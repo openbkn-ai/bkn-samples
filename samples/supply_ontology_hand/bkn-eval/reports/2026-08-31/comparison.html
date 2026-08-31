@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>供应链核心 50 题对比评估 — A（BKN）vs B（direct-db）</title>
+<style>
+  :root{--green:#0a7d33;--red:#c62828;--amber:#b26a00;--gray:#5f6368;--line:#e2e5e9;--bg:#f6f8fa;}
+  *{box-sizing:border-box;}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif;margin:0;background:var(--bg);color:#202124;line-height:1.6;}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px;}
+  h1{font-size:24px;margin:0 0 4px;}
+  .sub{color:var(--gray);font-size:13px;margin-bottom:20px;}
+  .cards{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0 26px;}
+  .card{flex:1;min-width:200px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+  .card .num{font-size:30px;font-weight:700;line-height:1.2;}
+  .card .lbl{font-size:13px;color:var(--gray);margin-top:2px;}
+  .card .note{font-size:12px;color:var(--gray);margin-top:6px;}
+  h2{font-size:18px;margin:30px 0 10px;padding-left:10px;border-left:4px solid #1a73e8;}
+  .box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin-bottom:14px;}
+  table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top;}
+  th{background:#eef2f6;font-weight:600;white-space:nowrap;}
+  .q{white-space:nowrap;font-weight:600;}
+  .ok{color:var(--green);font-weight:700;}
+  .bad{color:var(--red);font-weight:700;}
+  .warn{color:var(--amber);font-weight:600;}
+  .tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;}
+  .tag.ok{background:#e6f4ea;}
+  .tag.bad{background:#fce8e6;}
+  .legend{font-size:12px;color:var(--gray);margin:8px 0;}
+  ul{margin:8px 0;padding-left:22px;}
+  li{margin:5px 0;}
+  .foot{font-size:12px;color:var(--gray);margin-top:30px;border-top:1px solid var(--line);padding-top:12px;}
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;}
+  .bottleneck{color:var(--red);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>供应链核心 50 题对比评估：BKN 知识网络 vs 直连数据库</h1>
+  <div class="sub">POC · DeepSeek Harness · DeepSeek V4 Flash · 数据基线 2026-08-13 快照 · 业务日期 2026-08-25 · 评估 2026-08-31</div>
+
+  <div class="cards">
+    <div class="card"><div class="num ok">50/50</div><div class="lbl">路径 A（BKN 知识网络）通过率</div><div class="note">100% 命中金标，无硬失败</div></div>
+    <div class="card"><div class="num bad">26/50</div><div class="lbl">路径 B（直连数据库）通过率</div><div class="note">24 题与金标不一致，含 1 题结论相反</div></div>
+    <div class="card"><div class="num">11 分钟</div><div class="lbl">路径 A 总耗时</div><div class="note">约 13 秒/题</div></div>
+    <div class="card"><div class="num">16 分钟</div><div class="lbl">路径 B 总耗时</div><div class="note">约 19 秒/题；A 快约 31%</div></div>
+  </div>
+
+  <h2>一句话结论</h2>
+  <div class="box">
+    <b>基于知识网络的路径 A 全部答对且耗时更短；直连数据库的路径 B 有近半数题目因"自建计算口径"与标准口径不一致而答错</b>，其中 1 题（S-10，客户要 3851 套 U00-000151）给出了与标准答案相反的供货判断（答"满足"而标准为"差 1 套不满足"）。简单读数的题目（主数据、交易量）两条路径表现一致；分歧全部集中在需要业务口径的题目（BOM 齐套、可售能力、缺口、交期承诺）。
+  </div>
+
+  <h2>关键发现</h2>
+  <div class="box">
+    <ul>
+      <li><b>准确率差距：</b>A（BKN）50/50（100%），B（直连 DB）26/50（52%）。</li>
+      <li><b>硬失败门禁：</b>A 无硬失败；B 存在口径性数据错误与规则未遵从（S-10 结论相反、可售/缺口/计数多处与金标不符），已单独核验，不计入通过率。</li>
+      <li><b>B 的错误集中在 4 类口径：</b>① 生产可用仓库范围偏宽（8~10 仓 vs 标准 7 仓）→ 理论可产被高估（如 U00-000151 可产 120 vs 标准 50）；② 缺口未按标准口径统计（382×50 标准缺 35 种，B 只报 1 种）；③ BOM 共同物料/完整清单计数与标准不一致（如 382 与 P61 共同物料 36 vs 标准 28）；④ 齐套倒排节点数用错口径（103 vs 标准 57）。</li>
+      <li><b>效率：</b>A 11 分钟（约 13 秒/题）＜ B 16 分钟（约 19 秒/题）；按"每正确题"折算 A 为 0.22 分钟、B 为 0.62 分钟。</li>
+      <li><b>A 的可解释性（仅 A 诊断）：</b>函数口径与金标完全对齐；唯一缺口是 <b>Skill 编排缺失</b>——答案集中 13 题引用的 3 个业务 Skill（需求履约覆盖率分析、供应能力分析、生产计划倒排）A 未显式调用（用发布函数直接覆盖，不影响正确性）；建议后续导出逐题 Trace 以便审计。</li>
+    </ul>
+  </div>
+
+  <h2>分类型汇总</h2>
+  <div class="box">
+    <table>
+      <tr><th>题型</th><th>题数</th><th>A 通过</th><th>A 准确率</th><th>B 通过</th><th>B 准确率</th></tr>
+      <tr><td>M · 主数据/交易量</td><td>15</td><td class="ok">15</td><td>100%</td><td class="ok">15</td><td>100%</td></tr>
+      <tr><td>F · BOM/齐套/可售</td><td>15</td><td class="ok">15</td><td>100%</td><td class="bad">2</td><td class="bad">13%</td></tr>
+      <tr><td>R · BOM 结构/物料反查</td><td>9</td><td class="ok">9</td><td>100%</td><td class="bad">6</td><td>67%</td></tr>
+      <tr><td>S · 供需/交期/承诺</td><td>11</td><td class="ok">11</td><td>100%</td><td class="bad">3</td><td class="bad">27%</td></tr>
+      <tr><td><b>合计</b></td><td><b>50</b></td><td class="ok"><b>50</b></td><td class="ok"><b>100%</b></td><td class="bad"><b>26</b></td><td class="bad"><b>52%</b></td></tr>
+    </table>
+    <div class="legend">规律：直连数据库在"直接读数"的题目上与标准一致；一进入需要业务口径的计算（齐套、可售、缺口、倒排），自建口径与标准函数口径就分叉。</div>
+  </div>
+
+  <h2>50 题逐题对比</h2>
+  <div class="legend">✅=与金标一致　❌=与金标不一致（含结论对但关键数值/缺口不一致）　★=业务结论相反（S-10，重点关注）</div>
+  <div class="table-scroll">
+  <table>
+    <tr><th>题号</th><th>问题（简）</th><th>金标</th><th>A（BKN）</th><th>B（direct-db）</th><th>A</th><th>B</th></tr>
+    <tr><td class="q">M-01</td><td>成品主数据数量</td><td>30 种</td><td>30 种</td><td>30 种</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-02</td><td>物料主数据数量</td><td>3497 种</td><td>3497 种</td><td>3497 种</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-03</td><td>供应商档案数量</td><td>230 家</td><td>230 家</td><td>230 家</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-04</td><td>销售订单数量</td><td>800 张</td><td>800 张</td><td>800 张</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-05</td><td>仓库数量</td><td>29 个</td><td>29 个</td><td>29 个</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-06</td><td>382-000005 三个成品仓可用库存</td><td>534</td><td>534</td><td>534</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-07</td><td>未关闭预测单需求合计</td><td>46840</td><td>46840</td><td>46840</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-08</td><td>未关闭预测单张数</td><td>87 张</td><td>87 张</td><td>87 张</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-09</td><td>执行中销售订单</td><td>16 张</td><td>16 张</td><td>16 张</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-10</td><td>382 签约/发货/未发</td><td>1081/1066/15</td><td>1081/1066/15</td><td>1081/1066/15</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-11</td><td>382 未关闭预测</td><td>6 张/2605</td><td>6 张/2605</td><td>6 张/2605</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-12</td><td>U00-000080 未关闭预测</td><td>9 张/10500</td><td>9 张/10500</td><td>9 张/10500</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-13</td><td>外购物料</td><td>3149 种</td><td>3149 种</td><td>3149 种</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-14</td><td>自制物料</td><td>233 种</td><td>233 种</td><td>233 种</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">M-15</td><td>杨强云维护供应商</td><td>51 家</td><td>51 家</td><td>51 家</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">F-01</td><td>382 一级主料</td><td>9 种（9 编码）</td><td>9 种（同）</td><td>9 种（同）</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">F-02</td><td>382 与 P61 共同物料</td><td><b>28 种</b></td><td>28 种</td><td class="bad">36 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-03</td><td>382/P61/U00 三者共同物料</td><td><b>11 种</b></td><td>11 种</td><td class="bad">17 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-04</td><td>382 不替代最多可卖</td><td><b>534</b></td><td>534</td><td class="bad">568</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-05</td><td>U00-000151 不替代最多可卖</td><td><b>3850</b></td><td>3850</td><td class="bad">3920</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-06</td><td>382×50 齐套</td><td>不齐，<b>35 条缺口</b></td><td>不齐，35 种</td><td class="bad">不齐，仅 1 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-07</td><td>606-000989 交期</td><td>14 天</td><td>14 天</td><td>14 天</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">F-08</td><td>382 理论可产</td><td><b>0 套</b></td><td>0 套</td><td class="bad">34 套</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-09</td><td>U00-000151 理论可产</td><td><b>50 套</b></td><td>50 套</td><td class="bad">120 套</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-10</td><td>P61×60 齐套</td><td>不齐，<b>1 种</b>（321-000569 缺 240）</td><td>不齐，1 种</td><td class="bad">不齐，4 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-11</td><td>382×50→P61×60 争用</td><td>都不齐，<b>35/1 条缺口</b></td><td>35/1</td><td class="bad">都不齐，1/4 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-12</td><td>P61 与 U00 共同物料</td><td><b>18 种</b></td><td>18 种</td><td class="bad">26 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-13</td><td>382 不采购不计在途可产</td><td><b>0 套</b></td><td>0 套</td><td class="bad">34 套</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-14</td><td>预测单 0000023181 完整倒排节点</td><td><b>57 个</b></td><td>57 个</td><td class="bad">103 个</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">F-15</td><td>382 允许替代料最多可供</td><td><b>534</b></td><td>534</td><td class="bad">3534</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">R-01</td><td>P61 一级主料</td><td><b>14 种</b></td><td>14 种</td><td class="bad">16 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">R-02</td><td>U00-000080 一级主料</td><td>5 种</td><td>5 种</td><td>5 种</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">R-03</td><td>U00-000080 完整物料清单</td><td><b>56 种</b></td><td>56 种</td><td class="bad">102 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">R-04</td><td>382 完整物料清单</td><td><b>272 种</b></td><td>272 种</td><td class="bad">407 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">R-05</td><td>321-000569 被哪些产品使用</td><td>3 个（P61-328/331/351）</td><td>3 个（同）</td><td>3 个（同）</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">R-06</td><td>606-000989 被哪些产品使用</td><td>2 个（382-005/006）</td><td>2 个（同）</td><td>2 个（同）</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">R-07</td><td>725-000226 被多少产品使用</td><td>30 种</td><td>30 种</td><td>30 种</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">R-08</td><td>382 与 382-000006 共同一级主料</td><td>4 种（4 编码）</td><td>4 种（同）</td><td>4 种（同）</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">R-09</td><td>356-000061 替代料及库存</td><td>356-000356，可用 500</td><td>356-000356，500</td><td>356-000356，500</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">S-01</td><td>P61×60 至 09-05 能否交付</td><td>不能（321-000569 缺 240）</td><td>不能（09-29，延 24 天）</td><td class="bad">不能（但理由为缺 4 种料）</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">S-02</td><td>U00-000151 可售能力=交期承诺？</td><td>可售 <b>3850</b>；不等于承诺</td><td>3850；不等于</td><td class="bad">3920；不等于</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">S-03</td><td>382 新增 50 套齐套/缺料</td><td>不齐，<b>35 条缺口</b></td><td>不齐，35 种</td><td class="bad">不齐，1 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">S-04</td><td>382×50、P61×60 同时承接</td><td>不能，<b>35/1 条缺口</b></td><td>不能，35/1</td><td class="bad">不能，1/4 种</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">S-05</td><td>共同物料+未给数量能否判断承接</td><td><b>28 种</b>；不能判断</td><td>28 种；不能</td><td class="bad">36 种；不能</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">S-06</td><td>321-000569 建议采购量</td><td>240</td><td>240</td><td>240</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">S-07</td><td>382×50 至 09-05 允许替代料</td><td>可以（成品 534 覆盖 50，余 484）</td><td>可以（现货直发）</td><td>可以（替代料齐套）</td><td class="ok">✅</td><td class="ok">✅*</td></tr>
+    <tr><td class="q">S-08</td><td>P61×60 至 09-10，关键料交期 35 天</td><td>不能；最早 09-29，晚 19 天</td><td>不能（09-29，19 天）</td><td>不能（09-29，19 天）</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+    <tr><td class="q">S-09</td><td>U00-000151 3850 套能否满足</td><td>满足（可售 3850）</td><td>满足</td><td class="bad">满足（按 3920）</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">S-10</td><td>U00-000151 3851 套能否满足</td><td><b>不满足，差 1 套</b></td><td>不满足，差 1</td><td class="bottleneck">★ 满足，富余 69</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+    <tr><td class="q">S-11</td><td>P61×60、U00×50 同时齐套</td><td>P61 不齐（缺 240）；U00 齐套</td><td>P61 缺 240；U00 齐</td><td class="bad">P61 缺 4 种；U00 齐</td><td class="ok">✅</td><td class="bad">❌</td></tr>
+  </table>
+  </div>
+  <div class="legend">* S-07 B 结论与金标一致（可以按时交付），但依据路径不同（替代料齐套 vs 成品现货），已注明。S-10 为唯一业务结论相反的题（红色 ★）。</div>
+
+  <h2>给业务领导的建议</h2>
+  <div class="box">
+    <ul>
+      <li><b>知识网络路径（A）可作为基准能力：</b>100% 准确、无需重建业务逻辑、口径与函数契约一致，交付承诺类判断（S-01/S-07/S-08）符合"现货优先、倒排核交期"的业务规则。</li>
+      <li><b>直连数据库路径（B）不宜直接对客：</b>在仓库范围、净需求（含在途）、缺口统计、BOM 计数等口径上自建实现，导致近半数题目偏离标准，并曾给出相反的供货判断（S-10）。若要用直连路径，必须先固化与标准一致的口径（净需求含在途、生产可用仓=7 个有效仓、缺口按全量物料净缺、倒排节点按 full_tree）。</li>
+      <li><b>建议统一口径为共享计算层：</b>把"净需求含在途、仓库范围、BOM 主料去重、可售=成品+理论可产、替代料按替代组语义"固化为各路径共用口径，避免同一份数据两套答案。</li>
+      <li><b>A 的改进点（非正确性问题）：</b>补全业务 Skill 编排（需求履约覆盖率/供应能力/生产计划倒排）并导出逐题 Trace，便于审计与追溯。</li>
+    </ul>
+  </div>
+
+  <div class="foot">注：本报告为 2026-08-31 轮次单次 POC 评估（DeepSeek Harness / DeepSeek V4 Flash；数据快照 2026-08-13，业务日期 2026-08-25，答案集 sample-answer-set-v1.yaml schema 1.3-poc）。效率仅按运行时长统计，不含成本/Token/网络指标。题目、快照、模型或函数版本变化时应重新评估。详细判定、硬失败证据与 A 可解释性诊断见配套 Markdown 评估报告。</div>
+</div>
+</body>
+</html>
