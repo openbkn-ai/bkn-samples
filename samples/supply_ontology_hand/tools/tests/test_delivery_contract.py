@@ -40,3 +40,11 @@ def test_unreleased_english_sample_is_absent():
 def test_chinese_sample_does_not_use_stage_directories():
     sample = REPO_ROOT / "samples" / "supply_ontology_hand"
     assert not any(path.is_dir() for path in sample.glob("stage*"))
+
+
+def test_released_sample_has_no_legacy_dataset_or_local_eval_paths():
+    sample = REPO_ROOT / "samples" / "supply_ontology_hand"
+
+    assert (sample / "data" / "customer_entity.csv").is_file()
+    assert not (sample / "datasets").exists()
+    assert not (sample / "eval").exists()
