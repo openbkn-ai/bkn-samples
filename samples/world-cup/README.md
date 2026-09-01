@@ -13,7 +13,7 @@
                        │                     (pre-creates wc_matches / wc_team_appearances
                        │                      with VARCHAR(255) to dodge MySQL Error 1118)
                        │
-                       ├─ 3) Vega scan       vega catalog create + discover --wait
+                       ├─ 3) Vega scan       vega catalog create + asynchronous discover
                        │
    ./run.sh  ─────────►├─ 4) Render BKN      map vega Resources → render worldcup-bkn.tar
                        │
@@ -49,9 +49,7 @@ Keep attribution and the share-alike notice on derived data. **Pin a revision** 
 2. **Authenticate the CLI**: `openbkn auth login https://<your-platform-url>` (writes `~/.bkn/`).
 3. **Register an embedding model** (the vector index needs it; the full-text index builds without it):
    ```bash
-   openbkn model small add --name text-embedding-v4-cn \
-     --type embedding --batch-size 10 --max-tokens 512 --embedding-dim 1024 \
-     --model-config-file <emb.json>
+   openbkn model small add --body-file <emb.json>
    ```
    `EMBEDDING_MODEL_NAME` in `.env` (default `text-embedding-v4-cn`) is passed to the build
    by **name** — Vega resolves embedding models by name and rejects a raw model id.
@@ -111,12 +109,11 @@ Once `./run.sh` finishes, run the published `vega_sql_execute` tool. Resolve a t
 
 ```bash
 # list table resources to grab a resource_id
-openbkn vega resource list --datasource-id <catalog_id> --type table
+openbkn vega resource list --catalog-id <catalog_id> --category table
 
 # run SQL through the published tool (TOOLBOX_BOX_ID / VEGA_TOOL_ID are echoed by step 6)
-openbkn tool invoke <VEGA_TOOL_ID> --toolbox <TOOLBOX_BOX_ID> \
-  --input query='<your SQL with {{<resource_id>}} placeholders>' \
-  --input query_format=sql
+openbkn tool execute <VEGA_TOOL_ID> --toolbox <TOOLBOX_BOX_ID> \
+  --body '{"query":"<your SQL with {{<resource_id>}} placeholders>","query_format":"sql"}'
 ```
 
 ### Q1 · Messi's World Cup awards

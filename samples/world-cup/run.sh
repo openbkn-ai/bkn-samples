@@ -458,7 +458,7 @@ step_3_vega_scan() {
     # Auto-skip discover if catalog already has all 27 table resources.
     if [ "${FORCE_DISCOVER:-0}" != 1 ]; then
         local n_resources
-        n_resources="$("${KWEAV[@]}" vega resource list --datasource-id "$catalog_id" --type table --limit 50 2>/dev/null \
+        n_resources="$("${KWEAV[@]}" vega resource list --catalog-id "$catalog_id" --category table --limit 50 2>/dev/null \
             | _extract_cli_json | jq '.entries | length' 2>/dev/null || echo 0)"
         if [ "${n_resources:-0}" -ge 27 ]; then
             echo "  skip discover — $n_resources table resources already present (FORCE_DISCOVER=1 to redo)" >&2
@@ -468,12 +468,12 @@ step_3_vega_scan() {
         fi
     fi
 
-    echo "  Running discover --wait …" >&2
-    "${KWEAV[@]}" call "/api/vega-backend/v1/catalogs/${catalog_id}/discover?wait=true" -X POST >/dev/null 2>&1 || true
+    echo "  Starting catalog discovery …" >&2
+    "${KWEAV[@]}" vega catalog discover "$catalog_id" >/dev/null
     # Discovery is asynchronous — poll until table resources appear (~90s max).
     local _n=0
     for _i in $(seq 1 30); do
-        _n="$("${KWEAV[@]}" vega resource list --datasource-id "$catalog_id" --type table --limit 50 2>/dev/null \
+        _n="$("${KWEAV[@]}" vega resource list --catalog-id "$catalog_id" --category table --limit 50 2>/dev/null \
             | _extract_cli_json | jq '.entries | length' 2>/dev/null || echo 0)"
         [ "${_n:-0}" -ge 27 ] && break
         sleep 3
@@ -521,7 +521,7 @@ step_4_render_bkn() {
     # Note: 0.8.0 dropped /catalogs/:id/resources nested endpoint in favor of the
     # top-level /resources?catalog_id=... filter. `vega resource list --catalog-id`
     # SDK call hits the new path on both 0.7.0 and 0.8.0.
-    raw="$("${KWEAV[@]}" vega resource list --datasource-id "$catalog_id" --type table --limit 500 2>&1)"
+    raw="$("${KWEAV[@]}" vega resource list --catalog-id "$catalog_id" --category table --limit 500 2>&1)"
     body="$(printf '%s' "$raw" | _extract_cli_json)" || { echo "Error parsing vega catalog resources output." >&2; exit 1; }
     nres="$(printf '%s' "$body" | jq '.entries | length')"
     echo "  table resources returned: $nres" >&2
@@ -871,10 +871,9 @@ step_6_toolbox() {
     echo "  Done. Vega catalog BKN '${kn_id:-worldcup_vega_catalog_bkn}' is live with a published" >&2
     echo "  vega_sql_execute tool (TOOLBOX_BOX_ID=$box_id  VEGA_TOOL_ID=$tool_id) over the 27 wc_* tables." >&2
     echo "  Query the resources directly, e.g.:" >&2
-    echo "    ${KWEAV[*]} tool invoke $tool_id --toolbox $box_id \\" >&2
-    echo "      --input query='SELECT tournament_name, winner FROM {{<tournaments_resource_id>}} ORDER BY year DESC LIMIT 5' \\" >&2
-    echo "      --input query_format=sql" >&2
-    echo "  (resource_id comes from: ${KWEAV[*]} vega resource list --datasource-id <catalog> --type table)" >&2
+    echo "    ${KWEAV[*]} tool execute $tool_id --toolbox $box_id \\" >&2
+    echo "      --body '{\"query\":\"SELECT tournament_name, winner FROM {{<tournaments_resource_id>}} ORDER BY year DESC LIMIT 5\",\"query_format\":\"sql\"}'" >&2
+    echo "  (resource_id comes from: ${KWEAV[*]} vega resource list --catalog-id <catalog> --category table)" >&2
 }
 
 # ─── Driver ─────────────────────────────────────────────────────────────────

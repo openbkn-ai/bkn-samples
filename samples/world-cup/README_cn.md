@@ -13,7 +13,7 @@
                        │                 （预建 wc_matches / wc_team_appearances 为 VARCHAR(255)
                        │                   规避 MySQL Error 1118 行宽超限）
                        │
-                       ├─ 3) Vega 扫描    vega catalog create + discover --wait
+                       ├─ 3) Vega 扫描    vega catalog create + 异步 discover
                        │
    ./run.sh  ─────────►├─ 4) 渲染 BKN     map vega Resources → render worldcup-bkn.tar
                        │
@@ -53,9 +53,7 @@ CSV 来自 Joshua C. Fjelstul 的 **The Fjelstul World Cup Database**（[仓库]
 2. **CLI 登录**：`openbkn auth login https://<你的平台地址>`（凭据写入 `~/.bkn/`）。
 3. **注册 embedding 模型**（向量索引需要；不注册会自动降级为关键字索引）：
    ```bash
-   openbkn model small add --name text-embedding-v4-cn \
-     --type embedding --batch-size 10 --max-tokens 512 --embedding-dim 1024 \
-     --model-config-file <emb.json>
+   openbkn model small add --body-file <emb.json>
    ```
    `.env` 里的 `EMBEDDING_MODEL_NAME` 运行时被解析成 `model_id`（默认 `text-embedding-v4-cn`）。
 4. **把 BKN 默认 embedding 写进 ConfigMap**（KN 级语义检索路径用到；本示例不强依赖）：
@@ -114,12 +112,11 @@ step 6 会发布一个 OpenAPI 描述的工具 `vega_sql_execute`，对 `worldcu
 
 ```bash
 # 列出表 resource，拿 resource_id
-openbkn vega resource list --datasource-id <catalog_id> --type table
+openbkn vega resource list --catalog-id <catalog_id> --category table
 
 # 通过已发布的工具跑 SQL（TOOLBOX_BOX_ID / VEGA_TOOL_ID 由 step 6 打印出来）
-openbkn tool invoke <VEGA_TOOL_ID> --toolbox <TOOLBOX_BOX_ID> \
-  --input query='<带 {{<resource_id>}} 占位的 SQL>' \
-  --input query_format=sql
+openbkn tool execute <VEGA_TOOL_ID> --toolbox <TOOLBOX_BOX_ID> \
+  --body '{"query":"<带 {{<resource_id>}} 占位的 SQL>","query_format":"sql"}'
 ```
 
 ### Q1 · 梅西在世界杯获过哪些奖

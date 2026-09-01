@@ -426,7 +426,7 @@ Full mapping: `tools/mapping/object_table_map.yaml`.
 | Import name exists | KN name collision | Remove conflict or UI import |
 | Load connection failed | DB missing / wrong creds | `CREATE DATABASE`; check `config.yaml` |
 | Catalog incomplete connector | Missing `password` | Set PG password; fill `database.password` |
-| Discover missing tables | Scan not finished | `vega catalog discover <id> --wait` |
+| Discover missing tables | Scan not finished | Run `python3 tools/setup_catalog.py --config tools/config.yaml --write-config`; it polls the discovery task before verifying tables. |
 | Query empty after bind | Wrong table/PK | Check Appendix B; UI re-bind |
 | Script bind failed | CLI version / permissions | Step 5 UI fallback |
 
