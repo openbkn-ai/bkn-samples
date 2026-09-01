@@ -22,12 +22,10 @@ def test_pack_layout_exists():
     assert (skills / "demand-fulfillment-capacity-analysis" / "SKILL.md").is_file()
     assert (skills / "demand-fulfillment-requirement-coverage-analysis" / "SKILL.md").is_file()
     docs = PACK / "docs"
-    assert (docs / "动力层落地说明书.md").is_file()
-    payloads = docs / "payloads"
-    assert (payloads / "metrics-create.json").is_file()
-    assert (payloads / "metrics-query-examples.json").is_file()
-    assert (payloads / "logic-properties.json").is_file()
-    assert not (payloads / "functions-openapi.json").exists()
+    assert (docs / "openbkn-hand-import-guide_cn.md").is_file()
+    assert (docs / "faq.md").is_file()
+    assert (docs / "reference" / "capability-contract.md").is_file()
+    assert (TOOLS / "README.md").is_file()
 
 
 def test_sample_has_twelve_csv():
