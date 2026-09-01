@@ -34,7 +34,7 @@ answers:
     basis: {objects: [产品需求预测单], relations: [], metrics: [预测需求量合计], functions: [], skills: [], actions: [], sequence: [产品需求预测单, 预测需求量合计], evidence: "排除已关闭预测单后，对 87 条预测需求数量求和，得到 46840。"}
   - id: M-08
     answer: 当前未关闭预测单共有 87 张。
-    basis: {objects: [产品需求预测单], relations: [], metrics: [未关闭预测单数], functions: [], skills: [], actions: [], sequence: [产品需求预测单, 未关闭预测单数], evidence: "排除已关闭预测单后，预测单编号去重得到 87。"}
+    basis: {objects: [产品需求预测单], relations: [], metrics: [未关闭预测单数], functions: [未关闭预测单数], skills: [], actions: [], sequence: [产品需求预测单, 未关闭预测单数函数], evidence: "通过未关闭预测单数函数排除已关闭记录后，预测单编号去重得到 87。"}
   - id: M-09
     answer: 当前处于执行中的销售订单共有 16 张。
     basis: {objects: [销售订单], relations: [], metrics: [销售订单数量], functions: [], skills: [], actions: [], sequence: [销售订单, 订单状态执行中, 销售订单数量], evidence: "销售订单按订单号去重，并筛选订单状态为执行中，得到 16。"}
@@ -85,7 +85,7 @@ answers:
     basis: {objects: [产品, 产品BOM, 物料, 库存], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存], metrics: [库存可用量], functions: [理论可产], skills: [], actions: [], sequence: [产品, 产品BOM, 物料, 库存, 库存可用量, 理论可产], evidence: "theoretical_build(U00-000151, substitute=no) 复算为 50。"}
   - id: F-10
     answer: 不齐套，共缺 1 种物料；物料 321-000569 净缺 240。
-    basis: {objects: [产品, 产品BOM, 物料, 库存, 采购订单], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存, 采购订单关联物料请购单, 采购申请单关联物料需求计划, 物料需求计划关联物料], metrics: [库存可用量], functions: [要X套净需求与齐套], skills: [], actions: [], sequence: [产品, 产品BOM, 物料, 库存, 采购订单, 要X套净需求与齐套], evidence: "kitting_net_demand(P61-000351, 60, substitute=no) 复算：唯一缺口 321-000569，净缺 240。"}
+    basis: {objects: [产品, 产品BOM, 物料, 库存, 采购订单], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存, 采购订单关联物料请购单, 采购申请单关联物料需求计划, 物料需求计划关联物料], metrics: [库存可用量], functions: [子料分层库存, 要X套净需求与齐套], skills: [], actions: [], sequence: [产品, 产品BOM, 子料分层库存, 库存, 采购订单, 要X套净需求与齐套], evidence: "先用子料分层库存核对 P61-000351 的生产仓库存，再用 kitting_net_demand(P61-000351, 60, substitute=no) 复算：唯一缺口 321-000569，净缺 240。"}
   - id: F-11
     answer: 两单都不能齐套。按给定顺序扣减后，382-000005 有 35 条缺口，P61-000351 有 1 条缺口。
     basis: {objects: [产品, 产品BOM, 物料, 库存, 采购订单], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存, 采购订单关联物料请购单, 采购申请单关联物料需求计划, 物料需求计划关联物料], metrics: [库存可用量], functions: [产品BOM共用清单, 要X套净需求与齐套, 共用料与多需求争用], skills: [demand-fulfillment-requirement-coverage-analysis], actions: [], sequence: [产品BOM共用清单, 要X套净需求与齐套, 共用料与多需求争用], evidence: "按 382×50→P61×60 顺序运行 shared_contention，缺口行数为 35、1。"}
@@ -94,7 +94,7 @@ answers:
     basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [产品BOM共用清单], skills: [], actions: [], sequence: [产品, 产品BOM, 物料, 产品BOM共用清单], evidence: "P61-000351 与 U00-000151 的 BOM 交集复算为 18。"}
   - id: F-13
     answer: 不采购、不计在途且不启用替代料时，最多可生产 0。
-    basis: {objects: [产品, 产品BOM, 物料, 库存], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存], metrics: [库存可用量], functions: [不含采购最大可产], skills: [], actions: [], sequence: [产品, 产品BOM, 物料, 库存, 不含采购最大可产], evidence: "max_build_without_po(382-000005, substitute=no) 复算为 0。"}
+    basis: {objects: [产品, 产品BOM, 物料, 库存], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存], metrics: [库存可用量], functions: [无需采购最大可产], skills: [], actions: [], sequence: [产品, 产品BOM, 物料, 库存, 无需采购最大可产], evidence: "max_build_without_po(382-000005, substitute=no) 复算为 0。"}
   - id: F-14
     answer: 完整齐套倒排结果树共有 57 个节点。
     basis: {objects: [产品需求预测单, 产品, 产品BOM, 物料, 库存, 采购订单, 采购申请单, 物料需求计划], relations: [产品关联需求预测单, 产品关联产品bom, 产品bom关联物料, 物料关联库存, 物料需求计划关联产品预测需求, 采购申请单关联物料需求计划, 采购订单关联物料请购单], metrics: [库存可用量], functions: [生产计划齐套倒排], skills: [production-schedule-backward-planning], actions: [], sequence: [产品需求预测单, 产品, 产品BOM, 物料, 库存, 采购订单, 采购申请单, 物料需求计划, 生产计划齐套倒排], evidence: "本题明确要求完整树；以 report_grain=full_tree 对预测单 0000023181 完整展开，node_count_total 复算为 57。"}
@@ -115,13 +115,13 @@ answers:
     basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [BOM清单], skills: [], actions: [], sequence: [382-000005, 产品BOM, 多级展开, 完整物料清单], evidence: "382-000005 完整 BOM 展开有 313 条主料行，按物料编码去重后为 272 种物料。"}
   - id: R-05
     answer: 物料 321-000569 被 P61-000328、P61-000331、P61-000351 三个产品使用。
-    basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [BOM反查], skills: [], actions: [], sequence: [物料321-000569, 产品BOM反查, 产品], evidence: "按 material_code=321-000569 反查 BOM 父产品，去重得到 P61-000328、P61-000331、P61-000351。"}
+    basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [物料反查产品], skills: [], actions: [], sequence: [物料321-000569, 物料反查产品, 产品], evidence: "按 material_code=321-000569 反查 BOM 父产品，去重得到 P61-000328、P61-000331、P61-000351。"}
   - id: R-06
     answer: 物料 606-000989 被产品 382-000005 和 382-000006 使用。
-    basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [BOM反查], skills: [], actions: [], sequence: [物料606-000989, 产品BOM反查, 产品], evidence: "按 material_code=606-000989 反查 BOM 父产品，去重得到 382-000005、382-000006。"}
+    basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [物料反查产品], skills: [], actions: [], sequence: [物料606-000989, 物料反查产品, 产品], evidence: "按 material_code=606-000989 反查 BOM 父产品，去重得到 382-000005、382-000006。"}
   - id: R-07
     answer: 物料 725-000226 被 30 种产品使用。
-    basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [BOM反查], skills: [], actions: [], sequence: [物料725-000226, 产品BOM反查, 产品数量], evidence: "按 material_code=725-000226 反查 BOM 父产品并去重，得到 30 种产品。"}
+    basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [物料反查产品], skills: [], actions: [], sequence: [物料725-000226, 物料反查产品, 产品数量], evidence: "按 material_code=725-000226 反查 BOM 父产品并去重，得到 30 种产品。"}
   - id: R-08
     answer: "有 4 种：468-000493、606-000989、606-000990、994-000550。"
     basis: {objects: [产品, 产品BOM, 物料], relations: [产品关联产品bom, 产品bom关联物料], metrics: [], functions: [BOM清单], skills: [], actions: [], sequence: [382-000005一级主料, 382-000006一级主料, 交集], evidence: "原始 BOM 的一级主料（parent_material_code 为产品编码）交集为 468-000493、606-000989、606-000990、994-000550。"}
@@ -151,7 +151,7 @@ answers:
     basis: {objects: [产品, 库存], relations: [产品关联库存], metrics: [库存可用量], functions: [合计可售], skills: [production-schedule-backward-planning, demand-fulfillment-capacity-analysis], actions: [], sequence: [S1交期场景, 合计可售, 三个成品仓库存可用量, 成品库存534, 需求50, 履约结论], evidence: "S1 先确认成品现货：M-06 / total_sellable(382-000005, substitute=yes) 的冻结快照中，三个成品仓可用成品为 534；534 - 50 = 484。现货已覆盖时不进入制造倒排。"}
   - id: S-08
     answer: "不能按时交付。以 2026-08-25 为基线，321-000569 的标准采购交期为 35 天，最早到货日为 2026-09-29，比 2026-09-10 晚 19 天；且该物料净缺 240。"
-    basis: {objects: [产品, 产品BOM, 物料, 库存, 采购订单], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存, 采购订单关联物料请购单], metrics: [库存可用量], functions: [要X套净需求与齐套, 标准交期], skills: [demand-fulfillment-requirement-coverage-analysis], actions: [], sequence: [P61-000351, 需求60, 净缺321-000569=240, 标准交期35天, 2026-09-29到货, 交期比较], evidence: "321-000569 的标准采购交期为 35 天；2026-08-25 加 35 天为 2026-09-29，晚于客户交期 2026-09-10 共 19 天。"}
+    basis: {objects: [产品, 产品BOM, 物料, 库存, 采购订单], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存, 采购订单关联物料请购单], metrics: [库存可用量], functions: [要X套净需求与齐套, 标准交期, 供应状态诊断], skills: [demand-fulfillment-requirement-coverage-analysis], actions: [], sequence: [P61-000351, 需求60, 净缺321-000569=240, 供应状态诊断异常, 标准交期35天, 2026-09-29到货, 交期比较], evidence: "321-000569 的供应状态诊断为 anomaly；其标准采购交期为 35 天，2026-08-25 加 35 天为 2026-09-29，晚于客户交期 2026-09-10 共 19 天。"}
   - id: S-09
     answer: "满足。当前最多可供 3850 套，正好覆盖客户所需的 3850 套；其中成品库存 3800 套，理论可产 50 套。"
     basis: {objects: [产品, 产品BOM, 物料, 库存], relations: [产品关联产品bom, 产品bom关联物料, 物料关联库存], metrics: [库存可用量], functions: [理论可产, 合计可售], skills: [demand-fulfillment-capacity-analysis], actions: [], sequence: [U00-000151, 不使用替代料, 成品库存3800, 理论可产50, 合计可售3850, 需求3850], evidence: "total_sellable(U00-000151, substitute=no) = 3800 + 50 = 3850。"}
