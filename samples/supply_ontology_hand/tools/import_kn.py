@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import subprocess
 import sys
@@ -34,6 +35,17 @@ def resolve_default_embedding() -> str:
     return str(model_id)
 
 
+def strip_index_config(node) -> None:
+    """Recursively remove deprecated property index settings in place."""
+    if isinstance(node, dict):
+        node.pop("index_config", None)
+        for value in node.values():
+            strip_index_config(value)
+    elif isinstance(node, list):
+        for item in node:
+            strip_index_config(item)
+
+
 def import_kn(
     json_path: Path, *, dry_run: bool = False, resolve_embedding: bool = False
 ) -> dict:
@@ -62,8 +74,20 @@ def import_kn(
         report["action"] = "would_import"
         return report
 
-    body = json.dumps(payload, ensure_ascii=False)
-    raw = run_cmd(["openbkn", "--json", "call", "-X", "POST", _IMPORT_PATH, "-d", body])
+    def post(body_payload: dict) -> str:
+        body = json.dumps(body_payload, ensure_ascii=False)
+        return run_cmd(["openbkn", "--json", "call", "-X", "POST", _IMPORT_PATH, "-d", body])
+
+    try:
+        raw = post(payload)
+        report["index_config_stripped"] = False
+    except RuntimeError as exc:
+        if "index_config" not in str(exc):
+            raise
+        stripped = copy.deepcopy(payload)
+        strip_index_config(stripped)
+        raw = post(stripped)
+        report["index_config_stripped"] = True
     try:
         report["import_response"] = json.loads(raw)
     except json.JSONDecodeError:
