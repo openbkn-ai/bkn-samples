@@ -1,4 +1,4 @@
-"""S1 生产计划齐套倒排纯函数（口径 SSOT：docs/能力口径清单.md、
+"""S1 生产计划齐套倒排纯函数（口径 SSOT：docs/reference/capability-contract.md、
 skills/production-schedule-backward-planning/references/business-rules.md）。
 
 只吃请求级 Snapshot，不做远程查询，不读运行时 CSV。日期公式、供应状态、

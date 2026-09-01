@@ -19,12 +19,12 @@ from bind_kn_resources import (
 )
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-_PAYLOAD_DIR = _SCRIPT_DIR.parent / "docs" / "payloads"
+_PAYLOAD_DIR = _SCRIPT_DIR / "assets"
 _DEFAULT_METRICS = _PAYLOAD_DIR / "metrics-create.json"
 _DEFAULT_LP = _PAYLOAD_DIR / "logic-properties.json"
 _DEFAULT_QUERY = _PAYLOAD_DIR / "metrics-query-examples.json"
 _DEFAULT_KN = "supply_ontology_hand"
-_UI_FALLBACK_MSG = "请按 docs/动力层落地说明书.md 检查 openbkn 认证与知识网络 ID"
+_UI_FALLBACK_MSG = "请按 docs/openbkn-hand-import-guide_cn.md 检查 OpenBKN 认证与知识网络 ID"
 
 
 def load_json(path: Path) -> Any:

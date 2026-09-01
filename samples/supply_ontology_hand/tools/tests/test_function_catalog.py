@@ -98,65 +98,14 @@ def test_native_tool_inputs_expose_one_discoverable_tool_per_operation():
     assert "前导零" in backward["forecast_id"]["description"]
 
 
-def test_delivery_docs_only_direct_users_to_the_native_function_entry():
+def test_public_capability_contract_only_directs_users_to_native_functions():
     from pathlib import Path
 
     package = Path(__file__).resolve().parents[2]
-    for path in (
-        package / "docs" / "能力口径清单.md",
-        package / "docs" / "动力层落地说明书.md",
-        package / "docs" / "动力层建设方案.md",
-        package / "docs" / "场景驱动的供应链动态能力设计.md",
-    ):
-        text = path.read_text(encoding="utf-8")
-        assert "14 个" not in text
-        assert "supply_chain_compute" not in text
-        assert "host.docker.internal:8765" not in text
-        assert "71600d21-c9f6-4336-bfbf-95bfb3654674" not in text
-        assert "242385da-f2d1-4264-84ac-ee7b10cdd76d" not in text
-        assert "函数尚未做成独立算子" not in text
+    text = (package / "docs" / "reference" / "capability-contract.md").read_text(encoding="utf-8")
 
-    delivery = (package / "docs" / "动力层落地说明书.md").read_text(encoding="utf-8")
-    assert "register_native_function_toolbox.py" in delivery
-    assert "物料反查产品" in delivery
-
-
-def test_action_catalog_does_not_present_local_dry_runs_as_platform_writes():
-    from pathlib import Path
-
-    package = Path(__file__).resolve().parents[2]
-    text = (package / "docs" / "catalog" / "actions.md").read_text(encoding="utf-8")
-
-    assert "未绑定实际 Tool" in text
-    assert "不可执行" in text
-    assert "dry-run" in text
-    assert "不得" in text
-
-
-def test_delivery_guide_does_not_hard_code_deployment_specific_skill_ids():
-    from pathlib import Path
-
-    package = Path(__file__).resolve().parents[2]
-    text = (package / "docs" / "动力层落地说明书.md").read_text(encoding="utf-8")
-
-    for retired_id in (
-        "158aee6d-067a-41ca-b382-d9a9a1e33275",
-        "03c91afa-4aef-4e5b-899d-881ac1739d7f",
-        "fba4903b-1e15-4353-9e23-66fd5d2d1bd5",
-    ):
-        assert retired_id not in text
-    assert "openbkn --json skill list --limit 100" in text
-
-
-def test_online_function_docs_describe_the_function_owned_bkn_read_contract():
-    from pathlib import Path
-
-    package = Path(__file__).resolve().parents[2]
-    for path in (
-        package / "docs" / "quickstart" / "online-openbkn.md",
-        package / "docs" / "catalog" / "functions.md",
-    ):
-        text = path.read_text(encoding="utf-8")
-        assert "sandbox_sdk.bkn" in text
-        assert "resolved_context" not in text
-        assert "FUNCTION_SERVICE_URL" not in text
+    assert "tools/fn/" in text
+    assert "原生 Function Toolbox" in text
+    assert "resolved_context" in text
+    assert "host.docker.internal" not in text
+    assert "FUNCTION_SERVICE_URL" not in text

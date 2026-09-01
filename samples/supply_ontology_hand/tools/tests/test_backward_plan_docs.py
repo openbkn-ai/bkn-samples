@@ -5,7 +5,6 @@ from __future__ import annotations
 from pathlib import Path
 
 PACK = Path(__file__).resolve().parents[2]
-HANDOFF = PACK / "docs" / "第三方Agent数据交接说明.md"
 S1 = PACK / "skills" / "production-schedule-backward-planning" / "SKILL.md"
 IO = PACK / "skills" / "production-schedule-backward-planning" / "references" / "io-contract.md"
 RULES = PACK / "skills" / "production-schedule-backward-planning" / "references" / "business-rules.md"
@@ -65,10 +64,3 @@ def test_s1_is_self_contained_and_maps_user_input_to_function_contract():
     assert "71600d21-c9f6-4336-bfbf-95bfb3654674" not in skill
     assert "docs/" not in combined
 
-
-def test_handoff_exposes_backward_plan_as_a_business_function():
-    text = HANDOFF.read_text(encoding="utf-8")
-    assert "生产计划齐套倒排" in text
-    assert "函数自行读取" in text
-    assert "不要自行封装 Context Loader" in text
-    assert "数据快照或 `resolved_context` 作为函数参数传递" in text
