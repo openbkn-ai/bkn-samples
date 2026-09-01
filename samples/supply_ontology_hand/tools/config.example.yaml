@@ -24,10 +24,10 @@ load:
 vega:
   catalog_id: ""     # 步骤 4 扫描后由 setup_catalog.py --write-config 写入，或手工填写
   catalog_name: supply-demo-hand   # 步骤 4 脚本创建的 Catalog 名称（必须改成环境内唯一名称）
-  catalog_host: ""   # 必填：OpenBKN 平台网络能访问的数据库主机；不要假定 host.docker.internal 可用
+  catalog_host: ""   # OpenBKN 平台网络能访问的数据库主机；留空时使用 database.host
   connector_type: postgresql   # 默认同 database.engine（postgres→postgresql）
-  connector_options:
-    sslmode: disable
+  # PostgreSQL 未填写时脚本会使用 sslmode:disable；MySQL 不要填写 sslmode。
+  connector_options: {}
 
 bind:
   dry_run: false

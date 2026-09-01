@@ -17,8 +17,8 @@ C. 灌入 data/*.csv（步骤 3）→ 行数与下表一致
 D. Catalog 扫描 + 对象绑定（步骤 4～5）→ 11 个 bind:true 可查
 E. smoke_test.py 通过
 F. 创建指标并挂逻辑属性：python3 tools/power_layer.py all --kn-id supply_ontology_hand
-G. 注册并发布 14 个原生函数：python3 tools/register_native_function_toolbox.py --apply
-H. 用 MCP 完成函数冒烟（本清单 §3）；通过后再注册场景技能（可选增强）
+G. 注册并发布原生业务函数：python3 tools/register_native_function_toolbox.py --apply
+H. 注册并发布 S1/S2/S3 Skill：python3 tools/register_skills.py --apply；再用 MCP 完成函数与场景冒烟（本清单 §3～4）
 I. 跑业务问答测试集（先规模与事实，再函数和场景）
 J. 治理题：监控任务须确认；发起 PO 拒绝自动
 ```
@@ -40,7 +40,7 @@ J. 治理题：监控任务须确认；发起 PO 拒绝自动
 | 1.7 | 预测覆盖 | 30 个成品都能联到预测 | 关系 `prod2fcst` | ☐ |
 | 1.8 | BOM→物料 | 无孤儿物料码 | `smoke_test` / join_checks | ☐ |
 | 1.9 | PO→供应商 | 供应商码可命中 | 同上 | ☐ |
-| 1.10 | 监控任务 | 步骤 8 后绑定 `sc_plan_monitor_task`；初始实例为空属预期 | 不要当成导入失败 | ☐ |
+| 1.10 | 监控任务 | 本版本不绑定 `sc_plan_monitor_task`；初始实例为空属预期 | 不要当成导入失败 | ☐ |
 
 ```bash
 cd tools
@@ -95,7 +95,7 @@ python3 register_native_function_toolbox.py --apply
 | # | 检查 | 期望 | 通过 |
 |---|------|------|------|
 | 3.1 | 工具箱发布 | MCP `list_published_toolboxes` 可按名称发现 `供应链原生计算函数`，状态为 published | ☐ |
-| 3.2 | 工具目录完整 | MCP `list_published_tools` 返回 **14** 个 enabled 的具名函数，含“标准交期”“BOM清单”“物料反查产品”“生产计划齐套倒排” | ☐ |
+| 3.2 | 工具目录完整 | MCP `list_published_tools` 返回已启用的具名业务函数，含“标准交期”“BOM清单”“物料反查产品”“生产计划齐套倒排” | ☐ |
 | 3.3 | 标准交期冒烟 | 在新的受管 Interaction 中，通过 `execute_published_tool` 调用“标准交期”，只传 `material_code=606-000989`，返回 `leadtime_days=14` | ☐ |
 | 3.4 | BOM 冒烟 | 在另一新的受管 Interaction 中调用“BOM清单”，只传 `product=382-000005`，返回一级主料数 **9** | ☐ |
 | 3.5 | 调用契约 | Agent 未传 Token、服务地址、`resolved_context`、快照或 Toolbox UUID；函数自行读取已绑定知识网络 | ☐ |
@@ -188,7 +188,7 @@ python3 register_native_function_toolbox.py --apply
 
 - 步骤 1 的 1.1～1.9 + smoke_test
 - 步骤 2 的规模与库存题（2.2～2.9）
-- 步骤 3 的 14 函数发布与两项 MCP 冒烟
+- 步骤 3 的业务函数发布与两项 MCP 冒烟
 - 步骤 4 的倒排标杆题（4.2～4.6）
 
 **P1**（5.x）建议在演示「需求承接」前完成。

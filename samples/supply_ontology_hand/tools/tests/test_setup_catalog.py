@@ -44,12 +44,13 @@ def test_build_connector_config_uses_catalog_host_override():
     assert conn["database"] == "supply_demo_hand"
     assert conn["schemas"] == ["public"]
     assert conn["password"] == ""
-    assert "options" not in conn
+    assert conn["options"] == {"sslmode": "disable"}
 
 
 def test_build_connector_config_forwards_explicit_options_only():
     cfg = {
         "database": {
+            "engine": "postgres",
             "host": "127.0.0.1",
             "port": 5432,
             "database": "supply_demo_hand",
@@ -77,7 +78,25 @@ def test_build_connector_config_mysql_engine_name():
     }
     conn = build_connector_config(cfg)
     assert conn["password"] == "secret"
-    assert conn["schemas"] == ["public"]
+    assert "schemas" not in conn
+
+
+def test_build_connector_config_mysql_omits_postgres_only_fields():
+    cfg = {
+        "database": {
+            "engine": "mysql",
+            "host": "127.0.0.1",
+            "port": 3306,
+            "database": "supply_demo_hand",
+            "user": "root",
+        },
+        "vega": {"connector_options": {"sslmode": "disable", "connect_timeout": "5"}},
+    }
+
+    conn = build_connector_config(cfg)
+
+    assert "schemas" not in conn
+    assert conn["options"] == {"connect_timeout": "5"}
 
 
 def test_expected_tables_count():
@@ -133,6 +152,38 @@ def test_run_catalog_setup_create_enable_discover():
     assert report["verification"]["ok"] is True
     assert any(step.get("action") == "create" for step in report["steps"])
     assert any(step.get("action") == "discover" for step in report["steps"])
+
+
+def test_run_catalog_setup_polls_resources_without_discover_task_api():
+    calls: list[list[str]] = []
+
+    def fake_run_cmd(args: list[str]) -> str:
+        calls.append(args)
+        if args[:5] == ["openbkn", "--json", "vega", "catalog", "list"]:
+            return json.dumps({"entries": [{"id": "cat-1", "name": "supply-demo-hand", "enabled": True}]})
+        if args[:5] == ["openbkn", "--json", "vega", "catalog", "test-connection"]:
+            return json.dumps({"ok": True})
+        if args[:5] == ["openbkn", "--json", "vega", "catalog", "discover"]:
+            return json.dumps({"id": "task-1"})
+        if args[:5] == ["openbkn", "--json", "vega", "catalog", "resources"]:
+            import yaml
+
+            mapping = yaml.safe_load(MAP.read_text(encoding="utf-8"))
+            return json.dumps({"entries": [{"name": table, "table_name": table} for table in mapping["load_order"]]})
+        raise AssertionError(f"unexpected command: {args}")
+
+    import yaml
+
+    mapping = yaml.safe_load(MAP.read_text(encoding="utf-8"))
+    config = {
+        "database": {"engine": "postgres", "host": "127.0.0.1", "port": 5432, "database": "supply_demo_hand", "user": "leecky"},
+        "vega": {"catalog_name": "supply-demo-hand"},
+    }
+
+    report = run_catalog_setup(config, mapping, run_cmd=fake_run_cmd)
+
+    assert report["verification"]["ok"] is True
+    assert not any(args[:5] == ["openbkn", "--json", "vega", "discover-task", "get"] for args in calls)
 
 
 def test_write_catalog_id_to_config(tmp_path: Path):
