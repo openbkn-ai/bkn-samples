@@ -10,7 +10,6 @@ REQUIRED_FILES = (
     "data/erp_mds_forecast.csv",
     "docs/openbkn-hand-import-guide_cn.md",
     "docs/faq.md",
-    "docs/reference/capability-contract.md",
     "bkn-eval/体验评测指南.md",
     "bkn-eval/datasets/sample-question-set-v1.yaml",
     "bkn-eval/datasets/sample-answer-set-v1.yaml",

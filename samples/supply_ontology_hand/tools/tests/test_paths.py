@@ -23,7 +23,6 @@ def test_pack_layout_exists():
     docs = PACK / "docs"
     assert (docs / "openbkn-hand-import-guide_cn.md").is_file()
     assert (docs / "faq.md").is_file()
-    assert (docs / "reference" / "capability-contract.md").is_file()
     assert (TOOLS / "README.md").is_file()
 
 
