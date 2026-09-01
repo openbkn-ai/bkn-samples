@@ -367,7 +367,7 @@ python3 setup_catalog.py --config config.yaml --write-config
 
 1. 按 `database` + `vega.catalog_host` 组装连接器配置  
 2. 若 `catalog_id` 为空：按 `catalog_name` 查找已有 Catalog，否则 `vega catalog create`  
-3. `vega catalog enable` → `test-connection` → `discover --wait`  
+3. `vega catalog enable` → `test-connection` → 触发异步 `discover` 并轮询任务终态
 4. 校验 Catalog 中可见附录 A 的 **12 张表**  
 5. `--write-config` 时将 `catalog_id` 写回 `config.yaml`
 
@@ -379,7 +379,8 @@ python3 setup_catalog.py --config config.yaml --write-config
 **若 verification 报缺表（discover 尚未完成）：**
 
 ```bash
-openbkn vega catalog discover <catalog_id> --wait
+openbkn --json vega catalog discover <catalog_id>
+# 记下返回的 task id，再查询：openbkn --json vega discover-task get <task_id>
 python3 setup_catalog.py --config config.yaml --write-config
 ```
 
@@ -612,7 +613,7 @@ python3 smoke_test.py --config config.yaml
 | 灌库报 Unknown database | 目标库未创建 | 先建空库，库名与 `database` 字段一致 |
 | 误指向共用库 | `recreate` 覆盖同名 12 表 | 改用专用库名；勿对生产库执行灌库 |
 | 创建 Catalog 报 Connector initialization failed / config is incomplete | 连接器 JSON 缺 `password` 或 PG 用户未设密码 | 见步骤 4「密码设置」；填 `database.password` 后重跑 `setup_catalog.py` |
-| 扫描后 verification 缺表 | discover 尚未完成 | `openbkn vega catalog discover <catalog_id> --wait` 后再跑脚本 |
+| 扫描后 verification 缺表 | discover 尚未完成 | 运行 `python3 setup_catalog.py --config config.yaml --write-config`；脚本会轮询 discovery task 后再校验 |
 | Catalog 扫描不到表 | 数据源未 enable、库名 / schema 不对 | 确认 Catalog 连接与步骤 3 同一库名；重新 discover |
 | MySQL 下 schema 无效 | MySQL 无 PostgreSQL 式 schema；`database.schema` 会被忽略 | 配置中 `schema` 可留空或忽略；Catalog 绑定库名即可，勿填 `database.public` 形式 |
 | 绑定后 query 为空 | 表名与映射不一致、PK 未配置 | 核对附录 B；必要时走 UI 手绑 |

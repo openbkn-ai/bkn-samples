@@ -7,6 +7,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any, Callable
 
@@ -17,6 +18,8 @@ from bind_kn_resources import parse_cli_json
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _DEFAULT_MAP = _SCRIPT_DIR / "mapping" / "object_table_map.yaml"
 _UI_FALLBACK_MSG = "请按说明书步骤 4 UI 挂接扫描"
+_DISCOVERY_SUCCESS = {"completed"}
+_DISCOVERY_FAILURE = {"failed", "cancelled", "stopped"}
 
 
 def run_cmd(args: list[str]) -> str:
@@ -81,6 +84,48 @@ def _find_catalog_by_name(name: str, *, run_cmd: Callable[[list[str]], str]) -> 
         if entry.get("name") == name:
             return entry
     return None
+
+
+def _single_catalog(payload: object, catalog_id: str) -> dict:
+    if isinstance(payload, dict) and isinstance(payload.get("entries"), list):
+        entries = payload["entries"]
+        if len(entries) == 1 and isinstance(entries[0], dict):
+            return entries[0]
+    if isinstance(payload, dict):
+        return payload
+    raise RuntimeError(f"catalog get returned unexpected payload for {catalog_id}: {payload!r}")
+
+
+def wait_for_discovery(
+    catalog_id: str,
+    *,
+    run_cmd: Callable[[list[str]], str],
+    timeout_seconds: float = 120,
+    poll_interval_seconds: float = 2,
+) -> dict:
+    created = parse_cli_json(
+        run_cmd(["openbkn", "--json", "vega", "catalog", "discover", catalog_id])
+    )
+    task_id = created.get("id") if isinstance(created, dict) else None
+    if not isinstance(task_id, str) or not task_id:
+        raise RuntimeError(f"catalog discover returned no task id: {created!r}")
+
+    deadline = time.monotonic() + timeout_seconds
+    while True:
+        task = parse_cli_json(
+            run_cmd(["openbkn", "--json", "vega", "discover-task", "get", task_id])
+        )
+        if not isinstance(task, dict):
+            raise RuntimeError(f"discover task {task_id} returned unexpected payload: {task!r}")
+        status = str(task.get("status", "")).lower()
+        if status in _DISCOVERY_SUCCESS:
+            return task
+        if status in _DISCOVERY_FAILURE:
+            message = task.get("message")
+            raise RuntimeError(f"discover task {task_id} {status}{': ' + str(message) if message else ''}")
+        if time.monotonic() >= deadline:
+            raise RuntimeError(f"discover task {task_id} did not complete within {timeout_seconds:g} seconds")
+        time.sleep(poll_interval_seconds)
 
 
 def _catalog_resources(catalog_id: str, *, run_cmd: Callable[[list[str]], str]) -> list[dict]:
@@ -175,11 +220,10 @@ def run_catalog_setup(
     catalog_id = (vega.get("catalog_id") or "").strip()
     catalog_entry: dict | None = None
     if catalog_id:
-        catalog_entry = parse_cli_json(
-            cmd(["openbkn", "--json", "vega", "catalog", "get", catalog_id])
+        catalog_entry = _single_catalog(
+            parse_cli_json(cmd(["openbkn", "--json", "vega", "catalog", "get", catalog_id])),
+            catalog_id,
         )
-        if not isinstance(catalog_entry, dict):
-            raise RuntimeError(f"catalog get returned unexpected payload for {catalog_id}")
         report["steps"].append({"action": "reuse_config_catalog_id", "catalog_id": catalog_id})
     else:
         catalog_entry = _find_catalog_by_name(catalog_name, run_cmd=cmd)
@@ -227,9 +271,8 @@ def run_catalog_setup(
     report["steps"].append({"action": "test_connection"})
 
     if not skip_discover:
-        discover_args = ["openbkn", "--json", "vega", "catalog", "discover", catalog_id, "--wait"]
-        parse_cli_json(cmd(discover_args))
-        report["steps"].append({"action": "discover", "wait": True})
+        task = wait_for_discovery(catalog_id, run_cmd=cmd)
+        report["steps"].append({"action": "discover", "task_id": task.get("id")})
     else:
         report["steps"].append({"action": "discover_skipped"})
 

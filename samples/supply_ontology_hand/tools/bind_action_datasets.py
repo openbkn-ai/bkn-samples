@@ -6,7 +6,12 @@ import json
 from pathlib import Path
 import subprocess
 import tempfile
+import time
 import yaml
+
+
+_DISCOVERY_SUCCESS = {"completed"}
+_DISCOVERY_FAILURE = {"failed", "cancelled", "stopped"}
 
 
 def build_bindings(mapping: dict, *, kn_id: str, schema: str) -> list[dict]:
@@ -50,8 +55,26 @@ def find_resource_id(catalog_id: str, dataset: str, run_cmd=run_cmd) -> str:
     raise RuntimeError(f"resource not found for Action Dataset {dataset}")
 
 
-def discover_catalog(catalog_id: str, run_cmd=run_cmd) -> None:
-    run_cmd(["openbkn", "--json", "vega", "catalog", "discover", catalog_id, "--wait"])
+def discover_catalog(catalog_id: str, run_cmd=run_cmd, *, timeout_seconds: float = 120) -> None:
+    created = parse_json(run_cmd(["openbkn", "--json", "vega", "catalog", "discover", catalog_id]))
+    task_id = created.get("id") if isinstance(created, dict) else None
+    if not isinstance(task_id, str) or not task_id:
+        raise RuntimeError(f"catalog discover returned no task id: {created!r}")
+
+    deadline = time.monotonic() + timeout_seconds
+    while True:
+        task = parse_json(run_cmd(["openbkn", "--json", "vega", "discover-task", "get", task_id]))
+        if not isinstance(task, dict):
+            raise RuntimeError(f"discover task {task_id} returned unexpected payload: {task!r}")
+        status = str(task.get("status", "")).lower()
+        if status in _DISCOVERY_SUCCESS:
+            return
+        if status in _DISCOVERY_FAILURE:
+            message = task.get("message")
+            raise RuntimeError(f"discover task {task_id} {status}{': ' + str(message) if message else ''}")
+        if time.monotonic() >= deadline:
+            raise RuntimeError(f"discover task {task_id} did not complete within {timeout_seconds:g} seconds")
+        time.sleep(2)
 
 
 def resolve_path(root: Path, value: str) -> Path:

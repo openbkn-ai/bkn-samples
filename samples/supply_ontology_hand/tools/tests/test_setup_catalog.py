@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from setup_catalog import (
+    _single_catalog,
     build_connector_config,
     expected_tables,
     run_catalog_setup,
@@ -16,6 +17,13 @@ from setup_catalog import (
 )
 
 MAP = Path(__file__).resolve().parents[1] / "mapping" / "object_table_map.yaml"
+
+
+def test_catalog_get_unwraps_current_entries_envelope():
+    assert _single_catalog({"entries": [{"id": "cat-1", "enabled": True}]}, "cat-1") == {
+        "id": "cat-1",
+        "enabled": True,
+    }
 
 
 def test_build_connector_config_uses_catalog_host_override():
@@ -93,7 +101,9 @@ def test_run_catalog_setup_create_enable_discover():
         if args[:5] == ["openbkn", "--json", "vega", "catalog", "test-connection"]:
             return json.dumps({"ok": True})
         if args[:5] == ["openbkn", "--json", "vega", "catalog", "discover"]:
-            return json.dumps({"status": "completed"})
+            return json.dumps({"id": "task-1"})
+        if args[:5] == ["openbkn", "--json", "vega", "discover-task", "get"]:
+            return json.dumps({"id": "task-1", "status": "completed"})
         if args[:5] == ["openbkn", "--json", "vega", "catalog", "resources"]:
             import yaml
 

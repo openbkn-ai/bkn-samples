@@ -47,7 +47,7 @@ python3 verify_sample.py
 python3 register_skills.py
 python3 register_skills.py --apply
 python3 setup_skill_dataset.py --interactive --apply --kn-id supply_ontology_hand
-openbkn --json vega catalog discover <catalog-id-from-config.yaml> --wait
+python3 setup_catalog.py --config config.yaml --write-config
 python3 bind_skill_dataset.py --kn-id supply_ontology_hand --catalog-id <catalog-id-from-config.yaml> --apply
 python3 power_layer.py --dry-run all --kn-id supply_ontology_hand
 python3 power_layer.py all --kn-id supply_ontology_hand

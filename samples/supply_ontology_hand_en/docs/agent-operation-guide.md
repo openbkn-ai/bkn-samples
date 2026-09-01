@@ -30,7 +30,7 @@ python3 tools/import_kn.py --json kn/supply_ontology_hand_en.json --resolve-embe
 python3 tools/bind_kn_resources.py --config tools/config.poc.yaml --kn-id supply_ontology_hand_en --table-prefix hand_
 python3 tools/register_skills.py --dry-run
 python3 tools/setup_skill_dataset.py --interactive --apply --kn-id supply_ontology_hand_en
-openbkn --json vega catalog discover <catalog-id> --wait
+python3 tools/setup_catalog.py --config tools/config.yaml --write-config
 python3 tools/bind_skill_dataset.py --kn-id supply_ontology_hand_en --catalog-id <catalog-id> --apply
 python3 tools/bootstrap_action_layer.py \
   --config tools/config.poc.yaml \

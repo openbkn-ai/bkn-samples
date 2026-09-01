@@ -8,7 +8,7 @@ Input: JSON object mapping placeholder name → uuid, e.g.:
 Paths default to sibling dirs under samples/world-cup/.
 
 Example:
-  openbkn --json vega resource list --datasource-id <cid> --type table --limit 500 \\
+  openbkn --json vega resource list --catalog-id <cid> --category table --limit 500 \\
     | python3 scripts/map_vega_table_resources.py > mappings.json
   python3 scripts/render_worldcup_bkn_vega_placeholders.py --mapping mappings.json \\
     --src worldcup-bkn --dst .rendered-bkn-vega

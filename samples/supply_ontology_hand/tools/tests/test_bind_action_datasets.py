@@ -23,8 +23,20 @@ def test_build_bindings_expands_schema_placeholder():
 
 def test_discover_catalog_waits_for_new_action_tables():
     calls = []
-    discover_catalog("catalog1", run_cmd=lambda args: calls.append(args) or "{}")
-    assert calls == [["openbkn", "--json", "vega", "catalog", "discover", "catalog1", "--wait"]]
+
+    def run_cmd(args):
+        calls.append(args)
+        if args[2:5] == ["vega", "catalog", "discover"]:
+            return '{"id":"task-1"}'
+        if args[2:5] == ["vega", "discover-task", "get"]:
+            return '{"id":"task-1","status":"completed"}'
+        raise AssertionError(f"unexpected command: {args}")
+
+    discover_catalog("catalog1", run_cmd=run_cmd)
+    assert calls == [
+        ["openbkn", "--json", "vega", "catalog", "discover", "catalog1"],
+        ["openbkn", "--json", "vega", "discover-task", "get", "task-1"],
+    ]
 
 
 def test_dry_run_does_not_update_object_type():
