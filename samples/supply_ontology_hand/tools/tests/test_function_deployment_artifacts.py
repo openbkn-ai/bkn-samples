@@ -5,12 +5,13 @@ PACK = Path(__file__).resolve().parents[2]
 
 
 def test_function_service_deployment_artifacts_exist():
-    assert (PACK / "Dockerfile.function").is_file()
-    assert (PACK / "docker-compose.function.yaml").is_file()
+    assert not (PACK / "Dockerfile.function").exists()
+    assert not (PACK / "docker-compose.function.yaml").exists()
 
 
 def test_function_deployment_does_not_embed_host_docker_internal():
-    compose = (PACK / "docker-compose.function.yaml").read_text(encoding="utf-8")
-    dockerfile = (PACK / "Dockerfile.function").read_text(encoding="utf-8")
-    assert "host.docker.internal" not in compose
-    assert "host.docker.internal" not in dockerfile
+    config = (PACK / "tools" / "config.example.yaml").read_text(encoding="utf-8")
+    requirements = (PACK / "tools" / "requirements.txt").read_text(encoding="utf-8")
+    assert "service_url" not in config
+    assert "fastapi" not in requirements.lower()
+    assert "uvicorn" not in requirements.lower()

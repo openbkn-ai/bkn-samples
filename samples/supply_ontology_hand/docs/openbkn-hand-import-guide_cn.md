@@ -71,7 +71,7 @@ python3 register_native_function_toolbox.py --apply
 python3 register_skills.py --apply
 ```
 
-在第三方 Agent 中仅通过 OpenBKN MCP 证明三件事：能发现已发布工具箱与 Skill；能以业务参数调用“标准交期”和“BOM清单”；能分别演示可售、净需求/多需求覆盖和指定交期履约。保留 Interaction 与结果作为验收证据。函数不得接收 Token、服务地址、快照或 `resolved_context`；不得用 CSV、CLI 或 SQL 冒充 MCP 调用结果。
+原生函数实现位于 `tools/fn/`，由 OpenBKN 内建运行时发布为原生 Function Toolbox。第三方 Agent 仅通过 OpenBKN MCP 证明三件事：能发现已发布工具箱与 Skill；能以业务参数调用“标准交期”和“BOM清单”；能分别演示可售、净需求/多需求覆盖和指定交期履约。保留 Interaction 与结果作为验收证据。函数不得接收 Token、服务地址、快照或 `resolved_context`；不得用 CSV、CLI 或 SQL 冒充 MCP 调用结果。
 
 ## 步骤 7：核心 50 题系统评测对比
 

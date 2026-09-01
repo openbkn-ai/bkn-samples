@@ -98,11 +98,11 @@ def test_native_tool_inputs_expose_one_discoverable_tool_per_operation():
     assert "前导零" in backward["forecast_id"]["description"]
 
 
-def test_public_capability_contract_only_directs_users_to_native_functions():
+def test_public_guide_only_directs_users_to_native_functions():
     from pathlib import Path
 
     package = Path(__file__).resolve().parents[2]
-    text = (package / "docs" / "reference" / "capability-contract.md").read_text(encoding="utf-8")
+    text = (package / "docs" / "openbkn-hand-import-guide_cn.md").read_text(encoding="utf-8")
 
     assert "tools/fn/" in text
     assert "原生 Function Toolbox" in text
