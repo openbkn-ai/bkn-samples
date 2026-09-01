@@ -2,7 +2,6 @@ schema_version: "1.1-poc"
 set_id: supply-sample-question-set-v1.1
 snapshot_date: "2026-08-13"
 business_date: "2026-08-25"
-extension_test_default: false
 audience: evaluated_agent
 answer_set_access: forbidden
 
@@ -57,16 +56,3 @@ questions:
   - {id: S-09, question: 客户需要 U00-000151 共 3850 套，不能使用替代料。请判断当前供货能力是否满足该数量。}
   - {id: S-10, question: 客户需要 U00-000151 共 3851 套，不能使用替代料。请判断当前供货能力是否满足该数量，并说明差额。}
   - {id: S-11, question: 两个客户同时新增需求：P61-000351 共 60 套、U00-000151 共 50 套，均不能使用替代料。请判断两单各自是否齐套，并说明缺料情况。}
-
-# 扩展题不计入核心 50 题准确率；用于观察自然语言实例召回与歧义处理能力。
-extensions:
-  scoring: separate_semantic_retrieval_report
-  questions:
-    - {id: X-01, question: 客户需要农业智能播种监控系统 60 套，不能使用替代料。请判断物料是否齐套。}
-    - {id: X-02, question: YC400_controler_P5_PCB 的标准采购交期是多少天？}
-    - {id: X-03, question: YN406 包装外箱 V2 的标准采购交期是多少天？}
-    - {id: X-04, question: 天线底座 MMCX-KE-7536 的物料编码是什么？当前可用库存是多少？}
-    - {id: X-05, question: YC400_controler_P5_PCB 被哪些产品使用？}
-    - {id: X-06, question: 客户询问北斗导航农机驾驶仪现在最多可以供多少套。请回复客户。}
-    - {id: X-07, question: 客户询问北斗车载智能终端系统现在最多可以供多少套。请回复客户。}
-    - {id: X-08, question: 农业智能播种监控系统的 YC400 控制器 PCB 缺料。客户要 60 套时，缺多少个？}

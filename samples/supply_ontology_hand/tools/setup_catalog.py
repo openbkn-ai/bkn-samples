@@ -18,8 +18,6 @@ from bind_kn_resources import parse_cli_json
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _DEFAULT_MAP = _SCRIPT_DIR / "mapping" / "object_table_map.yaml"
 _UI_FALLBACK_MSG = "请按说明书步骤 4 UI 挂接扫描"
-_DISCOVERY_SUCCESS = {"completed"}
-_DISCOVERY_FAILURE = {"failed", "cancelled", "stopped"}
 
 
 def run_cmd(args: list[str]) -> str:
@@ -51,18 +49,25 @@ def expected_tables(mapping: dict, table_prefix: str = "") -> list[str]:
 def build_connector_config(cfg: dict) -> dict:
     db = cfg["database"]
     vega = cfg.get("vega") or {}
+    engine = db["engine"]
     host = vega.get("catalog_host") or db["host"]
-    schema = db.get("schema") or "public"
     connector: dict[str, Any] = {
         "host": host,
         "port": int(db["port"]),
         "username": db["user"],
         "database": db["database"],
-        "schemas": [schema] if isinstance(schema, str) else list(schema),
     }
-    connector_options = vega.get("connector_options")
-    if connector_options:
-        connector["options"] = dict(connector_options)
+    options = dict(vega.get("connector_options") or {})
+    if engine == "postgres":
+        schema = db.get("schema") or "public"
+        connector["schemas"] = [schema] if isinstance(schema, str) else list(schema)
+        connector["options"] = options or {"sslmode": "disable"}
+    elif engine == "mysql":
+        options.pop("sslmode", None)
+        if options:
+            connector["options"] = options
+    else:
+        raise ValueError(f"unsupported database engine for Vega catalog: {engine}")
     password = db.get("password")
     if password is None:
         password = ""
@@ -94,38 +99,6 @@ def _single_catalog(payload: object, catalog_id: str) -> dict:
     if isinstance(payload, dict):
         return payload
     raise RuntimeError(f"catalog get returned unexpected payload for {catalog_id}: {payload!r}")
-
-
-def wait_for_discovery(
-    catalog_id: str,
-    *,
-    run_cmd: Callable[[list[str]], str],
-    timeout_seconds: float = 120,
-    poll_interval_seconds: float = 2,
-) -> dict:
-    created = parse_cli_json(
-        run_cmd(["openbkn", "--json", "vega", "catalog", "discover", catalog_id])
-    )
-    task_id = created.get("id") if isinstance(created, dict) else None
-    if not isinstance(task_id, str) or not task_id:
-        raise RuntimeError(f"catalog discover returned no task id: {created!r}")
-
-    deadline = time.monotonic() + timeout_seconds
-    while True:
-        task = parse_cli_json(
-            run_cmd(["openbkn", "--json", "vega", "discover-task", "get", task_id])
-        )
-        if not isinstance(task, dict):
-            raise RuntimeError(f"discover task {task_id} returned unexpected payload: {task!r}")
-        status = str(task.get("status", "")).lower()
-        if status in _DISCOVERY_SUCCESS:
-            return task
-        if status in _DISCOVERY_FAILURE:
-            message = task.get("message")
-            raise RuntimeError(f"discover task {task_id} {status}{': ' + str(message) if message else ''}")
-        if time.monotonic() >= deadline:
-            raise RuntimeError(f"discover task {task_id} did not complete within {timeout_seconds:g} seconds")
-        time.sleep(poll_interval_seconds)
 
 
 def _catalog_resources(catalog_id: str, *, run_cmd: Callable[[list[str]], str]) -> list[dict]:
@@ -189,6 +162,30 @@ def verify_tables(
     }
 
 
+def wait_for_tables(
+    catalog_id: str,
+    mapping: dict,
+    *,
+    table_prefix: str,
+    run_cmd: Callable[[list[str]], str],
+    attempts: int,
+    interval_seconds: float,
+    sleep_fn: Callable[[float], None],
+) -> dict[str, Any]:
+    """Poll resources because CLI 0.1.4 does not expose a discover wait API."""
+    verification: dict[str, Any] = {}
+    for attempt in range(1, attempts + 1):
+        verification = verify_tables(
+            catalog_id, mapping, table_prefix=table_prefix, run_cmd=run_cmd
+        )
+        verification["attempt"] = attempt
+        if verification["ok"]:
+            return verification
+        if attempt < attempts:
+            sleep_fn(interval_seconds)
+    return verification
+
+
 def run_catalog_setup(
     config: dict,
     mapping: dict,
@@ -198,8 +195,12 @@ def run_catalog_setup(
     skip_discover: bool = False,
     table_prefix: str = "",
     run_cmd: Callable[[list[str]], str] | None = None,
+    sleep_fn: Callable[[float], None] | None = None,
+    discover_poll_attempts: int = 30,
+    discover_poll_interval_seconds: float = 2,
 ) -> dict[str, Any]:
     cmd = run_cmd or _default_run_cmd
+    sleep = sleep_fn or time.sleep
     vega = config.get("vega") or {}
     db = config["database"]
     catalog_name = vega.get("catalog_name") or f"supply-demo-{db['database']}"
@@ -271,12 +272,20 @@ def run_catalog_setup(
     report["steps"].append({"action": "test_connection"})
 
     if not skip_discover:
-        task = wait_for_discovery(catalog_id, run_cmd=cmd)
-        report["steps"].append({"action": "discover", "task_id": task.get("id")})
+        parse_cli_json(cmd(["openbkn", "--json", "vega", "catalog", "discover", catalog_id]))
+        report["steps"].append({"action": "discover", "wait": "resource_poll"})
     else:
         report["steps"].append({"action": "discover_skipped"})
 
-    verification = verify_tables(catalog_id, mapping, table_prefix=table_prefix, run_cmd=cmd)
+    verification = wait_for_tables(
+        catalog_id,
+        mapping,
+        table_prefix=table_prefix,
+        run_cmd=cmd,
+        attempts=discover_poll_attempts,
+        interval_seconds=discover_poll_interval_seconds,
+        sleep_fn=sleep,
+    )
     report["verification"] = verification
     if not verification["ok"]:
         missing = ", ".join(verification["missing"])

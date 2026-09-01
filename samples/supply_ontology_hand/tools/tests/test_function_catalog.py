@@ -109,7 +109,7 @@ def test_delivery_docs_only_direct_users_to_the_native_function_entry():
         package / "docs" / "场景驱动的供应链动态能力设计.md",
     ):
         text = path.read_text(encoding="utf-8")
-        assert "14 个" in text
+        assert "14 个" not in text
         assert "supply_chain_compute" not in text
         assert "host.docker.internal:8765" not in text
         assert "71600d21-c9f6-4336-bfbf-95bfb3654674" not in text

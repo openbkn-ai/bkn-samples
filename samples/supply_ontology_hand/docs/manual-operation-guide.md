@@ -63,7 +63,7 @@ python3 register_native_function_toolbox.py --apply
 
 Toolbox 名称只能使用中文、字母、数字和下划线，不能含连字符、空格或其他标点。创建前先在 UI 或 `openbkn toolbox list` 中确认同名 Toolbox；如果 POC 返回连接超时，先检查 `openbkn auth status` 和 Toolbox 列表，再决定是否重试，避免重复创建。
 
-默认样例使用 OpenBKN 内建的 `metadata_type=function` 运行时，不需要函数服务器地址、Docker、`host.docker.internal` 或独立函数服务。操作者只需已登录 OpenBKN；脚本会创建或更新 `供应链原生计算函数` Toolbox，并发布 14 个按业务命名的函数。调用者只传业务参数；函数在受控运行时读取已绑定的知识网络。
+默认样例使用 OpenBKN 内建的 `metadata_type=function` 运行时，不需要函数服务器地址、Docker、`host.docker.internal` 或独立函数服务。操作者只需已登录 OpenBKN；脚本会创建或更新 `供应链原生计算函数` Toolbox，并发布按业务命名的函数。调用者只传业务参数；函数在受控运行时读取已绑定的知识网络。
 
 ### Action Dataset 建表
 
