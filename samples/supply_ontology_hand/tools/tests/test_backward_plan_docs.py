@@ -5,7 +5,6 @@ from __future__ import annotations
 from pathlib import Path
 
 PACK = Path(__file__).resolve().parents[2]
-HANDOFF = PACK / "docs" / "第三方Agent数据交接说明.md"
 S1 = PACK / "skills" / "production-schedule-backward-planning" / "SKILL.md"
 IO = PACK / "skills" / "production-schedule-backward-planning" / "references" / "io-contract.md"
 RULES = PACK / "skills" / "production-schedule-backward-planning" / "references" / "business-rules.md"
@@ -20,9 +19,7 @@ S1_NAVIGATION_SNIPPETS = [
     "新增客户需求",
     "business_date",
     "2026-08-25",
-    "人工确认",
-    "采购申请决策",
-    "不创建 ERP",
+    "不创建监控",
 ]
 
 
@@ -38,14 +35,15 @@ def test_s1_skill_routes_delivery_scenarios_without_runtime_rebuild():
     assert "函数服务不查询" not in text
 
 
-def test_s1_references_keep_single_forecast_monitor_and_no_erp_write():
+def test_s1_references_do_not_expose_action_or_erp_write_paths():
     combined = "\n".join(
         path.read_text(encoding="utf-8") for path in (IO, RULES, REPORT)
     )
     assert "backward_plan" in combined
     assert "一张" in combined and "预测" in combined
-    assert "create_monitor_task" in combined
-    assert "initiate_po" in combined or "ERP PR" in combined or "不创建 ERP" in combined
+    assert "create_monitor_task" not in combined
+    assert "Action" not in combined
+    assert "initiate_po" not in combined
 
 
 def test_s1_is_self_contained_and_maps_user_input_to_function_contract():
@@ -64,11 +62,3 @@ def test_s1_is_self_contained_and_maps_user_input_to_function_contract():
     assert "supply_chain_compute" not in combined
     assert "71600d21-c9f6-4336-bfbf-95bfb3654674" not in skill
     assert "docs/" not in combined
-
-
-def test_handoff_exposes_backward_plan_as_a_business_function():
-    text = HANDOFF.read_text(encoding="utf-8")
-    assert "生产计划齐套倒排" in text
-    assert "函数自行读取" in text
-    assert "不要自行封装 Context Loader" in text
-    assert "数据快照或 `resolved_context` 作为函数参数传递" in text

@@ -17,15 +17,14 @@ def read_forecasts(sample_name):
         return {row["id"]: row for row in csv.DictReader(handle)}
 
 
-def test_future_forecast_cases_exist_in_both_languages():
-    for sample_name in ("supply_ontology_hand", "supply_ontology_hand_en"):
-        forecasts = read_forecasts(sample_name)
-        for forecast_id, (product, quantity, due_date) in EXPECTED_CASES.items():
-            row = forecasts[forecast_id]
-            assert row["material_number"] == product
-            assert float(row["qty"]) == quantity
-            assert date.fromisoformat(row["enddate"]) == due_date
-            assert due_date > date(2026, 8, 15)
+def test_future_forecast_cases_exist_in_the_released_chinese_sample():
+    forecasts = read_forecasts("supply_ontology_hand")
+    for forecast_id, (product, quantity, due_date) in EXPECTED_CASES.items():
+        row = forecasts[forecast_id]
+        assert row["material_number"] == product
+        assert float(row["qty"]) == quantity
+        assert date.fromisoformat(row["enddate"]) == due_date
+        assert due_date > date(2026, 8, 15)
 
 
 def test_historical_regression_case_is_retained():

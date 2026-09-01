@@ -17,7 +17,7 @@ from power_layer import (
 )
 
 PACK = Path(__file__).resolve().parents[2]
-PAYLOADS = PACK / "docs" / "payloads"
+PAYLOADS = PACK / "tools" / "assets"
 METRICS_FILE = PAYLOADS / "metrics-create.json"
 LP_FILE = PAYLOADS / "logic-properties.json"
 QUERY_FILE = PAYLOADS / "metrics-query-examples.json"

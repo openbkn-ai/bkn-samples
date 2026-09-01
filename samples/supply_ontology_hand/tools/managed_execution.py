@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from collections.abc import Callable, Mapping
 from typing import Any
 
-from context.operation_contracts import OPERATION_CONTRACTS
+from fn.contracts import OPERATION_CONTRACTS
 from fn import (
     backward_plan,
     bom_list,

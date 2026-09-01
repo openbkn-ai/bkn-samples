@@ -57,4 +57,4 @@
 - `fulfillment_mode=production_plan` 表示现货不足：`customer_earliest_available_date` / `customer_late_days` 用于客户交期沟通；`max_delay_days` 仅表示内部倒排风险，不能直接表述为客户延期天数。
 - 报告同时说明数据范围、替代策略与所用计算口径。
 
-监控建议如提出，目标只能是一种产品加一张预测；采购申请决策须人工确认，不创建 ERP PR/PO。
+后续处置只输出人工建议；本版本不创建监控、采购申请、采购订单或 ERP 记录。

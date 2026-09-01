@@ -3,7 +3,7 @@
 import sys
 import types
 
-from support_resolved_context import csv_resolved_context
+from support_bkn_rows import bkn_rows
 
 
 def test_native_function_source_is_compilable_sdk_tool_code():
@@ -37,7 +37,7 @@ def test_native_function_source_never_asks_caller_for_a_data_snapshot():
 def test_generated_native_function_loads_its_own_bkn_rows(monkeypatch):
     from native_function_bundle import build_native_function_code
 
-    rows = csv_resolved_context()["rows"]
+    rows = bkn_rows()
     dataset_by_object_type = {
         "supply_ontology_hand_forecast": "forecast",
         "supply_ontology_hand_bom": "bom",

@@ -43,7 +43,7 @@ dry-run 只能验证本地 JSON 和请求准备，不能证明目标环境的模
 openbkn --json bkn metric list <kn_id>
 ```
 
-技能注册、函数服务和行动绑定也必须分别验收，不能用 KN 导入成功替代全部动力层验证。
+函数与 Skill 也必须分别验收，不能用 KN 导入成功替代完整交付验收。
 
 ## Q7：手工模式怎么处理？
 
@@ -57,25 +57,13 @@ POC 的 Toolbox 名称只允许中文、英文字母、数字和下划线。不�
 
 不能直接盲目重试。先执行 `openbkn auth status`，再执行 `openbkn toolbox list --limit 100` 确认同名 Toolbox 是否已经创建。
 
-## Q10：`setup_action_datasets.py --apply` 是否已经把表建到数据库？
-
-现在 Agent 模式使用 `bootstrap_action_layer.py --interactive --apply` 自动执行幂等 DDL 并验收三张表；密码不落盘。纯手工模式仍可直接执行 SQL。无论哪种模式，都必须查询三张 `sc_` 表确认。
-
-## Q11：函数 Toolbox 创建成功但调用失败怎么办？
+## Q10：函数 Toolbox 创建成功但调用失败怎么办？
 
 先确认是否使用默认的原生 Function Toolbox：执行 `python3 tools/register_native_function_toolbox.py --apply`。该路径不需要 `FUNCTION_SERVICE_URL`；函数由 OpenBKN 内建运行时执行。
 
 函数只接收业务参数，不传 BOM/库存快照、`resolved_context`、Token 或服务地址。先用 MCP 的 `list_published_toolboxes` / `list_published_tools` 发现“供应链原生计算函数”和目标函数；再在新的受管 Interaction 中调用 `execute_published_tool`。若函数内部读取知识网络失败，记录平台返回的错误和 Interaction ID，由环境管理员检查调用者对知识网络的查询权限；不要改用 CSV 或本地计算冒充线上结果。
 
-## Q12：OpenAPI 上传成功但工具不能调用怎么办？
-
-上传成功不等于工具已启用。检查 Toolbox 中每个工具的状态；如果是 `disabled`，使用上传回执中的 `tool_id` 执行 `openbkn tool enable`，再重新查询确认。
-
-## Q13：为什么 Action Dataset 不能直接用 `data_source.type=dataset` 绑定？
-
-Action Dataset 首先是数据库表；对象类在 OpenBKN 中必须绑定物理 Catalog Discover 出来的 Resource。因此正确顺序是：建表 → Catalog Discover → 获取 `resource_id` → 用 `data_source.type=resource` 绑定。`bootstrap_action_layer.py` 已自动执行这四步。
-
-## Q14：为什么网页/内置 Agent 查询不到本环境数据，但 CLI 能查到？
+## Q11：为什么网页/内置 Agent 查询不到本环境数据，但 CLI 能查到？
 
 先不要判断数据导入失败。必须先回读当前 Agent 实际使用的 `kn_id`、Catalog 和对象类 `data_source`。可复现的只读验证入口是已认证的 `openbkn context` CLI；如果内置连接器返回公共或旧 Resource，说明环境路由不一致，应停止业务验收并切换到当前环境的 Context Loader。不能用其他环境资源的查询结果替代本环境证据。
 
@@ -88,6 +76,6 @@ openbkn --json context tool-call supply_ontology_hand bkn_start_interaction \\
 
 后续查询必须复用返回的 `conversation_id` 和 `interaction_id`，并在结束时调用 `bkn_finish_interaction`。
 
-## Q15：数据库名和 OpenBKN 连接名称是不是一回事？
+## Q12：数据库名和 OpenBKN 连接名称是不是一回事？
 
 不是。由部署者为本环境分别创建 PostgreSQL 数据库（如 `<sample_database>`）与 OpenBKN 物理 Catalog（如 `<sample_catalog_name>`）；Catalog ID 由平台创建后返回。数据库脚本提示数据库名时只能填数据库名，不能填 Catalog 名称或 Catalog ID。不要复制其他 POC、客户或报告中的这些值。
