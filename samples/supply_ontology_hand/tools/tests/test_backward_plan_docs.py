@@ -19,9 +19,7 @@ S1_NAVIGATION_SNIPPETS = [
     "新增客户需求",
     "business_date",
     "2026-08-25",
-    "人工确认",
-    "采购申请决策",
-    "不创建 ERP",
+    "不创建监控",
 ]
 
 
@@ -37,14 +35,15 @@ def test_s1_skill_routes_delivery_scenarios_without_runtime_rebuild():
     assert "函数服务不查询" not in text
 
 
-def test_s1_references_keep_single_forecast_monitor_and_no_erp_write():
+def test_s1_references_do_not_expose_action_or_erp_write_paths():
     combined = "\n".join(
         path.read_text(encoding="utf-8") for path in (IO, RULES, REPORT)
     )
     assert "backward_plan" in combined
     assert "一张" in combined and "预测" in combined
-    assert "create_monitor_task" in combined
-    assert "initiate_po" in combined or "ERP PR" in combined or "不创建 ERP" in combined
+    assert "create_monitor_task" not in combined
+    assert "Action" not in combined
+    assert "initiate_po" not in combined
 
 
 def test_s1_is_self_contained_and_maps_user_input_to_function_contract():
@@ -63,4 +62,3 @@ def test_s1_is_self_contained_and_maps_user_input_to_function_contract():
     assert "supply_chain_compute" not in combined
     assert "71600d21-c9f6-4336-bfbf-95bfb3654674" not in skill
     assert "docs/" not in combined
-

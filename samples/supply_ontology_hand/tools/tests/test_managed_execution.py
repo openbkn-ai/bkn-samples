@@ -2,8 +2,8 @@
 
 import pytest
 
-from context.operation_contracts import OPERATION_CONTRACTS
-from support_resolved_context import csv_resolved_context
+from fn.contracts import OPERATION_CONTRACTS
+from support_bkn_rows import bkn_rows
 
 
 def test_every_operation_has_a_bkn_managed_query_plan():
@@ -49,7 +49,7 @@ def test_managed_execution_runs_backward_plan_from_internal_bkn_rows():
 
     result = execute_from_bkn_rows(
         "backward_plan",
-        csv_resolved_context()["rows"],
+        bkn_rows(),
         {
             "product": "U00-000080",
             "forecast_id": "0000023181",
@@ -68,7 +68,7 @@ def test_forecast_mode_needs_no_agent_copied_product_quantity_or_due_date():
 
     result = execute_from_bkn_rows(
         "backward_plan",
-        csv_resolved_context()["rows"],
+        bkn_rows(),
         {"forecast_id": "0000023181", "substitute_enabled": False},
     )
 
@@ -82,7 +82,7 @@ def test_managed_execution_runs_bom_list_from_internal_bkn_rows():
 
     result = execute_from_bkn_rows(
         "bom_list",
-        csv_resolved_context()["rows"],
+        bkn_rows(),
         {"product": "382-000005", "depth": 1, "include_substitute": False},
     )
 

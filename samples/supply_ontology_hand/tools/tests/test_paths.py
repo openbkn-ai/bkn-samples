@@ -14,7 +14,6 @@ def test_pack_layout_exists():
     assert (PACK / "README.md").is_file()
     assert (TOOLS / "power_layer.py").is_file()
     assert (TOOLS / "fn" / "__init__.py").is_file()
-    assert (TOOLS / "fn_cli.py").is_file()
     assert (TOOLS / "native_function_bundle.py").is_file()
     assert (TOOLS / "register_native_function_toolbox.py").is_file()
     skills = PACK / "skills"

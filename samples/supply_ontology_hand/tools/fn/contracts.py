@@ -1,25 +1,9 @@
-"""Logical dataset requirements for each function operation.
-
-This contract only lists which resolved_context.rows a function needs.
-It does not describe how an Agent queries Context Loader.
-"""
+"""Knowledge-network dataset requirements for each native function."""
 
 from __future__ import annotations
 
 from collections.abc import Mapping
 
-ALLOWED_DATASETS = frozenset(
-    {
-        "bom",
-        "inventory",
-        "material",
-        "purchase_order",
-        "purchase_request",
-        "mrp",
-        "forecast",
-        "product",
-    }
-)
 
 OPERATION_CONTRACTS: Mapping[str, frozenset[str]] = {
     "bom_list": frozenset({"bom"}),
