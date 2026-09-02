@@ -133,7 +133,8 @@
       "metric_name": "预测需求量合计",
       "title": "预测数量全量",
       "body": {},
-      "expected_value": 115922
+      "expected_value": 106422,
+      "note": "冻结数据快照（2026-08-13）：正常预测 46840 + 已关闭预测 59582 = 106422。已与 POC 环境的指标结果交叉核对；其中正常预测 46840 与 sample-answer-set-v1.yaml 的 M-07 基准答案一致。"
     },
     {
       "id": "forecast_382_open_qty",
@@ -157,8 +158,8 @@
       "body": {
         "condition": { "field": "closestatus_title", "operation": "!=", "value": "已关闭" }
       },
-      "expected_value": 90,
-      "note": "定义态 condition 无效。查询时必须显式传 closestatus_title != 已关闭。"
+      "expected_value": 87,
+      "note": "冻结数据快照（2026-08-13）：状态为“正常”的未关闭预测单数量为 87。已与 POC 环境的指标结果交叉核对，并与 sample-answer-set-v1.yaml 的 M-08 基准答案一致。定义态 condition 无效，查询时必须显式传 closestatus_title != 已关闭。"
     }
   ]
 }
