@@ -4,6 +4,23 @@
 
 它不使用客户生产数据，也不会自动创建采购订单或写入 ERP。真实写回须另行配置工具、权限和审批。
 
+## 获取最新发布版
+
+新使用者直接拉取已验证发布版：
+
+```bash
+git clone --branch supply-ontology-hand-v0.1.4 --depth 1 https://github.com/openbkn-ai/bkn-samples.git
+cd bkn-samples/samples/supply_ontology_hand
+```
+
+已有仓库先进入 `bkn-samples` 根目录再更新 tag：
+
+```bash
+git fetch origin --tags --force
+git checkout --detach supply-ontology-hand-v0.1.4
+cd samples/supply_ontology_hand
+```
+
 ## 给客户
 
 完成交付后，第三方 Agent 可经 MCP 回答：
