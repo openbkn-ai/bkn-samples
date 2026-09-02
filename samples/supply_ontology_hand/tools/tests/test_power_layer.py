@@ -114,7 +114,8 @@ def test_pack_payloads_exist_and_align():
     query_payload = json.loads(QUERY_FILE.read_text(encoding="utf-8"))
     query_metric_names = {case["metric_name"] for case in query_payload["cases"]}
     assert query_metric_names <= metric_names
-    assert "open_forecast_count" in {c["id"] for c in query_payload["cases"]}
+    cases_by_id = {case["id"]: case for case in query_payload["cases"]}
+    assert "open_forecast_count" in cases_by_id
     lp_names = {
         spec["name"]
         for group in lp_payload["bindings"]
@@ -122,4 +123,13 @@ def test_pack_payloads_exist_and_align():
     }
     assert "available_qty_sum" in lp_names
     assert "available_inventory_qty" not in lp_names
-    assert query_payload["cases"][-1]["expected_value"] == 90
+    forecast_qty_all = cases_by_id["forecast_qty_all"]
+    assert forecast_qty_all["expected_value"] == 106422
+    assert "POC 环境" in forecast_qty_all["note"]
+    assert "M-07" in forecast_qty_all["note"]
+
+    open_forecast_count = cases_by_id["open_forecast_count"]
+    assert open_forecast_count["expected_value"] == 87
+    assert "状态为“正常”" in open_forecast_count["note"]
+    assert "POC 环境" in open_forecast_count["note"]
+    assert "M-08" in open_forecast_count["note"]
