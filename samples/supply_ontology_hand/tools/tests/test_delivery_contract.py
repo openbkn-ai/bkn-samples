@@ -47,3 +47,13 @@ def test_released_sample_has_no_legacy_dataset_or_local_eval_paths():
     assert (sample / "data" / "customer_entity.csv").is_file()
     assert not (sample / "datasets").exists()
     assert not (sample / "eval").exists()
+
+
+def test_readme_explains_how_to_get_the_release_tag():
+    readme = (
+        REPO_ROOT / "samples" / "supply_ontology_hand" / "README.md"
+    ).read_text(encoding="utf-8")
+
+    assert "supply-ontology-hand-v0.1.4" in readme
+    assert "git clone --branch" in readme
+    assert "git fetch origin --tags --force" in readme
