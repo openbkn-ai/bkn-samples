@@ -39,3 +39,25 @@ def test_sql_type_for_all_engines():
     assert sql_type_for("BIGINT", "sqlite") == "INTEGER"
     assert sql_type_for("FLOAT", "postgres") == "DOUBLE PRECISION"
     assert sql_type_for("TIMESTAMP", "mysql") == "DATETIME"
+
+
+def test_explicit_schema_keeps_numeric_looking_identifiers_as_varchar():
+    from load_sample_data import column_schema
+
+    assert column_schema("customer_entity", "contact_phone", ["13800138000"], "mysql") == (
+        "contact_phone", "VARCHAR(32)"
+    )
+    assert column_schema("erp_material", "material_code", ["10001"], "mysql") == (
+        "material_code", "VARCHAR(64)"
+    )
+
+
+def test_explicit_schema_uses_decimal_for_prices_and_quantities():
+    from load_sample_data import column_schema
+
+    assert column_schema("erp_material", "material_standard_price", ["0"], "mysql") == (
+        "material_standard_price", "DECIMAL(18,6)"
+    )
+    assert column_schema("erp_purchase_order", "qty", ["0"], "mysql") == (
+        "qty", "DECIMAL(18,6)"
+    )

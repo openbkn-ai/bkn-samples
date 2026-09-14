@@ -19,10 +19,12 @@ _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}")
 _SAMPLE_ROWS = 200
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _DEFAULT_MAP = _SCRIPT_DIR / "mapping" / "object_table_map.yaml"
+_COLUMN_TYPES = _SCRIPT_DIR / "mapping" / "column_types.yaml"
 
 _SQLITE_TYPE_MAP = {
     "BIGINT": "INTEGER",
     "FLOAT": "REAL",
+    "DECIMAL": "NUMERIC",
     "TIMESTAMP": "TEXT",
     "TEXT": "TEXT",
 }
@@ -30,6 +32,7 @@ _SQLITE_TYPE_MAP = {
 _POSTGRES_TYPE_MAP = {
     "BIGINT": "BIGINT",
     "FLOAT": "DOUBLE PRECISION",
+    "DECIMAL": "DECIMAL(18,6)",
     "TIMESTAMP": "TIMESTAMP",
     "TEXT": "TEXT",
 }
@@ -37,9 +40,29 @@ _POSTGRES_TYPE_MAP = {
 _MYSQL_TYPE_MAP = {
     "BIGINT": "BIGINT",
     "FLOAT": "DOUBLE",
+    "DECIMAL": "DECIMAL(18,6)",
     "TIMESTAMP": "DATETIME",
     "TEXT": "TEXT",
 }
+
+
+def _load_column_overrides() -> dict:
+    if not _COLUMN_TYPES.is_file():
+        return {}
+    return yaml.safe_load(_COLUMN_TYPES.read_text(encoding="utf-8")) or {}
+
+
+def column_schema(table: str, column: str, values: Iterable[str], engine_name: str) -> tuple[str, str]:
+    """Resolve a column from business schema first, inference only as fallback."""
+    spec = _load_column_overrides().get("overrides", {}).get(table, {}).get(column)
+    if spec:
+        kind = str(spec["type"]).upper()
+        if kind == "VARCHAR":
+            return column, f"VARCHAR({int(spec['length'])})"
+        if kind == "DECIMAL":
+            return column, f"DECIMAL({int(spec['precision'])},{int(spec['scale'])})"
+        return column, sql_type_for(kind, engine_name)
+    return column, sql_type_for(infer_column_type(values), engine_name)
 
 
 def infer_column_type(values: Iterable[str]) -> str:
@@ -115,12 +138,11 @@ def ensure_postgres_database(db: dict) -> None:
         conn.close()
 
 
-def _infer_schema(header: list[str], rows: list[list[str]], engine_name: str) -> list[tuple[str, str]]:
+def _infer_schema(table: str, header: list[str], rows: list[list[str]], engine_name: str) -> list[tuple[str, str]]:
     col_types: list[tuple[str, str]] = []
     for idx, col in enumerate(header):
         samples = (row[idx] if idx < len(row) else "" for row in rows[:_SAMPLE_ROWS])
-        logical = infer_column_type(samples)
-        col_types.append((col, sql_type_for(logical, engine_name)))
+        col_types.append(column_schema(table, col, samples, engine_name))
     return col_types
 
 
@@ -165,7 +187,7 @@ def _load_table(
                 sample_rows.append(row)
             all_rows.append(row)
 
-    schema = _infer_schema(header, sample_rows, engine_name)
+    schema = _infer_schema(table, header, sample_rows, engine_name)
     q_table = quote_ident(table, engine_name)
     col_defs = ", ".join(
         f"{quote_ident(col, engine_name)} {sql_type}" for col, sql_type in schema
