@@ -152,6 +152,11 @@ def test_run_catalog_setup_create_enable_discover():
     assert report["verification"]["ok"] is True
     assert any(step.get("action") == "create" for step in report["steps"])
     assert any(step.get("action") == "discover" for step in report["steps"])
+    list_call = next(call for call in calls if call[:5] == ["openbkn", "--json", "vega", "catalog", "list"])
+    assert "--type" in list_call
+    assert list_call[list_call.index("--type") + 1] == "physical"
+    assert "--name" in list_call
+    assert list_call[list_call.index("--name") + 1] == "supply-demo-hand"
 
 
 def test_run_catalog_setup_polls_resources_without_discover_task_api():

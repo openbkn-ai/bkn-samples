@@ -75,8 +75,12 @@ def build_connector_config(cfg: dict) -> dict:
     return connector
 
 
-def _catalog_list(*, run_cmd: Callable[[list[str]], str]) -> list[dict]:
-    payload = parse_cli_json(run_cmd(["openbkn", "--json", "vega", "catalog", "list", "--limit", "-1"]))
+def _catalog_list(*, name: str | None = None, run_cmd: Callable[[list[str]], str]) -> list[dict]:
+    args = ["openbkn", "--json", "vega", "catalog", "list", "--type", "physical"]
+    if name:
+        args.extend(["--name", name])
+    args.extend(["--limit", "-1"])
+    payload = parse_cli_json(run_cmd(args))
     if isinstance(payload, dict):
         return list(payload.get("entries") or [])
     if isinstance(payload, list):
@@ -85,7 +89,7 @@ def _catalog_list(*, run_cmd: Callable[[list[str]], str]) -> list[dict]:
 
 
 def _find_catalog_by_name(name: str, *, run_cmd: Callable[[list[str]], str]) -> dict | None:
-    for entry in _catalog_list(run_cmd=run_cmd):
+    for entry in _catalog_list(name=name, run_cmd=run_cmd):
         if entry.get("name") == name:
             return entry
     return None
