@@ -4,6 +4,26 @@
 
 Official OpenBKN experience samples: knowledge network models, sample data, and step-by-step import tools.
 
+## One-command install
+
+After logging in with an OpenBKN administrator account, install a sample from a repository checkout:
+
+```bash
+./install.sh list
+./install.sh supply-chain --runtime k8s
+./install.sh world-cup --runtime k8s
+```
+
+For a Docker runtime outside the OpenBKN cluster, provide the host address that Vega can reach. The installer uses a per-sample default port (`13306` for supply-chain and `13307` for world-cup):
+
+```bash
+./install.sh supply-chain --runtime docker --catalog-host 10.0.0.8
+```
+
+If no local session exists, the installer guides an interactive `openbkn auth login <url> --device`; non-interactive runs print the exact login command and stop. Use `--dry-run` to inspect the plan without writes.
+
+The installer requires an `openbkn` release whose `vega catalog create`, `update`, and `test-connection-config` commands support `--connector-config-file`. It never falls back to passing the database password in command-line JSON.
+
 ## Prerequisites
 
 - [OpenBKN platform install (Feishu guide)](https://openbkn-ai.feishu.cn/wiki/Hby4wPzuhiFqD8klgMdcwvpBnde)

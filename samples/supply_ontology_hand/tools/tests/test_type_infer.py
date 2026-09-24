@@ -24,6 +24,32 @@ def test_mysql_type_map():
     assert sql_type_for("TEXT", "mysql") in ("TEXT", "LONGTEXT")
 
 
+def test_mysql_engine_accepts_a_unix_socket_for_container_init(monkeypatch):
+    import load_sample_data
+
+    captured = {}
+
+    def fake_create_engine(url, **kwargs):
+        captured["url"] = url
+        captured["kwargs"] = kwargs
+        return object()
+
+    monkeypatch.setattr(load_sample_data, "create_engine", fake_create_engine)
+    load_sample_data.build_engine(
+        {
+            "engine": "mysql",
+            "host": "localhost",
+            "port": 3306,
+            "database": "sample",
+            "user": "sample_user",
+            "password": "sample_password",
+            "unix_socket": "/run/mysqld/mysqld.sock",
+        }
+    )
+
+    assert captured["kwargs"] == {"connect_args": {"unix_socket": "/run/mysqld/mysqld.sock"}}
+
+
 def test_quote_ident_by_engine():
     from load_sample_data import quote_ident
 

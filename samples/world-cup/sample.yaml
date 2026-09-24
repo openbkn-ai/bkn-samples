@@ -1,0 +1,24 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: Sample
+metadata:
+  name: world-cup
+  aliases: [worldcup]
+  displayName: 世界杯
+spec:
+  version: 1.0.0
+  database:
+    engine: mariadb
+    name: worldcup
+    expectedTables: 27
+    dockerPort: 13307
+  data:
+    mode: runtime-download
+    version: 1.0.0
+    lockFile: dataset.lock
+  knowledgeNetwork:
+    id: worldcup_vega_catalog_bkn
+  hooks:
+    dbInit: db/init.sh
+    dbVerify: db/verify.sh
+    platformInstall: platform/install.sh
+    platformVerify: platform/verify.sh

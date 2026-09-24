@@ -47,7 +47,8 @@ def strip_index_config(node) -> None:
 
 
 def import_kn(
-    json_path: Path, *, dry_run: bool = False, resolve_embedding: bool = False
+    json_path: Path, *, dry_run: bool = False, resolve_embedding: bool = False,
+    embedding_mode: str = "preserve",
 ) -> dict:
     payload = json.loads(json_path.read_text(encoding="utf-8"))
     kn_id = payload.get("id")
@@ -55,23 +56,58 @@ def import_kn(
     if not kn_id or not kn_name:
         raise ValueError(f"KN JSON missing id/name: {json_path}")
 
+    if embedding_mode not in {"preserve", "auto", "disable"}:
+        raise ValueError("embedding_mode must be preserve, auto, or disable")
     if resolve_embedding:
-        embedding_id = resolve_default_embedding()
-        for obj in payload.get("object_types", []):
-            for prop in obj.get("data_properties", []):
-                vector = prop.get("index_config", {}).get("vector_config")
-                if vector and vector.get("enabled"):
-                    vector["model_id"] = embedding_id
+        embedding_mode = "auto"
+    if embedding_mode == "disable":
+        strip_index_config(payload)
+        report_embedding_mode = "keyword"
+    elif embedding_mode == "auto":
+        try:
+            embedding_id = resolve_default_embedding()
+        except RuntimeError:
+            strip_index_config(payload)
+            embedding_id = ""
+            report_embedding_mode = "keyword"
+        else:
+            report_embedding_mode = "vector"
+        if embedding_id:
+            for obj in payload.get("object_types", []):
+                for prop in obj.get("data_properties", []):
+                    vector = prop.get("index_config", {}).get("vector_config")
+                    if vector and vector.get("enabled"):
+                        vector["model_id"] = embedding_id
+    else:
+        report_embedding_mode = "preserve"
 
     report = {
         "json_path": str(json_path),
         "kn_id": kn_id,
         "kn_name": kn_name,
         "dry_run": dry_run,
+        "embedding_mode": report_embedding_mode,
     }
 
     if dry_run:
         report["action"] = "would_import"
+        return report
+
+    # The installer is intentionally repeatable.  The import endpoint only
+    # creates a network and rejects an existing ID, so retain an already
+    # installed network for normal reruns; explicit upgrade handling belongs
+    # to the installer upgrade path.
+    try:
+        existing = json.loads(run_cmd(["openbkn", "--json", "bkn", "get", kn_id]))
+    except (RuntimeError, json.JSONDecodeError):
+        existing = None
+    if isinstance(existing, dict) and existing.get("id") == kn_id:
+        if existing.get("name") != kn_name:
+            raise RuntimeError(
+                f"existing knowledge network {kn_id} has a different name: {existing.get('name')!r}"
+            )
+        report["action"] = "already_present"
+        report["verified"] = True
         return report
 
     def post(body_payload: dict) -> str:
@@ -113,6 +149,12 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Resolve the target environment default embedding before import",
     )
+    parser.add_argument(
+        "--embedding-mode",
+        choices=("preserve", "auto", "disable"),
+        default="preserve",
+        help="auto rewrites vector model IDs or strips indexes when no default model exists",
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -120,6 +162,7 @@ def main(argv: list[str] | None = None) -> int:
             Path(args.json),
             dry_run=args.dry_run,
             resolve_embedding=args.resolve_embedding,
+            embedding_mode=args.embedding_mode,
         )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0

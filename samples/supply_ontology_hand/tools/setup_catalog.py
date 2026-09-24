@@ -202,6 +202,7 @@ def run_catalog_setup(
     sleep_fn: Callable[[float], None] | None = None,
     discover_poll_attempts: int = 30,
     discover_poll_interval_seconds: float = 2,
+    connector_config_file: Path | None = None,
 ) -> dict[str, Any]:
     cmd = run_cmd or _default_run_cmd
     sleep = sleep_fn or time.sleep
@@ -250,12 +251,14 @@ def run_catalog_setup(
                 catalog_name,
                 "--connector-type",
                 connector_type,
-                "--connector-config",
-                json.dumps(connector_config, ensure_ascii=False),
                 "--description",
                 vega.get("catalog_description")
                 or "Supply demo hand experience pack (auto setup)",
             ]
+            if connector_config_file is None:
+                create_args[9:9] = ["--connector-config", json.dumps(connector_config, ensure_ascii=False)]
+            else:
+                create_args[9:9] = ["--connector-config-file", str(connector_config_file)]
             catalog_entry = parse_cli_json(cmd(create_args))
             if not isinstance(catalog_entry, dict) or not catalog_entry.get("id"):
                 raise RuntimeError(f"catalog create returned unexpected payload: {catalog_entry!r}")
@@ -327,6 +330,10 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Write vega.catalog_id back into config file after success",
     )
+    parser.add_argument(
+        "--connector-config-file",
+        help="Read the Vega connector config from a file instead of putting its password in argv",
+    )
     parser.add_argument("--interactive", action="store_true", help="Prompt for a new PostgreSQL connection and Catalog name")
     parser.add_argument("--table-prefix", default=None, help="Prefix on destination table names, e.g. hand_")
     args = parser.parse_args(argv)
@@ -359,6 +366,7 @@ def main(argv: list[str] | None = None) -> int:
             rediscover=args.rediscover,
             skip_discover=args.skip_discover,
             table_prefix=table_prefix,
+            connector_config_file=Path(args.connector_config_file) if args.connector_config_file else None,
         )
         if args.write_config and report.get("catalog_id") and not args.dry_run:
             write_catalog_id_to_config(config_path, report["catalog_id"])

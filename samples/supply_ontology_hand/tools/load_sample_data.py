@@ -98,6 +98,7 @@ def quote_ident(name: str, engine_name: str) -> str:
 
 def build_engine(db: dict) -> Engine:
     eng = db["engine"]
+    connect_args: dict = {}
     if eng == "postgres":
         url = (
             f"postgresql+psycopg://{db['user']}:{db['password']}"
@@ -108,12 +109,14 @@ def build_engine(db: dict) -> Engine:
             f"mysql+pymysql://{db['user']}:{db['password']}"
             f"@{db['host']}:{db['port']}/{db['database']}?charset=utf8mb4"
         )
+        if db.get("unix_socket"):
+            connect_args["unix_socket"] = str(db["unix_socket"])
     elif eng == "sqlite":
         db_path = db.get("database", ":memory:")
         url = f"sqlite:///{db_path}"
     else:
         raise ValueError(f"unsupported engine: {eng}")
-    return create_engine(url)
+    return create_engine(url, connect_args=connect_args)
 
 
 def ensure_postgres_database(db: dict) -> None:

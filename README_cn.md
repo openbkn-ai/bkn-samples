@@ -4,6 +4,26 @@
 
 OpenBKN 官方体验样例集合：知识网络模型、样例数据与分步导入工具。
 
+## 一键安装
+
+使用 OpenBKN 管理员账号登录后，在仓库 checkout 中执行：
+
+```bash
+./install.sh list
+./install.sh supply-chain --runtime k8s
+./install.sh world-cup --runtime k8s
+```
+
+在 OpenBKN 集群外运行 Docker 时，传入 Vega 能访问的数据库主机地址。安装器为供应链和世界杯分别使用默认端口 `13306`、`13307`：
+
+```bash
+./install.sh supply-chain --runtime docker --catalog-host 10.0.0.8
+```
+
+本机未登录时，交互模式会引导 `openbkn auth login <url> --device`；非交互模式只输出准确登录命令并停止。使用 `--dry-run` 可以只查看计划、不产生写入。
+
+安装器要求 `openbkn vega catalog create`、`update` 和 `test-connection-config` 均支持 `--connector-config-file`。它不会回退到把数据库密码写入命令行 JSON 的方式。
+
 ## 前置条件
 
 - [OpenBKN 平台安装（飞书文档）](https://openbkn-ai.feishu.cn/wiki/Hby4wPzuhiFqD8klgMdcwvpBnde)

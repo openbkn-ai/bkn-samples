@@ -1,0 +1,23 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: Sample
+metadata:
+  name: supply-chain
+  aliases: [supply_ontology_hand]
+  displayName: 供应链
+spec:
+  version: 1.0.0
+  database:
+    engine: mariadb
+    name: supply_demo_hand
+    expectedTables: 12
+    dockerPort: 13306
+  data:
+    mode: embedded
+    version: 1.0.0
+  knowledgeNetwork:
+    id: supply_ontology_hand
+  hooks:
+    dbInit: db/init.sh
+    dbVerify: db/verify.sh
+    platformInstall: platform/install.sh
+    platformVerify: platform/verify.sh

@@ -1,0 +1,26 @@
+services:
+  database:
+    image: ${BKN_SAMPLES_IMAGE}
+    environment:
+      BKN_SAMPLE_ID: ${BKN_SAMPLE_ID}
+      BKN_SAMPLE_VERSION: ${BKN_SAMPLE_VERSION}
+      BKN_DATA_VERSION: ${BKN_DATA_VERSION}
+      BKN_DATABASE: ${BKN_DATABASE}
+      MARIADB_DATABASE: ${BKN_DATABASE}
+      MARIADB_USER: bkn_sample
+      MARIADB_PASSWORD: ${BKN_DATABASE_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${BKN_DATABASE_PASSWORD}
+      BKN_INIT_ATTEMPT: ${BKN_INIT_ATTEMPT}
+    volumes:
+      - sample-data:/var/lib/bkn-samples
+    healthcheck:
+      test: ["CMD", "/opt/bkn-samples/bin/healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+    ports:
+      - "${BKN_CATALOG_BIND_HOST}:${BKN_CATALOG_PORT}:3306"
+
+volumes:
+  sample-data:

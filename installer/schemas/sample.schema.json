@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenBKN installable sample v1alpha1",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {"const": "samples.openbkn.ai/v1alpha1"},
+    "kind": {"const": "Sample"},
+    "metadata": {
+      "type": "object",
+      "required": ["name", "displayName"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"},
+        "displayName": {"type": "string", "minLength": 1},
+        "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "required": ["version", "database", "data", "knowledgeNetwork", "hooks"],
+      "properties": {
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "database": {
+          "type": "object",
+          "required": ["engine", "name", "expectedTables", "dockerPort"],
+          "properties": {
+            "engine": {"const": "mariadb"},
+            "name": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"},
+            "expectedTables": {"type": "integer", "minimum": 1},
+            "dockerPort": {"type": "integer", "minimum": 1024, "maximum": 65535}
+          },
+          "additionalProperties": false
+        },
+        "data": {
+          "type": "object",
+          "required": ["mode", "version"],
+          "properties": {
+            "mode": {"enum": ["embedded", "runtime-download"]},
+            "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+            "lockFile": {"type": "string"}
+          },
+          "additionalProperties": false
+        },
+        "knowledgeNetwork": {
+          "type": "object",
+          "required": ["id"],
+          "properties": {"id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"}},
+          "additionalProperties": false
+        },
+        "hooks": {
+          "type": "object",
+          "required": ["dbInit", "dbVerify", "platformInstall", "platformVerify"],
+          "additionalProperties": {"type": "string", "pattern": "^(?!/)(?!.*\\.\\.)[^\\x00]+$"}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

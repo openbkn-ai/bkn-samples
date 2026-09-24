@@ -1,0 +1,69 @@
+name: Publish sample image
+
+on:
+  pull_request:
+    paths:
+      - Dockerfile
+      - VERSION
+      - docker/**
+      - samples/**
+      - .github/workflows/publish-sample-image.yml
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          platforms: linux/amd64
+          tags: bkn-samples:verify
+          provenance: false
+          sbom: false
+
+  publish:
+    if: github.event_name != 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: version
+        run: |
+          version="$(tr -d '[:space:]' < VERSION)"
+          test -n "$version"
+          printf 'value=%s\n' "$version" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/login-action@v3
+        with:
+          registry: swr.cn-east-3.myhuaweicloud.com
+          username: ${{ secrets.SWR_USERNAME }}
+          password: ${{ secrets.SWR_PASSWORD }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          outputs: type=registry,oci-mediatypes=false
+          tags: |
+            ghcr.io/openbkn-ai/bkn-samples:${{ steps.version.outputs.value }}
+            swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${{ steps.version.outputs.value }}
+          provenance: false
+          sbom: false

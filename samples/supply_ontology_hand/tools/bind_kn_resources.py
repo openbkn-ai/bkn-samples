@@ -109,7 +109,7 @@ def _object_type_from_get(payload: Any, ot_id: str) -> dict:
     raise RuntimeError(f"unexpected object-type get payload for {ot_id}")
 
 
-def _sanitize_ot_for_bind_update(ot_body: dict) -> dict:
+def _sanitize_ot_for_bind_update(ot_body: dict, *, preserve_vector_config: bool = False) -> dict:
     """Strip env-specific vector model ids so bind update does not fail cross-environment."""
     body = copy.deepcopy(ot_body)
     for prop_key in ("data_properties", "logic_properties"):
@@ -123,7 +123,11 @@ def _sanitize_ot_for_bind_update(ot_body: dict) -> dict:
             if not isinstance(index_config, dict):
                 continue
             vector_config = index_config.get("vector_config")
-            if isinstance(vector_config, dict) and vector_config.get("model_id"):
+            if (
+                not preserve_vector_config
+                and isinstance(vector_config, dict)
+                and vector_config.get("model_id")
+            ):
                 vector_config["model_id"] = ""
                 vector_config["enabled"] = False
     return body
@@ -192,6 +196,7 @@ def run_bind(
     *,
     dry_run: bool = False,
     table_prefix: str = "",
+    preserve_vector_config: bool = False,
     run_cmd: Callable[[list[str]], str] | None = None,
 ) -> dict:
     """Bind OTs with bind:true to catalog resources; return execution report."""
@@ -240,7 +245,9 @@ def run_bind(
         if not ot_body.get("name"):
             raise RuntimeError(f"object-type get missing name for {ot_id}")
 
-        update_body = _sanitize_ot_for_bind_update(ot_body)
+        update_body = _sanitize_ot_for_bind_update(
+            ot_body, preserve_vector_config=preserve_vector_config
+        )
         update_body["data_source"] = {"type": "resource", "id": resource_id}
 
         with tempfile.NamedTemporaryFile(
@@ -266,7 +273,10 @@ def run_bind(
             ]
             cmd(update_args)
         finally:
-            Path(tmp_path).unlink(missing_ok=True)
+            try:
+                Path(tmp_path).unlink()
+            except FileNotFoundError:
+                pass
 
     return report
 
@@ -294,6 +304,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="Print OT→table→resource_id only")
     parser.add_argument("--mapping", default=str(_DEFAULT_MAP), help="Path to OT→table mapping YAML")
     parser.add_argument("--table-prefix", default=None, help="Prefix on destination table names, e.g. hand_")
+    parser.add_argument(
+        "--preserve-vector-config",
+        action="store_true",
+        help="Keep vector model IDs already normalized for this target environment",
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -303,7 +318,13 @@ def main(argv: list[str] | None = None) -> int:
         table_prefix = args.table_prefix
         if table_prefix is None:
             table_prefix = (config.get("load") or {}).get("table_prefix", "")
-        report = run_bind(config, mapping, dry_run=dry_run, table_prefix=table_prefix)
+        report = run_bind(
+            config,
+            mapping,
+            dry_run=dry_run,
+            table_prefix=table_prefix,
+            preserve_vector_config=args.preserve_vector_config,
+        )
         if dry_run:
             print_dry_run_lines(report)
         else:
