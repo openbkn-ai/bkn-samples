@@ -7,6 +7,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY VERSION /opt/bkn-samples/VERSION
+COPY manifest-index.json /opt/bkn-samples/manifest-index.json
 COPY samples/supply_ontology_hand/data /opt/bkn-samples/samples/supply_ontology_hand/data
 COPY samples/supply_ontology_hand/tools /opt/bkn-samples/samples/supply_ontology_hand/tools
 COPY samples/supply_ontology_hand/db /opt/bkn-samples/samples/supply_ontology_hand/db
