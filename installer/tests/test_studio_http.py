@@ -4,7 +4,7 @@ import unittest
 from http.client import HTTPConnection
 
 from installer.studio_api import ApiError
-from installer.studio_http import StudioApp, dispatch, role_from_safe
+from installer.studio_http import StudioApp, authenticate_bearer, dispatch, role_from_safe
 from http.server import ThreadingHTTPServer
 
 from installer.studio_http import _Handler
@@ -70,6 +70,16 @@ class StudioHttpTest(unittest.TestCase):
         self.assertEqual(status, 403)
         self.assertEqual(calls["create"], 0)
 
+    def test_bearer_uses_the_safe_admin_flag(self):
+        def fetch(path, _authorization):
+            if path.startswith("/api/safe/v1/me/permissions"):
+                return 200, {"is_admin": True}
+            return 200, {"id": "admin"}
+
+        self.assertEqual(authenticate_bearer(fetch, "Bearer token"), "admin")
+        with self.assertRaises(ApiError):
+            authenticate_bearer(fetch, None)
+
     def test_missing_token_is_rejected_over_http(self):
         built, _calls = app("")
         _Handler.app = built
@@ -86,8 +96,12 @@ class StudioHttpTest(unittest.TestCase):
             self.assertEqual(payload["code"], "forbidden")
             connection.request("GET", "/api/studio/samples/supply-chain/installations/inst-supply-chain/retry")
             missing = connection.getresponse()
-            connection.close()
             self.assertEqual(missing.status, 404)
+            connection.request("GET", "/healthz")
+            health = connection.getresponse()
+            self.assertEqual(health.status, 200)
+            health.read()
+            connection.close()
         finally:
             server.shutdown()
             server.server_close()

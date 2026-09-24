@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bkn-sample-studio
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: bkn-sample-studio
+  template:
+    metadata:
+      labels:
+        app: bkn-sample-studio
+    spec:
+      containers:
+        - name: studio
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: BKN_SAFE_URL
+              value: {{ .Values.safeURL | quote }}
+            - name: BKN_SAMPLE_STATE_DIR
+              value: /var/lib/bkn-samples/state
+            - name: BKN_SAMPLE_IMAGE_INDEX
+              value: /var/lib/bkn-samples/manifest-index.json
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: state
+              mountPath: /var/lib/bkn-samples
+      volumes:
+        - name: state
+          emptyDir: {}
