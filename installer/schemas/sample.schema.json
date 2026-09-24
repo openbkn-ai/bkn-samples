@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://samples.openbkn.ai/v1alpha1/sample.schema.json",
+  "title": "OpenBKN sample",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": { "const": "samples.openbkn.ai/v1alpha1" },
+    "kind": { "const": "Sample" },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "displayName", "summary"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z0-9-]{1,32}$" },
+        "aliases": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z0-9-]{1,32}$" }
+        },
+        "displayName": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["studio", "database", "data", "knowledgeNetwork", "capabilities", "hooks"],
+      "properties": {
+        "studio": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["licenseNote", "questions"],
+          "properties": {
+            "licenseNote": { "type": "string", "minLength": 1 },
+            "questions": {
+              "type": "array",
+              "maxItems": 3,
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "database": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["engine", "name", "expectedTables"],
+          "properties": {
+            "engine": { "const": "mariadb" },
+            "name": { "type": "string", "pattern": "^[a-z0-9_]{1,64}$" },
+            "expectedTables": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "enum": ["embedded", "runtime-download"] },
+            "lockFile": { "type": "string", "minLength": 1 }
+          }
+        },
+        "knowledgeNetwork": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "displayName"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "displayName": { "type": "string", "minLength": 1 }
+          }
+        },
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required"],
+          "properties": { "required": { "type": "boolean" } }
+        },
+        "hooks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["dbInit", "dbVerify", "platformInstall", "platformVerify"],
+          "properties": {
+            "dbInit": { "type": "string" },
+            "dbVerify": { "type": "string" },
+            "dbUpgrade": { "type": "string" },
+            "platformInstall": { "type": "string" },
+            "platformVerify": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
