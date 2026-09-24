@@ -21,3 +21,40 @@ jobs:
         run: |
           python installer/build_manifest_index.py --revision "${{ github.sha }}" --output /tmp/manifest-index.json
           python installer/check_manifest_index.py /tmp/manifest-index.json
+
+  supply-mariadb:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:11.4.7
+        env:
+          MARIADB_ROOT_PASSWORD: ci-only
+          MARIADB_DATABASE: mysql
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mariadb-admin ping -uroot -pci-only --silent"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install database loader dependencies
+        run: python -m pip install "PyYAML>=6" "SQLAlchemy>=2" "PyMySQL>=1.1" "psycopg[binary]>=3.1"
+      - name: Load and verify the supply sample
+        env:
+          BKN_SAMPLE_ID: supply-chain
+          BKN_SAMPLE_VERSION: "0.1.0"
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: "3306"
+          MYSQL_USER: root
+          MYSQL_PASSWORD: ci-only
+          MYSQL_DATABASE: supply_demo_hand
+          MYSQL_ADMIN_DATABASE: mysql
+        run: |
+          samples/supply_ontology_hand/db/init.sh
+          samples/supply_ontology_hand/db/verify.sh
+          samples/supply_ontology_hand/db/init.sh

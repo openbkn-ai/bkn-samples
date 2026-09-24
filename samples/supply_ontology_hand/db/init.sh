@@ -1,4 +1,6 @@
 #!/bin/sh
-# Contract entry for stage 1. MariaDB load is stage 2.
-echo "supply-chain db/init.sh is not implemented yet" >&2
-exit 78
+# Load supply-chain CSVs into MariaDB. Official entrypoint calls this on an empty datadir.
+set -eu
+cd "$(dirname "$0")/.."
+export PYTHONPATH="${PYTHONPATH:-}:$(pwd)/tools"
+python3 db/load_supply.py
