@@ -1,0 +1,23 @@
+name: sample-contract
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install YAML parser
+        run: python -m pip install "PyYAML>=6"
+      - name: Validate sample contracts
+        run: python -m unittest discover -s installer/tests -v
+      - name: Build and check the manifest index
+        run: |
+          python installer/build_manifest_index.py --revision "${{ github.sha }}" --output /tmp/manifest-index.json
+          python installer/check_manifest_index.py /tmp/manifest-index.json

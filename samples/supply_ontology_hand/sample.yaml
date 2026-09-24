@@ -1,0 +1,29 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: Sample
+metadata:
+  name: supply-chain
+  aliases: []
+  displayName: 供应链
+  summary: 用脱敏的订单、库存、BOM 和供应数据体验交付判断。
+spec:
+  studio:
+    licenseNote: 脱敏历史回放，不能用于真实交付承诺。
+    questions:
+      - 这批需求能不能按当前库存和在制满足？
+      - 缺料时有哪些可用替代料？
+  database:
+    engine: mariadb
+    name: supply_demo_hand
+    expectedTables: 12
+  data:
+    mode: embedded
+  knowledgeNetwork:
+    id: supply_ontology_hand
+    displayName: 供应链本体知识网络-手工版
+  capabilities:
+    required: true
+  hooks:
+    dbInit: db/init.sh
+    dbVerify: db/verify.sh
+    platformInstall: platform/install.sh
+    platformVerify: platform/verify.sh
