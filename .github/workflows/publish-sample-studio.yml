@@ -22,7 +22,7 @@ jobs:
         id: version
         run: |
           python -m pip install "PyYAML>=6"
-          version="$(python installer/release.py check-tag --tag "${GITHUB_REF_NAME}")"
+          version="$(PYTHONPATH=. python installer/release.py check-tag --tag "${GITHUB_REF_NAME}")"
           printf 'value=%s\n' "$version" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
