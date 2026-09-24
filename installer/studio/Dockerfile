@@ -2,6 +2,7 @@ FROM python:3.12-slim
 
 WORKDIR /opt/bkn-samples
 COPY installer /opt/bkn-samples/installer
+COPY samples /opt/bkn-samples/samples
 COPY VERSION /opt/bkn-samples/VERSION
 ENV PYTHONPATH=/opt/bkn-samples
 EXPOSE 8080

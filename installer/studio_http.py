@@ -134,6 +134,8 @@ def main() -> None:
     from pathlib import Path
     from urllib.request import Request, urlopen
 
+    from installer.runtime import deploy as deploy_database_sample
+    from installer.runtime import install_sample, kubectl_run, process_run, retry_sample
     from installer.studio_api import get_sample_installation, list_samples, load_indexes
 
     root = Path(os.environ.get("BKN_SAMPLES_ROOT", "/opt/bkn-samples"))
@@ -156,13 +158,35 @@ def main() -> None:
             actor_role=role,
         )
 
-    def unavailable(*_args):
-        raise ApiError(500, "install_failed", "the sample installer runtime is not configured")
+    def create(sample: str, role: str) -> dict:
+        return install_sample(
+            sample=sample,
+            actor_role=role,
+            state_dir=state_dir,
+            root=root,
+            version=version,
+            deploy=lambda name: deploy_database_sample(root, name),
+            kubectl=kubectl_run,
+            run=process_run,
+        )
+
+    def retry(sample: str, installation: str, role: str) -> dict:
+        return retry_sample(
+            sample=sample,
+            installation_id=installation,
+            actor_role=role,
+            state_dir=state_dir,
+            root=root,
+            version=version,
+            deploy=lambda name: deploy_database_sample(root, name),
+            kubectl=kubectl_run,
+            run=process_run,
+        )
 
     app = build_app(
         list_samples=catalog,
-        create_installation=unavailable,
-        retry_installation=unavailable,
+        create_installation=create,
+        retry_installation=retry,
         get_installation=lambda sample, installation, role: get_sample_installation(
             sample=sample,
             installation_id=installation,
