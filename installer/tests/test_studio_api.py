@@ -124,6 +124,11 @@ class StudioApiTest(unittest.TestCase):
         self.assertEqual(caught.exception.status, 409)
 
     def test_non_admin_cannot_install(self):
+        calls = {"deploy": 0}
+
+        def deploy(_sample):
+            calls["deploy"] += 1
+
         with self.assertRaises(ApiError) as caught:
             create_sample_installation(
                 sample="supply-chain",
@@ -133,9 +138,11 @@ class StudioApiTest(unittest.TestCase):
                 database={"name": "supply_demo_hand"},
                 openbkn=lambda _args: {"entries": []},
                 hook_runner=lambda *_args: {"ok": True},
-                deploy=lambda _sample: None,
+                deploy=deploy,
             )
         self.assertEqual(caught.exception.code, "forbidden")
+        self.assertEqual(caught.exception.status, 403)
+        self.assertEqual(calls["deploy"], 0)
 
     def test_retry_uses_the_existing_installation_id(self):
         state = Path(tempfile.mkdtemp())

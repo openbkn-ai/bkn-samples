@@ -56,6 +56,8 @@ def create_sample_installation(
     deploy,
 ) -> dict:
     _require_sample(sample)
+    if actor_role != "admin":
+        raise ApiError(403, "forbidden", "an administrator must install the sample")
     try:
         deploy(sample)
     except Exception as exc:
@@ -94,6 +96,8 @@ def retry_sample_installation(
     current = _read_state(state_dir, sample)
     if not current or _installation_id(current) != installation_id:
         raise ApiError(404, "install_failed", "installation not found")
+    if actor_role != "admin":
+        raise ApiError(403, "forbidden", "an administrator must install the sample")
     try:
         deploy(sample)
         record = retry_installation(
