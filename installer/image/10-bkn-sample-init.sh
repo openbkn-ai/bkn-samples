@@ -7,6 +7,9 @@ case "$sample_id" in
   supply-chain)
     sample_dir="${root}/supply_ontology_hand"
     ;;
+  world-cup)
+    sample_dir="${root}/world-cup"
+    ;;
   *)
     echo "BKN_SAMPLE_ID must be a sample shipped in this image" >&2
     exit 1

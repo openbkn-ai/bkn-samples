@@ -1,0 +1,30 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: Sample
+metadata:
+  name: world-cup
+  aliases: []
+  displayName: 世界杯
+  summary: 用公开的世界杯数据体验跨表查询和已发布的 SQL 工具。
+spec:
+  studio:
+    licenseNote: CC-BY-SA 4.0 · Joshua C. Fjelstul
+    questions:
+      - 梅西在世界杯获得过哪些奖？
+      - 近三届男足世界杯的冠军是谁？
+  database:
+    engine: mariadb
+    name: worldcup
+    expectedTables: 27
+  data:
+    mode: runtime-download
+    lockFile: dataset.lock
+  knowledgeNetwork:
+    id: worldcup_vega_catalog_bkn
+    displayName: 世界杯
+  capabilities:
+    required: true
+  hooks:
+    dbInit: db/init.sh
+    dbVerify: db/verify.sh
+    platformInstall: platform/install.sh
+    platformVerify: platform/verify.sh

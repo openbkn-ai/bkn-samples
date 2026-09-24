@@ -11,8 +11,13 @@ COPY samples/supply_ontology_hand/data /opt/bkn-samples/samples/supply_ontology_
 COPY samples/supply_ontology_hand/tools /opt/bkn-samples/samples/supply_ontology_hand/tools
 COPY samples/supply_ontology_hand/db /opt/bkn-samples/samples/supply_ontology_hand/db
 COPY samples/supply_ontology_hand/sample.yaml /opt/bkn-samples/samples/supply_ontology_hand/sample.yaml
+COPY samples/world-cup/dataset.lock /opt/bkn-samples/samples/world-cup/dataset.lock
+COPY samples/world-cup/db /opt/bkn-samples/samples/world-cup/db
+COPY samples/world-cup/sample.yaml /opt/bkn-samples/samples/world-cup/sample.yaml
 COPY installer/image/10-bkn-sample-init.sh /docker-entrypoint-initdb.d/10-bkn-sample-init.sh
 
 RUN chmod 755 /docker-entrypoint-initdb.d/10-bkn-sample-init.sh \
     /opt/bkn-samples/samples/supply_ontology_hand/db/init.sh \
-    /opt/bkn-samples/samples/supply_ontology_hand/db/verify.sh
+    /opt/bkn-samples/samples/supply_ontology_hand/db/verify.sh \
+    /opt/bkn-samples/samples/world-cup/db/init.sh \
+    /opt/bkn-samples/samples/world-cup/db/verify.sh
