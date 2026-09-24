@@ -81,9 +81,18 @@ class _Handler(BaseHTTPRequestHandler):
         return
 
     def _handle(self) -> None:
+        path = self.path.split("?", 1)[0]
+        if self.command == "GET" and path == "/healthz":
+            encoded = b'{"status":"ok"}'
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(encoded)))
+            self.end_headers()
+            self.wfile.write(encoded)
+            return
         length = int(self.headers.get("Content-Length") or "0")
         body = self.rfile.read(length) if length else b""
-        status, payload = dispatch(self.app, self.command, self.path.split("?", 1)[0], self.headers.get("Authorization"), body)
+        status, payload = dispatch(self.app, self.command, path, self.headers.get("Authorization"), body)
         encoded = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
@@ -97,3 +106,73 @@ def serve(app: StudioApp, host: str, port: int) -> ThreadingHTTPServer:
     server = ThreadingHTTPServer((host, port), _Handler)
     server.serve_forever()
     return server
+
+
+def authenticate_bearer(fetch, authorization: str | None) -> str:
+    """``fetch(path, authorization)`` returns ``(status, json)`` from bkn-safe."""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise ApiError(401, "forbidden", "sign in to read the sample catalog")
+    me_status, _me = fetch("/api/safe/v1/me", authorization)
+    perm_status, permissions = fetch("/api/safe/v1/me/permissions?scope=type", authorization)
+    if me_status != 200 or perm_status != 200:
+        raise ApiError(401, "forbidden", "sign in to read the sample catalog")
+    return role_from_safe(me_status, permissions if isinstance(permissions, dict) else None)
+
+
+def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate) -> StudioApp:
+    return StudioApp(
+        catalog=list_samples,
+        create=create_installation,
+        retry=retry_installation,
+        get=get_installation,
+        authenticate=authenticate,
+    )
+
+
+def main() -> None:
+    import os
+    from pathlib import Path
+    from urllib.request import Request, urlopen
+
+    from installer.studio_api import get_sample_installation, list_samples, load_indexes
+
+    root = Path(os.environ.get("BKN_SAMPLES_ROOT", "/opt/bkn-samples"))
+    state_dir = Path(os.environ.get("BKN_SAMPLE_STATE_DIR", "/var/lib/bkn-samples/state"))
+    image_index = Path(os.environ.get("BKN_SAMPLE_IMAGE_INDEX", str(root / "manifest-index.json")))
+    safe_url = os.environ.get("BKN_SAFE_URL", "http://bkn-safe:3000").rstrip("/")
+    version, image, repo = load_indexes(root, image_index)
+
+    def fetch(path: str, authorization: str):
+        request = Request(safe_url + path, headers={"Authorization": authorization})
+        with urlopen(request, timeout=10) as response:
+            return response.status, json.loads(response.read().decode("utf-8"))
+
+    def catalog(role: str) -> dict:
+        return list_samples(
+            pinned_version=version,
+            image_index=image,
+            repo_index=repo,
+            state_dir=state_dir,
+            actor_role=role,
+        )
+
+    def unavailable(*_args):
+        raise ApiError(500, "install_failed", "the sample installer runtime is not configured")
+
+    app = build_app(
+        list_samples=catalog,
+        create_installation=unavailable,
+        retry_installation=unavailable,
+        get_installation=lambda sample, installation, role: get_sample_installation(
+            sample=sample,
+            installation_id=installation,
+            state_dir=state_dir,
+            actor_role=role,
+        ),
+        authenticate=lambda authorization: authenticate_bearer(fetch, authorization),
+    )
+    serve(app, os.environ.get("BKN_SAMPLE_HTTP_HOST", "0.0.0.0"), int(os.environ.get("BKN_SAMPLE_HTTP_PORT", "8080")))
+
+
+if __name__ == "__main__":
+    main()
