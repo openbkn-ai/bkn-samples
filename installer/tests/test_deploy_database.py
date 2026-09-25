@@ -1,7 +1,9 @@
 import json
+import os
 import subprocess
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from installer.deploy_database import GHCR_IMAGE, SWR_IMAGE, DeployError, deploy_database
 
@@ -92,6 +94,20 @@ class DeployDatabaseTest(unittest.TestCase):
         kubectl = FakeKubectl(states=["image_pull_failed", "image_pull_failed"])
         with self.assertRaises(DeployError) as caught:
             deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=2)
+        self.assertEqual(caught.exception.code, "image_unavailable")
+
+    def test_uses_the_published_main_build_tag(self):
+        kubectl = FakeKubectl()
+        tag = "0.1.0-main.20260925021424.sha912ed7b"
+        with patch.dict(os.environ, {"BKN_SAMPLE_DATA_IMAGE_TAG": tag}):
+            result = deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=1)
+        self.assertIn(f"{SWR_IMAGE}:{tag}", kubectl.applied[0])
+        self.assertEqual(result["image"], f"{SWR_IMAGE}:{tag}")
+
+    def test_rejects_latest_image_tag(self):
+        with patch.dict(os.environ, {"BKN_SAMPLE_DATA_IMAGE_TAG": "latest"}):
+            with self.assertRaises(DeployError) as caught:
+                deploy_database(ROOT, "supply-chain", FakeKubectl(), sleep=lambda _seconds: None, attempts=1)
         self.assertEqual(caught.exception.code, "image_unavailable")
 
     def test_reports_database_not_ready(self):
