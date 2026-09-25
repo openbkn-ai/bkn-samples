@@ -121,8 +121,9 @@ def _payload_entries(payload) -> list:
     return []
 
 
-def scan_catalog(catalog: dict, expected_tables: int, openbkn, attempts: int = 30, sleep=time.sleep) -> None:
+def scan_catalog(catalog: dict, expected_tables: int, openbkn, attempts: int = 30, sleep=None) -> None:
     """Enable the catalog, test it, and wait until discovery returns the declared table count."""
+    pause = time.sleep if sleep is None else sleep
     catalog_id = catalog["id"]
     openbkn(["vega", "catalog", "enable", catalog_id])
     openbkn(["vega", "catalog", "test-connection", catalog_id])
@@ -135,7 +136,7 @@ def scan_catalog(catalog: dict, expected_tables: int, openbkn, attempts: int = 3
         found = len(_payload_entries(resources))
         if found == expected_tables:
             return
-        sleep(2)
+        pause(2)
     raise ControlError(
         "discover_incomplete",
         f"discovered {found} tables, expected {expected_tables}",
