@@ -62,7 +62,7 @@ def openbkn_json(args: list[str], run, env: dict | None = None) -> dict:
     return payload
 
 
-def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | None = None) -> dict:
+def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | None = None, state_dir: Path | None = None) -> dict:
     sample_dir, document = _sample(root, payload["sample"])
     hook_name = "platformInstall" if stage == "platform-install" else "platformVerify"
     script = sample_dir / document["spec"]["hooks"][hook_name]
@@ -74,6 +74,10 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
         hook_env = dict(env or {})
         hook_env["BKN_SAMPLE_INPUT"] = str(source)
         hook_env["BKN_SAMPLE_OUTPUT"] = str(output)
+        if state_dir is not None:
+            shared = state_dir / payload["sample"]
+            shared.mkdir(parents=True, exist_ok=True)
+            hook_env["BKN_SAMPLE_CONFIG"] = str(shared / "config.yaml")
         completed = run([str(script)], hook_env)
         if completed.returncode != 0 or not output.is_file():
             return {"ok": False, "message": "platform hook failed"}
@@ -98,7 +102,7 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
             database=database,
             state_dir=state_dir,
             openbkn=lambda args: openbkn_json(args, run, cli_env),
-            hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env),
+            hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env, state_dir),
             expected_tables=expected_tables,
             knowledge_network=knowledge_network,
         )
@@ -129,7 +133,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             database=database,
             state_dir=state_dir,
             openbkn=lambda args: openbkn_json(args, run, cli_env),
-            hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env),
+            hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env, state_dir),
             expected_tables=expected_tables,
             knowledge_network=knowledge_network,
         )

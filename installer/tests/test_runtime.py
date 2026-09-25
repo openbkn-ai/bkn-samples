@@ -45,6 +45,7 @@ class RuntimeTest(unittest.TestCase):
             seen["password"] = payload["database"]["password"]
             seen["network"] = payload["knowledgeNetwork"]["id"]
             seen["hook_token"] = env.get("BKN_TOKEN")
+            seen.setdefault("configs", []).append(env.get("BKN_SAMPLE_CONFIG"))
             Path(env["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps({"ok": True, "resources": {}}), encoding="utf-8")
             return completed()
 
@@ -63,6 +64,10 @@ class RuntimeTest(unittest.TestCase):
         self.assertEqual(seen["network"], "supply_ontology_hand")
         self.assertEqual(seen["token"], "admin-token")
         self.assertEqual(seen["hook_token"], "admin-token")
+        self.assertEqual(len(seen["configs"]), 2)
+        self.assertTrue(seen["configs"][0])
+        self.assertEqual(seen["configs"][0], seen["configs"][1])
+        self.assertNotIn(PASSWORD, Path(seen["configs"][0]).read_text(encoding="utf-8") if Path(seen["configs"][0]).is_file() else "")
         self.assertEqual(view["status"], "installed")
         rendered = json.dumps(view)
         self.assertNotIn(PASSWORD, rendered)

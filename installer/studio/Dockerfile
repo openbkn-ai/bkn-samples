@@ -10,6 +10,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl ca-certificates \
     && curl -fsSL -o /usr/local/bin/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl" \
     && chmod 755 /usr/local/bin/kubectl \
+    && python3 -m pip install --break-system-packages --no-cache-dir "PyYAML>=6" \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=cli /usr/local/bin/node /usr/local/bin/node
