@@ -36,7 +36,13 @@ class OpenBKN:
             name = args[args.index("--name") + 1]
             return {"entries": [item for item in self.catalogs if item.get("name") == name]}
         if args[:3] == ["vega", "catalog", "create"]:
-            created = {"id": "cat-new", "name": args[args.index("--name") + 1], "tags": args[args.index("--tag") + 1 :]}
+            config = json.loads(args[args.index("--connector-config") + 1])
+            created = {
+                "id": "cat-new",
+                "name": args[args.index("--name") + 1],
+                "tags": args[args.index("--tags") + 1].split(","),
+                "database": config["database"],
+            }
             self.catalogs.append(created)
             return created
         raise AssertionError(args)
@@ -94,6 +100,9 @@ class ControlPlaneTest(unittest.TestCase):
             hook_runner=hooks,
         )
         self.assertEqual(record["status"], "installed")
+        create_call = next(call for call in client.calls if call[:3] == ["vega", "catalog", "create"])
+        self.assertEqual(create_call[create_call.index("--connector-type") + 1], "mysql")
+        self.assertIn("secret-value", create_call[create_call.index("--connector-config") + 1])
         self.assertNotIn("secret-value", json.dumps({k: v for k, v in record.items() if k != "resources"}))
         with self.assertRaises(ControlError) as caught:
             create_installation(

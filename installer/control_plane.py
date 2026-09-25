@@ -87,8 +87,21 @@ def ensure_catalog(sample: str, version: str, database: dict, openbkn) -> dict:
             "create",
             "--name",
             name,
-            "--tag",
-            *ownership_tags(sample, version),
+            "--connector-type",
+            "mysql",
+            "--connector-config",
+            json.dumps(
+                {
+                    "host": database["host"],
+                    "port": int(database["port"]),
+                    "username": database["user"],
+                    "database": database["name"],
+                    "password": database["password"],
+                },
+                ensure_ascii=False,
+            ),
+            "--tags",
+            ",".join(ownership_tags(sample, version)),
         ]
     )
     if not isinstance(created, dict) or not created.get("id"):
