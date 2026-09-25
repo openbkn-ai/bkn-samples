@@ -18,6 +18,7 @@ def _load(name: str, relative: str):
 
 LOAD = _load("load_worldcup", "samples/world-cup/db/load_worldcup.py")
 INSTALL = _load("install_worldcup", "samples/world-cup/platform/install_worldcup.py")
+VERIFY = _load("verify_worldcup_platform", "samples/world-cup/platform/verify_worldcup.py")
 
 
 class _Body:
@@ -94,6 +95,35 @@ class WorldCupLoadTest(unittest.TestCase):
         self.assertTrue(body["ok"])
         self.assertEqual(body["degrade"][0]["code"], "keyword-index")
         self.assertEqual(body["resources"]["knowledgeNetworkId"], "worldcup_vega_catalog_bkn")
+
+    def test_verify_reads_the_hook_database(self):
+        saved = {key: os.environ.get(key) for key in ("MYSQL_HOST", "MYSQL_UNIX_SOCKET", "MYSQL_USER", "MYSQL_PASSWORD", "MYSQL_DATABASE", "MYSQL_PORT")}
+        for key in saved:
+            os.environ.pop(key, None)
+        try:
+            VERIFY.apply_database_env(
+                {
+                    "sample": "world-cup",
+                    "version": "0.1.0",
+                    "database": {
+                        "host": "db.example",
+                        "port": 3306,
+                        "name": "worldcup",
+                        "user": "bkn_sample",
+                        "password": "secret",
+                    },
+                }
+            )
+            self.assertEqual(os.environ["MYSQL_HOST"], "db.example")
+            self.assertEqual(os.environ["MYSQL_DATABASE"], "worldcup")
+            self.assertEqual(os.environ["MYSQL_USER"], "bkn_sample")
+            self.assertEqual(os.environ["BKN_SAMPLE_VERSION"], "0.1.0")
+        finally:
+            for key, value in saved.items():
+                if value is None:
+                    os.environ.pop(key, None)
+                else:
+                    os.environ[key] = value
 
 
 if __name__ == "__main__":

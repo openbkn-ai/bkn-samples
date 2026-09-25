@@ -10,7 +10,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends bash curl ca-certificates jq \
     && curl -fsSL -o /usr/local/bin/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl" \
     && chmod 755 /usr/local/bin/kubectl \
-    && python3 -m pip install --break-system-packages --no-cache-dir "PyYAML>=6" \
+    && python3 -m pip install --break-system-packages --no-cache-dir \
+        "PyYAML>=6" "SQLAlchemy>=2" "PyMySQL>=1.1" "psycopg[binary]>=3.1" \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=cli /usr/local/bin/node /usr/local/bin/node
