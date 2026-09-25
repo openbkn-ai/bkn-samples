@@ -13,6 +13,7 @@ spec:
       labels:
         app: bkn-sample-studio
     spec:
+      serviceAccountName: bkn-sample-studio
       containers:
         - name: studio
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
