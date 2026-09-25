@@ -29,6 +29,14 @@ def assert_release_tag(tag: str, version: str) -> str:
     return version
 
 
+def main_build_version(version: str, committed_at: str, sha: str) -> str:
+    """Return the platform's main chart version: <version>-main.<UTC timestamp>.sha<7>."""
+    pinned = assert_release_tag(version, version)
+    if not re.fullmatch(r"\d{14}", committed_at) or not re.fullmatch(r"[0-9a-f]{7}", sha):
+        raise ReleaseError("a main build needs a UTC timestamp and a 7-character commit")
+    return f"{pinned}-main.{committed_at}.sha{sha}"
+
+
 def image_refs(version: str) -> tuple[str, str]:
     pinned = assert_release_tag(version, version)
     return f"{SWR_IMAGE}:{pinned}", f"{GHCR_IMAGE}:{pinned}"
@@ -88,11 +96,18 @@ def main(argv: list[str] | None = None) -> int:
     digests = sub.add_parser("check-digests")
     digests.add_argument("--left", required=True)
     digests.add_argument("--right", required=True)
+    build = sub.add_parser("main-build")
+    build.add_argument("--root", default=".")
+    build.add_argument("--committed-at", required=True)
+    build.add_argument("--sha", required=True)
     args = parser.parse_args(argv)
     try:
         if args.command == "check-tag":
             version = read_version(__import__("pathlib").Path(args.root))
             print(assert_release_tag(args.tag, version))
+        elif args.command == "main-build":
+            version = read_version(__import__("pathlib").Path(args.root))
+            print(main_build_version(version, args.committed_at, args.sha))
         else:
             print(assert_same_digest(args.left, args.right))
     except (ReleaseError, ContractError) as exc:
