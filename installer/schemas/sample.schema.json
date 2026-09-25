@@ -25,7 +25,7 @@
     "spec": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["studio", "database", "data", "knowledgeNetwork", "capabilities", "hooks"],
+      "required": ["studio", "database", "data", "knowledgeNetwork", "capabilities", "components", "hooks"],
       "properties": {
         "studio": {
           "type": "object",
@@ -73,6 +73,18 @@
           "additionalProperties": false,
           "required": ["required"],
           "properties": { "required": { "type": "boolean" } }
+        },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["objects", "relations", "metrics", "functions", "skills"],
+          "properties": {
+            "objects": { "type": "boolean" },
+            "relations": { "type": "boolean" },
+            "metrics": { "type": "boolean" },
+            "functions": { "type": "boolean" },
+            "skills": { "type": "boolean" }
+          }
         },
         "hooks": {
           "type": "object",
