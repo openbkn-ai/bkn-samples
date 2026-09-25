@@ -143,7 +143,7 @@ def scan_catalog(catalog: dict, expected_tables: int, openbkn, attempts: int = 3
     )
 
 
-def _hook_input(sample: str, version: str, database: dict, catalog_id: str, knowledge_network: dict) -> dict:
+def _hook_input(sample: str, version: str, database: dict, catalog_id: str, knowledge_network: dict, components: dict | None = None) -> dict:
     return {
         "apiVersion": "samples.openbkn.ai/v1alpha1",
         "sample": sample,
@@ -154,6 +154,7 @@ def _hook_input(sample: str, version: str, database: dict, catalog_id: str, know
             "id": knowledge_network["id"],
             "displayName": knowledge_network["displayName"],
         },
+        "components": dict(components or {}),
         "ownership": {
             "managedBy": OWNERSHIP_MANAGED_BY,
             "sample": sample,
@@ -182,6 +183,7 @@ def create_installation(
     hook_runner,
     expected_tables: int,
     knowledge_network: dict,
+    components: dict | None = None,
 ) -> dict:
     _require_admin(actor_role)
     current = _read_state(state_dir, sample)
@@ -199,6 +201,7 @@ def create_installation(
         current=current,
         expected_tables=expected_tables,
         knowledge_network=knowledge_network,
+        components=components,
     )
 
 
@@ -213,6 +216,7 @@ def retry_installation(
     hook_runner,
     expected_tables: int,
     knowledge_network: dict,
+    components: dict | None = None,
 ) -> dict:
     _require_admin(actor_role)
     current = _read_state(state_dir, sample)
@@ -228,10 +232,11 @@ def retry_installation(
         current=current,
         expected_tables=expected_tables,
         knowledge_network=knowledge_network,
+        components=components,
     )
 
 
-def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, current, expected_tables, knowledge_network) -> dict:
+def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, current, expected_tables, knowledge_network, components=None) -> dict:
     record = current or {
         "sample": sample,
         "version": version,
@@ -244,7 +249,7 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
         scan_catalog(catalog, expected_tables, openbkn)
         record["stages"]["discover"] = "succeeded"
         record["catalogId"] = catalog["id"]
-        payload = _hook_input(sample, version, database, catalog["id"], knowledge_network)
+        payload = _hook_input(sample, version, database, catalog["id"], knowledge_network, components)
         if record["stages"].get("knowledge") != "succeeded":
             installed = _run_hook(hook_runner, payload, "platform-install")
             record["stages"]["knowledge"] = "succeeded"

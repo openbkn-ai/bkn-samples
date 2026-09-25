@@ -37,10 +37,10 @@ def database_config(deployed: dict, kubectl) -> dict:
     }
 
 
-def sample_contract(root: Path, sample: str) -> tuple[int, dict]:
+def sample_contract(root: Path, sample: str) -> tuple[int, dict, dict]:
     _sample_dir, document = _sample(root, sample)
     spec = document["spec"]
-    return int(spec["database"]["expectedTables"]), spec["knowledgeNetwork"]
+    return int(spec["database"]["expectedTables"]), spec["knowledgeNetwork"], spec["components"]
 
 
 def caller_env(authorization: str | None) -> dict:
@@ -94,7 +94,7 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
     try:
         deployed = deploy(sample)
         database = database_config(deployed, kubectl)
-        expected_tables, knowledge_network = sample_contract(root, sample)
+        expected_tables, knowledge_network, components = sample_contract(root, sample)
         record = create_installation(
             sample=sample,
             version=version,
@@ -105,6 +105,7 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
             hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env, state_dir),
             expected_tables=expected_tables,
             knowledge_network=knowledge_network,
+            components=components,
         )
     except DeployError as exc:
         _write_failed(state_dir, sample, version, exc.code, exc.message)
@@ -125,7 +126,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
     try:
         deployed = deploy(sample)
         database = database_config(deployed, kubectl)
-        expected_tables, knowledge_network = sample_contract(root, sample)
+        expected_tables, knowledge_network, components = sample_contract(root, sample)
         record = retry_installation(
             sample=sample,
             version=version,
@@ -136,6 +137,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env, state_dir),
             expected_tables=expected_tables,
             knowledge_network=knowledge_network,
+            components=components,
         )
     except (DeployError, ControlError) as exc:
         code = getattr(exc, "code", "install_failed")

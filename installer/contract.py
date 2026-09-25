@@ -15,6 +15,7 @@ NAME_RE = re.compile(r"^[a-z0-9-]{1,32}$")
 DB_NAME_RE = re.compile(r"^[a-z0-9_]{1,64}$")
 REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
 REQUIRED_HOOKS = ("dbInit", "dbVerify", "platformInstall", "platformVerify")
+COMPONENT_KEYS = ("objects", "relations", "metrics", "functions", "skills")
 DB_HOOKS = ("dbInit", "dbVerify", "dbUpgrade")
 
 
@@ -132,6 +133,15 @@ def validate_document(sample_dir: Path, document: dict) -> list[str]:
     capabilities = _require_mapping(spec.get("capabilities"), "spec.capabilities", errors)
     if not isinstance(capabilities.get("required"), bool):
         errors.append("spec.capabilities.required must be a boolean")
+    components = _require_mapping(spec.get("components"), "spec.components", errors)
+    for key in COMPONENT_KEYS:
+        if not isinstance(components.get(key), bool):
+            errors.append(f"spec.components.{key} must be a boolean")
+    publishes = bool(components.get("functions")) or bool(components.get("skills"))
+    if capabilities.get("required") is True and not publishes:
+        errors.append("spec.capabilities.required cannot be true when the sample publishes neither functions nor skills")
+    if capabilities.get("required") is False and publishes:
+        errors.append("spec.capabilities.required must be true when the sample publishes functions or skills")
 
     hooks = _require_mapping(spec.get("hooks"), "spec.hooks", errors)
     for key in REQUIRED_HOOKS:
@@ -215,6 +225,7 @@ def build_manifest_index(root: Path, revision: str, source_repo: str = OFFICIAL_
                 "dataMode": document["spec"]["data"]["mode"],
                 "knowledgeNetworkId": network["id"],
                 "knowledgeNetworkDisplayName": network["displayName"],
+                "components": {key: bool(document["spec"]["components"][key]) for key in COMPONENT_KEYS},
                 "manifestSha256": manifest_sha256(sample_dir, document),
             }
         )

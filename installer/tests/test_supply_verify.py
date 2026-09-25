@@ -22,6 +22,7 @@ class SupplyVerifyTest(unittest.TestCase):
     def test_data_smoke_does_not_mark_capabilities_ready(self):
         checks = VERIFY.build_checks(
             data_ok=True,
+            components={"functions": True, "skills": True},
             run_cli=_cli(
                 {
                     ("toolbox", "list"): {"data": []},
@@ -43,6 +44,7 @@ class SupplyVerifyTest(unittest.TestCase):
         names = [{"name": name, "status": "published"} for name, _path in local_skills()]
         checks = VERIFY.build_checks(
             data_ok=True,
+            components={"functions": True, "skills": True},
             run_cli=_cli(
                 {
                     ("toolbox", "list"): {"data": [{"box_name": VERIFY.BOX_NAME, "box_id": "box-1"}]},
@@ -52,6 +54,17 @@ class SupplyVerifyTest(unittest.TestCase):
             ),
         )
         self.assertTrue(all(item["ok"] for item in checks))
+
+    def test_absent_functions_and_skills_are_not_required(self):
+        calls = []
+
+        def run(args):
+            calls.append(args)
+            raise AssertionError(args)
+
+        checks = VERIFY.build_checks(data_ok=True, components={"functions": False, "skills": False}, run_cli=run)
+        self.assertEqual([item["name"] for item in checks], list(VERIFY.DATA_CHECKS))
+        self.assertEqual(calls, [])
 
 
 if __name__ == "__main__":

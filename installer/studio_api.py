@@ -169,6 +169,7 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
         status = "conflict"
     installable = actor_role == "admin" and status in {"not_installed", "failed"}
     installed = status == "installed"
+    installed_version = str((state or {}).get("version") or "")
     return {
         "name": item.get("name"),
         "displayName": item.get("displayName") or item.get("name"),
@@ -180,6 +181,9 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
             "id": item.get("knowledgeNetworkId", ""),
             "displayName": item.get("knowledgeNetworkDisplayName") or item.get("knowledgeNetworkId", ""),
         },
+        "components": dict(item.get("components") or {}),
+        "installedVersion": installed_version if installed else "",
+        "updateAvailable": installed and bool(installed_version) and installed_version != version,
         "questions": list(item.get("questions") or []) if installed else [],
         "status": status,
         "installable": installable,
