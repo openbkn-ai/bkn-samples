@@ -18,7 +18,7 @@ def app(role: str = "admin", deploy=None) -> tuple[StudioApp, dict]:
             raise ApiError(401, "forbidden", "sign in to read the sample catalog")
         return role
 
-    def create(sample, actor):
+    def create(sample, actor, _authorization=None):
         if actor != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
         calls["create"] += 1
@@ -30,7 +30,7 @@ def app(role: str = "admin", deploy=None) -> tuple[StudioApp, dict]:
     built = StudioApp(
         catalog=lambda actor: {"samples": [{"name": "supply-chain", "installable": actor == "admin"}]},
         create=create,
-        retry=lambda sample, installation, actor: {"id": installation, "sample": sample, "status": "installed"},
+        retry=lambda sample, installation, actor, _authorization=None: {"id": installation, "sample": sample, "status": "installed"},
         get=lambda sample, installation, _actor: {"id": installation, "sample": sample, "status": "installed"},
         authenticate=authenticate,
     )
