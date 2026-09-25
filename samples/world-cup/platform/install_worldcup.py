@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -40,7 +41,18 @@ def degrade_notes() -> list[dict]:
     ]
 
 
-def write_output(payload: dict, ok: bool, message: str = "") -> None:
+def capability_summary(payload: dict) -> str:
+    """Hash the platform script that publishes this sample's functions."""
+    components = payload.get("components") or {}
+    digest = hashlib.sha256()
+    if components.get("functions"):
+        script = SAMPLE_DIR / "run.sh"
+        digest.update(b"run.sh\0")
+        digest.update(script.read_bytes())
+    return digest.hexdigest()
+
+
+def write_output(payload: dict, ok: bool, message: str = "", code: str = "") -> None:
     path = os.environ.get("BKN_SAMPLE_OUTPUT", "")
     if not path:
         return
@@ -50,9 +62,11 @@ def write_output(payload: dict, ok: bool, message: str = "") -> None:
         "resources": {
             "catalogId": payload["catalog"]["id"],
             "knowledgeNetworkId": KN_ID,
+            "capabilitySummary": capability_summary(payload),
         },
         "checks": [],
         "degrade": degrade_notes(),
+        "code": code,
         "message": message,
     }
     Path(path).write_text(json.dumps(body, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -82,6 +96,15 @@ def command_env(payload: dict) -> dict:
 
 def main() -> int:
     payload = load_input()
+    recorded = payload.get("capabilitySummary")
+    if recorded and recorded != capability_summary(payload):
+        write_output(
+            payload,
+            False,
+            "published capabilities do not match the installation record",
+            code="ownership_conflict",
+        )
+        return 1
     if os.environ.get("BKN_SAMPLE_PRINT_ONLY") == "1":
         print(json.dumps(["./run.sh", "--from", "4"], ensure_ascii=False))
         write_output(payload, True)
