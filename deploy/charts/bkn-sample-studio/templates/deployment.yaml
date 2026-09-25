@@ -29,6 +29,8 @@ spec:
               value: /var/lib/bkn-samples/state
             - name: BKN_SAMPLE_IMAGE_INDEX
               value: /opt/bkn-samples/manifest-index.json
+            - name: BKN_SAMPLE_DATA_IMAGE_TAG
+              value: {{ .Values.dataImage.tag | quote }}
           readinessProbe:
             httpGet:
               path: /healthz

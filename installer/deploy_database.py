@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import os
+import re
 import secrets
 import subprocess
 import sys
@@ -15,6 +17,7 @@ NAMESPACE = "openbkn-samples"
 SWR_IMAGE = "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples"
 GHCR_IMAGE = "ghcr.io/openbkn-ai/bkn-samples"
 DB_USER = "bkn_sample"
+_IMAGE_TAG = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}")
 
 
 class DeployError(Exception):
@@ -206,6 +209,19 @@ def _switch_image(kubectl, sample: str, image: str) -> None:
         raise DeployError("image_unavailable", "cannot switch the sample image to GHCR")
 
 
+def image_tag(version: str) -> str:
+    """Return the published database image tag.
+
+    A release uses VERSION. A main build sets BKN_SAMPLE_DATA_IMAGE_TAG to the
+    same tag as the catalog image, because that image is not published as VERSION.
+    """
+    override = os.environ.get("BKN_SAMPLE_DATA_IMAGE_TAG", "").strip()
+    tag = override or version
+    if tag == "latest" or not _IMAGE_TAG.fullmatch(tag):
+        raise DeployError("image_unavailable", "the sample image tag is not pinned")
+    return tag
+
+
 def deploy_database(root: Path, sample: str, kubectl, sleep=time.sleep, attempts: int = 30) -> dict:
     """Apply the sample database and wait until it is ready. Never creates a Catalog."""
     _sample_dir, document = _sample(root, sample)
@@ -221,13 +237,13 @@ def deploy_database(root: Path, sample: str, kubectl, sleep=time.sleep, attempts
         root_password = secrets.token_urlsafe(24)
         user_password = secrets.token_urlsafe(24)
         secret_manifest = "create"
-    image = f"{SWR_IMAGE}:{version}"
+    image = f"{SWR_IMAGE}:{image_tag(version)}"
     manifest = _manifests(sample, database, version, image, root_password or "unused", user_password or "unused")
     if secret_manifest == "":
         parts = manifest.split("---\n")
         manifest = "---\n".join(part for part in parts if "kind: Secret" not in part)
     _apply(kubectl, manifest)
-    ghcr = f"{GHCR_IMAGE}:{version}"
+    ghcr = f"{GHCR_IMAGE}:{image_tag(version)}"
     switched = False
     state = "pending"
     for _ in range(attempts):

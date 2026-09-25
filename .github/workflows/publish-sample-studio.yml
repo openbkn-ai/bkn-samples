@@ -47,6 +47,16 @@ jobs:
             fi
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
+          {
+            echo "data_tags<<EOF"
+            if [[ "${GITHUB_REF_TYPE}" != "tag" ]]; then
+              echo "ghcr.io/openbkn-ai/bkn-samples:${version}"
+              if [[ -n "${SWR_PASSWORD}" ]]; then
+                echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}"
+              fi
+            fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
       - name: Write the manifest index for this commit
         run: PYTHONPATH=. python installer/build_manifest_index.py --revision "${GITHUB_SHA}" --output manifest-index.json
       - uses: docker/setup-qemu-action@v3
@@ -71,12 +81,29 @@ jobs:
           provenance: false
           sbom: false
           tags: ${{ steps.version.outputs.tags }}
+      - uses: docker/build-push-action@v6
+        if: github.ref_type != 'tag'
+        with:
+          context: .
+          file: installer/image/Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          provenance: false
+          sbom: false
+          tags: ${{ steps.version.outputs.data_tags }}
       - name: Require SWR and GHCR digests to match
         if: steps.version.outputs.swr == 'true'
         run: |
           version="${{ steps.version.outputs.value }}"
           swr="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio:${version}")"
           ghcr="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "ghcr.io/openbkn-ai/bkn-sample-studio:${version}")"
+          PYTHONPATH=. python installer/release.py check-digests --left "$swr" --right "$ghcr"
+      - name: Require sample database SWR and GHCR digests to match
+        if: github.ref_type != 'tag' && steps.version.outputs.swr == 'true'
+        run: |
+          version="${{ steps.version.outputs.value }}"
+          swr="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}")"
+          ghcr="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "ghcr.io/openbkn-ai/bkn-samples:${version}")"
           PYTHONPATH=. python installer/release.py check-digests --left "$swr" --right "$ghcr"
       - name: Package the chart for the same version
         env:

@@ -12,6 +12,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      SWR_PASSWORD: ${{ secrets.SWR_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,8 +23,21 @@ jobs:
         id: version
         run: |
           python -m pip install "PyYAML>=6"
-          version="$(python installer/release.py check-tag --tag "${GITHUB_REF_NAME}")"
+          version="$(PYTHONPATH=. python installer/release.py check-tag --tag "${GITHUB_REF_NAME}")"
           printf 'value=%s\n' "$version" >> "$GITHUB_OUTPUT"
+          if [[ -n "${SWR_PASSWORD}" ]]; then
+            echo "swr=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "swr=false" >> "$GITHUB_OUTPUT"
+          fi
+          {
+            echo "tags<<EOF"
+            echo "ghcr.io/openbkn-ai/bkn-samples:${version}"
+            if [[ -n "${SWR_PASSWORD}" ]]; then
+              echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}"
+            fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
       - name: Write the manifest index for this commit
         run: python installer/build_manifest_index.py --revision "${GITHUB_SHA}" --output manifest-index.json
       - uses: docker/setup-qemu-action@v3
@@ -33,6 +48,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/login-action@v3
+        if: steps.version.outputs.swr == 'true'
         with:
           registry: swr.cn-east-3.myhuaweicloud.com
           username: ${{ secrets.SWR_USERNAME }}
@@ -45,12 +61,11 @@ jobs:
           platforms: linux/amd64,linux/arm64
           provenance: false
           sbom: false
-          tags: |
-            ghcr.io/openbkn-ai/bkn-samples:${{ steps.version.outputs.value }}
-            swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${{ steps.version.outputs.value }}
+          tags: ${{ steps.version.outputs.tags }}
       - name: Require SWR and GHCR digests to match
+        if: steps.version.outputs.swr == 'true'
         run: |
           version="${{ steps.version.outputs.value }}"
           swr="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}")"
           ghcr="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "ghcr.io/openbkn-ai/bkn-samples:${version}")"
-          python installer/release.py check-digests --left "$swr" --right "$ghcr"
+          PYTHONPATH=. python installer/release.py check-digests --left "$swr" --right "$ghcr"
