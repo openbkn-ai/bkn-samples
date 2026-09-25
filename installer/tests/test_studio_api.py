@@ -112,6 +112,20 @@ class StudioApiTest(unittest.TestCase):
         )
         self.assertEqual(again["samples"][0]["status"], "installed")
         self.assertFalse(again["samples"][0]["installable"])
+        self.assertFalse(again["samples"][0]["updateAvailable"])
+        saved = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
+        saved["version"] = "0.0.1"
+        (state / "supply-chain.json").write_text(json.dumps(saved), encoding="utf-8")
+        newer = list_samples(
+            pinned_version="0.1.0",
+            image_index=index(),
+            repo_index=index(),
+            state_dir=state,
+            actor_role="admin",
+        )
+        self.assertTrue(newer["samples"][0]["updateAvailable"])
+        self.assertEqual(newer["samples"][0]["installedVersion"], "0.0.1")
+        self.assertFalse(newer["samples"][0]["installable"])
         self.assertEqual(again["samples"][0]["questions"], ["Can this order ship?"])
         with self.assertRaises(ApiError) as caught:
             create_sample_installation(

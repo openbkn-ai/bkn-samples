@@ -22,6 +22,12 @@ spec:
     displayName: 供应链本体知识网络-手工版
   capabilities:
     required: true
+  components:
+    objects: true
+    relations: true
+    metrics: false
+    functions: true
+    skills: true
   hooks:
     dbInit: db/init.sh
     dbVerify: db/verify.sh

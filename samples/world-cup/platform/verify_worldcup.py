@@ -9,6 +9,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import yaml
+
 DATA_CHECKS = ("tables-discovered", "cross-table-query")
 BOX_NAME = "wc_vega_query"
 TOOL_NAME = "vega_sql_execute"
@@ -50,9 +52,10 @@ def tool_ready(run_cli) -> bool:
     )
 
 
-def build_checks(*, data_ok: bool, tool_ok: bool) -> list[dict]:
+def build_checks(*, data_ok: bool, tool_ok: bool | None) -> list[dict]:
     checks = [{"name": name, "ok": data_ok} for name in DATA_CHECKS]
-    checks.append({"name": "capability-callable", "ok": tool_ok})
+    if tool_ok is not None:
+        checks.append({"name": "capability-callable", "ok": tool_ok})
     return checks
 
 
@@ -80,7 +83,8 @@ def main() -> int:
         from db.verify_worldcup import main as verify_database
 
         data_ok = verify_database() == 0
-        tool_ok = tool_ready(_openbkn)
+        document = yaml.safe_load((SAMPLE_DIR / "sample.yaml").read_text(encoding="utf-8"))
+        tool_ok = tool_ready(_openbkn) if document["spec"]["components"].get("functions") else None
     checks = build_checks(data_ok=data_ok, tool_ok=tool_ok)
     passed = all(item["ok"] for item in checks)
     degrade = []

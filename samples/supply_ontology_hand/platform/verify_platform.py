@@ -9,7 +9,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-REQUIRED = ("tables-discovered", "object-query", "cross-table-query", "capability-callable", "skill-discoverable")
+import yaml
+
 DATA_CHECKS = ("tables-discovered", "object-query", "cross-table-query")
 BOX_NAME = "供应链原生计算函数"
 SAMPLE_DIR = Path(__file__).resolve().parents[1]
@@ -47,18 +48,12 @@ def skills_ready(run_cli) -> bool:
     return expected <= found
 
 
-def build_checks(*, data_ok: bool, run_cli) -> list[dict]:
-    capability_ok = capability_ready(run_cli)
-    skill_ok = skills_ready(run_cli)
-    checks = []
-    for name in REQUIRED:
-        if name in DATA_CHECKS:
-            ok = data_ok
-        elif name == "capability-callable":
-            ok = capability_ok
-        else:
-            ok = skill_ok
-        checks.append({"name": name, "ok": ok})
+def build_checks(*, data_ok: bool, run_cli, components: dict) -> list[dict]:
+    checks = [{"name": name, "ok": data_ok} for name in DATA_CHECKS]
+    if components.get("functions"):
+        checks.append({"name": "capability-callable", "ok": capability_ready(run_cli)})
+    if components.get("skills"):
+        checks.append({"name": "skill-discoverable", "ok": skills_ready(run_cli)})
     return checks
 
 
@@ -85,7 +80,12 @@ def main() -> int:
         [sys.executable, str(SAMPLE_DIR / "tools" / "smoke_test.py"), "--config", config],
         check=False,
     )
-    checks = build_checks(data_ok=smoke.returncode == 0, run_cli=_openbkn)
+    document = yaml.safe_load((SAMPLE_DIR / "sample.yaml").read_text(encoding="utf-8"))
+    checks = build_checks(
+        data_ok=smoke.returncode == 0,
+        run_cli=_openbkn,
+        components=document["spec"]["components"],
+    )
     passed = all(item["ok"] for item in checks)
     body = {
         "ok": passed,

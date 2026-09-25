@@ -23,6 +23,12 @@ spec:
     displayName: 世界杯
   capabilities:
     required: true
+  components:
+    objects: true
+    relations: true
+    metrics: false
+    functions: true
+    skills: false
   hooks:
     dbInit: db/init.sh
     dbVerify: db/verify.sh

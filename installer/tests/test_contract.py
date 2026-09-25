@@ -41,6 +41,13 @@ def base_document(name: str = "fixture", engine: str = "mariadb", hook: str = "d
             "data": {"mode": "embedded"},
             "knowledgeNetwork": {"id": f"{name}_kn", "displayName": "Fixture network"},
             "capabilities": {"required": False},
+            "components": {
+                "objects": True,
+                "relations": False,
+                "metrics": False,
+                "functions": False,
+                "skills": False,
+            },
             "hooks": {
                 "dbInit": hook,
                 "dbVerify": "db/verify.sh",
@@ -63,6 +70,8 @@ class SupplyContractTest(unittest.TestCase):
         self.assertEqual(index["sourceRepo"], OFFICIAL_SOURCE_REPO)
         self.assertEqual(index["samples"][0]["name"], "supply-chain")
         self.assertEqual(index["samples"][0]["expectedTables"], 12)
+        self.assertTrue(index["samples"][0]["components"]["skills"])
+        self.assertFalse(index["samples"][1]["components"]["skills"])
         check_manifest_index(ROOT, index)
 
     def test_rejects_other_source_repo(self):
