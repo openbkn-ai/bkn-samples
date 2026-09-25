@@ -7,7 +7,7 @@ ARG TARGETARCH
 ARG KUBECTL_VERSION=v1.32.2
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl ca-certificates \
+    && apt-get install -y --no-install-recommends bash curl ca-certificates jq \
     && curl -fsSL -o /usr/local/bin/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl" \
     && chmod 755 /usr/local/bin/kubectl \
     && python3 -m pip install --break-system-packages --no-cache-dir "PyYAML>=6" \
