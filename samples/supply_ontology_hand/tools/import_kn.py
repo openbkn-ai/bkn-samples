@@ -46,6 +46,16 @@ def strip_index_config(node) -> None:
             strip_index_config(item)
 
 
+def _existing_network(kn_id: str) -> dict | None:
+    try:
+        got = json.loads(run_cmd(["openbkn", "--json", "bkn", "get", kn_id]))
+    except RuntimeError:
+        return None
+    if isinstance(got, dict) and got.get("id") == kn_id:
+        return got
+    return None
+
+
 def import_kn(
     json_path: Path, *, dry_run: bool = False, resolve_embedding: bool = False
 ) -> dict:
@@ -72,6 +82,14 @@ def import_kn(
 
     if dry_run:
         report["action"] = "would_import"
+        return report
+
+    existing = _existing_network(kn_id)
+    if existing is not None:
+        if existing.get("name") != kn_name:
+            raise RuntimeError(f"knowledge network {kn_id} exists with a different name")
+        report["action"] = "reuse"
+        report["verified"] = True
         return report
 
     def post(body_payload: dict) -> str:
