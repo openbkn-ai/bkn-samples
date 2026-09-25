@@ -71,6 +71,8 @@ class StudioApiTest(unittest.TestCase):
             calls["deploy"] += 1
 
         def openbkn(args):
+            if "resources" in args:
+                return {"entries": [{}] * 12}
             if "list" in args:
                 return {"entries": []}
             return {"id": "cat-1", "name": "bkn-sample-supply-chain"}
@@ -87,6 +89,8 @@ class StudioApiTest(unittest.TestCase):
             openbkn=openbkn,
             hook_runner=hook,
             deploy=deploy,
+            expected_tables=12,
+            knowledge_network={"id": "supply_ontology_hand", "displayName": "供应链本体知识网络-手工版"},
         )
         self.assertEqual(created["status"], "installed")
         self.assertEqual(calls["deploy"], 1)
@@ -119,6 +123,8 @@ class StudioApiTest(unittest.TestCase):
                 openbkn=openbkn,
                 hook_runner=hook,
                 deploy=deploy,
+                expected_tables=12,
+                knowledge_network={"id": "supply_ontology_hand", "displayName": "供应链本体知识网络-手工版"},
             )
         self.assertEqual(caught.exception.code, "already_installed")
         self.assertEqual(caught.exception.status, 409)
@@ -139,6 +145,8 @@ class StudioApiTest(unittest.TestCase):
                 openbkn=lambda _args: {"entries": []},
                 hook_runner=lambda *_args: {"ok": True},
                 deploy=deploy,
+                expected_tables=12,
+                knowledge_network={"id": "supply_ontology_hand", "displayName": "供应链"},
             )
         self.assertEqual(caught.exception.code, "forbidden")
         self.assertEqual(caught.exception.status, 403)
@@ -161,6 +169,8 @@ class StudioApiTest(unittest.TestCase):
         )
 
         def openbkn(args):
+            if "resources" in args:
+                return {"entries": [{}] * 12}
             if "list" in args:
                 return {"entries": [{"id": "cat-1", "name": "bkn-sample-supply-chain", "tags": ["bkn-samples", "bkn-sample:supply-chain", "bkn-samples-version:0.1.0"]}]}
             return {"id": "cat-1"}
@@ -175,6 +185,8 @@ class StudioApiTest(unittest.TestCase):
             openbkn=openbkn,
             hook_runner=lambda *_args: {"ok": True, "resources": {}},
             deploy=lambda _sample: None,
+            expected_tables=12,
+            knowledge_network={"id": "supply_ontology_hand", "displayName": "供应链本体知识网络-手工版"},
         )
         self.assertEqual(retried["status"], "installed")
         self.assertEqual(retried["id"], "inst-supply-chain")

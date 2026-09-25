@@ -54,6 +54,8 @@ def create_sample_installation(
     openbkn,
     hook_runner,
     deploy,
+    expected_tables: int,
+    knowledge_network: dict,
 ) -> dict:
     _require_sample(sample)
     if actor_role != "admin":
@@ -74,6 +76,8 @@ def create_sample_installation(
             state_dir=state_dir,
             openbkn=openbkn,
             hook_runner=hook_runner,
+            expected_tables=expected_tables,
+            knowledge_network=knowledge_network,
         )
     except ControlError as exc:
         raise _api_error(exc) from exc
@@ -91,6 +95,8 @@ def retry_sample_installation(
     openbkn,
     hook_runner,
     deploy,
+    expected_tables: int,
+    knowledge_network: dict,
 ) -> dict:
     _require_sample(sample)
     current = _read_state(state_dir, sample)
@@ -108,6 +114,8 @@ def retry_sample_installation(
             state_dir=state_dir,
             openbkn=openbkn,
             hook_runner=hook_runner,
+            expected_tables=expected_tables,
+            knowledge_network=knowledge_network,
         )
     except ControlError as exc:
         raise _api_error(exc) from exc
