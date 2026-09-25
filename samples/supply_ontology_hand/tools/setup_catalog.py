@@ -20,13 +20,28 @@ _DEFAULT_MAP = _SCRIPT_DIR / "mapping" / "object_table_map.yaml"
 _UI_FALLBACK_MSG = "请按说明书步骤 4 UI 挂接扫描"
 
 
+def _password_values(args: list[str]) -> list[str]:
+    values = []
+    for arg in args:
+        values.extend(re.findall(r'"password"\s*:\s*"((?:\\.|[^"\\])*)"', arg))
+    return [value for value in values if value]
+
+
+def redact_secrets(text: str, secrets: list[str] | None = None) -> str:
+    """Drop database passwords from command text and CLI output."""
+    redacted = re.sub(r'("password"\s*:\s*")(?:\\.|[^"\\])*"', r'\1***"', text)
+    redacted = re.sub(r"(?i)(password=)[^\s&]+", r"\1***", redacted)
+    for secret in secrets or []:
+        redacted = redacted.replace(secret, "***")
+    return redacted
+
+
 def run_cmd(args: list[str]) -> str:
     proc = subprocess.run(args, capture_output=True, text=True, check=False)
     if proc.returncode != 0:
         detail = (proc.stderr or proc.stdout or "").strip()
-        raise RuntimeError(
-            f"openbkn failed ({proc.returncode}): {' '.join(args)}\n{detail}"
-        )
+        rendered = redact_secrets(f"{' '.join(args)}\n{detail}", _password_values(args))
+        raise RuntimeError(f"openbkn failed ({proc.returncode}): {rendered}")
     return proc.stdout
 
 
@@ -372,7 +387,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     except (RuntimeError, json.JSONDecodeError, OSError, yaml.YAMLError, KeyError) as exc:
         print(_UI_FALLBACK_MSG, file=sys.stderr)
-        print(str(exc), file=sys.stderr)
+        print(redact_secrets(str(exc)), file=sys.stderr)
         return 1
 
 
