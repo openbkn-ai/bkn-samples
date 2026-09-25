@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -58,7 +59,27 @@ def commands(config_path: Path) -> list[list[str]]:
     ]
 
 
-def write_output(payload: dict, ok: bool, message: str = "") -> None:
+def capability_summary(payload: dict) -> str:
+    """Hash the function and skill files this sample publishes."""
+    components = payload.get("components") or {}
+    digest = hashlib.sha256()
+    if components.get("functions"):
+        for name in ("function_catalog.py", "native_function_bundle.py"):
+            path = TOOLS / name
+            digest.update(name.encode())
+            digest.update(b"\0")
+            digest.update(path.read_bytes())
+            digest.update(b"\0")
+    if components.get("skills"):
+        for path in sorted(item for item in (SAMPLE_DIR / "skills").rglob("*") if item.is_file()):
+            digest.update(path.relative_to(SAMPLE_DIR).as_posix().encode())
+            digest.update(b"\0")
+            digest.update(path.read_bytes())
+            digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def write_output(payload: dict, ok: bool, message: str = "", code: str = "") -> None:
     path = os.environ.get("BKN_SAMPLE_OUTPUT", "")
     if not path:
         return
@@ -68,9 +89,11 @@ def write_output(payload: dict, ok: bool, message: str = "") -> None:
         "resources": {
             "catalogId": payload["catalog"]["id"],
             "knowledgeNetworkId": KN_ID,
+            "capabilitySummary": capability_summary(payload),
         },
         "checks": [],
         "degrade": [],
+        "code": code,
         "message": message,
     }
     Path(path).write_text(json.dumps(body, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -78,6 +101,15 @@ def write_output(payload: dict, ok: bool, message: str = "") -> None:
 
 def main() -> int:
     payload = load_input()
+    recorded = payload.get("capabilitySummary")
+    if recorded and recorded != capability_summary(payload):
+        write_output(
+            payload,
+            False,
+            "published capabilities do not match the installation record",
+            code="ownership_conflict",
+        )
+        return 1
     config = build_config(payload)
     config_path = Path(os.environ.get("BKN_SAMPLE_CONFIG", "")) if os.environ.get("BKN_SAMPLE_CONFIG") else None
     if config_path is None:

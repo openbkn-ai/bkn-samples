@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -62,7 +63,11 @@ def hooks(stage: str, payload: dict) -> dict:
     return {
         "ok": True,
         "stage": stage,
-        "resources": {"catalogId": payload["catalog"]["id"], "knowledgeNetworkId": "supply_ontology_hand"},
+        "resources": {
+            "catalogId": payload["catalog"]["id"],
+            "knowledgeNetworkId": "supply_ontology_hand",
+            "capabilitySummary": "declared",
+        },
         "checks": [{"name": "tables-discovered", "ok": True}],
     }
 
@@ -180,6 +185,49 @@ class ControlPlaneTest(unittest.TestCase):
             knowledge_network=NETWORK,
         )
         self.assertEqual(retried["status"], "installed")
+        self.assertEqual(retried["capabilitySummary"], "declared")
+
+    def test_changed_capability_summary_is_a_conflict(self):
+        state = Path(tempfile.mkdtemp())
+        (state / "supply-chain.json").write_text(
+            json.dumps(
+                {
+                    "sample": "supply-chain",
+                    "version": VERSION,
+                    "status": "failed",
+                    "stages": {"knowledge": "succeeded"},
+                    "capabilitySummary": "recorded-summary",
+                }
+            ),
+            encoding="utf-8",
+        )
+        seen = []
+
+        def hook(stage, payload):
+            seen.append(payload.get("capabilitySummary"))
+            return {
+                "ok": False,
+                "code": "ownership_conflict",
+                "message": "published capabilities do not match the installation record",
+            }
+
+        with self.assertRaises(ControlError) as caught:
+            retry_installation(
+                sample="supply-chain",
+                version=VERSION,
+                actor_role="admin",
+                database=DATABASE,
+                state_dir=state,
+                openbkn=OpenBKN(),
+                hook_runner=hook,
+                expected_tables=12,
+                knowledge_network=NETWORK,
+            )
+        self.assertEqual(caught.exception.code, "ownership_conflict")
+        self.assertEqual(seen, ["recorded-summary"])
+        saved = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["capabilitySummary"], "recorded-summary")
+        self.assertNotEqual(saved["stages"].get("capabilities"), "succeeded")
 
     def test_stops_before_the_hook_when_tables_are_missing(self):
         client = OpenBKN(tables=3)
@@ -222,6 +270,32 @@ class InstallSupplyTest(unittest.TestCase):
         self.assertNotIn("kubectl", rendered)
         self.assertIn("import_kn.py", rendered)
         self.assertIn("register_skills.py", rendered)
+
+    def test_supply_hook_stops_before_commands_when_the_summary_differs(self):
+        payload = {
+            "sample": "supply-chain",
+            "components": {"functions": True, "skills": True},
+            "database": DATABASE,
+            "catalog": {"id": "cat-1", "name": "bkn-sample-supply-chain"},
+            "knowledgeNetwork": {"id": "supply_ontology_hand", "displayName": "供应链本体知识网络-手工版"},
+            "capabilitySummary": "not-the-sample",
+        }
+        directory = Path(tempfile.mkdtemp())
+        source = directory / "input.json"
+        output = directory / "output.json"
+        source.write_text(json.dumps(payload), encoding="utf-8")
+        env = {
+            "BKN_SAMPLE_INPUT": str(source),
+            "BKN_SAMPLE_OUTPUT": str(output),
+            "BKN_SAMPLE_CONFIG": str(directory / "config.yaml"),
+        }
+        with patch.dict(os.environ, env, clear=False):
+            status = _INSTALL.main()
+        self.assertEqual(status, 1)
+        body = json.loads(output.read_text(encoding="utf-8"))
+        self.assertEqual(body["code"], "ownership_conflict")
+        self.assertFalse((directory / "config.yaml").exists())
+        self.assertNotIn(DATABASE["password"], output.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

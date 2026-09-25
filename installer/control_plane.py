@@ -165,6 +165,11 @@ def _hook_input(sample: str, version: str, database: dict, catalog_id: str, know
 
 def _run_hook(hook_runner, payload: dict, stage: str) -> dict:
     result = hook_runner(stage, payload)
+    if isinstance(result, dict) and result.get("code") == "ownership_conflict":
+        raise ControlError(
+            "ownership_conflict",
+            result.get("message") or "published capabilities do not match the installation record",
+        )
     if not isinstance(result, dict) or result.get("ok") is not True:
         message = (result or {}).get("message") if isinstance(result, dict) else "hook failed"
         code = "verify_failed" if stage == "platform-verify" else "install_failed"
@@ -250,11 +255,22 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
         record["stages"]["discover"] = "succeeded"
         record["catalogId"] = catalog["id"]
         payload = _hook_input(sample, version, database, catalog["id"], knowledge_network, components)
-        if record["stages"].get("knowledge") != "succeeded":
+        if record["stages"].get("knowledge") != "succeeded" or record["stages"].get("capabilities") != "succeeded":
+            if record.get("capabilitySummary"):
+                payload = {**payload, "capabilitySummary": record["capabilitySummary"]}
             installed = _run_hook(hook_runner, payload, "platform-install")
+            reported = (installed.get("resources") or {}).get("capabilitySummary")
+            previous = record.get("capabilitySummary")
+            if previous and reported != previous:
+                raise ControlError(
+                    "ownership_conflict",
+                    "published capabilities do not match the installation record",
+                )
             record["stages"]["knowledge"] = "succeeded"
             record["stages"]["capabilities"] = "succeeded"
             record["resources"] = installed.get("resources") or {}
+            if reported:
+                record["capabilitySummary"] = reported
         verified = _run_hook(hook_runner, payload, "platform-verify")
         record["stages"]["verify"] = "succeeded"
         record["checks"] = verified.get("checks") or []
