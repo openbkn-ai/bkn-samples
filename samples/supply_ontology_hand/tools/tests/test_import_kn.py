@@ -11,6 +11,26 @@ from import_kn import import_kn
 KN = Path(__file__).resolve().parents[2] / "kn" / "supply_ontology_hand.json"
 
 
+def test_import_reuses_the_same_network(tmp_path, monkeypatch):
+    json_path = tmp_path / "kn.json"
+    json_path.write_text(
+        json.dumps({"id": "supply_ontology_hand", "name": "供应链本体知识网络-手工版"}),
+        encoding="utf-8",
+    )
+    calls = []
+
+    def fake_run_cmd(args):
+        calls.append(args)
+        if args[2:4] == ["bkn", "get"]:
+            return json.dumps({"id": "supply_ontology_hand", "name": "供应链本体知识网络-手工版"})
+        raise AssertionError(args)
+
+    monkeypatch.setattr(import_kn_module, "run_cmd", fake_run_cmd)
+    report = import_kn_module.import_kn(json_path)
+    assert report["action"] == "reuse"
+    assert all(call[2] != "call" for call in calls)
+
+
 def test_import_kn_dry_run():
     report = import_kn(KN, dry_run=True)
     assert report["kn_id"] == "supply_ontology_hand"
@@ -44,15 +64,19 @@ def test_import_retries_without_index_config_when_platform_rejects_it(tmp_path, 
     json_path = tmp_path / "kn.json"
     json_path.write_text(json.dumps(payload), encoding="utf-8")
     posted_bodies = []
+    lookups = {"count": 0}
 
     def fake_run_cmd(args):
+        if args[2:4] == ["bkn", "get"]:
+            lookups["count"] += 1
+            if lookups["count"] == 1:
+                raise RuntimeError("not found")
+            return json.dumps({"id": "test_network", "name": "Test network"})
         if args[2] == "call":
             posted_bodies.append(json.loads(args[-1]))
             if len(posted_bodies) == 1:
                 raise RuntimeError("数据属性 material_name 不再支持 index_config")
             return json.dumps({"ok": True})
-        if args[2:4] == ["bkn", "get"]:
-            return json.dumps({"id": "test_network", "name": "Test network"})
         raise AssertionError(args)
 
     monkeypatch.setattr(import_kn_module, "run_cmd", fake_run_cmd)
