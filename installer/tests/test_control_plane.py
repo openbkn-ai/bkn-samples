@@ -3,6 +3,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from installer.control_plane import ControlError, create_installation, retry_installation
 
@@ -15,6 +16,7 @@ commands = _INSTALL.commands
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+NETWORK = {"id": "supply_ontology_hand", "displayName": "供应链本体知识网络-手工版"}
 DATABASE = {
     "engine": "mariadb",
     "host": "bkn-sample-supply-chain.openbkn-samples.svc",
@@ -26,8 +28,9 @@ DATABASE = {
 
 
 class OpenBKN:
-    def __init__(self, catalogs: list[dict] | None = None):
+    def __init__(self, catalogs: list[dict] | None = None, tables: int = 12):
         self.catalogs = list(catalogs or [])
+        self.tables = tables
         self.calls: list[list[str]] = []
 
     def __call__(self, args: list[str]):
@@ -45,6 +48,12 @@ class OpenBKN:
             }
             self.catalogs.append(created)
             return created
+        if args[:3] == ["vega", "catalog", "resources"]:
+            return {"entries": [{"name": f"t{index}"} for index in range(self.tables)]}
+        if args[:3] == ["vega", "catalog", "enable"]:
+            return {"id": args[3], "enabled": True}
+        if args[:3] in (["vega", "catalog", "test-connection"], ["vega", "catalog", "discover"]):
+            return {"ok": True}
         raise AssertionError(args)
 
 
@@ -69,6 +78,8 @@ class ControlPlaneTest(unittest.TestCase):
                 state_dir=Path(tempfile.mkdtemp()),
                 openbkn=OpenBKN(),
                 hook_runner=hooks,
+                expected_tables=12,
+                knowledge_network=NETWORK,
             )
         self.assertEqual(caught.exception.code, "forbidden")
 
@@ -83,6 +94,8 @@ class ControlPlaneTest(unittest.TestCase):
                 state_dir=Path(tempfile.mkdtemp()),
                 openbkn=client,
                 hook_runner=hooks,
+                expected_tables=12,
+                knowledge_network=NETWORK,
             )
         self.assertEqual(caught.exception.code, "ownership_conflict")
         self.assertFalse(any(call[:3] == ["vega", "catalog", "create"] for call in client.calls))
@@ -98,6 +111,8 @@ class ControlPlaneTest(unittest.TestCase):
             state_dir=state,
             openbkn=client,
             hook_runner=hooks,
+                expected_tables=12,
+                knowledge_network=NETWORK,
         )
         self.assertEqual(record["status"], "installed")
         create_call = next(call for call in client.calls if call[:3] == ["vega", "catalog", "create"])
@@ -113,6 +128,8 @@ class ControlPlaneTest(unittest.TestCase):
                 state_dir=state,
                 openbkn=client,
                 hook_runner=hooks,
+                expected_tables=12,
+                knowledge_network=NETWORK,
             )
         self.assertEqual(caught.exception.code, "already_installed")
 
@@ -134,6 +151,8 @@ class ControlPlaneTest(unittest.TestCase):
                 state_dir=state,
                 openbkn=client,
                 hook_runner=fail_once,
+                expected_tables=12,
+                knowledge_network=NETWORK,
             )
         self.assertEqual(caught.exception.code, "verify_failed")
         with self.assertRaises(ControlError) as denied:
@@ -145,6 +164,8 @@ class ControlPlaneTest(unittest.TestCase):
                 state_dir=state,
                 openbkn=client,
                 hook_runner=hooks,
+                expected_tables=12,
+                knowledge_network=NETWORK,
             )
         self.assertEqual(denied.exception.code, "use_retry")
         retried = retry_installation(
@@ -155,8 +176,34 @@ class ControlPlaneTest(unittest.TestCase):
             state_dir=state,
             openbkn=client,
             hook_runner=hooks,
+            expected_tables=12,
+            knowledge_network=NETWORK,
         )
         self.assertEqual(retried["status"], "installed")
+
+    def test_stops_before_the_hook_when_tables_are_missing(self):
+        client = OpenBKN(tables=3)
+        ran = {"hook": 0}
+
+        def hook(stage, payload):
+            ran["hook"] += 1
+            return hooks(stage, payload)
+
+        with patch("installer.control_plane.time.sleep"), self.assertRaises(ControlError) as caught:
+            create_installation(
+                sample="supply-chain",
+                version=VERSION,
+                actor_role="admin",
+                database=DATABASE,
+                state_dir=Path(tempfile.mkdtemp()),
+                openbkn=client,
+                hook_runner=hook,
+                expected_tables=12,
+                knowledge_network=NETWORK,
+            )
+        self.assertEqual(caught.exception.code, "discover_incomplete")
+        self.assertEqual(ran["hook"], 0)
+        self.assertTrue(any(call[:3] == ["vega", "catalog", "enable"] for call in client.calls))
 
 
 class InstallSupplyTest(unittest.TestCase):

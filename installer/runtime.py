@@ -37,6 +37,12 @@ def database_config(deployed: dict, kubectl) -> dict:
     }
 
 
+def sample_contract(root: Path, sample: str) -> tuple[int, dict]:
+    _sample_dir, document = _sample(root, sample)
+    spec = document["spec"]
+    return int(spec["database"]["expectedTables"]), spec["knowledgeNetwork"]
+
+
 def caller_env(authorization: str | None) -> dict:
     if not authorization or not authorization.startswith("Bearer "):
         return {}
@@ -84,6 +90,7 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
     try:
         deployed = deploy(sample)
         database = database_config(deployed, kubectl)
+        expected_tables, knowledge_network = sample_contract(root, sample)
         record = create_installation(
             sample=sample,
             version=version,
@@ -92,6 +99,8 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
             state_dir=state_dir,
             openbkn=lambda args: openbkn_json(args, run, cli_env),
             hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env),
+            expected_tables=expected_tables,
+            knowledge_network=knowledge_network,
         )
     except DeployError as exc:
         _write_failed(state_dir, sample, version, exc.code, exc.message)
@@ -112,6 +121,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
     try:
         deployed = deploy(sample)
         database = database_config(deployed, kubectl)
+        expected_tables, knowledge_network = sample_contract(root, sample)
         record = retry_installation(
             sample=sample,
             version=version,
@@ -120,6 +130,8 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             state_dir=state_dir,
             openbkn=lambda args: openbkn_json(args, run, cli_env),
             hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env),
+            expected_tables=expected_tables,
+            knowledge_network=knowledge_network,
         )
     except (DeployError, ControlError) as exc:
         code = getattr(exc, "code", "install_failed")

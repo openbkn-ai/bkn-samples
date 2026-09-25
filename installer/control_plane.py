@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 
 OWNERSHIP_MANAGED_BY = "bkn-samples"
@@ -109,7 +110,40 @@ def ensure_catalog(sample: str, version: str, database: dict, openbkn) -> dict:
     return created
 
 
-def _hook_input(sample: str, version: str, database: dict, catalog_id: str) -> dict:
+def _payload_entries(payload) -> list:
+    if isinstance(payload, dict):
+        for key in ("entries", "resources", "items", "data"):
+            inner = payload.get(key)
+            if isinstance(inner, list):
+                return inner
+    if isinstance(payload, list):
+        return payload
+    return []
+
+
+def scan_catalog(catalog: dict, expected_tables: int, openbkn, attempts: int = 30, sleep=None) -> None:
+    """Enable the catalog, test it, and wait until discovery returns the declared table count."""
+    pause = time.sleep if sleep is None else sleep
+    catalog_id = catalog["id"]
+    openbkn(["vega", "catalog", "enable", catalog_id])
+    openbkn(["vega", "catalog", "test-connection", catalog_id])
+    openbkn(["vega", "catalog", "discover", catalog_id])
+    found = 0
+    for _ in range(attempts):
+        resources = openbkn(
+            ["vega", "catalog", "resources", catalog_id, "--category", "table", "--limit", "-1"]
+        )
+        found = len(_payload_entries(resources))
+        if found == expected_tables:
+            return
+        pause(2)
+    raise ControlError(
+        "discover_incomplete",
+        f"discovered {found} tables, expected {expected_tables}",
+    )
+
+
+def _hook_input(sample: str, version: str, database: dict, catalog_id: str, knowledge_network: dict) -> dict:
     return {
         "apiVersion": "samples.openbkn.ai/v1alpha1",
         "sample": sample,
@@ -117,8 +151,8 @@ def _hook_input(sample: str, version: str, database: dict, catalog_id: str) -> d
         "database": database,
         "catalog": {"name": catalog_name(sample), "id": catalog_id},
         "knowledgeNetwork": {
-            "id": "supply_ontology_hand",
-            "displayName": "供应链本体知识网络-手工版",
+            "id": knowledge_network["id"],
+            "displayName": knowledge_network["displayName"],
         },
         "ownership": {
             "managedBy": OWNERSHIP_MANAGED_BY,
@@ -146,6 +180,8 @@ def create_installation(
     state_dir: Path,
     openbkn,
     hook_runner,
+    expected_tables: int,
+    knowledge_network: dict,
 ) -> dict:
     _require_admin(actor_role)
     current = _read_state(state_dir, sample)
@@ -161,6 +197,8 @@ def create_installation(
         openbkn=openbkn,
         hook_runner=hook_runner,
         current=current,
+        expected_tables=expected_tables,
+        knowledge_network=knowledge_network,
     )
 
 
@@ -173,6 +211,8 @@ def retry_installation(
     state_dir: Path,
     openbkn,
     hook_runner,
+    expected_tables: int,
+    knowledge_network: dict,
 ) -> dict:
     _require_admin(actor_role)
     current = _read_state(state_dir, sample)
@@ -186,10 +226,12 @@ def retry_installation(
         openbkn=openbkn,
         hook_runner=hook_runner,
         current=current,
+        expected_tables=expected_tables,
+        knowledge_network=knowledge_network,
     )
 
 
-def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, current) -> dict:
+def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, current, expected_tables, knowledge_network) -> dict:
     record = current or {
         "sample": sample,
         "version": version,
@@ -199,9 +241,10 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
     record["status"] = "installing"
     try:
         catalog = ensure_catalog(sample, version, database, openbkn)
+        scan_catalog(catalog, expected_tables, openbkn)
         record["stages"]["discover"] = "succeeded"
         record["catalogId"] = catalog["id"]
-        payload = _hook_input(sample, version, database, catalog["id"])
+        payload = _hook_input(sample, version, database, catalog["id"], knowledge_network)
         if record["stages"].get("knowledge") != "succeeded":
             installed = _run_hook(hook_runner, payload, "platform-install")
             record["stages"]["knowledge"] = "succeeded"

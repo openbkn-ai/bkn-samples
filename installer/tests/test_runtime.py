@@ -36,11 +36,14 @@ class RuntimeTest(unittest.TestCase):
         def run(argv, env):
             if argv[0] == "openbkn":
                 seen["token"] = (env or {}).get("BKN_TOKEN")
+                if "resources" in argv:
+                    return completed(json.dumps({"entries": [{}] * 12}))
                 if "list" in argv:
                     return completed(json.dumps({"entries": []}))
                 return completed(json.dumps({"id": "cat-1", "name": "bkn-sample-supply-chain"}))
             payload = json.loads(Path(env["BKN_SAMPLE_INPUT"]).read_text(encoding="utf-8"))
             seen["password"] = payload["database"]["password"]
+            seen["network"] = payload["knowledgeNetwork"]["id"]
             seen["hook_token"] = env.get("BKN_TOKEN")
             Path(env["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps({"ok": True, "resources": {}}), encoding="utf-8")
             return completed()
@@ -57,6 +60,7 @@ class RuntimeTest(unittest.TestCase):
             authorization="Bearer admin-token",
         )
         self.assertEqual(seen["password"], PASSWORD)
+        self.assertEqual(seen["network"], "supply_ontology_hand")
         self.assertEqual(seen["token"], "admin-token")
         self.assertEqual(seen["hook_token"], "admin-token")
         self.assertEqual(view["status"], "installed")
