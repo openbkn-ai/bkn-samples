@@ -10,6 +10,8 @@ class StudioImageTest(unittest.TestCase):
         self.assertIn("bash", text)
         self.assertIn("jq", text)
         self.assertIn("PyYAML", text)
+        self.assertIn("SQLAlchemy", text)
+        self.assertIn("PyMySQL", text)
 
 
 if __name__ == "__main__":

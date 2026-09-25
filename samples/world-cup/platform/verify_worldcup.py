@@ -13,11 +13,26 @@ KN_ID = "worldcup_vega_catalog_bkn"
 SAMPLE_DIR = Path(__file__).resolve().parents[1]
 
 
+def apply_database_env(raw: dict) -> None:
+    """Use the hook database when this process is not inside the MariaDB container."""
+    if os.environ.get("MYSQL_HOST") or os.environ.get("MYSQL_UNIX_SOCKET"):
+        return
+    database = raw["database"]
+    os.environ["MYSQL_HOST"] = str(database["host"])
+    os.environ["MYSQL_PORT"] = str(database["port"])
+    os.environ["MYSQL_USER"] = str(database["user"])
+    os.environ["MYSQL_PASSWORD"] = str(database["password"])
+    os.environ["MYSQL_DATABASE"] = str(database["name"])
+    os.environ.setdefault("BKN_SAMPLE_ID", str(raw.get("sample") or ""))
+    os.environ.setdefault("BKN_SAMPLE_VERSION", str(raw.get("version") or ""))
+
+
 def main() -> int:
     raw = json.loads(Path(os.environ["BKN_SAMPLE_INPUT"]).read_text(encoding="utf-8"))
     if raw.get("sample") != "world-cup":
         print("unexpected sample", file=sys.stderr)
         return 1
+    apply_database_env(raw)
     if os.environ.get("BKN_SAMPLE_PRINT_ONLY") == "1":
         passed = True
     else:
