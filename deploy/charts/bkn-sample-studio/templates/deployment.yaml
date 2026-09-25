@@ -25,7 +25,7 @@ spec:
             - name: BKN_SAMPLE_STATE_DIR
               value: /var/lib/bkn-samples/state
             - name: BKN_SAMPLE_IMAGE_INDEX
-              value: /var/lib/bkn-samples/manifest-index.json
+              value: /opt/bkn-samples/manifest-index.json
           readinessProbe:
             httpGet:
               path: /healthz
