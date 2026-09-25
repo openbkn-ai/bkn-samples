@@ -45,26 +45,26 @@ def dispatch(app: StudioApp, method: str, path: str, authorization: str | None, 
         return 404, {"code": "install_failed", "message": "unknown sample route"}
     try:
         role = app.authenticate(authorization)
-        return action(app, role)
+        return action(app, role, authorization)
     except ApiError as exc:
         return exc.status, {"code": exc.code, "message": exc.message}
 
 
 def _route(method: str, path: str):
     if _LIST.fullmatch(path) and method == "GET":
-        return lambda app, role: (200, app.catalog(role))
+        return lambda app, role, _authorization: (200, app.catalog(role))
     created = _CREATE.fullmatch(path)
     if created and method == "POST":
         sample = created.group("sample")
-        return lambda app, role: (201, app.create(sample, role))
+        return lambda app, role, authorization: (201, app.create(sample, role, authorization))
     retried = _RETRY.fullmatch(path)
     if retried and method == "POST":
         sample, installation = retried.group("sample"), retried.group("installation")
-        return lambda app, role: (200, app.retry(sample, installation, role))
+        return lambda app, role, authorization: (200, app.retry(sample, installation, role, authorization))
     current = _GET.fullmatch(path)
     if current and method == "GET":
         sample, installation = current.group("sample"), current.group("installation")
-        return lambda app, role: (200, app.get(sample, installation, role))
+        return lambda app, role, _authorization: (200, app.get(sample, installation, role))
     return None
 
 
@@ -158,7 +158,7 @@ def main() -> None:
             actor_role=role,
         )
 
-    def create(sample: str, role: str) -> dict:
+    def create(sample: str, role: str, authorization: str | None = None) -> dict:
         return install_sample(
             sample=sample,
             actor_role=role,
@@ -168,9 +168,10 @@ def main() -> None:
             deploy=lambda name: deploy_database_sample(root, name),
             kubectl=kubectl_run,
             run=process_run,
+            authorization=authorization,
         )
 
-    def retry(sample: str, installation: str, role: str) -> dict:
+    def retry(sample: str, installation: str, role: str, authorization: str | None = None) -> dict:
         return retry_sample(
             sample=sample,
             installation_id=installation,
@@ -181,6 +182,7 @@ def main() -> None:
             deploy=lambda name: deploy_database_sample(root, name),
             kubectl=kubectl_run,
             run=process_run,
+            authorization=authorization,
         )
 
     app = build_app(

@@ -37,8 +37,17 @@ def database_config(deployed: dict, kubectl) -> dict:
     }
 
 
-def openbkn_json(args: list[str], run) -> dict:
-    completed = run(["openbkn", "--json", *args], None)
+def caller_env(authorization: str | None) -> dict:
+    if not authorization or not authorization.startswith("Bearer "):
+        return {}
+    token = authorization.removeprefix("Bearer ").strip()
+    if not token:
+        return {}
+    return {"BKN_TOKEN": token}
+
+
+def openbkn_json(args: list[str], run, env: dict | None = None) -> dict:
+    completed = run(["openbkn", "--json", *args], env)
     if completed.returncode != 0:
         raise ControlError("install_failed", "openbkn command failed")
     payload = json.loads(completed.stdout or "{}")
@@ -47,7 +56,7 @@ def openbkn_json(args: list[str], run) -> dict:
     return payload
 
 
-def run_platform_hook(root: Path, stage: str, payload: dict, run) -> dict:
+def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | None = None) -> dict:
     sample_dir, document = _sample(root, payload["sample"])
     hook_name = "platformInstall" if stage == "platform-install" else "platformVerify"
     script = sample_dir / document["spec"]["hooks"][hook_name]
@@ -56,10 +65,10 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run) -> dict:
         source = directory / "input.json"
         output = directory / "output.json"
         source.write_text(json.dumps(payload), encoding="utf-8")
-        completed = run(
-            [str(script)],
-            {"BKN_SAMPLE_INPUT": str(source), "BKN_SAMPLE_OUTPUT": str(output)},
-        )
+        hook_env = dict(env or {})
+        hook_env["BKN_SAMPLE_INPUT"] = str(source)
+        hook_env["BKN_SAMPLE_OUTPUT"] = str(output)
+        completed = run([str(script)], hook_env)
         if completed.returncode != 0 or not output.is_file():
             return {"ok": False, "message": "platform hook failed"}
         result = json.loads(output.read_text(encoding="utf-8"))
@@ -68,9 +77,10 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run) -> dict:
         return result
 
 
-def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run) -> dict:
+def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None) -> dict:
     if actor_role != "admin":
         raise ApiError(403, "forbidden", "an administrator must install the sample")
+    cli_env = caller_env(authorization)
     try:
         deployed = deploy(sample)
         database = database_config(deployed, kubectl)
@@ -80,8 +90,8 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
             actor_role=actor_role,
             database=database,
             state_dir=state_dir,
-            openbkn=lambda args: openbkn_json(args, run),
-            hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run),
+            openbkn=lambda args: openbkn_json(args, run, cli_env),
+            hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env),
         )
     except DeployError as exc:
         _write_failed(state_dir, sample, version, exc.code, exc.message)
@@ -92,12 +102,13 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
     return installation_view(record, actor_role)
 
 
-def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run) -> dict:
+def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None) -> dict:
     current = _read_state(state_dir, sample)
     if not current or _installation_id(current) != installation_id:
         raise ApiError(404, "install_failed", "installation not found")
     if actor_role != "admin":
         raise ApiError(403, "forbidden", "an administrator must install the sample")
+    cli_env = caller_env(authorization)
     try:
         deployed = deploy(sample)
         database = database_config(deployed, kubectl)
@@ -107,8 +118,8 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             actor_role=actor_role,
             database=database,
             state_dir=state_dir,
-            openbkn=lambda args: openbkn_json(args, run),
-            hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run),
+            openbkn=lambda args: openbkn_json(args, run, cli_env),
+            hook_runner=lambda stage, payload: run_platform_hook(root, stage, payload, run, cli_env),
         )
     except (DeployError, ControlError) as exc:
         code = getattr(exc, "code", "install_failed")
