@@ -172,6 +172,18 @@ spec:
 """
 
 
+def _data_unavailable(text: str) -> bool:
+    return "sample data unavailable" in text or "checksum mismatch" in text
+
+
+def _pod_logs(kubectl, sample: str) -> str:
+    result = _run(
+        kubectl,
+        ["logs", "-n", NAMESPACE, "-l", f"app=bkn-sample,bkn-sample={sample}", "--tail=80"],
+    )
+    return result.stdout or ""
+
+
 def _pod_state(kubectl, sample: str) -> str:
     result = _run(
         kubectl,
@@ -193,6 +205,10 @@ def _pod_state(kubectl, sample: str) -> str:
         reason = item.get("state", {}).get("waiting", {}).get("reason", "")
         if reason in {"ImagePullBackOff", "ErrImagePull"}:
             return "image_pull_failed"
+        terminated = item.get("state", {}).get("terminated") or item.get("lastState", {}).get("terminated") or {}
+        if reason == "CrashLoopBackOff" or terminated.get("exitCode") not in (None, 0):
+            if _data_unavailable(_pod_logs(kubectl, sample)):
+                return "sample_data_unavailable"
     return "pending"
 
 
@@ -250,6 +266,11 @@ def deploy_database(root: Path, sample: str, kubectl, sleep=time.sleep, attempts
         state = _pod_state(kubectl, sample)
         if state == "ready":
             break
+        if state == "sample_data_unavailable":
+            raise DeployError(
+                "sample_data_unavailable",
+                "the sample data was not downloaded or did not match its lock file",
+            )
         if state == "image_pull_failed" and not switched:
             _switch_image(kubectl, sample, ghcr)
             switched = True

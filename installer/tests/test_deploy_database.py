@@ -42,9 +42,21 @@ class FakeKubectl:
                 status = {"containerStatuses": [{"ready": True}]}
             elif state == "image_pull_failed":
                 status = {"containerStatuses": [{"ready": False, "state": {"waiting": {"reason": "ImagePullBackOff"}}}]}
+            elif state == "sample_data_unavailable":
+                status = {
+                    "containerStatuses": [
+                        {
+                            "ready": False,
+                            "state": {"waiting": {"reason": "CrashLoopBackOff"}},
+                            "lastState": {"terminated": {"exitCode": 1}},
+                        }
+                    ]
+                }
             else:
                 status = {"containerStatuses": [{"ready": False, "state": {"waiting": {"reason": "PodInitializing"}}}]}
             return self._ok(json.dumps({"items": [{"status": status}]}))
+        if args[:1] == ["logs"]:
+            return self._ok("sample data unavailable: matches.csv")
         if args[:1] == ["patch"]:
             self.patched.append(args[-1])
             return self._ok("patched")
@@ -109,6 +121,13 @@ class DeployDatabaseTest(unittest.TestCase):
             with self.assertRaises(DeployError) as caught:
                 deploy_database(ROOT, "supply-chain", FakeKubectl(), sleep=lambda _seconds: None, attempts=1)
         self.assertEqual(caught.exception.code, "image_unavailable")
+
+    def test_download_failure_does_not_wait_for_a_catalog(self):
+        kubectl = FakeKubectl(states=["sample_data_unavailable"])
+        with self.assertRaises(DeployError) as caught:
+            deploy_database(ROOT, "world-cup", kubectl, sleep=lambda _seconds: None, attempts=5)
+        self.assertEqual(caught.exception.code, "sample_data_unavailable")
+        self.assertEqual(len(kubectl.applied), 1)
 
     def test_reports_database_not_ready(self):
         kubectl = FakeKubectl(states=["pending"])
