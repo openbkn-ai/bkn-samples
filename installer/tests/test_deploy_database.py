@@ -5,7 +5,16 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from installer.deploy_database import GHCR_IMAGE, SWR_IMAGE, DeployError, deploy_database
+from installer.deploy_database import (
+    GHCR_IMAGE,
+    SWR_IMAGE,
+    DeployError,
+    deploy_database,
+    registry_digests,
+)
+
+DIGEST = "sha256:" + "ab" * 32
+OTHER = "sha256:" + "cd" * 32
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -96,16 +105,57 @@ class DeployDatabaseTest(unittest.TestCase):
         deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=1)
         self.assertNotIn("kind: Secret", kubectl.applied[0])
 
-    def test_switches_to_ghcr_after_pull_failure(self):
+    def test_switches_to_ghcr_when_manifest_digests_match(self):
         kubectl = FakeKubectl(states=["image_pull_failed", "ready"])
-        result = deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=3)
+        result = deploy_database(
+            ROOT,
+            "supply-chain",
+            kubectl,
+            sleep=lambda _seconds: None,
+            attempts=3,
+            digests=lambda _tag: (DIGEST, DIGEST),
+        )
         self.assertIn(f"{GHCR_IMAGE}:0.1.0", kubectl.patched[0])
+        self.assertEqual(result["image"], f"{GHCR_IMAGE}:0.1.0")
+
+    def test_refuses_ghcr_when_manifest_digests_differ(self):
+        kubectl = FakeKubectl(states=["image_pull_failed", "ready"])
+        with self.assertRaises(DeployError) as caught:
+            deploy_database(
+                ROOT,
+                "supply-chain",
+                kubectl,
+                sleep=lambda _seconds: None,
+                attempts=3,
+                digests=lambda _tag: (DIGEST, OTHER),
+            )
+        self.assertEqual(caught.exception.code, "image_unavailable")
+        self.assertEqual(kubectl.patched, [])
+        self.assertIn("digests differ", caught.exception.message)
+
+    def test_switches_to_ghcr_when_swr_has_no_manifest(self):
+        kubectl = FakeKubectl(states=["image_pull_failed", "ready"])
+        result = deploy_database(
+            ROOT,
+            "supply-chain",
+            kubectl,
+            sleep=lambda _seconds: None,
+            attempts=3,
+            digests=lambda _tag: (None, DIGEST),
+        )
         self.assertEqual(result["image"], f"{GHCR_IMAGE}:0.1.0")
 
     def test_reports_image_unavailable_when_both_registries_fail(self):
         kubectl = FakeKubectl(states=["image_pull_failed", "image_pull_failed"])
         with self.assertRaises(DeployError) as caught:
-            deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=2)
+            deploy_database(
+                ROOT,
+                "supply-chain",
+                kubectl,
+                sleep=lambda _seconds: None,
+                attempts=2,
+                digests=lambda _tag: (DIGEST, DIGEST),
+            )
         self.assertEqual(caught.exception.code, "image_unavailable")
 
     def test_uses_the_published_main_build_tag(self):
@@ -134,6 +184,44 @@ class DeployDatabaseTest(unittest.TestCase):
         with self.assertRaises(DeployError) as caught:
             deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=1)
         self.assertEqual(caught.exception.code, "database_not_ready")
+
+
+class _Response:
+    def __init__(self, headers: dict | None = None, body: bytes = b""):
+        self.headers = headers or {}
+        self._body = body
+
+    def read(self) -> bytes:
+        return self._body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args):
+        return False
+
+
+class RegistryDigestTest(unittest.TestCase):
+    def test_reads_the_manifest_list_digest(self):
+        seen = []
+
+        def opener(request, timeout=10):
+            seen.append(request)
+            if request.full_url.startswith("https://ghcr.io/token"):
+                return _Response(body=b'{"token":"pull-token"}')
+            return _Response({"Docker-Content-Digest": DIGEST})
+
+        swr, ghcr = registry_digests("0.1.0", opener)
+        self.assertEqual((swr, ghcr), (DIGEST, DIGEST))
+        ghcr_request = next(item for item in seen if item.full_url.startswith("https://ghcr.io/v2/"))
+        self.assertEqual(ghcr_request.get_method(), "HEAD")
+        self.assertEqual(ghcr_request.get_header("Authorization"), "Bearer pull-token")
+
+    def test_missing_manifest_is_empty(self):
+        def opener(_request, timeout=10):
+            raise OSError("missing")
+
+        self.assertEqual(registry_digests("0.1.0", opener), (None, None))
 
 
 if __name__ == "__main__":
