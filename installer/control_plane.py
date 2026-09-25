@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 
 OWNERSHIP_MANAGED_BY = "bkn-samples"
@@ -120,21 +121,25 @@ def _payload_entries(payload) -> list:
     return []
 
 
-def scan_catalog(catalog: dict, expected_tables: int, openbkn) -> None:
-    """Enable the catalog, test it, and require the declared table count."""
+def scan_catalog(catalog: dict, expected_tables: int, openbkn, attempts: int = 30, sleep=time.sleep) -> None:
+    """Enable the catalog, test it, and wait until discovery returns the declared table count."""
     catalog_id = catalog["id"]
     openbkn(["vega", "catalog", "enable", catalog_id])
     openbkn(["vega", "catalog", "test-connection", catalog_id])
     openbkn(["vega", "catalog", "discover", catalog_id])
-    resources = openbkn(
-        ["vega", "catalog", "resources", catalog_id, "--category", "table", "--limit", "-1"]
-    )
-    found = len(_payload_entries(resources))
-    if found != expected_tables:
-        raise ControlError(
-            "discover_incomplete",
-            f"discovered {found} tables, expected {expected_tables}",
+    found = 0
+    for _ in range(attempts):
+        resources = openbkn(
+            ["vega", "catalog", "resources", catalog_id, "--category", "table", "--limit", "-1"]
         )
+        found = len(_payload_entries(resources))
+        if found == expected_tables:
+            return
+        sleep(2)
+    raise ControlError(
+        "discover_incomplete",
+        f"discovered {found} tables, expected {expected_tables}",
+    )
 
 
 def _hook_input(sample: str, version: str, database: dict, catalog_id: str, knowledge_network: dict) -> dict:

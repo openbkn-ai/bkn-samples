@@ -3,6 +3,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from installer.control_plane import ControlError, create_installation, retry_installation
 
@@ -188,7 +189,7 @@ class ControlPlaneTest(unittest.TestCase):
             ran["hook"] += 1
             return hooks(stage, payload)
 
-        with self.assertRaises(ControlError) as caught:
+        with patch("installer.control_plane.time.sleep"), self.assertRaises(ControlError) as caught:
             create_installation(
                 sample="supply-chain",
                 version=VERSION,
