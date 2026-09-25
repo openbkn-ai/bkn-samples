@@ -1,7 +1,7 @@
 import unittest
 
 from installer.contract import OFFICIAL_SOURCE_REPO
-from installer.release import ReleaseError, assert_release_tag, assert_same_digest, image_refs, merge_catalog
+from installer.release import ReleaseError, assert_release_tag, assert_same_digest, image_refs, main_build_version, merge_catalog
 
 DIGEST = "sha256:" + "ab" * 32
 
@@ -22,6 +22,14 @@ class ReleasePinTest(unittest.TestCase):
             assert_release_tag("latest", "0.1.0")
         with self.assertRaises(ReleaseError):
             assert_release_tag("0.2.0", "0.1.0")
+
+    def test_main_build_uses_the_platform_version_shape(self):
+        self.assertEqual(
+            main_build_version("0.1.0", "20260925010000", "abcdef1"),
+            "0.1.0-main.20260925010000.shaabcdef1",
+        )
+        with self.assertRaises(ReleaseError):
+            main_build_version("0.1.0", "2026", "abcdef1")
 
     def test_image_refs_use_the_pinned_version(self):
         swr, ghcr = image_refs("0.1.0")

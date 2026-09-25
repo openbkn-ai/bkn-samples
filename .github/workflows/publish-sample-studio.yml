@@ -2,6 +2,7 @@ name: Publish sample catalog service
 
 on:
   push:
+    branches: [main]
     tags:
       - "*"
 
@@ -18,11 +19,17 @@ jobs:
         with:
           python-version: "3.11"
       - uses: azure/setup-helm@v4
-      - name: Require the tag to match VERSION
+      - name: Resolve the image and chart version
         id: version
         run: |
           python -m pip install "PyYAML>=6"
-          version="$(PYTHONPATH=. python installer/release.py check-tag --tag "${GITHUB_REF_NAME}")"
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            version="$(PYTHONPATH=. python installer/release.py check-tag --tag "${GITHUB_REF_NAME}")"
+          else
+            stamp="$(TZ=UTC git show -s --format=%cd --date=format-local:%Y%m%d%H%M%S HEAD)"
+            sha="$(git rev-parse --short=7 HEAD)"
+            version="$(PYTHONPATH=. python installer/release.py main-build --committed-at "${stamp}" --sha "${sha}")"
+          fi
           printf 'value=%s\n' "$version" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
