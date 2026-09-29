@@ -37,8 +37,19 @@ class StudioApp:
         self.authenticate = authenticate
 
 
+def _empty_body(body: bytes) -> bool:
+    """A browser client sends {} for a POST without parameters. Any real field is still refused."""
+    text = body.strip()
+    if not text:
+        return True
+    try:
+        return json.loads(text) in ({}, None)
+    except ValueError:
+        return False
+
+
 def dispatch(app: StudioApp, method: str, path: str, authorization: str | None, body: bytes) -> tuple[int, dict]:
-    if body.strip():
+    if not _empty_body(body):
         return 400, {"code": "install_failed", "message": "the request body must be empty"}
     action = _route(method, path)
     if action is None:

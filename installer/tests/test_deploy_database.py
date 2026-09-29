@@ -179,11 +179,25 @@ class DeployDatabaseTest(unittest.TestCase):
         self.assertEqual(caught.exception.code, "sample_data_unavailable")
         self.assertEqual(len(kubectl.applied), 1)
 
+    def test_waits_between_checks_instead_of_spinning(self):
+        kubectl = FakeKubectl(states=["pending", "pending", "ready"])
+        waits = []
+        deploy_database(ROOT, "supply-chain", kubectl, sleep=waits.append, attempts=5, poll_seconds=7)
+        self.assertEqual(waits, [7, 7])
+
     def test_reports_database_not_ready(self):
         kubectl = FakeKubectl(states=["pending"])
         with self.assertRaises(DeployError) as caught:
             deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=1)
         self.assertEqual(caught.exception.code, "database_not_ready")
+
+
+class PollingTest(unittest.TestCase):
+    def test_waits_between_checks_instead_of_spinning(self):
+        waits = []
+        kubectl = FakeKubectl(states=["pending", "pending", "ready"])
+        deploy_database(ROOT, "supply-chain", kubectl, sleep=waits.append, attempts=5, poll_seconds=7)
+        self.assertEqual(waits, [7, 7])
 
 
 class _Response:

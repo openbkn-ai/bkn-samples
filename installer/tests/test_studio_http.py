@@ -56,10 +56,18 @@ class StudioHttpTest(unittest.TestCase):
         self.assertEqual(payload["id"], "inst-supply-chain")
         self.assertEqual(calls["create"], 1)
 
-        status, body = dispatch(built, "POST", "/api/studio/samples/supply-chain/installations", "Bearer t", b"{}")
-        self.assertEqual(status, 400)
-        self.assertEqual(body["code"], "install_failed")
+        for extra in (b'{"image":"registry.example/x:1"}', b'{"database":{"host":"h"}}', b"[1]", b"not json"):
+            status, body = dispatch(built, "POST", "/api/studio/samples/supply-chain/installations", "Bearer t", extra)
+            self.assertEqual(status, 400)
+            self.assertEqual(body["code"], "install_failed")
         self.assertEqual(calls["create"], 1)
+
+    def test_browser_empty_object_body_is_accepted(self):
+        built, calls = app()
+        for empty in (b"{}", b" {} ", b"null"):
+            status, _payload = dispatch(built, "POST", "/api/studio/samples/supply-chain/installations", "Bearer t", empty)
+            self.assertEqual(status, 201)
+        self.assertEqual(calls["create"], 3)
 
     def test_user_can_read_but_not_install(self):
         built, calls = app("user")
