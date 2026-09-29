@@ -300,7 +300,8 @@ def deploy_database(
     sample: str,
     kubectl,
     sleep=time.sleep,
-    attempts: int = 30,
+    attempts: int = 120,
+    poll_seconds: float = 5.0,
     digests=None,
 ) -> dict:
     """Apply the sample database and wait until it is ready. Never creates a Catalog."""
@@ -343,7 +344,7 @@ def deploy_database(
             _switch_image(kubectl, sample, ghcr)
             switched = True
             image = ghcr
-        sleep(0)
+        sleep(poll_seconds)
     else:
         if state == "image_pull_failed":
             raise DeployError("image_unavailable", "neither SWR nor GHCR could provide the sample image")
