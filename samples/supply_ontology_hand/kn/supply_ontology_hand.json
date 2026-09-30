@@ -5351,12 +5351,22 @@
       "branch": "main"
     },
     {
-      "id": "supply_ontology_hand_bom2parent",
-      "name": "产品bom关联父件物料",
+      "id": "supply_ontology_hand_bom2parentbom",
+      "name": "产品bom关联父级bom",
       "source_object_type_id": "supply_ontology_hand_bom",
-      "target_object_type_id": "supply_ontology_hand_material",
+      "target_object_type_id": "supply_ontology_hand_bom",
       "type": "direct",
       "mapping_rules": [
+        {
+          "source_property": {
+            "name": "bom_material_code",
+            "display_name": "BOM所属产品物料编码"
+          },
+          "target_property": {
+            "name": "bom_material_code",
+            "display_name": "BOM所属产品物料编码"
+          }
+        },
         {
           "source_property": {
             "name": "parent_material_code",
@@ -5369,7 +5379,7 @@
         }
       ],
       "tags": [],
-      "comment": "BOM 行的父件。与「产品bom关联物料」（子件）一起，把多级 BOM 还原成物料之间的组成关系：父件物料 ← BOM 行 → 子件物料。第 1 级 BOM 行的父件就是产品本身。",
+      "comment": "BOM 行指向同一产品里它的父件那一行：两行的 bom_material_code 相同，父行的 material_code 等于本行的 parent_material_code。沿它可以把一款产品的多级 BOM 画成一棵树，根是第 0 层的产品行。同一父件在同一产品里出现多次时，子行会连到多条父行。",
       "icon": "",
       "color": "",
       "branch": "main"
