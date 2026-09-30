@@ -5285,8 +5285,8 @@
       "mapping_rules": [
         {
           "source_property": {
-            "name": "srcbillid",
-            "display_name": "采购申请明细主键"
+            "name": "srcbillnumber",
+            "display_name": "来源单据编号"
           },
           "target_property": {
             "name": "billno",
@@ -5295,7 +5295,7 @@
         }
       ],
       "tags": [],
-      "comment": "采购订单来自于物料需求计划的投放。",
+      "comment": "采购申请由物料需求计划投放产生，按来源单据编号关联。只有由 MRP 投放产生的采购申请有这条关联；来源字段为空的申请（手工创建等）不连。",
       "icon": "",
       "color": "",
       "branch": "main"
@@ -5351,6 +5351,40 @@
       "branch": "main"
     },
     {
+      "id": "supply_ontology_hand_bom2parentbom",
+      "name": "产品bom关联父级bom",
+      "source_object_type_id": "supply_ontology_hand_bom",
+      "target_object_type_id": "supply_ontology_hand_bom",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "bom_material_code",
+            "display_name": "BOM所属产品物料编码"
+          },
+          "target_property": {
+            "name": "bom_material_code",
+            "display_name": "BOM所属产品物料编码"
+          }
+        },
+        {
+          "source_property": {
+            "name": "parent_material_code",
+            "display_name": "父件物料编码"
+          },
+          "target_property": {
+            "name": "material_code",
+            "display_name": "物料编码"
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "BOM 行指向同一产品里它的父件那一行：两行的 bom_material_code 相同，父行的 material_code 等于本行的 parent_material_code。沿它可以把一款产品的多级 BOM 画成一棵树，根是第 0 层的产品行。同一父件在同一产品里出现多次时，子行会连到多条父行。",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
       "id": "supply_ontology_hand_mat2inv",
       "name": "物料关联库存",
       "source_object_type_id": "supply_ontology_hand_material",
@@ -5398,6 +5432,30 @@
         "已审核"
       ],
       "comment": "",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_po2mat",
+      "name": "采购订单关联物料",
+      "source_object_type_id": "supply_ontology_hand_po",
+      "target_object_type_id": "supply_ontology_hand_material",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "material_number",
+            "display_name": "物料编码"
+          },
+          "target_property": {
+            "name": "material_code",
+            "display_name": "物料编码"
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "采购订单行采购的物料。经由它，「物料 ← 采购订单 → 供应商」可以推出一种料由哪些供应商供货；示例数据里没有货源清单，这是物料与供应商之间唯一的连接。",
       "icon": "",
       "color": "",
       "branch": "main"
