@@ -48,6 +48,15 @@ def build_config(payload: dict) -> dict:
     }
 
 
+def ownership_tags(payload: dict) -> list[str]:
+    version = str(payload.get("version") or "")
+    return [
+        "bkn-samples",
+        f"bkn-sample-{payload['sample']}",
+        "bkn-samples-version-" + version.replace(".", "-"),
+    ]
+
+
 def commands(config_path: Path) -> list[list[str]]:
     python = sys.executable
     return [
@@ -115,12 +124,21 @@ def main() -> int:
     if config_path is None:
         config_path = SAMPLE_DIR / "platform" / ".config.yaml"
     config_path.write_text(yaml.safe_dump(config, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    os.environ["BKN_SAMPLE_OWNERSHIP_TAGS"] = ",".join(ownership_tags(payload))
     if os.environ.get("BKN_SAMPLE_PRINT_ONLY") == "1":
         print(json.dumps(commands(config_path), ensure_ascii=False))
         write_output(payload, True)
         return 0
     for argv in commands(config_path):
         result = subprocess.run(argv, check=False)
+        if result.returncode == 2 and Path(argv[1]).name == "import_kn.py":
+            write_output(
+                payload,
+                False,
+                "knowledge network already exists and is not managed by this installer",
+                code="ownership_conflict",
+            )
+            return 1
         if result.returncode != 0:
             write_output(payload, False, f"{Path(argv[1]).name} failed")
             return result.returncode

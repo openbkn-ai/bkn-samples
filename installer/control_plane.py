@@ -115,6 +115,17 @@ def ensure_catalog(sample: str, version: str, database: dict, openbkn) -> dict:
     return created
 
 
+def _table_count(payload) -> int:
+    """Count discovered business tables. The installer metadata table is not one of them."""
+    count = 0
+    for entry in _payload_entries(payload):
+        name = str(entry.get("name") or "")
+        if name.rsplit(".", 1)[-1] == "bkn_sample_meta":
+            continue
+        count += 1
+    return count
+
+
 def _payload_entries(payload) -> list:
     if isinstance(payload, dict):
         for key in ("entries", "resources", "items", "data"):
@@ -138,7 +149,7 @@ def scan_catalog(catalog: dict, expected_tables: int, openbkn, attempts: int = 3
         resources = openbkn(
             ["vega", "catalog", "resources", catalog_id, "--category", "table", "--limit", "-1"]
         )
-        found = len(_payload_entries(resources))
+        found = _table_count(resources)
         if found == expected_tables:
             return
         pause(2)

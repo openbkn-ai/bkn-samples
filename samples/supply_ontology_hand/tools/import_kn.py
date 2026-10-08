@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -13,6 +14,17 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 _DEFAULT_JSON = _SCRIPT_DIR.parent / "kn" / "supply_ontology_hand.json"
 _IMPORT_PATH = "/api/ontology-manager/v1/knowledge-networks"
 _UI_FALLBACK_MSG = "请按说明书步骤 2 UI 导入知识网络"
+
+
+class OwnershipConflict(RuntimeError):
+    """The knowledge network id already belongs to someone else."""
+
+
+def _ownership_tags() -> list[str]:
+    raw = os.environ.get("BKN_SAMPLE_OWNERSHIP_TAGS", "").strip()
+    if not raw:
+        return []
+    return [part for part in raw.split(",") if part]
 
 
 def run_cmd(args: list[str]) -> str:
@@ -85,12 +97,24 @@ def import_kn(
         return report
 
     existing = _existing_network(kn_id)
+    required = _ownership_tags()
     if existing is not None:
         if existing.get("name") != kn_name:
             raise RuntimeError(f"knowledge network {kn_id} exists with a different name")
+        have = set(existing.get("tags") or [])
+        if required and not set(required).issubset(have):
+            raise OwnershipConflict(
+                f"knowledge network {kn_id} already exists and is not managed by this installer"
+            )
         report["action"] = "reuse"
         report["verified"] = True
         return report
+    if required:
+        tags = list(payload.get("tags") or [])
+        for tag in required:
+            if tag not in tags:
+                tags.append(tag)
+        payload["tags"] = tags
 
     def post(body_payload: dict) -> str:
         body = json.dumps(body_payload, ensure_ascii=False)
@@ -141,6 +165,9 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
+    except OwnershipConflict as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
     except (RuntimeError, json.JSONDecodeError, OSError, ValueError) as exc:
         print(_UI_FALLBACK_MSG, file=sys.stderr)
         print(str(exc), file=sys.stderr)

@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from installer.control_plane import ControlError, create_installation, ownership_tags, retry_installation
+from installer.control_plane import ControlError, _table_count, create_installation, ownership_tags, retry_installation
 
 _INSTALL_PATH = Path(__file__).resolve().parents[2] / "samples/supply_ontology_hand/platform/install_supply.py"
 _SPEC = importlib.util.spec_from_file_location("install_supply", _INSTALL_PATH)
@@ -257,6 +257,13 @@ class ControlPlaneTest(unittest.TestCase):
         self.assertEqual(caught.exception.code, "discover_incomplete")
         self.assertEqual(ran["hook"], 0)
         self.assertTrue(any(call[:3] == ["vega", "catalog", "enable"] for call in client.calls))
+
+
+class TableCountTest(unittest.TestCase):
+    def test_installer_metadata_table_is_not_counted(self):
+        entries = [{"name": f"supply_demo_hand.t{index}"} for index in range(12)]
+        entries.append({"name": "supply_demo_hand.bkn_sample_meta"})
+        self.assertEqual(_table_count({"entries": entries}), 12)
 
 
 class InstallSupplyTest(unittest.TestCase):
