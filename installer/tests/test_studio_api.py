@@ -231,6 +231,49 @@ class StudioApiTest(unittest.TestCase):
                 knowledge_network={"id": "supply_ontology_hand", "displayName": "供应链"},
             )
         self.assertEqual(caught.exception.code, "database_not_ready")
+        view = installation_view(json.loads((state / "supply-chain.json").read_text(encoding="utf-8")), "admin")
+        self.assertEqual(view["stages"][0]["state"], "failed")
+        self.assertEqual(view["stages"][1]["state"], "pending")
+
+    def test_name_conflict_can_be_retried_by_an_admin(self):
+        state = Path(tempfile.mkdtemp())
+        (state / "supply-chain.json").write_text(
+            json.dumps(
+                {
+                    "id": "inst-supply-chain",
+                    "sample": "supply-chain",
+                    "version": "0.1.0",
+                    "status": "failed",
+                    "stages": {"database": "succeeded", "discover": "succeeded"},
+                    "error": {"code": "ownership_conflict", "message": "knowledge network already exists"},
+                }
+            ),
+            encoding="utf-8",
+        )
+        admin = list_samples(
+            pinned_version="0.1.0",
+            image_index=index(),
+            repo_index=index(),
+            state_dir=state,
+            actor_role="admin",
+        )["samples"][0]
+        user = list_samples(
+            pinned_version="0.1.0",
+            image_index=index(),
+            repo_index=index(),
+            state_dir=state,
+            actor_role="user",
+        )["samples"][0]
+        self.assertEqual(admin["status"], "conflict")
+        self.assertTrue(admin["installable"])
+        self.assertFalse(user["installable"])
+        view = get_sample_installation(
+            sample="supply-chain",
+            installation_id="inst-supply-chain",
+            state_dir=state,
+            actor_role="admin",
+        )
+        self.assertEqual([stage["state"] for stage in view["stages"]], ["succeeded", "succeeded", "failed", "pending", "pending"])
 
 
 if __name__ == "__main__":
