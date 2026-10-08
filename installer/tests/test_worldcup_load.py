@@ -46,6 +46,13 @@ class WorldCupLoadTest(unittest.TestCase):
         self.assertIn("VARCHAR(512)", narrow)
         self.assertIn("VARCHAR(255)", LOAD.create_table_sql("wc_team_appearances", ["team_id"]))
 
+    def test_create_table_runs_drop_and_create_as_separate_statements(self):
+        drop, create = LOAD.create_table_statements("wc_tournaments", ["tournament_id"])
+        self.assertEqual(drop, "DROP TABLE IF EXISTS `wc_tournaments`")
+        self.assertNotIn(";", drop)
+        self.assertTrue(create.startswith("CREATE TABLE `wc_tournaments`"))
+        self.assertNotIn(";", create)
+
     def test_checksum_mismatch_stops_before_the_database(self):
         with tempfile.TemporaryDirectory() as cache:
             previous = os.environ.get("BKN_SAMPLE_CACHE")

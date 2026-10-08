@@ -95,13 +95,21 @@ def table_name(csv_path: Path) -> str:
     return f"wc_{stem}"
 
 
-def create_table_sql(table: str, columns: list[str]) -> str:
+def create_table_statements(table: str, columns: list[str]) -> tuple[str, str]:
+    """One statement each. MariaDB rejects a DROP and CREATE sent together."""
     width = 255 if table in WIDE_TABLES else 512
     quoted = ", ".join(f"`{column.replace('`', '``')}` VARCHAR({width})" for column in columns)
-    return (
-        f"DROP TABLE IF EXISTS `{table}`; "
-        f"CREATE TABLE `{table}` ({quoted}) ENGINE=InnoDB ROW_FORMAT=DYNAMIC DEFAULT CHARSET=utf8mb4"
+    drop = f"DROP TABLE IF EXISTS `{table}`"
+    create = (
+        f"CREATE TABLE `{table}` ({quoted}) "
+        "ENGINE=InnoDB ROW_FORMAT=DYNAMIC DEFAULT CHARSET=utf8mb4"
     )
+    return drop, create
+
+
+def create_table_sql(table: str, columns: list[str]) -> str:
+    drop, create = create_table_statements(table, columns)
+    return f"{drop}; {create}"
 
 
 def _sha256(path: Path) -> str:
@@ -195,7 +203,8 @@ def _load_csvs(database: str, files: list[Path]) -> list[str]:
                 continue
             header, data = rows[0], rows[1:]
             table = table_name(path)
-            conn.execute(text(create_table_sql(table, header)))
+            for statement in create_table_statements(table, header):
+                conn.execute(text(statement))
             if data:
                 columns = ", ".join(f"`{column.replace('`', '``')}`" for column in header)
                 placeholders = ", ".join(f":c{index}" for index in range(len(header)))
