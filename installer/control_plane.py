@@ -22,7 +22,12 @@ def catalog_name(sample: str) -> str:
 
 
 def ownership_tags(sample: str, version: str) -> list[str]:
-    return [OWNERSHIP_MANAGED_BY, f"bkn-sample:{sample}", f"bkn-samples-version:{version}"]
+    """Tags Vega will accept. ':' and '.' are rejected by the catalog API."""
+    return [
+        OWNERSHIP_MANAGED_BY,
+        f"bkn-sample-{sample}",
+        "bkn-samples-version-" + version.replace(".", "-"),
+    ]
 
 
 def _state_path(state_dir: Path, sample: str) -> Path:

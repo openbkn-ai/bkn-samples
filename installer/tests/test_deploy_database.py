@@ -9,6 +9,7 @@ from installer.deploy_database import (
     GHCR_IMAGE,
     SWR_IMAGE,
     DeployError,
+    _pod_state,
     deploy_database,
     registry_digests,
 )
@@ -26,6 +27,7 @@ class FakeKubectl:
         self.states = list(states or ["ready"])
         self.applied: list[str] = []
         self.patched: list[str] = []
+        self.deleted: list[str] = []
 
     def __call__(self, args: list[str], stdin: str | None = None) -> subprocess.CompletedProcess:
         if args[:2] == ["get", "storageclass"]:
@@ -69,6 +71,9 @@ class FakeKubectl:
         if args[:1] == ["patch"]:
             self.patched.append(args[-1])
             return self._ok("patched")
+        if args[:2] == ["delete", "pod"]:
+            self.deleted.append(args[2])
+            return self._ok("deleted")
         return self._fail(f"unexpected {' '.join(args)}")
 
     @staticmethod
@@ -81,6 +86,13 @@ class FakeKubectl:
 
 
 class DeployDatabaseTest(unittest.TestCase):
+    def setUp(self):
+        self._digests = patch("installer.deploy_database.registry_digests", return_value=(None, None))
+        self._digests.start()
+
+    def tearDown(self):
+        self._digests.stop()
+
     def test_missing_storage_class_creates_nothing(self):
         kubectl = FakeKubectl(storage=False)
         with self.assertRaises(DeployError) as caught:
@@ -116,6 +128,7 @@ class DeployDatabaseTest(unittest.TestCase):
             digests=lambda _tag: (DIGEST, DIGEST),
         )
         self.assertIn(f"{GHCR_IMAGE}:0.1.0", kubectl.patched[0])
+        self.assertEqual(kubectl.deleted, ["bkn-sample-supply-chain-0"])
         self.assertEqual(result["image"], f"{GHCR_IMAGE}:0.1.0")
 
     def test_refuses_ghcr_when_manifest_digests_differ(self):
@@ -132,6 +145,35 @@ class DeployDatabaseTest(unittest.TestCase):
         self.assertEqual(caught.exception.code, "image_unavailable")
         self.assertEqual(kubectl.patched, [])
         self.assertIn("digests differ", caught.exception.message)
+
+    def test_starts_on_ghcr_when_swr_has_no_manifest(self):
+        kubectl = FakeKubectl()
+        result = deploy_database(
+            ROOT,
+            "supply-chain",
+            kubectl,
+            sleep=lambda _seconds: None,
+            attempts=1,
+            digests=lambda _tag: (None, DIGEST),
+        )
+        self.assertIn(f"{GHCR_IMAGE}:0.1.0", kubectl.applied[0])
+        self.assertNotIn(SWR_IMAGE, kubectl.applied[0])
+        self.assertEqual(result["image"], f"{GHCR_IMAGE}:0.1.0")
+        self.assertEqual(kubectl.patched, [])
+
+    def test_ready_pod_running_another_image_is_still_pending(self):
+        def kubectl(args, stdin=None):
+            body = {
+                "items": [
+                    {
+                        "spec": {"containers": [{"image": f"{SWR_IMAGE}:0.1.0"}]},
+                        "status": {"containerStatuses": [{"ready": True}]},
+                    }
+                ]
+            }
+            return subprocess.CompletedProcess(args=[], returncode=0, stdout=json.dumps(body), stderr="")
+
+        self.assertEqual(_pod_state(kubectl, "supply-chain", f"{GHCR_IMAGE}:0.1.0"), "pending")
 
     def test_switches_to_ghcr_when_swr_has_no_manifest(self):
         kubectl = FakeKubectl(states=["image_pull_failed", "ready"])

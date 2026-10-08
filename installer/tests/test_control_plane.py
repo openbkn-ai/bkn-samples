@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from installer.control_plane import ControlError, create_installation, retry_installation
+from installer.control_plane import ControlError, create_installation, ownership_tags, retry_installation
 
 _INSTALL_PATH = Path(__file__).resolve().parents[2] / "samples/supply_ontology_hand/platform/install_supply.py"
 _SPEC = importlib.util.spec_from_file_location("install_supply", _INSTALL_PATH)
@@ -73,6 +73,11 @@ def hooks(stage: str, payload: dict) -> dict:
 
 
 class ControlPlaneTest(unittest.TestCase):
+    def test_ownership_tags_are_accepted_by_vega(self):
+        tags = ownership_tags("supply-chain", "0.1.0")
+        self.assertEqual(tags, ["bkn-samples", "bkn-sample-supply-chain", "bkn-samples-version-0-1-0"])
+        self.assertFalse(any(":" in tag or "." in tag for tag in tags))
+
     def test_rejects_non_admin(self):
         with self.assertRaises(ControlError) as caught:
             create_installation(

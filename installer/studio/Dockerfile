@@ -1,5 +1,15 @@
 FROM node:22-bookworm-slim AS cli
-RUN npm install -g @openbkn/bkn-sdk@0.1.5
+# npm still publishes 0.1.5. This platform rejects that CLI, so build the 0.2.0 commit.
+ARG BKN_SDK_REF=703921dbd2affd39c07c65f65e05b4ae0f266187
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates git \
+    && git init /tmp/bkn-sdk \
+    && git -C /tmp/bkn-sdk fetch --depth 1 https://github.com/openbkn-ai/bkn-sdk.git ${BKN_SDK_REF} \
+    && git -C /tmp/bkn-sdk checkout FETCH_HEAD \
+    && npm ci --prefix /tmp/bkn-sdk \
+    && npm run build --prefix /tmp/bkn-sdk \
+    && npm install -g /tmp/bkn-sdk \
+    && rm -rf /var/lib/apt/lists/* /tmp/bkn-sdk
 
 FROM python:3.12-slim
 

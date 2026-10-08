@@ -5,6 +5,7 @@ from __future__ import annotations
 import base64
 import json
 import os
+import re
 import subprocess
 import tempfile
 from pathlib import Path
@@ -52,10 +53,20 @@ def caller_env(authorization: str | None) -> dict:
     return {"BKN_TOKEN": token}
 
 
+def _command_failure(completed) -> str:
+    detail = (completed.stderr or completed.stdout or "").strip().replace("\n", " ")
+    detail = re.sub(r'("password"\s*:\s*")(?:\\.|[^"\\])*"', r'\1***"', detail)
+    if len(detail) > 400:
+        detail = detail[:400]
+    if not detail:
+        return "openbkn command failed"
+    return f"openbkn command failed: {detail}"
+
+
 def openbkn_json(args: list[str], run, env: dict | None = None) -> dict:
     completed = run(["openbkn", "--json", *args], env)
     if completed.returncode != 0:
-        raise ControlError("install_failed", "openbkn command failed")
+        raise ControlError("install_failed", _command_failure(completed))
     payload = json.loads(completed.stdout or "{}")
     if not isinstance(payload, (dict, list)):
         raise ControlError("install_failed", "openbkn command failed")

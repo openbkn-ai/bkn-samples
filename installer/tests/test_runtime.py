@@ -5,7 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from installer.runtime import database_config, install_sample, retry_sample
+from installer.control_plane import ControlError
+from installer.runtime import database_config, install_sample, openbkn_json, retry_sample
 from installer.studio_api import ApiError
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -98,6 +99,20 @@ class RuntimeTest(unittest.TestCase):
             )
         self.assertEqual(caught.exception.status, 403)
         self.assertEqual(calls["deploy"], 0)
+
+    def test_cli_failure_keeps_the_reason_and_drops_the_password(self):
+        def run(_argv, _env):
+            return subprocess.CompletedProcess(
+                args=[],
+                returncode=1,
+                stdout="",
+                stderr='Request failed: invalid tag\n{"password":"secret-value"}',
+            )
+
+        with self.assertRaises(ControlError) as caught:
+            openbkn_json(["vega", "catalog", "list"], run)
+        self.assertIn("invalid tag", caught.exception.message)
+        self.assertNotIn("secret-value", caught.exception.message)
 
     def test_database_config_reads_the_secret(self):
         config = database_config(
