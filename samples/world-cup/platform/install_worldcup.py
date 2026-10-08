@@ -94,6 +94,30 @@ def command_env(payload: dict) -> dict:
     return env
 
 
+def _ownership_tags(payload: dict) -> set[str]:
+    version = str(payload.get("version") or "").replace(".", "-")
+    return {"bkn-samples", f"bkn-sample-{payload['sample']}", f"bkn-samples-version-{version}"}
+
+
+def _unclaimed_network(payload: dict) -> bool:
+    """True when this sample's knowledge network exists but this installer did not create it."""
+    result = subprocess.run(
+        ["openbkn", "--json", "bkn", "get", KN_ID],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return False
+    try:
+        network = json.loads(result.stdout or "null")
+    except json.JSONDecodeError:
+        return False
+    if not isinstance(network, dict) or network.get("id") != KN_ID:
+        return False
+    return not _ownership_tags(payload).issubset(set(network.get("tags") or []))
+
+
 def main() -> int:
     payload = load_input()
     recorded = payload.get("capabilitySummary")
@@ -109,6 +133,14 @@ def main() -> int:
         print(json.dumps(["./run.sh", "--from", "4"], ensure_ascii=False))
         write_output(payload, True)
         return 0
+    if _unclaimed_network(payload):
+        write_output(
+            payload,
+            False,
+            "knowledge network already exists and is not managed by this installer",
+            code="ownership_conflict",
+        )
+        return 1
     result = subprocess.run(["./run.sh", "--from", "4"], cwd=SAMPLE_DIR, env=command_env(payload), check=False)
     if result.returncode != 0:
         write_output(payload, False, "run.sh failed")

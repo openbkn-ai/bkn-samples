@@ -29,6 +29,27 @@ class ImageInitTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout, "root:root-password:supply_demo_hand")
 
+    def test_world_cup_cache_is_created_where_the_database_user_can_write(self):
+        root = Path(tempfile.mkdtemp())
+        cache_root = Path(tempfile.mkdtemp())
+        db = root / "world-cup" / "db"
+        db.mkdir(parents=True)
+        init = db / "init.sh"
+        init.write_text('#!/bin/sh\ntest -d "$BKN_SAMPLE_CACHE" && printf "%s" "$BKN_SAMPLE_CACHE"\n')
+        init.chmod(0o755)
+        env = {
+            "PATH": os.environ["PATH"],
+            "BKN_SAMPLE_ID": "world-cup",
+            "BKN_SAMPLE_ROOT": str(root),
+            "TMPDIR": str(cache_root),
+            "MYSQL_USER": "bkn_sample",
+            "MARIADB_ROOT_PASSWORD": "root-password",
+            "MARIADB_DATABASE": "worldcup",
+        }
+        result = subprocess.run(["sh", str(WRAPPER)], env=env, capture_output=True, text=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, str(cache_root / "bkn-samples/cache/world-cup"))
+
 
 if __name__ == "__main__":
     unittest.main()

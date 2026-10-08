@@ -185,15 +185,30 @@ spec:
 
 
 def _data_unavailable(text: str) -> bool:
-    return "sample data unavailable" in text or "checksum mismatch" in text
+    return (
+        "sample data unavailable" in text
+        or "checksum mismatch" in text
+        or "Permission denied: '/var/lib/bkn-samples'" in text
+    )
 
 
 def _pod_logs(kubectl, sample: str) -> str:
-    result = _run(
+    current = _run(
         kubectl,
         ["logs", "-n", NAMESPACE, "-l", f"app=bkn-sample,bkn-sample={sample}", "--tail=80"],
     )
-    return result.stdout or ""
+    previous = _run(
+        kubectl,
+        ["logs", "-n", NAMESPACE, "-l", f"app=bkn-sample,bkn-sample={sample}", "--previous", "--tail=80"],
+    )
+    return f"{current.stdout or ''}\n{previous.stdout or ''}"
+
+
+def _discard_failed_data(kubectl, sample: str) -> None:
+    """A failed first boot leaves a data directory that will not run the loader again."""
+    name = _workload_name(sample)
+    _run(kubectl, ["delete", "pod", f"{name}-0", "-n", NAMESPACE, "--wait=false"])
+    _run(kubectl, ["delete", "pvc", f"data-{name}-0", "-n", NAMESPACE, "--wait=false"])
 
 
 def _pod_state(kubectl, sample: str, image: str | None = None) -> str:
@@ -342,6 +357,7 @@ def deploy_database(
         if state == "ready":
             break
         if state == "sample_data_unavailable":
+            _discard_failed_data(kubectl, sample)
             raise DeployError(
                 "sample_data_unavailable",
                 "the sample data was not downloaded or did not match its lock file",

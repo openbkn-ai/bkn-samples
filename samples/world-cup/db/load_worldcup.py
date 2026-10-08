@@ -60,7 +60,10 @@ def cache_dir() -> Path:
 
 def fetch_locked_files(lock: dict, destination: Path, opener=urllib.request.urlopen) -> list[Path]:
     """Download every locked file. A failed download or checksum leaves no renamed database."""
-    destination.mkdir(parents=True, exist_ok=True)
+    try:
+        destination.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        raise SystemExit("sample data unavailable: cache directory") from None
     base = str(lock["source"]["baseUrl"]).rstrip("/")
     saved: list[Path] = []
     for item in lock["files"]:
