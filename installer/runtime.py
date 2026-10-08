@@ -68,6 +68,8 @@ def openbkn_json(args: list[str], run, env: dict | None = None) -> dict:
     if completed.returncode != 0:
         raise ControlError("install_failed", _command_failure(completed))
     payload = json.loads(completed.stdout or "{}")
+    if payload is None:
+        return {}
     if not isinstance(payload, (dict, list)):
         raise ControlError("install_failed", "openbkn command failed")
     return payload

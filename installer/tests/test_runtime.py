@@ -114,6 +114,12 @@ class RuntimeTest(unittest.TestCase):
         self.assertIn("invalid tag", caught.exception.message)
         self.assertNotIn("secret-value", caught.exception.message)
 
+    def test_cli_null_body_is_an_empty_success(self):
+        def run(_argv, _env):
+            return subprocess.CompletedProcess(args=[], returncode=0, stdout="null\n", stderr="")
+
+        self.assertEqual(openbkn_json(["vega", "catalog", "enable", "catalog-id"], run), {})
+
     def test_database_config_reads_the_secret(self):
         config = database_config(
             {"service": "bkn-sample-supply-chain", "namespace": "openbkn-samples", "host": "db", "port": 3306, "database": "supply_demo_hand", "user": "bkn_sample"},
