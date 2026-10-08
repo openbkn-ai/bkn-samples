@@ -143,6 +143,71 @@ class ControlPlaneTest(unittest.TestCase):
             )
         self.assertEqual(caught.exception.code, "already_installed")
 
+    def test_each_finished_step_is_saved_before_the_next_one(self):
+        state = Path(tempfile.mkdtemp())
+        seen: dict = {}
+
+        def hook(stage, payload):
+            if stage == "platform-install":
+                saved = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
+                seen["status"] = saved["status"]
+                seen["stages"] = saved["stages"]
+            return hooks(stage, payload)
+
+        create_installation(
+            sample="supply-chain",
+            version=VERSION,
+            actor_role="admin",
+            database=DATABASE,
+            state_dir=state,
+            openbkn=OpenBKN(),
+            hook_runner=hook,
+            expected_tables=12,
+            knowledge_network=NETWORK,
+        )
+        self.assertEqual(seen["status"], "installing")
+        self.assertEqual(seen["stages"]["discover"], "succeeded")
+        self.assertEqual(seen["stages"]["knowledge"], "running")
+        final = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
+        self.assertEqual(final["status"], "installed")
+        self.assertEqual(final["stages"]["verify"], "succeeded")
+
+    def test_retry_continues_after_a_name_conflict_is_cleared(self):
+        state = Path(tempfile.mkdtemp())
+
+        def conflict(_stage, _payload):
+            return {"ok": False, "code": "ownership_conflict", "message": "knowledge network already exists"}
+
+        with self.assertRaises(ControlError) as caught:
+            create_installation(
+                sample="supply-chain",
+                version=VERSION,
+                actor_role="admin",
+                database=DATABASE,
+                state_dir=state,
+                openbkn=OpenBKN(),
+                hook_runner=conflict,
+                expected_tables=12,
+                knowledge_network=NETWORK,
+            )
+        self.assertEqual(caught.exception.code, "ownership_conflict")
+        saved = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["status"], "failed")
+        self.assertEqual(saved["stages"]["discover"], "succeeded")
+        retried = retry_installation(
+            sample="supply-chain",
+            version=VERSION,
+            actor_role="admin",
+            database=DATABASE,
+            state_dir=state,
+            openbkn=OpenBKN(),
+            hook_runner=hooks,
+            expected_tables=12,
+            knowledge_network=NETWORK,
+        )
+        self.assertEqual(retried["status"], "installed")
+        self.assertNotIn("error", retried)
+
     def test_retry_after_failed_hook(self):
         state = Path(tempfile.mkdtemp())
         client = OpenBKN()

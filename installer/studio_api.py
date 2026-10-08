@@ -6,7 +6,7 @@ import json
 import re
 from pathlib import Path
 
-from installer.control_plane import ControlError, create_installation, retry_installation
+from installer.control_plane import ControlError, create_installation, note_database_ready, retry_installation
 from installer.contract import read_version
 from installer.release import merge_catalog
 
@@ -70,6 +70,9 @@ def create_sample_installation(
         message = getattr(exc, "message", str(exc))
         _write_failed(state_dir, sample, version, code, message)
         raise ApiError(409 if code in {"already_installed", "use_retry"} else 500, code, message) from exc
+    current = _read_state(state_dir, sample)
+    if not current or current.get("status") not in {"installed", "failed"}:
+        note_database_ready(state_dir, sample, version)
     try:
         record = create_installation(
             sample=sample,
@@ -141,6 +144,9 @@ def installation_view(record: dict, actor_role: str) -> dict:
     running_assigned = False
     for stage_id, name in STAGES:
         state = (record.get("stages") or {}).get(stage_id)
+        if stage_id == "database" and state == "failed":
+            stages.append({"id": stage_id, "name": name, "state": "failed"})
+            continue
         if stage_id == "database" and record.get("status") == "installing" and state != "succeeded":
             stages.append({"id": stage_id, "name": name, "state": "running"})
             running_assigned = True
@@ -174,7 +180,7 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
     status = "unavailable" if source_rejected or item.get("status") == "unavailable" else _public_status(state or {})
     if state and state.get("error", {}).get("code") == "ownership_conflict":
         status = "conflict"
-    installable = actor_role == "admin" and status in {"not_installed", "failed"}
+    installable = actor_role == "admin" and status in {"not_installed", "failed", "conflict"}
     installed = status == "installed"
     installed_version = str((state or {}).get("version") or "")
     return {
@@ -210,6 +216,8 @@ def _public_status(record: dict) -> str:
 
 def _failed_stage(record: dict) -> str:
     stages = record.get("stages") or {}
+    if stages.get("database") == "failed":
+        return "database"
     for stage_id, _name in STAGES:
         if stage_id == "database":
             continue
@@ -245,12 +253,18 @@ def _write_installing(state_dir: Path, sample: str, version: str) -> None:
 
 def _write_failed(state_dir: Path, sample: str, version: str, code: str, message: str) -> None:
     state_dir.mkdir(parents=True, exist_ok=True)
+    database_codes = {
+        "database_not_ready",
+        "image_unavailable",
+        "sample_data_unavailable",
+        "storage_class_missing",
+    }
     record = {
         "id": f"inst-{sample}",
         "sample": sample,
         "version": version,
         "status": "failed",
-        "stages": {},
+        "stages": {"database": "failed"} if code in database_codes else {},
         "error": {"code": code, "message": message},
     }
     (state_dir / f"{sample}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

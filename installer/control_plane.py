@@ -49,6 +49,33 @@ def _write_state(state_dir: Path, record: dict) -> None:
     )
 
 
+def _checkpoint(state_dir: Path, record: dict, **stage_updates: str) -> None:
+    """Persist the in-progress record so a refresh can show the finished steps."""
+    record["status"] = "installing"
+    record.pop("error", None)
+    stages = record.setdefault("stages", {})
+    for name, state in stage_updates.items():
+        if state == "running" and stages.get(name) == "succeeded":
+            continue
+        stages[name] = state
+    _write_state(state_dir, record)
+
+
+def note_database_ready(state_dir: Path, sample: str, version: str) -> None:
+    """Record that the sample database is ready and discovery is the current step."""
+    current = _read_state(state_dir, sample) or {
+        "id": f"inst-{sample}",
+        "sample": sample,
+        "version": version,
+        "status": "installing",
+        "stages": {},
+    }
+    current["sample"] = sample
+    current["version"] = version
+    current.setdefault("id", f"inst-{sample}")
+    _checkpoint(state_dir, current, database="succeeded", discover="running")
+
+
 def _require_admin(actor_role: str) -> None:
     if actor_role != "admin":
         raise ControlError("forbidden", "an administrator must install the sample")
@@ -259,17 +286,20 @@ def retry_installation(
 
 def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, current, expected_tables, knowledge_network, components=None) -> dict:
     record = current or {
+        "id": f"inst-{sample}",
         "sample": sample,
         "version": version,
         "status": "installing",
         "stages": {},
     }
-    record["status"] = "installing"
+    record.setdefault("id", f"inst-{sample}")
+    record.setdefault("stages", {})
+    _checkpoint(state_dir, record, database="succeeded", discover="running")
     try:
         catalog = ensure_catalog(sample, version, database, openbkn)
         scan_catalog(catalog, expected_tables, openbkn)
-        record["stages"]["discover"] = "succeeded"
         record["catalogId"] = catalog["id"]
+        _checkpoint(state_dir, record, discover="succeeded", knowledge="running")
         payload = _hook_input(sample, version, database, catalog["id"], knowledge_network, components)
         if record["stages"].get("knowledge") != "succeeded" or record["stages"].get("capabilities") != "succeeded":
             if record.get("capabilitySummary"):
@@ -282,14 +312,14 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
                     "ownership_conflict",
                     "published capabilities do not match the installation record",
                 )
-            record["stages"]["knowledge"] = "succeeded"
-            record["stages"]["capabilities"] = "succeeded"
             record["resources"] = installed.get("resources") or {}
             if reported:
                 record["capabilitySummary"] = reported
+            _checkpoint(state_dir, record, knowledge="succeeded", capabilities="succeeded")
+        _checkpoint(state_dir, record, verify="running")
         verified = _run_hook(hook_runner, payload, "platform-verify")
-        record["stages"]["verify"] = "succeeded"
         record["checks"] = verified.get("checks") or []
+        record["stages"]["verify"] = "succeeded"
         record["status"] = "installed"
     except ControlError as exc:
         record["status"] = "failed"
