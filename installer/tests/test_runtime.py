@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from installer.control_plane import ControlError
-from installer.runtime import database_config, install_sample, openbkn_json, retry_sample
+from installer.runtime import database_config, install_sample, openbkn_json, retry_sample, run_platform_hook
 from installer.studio_api import ApiError
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -119,6 +119,30 @@ class RuntimeTest(unittest.TestCase):
             return subprocess.CompletedProcess(args=[], returncode=0, stdout="null\n", stderr="")
 
         self.assertEqual(openbkn_json(["vega", "catalog", "enable", "catalog-id"], run), {})
+
+    def test_hook_keeps_an_ownership_code_when_the_script_exits(self):
+        def run(_argv, env):
+            Path(env["BKN_SAMPLE_OUTPUT"]).write_text(
+                json.dumps(
+                    {
+                        "ok": False,
+                        "code": "ownership_conflict",
+                        "message": "knowledge network already exists and is not managed by this installer",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            return completed(code=1)
+
+        result = run_platform_hook(
+            ROOT,
+            "platform-install",
+            {"sample": "supply-chain", "version": "0.1.0"},
+            run,
+            env={},
+            state_dir=Path(tempfile.mkdtemp()),
+        )
+        self.assertEqual(result["code"], "ownership_conflict")
 
     def test_database_config_reads_the_secret(self):
         config = database_config(
