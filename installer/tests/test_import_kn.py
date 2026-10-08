@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -44,6 +45,28 @@ class ImportKnTest(unittest.TestCase):
         IMPORT.run_cmd = run_cmd
         with self.assertRaises(RuntimeError):
             IMPORT.import_kn(source)
+
+    def test_stops_when_an_existing_network_has_no_installer_claim(self):
+        directory = Path(tempfile.mkdtemp())
+        source = directory / "kn.json"
+        source.write_text(json.dumps({"id": "supply_ontology_hand", "name": "供应链本体知识网络-手工版", "tags": ["体验版"]}), encoding="utf-8")
+
+        def run_cmd(args):
+            if args[2:4] == ["bkn", "get"]:
+                return json.dumps({"id": "supply_ontology_hand", "name": "供应链本体知识网络-手工版", "tags": ["体验版"]})
+            raise AssertionError(args)
+
+        IMPORT.run_cmd = run_cmd
+        previous = os.environ.get("BKN_SAMPLE_OWNERSHIP_TAGS")
+        os.environ["BKN_SAMPLE_OWNERSHIP_TAGS"] = "bkn-samples,bkn-sample-supply-chain,bkn-samples-version-0-1-0"
+        try:
+            with self.assertRaises(IMPORT.OwnershipConflict):
+                IMPORT.import_kn(source)
+        finally:
+            if previous is None:
+                os.environ.pop("BKN_SAMPLE_OWNERSHIP_TAGS", None)
+            else:
+                os.environ["BKN_SAMPLE_OWNERSHIP_TAGS"] = previous
 
 
 if __name__ == "__main__":

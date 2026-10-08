@@ -8,8 +8,9 @@ RUN apt-get update \
     && git -C /tmp/bkn-sdk checkout FETCH_HEAD \
     && npm ci --prefix /tmp/bkn-sdk \
     && npm run build --prefix /tmp/bkn-sdk \
-    && npm install -g /tmp/bkn-sdk \
-    && rm -rf /var/lib/apt/lists/* /tmp/bkn-sdk
+    && npm pack --prefix /tmp/bkn-sdk --pack-destination /opt/sdk-pack \
+    && npm install -g /opt/sdk-pack/openbkn-bkn-sdk-*.tgz \
+    && rm -rf /var/lib/apt/lists/* /tmp/bkn-sdk /opt/sdk-pack
 
 FROM python:3.12-slim
 

@@ -68,6 +68,8 @@ def openbkn_json(args: list[str], run, env: dict | None = None) -> dict:
     if completed.returncode != 0:
         raise ControlError("install_failed", _command_failure(completed))
     payload = json.loads(completed.stdout or "{}")
+    if payload is None:
+        return {}
     if not isinstance(payload, (dict, list)):
         raise ControlError("install_failed", "openbkn command failed")
     return payload
@@ -90,12 +92,16 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
             shared.mkdir(parents=True, exist_ok=True)
             hook_env["BKN_SAMPLE_CONFIG"] = str(shared / "config.yaml")
         completed = run([str(script)], hook_env)
+        if output.is_file():
+            try:
+                result = json.loads(output.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                result = None
+            if isinstance(result, dict) and (completed.returncode == 0 or result.get("code")):
+                return result
         if completed.returncode != 0 or not output.is_file():
             return {"ok": False, "message": "platform hook failed"}
-        result = json.loads(output.read_text(encoding="utf-8"))
-        if not isinstance(result, dict):
-            return {"ok": False, "message": "platform hook failed"}
-        return result
+        return {"ok": False, "message": "platform hook failed"}
 
 
 def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None) -> dict:
