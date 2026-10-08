@@ -196,7 +196,7 @@ def _pod_logs(kubectl, sample: str) -> str:
     return result.stdout or ""
 
 
-def _pod_state(kubectl, sample: str) -> str:
+def _pod_state(kubectl, sample: str, image: str | None = None) -> str:
     result = _run(
         kubectl,
         [
@@ -209,6 +209,10 @@ def _pod_state(kubectl, sample: str) -> str:
         return "pending"
     items = json.loads(result.stdout or "{}").get("items", [])
     if not items:
+        return "pending"
+    containers = items[0].get("spec", {}).get("containers") or []
+    running_image = containers[0].get("image") if containers else ""
+    if image and running_image and running_image != image:
         return "pending"
     statuses = items[0].get("status", {}).get("containerStatuses", [])
     if any(item.get("ready") for item in statuses):
@@ -280,6 +284,7 @@ def _switch_image(kubectl, sample: str, image: str) -> None:
     )
     if result.returncode != 0:
         raise DeployError("image_unavailable", "cannot switch the sample image to GHCR")
+    _run(kubectl, ["delete", "pod", f"{name}-0", "-n", NAMESPACE, "--wait=false"])
 
 
 def image_tag(version: str) -> str:
@@ -318,17 +323,22 @@ def deploy_database(
         root_password = secrets.token_urlsafe(24)
         user_password = secrets.token_urlsafe(24)
         secret_manifest = "create"
-    image = f"{SWR_IMAGE}:{image_tag(version)}"
+    tag = image_tag(version)
+    lookup = registry_digests if digests is None else digests
+    swr_digest, ghcr_digest = lookup(tag)
+    if _digests_conflict(swr_digest, ghcr_digest):
+        raise DeployError("image_unavailable", "SWR and GHCR manifest digests differ")
+    image = f"{GHCR_IMAGE}:{tag}" if _usable_digest(swr_digest) is None and _usable_digest(ghcr_digest) else f"{SWR_IMAGE}:{tag}"
     manifest = _manifests(sample, database, version, image, root_password or "unused", user_password or "unused")
     if secret_manifest == "":
         parts = manifest.split("---\n")
         manifest = "---\n".join(part for part in parts if "kind: Secret" not in part)
     _apply(kubectl, manifest)
-    ghcr = f"{GHCR_IMAGE}:{image_tag(version)}"
-    switched = False
+    ghcr = f"{GHCR_IMAGE}:{tag}"
+    switched = image == ghcr
     state = "pending"
     for _ in range(attempts):
-        state = _pod_state(kubectl, sample)
+        state = _pod_state(kubectl, sample, image)
         if state == "ready":
             break
         if state == "sample_data_unavailable":
@@ -337,10 +347,6 @@ def deploy_database(
                 "the sample data was not downloaded or did not match its lock file",
             )
         if state == "image_pull_failed" and not switched:
-            lookup = registry_digests if digests is None else digests
-            swr_digest, ghcr_digest = lookup(image_tag(version))
-            if _digests_conflict(swr_digest, ghcr_digest):
-                raise DeployError("image_unavailable", "SWR and GHCR manifest digests differ")
             _switch_image(kubectl, sample, ghcr)
             switched = True
             image = ghcr

@@ -186,7 +186,7 @@ class StudioApiTest(unittest.TestCase):
             if "resources" in args:
                 return {"entries": [{}] * 12}
             if "list" in args:
-                return {"entries": [{"id": "cat-1", "name": "bkn-sample-supply-chain", "tags": ["bkn-samples", "bkn-sample:supply-chain", "bkn-samples-version:0.1.0"]}]}
+                return {"entries": [{"id": "cat-1", "name": "bkn-sample-supply-chain", "tags": ["bkn-samples", "bkn-sample-supply-chain", "bkn-samples-version-0-1-0"]}]}
             return {"id": "cat-1"}
 
         retried = retry_sample_installation(
