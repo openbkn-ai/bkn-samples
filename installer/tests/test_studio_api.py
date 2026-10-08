@@ -4,10 +4,12 @@ import unittest
 from pathlib import Path
 
 from installer.contract import OFFICIAL_SOURCE_REPO
+from installer.deploy_database import DeployError
 from installer.studio_api import (
     ApiError,
     create_sample_installation,
     get_sample_installation,
+    installation_view,
     list_samples,
     retry_sample_installation,
 )
@@ -204,6 +206,31 @@ class StudioApiTest(unittest.TestCase):
         )
         self.assertEqual(retried["status"], "installed")
         self.assertEqual(retried["id"], "inst-supply-chain")
+
+    def test_database_stage_stays_running_until_the_database_is_ready(self):
+        state = Path(tempfile.mkdtemp())
+
+        def deploy(_sample):
+            record = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
+            self.assertEqual(record["status"], "installing")
+            view = installation_view(record, "admin")
+            self.assertEqual(view["stages"][0], {"id": "database", "name": "准备样例库", "state": "running"})
+            raise DeployError("database_not_ready", "the sample database did not become ready")
+
+        with self.assertRaises(ApiError) as caught:
+            create_sample_installation(
+                sample="supply-chain",
+                actor_role="admin",
+                state_dir=state,
+                version="0.1.0",
+                database={"name": "supply_demo_hand"},
+                openbkn=lambda _args: {"entries": []},
+                hook_runner=lambda *_args: {"ok": True},
+                deploy=deploy,
+                expected_tables=12,
+                knowledge_network={"id": "supply_ontology_hand", "displayName": "供应链"},
+            )
+        self.assertEqual(caught.exception.code, "database_not_ready")
 
 
 if __name__ == "__main__":

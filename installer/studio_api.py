@@ -60,6 +60,9 @@ def create_sample_installation(
     _require_sample(sample)
     if actor_role != "admin":
         raise ApiError(403, "forbidden", "an administrator must install the sample")
+    current = _read_state(state_dir, sample)
+    if not current or current.get("status") not in {"installed", "failed"}:
+        _write_installing(state_dir, sample, version)
     try:
         deploy(sample)
     except Exception as exc:
@@ -138,6 +141,10 @@ def installation_view(record: dict, actor_role: str) -> dict:
     running_assigned = False
     for stage_id, name in STAGES:
         state = (record.get("stages") or {}).get(stage_id)
+        if stage_id == "database" and record.get("status") == "installing" and state != "succeeded":
+            stages.append({"id": stage_id, "name": name, "state": "running"})
+            running_assigned = True
+            continue
         if state == "succeeded" or (stage_id == "database" and record.get("status") in {"installed", "installing", "failed"} and failed_at != "database"):
             view_state = "succeeded" if state == "succeeded" or stage_id == "database" else state
             if stage_id == "database" and state != "failed":
@@ -222,6 +229,18 @@ def _read_state(state_dir: Path, sample: str) -> dict | None:
     if not sample or not path.is_file():
         return None
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _write_installing(state_dir: Path, sample: str, version: str) -> None:
+    state_dir.mkdir(parents=True, exist_ok=True)
+    record = {
+        "id": f"inst-{sample}",
+        "sample": sample,
+        "version": version,
+        "status": "installing",
+        "stages": {},
+    }
+    (state_dir / f"{sample}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def _write_failed(state_dir: Path, sample: str, version: str, code: str, message: str) -> None:

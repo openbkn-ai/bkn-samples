@@ -26,6 +26,12 @@ fi
 export MYSQL_USER=root
 export MYSQL_PASSWORD="${MARIADB_ROOT_PASSWORD:-}"
 export MYSQL_DATABASE="${MYSQL_DATABASE:-${MARIADB_DATABASE:-}}"
+# Init runs as the mysql user. The default cache path is not writable by that user.
+if [ "$sample_id" = "world-cup" ]; then
+  cache_root="${TMPDIR:-/tmp}/bkn-samples/cache"
+  mkdir -p "${cache_root}/${sample_id}"
+  export BKN_SAMPLE_CACHE="${cache_root}/${sample_id}"
+fi
 if [ -z "${BKN_SAMPLE_VERSION:-}" ] && [ -f /opt/bkn-samples/VERSION ]; then
   BKN_SAMPLE_VERSION="$(tr -d '[:space:]' < /opt/bkn-samples/VERSION)"
   export BKN_SAMPLE_VERSION

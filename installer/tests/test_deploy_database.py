@@ -71,7 +71,7 @@ class FakeKubectl:
         if args[:1] == ["patch"]:
             self.patched.append(args[-1])
             return self._ok("patched")
-        if args[:2] == ["delete", "pod"]:
+        if args[:1] == ["delete"]:
             self.deleted.append(args[2])
             return self._ok("deleted")
         return self._fail(f"unexpected {' '.join(args)}")
@@ -220,6 +220,7 @@ class DeployDatabaseTest(unittest.TestCase):
             deploy_database(ROOT, "world-cup", kubectl, sleep=lambda _seconds: None, attempts=5)
         self.assertEqual(caught.exception.code, "sample_data_unavailable")
         self.assertEqual(len(kubectl.applied), 1)
+        self.assertEqual(kubectl.deleted, ["bkn-sample-world-cup-0", "data-bkn-sample-world-cup-0"])
 
     def test_waits_between_checks_instead_of_spinning(self):
         kubectl = FakeKubectl(states=["pending", "pending", "ready"])
