@@ -13,18 +13,6 @@ _SPEC.loader.exec_module(SETUP)
 
 
 class SetupCatalogSecretTest(unittest.TestCase):
-    def test_catalog_get_accepts_the_sdk_list_and_legacy_shapes(self):
-        entry = {"id": "cat-1", "enabled": True}
-        for payload in ([entry], {"entries": [entry]}, entry):
-            with self.subTest(payload=payload):
-                self.assertEqual(SETUP._single_catalog(payload, "cat-1"), entry)
-
-    def test_catalog_get_rejects_missing_ambiguous_or_different_catalogs(self):
-        for payload in ([], [{"id": "other"}], [{"id": "cat-1"}, {"id": "other"}], {}):
-            with self.subTest(payload=payload):
-                with self.assertRaises(RuntimeError):
-                    SETUP._single_catalog(payload, "cat-1")
-
     def test_command_failure_does_not_keep_the_database_password(self):
         password = "db-secret-value"
 

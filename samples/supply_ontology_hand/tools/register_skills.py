@@ -49,11 +49,11 @@ def entry_id(payload: dict[str, Any]) -> str:
     return ""
 
 
-def run(*, apply: bool, kn_id: str | None = None) -> dict[str, Any]:
+def run(*, apply: bool) -> dict[str, Any]:
     skills = local_skills()
     if not apply:
         return {"mode": "dry_run", "skills": [{"name": name, "directory": str(path)} for name, path in skills]}
-    listing = run_cli(["skill", "list", "--all"])
+    listing = run_cli(["skill", "list"])
     entries = listing.get("data") or listing.get("entries") or []
     existing = {str(item.get("name")): item for item in entries if isinstance(item, dict)}
     results = []
@@ -71,18 +71,14 @@ def run(*, apply: bool, kn_id: str | None = None) -> dict[str, Any]:
             operation = "registered"
         run_cli(["skill", "set-status", skill_id, "published"])
         results.append({"name": name, "skill_id": skill_id, "operation": operation, "status": "published"})
-    if kn_id:
-        run_cli(["bkn", "capability", "attach", kn_id, "--skill",
-                 ",".join(item["skill_id"] for item in results)])
     return {"mode": "apply", "skills": results}
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apply", action="store_true", help="Register/update and publish Skills")
-    parser.add_argument("--kn-id", help="Mount these skills to the target knowledge network")
     args = parser.parse_args()
-    print(json.dumps(run(apply=args.apply, kn_id=args.kn_id), ensure_ascii=False, indent=2))
+    print(json.dumps(run(apply=args.apply), ensure_ascii=False, indent=2))
     return 0
 
 

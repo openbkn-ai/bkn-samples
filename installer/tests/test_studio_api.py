@@ -50,7 +50,7 @@ class StudioApiTest(unittest.TestCase):
         self.assertEqual(sample["name"], "supply-chain")
         self.assertEqual(sample["status"], "not_installed")
         self.assertFalse(sample["installable"])
-        self.assertEqual(sample["questions"], ["Can this order ship?"])
+        self.assertEqual(sample["questions"], [])
 
     def test_sha_mismatch_is_not_installable(self):
         catalog = list_samples(

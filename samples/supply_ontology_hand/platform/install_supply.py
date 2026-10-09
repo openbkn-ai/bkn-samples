@@ -63,8 +63,8 @@ def commands(config_path: Path) -> list[list[str]]:
         [python, str(TOOLS / "import_kn.py")],
         [python, str(TOOLS / "setup_catalog.py"), "--config", str(config_path)],
         [python, str(TOOLS / "bind_kn_resources.py"), "--config", str(config_path)],
-        [python, str(TOOLS / "register_native_function_toolbox.py"), "--apply", "--kn-id", KN_ID],
-        [python, str(TOOLS / "register_skills.py"), "--apply", "--kn-id", KN_ID],
+        [python, str(TOOLS / "register_native_function_toolbox.py"), "--apply"],
+        [python, str(TOOLS / "register_skills.py"), "--apply"],
     ]
 
 

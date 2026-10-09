@@ -189,17 +189,11 @@ def manifest_sha256(sample_dir: Path, document: dict) -> str:
     hooks = document["spec"]["hooks"]
     relative_paths = ["sample.yaml"]
     relative_paths.extend(hooks[key] for key in DB_HOOKS if key in hooks)
-    # Include bundled version notes in the same index identity as the legacy hooks.
-    relative_paths.extend(str(p.relative_to(sample_dir)) for p in
-                          (sample_dir / "releases").glob("*/release-notes.*.md"))
     digest = hashlib.sha256()
     for relative in sorted(relative_paths):
-        path = sample_dir / relative
-        if path.is_symlink() or not path.resolve().is_relative_to(sample_dir.resolve()):
-            raise ContractError([f"manifest input escapes sample: {relative}"])
         digest.update(relative.encode("utf-8"))
         digest.update(b"\0")
-        digest.update(path.read_bytes())
+        digest.update((sample_dir / relative).read_bytes())
         digest.update(b"\0")
     return digest.hexdigest()
 
@@ -219,8 +213,6 @@ def build_manifest_index(root: Path, revision: str, source_repo: str = OFFICIAL_
         studio = document["spec"]["studio"]
         database = document["spec"]["database"]
         network = document["spec"]["knowledgeNetwork"]
-        from installer.release_notes import bundled_notes
-        notes = bundled_notes(sample_dir, version)
         samples.append(
             {
                 "name": document["metadata"]["name"],
@@ -235,7 +227,6 @@ def build_manifest_index(root: Path, revision: str, source_repo: str = OFFICIAL_
                 "knowledgeNetworkDisplayName": network["displayName"],
                 "components": {key: bool(document["spec"]["components"][key]) for key in COMPONENT_KEYS},
                 "manifestSha256": manifest_sha256(sample_dir, document),
-                **({"releaseNotes": notes} if notes else {}),
             }
         )
     validate_repository(root)

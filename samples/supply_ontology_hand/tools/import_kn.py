@@ -110,15 +110,11 @@ def import_kn(
         report["verified"] = True
         return report
     if required:
-        # The native BKN backend permits at most five network tags. Ownership
-        # must remain complete so retry never adopts an unrelated network.
-        required = list(dict.fromkeys(required))
-        if len(required) > 5:
-            raise ValueError("installer ownership exceeds the platform tag limit")
-        descriptive = list(dict.fromkeys(tag for tag in payload.get("tags", []) if tag not in required))
-        retained = descriptive[:5 - len(required)]
-        payload["tags"] = retained + required
-        report["omitted_descriptive_tags"] = descriptive[len(retained):]
+        tags = list(payload.get("tags") or [])
+        for tag in required:
+            if tag not in tags:
+                tags.append(tag)
+        payload["tags"] = tags
 
     def post(body_payload: dict) -> str:
         body = json.dumps(body_payload, ensure_ascii=False)

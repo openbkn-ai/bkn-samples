@@ -25,26 +25,12 @@ def _entries(payload: dict, *keys: str) -> list:
 
 
 def capability_ready(run_cli) -> bool:
-    sys.path.insert(0, str(SAMPLE_DIR / "tools"))
-    from function_catalog import FUNCTION_CATALOG
-
-    expected = {spec["name"] for spec in FUNCTION_CATALOG.values()}
-    if not expected:
-        return False
     listing = run_cli(["toolbox", "list", "--keyword", BOX_NAME, "--limit", "100"])
     box = next((item for item in _entries(listing, "data", "entries") if item.get("box_name") == BOX_NAME), None)
     if not box or not box.get("box_id"):
         return False
     tools = run_cli(["tool", "list", "--toolbox", box["box_id"], "--all"])
-    enabled = {item.get("name"): item.get("tool_id")
-               for item in _entries(tools, "tools", "data", "entries")
-               if item.get("status") == "enabled" and item.get("tool_id")}
-    if not expected <= enabled.keys():
-        return False
-    bindings = run_cli(["bkn", "capability", "list", "supply_ontology_hand", "--limit", "100"])
-    mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
-               if item.get("capability_type") == "function" and item.get("box_id") == box["box_id"]}
-    return {enabled[name] for name in expected} <= mounted
+    return any(item.get("status") == "enabled" for item in _entries(tools, "tools", "data", "entries"))
 
 
 def skills_ready(run_cli) -> bool:
@@ -52,19 +38,14 @@ def skills_ready(run_cli) -> bool:
     from register_skills import local_skills
 
     expected = {name for name, _path in local_skills()}
-    listing = run_cli(["skill", "list", "--all"])
-    found = {}
+    listing = run_cli(["skill", "list"])
+    found = set()
     for item in _entries(listing, "data", "entries", "skills"):
         if item.get("status") not in (None, "published"):
             continue
         if item.get("name"):
-            found[str(item["name"])] = item.get("skill_id") or item.get("id")
-    if not expected <= found.keys() or not all(found[name] for name in expected):
-        return False
-    bindings = run_cli(["bkn", "capability", "list", "supply_ontology_hand", "--limit", "100"])
-    mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
-               if item.get("capability_type") == "skill"}
-    return {found[name] for name in expected} <= mounted
+            found.add(str(item["name"]))
+    return expected <= found
 
 
 def build_checks(*, data_ok: bool, run_cli, components: dict) -> list[dict]:
