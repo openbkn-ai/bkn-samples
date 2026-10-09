@@ -21,6 +21,11 @@ proof of a fix or an incorrect finding closes it; incomplete verification keeps
 the finding and fails the final check. Advisory output is capped at two items on
 the first round and one on later rounds by the deterministic controller.
 
+The final verdict always runs. Failed or missing plans fail the gate. On first
+installation, missing trusted files on the default branch are reported explicitly
+and the gate fails without executing PR controllers; maintainers must review the
+initial installation themselves.
+
 See the [workflow setup](../../.github/workflows/README.md) and
 [Chinese overview](sample-pr-review-rules_cn.md). The independent sample-release
 protocol and actual platform verification remain separate implementation work.

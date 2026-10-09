@@ -41,6 +41,7 @@ jobs:
       contents: read
       pull-requests: read
     outputs:
+      bootstrap: ${{ steps.trusted.outputs.bootstrap }}
       eligible: ${{ steps.plan.outputs.eligible }}
       head: ${{ steps.plan.outputs.head }}
       base: ${{ steps.plan.outputs.base }}
@@ -57,8 +58,18 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0
           persist-credentials: false
+      - name: Check trusted review installation
+        id: trusted
+        run: |
+          if [ ! -f .github/scripts/deepseek_review.py ] || [ ! -f .github/REVIEW_RULES.md ]; then
+            echo 'bootstrap=true' >> "$GITHUB_OUTPUT"
+            echo '首次启用：默认分支尚未安装审核规则或控制脚本。本轮不能自动审核，须先人工审阅引入变更。' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'bootstrap=false' >> "$GITHUB_OUTPUT"
+          fi
       - name: Fix review scope and commit
         id: plan
+        if: steps.trusted.outputs.bootstrap == 'false'
         run: python3 .github/scripts/deepseek_review.py plan
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: steps.plan.outputs.eligible == 'true'
@@ -220,7 +231,7 @@ jobs:
 
   verdict:
     needs: [plan, review, verify]
-    if: always() && needs.plan.outputs.eligible == 'true'
+    if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -232,33 +243,55 @@ jobs:
       REVIEW_RESULT: ${{ needs.review.result }}
       VERIFY_RESULT: ${{ needs.verify.result }}
     steps:
+      - name: Require a complete review plan
+        if: needs.plan.result != 'skipped' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+        env:
+          PLAN_RESULT: ${{ needs.plan.result }}
+          ELIGIBLE: ${{ needs.plan.outputs.eligible }}
+          BOOTSTRAP: ${{ needs.plan.outputs.bootstrap }}
+        run: |
+          if [ "$BOOTSTRAP" = 'true' ]; then
+            echo '首次启用：默认分支缺少可信审核文件，本轮未经 AI 审核；需要人工审阅引入变更。' >> "$GITHUB_STEP_SUMMARY"
+            echo '::error::Trusted review files are not installed on the default branch; no automatic approval.'
+            exit 1
+          fi
+          if [ "$PLAN_RESULT" != 'success' ] || [ "$ELIGIBLE" != 'true' ]; then
+            echo '审核计划未成功完成，或此 PR 不支持自动审核；最终检查不通过。' >> "$GITHUB_STEP_SUMMARY"
+            echo '::error::A successful, eligible review plan is required.'
+            exit 1
+          fi
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        if: needs.plan.outputs.eligible == 'true'
         with:
           ref: ${{ needs.plan.outputs.rules_revision }}
           persist-credentials: false
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        if: needs.plan.outputs.eligible == 'true'
         with:
           name: review-plan
           path: review-data
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        if: needs.plan.outputs.eligible == 'true'
         continue-on-error: true
         with:
           name: review-findings
           path: review-data
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        if: needs.plan.outputs.eligible == 'true'
         continue-on-error: true
         with:
           name: review-verification
           path: review-data
       - name: Reviewer App token (optional)
         id: app
-        if: vars.REVIEW_APP_ID != ''
+        if: needs.plan.outputs.eligible == 'true' && vars.REVIEW_APP_ID != ''
         continue-on-error: true
         uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
         with:
           app-id: ${{ vars.REVIEW_APP_ID }}
           private-key: ${{ secrets.REVIEW_APP_PRIVATE_KEY }}
       - name: Post one verdict
+        if: needs.plan.outputs.eligible == 'true'
         env:
           GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
         run: python3 .github/scripts/deepseek_review.py verdict
