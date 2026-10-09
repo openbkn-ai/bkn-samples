@@ -404,13 +404,7 @@ def main() -> None:
                 raise ApiError(409, "version_changed", "sample version or manifest changed; confirm again")
             runner.register(sample)
             return runner.submit(sample, lambda: offline.prepare(offline_release),
-                                 lambda: offline.execute(offline_release, lambda bundle_root, fixed_version, fixed_image, retry:
-                                     retry_sample(sample=sample, installation_id=_installation_id(_read_state(state_dir, sample)),
-                                                  actor_role=role, state_dir=state_dir, root=bundle_root, version=fixed_version,
-                                                  deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                                                      data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
-                                                  run=process_run, authorization=authorization, accepted=True,
-                                                  data_image_ref=fixed_image) if retry else install_sample(
+                                 lambda: offline.execute(offline_release, lambda bundle_root, fixed_version, fixed_image, retry: install_sample(
                                      sample=sample, actor_role=role, state_dir=state_dir, root=bundle_root,
                                      version=fixed_version, deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
                                          data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
@@ -431,13 +425,11 @@ def main() -> None:
                 raise ApiError(409, "source_rejected", "offline package is unavailable")
             runner.register(sample)
             return runner.submit(sample, lambda: offline.prepare(release, retry=True),
-                                 lambda: offline.execute(release, lambda bundle_root, fixed_version, fixed_image, retry:
-                                     retry_sample(sample=sample, installation_id=_installation_id(_read_state(state_dir, sample)),
-                                                  actor_role=role, state_dir=state_dir, root=bundle_root, version=fixed_version,
-                                                  deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                                                      data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
-                                                  run=process_run, authorization=authorization, accepted=True,
-                                                  data_image_ref=fixed_image), retry=True))
+                                 lambda: offline.execute(release, lambda bundle_root, fixed_version, fixed_image, retry: install_sample(
+                                     sample=sample, actor_role=role, state_dir=state_dir, root=bundle_root,
+                                     version=fixed_version, deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
+                                         data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
+                                     run=process_run, authorization=authorization), retry=True))
         if current.get("remoteRelease"):
             fixed = current["remoteRelease"]["entry"]
             if any(e["sampleId"] == sample and e["version"] == fixed["version"] and e["releaseStatus"] == "withdrawn"
