@@ -51,7 +51,7 @@ def included(relative):
     return (len(parts) == 1 and relative.name in FILES) or parts[0] in DIRECTORIES
 
 
-def build(sample_dir, version, output, data_image_ref=None):
+def build(sample_dir, version, output):
     require(VERSION.fullmatch(version), "version must be MAJOR.MINOR.PATCH")
     sample_dir = safe_path(sample_dir.absolute())
     require(sample_dir.parent == ROOT / "samples", "sample must be a direct child of samples/")
@@ -99,23 +99,6 @@ def build(sample_dir, version, output, data_image_ref=None):
         require(len(data) <= 256 * 1024 and data.decode("utf-8").strip(),
                 f"release notes must be nonempty UTF-8 and at most 256 KiB: {relative}")
         documents.append({"locale": locale, "path": relative.as_posix(), "digest": sha(data)})
-
-    if data_image_ref is not None:
-        require(re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[a-f0-9]{64}", data_image_ref),
-                "offline package needs a fixed data image digest")
-        descriptor = {
-            "apiVersion": "samples.openbkn.ai/offline.v1", "version": version,
-            "dataImageRef": data_image_ref,
-            "requires": {"installationProfiles": ["openbkn.ai/sample-install.v1"],
-                         "requiredExtensions": [], "platformVersion": ">=0.2.0 <0.3.0",
-                         "architectures": ["arm64", "amd64"],
-                         "capabilities": ["vega.catalog", "knowledge-network.import.kn-json",
-                                          "execution.function", "execution.skill"]},
-            "releaseNotes": documents,
-            "files": [{"path": p, "digest": sha(data)} for p, _, data in snapshots],
-        }
-        snapshots.append(("offline-release.json", 0o644,
-                          json.dumps(descriptor, ensure_ascii=False, sort_keys=True).encode("utf-8")))
 
     output = safe_path(output.absolute())
     require(not output.is_relative_to(ROOT), "candidate output must be outside the source repository")
@@ -168,10 +151,9 @@ def main():
     parser.add_argument("sample_dir", type=Path)
     parser.add_argument("--version", required=True)
     parser.add_argument("--output", required=True, type=Path)
-    parser.add_argument("--data-image-ref", help="Include offline metadata bound to this fixed image digest")
     args = parser.parse_args()
     try:
-        target = build(args.sample_dir, args.version, args.output, args.data_image_ref)
+        target = build(args.sample_dir, args.version, args.output)
     except (ValueError, OSError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Candidate build failed: {error}\n")
     print(f"Candidate created: {target}")
