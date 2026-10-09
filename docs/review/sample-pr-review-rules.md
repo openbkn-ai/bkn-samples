@@ -11,7 +11,8 @@ Anthropic-compatible endpoint and `deepseek-v4-pro`.
 
 Each ready, same-repository PR update is reviewed, including data and skill
 Markdown. Maintainers can request another round using `/review`, `@deepseek`, or
-the compatible `@claude` command. Rules/controllers come from the default branch;
+the compatible `@claude` command in a top-level PR comment. Rules/controllers and
+the `pull_request_target` entry point come from main;
 PR source is inspected as Git objects without executing it. Missing or incomplete
 reviews and stale commit results cannot approve. Humans decide whether to merge.
 
@@ -21,10 +22,13 @@ proof of a fix or an incorrect finding closes it; incomplete verification keeps
 the finding and fails the final check. Advisory output is capped at two items on
 the first round and one on later rounds by the deterministic controller.
 
-The final verdict always runs. Failed or missing plans fail the gate. On first
-installation, missing trusted files on the default branch are reported explicitly
-and the gate fails without executing PR controllers; maintainers must review the
-initial installation themselves.
+The gate is the explicit `sample-ai-review` commit status on the reviewed head SHA,
+shared by automatic, comment and manual review. Planning sets pending; the final
+verdict publishes success, failure or error. Missing or pending statuses cannot
+satisfy the gate. Native job checks are not the gate because comment/manual jobs
+may belong to main. Manual runs must select main. Inline comments are read as
+evidence but do not trigger execution. Maintainers review the initial installation
+themselves before the trusted entry point is available.
 
 See the [workflow setup](../../.github/workflows/README.md) and
 [Chinese overview](sample-pr-review-rules_cn.md). The independent sample-release

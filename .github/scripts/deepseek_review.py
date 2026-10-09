@@ -13,6 +13,7 @@ STATE_RE = re.compile(r"<!-- deepseek-sample-state:\s*(\{.*?\})\s*-->", re.S)
 TRUSTED = {"OWNER", "MEMBER", "COLLABORATOR"}
 MAX_FILES = 500
 MAX_BLOCKERS = 20
+STATUS_CONTEXT = "sample-ai-review"
 
 
 def gh(*args, payload=None):
@@ -52,6 +53,34 @@ def number(value):
     return str(value)
 
 
+def publish_status(repo, head, state, description):
+    if not re.fullmatch(r"[0-9a-f]{40}", head):
+        raise ValueError("Invalid status commit ID")
+    target_url = f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+    gh("api", "--method", "POST", f"repos/{repo}/statuses/{head}",
+       payload={"state": state, "context": STATUS_CONTEXT,
+                "description": description, "target_url": target_url})
+
+
+def status():
+    repo, pr = os.environ["GH_REPO"], number(os.environ["PR_NUMBER"])
+    head, base = os.environ["REVIEW_HEAD"], os.environ["REVIEW_BASE"]
+    current = api(f"repos/{repo}/pulls/{pr}")
+    if current["state"] != "open" or current["head"]["sha"] != head:
+        print("Review target changed or closed; no status posted to the new commit.")
+        return 1
+    decision = os.environ.get("REVIEW_DECISION", "error")
+    if current["base"]["sha"] != base or current["draft"] or current["base"]["ref"] != "main":
+        decision = "error"
+    descriptions = {"success": "完整审核通过，没有确认阻塞",
+                    "failure": "独立复核确认存在阻塞",
+                    "error": "审核未完成或结果过期，请复评"}
+    if decision not in descriptions:
+        decision = "error"
+    publish_status(repo, head, decision, descriptions[decision])
+    return 0 if decision == "success" else 1
+
+
 def plan():
     repo, pr = os.environ["GH_REPO"], number(os.environ["PR_NUMBER"])
     output("eligible", "false")
@@ -62,12 +91,17 @@ def plan():
                     not any(t in comment.get("body", "") for t in ("/review", "@deepseek", "@claude"))):
         return
     metadata = api(f"repos/{repo}/pulls/{pr}")
-    eligible = metadata["state"] == "open" and not metadata["draft"] and (metadata["head"].get("repo") or {}).get("full_name") == repo
+    eligible = (metadata["state"] == "open" and not metadata["draft"]
+                and metadata["base"]["ref"] == "main"
+                and (metadata["head"].get("repo") or {}).get("full_name") == repo)
     if not eligible:
         return
     head, base = metadata["head"]["sha"], metadata["base"]["sha"]
     if any(not re.fullmatch(r"[0-9a-f]{40}", ref) for ref in (head, base)):
         raise ValueError("Invalid PR commit IDs")
+    output("head", head)
+    output("base", base)
+    publish_status(repo, head, "pending", "正在审核此提交")
     files = pages(f"repos/{repo}/pulls/{pr}/files")
     if len(files) != metadata["changed_files"] or len(files) > MAX_FILES:
         raise ValueError("File list incomplete or exceeds 500; split the PR before review")
@@ -113,8 +147,6 @@ def plan():
                 "comments": [{"author": c["user"]["login"], "body": c["body"]} for c in comments[-50:]],
                 "inlineComments": [{"path": c["path"], "line": c["line"], "body": c["body"]} for c in inline[-50:]]}
     write("review-data/plan.json", snapshot)
-    output("head", head)
-    output("base", base)
     output("rules_revision", revision)
     output("eligible", "true")
 
@@ -191,6 +223,7 @@ def trim(value, size=350):
 
 
 def verdict():
+    output("decision", "error")
     repo, pr = os.environ["GH_REPO"], number(os.environ["PR_NUMBER"])
     snapshot = load_result("review-data/plan.json")
     if snapshot.get("repo") != repo or snapshot.get("pr") != int(pr):
@@ -264,7 +297,7 @@ def verdict():
     if current["state"] != "open":
         print("PR closed; no review posted.")
         return 0
-    if current["head"]["sha"] != snapshot["head"] or current["base"]["sha"] != snapshot["base"]:
+    if current["draft"] or current["head"]["sha"] != snapshot["head"] or current["base"]["sha"] != snapshot["base"]:
         print("PR changed during review; discarded stale verdict.")
         return 1
     payload = {"commit_id": snapshot["head"], "event": action, "body": body}
@@ -275,12 +308,14 @@ def verdict():
             raise
         gh("api", "--method", "POST", f"repos/{repo}/issues/{pr}/comments",
            payload={"body": body + "\n\nGitHub 未允许本身份批准，已改贴评论；没有 APPROVED 状态。"})
-    return 0 if complete and not confirmed else 1
+    decision = "success" if complete and not confirmed else "failure" if complete else "error"
+    output("decision", decision)
+    return 0 if decision == "success" else 1
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["plan", "collect", "verdict"])
+    parser.add_argument("stage", choices=["plan", "collect", "verdict", "status"])
     args = parser.parse_args()
-    result = {"plan": plan, "collect": collect, "verdict": verdict}[args.stage]()
+    result = {"plan": plan, "collect": collect, "verdict": verdict, "status": status}[args.stage]()
     raise SystemExit(result or 0)
