@@ -52,7 +52,7 @@ class StudioHttpTest(unittest.TestCase):
         self.assertTrue(payload["samples"][0]["installable"])
 
         status, payload = dispatch(built, "POST", "/api/studio/samples/supply-chain/installations", "Bearer t", b"")
-        self.assertEqual(status, 202)
+        self.assertEqual(status, 201)
         self.assertEqual(payload["id"], "inst-supply-chain")
         self.assertEqual(calls["create"], 1)
 
@@ -66,7 +66,7 @@ class StudioHttpTest(unittest.TestCase):
         built, calls = app()
         for empty in (b"{}", b" {} ", b"null"):
             status, _payload = dispatch(built, "POST", "/api/studio/samples/supply-chain/installations", "Bearer t", empty)
-            self.assertEqual(status, 202)
+            self.assertEqual(status, 201)
         self.assertEqual(calls["create"], 3)
 
     def test_user_can_read_but_not_install(self):

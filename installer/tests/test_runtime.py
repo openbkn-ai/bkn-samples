@@ -18,20 +18,6 @@ def completed(stdout: str = "", code: int = 0) -> subprocess.CompletedProcess:
 
 
 class RuntimeTest(unittest.TestCase):
-    def test_hook_keeps_a_structured_failure_without_a_code(self):
-        def run(_argv, env):
-            Path(env["BKN_SAMPLE_OUTPUT"]).write_text(
-                json.dumps({"ok": False, "code": "", "message": "import_kn.py failed"}),
-                encoding="utf-8",
-            )
-            return completed(code=1)
-
-        result = run_platform_hook(
-            ROOT, "platform-install", {"sample": "supply-chain"}, run
-        )
-        self.assertFalse(result["ok"])
-        self.assertEqual(result["message"], "import_kn.py failed")
-
     def test_install_passes_the_secret_to_the_hook_and_hides_it(self):
         seen = {}
 

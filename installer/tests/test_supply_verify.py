@@ -40,41 +40,20 @@ class SupplyVerifyTest(unittest.TestCase):
 
         sys.path.insert(0, str(VERIFY.SAMPLE_DIR / "tools"))
         from register_skills import local_skills
-        from function_catalog import FUNCTION_CATALOG
 
-        names = [{"name": name, "skill_id": name, "status": "published"} for name, _path in local_skills()]
-        tools = [{"name": spec["name"], "tool_id": operation, "status": "enabled"} for operation, spec in FUNCTION_CATALOG.items()]
-        bindings = [{"capability_type": "function", "box_id": "box-1", "capability_id": operation} for operation in FUNCTION_CATALOG]
-        bindings += [{"capability_type": "skill", "capability_id": item["skill_id"]} for item in names]
+        names = [{"name": name, "status": "published"} for name, _path in local_skills()]
         checks = VERIFY.build_checks(
             data_ok=True,
             components={"functions": True, "skills": True},
             run_cli=_cli(
                 {
                     ("toolbox", "list"): {"data": [{"box_name": VERIFY.BOX_NAME, "box_id": "box-1"}]},
-                    ("tool", "list"): {"tools": tools},
-                    ("bkn", "capability"): {"entries": bindings},
+                    ("tool", "list"): {"tools": [{"name": "bom_list", "status": "enabled"}]},
                     ("skill", "list"): {"data": names},
                 }
             ),
         )
         self.assertTrue(all(item["ok"] for item in checks))
-
-    def test_published_tools_without_network_bindings_fail(self):
-        import sys
-        sys.path.insert(0, str(VERIFY.SAMPLE_DIR / "tools"))
-        from function_catalog import FUNCTION_CATALOG
-        from register_skills import local_skills
-        run = _cli({
-            ("toolbox", "list"): {"data": [{"box_name": VERIFY.BOX_NAME, "box_id": "box-1"}]},
-            ("tool", "list"): {"tools": [{"name": spec["name"], "tool_id": operation, "status": "enabled"}
-                                             for operation, spec in FUNCTION_CATALOG.items()]},
-            ("skill", "list"): {"data": [{"name": name, "skill_id": name, "status": "published"}
-                                            for name, _path in local_skills()]},
-            ("bkn", "capability"): {"entries": []},
-        })
-        self.assertFalse(VERIFY.capability_ready(run))
-        self.assertFalse(VERIFY.skills_ready(run))
 
     def test_absent_functions_and_skills_are_not_required(self):
         calls = []

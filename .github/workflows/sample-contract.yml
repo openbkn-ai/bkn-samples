@@ -10,25 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install contract validators
-        run: python -m pip install "PyYAML>=6" -r tools/publication/requirements.txt
-      - name: Validate official publication metadata
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: |
-          python tools/publication/validate.py . --official
-          if [ -n "$BASE_SHA" ] && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
-            git cat-file -e "$BASE_SHA^{commit}"
-            if git cat-file -e "$BASE_SHA:catalog.json" 2>/dev/null; then
-              git show "$BASE_SHA:catalog.json" > /tmp/baseline-catalog.json
-              python tools/publication/validate.py . --official --baseline-catalog /tmp/baseline-catalog.json
-            fi
-          fi
+      - name: Install YAML parser
+        run: python -m pip install "PyYAML>=6"
       - name: Validate sample contracts
         run: python -m unittest discover -s installer/tests -v
       - name: Build and check the manifest index

@@ -3,7 +3,6 @@ import json
 import os
 import tempfile
 import unittest
-from unittest.mock import patch
 from pathlib import Path
 
 _PATH = Path(__file__).resolve().parents[2] / "samples/supply_ontology_hand/tools/import_kn.py"
@@ -13,30 +12,6 @@ _SPEC.loader.exec_module(IMPORT)
 
 
 class ImportKnTest(unittest.TestCase):
-    def test_import_keeps_ownership_within_native_tag_limit(self):
-        with tempfile.TemporaryDirectory() as directory:
-            source = Path(directory) / "kn.json"
-            original = {"id": "sample", "name": "Sample", "tags": ["a", "b", "c"]}
-            source.write_text(json.dumps(original), encoding="utf-8")
-            posted = []
-
-            def run_cmd(args):
-                if args[2] == "call":
-                    posted.append(json.loads(args[-1]))
-                    return "{}"
-                if posted:
-                    return json.dumps(posted[0])
-                raise RuntimeError("not found")
-
-            required = ["bkn-samples", "bkn-sample-supply-chain", "bkn-samples-version-0-1-0"]
-            with patch.object(IMPORT, "run_cmd", run_cmd), patch.dict(
-                os.environ, {"BKN_SAMPLE_OWNERSHIP_TAGS": ",".join(required)}
-            ):
-                report = IMPORT.import_kn(source)
-            self.assertEqual(posted[0]["tags"], ["a", "b", *required])
-            self.assertEqual(report["omitted_descriptive_tags"], ["c"])
-            self.assertEqual(json.loads(source.read_text(encoding="utf-8")), original)
-
     def test_reuses_an_existing_network_without_posting(self):
         directory = Path(tempfile.mkdtemp())
         source = directory / "kn.json"

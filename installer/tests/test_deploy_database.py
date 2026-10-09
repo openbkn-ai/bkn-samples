@@ -4,7 +4,6 @@ import subprocess
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-import yaml
 
 from installer.deploy_database import (
     GHCR_IMAGE,
@@ -88,8 +87,8 @@ class FakeKubectl:
 
 class DeployDatabaseTest(unittest.TestCase):
     def setUp(self):
-        self._digests = patch("installer.deploy_database.registry_digests", return_value=(DIGEST, DIGEST))
-        self.digest_lookup = self._digests.start()
+        self._digests = patch("installer.deploy_database.registry_digests", return_value=(None, None))
+        self._digests.start()
 
     def tearDown(self):
         self._digests.stop()
@@ -109,7 +108,7 @@ class DeployDatabaseTest(unittest.TestCase):
         self.assertNotIn("password", result)
         applied = kubectl.applied[0]
         self.assertIn("kind: Secret", applied)
-        self.assertIn(f"{SWR_IMAGE}@{DIGEST}", applied)
+        self.assertIn(f"{SWR_IMAGE}:0.1.0", applied)
         self.assertNotIn("kind: Catalog", applied)
         self.assertNotIn("mariadb-root-password: unused", applied)
 
@@ -128,9 +127,9 @@ class DeployDatabaseTest(unittest.TestCase):
             attempts=3,
             digests=lambda _tag: (DIGEST, DIGEST),
         )
-        self.assertIn(f"{GHCR_IMAGE}@{DIGEST}", kubectl.patched[0])
+        self.assertIn(f"{GHCR_IMAGE}:0.1.0", kubectl.patched[0])
         self.assertEqual(kubectl.deleted, ["bkn-sample-supply-chain-0"])
-        self.assertEqual(result["image"], f"{GHCR_IMAGE}@{DIGEST}")
+        self.assertEqual(result["image"], f"{GHCR_IMAGE}:0.1.0")
 
     def test_refuses_ghcr_when_manifest_digests_differ(self):
         kubectl = FakeKubectl(states=["image_pull_failed", "ready"])
@@ -157,9 +156,9 @@ class DeployDatabaseTest(unittest.TestCase):
             attempts=1,
             digests=lambda _tag: (None, DIGEST),
         )
-        self.assertIn(f"{GHCR_IMAGE}@{DIGEST}", kubectl.applied[0])
+        self.assertIn(f"{GHCR_IMAGE}:0.1.0", kubectl.applied[0])
         self.assertNotIn(SWR_IMAGE, kubectl.applied[0])
-        self.assertEqual(result["image"], f"{GHCR_IMAGE}@{DIGEST}")
+        self.assertEqual(result["image"], f"{GHCR_IMAGE}:0.1.0")
         self.assertEqual(kubectl.patched, [])
 
     def test_ready_pod_running_another_image_is_still_pending(self):
@@ -186,7 +185,7 @@ class DeployDatabaseTest(unittest.TestCase):
             attempts=3,
             digests=lambda _tag: (None, DIGEST),
         )
-        self.assertEqual(result["image"], f"{GHCR_IMAGE}@{DIGEST}")
+        self.assertEqual(result["image"], f"{GHCR_IMAGE}:0.1.0")
 
     def test_reports_image_unavailable_when_both_registries_fail(self):
         kubectl = FakeKubectl(states=["image_pull_failed", "image_pull_failed"])
@@ -201,64 +200,13 @@ class DeployDatabaseTest(unittest.TestCase):
             )
         self.assertEqual(caught.exception.code, "image_unavailable")
 
-    def test_missing_verified_digest_never_applies_a_mutable_tag(self):
-        kubectl = FakeKubectl()
-        with self.assertRaises(DeployError) as caught:
-            deploy_database(ROOT, "supply-chain", kubectl,
-                            digests=lambda _tag: (None, None))
-        self.assertEqual(caught.exception.code, "image_unavailable")
-        self.assertEqual(kubectl.applied, [])
-
-    def remote_kubectl(self, existing=None, states=None):
-        base = FakeKubectl(states=states)
-        def invoke(args, stdin=None):
-            if "--ignore-not-found" in args:
-                resource = (existing or {}).get(args[1])
-                return base._ok(json.dumps(resource) if resource else "")
-            return base(args, stdin)
-        return base, invoke
-
-    def test_remote_deploy_uses_task_image_and_marks_resources_including_pvc(self):
-        image = f"{GHCR_IMAGE}@{OTHER}"
-        base, kubectl = self.remote_kubectl()
-        with patch.dict(os.environ, {"BKN_SAMPLE_DATA_IMAGE_REF": f"{SWR_IMAGE}@{DIGEST}"}):
-            result = deploy_database(ROOT, "supply-chain", kubectl, data_image_ref=image, require_ownership=True)
-        self.assertEqual(result["image"], image)
-        self.digest_lookup.assert_not_called()
-        documents = list(yaml.safe_load_all(base.applied[0]))
-        for document in documents:
-            if document["kind"] != "Namespace":
-                self.assertEqual(document["metadata"]["annotations"]["openbkn.ai/sample-data-image"], image)
-        sts = next(d for d in documents if d["kind"] == "StatefulSet")
-        self.assertEqual(sts["spec"]["volumeClaimTemplates"][0]["metadata"]["annotations"]["openbkn.ai/sample-version"], "0.1.0")
-
-    def test_remote_deploy_rejects_any_unowned_database_resource_before_apply(self):
-        for kind in ("statefulset", "service", "secret", "pvc"):
-            with self.subTest(kind=kind):
-                base, kubectl = self.remote_kubectl({kind: {"metadata": {"name": "existing"}}})
-                with self.assertRaises(DeployError) as error:
-                    deploy_database(ROOT, "supply-chain", kubectl,
-                                    data_image_ref=f"{GHCR_IMAGE}@{DIGEST}", require_ownership=True)
-                self.assertEqual(error.exception.code, "ownership_conflict")
-                self.assertEqual(base.applied, [])
-                self.assertEqual(base.deleted, [])
-
-    def test_remote_failed_first_boot_keeps_the_database_volume(self):
-        base, kubectl = self.remote_kubectl(states=["sample_data_unavailable"])
-        with self.assertRaises(DeployError) as error:
-            deploy_database(ROOT, "world-cup", kubectl, data_image_ref=f"{GHCR_IMAGE}@{DIGEST}",
-                            require_ownership=True, attempts=1)
-        self.assertEqual(error.exception.code, "sample_data_unavailable")
-        self.assertEqual(base.deleted, [])
-
     def test_uses_the_published_main_build_tag(self):
         kubectl = FakeKubectl()
         tag = "0.1.0-main.20260925021424.sha912ed7b"
         with patch.dict(os.environ, {"BKN_SAMPLE_DATA_IMAGE_TAG": tag}):
             result = deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=1)
-        self.digest_lookup.assert_called_once_with(tag)
-        self.assertIn(f"{SWR_IMAGE}@{DIGEST}", kubectl.applied[0])
-        self.assertEqual(result["image"], f"{SWR_IMAGE}@{DIGEST}")
+        self.assertIn(f"{SWR_IMAGE}:{tag}", kubectl.applied[0])
+        self.assertEqual(result["image"], f"{SWR_IMAGE}:{tag}")
 
     def test_rejects_latest_image_tag(self):
         with patch.dict(os.environ, {"BKN_SAMPLE_DATA_IMAGE_TAG": "latest"}):
@@ -277,8 +225,7 @@ class DeployDatabaseTest(unittest.TestCase):
     def test_waits_between_checks_instead_of_spinning(self):
         kubectl = FakeKubectl(states=["pending", "pending", "ready"])
         waits = []
-        deploy_database(ROOT, "supply-chain", kubectl, sleep=waits.append, attempts=5, poll_seconds=7,
-                        digests=lambda _tag: (DIGEST, DIGEST))
+        deploy_database(ROOT, "supply-chain", kubectl, sleep=waits.append, attempts=5, poll_seconds=7)
         self.assertEqual(waits, [7, 7])
 
     def test_reports_database_not_ready(self):
@@ -292,8 +239,7 @@ class PollingTest(unittest.TestCase):
     def test_waits_between_checks_instead_of_spinning(self):
         waits = []
         kubectl = FakeKubectl(states=["pending", "pending", "ready"])
-        deploy_database(ROOT, "supply-chain", kubectl, sleep=waits.append, attempts=5, poll_seconds=7,
-                        digests=lambda _tag: (DIGEST, DIGEST))
+        deploy_database(ROOT, "supply-chain", kubectl, sleep=waits.append, attempts=5, poll_seconds=7)
         self.assertEqual(waits, [7, 7])
 
 

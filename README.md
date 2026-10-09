@@ -44,7 +44,3 @@ samples/<slug>/
 Add a new sample under `samples/<slug>/` with README (EN + `_cn`), data, tools, docs, and update the table above.
 
 Sample changes must follow the [PR review rules](docs/review/sample-pr-review-rules.md). Include the PR template evidence; publication requires verification of the exact candidate artifacts.
-
-## Dynamic sample publication (draft)
-
-The [publication protocol draft](protocol/draft/README.md) defines independent sample versions, release notes and content references. See the [cross-repository implementation plan](protocol/draft/implementation-plan.md). These examples are not installable releases; platform integration is pending.
