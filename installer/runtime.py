@@ -50,7 +50,10 @@ def caller_env(authorization: str | None) -> dict:
     token = authorization.removeprefix("Bearer ").strip()
     if not token:
         return {}
-    return {"BKN_TOKEN": token}
+    # Preserve the executor environment (especially PATH) when passing the
+    # bearer token to hooks and the CLI.  Replacing it outright makes
+    # subprocess hooks unable to resolve `openbkn` on local/offline installs.
+    return {**os.environ, "BKN_TOKEN": token}
 
 
 def _command_failure(completed) -> str:

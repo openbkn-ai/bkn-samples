@@ -6,6 +6,7 @@ catalog entry as the retry identity and owns the temporary directory lifetime.
 
 import hashlib
 import json
+import os
 import re
 import tarfile
 from pathlib import Path
@@ -216,6 +217,11 @@ def extract_package(archive, sample_dir, package):
                     require(chunk, "truncated archive member")
                     output.write(chunk)
                     remaining -= len(chunk)
+            # Reproducible candidate archives use the Unix epoch for member
+            # mtimes.  Some package builders (notably zipfile) reject dates
+            # before 1980, so normalize the private worktree timestamp without
+            # changing the archived bytes or their digest.
+            os.utime(target, (315532800, 315532800))
             target.chmod(0o700 if member.mode & 0o111 else 0o600)
 
 
