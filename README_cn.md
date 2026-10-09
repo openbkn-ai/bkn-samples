@@ -42,3 +42,5 @@ samples/<slug>/
 ## 贡献
 
 在 `samples/<slug>/` 下新增 sample，提供 README（中/英）、数据、工具、文档，并更新上表。
+
+样例更新须遵循 [PR 审查规则](docs/review/sample-pr-review-rules_cn.md)，按 PR 模板说明变更与验证证据；正式发布须验收同一份固定候选制品。

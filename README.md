@@ -42,3 +42,5 @@ samples/<slug>/
 ## Contributing
 
 Add a new sample under `samples/<slug>/` with README (EN + `_cn`), data, tools, docs, and update the table above.
+
+Sample changes must follow the [PR review rules](docs/review/sample-pr-review-rules.md). Include the PR template evidence; publication requires verification of the exact candidate artifacts.
