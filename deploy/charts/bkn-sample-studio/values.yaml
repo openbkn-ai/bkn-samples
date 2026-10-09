@@ -1,12 +1,21 @@
 replicaCount: 1
 
+# Installation records and catalog cache must survive Pod replacement.
+persistence:
+  existingClaim: ""
+  storageClass: ""
+  size: 1Gi
+
 image:
   repository: ghcr.io/openbkn-ai/bkn-sample-studio
   tag: "__VERSION__"
+  digest: ""
   pullPolicy: IfNotPresent
 
 dataImage:
   tag: "__VERSION__"
+  # Administrator-controlled immutable reference; overrides tag discovery.
+  reference: ""
 
 service:
   port: 8080
@@ -18,6 +27,11 @@ ingress:
 
 safeURL: http://bkn-safe:3000
 baseURL: ""
+
+# Explicit platform compatibility facts; empty values keep remote installs unavailable.
+platform:
+  version: ""
+  capabilities: []
 
 resources:
   requests:

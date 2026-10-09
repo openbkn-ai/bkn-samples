@@ -1,3 +1,6 @@
+{{- if ne (toString .Values.replicaCount) "1" }}
+{{- fail "bkn-sample-studio currently requires replicaCount=1; installation locks are process-local" }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,6 +8,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: bkn-sample-studio
@@ -16,7 +21,7 @@ spec:
       serviceAccountName: bkn-sample-studio
       containers:
         - name: studio
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}{{ if .Values.image.digest }}@{{ .Values.image.digest }}{{ else }}:{{ .Values.image.tag }}{{ end }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8080
@@ -31,6 +36,14 @@ spec:
               value: /opt/bkn-samples/manifest-index.json
             - name: BKN_SAMPLE_DATA_IMAGE_TAG
               value: {{ .Values.dataImage.tag | quote }}
+            - name: BKN_SAMPLE_DATA_IMAGE_REF
+              value: {{ .Values.dataImage.reference | quote }}
+            - name: BKN_SAMPLE_PLATFORM_VERSION
+              value: {{ .Values.platform.version | quote }}
+            - name: BKN_SAMPLE_PLATFORM_CAPABILITIES
+              value: {{ join "," .Values.platform.capabilities | quote }}
+            - name: BKN_SAMPLE_EXECUTOR_IMAGE_REF
+              value: "{{ .Values.image.repository }}{{ if .Values.image.digest }}@{{ .Values.image.digest }}{{ else }}:{{ .Values.image.tag }}{{ end }}"
           readinessProbe:
             httpGet:
               path: /healthz
@@ -42,4 +55,5 @@ spec:
               mountPath: /var/lib/bkn-samples
       volumes:
         - name: state
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: {{ default "bkn-sample-studio-state" .Values.persistence.existingClaim | quote }}

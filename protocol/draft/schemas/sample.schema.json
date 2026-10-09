@@ -1,0 +1,488 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.openbkn.invalid/draft/sample.schema.json",
+  "title": "OpenBKN sample draft",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "samples.openbkn.ai/v1beta1"
+    },
+    "kind": {
+      "const": "Sample"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sampleId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "licenseNote": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "sampleId",
+        "version",
+        "displayName",
+        "summary",
+        "authors",
+        "licenseNote"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "release": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "publishedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "defaultLocale": {
+              "type": "string",
+              "minLength": 1
+            },
+            "releaseNotes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "locale": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "path": {
+                    "type": "string",
+                    "pattern": "^[^/].*"
+                  },
+                  "digest": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "locale",
+                  "path",
+                  "digest"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "publishedAt",
+            "defaultLocale",
+            "releaseNotes"
+          ]
+        },
+        "requires": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "platformVersion": {
+              "type": "string",
+              "minLength": 1
+            },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "architectures": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "amd64",
+                  "arm64"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "requiredExtensions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0,
+              "uniqueItems": true,
+              "maxItems": 0
+            },
+            "installationProfiles": {
+              "type": "array",
+              "items": {
+                "const": "openbkn.ai/sample-install.v1"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "platformVersion",
+            "capabilities",
+            "architectures",
+            "requiredExtensions",
+            "installationProfiles"
+          ]
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+              },
+              "type": {
+                "enum": [
+                  "archive",
+                  "oci-image",
+                  "dataset"
+                ]
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "locations": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              },
+              "sizeBytes": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "id",
+              "type",
+              "digest",
+              "locations"
+            ]
+          },
+          "minItems": 1
+        },
+        "experience": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string",
+                "minLength": 1
+              },
+              "questions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "contentId": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+              }
+            },
+            "required": [
+              "type",
+              "contentId",
+              "questions"
+            ]
+          },
+          "minItems": 0
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}/[a-zA-Z0-9._-]+$"
+          }
+        },
+        "contents": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "knowledgeNetworks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "artifactId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  },
+                  "directory": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "format": {
+                    "type": "string",
+                    "description": "首期支持原生 BKN 目录和既有 KN 导出 JSON。新增格式经实际需求评审后修订协议。",
+                    "enum": [
+                      "bkn-directory",
+                      "kn-json"
+                    ]
+                  },
+                  "entrypoint": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "相对 directory 的包内入口；不得包含目录穿越或越界链接。"
+                  },
+                  "contentId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  }
+                },
+                "required": [
+                  "contentId",
+                  "artifactId",
+                  "directory",
+                  "format",
+                  "entrypoint"
+                ],
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "format": {
+                          "const": "bkn-directory"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "entrypoint": {
+                          "const": "network.bkn"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "format": {
+                          "const": "kn-json"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "entrypoint": {
+                          "pattern": "^[^/\\\\]+\\.json$"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "minItems": 1
+            },
+            "functionPackages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "artifactId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  },
+                  "directory": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "contentId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  }
+                },
+                "required": [
+                  "contentId",
+                  "artifactId",
+                  "directory"
+                ]
+              },
+              "minItems": 0
+            },
+            "skillPackages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "artifactId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  },
+                  "directory": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "contentId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  }
+                },
+                "required": [
+                  "contentId",
+                  "artifactId",
+                  "directory"
+                ]
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "knowledgeNetworks",
+            "functionPackages",
+            "skillPackages"
+          ]
+        },
+        "delivery": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "profile": {
+              "const": "openbkn.ai/sample-install.v1"
+            },
+            "dataDependencies": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  },
+                  "engine": {
+                    "const": "mariadb"
+                  },
+                  "databaseName": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "artifactId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  },
+                  "expectedTables": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "engine",
+                  "databaseName",
+                  "artifactId",
+                  "expectedTables"
+                ]
+              },
+              "minItems": 0
+            },
+            "bindings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "objectTypeId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dataDependencyId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  },
+                  "tableName": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "contentId": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+                  }
+                },
+                "required": [
+                  "contentId",
+                  "objectTypeId",
+                  "dataDependencyId",
+                  "tableName"
+                ]
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "profile",
+            "dataDependencies",
+            "bindings"
+          ]
+        }
+      },
+      "required": [
+        "release",
+        "requires",
+        "artifacts",
+        "experience",
+        "contents",
+        "delivery"
+      ]
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}/[a-zA-Z0-9._-]+$"
+      }
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "$comment": "Publication metadata only. Native BKN definitions must be validated by the pinned OpenBKN BKN parser and validator; this Schema does not define business objects or execution jobs."
+}

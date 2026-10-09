@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 
 from installer.control_plane import ControlError, create_installation, retry_installation
-from installer.deploy_database import NAMESPACE, DeployError, _sample, deploy_database
+from installer.deploy_database import NAMESPACE, DeployError, _sample, configured_image_ref, deploy_database
 from installer.studio_api import ApiError, _installation_id, _read_state, _write_failed, installation_view
 
 
@@ -89,7 +89,8 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
         hook_env["BKN_SAMPLE_OUTPUT"] = str(output)
         if state_dir is not None:
             shared = state_dir / payload["sample"]
-            shared.mkdir(parents=True, exist_ok=True)
+            shared.mkdir(parents=True, exist_ok=True, mode=0o700)
+            shared.chmod(0o700)
             hook_env["BKN_SAMPLE_CONFIG"] = str(shared / "config.yaml")
         completed = run([str(script)], hook_env)
         if output.is_file():
@@ -97,7 +98,7 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
                 result = json.loads(output.read_text(encoding="utf-8"))
             except json.JSONDecodeError:
                 result = None
-            if isinstance(result, dict) and (completed.returncode == 0 or result.get("code")):
+            if isinstance(result, dict) and (completed.returncode == 0 or result.get("ok") is False or result.get("code")):
                 return result
         if completed.returncode != 0 or not output.is_file():
             return {"ok": False, "message": "platform hook failed"}
@@ -133,14 +134,22 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
     return installation_view(record, actor_role)
 
 
-def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None) -> dict:
+def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None, accepted: bool = False, data_image_ref: str | None = None) -> dict:
     current = _read_state(state_dir, sample)
     if not current or _installation_id(current) != installation_id:
         raise ApiError(404, "install_failed", "installation not found")
     if actor_role != "admin":
         raise ApiError(403, "forbidden", "an administrator must install the sample")
+    if current.get("version") != version:
+        raise ApiError(409, "version_changed", "retry requires the original installed artifacts")
+    if current.get("status") != ("installing" if accepted else "failed"):
+        raise ApiError(409, "already_installed" if current.get("status") == "installed" else "already_installing",
+                       "only a failed installation can be retried")
     cli_env = caller_env(authorization)
     try:
+        expected_image = data_image_ref if data_image_ref is not None else configured_image_ref()
+        if "dataImageRef" in current and current["dataImageRef"] != expected_image:
+            raise ApiError(409, "version_changed", "retry requires the original configured data image")
         deployed = deploy(sample)
         database = database_config(deployed, kubectl)
         expected_tables, knowledge_network, components = sample_contract(root, sample)
@@ -155,6 +164,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             expected_tables=expected_tables,
             knowledge_network=knowledge_network,
             components=components,
+            accepted=accepted,
         )
     except (DeployError, ControlError) as exc:
         code = getattr(exc, "code", "install_failed")
