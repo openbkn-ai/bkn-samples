@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import json
 import re
+import tempfile
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
@@ -32,7 +34,7 @@ def role_from_safe(me_status: int, permissions: dict | None) -> str:
 
 
 class StudioApp:
-    def __init__(self, *, catalog, create, retry, get, authenticate, notes=None, history=None, refresh=None, create_selected=None):
+    def __init__(self, *, catalog, create, retry, get, authenticate, notes=None, history=None, refresh=None, create_selected=None, import_package=None):
         self.catalog = catalog
         self.create = create
         self.retry = retry
@@ -42,6 +44,7 @@ class StudioApp:
         self.history = history
         self.refresh = refresh
         self.create_selected = create_selected
+        self.import_package = import_package
 
 
 def _empty_body(body: bytes) -> bool:
@@ -148,9 +151,51 @@ class _Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(encoded)
             return
-        length = int(self.headers.get("Content-Length") or "0")
+        try:
+            length = int(self.headers.get("Content-Length") or "0")
+        except ValueError:
+            length = -1
+        importing = self.command == "POST" and self.path == "/api/studio/samples/import"
+        if importing:
+            self._import(length)
+            return
+        if not 0 <= length <= 64 * 1024:
+            self._reply(413, {"code": "invalid_package", "message": "request body exceeds size limit"})
+            return
         body = self.rfile.read(length) if length else b""
         status, payload = dispatch(self.app, self.command, path, self.headers.get("Authorization"), body)
+        self._reply(status, payload)
+
+    def _import(self, length):
+        try:
+            role = self.app.authenticate(self.headers.get("Authorization"))
+            if role != "admin":
+                raise ApiError(403, "forbidden", "an administrator must import the sample")
+            if not self.app.import_package:
+                raise ApiError(404, "import_unavailable", "offline import is unavailable")
+            if self.headers.get("Transfer-Encoding") or not 0 < length <= 128 * 1024 * 1024:
+                raise ApiError(413, "invalid_package", "package must be at most 128 MiB")
+            if self.headers.get("Content-Type", "").split(";")[0] != "application/gzip":
+                raise ApiError(415, "invalid_package", "expected application/gzip")
+            self.connection.settimeout(60)
+            with tempfile.TemporaryDirectory() as temporary:
+                archive = Path(temporary) / "package.tar.gz"
+                with archive.open("xb") as output:
+                    remaining = length
+                    while remaining:
+                        chunk = self.rfile.read(min(1024 * 1024, remaining))
+                        if not chunk:
+                            raise ApiError(400, "invalid_package", "incomplete package upload")
+                        output.write(chunk)
+                        remaining -= len(chunk)
+                payload = self.app.import_package(archive, role)
+            self._reply(201, payload)
+        except ApiError as error:
+            self._reply(error.status, {"code": error.code, "message": error.message})
+        except (OSError, ValueError):
+            self._reply(400, {"code": "invalid_package", "message": "package upload failed"})
+
+    def _reply(self, status, payload):
         encoded = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
@@ -177,7 +222,7 @@ def authenticate_bearer(fetch, authorization: str | None) -> str:
     return role_from_safe(me_status, permissions if isinstance(permissions, dict) else None)
 
 
-def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate, release_notes=None, installation_history=None, refresh_catalog=None, create_selected=None) -> StudioApp:
+def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate, release_notes=None, installation_history=None, refresh_catalog=None, create_selected=None, import_package=None) -> StudioApp:
     return StudioApp(
         catalog=list_samples,
         create=create_installation,
@@ -188,6 +233,7 @@ def build_app(*, list_samples, create_installation, retry_installation, get_inst
         history=installation_history,
         refresh=refresh_catalog,
         create_selected=create_selected,
+        import_package=import_package,
     )
 
 
@@ -210,6 +256,7 @@ def main() -> None:
     from installer.deploy_database import deploy_database
     from installer.remote_installation import RemoteInstallation
     from installer.remote_catalog import merge_remote
+    from installer.offline_bundle import OfflinePackages
 
     root = Path(os.environ.get("BKN_SAMPLES_ROOT", "/opt/bkn-samples"))
     state_dir = Path(os.environ.get("BKN_SAMPLE_STATE_DIR", "/var/lib/bkn-samples/state"))
@@ -224,6 +271,7 @@ def main() -> None:
                                 {"aarch64": "arm64", "arm64": "arm64", "x86_64": "amd64"}.get(platform.machine(), platform.machine()),
                                 os.environ.get("BKN_SAMPLE_PLATFORM_CAPABILITIES", "").split(","),
                                 os.environ.get("BKN_SAMPLE_EXECUTOR_IMAGE_REF", ""))
+    offline = OfflinePackages(root, state_dir, remote)
 
     def fetch(path: str, authorization: str):
         request = Request(safe_url + path, headers={"Authorization": authorization})
@@ -239,6 +287,7 @@ def main() -> None:
             actor_role=role,
         )
         merge_remote(result, source.entries(), state_dir, role, remote)
+        offline.merge(result, role)
         result["sourceRefresh"] = source.metadata()
         return result
 
@@ -349,6 +398,17 @@ def main() -> None:
         bundled = next((i for i in merge_catalog(version, image, repo)["samples"] if i["name"] == sample), None)
         if bundled and requested_version == version and requested_digest == bundled.get("manifestSha256"):
             return create(sample, role, authorization)
+        offline_release = offline.find(sample)
+        if offline_release and offline_release["version"] == requested_version:
+            if requested_digest != offline_release["manifestSha256"]:
+                raise ApiError(409, "version_changed", "sample version or manifest changed; confirm again")
+            runner.register(sample)
+            return runner.submit(sample, lambda: offline.prepare(offline_release),
+                                 lambda: offline.execute(offline_release, lambda bundle_root, fixed_version, fixed_image, retry: install_sample(
+                                     sample=sample, actor_role=role, state_dir=state_dir, root=bundle_root,
+                                     version=fixed_version, deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
+                                         data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
+                                     run=process_run, authorization=authorization)))
         entry = next((e for e in source.entries() if e["sampleId"] == sample and e["version"] == requested_version), None)
         if not entry or requested_digest != entry["manifest"]["digest"].removeprefix("sha256:"):
             raise ApiError(409, "version_changed", "sample version or manifest changed; confirm again")
@@ -359,6 +419,17 @@ def main() -> None:
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
         current = _read_state(state_dir, sample) or {}
+        if current.get("offlineRelease"):
+            release = offline.find(sample)
+            if not release:
+                raise ApiError(409, "source_rejected", "offline package is unavailable")
+            runner.register(sample)
+            return runner.submit(sample, lambda: offline.prepare(release, retry=True),
+                                 lambda: offline.execute(release, lambda bundle_root, fixed_version, fixed_image, retry: install_sample(
+                                     sample=sample, actor_role=role, state_dir=state_dir, root=bundle_root,
+                                     version=fixed_version, deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
+                                         data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
+                                     run=process_run, authorization=authorization), retry=True))
         if current.get("remoteRelease"):
             fixed = current["remoteRelease"]["entry"]
             if any(e["sampleId"] == sample and e["version"] == fixed["version"] and e["releaseStatus"] == "withdrawn"
@@ -384,6 +455,7 @@ def main() -> None:
         release_notes=release_notes,
         refresh_catalog=refresh,
         create_selected=create_selected,
+        import_package=lambda archive, role: offline.import_package(archive, role),
         installation_history=lambda sample, role: list_sample_installations(
             sample=sample, state_dir=state_dir, actor_role=role),
     )
