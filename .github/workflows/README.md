@@ -40,3 +40,7 @@ plan 确定目标 SHA 后先发布 `sample-ai-review: pending`，防止同一提
 未关闭问题保存在评审正文的 `deepseek-sample-state` 状态块中，不依赖短期 artifact。plan 只接受 github-actions 或配置的审核 App 发布的状态；verify 每轮核实旧问题和新发现，只有有证据证明已修复或不成立才关闭。复核失败保留状态，不能批准。问题上限 20，超过时要求拆分，不静默丢弃。待确认项首轮最多两条，复评最多一条。
 
 现有 sample-contract CI 与发布工作流保持独立；AI 批准不能代替候选制品实际安装验收，不能自动触发合并或发布。
+
+## 启用验收
+
+用一个小型同仓 PR 验证：开启后应出现绑定 head SHA 的 pending 状态，完整审核后转为 success/failure/error。在不推新提交的情况下于顶层评论写 `/review`，确认同一 head 的状态重新进入 pending 并更新最终结果。记录运行链接、提交 SHA 和实际结论后，再启用 `sample-ai-review` 保护门槛。
