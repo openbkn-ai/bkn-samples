@@ -3,18 +3,8 @@
 set -eu
 sample_id="${BKN_SAMPLE_ID:-}"
 root="${BKN_SAMPLE_ROOT:-/opt/bkn-samples/samples}"
-case "$sample_id" in
-  supply-chain)
-    sample_dir="${root}/supply_ontology_hand"
-    ;;
-  world-cup)
-    sample_dir="${root}/world-cup"
-    ;;
-  *)
-    echo "BKN_SAMPLE_ID must be a sample shipped in this image" >&2
-    exit 1
-    ;;
-esac
+script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+init_hook="$(python3 "${script_dir}/select_sample_init.py" "$root" "$sample_id")"
 if [ -S /run/mysqld/mysqld.sock ]; then
   export MYSQL_UNIX_SOCKET=/run/mysqld/mysqld.sock
 else
@@ -27,13 +17,11 @@ export MYSQL_USER=root
 export MYSQL_PASSWORD="${MARIADB_ROOT_PASSWORD:-}"
 export MYSQL_DATABASE="${MYSQL_DATABASE:-${MARIADB_DATABASE:-}}"
 # Init runs as the mysql user. The default cache path is not writable by that user.
-if [ "$sample_id" = "world-cup" ]; then
-  cache_root="${TMPDIR:-/tmp}/bkn-samples/cache"
-  mkdir -p "${cache_root}/${sample_id}"
-  export BKN_SAMPLE_CACHE="${cache_root}/${sample_id}"
-fi
+cache_root="${TMPDIR:-/tmp}/bkn-samples/cache"
+mkdir -p "${cache_root}/${sample_id}"
+export BKN_SAMPLE_CACHE="${cache_root}/${sample_id}"
 if [ -z "${BKN_SAMPLE_VERSION:-}" ] && [ -f /opt/bkn-samples/VERSION ]; then
   BKN_SAMPLE_VERSION="$(tr -d '[:space:]' < /opt/bkn-samples/VERSION)"
   export BKN_SAMPLE_VERSION
 fi
-exec "${sample_dir}/db/init.sh"
+exec "${init_hook}"

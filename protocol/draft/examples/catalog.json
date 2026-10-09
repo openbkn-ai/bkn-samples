@@ -1,0 +1,104 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "SampleCatalog",
+  "metadata": {
+    "sourceId": "openbkn-official",
+    "revision": "catalog-000042",
+    "sequence": 42,
+    "channel": "stable",
+    "publishedAt": "2026-10-09T00:01:00Z",
+    "expiresAt": "2026-10-16T00:01:00Z"
+  },
+  "spec": {
+    "entries": [
+      {
+        "sampleId": "supply-chain",
+        "version": "1.0.0",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "publishedAt": "2026-10-08T12:00:00Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "供应链首次独立版本交付",
+          "documents": [
+            {
+              "locale": "zh-CN",
+              "url": "https://releases.openbkn.invalid/supply-chain/1.0.0/release-notes.zh-CN.md",
+              "digest": "sha256:9d0c27475dc8ab52f8540f5f6dd5ec20538da9886c71b78a221421f4c9aa66ad"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://releases.openbkn.invalid/supply-chain/1.0.0/sample.json",
+          "digest": "sha256:9e36b6aeb4f463ed67d80ee591c3fbbf1a83ae82ecca104ebb2f680648c6e033"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.2.1",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://releases.openbkn.invalid/supply-chain/1.0.0/verification.json",
+          "digest": "sha256:e608a6ffcff55eaa5a7de388990b6fb6243f49a00c89e7c03225fd8f19d5b023"
+        }
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "1.1.0",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "publishedAt": "2026-10-09T00:00:00Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "演示后续版本说明与版本选择",
+          "documents": [
+            {
+              "locale": "zh-CN",
+              "url": "https://releases.openbkn.invalid/supply-chain/1.1.0/release-notes.zh-CN.md",
+              "digest": "sha256:116f3d9b068689b1c1f94b272cfba22d6e71b3f7a086c475441f1e395f60bed4"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://releases.openbkn.invalid/supply-chain/1.1.0/sample.json",
+          "digest": "sha256:85c18fdcc58bf05ae62874307ce31c91750344f32b7151d1c26fad183e8a032b"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.2.1",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://releases.openbkn.invalid/supply-chain/1.1.0/verification.json",
+          "digest": "sha256:ed2d7d4fdc58b883df3fb25a28b97f7eb5e3f4e3b502421cbfff42dce9a26c4e"
+        }
+      }
+    ]
+  }
+}
