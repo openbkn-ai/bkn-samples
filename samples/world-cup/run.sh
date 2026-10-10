@@ -2,7 +2,7 @@
 # =============================================================================
 # world-cup · BKN Foundry end-to-end (single script):
 #
-#   Step 1  Download CSVs      : jfjelstul/worldcup → data/ (skips cached files)
+#   Step 1  Validate embedded CSVs : verify data/ against dataset.lock
 #   Step 2  Import to MySQL    : load CSVs via local mysql client (wc_* tables)
 #   Step 3  Vega scan          : create catalog via API + discover (wait)
 #   Step 4  Render BKN         : map table Resources → render worldcup-bkn
@@ -23,15 +23,14 @@
 # Common usage:
 #   ./run.sh                   # run all steps
 #   ./run.sh --from 3          # rerun from Vega scan onward (CSVs already in MySQL)
-#   ./run.sh --only 1          # only download CSVs
+#   ./run.sh --only 1          # only validate embedded CSVs
 #   ./run.sh --dry-run         # print plan only
 # =============================================================================
 set -euo pipefail
 [ "${WC_TRACE:-0}" = 1 ] && set -x || true
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-BKN_ARCHIVE="$SCRIPT_DIR/worldcup-bkn.tar"
-BKN_EXTRACT_DIR="$SCRIPT_DIR/.tmp/worldcup-bkn"
+BKN_EXTRACT_DIR="$SCRIPT_DIR/kn"
 RENDERED_DIR="$SCRIPT_DIR/.rendered-bkn-vega"
 MAPPING_TMP="$SCRIPT_DIR/.vega-bkn-mapping.json"
 VEGA_OPENAPI_SPEC="$SCRIPT_DIR/vega_sql_execute.openapi.json"
@@ -50,7 +49,7 @@ Options:
   --only N            Run only step N (1..6).
 
 Steps:
-  1  Download CSVs   — fetch 27 CSV files from jfjelstul/worldcup (skips cached)
+  1  Validate data   — verify 27 embedded CSV files against dataset.lock
   2  Import MySQL    — load CSVs via local mysql client → wc_* tables
   3  Vega scan       — create catalog via API + discover (wait)
   4  Render BKN      — map Resources → render worldcup-bkn
@@ -58,8 +57,6 @@ Steps:
   6  Upload toolbox  — toolbox create + tool upload <OpenAPI> + publish (idempotent; DO_TOOLBOX=0 disables)
 
 Env (see env.sample):
-  WORLDCUP_REF                    Git ref for jfjelstul/worldcup; default master.
-  SKIP_DOWNLOAD=0                 Set 1 to skip step 1 even if CSVs are missing.
   DB_HOST / DB_PORT / DB_NAME     MySQL coordinates (required for steps 2-3).
   DB_USER / DB_PASS               MySQL account used by the mysql client + Vega connector.
   DS_ID                           Existing datasource id; skip ds connect in step 2.
@@ -169,49 +166,20 @@ kn_id_from_rendered() {
 
 # ─── Step 1: Download CSVs ──────────────────────────────────────────────────
 step_1_download() {
-    echo "=== [1/6] Download CSVs ===" >&2
-
-    if [ "${SKIP_DOWNLOAD:-0}" = 1 ]; then
-        echo "  skipped (SKIP_DOWNLOAD=1)" >&2
-        return 0
-    fi
-
-    # shellcheck source=scripts/worldcup_dataset_stems.inc.sh
-    source "$SCRIPT_DIR/scripts/worldcup_dataset_stems.inc.sh"
-    local ref="${WORLDCUP_REF:-master}"
-    local base="https://raw.githubusercontent.com/jfjelstul/worldcup/${ref}/data-csv"
-    local missing=0
-
-    for stem in "${WORLD_CUP_DATASET_STEMS[@]}"; do
-        [ -s "$DATA_DIR/${stem}.csv" ] || { missing=1; break; }
-    done
-
-    if [ "$missing" = 0 ]; then
-        echo "  all ${#WORLD_CUP_DATASET_STEMS[@]} CSVs already cached in $DATA_DIR — skipping download" >&2
-        return 0
-    fi
-
+    echo "=== [1/6] Validate embedded CSVs ===" >&2
     if [ "$DRY_RUN" = 1 ]; then
-        echo "  plan: download ${#WORLD_CUP_DATASET_STEMS[@]} CSVs from jfjelstul/worldcup@${ref} → $DATA_DIR" >&2
+        echo "  plan: validate embedded CSVs in $DATA_DIR using dataset.lock" >&2
         return 0
     fi
-
-    mkdir -p "$DATA_DIR"
-    echo "  Downloading ${#WORLD_CUP_DATASET_STEMS[@]} CSVs from jfjelstul/worldcup@${ref}" >&2
-    for stem in "${WORLD_CUP_DATASET_STEMS[@]}"; do
-        local out="$DATA_DIR/${stem}.csv"
-        if [ -s "$out" ]; then
-            printf '    %-26s (cached)\n' "$stem" >&2
-            continue
-        fi
-        if ! curl -fsSL "${base}/${stem}.csv" -o "$out"; then
-            echo "  FAIL: $stem  (${base}/${stem}.csv)" >&2
-            rm -f "$out"
-            exit 1
-        fi
-        printf '    %-26s %s bytes\n' "$stem" "$(wc -c <"$out" | tr -d ' ')" >&2
-    done
-    echo "  Done. CC-BY-SA 4.0 © 2023 Joshua C. Fjelstul, Ph.D." >&2
+    SCRIPT_DIR="$SCRIPT_DIR" python3 - <<'PY2'
+import os, sys
+from pathlib import Path
+root = Path(os.environ["SCRIPT_DIR"])
+sys.path.insert(0, str(root))
+from db.load_worldcup import embedded_files, read_lock
+files = embedded_files(read_lock(root / "dataset.lock"))
+print(f"  verified {len(files)} embedded CSV files")
+PY2
 }
 
 # ─── Step 2: Import to MySQL ─────────────────────────────────────────────────
@@ -544,27 +512,10 @@ step_4_render_bkn() {
 }
 
 _extract_bkn_archive() {
-    [ -f "$BKN_ARCHIVE" ] || {
-        echo "Error: BKN archive not found at $BKN_ARCHIVE." >&2
-        exit 1
-    }
-    if [ -f "$BKN_EXTRACT_DIR/network.bkn" ] && \
-       [ "$BKN_EXTRACT_DIR/network.bkn" -nt "$BKN_ARCHIVE" ]; then
-        echo "  reusing extracted BKN tree at $BKN_EXTRACT_DIR" >&2
-        return 0
-    fi
-    rm -rf "$BKN_EXTRACT_DIR"
-    mkdir -p "$(dirname "$BKN_EXTRACT_DIR")"
-    tar xf "$BKN_ARCHIVE" -C "$(dirname "$BKN_EXTRACT_DIR")"
-    # The archive was packed on macOS and carries AppleDouble (._*) sidecar
-    # files; they match the *.bkn glob and fail bkn validate ("must have YAML
-    # frontmatter"). Purge them.
-    find "$BKN_EXTRACT_DIR" -name '._*' -delete 2>/dev/null || true
     [ -f "$BKN_EXTRACT_DIR/network.bkn" ] || {
-        echo "Error: extracted tree missing network.bkn (expected $BKN_EXTRACT_DIR/network.bkn)." >&2
+        echo "Error: BKN directory missing network.bkn at $BKN_EXTRACT_DIR." >&2
         exit 1
     }
-    echo "  extracted BKN tree → $BKN_EXTRACT_DIR" >&2
 }
 
 # ─── Step 5: Push BKN ───────────────────────────────────────────────────────

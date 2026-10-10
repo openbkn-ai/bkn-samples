@@ -4,6 +4,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -62,8 +63,17 @@ class WorldCupLoadTest(unittest.TestCase):
             os.environ["MYSQL_DATABASE"] = "worldcup"
             os.environ.pop("MYSQL_USER", None)
             try:
-                with self.assertRaises(SystemExit) as caught:
-                    LOAD.load_worldcup(opener=lambda *_args, **_kwargs: _Body())
+                # The release now embeds its locked CSVs. Force this regression
+                # through the legacy downloader so it still covers bad bytes.
+                with patch.object(
+                    LOAD,
+                    "embedded_files",
+                    side_effect=lambda lock: LOAD.fetch_locked_files(
+                        lock, Path(cache), opener=lambda *_args, **_kwargs: _Body()
+                    ),
+                ):
+                    with self.assertRaises(SystemExit) as caught:
+                        LOAD.load_worldcup()
             finally:
                 if previous is None:
                     os.environ.pop("BKN_SAMPLE_CACHE", None)
