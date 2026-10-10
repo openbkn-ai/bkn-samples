@@ -14,6 +14,7 @@ from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from jsonschema import Draft202012Validator, FormatChecker
+import yaml
 
 from installer.catalog_source import object_pairs, pinned_url, read_url
 from installer.contract import load_sample, validate_document
@@ -24,7 +25,24 @@ MAX_FILE = 128 * 1024 * 1024
 MAX_MEMBERS = 10000
 PROFILE = "openbkn.ai/sample-install.v1"
 CAPABILITIES = {"vega.catalog", "knowledge-network.import.kn-json",
+                "knowledge-network.import.bkn-directory",
                 "execution.function", "execution.skill"}
+
+
+class UniqueLoader(yaml.SafeLoader):
+    pass
+
+
+def _mapping(loader, node):
+    result = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node)
+        require(key not in result, "duplicate BKN frontmatter key")
+        result[key] = loader.construct_object(value_node)
+    return result
+
+
+UniqueLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _mapping)
 
 
 def require(condition, message):
@@ -106,7 +124,8 @@ def load_release(entry, schema_path, platform_version, architecture, capabilitie
     require(len(dependencies) == 1 and dependencies[0]["artifactId"] == image["id"],
             "this profile requires one database dependency")
     networks = spec["contents"]["knowledgeNetworks"]
-    require(len(networks) == 1 and networks[0]["format"] == "kn-json", "this runtime requires one native KN JSON")
+    require(len(networks) == 1 and networks[0]["format"] in {"kn-json", "bkn-directory"},
+            "this runtime requires one native KN JSON or BKN directory")
     contents = [c for group in spec["contents"].values() for c in group]
     require(len({c["contentId"] for c in contents}) == len(contents), "duplicate content identity")
     for content in contents:
@@ -241,13 +260,43 @@ def validate_package(sample_dir, release):
             if "entrypoint" in content:
                 require((directory / safe_path(content["entrypoint"])).is_file(), "package entrypoint is missing")
     network = sample["spec"]["contents"]["knowledgeNetworks"][0]
-    path = sample_dir / safe_path(network["directory"]) / safe_path(network["entrypoint"])
-    model = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=object_pairs)
-    require(isinstance(model, dict) and model.get("id") == document["spec"]["knowledgeNetwork"]["id"],
-            "native KN identity differs from installation contract")
-    objects = model.get("object_types")
-    require(isinstance(objects, list) and all(isinstance(o, dict) for o in objects), "invalid native KN object types")
-    object_ids = {o.get("id") for o in objects}
+    network_root = sample_dir / safe_path(network["directory"])
+    path = network_root / safe_path(network["entrypoint"])
+    if network["format"] == "kn-json":
+        model = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=object_pairs)
+        require(isinstance(model, dict) and model.get("id") == document["spec"]["knowledgeNetwork"]["id"],
+                "native KN identity differs from installation contract")
+        objects = model.get("object_types")
+        require(isinstance(objects, list) and all(isinstance(o, dict) for o in objects),
+                "invalid native KN object types")
+        object_ids = {o.get("id") for o in objects}
+    else:
+        require(network["entrypoint"] == "network.bkn" and path.is_file(),
+                "BKN directory must contain network.bkn")
+        text = path.read_text(encoding="utf-8")
+        require(text.startswith("---\n"), "BKN network.bkn is missing frontmatter")
+        _, _, frontmatter = text.partition("---\n")
+        raw, separator, _ = frontmatter.partition("\n---")
+        require(separator, "BKN network.bkn has an invalid frontmatter block")
+        metadata = yaml.load(raw, Loader=UniqueLoader)
+        require(isinstance(metadata, dict) and metadata.get("type") == "knowledge_network"
+                and metadata.get("id") == document["spec"]["knowledgeNetwork"]["id"],
+                "BKN network identity differs from installation contract")
+        object_dir = network_root / "object_types"
+        object_files = sorted(object_dir.glob("*.bkn"))
+        require(object_files, "BKN directory has no object types")
+        object_ids = set()
+        for object_file in object_files:
+            object_text = object_file.read_text(encoding="utf-8")
+            require(object_text.startswith("---\n"), "BKN object type is missing frontmatter")
+            _, _, object_frontmatter = object_text.partition("---\n")
+            object_raw, object_separator, _ = object_frontmatter.partition("\n---")
+            require(object_separator, "BKN object type has an invalid frontmatter block")
+            object_metadata = yaml.load(object_raw, Loader=UniqueLoader)
+            require(isinstance(object_metadata, dict) and object_metadata.get("type") == "object_type"
+                    and isinstance(object_metadata.get("id"), str),
+                    "BKN object type identity is invalid")
+            object_ids.add(object_metadata["id"])
     for binding in sample["spec"]["delivery"]["bindings"]:
         require(binding["contentId"] == network["contentId"]
                 and binding["dataDependencyId"] == dependency["id"] and binding["objectTypeId"] in object_ids,
