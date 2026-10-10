@@ -309,14 +309,20 @@ def verdict():
     if current["draft"] or current["head"]["sha"] != snapshot["head"] or current["base"]["sha"] != snapshot["base"]:
         print("PR changed during review; discarded stale verdict.")
         return 1
-    payload = {"commit_id": snapshot["head"], "event": action, "body": body}
+    # Use the same review command as the other repositories.  The head was
+    # checked immediately above, so gh pr review is pinned to this round.
     try:
-        gh("api", "--method", "POST", f"repos/{repo}/pulls/{pr}/reviews", payload=payload)
+        event = {"APPROVE": "--approve", "REQUEST_CHANGES": "--request-changes",
+                 "COMMENT": "--comment"}[action]
+        subprocess.run(["gh", "pr", "review", str(pr), event, "--body-file", "verdict.md"], check=True)
     except subprocess.CalledProcessError:
         if action != "APPROVE":
             raise
-        gh("api", "--method", "POST", f"repos/{repo}/issues/{pr}/comments",
-           payload={"body": body + "\n\nGitHub 未允许本身份批准，已改贴评论；没有 APPROVED 状态。"})
+        print("::warning::GitHub rejected APPROVE; posting a visible comment without approval.")
+        subprocess.run(
+            ["gh", "pr", "comment", str(pr), "--body-file", "verdict.md"],
+            check=True,
+        )
     decision = "success" if complete and not confirmed else "failure" if complete else "error"
     output("decision", decision)
     return 0 if decision == "success" else 1
