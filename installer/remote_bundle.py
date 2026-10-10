@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import tarfile
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -126,6 +127,8 @@ def load_release(entry, schema_path, platform_version, architecture, capabilitie
     networks = spec["contents"]["knowledgeNetworks"]
     require(len(networks) == 1 and networks[0]["format"] in {"kn-json", "bkn-directory"},
             "this runtime requires one native KN JSON or BKN directory")
+    require("knowledge-network.import." + networks[0]["format"] in spec["requires"]["capabilities"],
+            "native format capability must be declared")
     contents = [c for group in spec["contents"].values() for c in group]
     require(len({c["contentId"] for c in contents}) == len(contents), "duplicate content identity")
     for content in contents:
@@ -273,6 +276,14 @@ def validate_package(sample_dir, release):
     else:
         require(network["entrypoint"] == "network.bkn" and path.is_file(),
                 "BKN directory must contain network.bkn")
+        # The installed SDK is part of the fixed executor. Use its native
+        # validator for model semantics; frontmatter below only binds identities.
+        result = subprocess.run(["openbkn", "--json", "bkn", "validate", str(network_root)],
+                                capture_output=True, text=True, timeout=60, check=False)
+        require(result.returncode == 0, "native BKN validation failed")
+        validation = json.loads(result.stdout, object_pairs_hook=object_pairs)
+        require(isinstance(validation, dict) and validation.get("valid") is True,
+                "native BKN validation failed")
         text = path.read_text(encoding="utf-8")
         require(text.startswith("---\n"), "BKN network.bkn is missing frontmatter")
         _, _, frontmatter = text.partition("---\n")
@@ -294,7 +305,8 @@ def validate_package(sample_dir, release):
             require(object_separator, "BKN object type has an invalid frontmatter block")
             object_metadata = yaml.load(object_raw, Loader=UniqueLoader)
             require(isinstance(object_metadata, dict) and object_metadata.get("type") == "object_type"
-                    and isinstance(object_metadata.get("id"), str),
+                    and isinstance(object_metadata.get("id"), str) and object_metadata["id"]
+                    and object_metadata["id"] not in object_ids,
                     "BKN object type identity is invalid")
             object_ids.add(object_metadata["id"])
     for binding in sample["spec"]["delivery"]["bindings"]:
