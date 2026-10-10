@@ -179,6 +179,16 @@ jobs:
       - name: Collect blockers
         id: collect
         run: python3 .github/scripts/deepseek_review.py collect
+      - name: Write empty verification result
+        if: steps.collect.outputs.count == '0'
+        env:
+          REVIEW_HEAD: ${{ needs.plan.outputs.head }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          Path("review-data/verified.json").write_text(json.dumps({"head": os.environ["REVIEW_HEAD"], "verdicts": []}) + "\n", encoding="utf-8")
+          PY
       - name: Fetch objects for independent verification
         if: steps.collect.outputs.count != '0'
         env:
