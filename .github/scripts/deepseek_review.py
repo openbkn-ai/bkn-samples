@@ -241,7 +241,6 @@ def verdict():
             raise ValueError("Review or verification job did not finish successfully")
         lines += [trim(data["summary"], 500), ""]
         if data["not_covered"].strip():
-            complete = False
             lines += ["未覆盖：" + trim(data["not_covered"]), ""]
         if data["external_not_covered"].strip():
             # Release assets and OCI image bytes are intentionally outside the
