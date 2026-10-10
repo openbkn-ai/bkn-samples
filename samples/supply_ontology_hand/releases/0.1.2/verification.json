@@ -1,0 +1,37 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.2",
+  "packageDigest": "sha256:f41cc957632e43a4096d74799945f4b0f14f1903355f3379c2df8818c7a57889",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:ac82fc84f138b93b558f60485bc7676cb75722f705820bb8185094dd786619f9",
+  "freshInstallation": true,
+  "installation": {
+    "instance": "http://localhost:8081",
+    "startedAt": "2026-10-10T09:11:22Z",
+    "finishedAt": "2026-10-10T09:12:58Z",
+    "installationId": "inst-supply-chain",
+    "source": "offline-package",
+    "administrator": "admin"
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 tables loaded and database readiness check passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Knowledge network import and binding completed."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Functions and four skills, including demand-fulfillment-risk-summary, were published and attached successfully."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Supply chain smoke verification passed."
+    }
+  ]
+}
