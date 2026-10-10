@@ -312,11 +312,9 @@ def verdict():
     # Use the same review command as the other repositories.  The head was
     # checked immediately above, so gh pr review is pinned to this round.
     try:
-        event = {"APPROVE": "--approve", "REQUEST_CHANGES": "--request-changes"}[action]
-        subprocess.run(
-            ["gh", "pr", "review", str(pr), event, "--body-file", "verdict.md"],
-            check=True,
-        )
+        event = {"APPROVE": "--approve", "REQUEST_CHANGES": "--request-changes",
+                 "COMMENT": "--comment"}[action]
+        subprocess.run(["gh", "pr", "review", str(pr), event, "--body-file", "verdict.md"], check=True)
     except subprocess.CalledProcessError:
         if action != "APPROVE":
             raise
