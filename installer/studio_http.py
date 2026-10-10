@@ -264,7 +264,8 @@ def main() -> None:
     safe_url = os.environ.get("BKN_SAFE_URL", "http://bkn-safe:3000").rstrip("/")
     version, image, repo = load_indexes(root, image_index)
     data_image_ref = configured_image_ref()
-    source = OfficialCatalog(state_dir, root / "protocol/draft/schemas/catalog.schema.json")
+    source = OfficialCatalog(state_dir, root / "protocol/draft/schemas/catalog.schema.json",
+                             os.environ.get("BKN_SAMPLE_CATALOG_URL", "").strip() or None)
     runner = InstallationRunner(state_dir, [item["name"] for item in image.get("samples", []) if item.get("name")])
     runner.recover_interrupted()
     remote = RemoteInstallation(root, state_dir, os.environ.get("BKN_SAMPLE_PLATFORM_VERSION", ""),

@@ -57,11 +57,17 @@ def pinned_url(url: str) -> None:
 
 
 class OfficialCatalog:
-    def __init__(self, state_dir: Path, schema_path: Path):
+    def __init__(self, state_dir: Path, schema_path: Path, catalog_url: str | None = None):
         self.path = state_dir / "catalogs" / "official.json"
         self.lock = threading.Lock()
         self.refresh_lock = threading.Lock()
         self.last_attempt = -60.0
+        self.catalog_url = catalog_url or ""
+        if self.catalog_url:
+            pinned_url(self.catalog_url)
+            parts = self.catalog_url[len(RAW_PREFIX):].split("/")
+            if len(parts) != 2 or parts[1] != "catalog.json" or not SHA.fullmatch(parts[0]):
+                raise ValueError("pinned catalog URL must identify an official commit")
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
         self.validator = Draft202012Validator(schema, format_checker=FormatChecker())
         self.cache = None
@@ -113,11 +119,16 @@ class OfficialCatalog:
             self.last_attempt = time.monotonic()
             checked_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
             try:
-                ref = json.loads(read_url(REF_URL, 16 * 1024), object_pairs_hook=object_pairs)
-                commit = ref["object"]["sha"]
-                if not isinstance(commit, str) or not SHA.fullmatch(commit):
-                    raise ValueError("invalid repository commit")
-                catalog = json.loads(read_url(RAW_PREFIX + commit + "/catalog.json", 2 * 1024 * 1024), object_pairs_hook=object_pairs)
+                if self.catalog_url:
+                    commit = self.catalog_url[len(RAW_PREFIX):].split("/", 1)[0]
+                    catalog_url = self.catalog_url
+                else:
+                    ref = json.loads(read_url(REF_URL, 16 * 1024), object_pairs_hook=object_pairs)
+                    commit = ref["object"]["sha"]
+                    if not isinstance(commit, str) or not SHA.fullmatch(commit):
+                        raise ValueError("invalid repository commit")
+                    catalog_url = RAW_PREFIX + commit + "/catalog.json"
+                catalog = json.loads(read_url(catalog_url, 2 * 1024 * 1024), object_pairs_hook=object_pairs)
                 self.validate(catalog)
                 previous = (self.cache or {}).get("catalog")
                 if previous and catalog != previous:

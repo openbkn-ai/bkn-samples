@@ -30,6 +30,8 @@ spec:
               value: {{ .Values.safeURL | quote }}
             - name: BKN_BASE_URL
               value: {{ .Values.baseURL | quote }}
+            - name: BKN_SAMPLE_CATALOG_URL
+              value: {{ .Values.catalogURL | quote }}
             - name: BKN_SAMPLE_STATE_DIR
               value: /var/lib/bkn-samples/state
             - name: BKN_SAMPLE_IMAGE_INDEX
