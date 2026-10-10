@@ -1,0 +1,37 @@
+{
+  "sampleId": "world-cup",
+  "version": "0.1.1",
+  "packageDigest": "sha256:56ecb0641daada096220028d8b7145b099de601dcd0a54662dc33ed5f6f03eb2",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:805317bc1ac93e58f4149e35a7a0a75057330d8888ca54526a354996f313fcd1",
+  "freshInstallation": true,
+  "installation": {
+    "instance": "http://localhost:8081",
+    "startedAt": "2026-10-10T16:00:58Z",
+    "finishedAt": "2026-10-10T16:01:30Z",
+    "installationId": "inst-world-cup",
+    "source": "bundled-manifest",
+    "administrator": "admin"
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "27 tables loaded and database readiness check passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Native BKN directory imported and bound successfully."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "The published SQL execution function is available."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "World Cup smoke verification passed."
+    }
+  ]
+}
