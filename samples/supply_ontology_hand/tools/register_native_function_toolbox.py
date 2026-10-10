@@ -96,7 +96,7 @@ def _find_tool(box_id: str, name: str) -> dict[str, Any] | None:
     return None
 
 
-def run(*, box_name: str, apply: bool) -> dict[str, Any]:
+def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, Any]:
     tool_inputs = _tool_inputs()
     preview = {
         "mode": "apply" if apply else "dry_run",
@@ -157,6 +157,9 @@ def run(*, box_name: str, apply: bool) -> dict[str, Any]:
     legacy = _find_tool(box_id, LEGACY_TOOL_NAME)
     if legacy and legacy.get("status") != "disabled":
         _call(["tool", "disable", "--toolbox", box_id, legacy["tool_id"]])
+    if kn_id:
+        _call(["bkn", "capability", "attach", kn_id, "--box", box_id,
+               "--tool", ",".join(tool_ids.values())])
     return {**preview, "box_id": box_id, "tool_ids": tool_ids, "legacy_tool_disabled": bool(legacy)}
 
 
@@ -164,8 +167,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--box-name", default="供应链原生计算函数")
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--kn-id", help="Mount these functions to the target knowledge network")
     args = parser.parse_args()
-    print(json.dumps(run(box_name=args.box_name, apply=args.apply), ensure_ascii=False, indent=2))
+    print(json.dumps(run(box_name=args.box_name, apply=args.apply, kn_id=args.kn_id), ensure_ascii=False, indent=2))
     return 0
 
 

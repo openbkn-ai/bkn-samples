@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 from pathlib import Path
 
-from installer.control_plane import ControlError, create_installation, note_database_ready, retry_installation
+from installer.control_plane import ControlError, create_installation, note_database_ready, retry_installation, timestamp
+from installer.state_store import write_json
 from installer.contract import read_version
 from installer.release import merge_catalog
 
@@ -137,6 +139,43 @@ def get_sample_installation(*, sample: str, installation_id: str, state_dir: Pat
     return installation_view(current, actor_role)
 
 
+def list_sample_installations(*, sample: str, state_dir: Path, actor_role: str) -> dict:
+    _require_role(actor_role)
+    _require_sample(sample)
+    record = _read_state(state_dir, sample)
+    # v1alpha1 stores only one record. Do not invent previously overwritten history.
+    return {"items": [installation_view(record, actor_role)] if record else [],
+            "historyComplete": False}
+
+
+def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
+                             pinned_version: str, image_index: dict, repo_index: dict,
+                             state_dir: Path, locale: str = "zh-CN") -> dict:
+    _require_role(actor_role)
+    _require_sample(sample)
+    record = _read_state(state_dir, sample)
+    notes = (record or {}).get("releaseNotesSnapshot")
+    if not isinstance(notes, dict) or notes.get("version") != version:
+        merged = merge_catalog(pinned_version, image_index, repo_index)
+        item = next((item for item in merged["samples"] if item.get("name") == sample), None)
+        if version != pinned_version or merged["sourceRejected"] or not item or item.get("status") == "unavailable":
+            raise ApiError(404, "release_notes_unavailable", "version notes are unavailable")
+        notes = item.get("releaseNotes")
+    if not isinstance(notes, dict) or notes.get("version") != version:
+        raise ApiError(404, "release_notes_unavailable", "version notes are unavailable")
+    documents = notes.get("documents") or []
+    document = next((d for d in documents if d.get("locale") == locale), None)
+    if document is None:
+        document = next((d for d in documents if d.get("locale") == notes.get("defaultLocale")), None)
+    if document is None:
+        raise ApiError(404, "release_notes_unavailable", "version notes are unavailable")
+    content = document.get("content")
+    if not isinstance(content, str) or not content.strip() or document.get("digest") != "sha256:" + hashlib.sha256(content.encode("utf-8")).hexdigest():
+        raise ApiError(500, "release_notes_unavailable", "version notes digest does not match")
+    return {"sample": sample, "version": version, "resolvedLocale": document["locale"],
+            "content": document["content"], "digest": document["digest"]}
+
+
 def installation_view(record: dict, actor_role: str) -> dict:
     error = record.get("error") if isinstance(record.get("error"), dict) else None
     failed_at = _failed_stage(record) if record.get("status") == "failed" else ""
@@ -167,6 +206,9 @@ def installation_view(record: dict, actor_role: str) -> dict:
         "id": _installation_id(record),
         "sample": record.get("sample", ""),
         "version": record.get("version", ""),
+        "startedAt": record.get("startedAt"),
+        "finishedAt": record.get("finishedAt"),
+        "installedAt": record.get("installedAt") if record.get("status") == "installed" else None,
         "status": _public_status(record),
         "requestedBy": actor_role,
         "stages": stages,
@@ -196,8 +238,11 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
         },
         "components": dict(item.get("components") or {}),
         "installedVersion": installed_version if installed else "",
+        "installedAt": (state or {}).get("installedAt") if installed else None,
+        "manifestSha256": item.get("manifestSha256", ""),
+        "versions": [{"version": version, "hasReleaseNotes": bool(item.get("releaseNotes"))}],
         "updateAvailable": installed and bool(installed_version) and installed_version != version,
-        "questions": list(item.get("questions") or []) if installed else [],
+        "questions": list(item.get("questions") or []),
         "status": status,
         "installable": installable,
         "installationId": _installation_id(state) if state else None,
@@ -239,7 +284,8 @@ def _read_state(state_dir: Path, sample: str) -> dict | None:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _write_installing(state_dir: Path, sample: str, version: str) -> None:
+def _write_installing(state_dir: Path, sample: str, version: str, release_notes: dict | None = None,
+                      manifest_sha256: str | None = None, data_image_ref: str | None = None) -> None:
     state_dir.mkdir(parents=True, exist_ok=True)
     record = {
         "id": f"inst-{sample}",
@@ -247,8 +293,12 @@ def _write_installing(state_dir: Path, sample: str, version: str) -> None:
         "version": version,
         "status": "installing",
         "stages": {},
+        "startedAt": timestamp(),
+        "dataImageRef": data_image_ref,
+        **({"releaseNotesSnapshot": release_notes} if release_notes else {}),
+        **({"manifestSha256": manifest_sha256} if manifest_sha256 else {}),
     }
-    (state_dir / f"{sample}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json(state_dir / f"{sample}.json", record)
 
 
 def _write_failed(state_dir: Path, sample: str, version: str, code: str, message: str) -> None:
@@ -259,6 +309,7 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
         "sample_data_unavailable",
         "storage_class_missing",
     }
+    current = _read_state(state_dir, sample) or {}
     record = {
         "id": f"inst-{sample}",
         "sample": sample,
@@ -266,8 +317,22 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
         "status": "failed",
         "stages": {"database": "failed"} if code in database_codes else {},
         "error": {"code": code, "message": message},
+        "startedAt": current.get("startedAt"),
+        "finishedAt": timestamp(),
+        **({"releaseNotesSnapshot": current["releaseNotesSnapshot"]}
+           if current.get("version") == version and current.get("releaseNotesSnapshot") else {}),
+        **({"manifestSha256": current["manifestSha256"]}
+           if current.get("version") == version and current.get("manifestSha256") else {}),
+        **({"dataImageRef": current["dataImageRef"]}
+           if current.get("version") == version and "dataImageRef" in current else {}),
+        **({"remoteRelease": current["remoteRelease"]}
+           if current.get("version") == version and current.get("remoteRelease") else {}),
+        **({"offlineRelease": current["offlineRelease"]}
+           if current.get("version") == version and current.get("offlineRelease") else {}),
+        **({"packageDigest": current["packageDigest"]}
+           if current.get("version") == version and current.get("packageDigest") else {}),
     }
-    (state_dir / f"{sample}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json(state_dir / f"{sample}.json", record)
 
 
 def _require_role(actor_role: str) -> None:

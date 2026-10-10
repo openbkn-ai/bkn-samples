@@ -111,13 +111,16 @@ def _find_catalog_by_name(name: str, *, run_cmd: Callable[[list[str]], str]) -> 
 
 
 def _single_catalog(payload: object, catalog_id: str) -> dict:
-    if isinstance(payload, dict) and isinstance(payload.get("entries"), list):
-        entries = payload["entries"]
-        if len(entries) == 1 and isinstance(entries[0], dict):
-            return entries[0]
-    if isinstance(payload, dict):
-        return payload
-    raise RuntimeError(f"catalog get returned unexpected payload for {catalog_id}: {payload!r}")
+    # SDK 0.2.0 exposes the backend's list response for get; older callers may
+    # provide an entries envelope or an already unwrapped object.
+    entries = payload.get("entries") if isinstance(payload, dict) and "entries" in payload else payload
+    if isinstance(entries, list):
+        if len(entries) != 1:
+            raise RuntimeError(f"catalog get did not return one catalog for {catalog_id}")
+        entries = entries[0]
+    if isinstance(entries, dict) and entries.get("id") == catalog_id:
+        return entries
+    raise RuntimeError(f"catalog get did not return the requested catalog {catalog_id}")
 
 
 def _catalog_resources(catalog_id: str, *, run_cmd: Callable[[list[str]], str]) -> list[dict]:

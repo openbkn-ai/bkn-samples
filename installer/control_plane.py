@@ -4,10 +4,17 @@ from __future__ import annotations
 
 import json
 import time
+from datetime import datetime, timezone
 from pathlib import Path
+
+from installer.state_store import write_json
 
 OWNERSHIP_MANAGED_BY = "bkn-samples"
 CATALOG_NAME = "bkn-sample-{sample}"
+
+
+def timestamp() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 class ControlError(Exception):
@@ -42,11 +49,7 @@ def _read_state(state_dir: Path, sample: str) -> dict | None:
 
 
 def _write_state(state_dir: Path, record: dict) -> None:
-    state_dir.mkdir(parents=True, exist_ok=True)
-    _state_path(state_dir, record["sample"]).write_text(
-        json.dumps(record, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    write_json(_state_path(state_dir, record["sample"]), record)
 
 
 def _checkpoint(state_dir: Path, record: dict, **stage_updates: str) -> None:
@@ -69,6 +72,7 @@ def note_database_ready(state_dir: Path, sample: str, version: str) -> None:
         "version": version,
         "status": "installing",
         "stages": {},
+        "startedAt": timestamp(),
     }
     current["sample"] = sample
     current["version"] = version
@@ -265,11 +269,14 @@ def retry_installation(
     expected_tables: int,
     knowledge_network: dict,
     components: dict | None = None,
+    accepted: bool = False,
 ) -> dict:
     _require_admin(actor_role)
     current = _read_state(state_dir, sample)
-    if not current or current.get("status") != "failed":
+    if not current or current.get("status") != ("installing" if accepted else "failed"):
         raise ControlError("install_failed", "there is no failed installation to retry")
+    if current.get("version") != version:
+        raise ControlError("version_changed", "retry requires the original installed artifacts")
     return _advance(
         sample=sample,
         version=version,
@@ -291,9 +298,11 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
         "version": version,
         "status": "installing",
         "stages": {},
+        "startedAt": timestamp(),
     }
     record.setdefault("id", f"inst-{sample}")
     record.setdefault("stages", {})
+    record.pop("finishedAt", None)
     _checkpoint(state_dir, record, database="succeeded", discover="running")
     try:
         catalog = ensure_catalog(sample, version, database, openbkn)
@@ -321,8 +330,11 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
         record["checks"] = verified.get("checks") or []
         record["stages"]["verify"] = "succeeded"
         record["status"] = "installed"
+        record["installedAt"] = timestamp()
+        record["finishedAt"] = record["installedAt"]
     except ControlError as exc:
         record["status"] = "failed"
+        record["finishedAt"] = timestamp()
         record["error"] = {"code": exc.code, "message": exc.message}
         _write_state(state_dir, record)
         raise

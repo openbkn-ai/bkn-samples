@@ -13,6 +13,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
+import yaml
 
 from installer.contract import OFFICIAL_SOURCE_REPO, discover_sample_dirs, load_sample, read_version
 
@@ -22,6 +23,11 @@ GHCR_IMAGE = "ghcr.io/openbkn-ai/bkn-samples"
 DB_USER = "bkn_sample"
 _IMAGE_TAG = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}")
 _DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
+_IMAGE_REFERENCE = re.compile(
+    r"^[a-z0-9][a-z0-9.-]*(?::[0-9]{1,5})?/"
+    r"[a-z0-9]+(?:[._-][a-z0-9]+)*(?:/[a-z0-9]+(?:[._-][a-z0-9]+)*)*"
+    r"@sha256:[0-9a-f]{64}$"
+)
 _MANIFEST_ACCEPT = ", ".join(
     [
         "application/vnd.oci.image.index.v1+json",
@@ -149,6 +155,8 @@ spec:
           env:
             - name: BKN_SAMPLE_ID
               value: {sample}
+            - name: BKN_SAMPLE_VERSION
+              value: "{version}"
             - name: MARIADB_DATABASE
               value: {database}
             - name: MARIADB_USER
@@ -315,6 +323,51 @@ def image_tag(version: str) -> str:
     return tag
 
 
+def configured_image_ref() -> str | None:
+    """An administrator may pin the data image in deployment configuration."""
+    reference = os.environ.get("BKN_SAMPLE_DATA_IMAGE_REF", "").strip()
+    if not reference:
+        return None
+    if not _IMAGE_REFERENCE.fullmatch(reference):
+        raise DeployError("image_unavailable", "configured data image requires a registry/repository@sha256 reference")
+    return reference
+
+
+def _assert_database_ownership(kubectl, sample, version, image):
+    name = _workload_name(sample)
+    expected = {"openbkn.ai/sample-id": sample, "openbkn.ai/sample-version": version,
+                "openbkn.ai/sample-data-image": image}
+    for kind, resource in (("statefulset", name), ("service", name), ("secret", name),
+                           ("pvc", f"data-{name}-0")):
+        result = _run(kubectl, ["get", kind, resource, "-n", NAMESPACE, "--ignore-not-found", "-o", "json"])
+        if result.returncode != 0:
+            raise DeployError("install_failed", "cannot check existing sample database resources")
+        if not (result.stdout or "").strip():
+            continue
+        current = json.loads(result.stdout)
+        annotations = current.get("metadata", {}).get("annotations", {})
+        if any(annotations.get(key) != value for key, value in expected.items()):
+            raise DeployError("ownership_conflict", "an existing database resource is not owned by this fixed release")
+        if kind == "statefulset":
+            containers = current.get("spec", {}).get("template", {}).get("spec", {}).get("containers", [])
+            if len(containers) != 1 or containers[0].get("image") != image:
+                raise DeployError("ownership_conflict", "existing sample database image differs")
+
+
+def _owned_manifests(manifest, sample, version, image):
+    annotations = {"openbkn.ai/sample-id": sample, "openbkn.ai/sample-version": version,
+                   "openbkn.ai/sample-data-image": image}
+    documents = list(yaml.safe_load_all(manifest))
+    for document in documents:
+        if document["kind"] == "Namespace":
+            continue
+        document["metadata"].setdefault("annotations", {}).update(annotations)
+        if document["kind"] == "StatefulSet":
+            for claim in document["spec"]["volumeClaimTemplates"]:
+                claim["metadata"].setdefault("annotations", {}).update(annotations)
+    return yaml.safe_dump_all(documents, sort_keys=False)
+
+
 def deploy_database(
     root: Path,
     sample: str,
@@ -323,6 +376,8 @@ def deploy_database(
     attempts: int = 120,
     poll_seconds: float = 5.0,
     digests=None,
+    data_image_ref: str | None = None,
+    require_ownership: bool = False,
 ) -> dict:
     """Apply the sample database and wait until it is ready. Never creates a Catalog."""
     _sample_dir, document = _sample(root, sample)
@@ -338,18 +393,33 @@ def deploy_database(
         root_password = secrets.token_urlsafe(24)
         user_password = secrets.token_urlsafe(24)
         secret_manifest = "create"
-    tag = image_tag(version)
-    lookup = registry_digests if digests is None else digests
-    swr_digest, ghcr_digest = lookup(tag)
-    if _digests_conflict(swr_digest, ghcr_digest):
-        raise DeployError("image_unavailable", "SWR and GHCR manifest digests differ")
-    image = f"{GHCR_IMAGE}:{tag}" if _usable_digest(swr_digest) is None and _usable_digest(ghcr_digest) else f"{SWR_IMAGE}:{tag}"
+    image = data_image_ref if data_image_ref is not None else configured_image_ref()
+    if image is not None and not _IMAGE_REFERENCE.fullmatch(image):
+        raise DeployError("image_unavailable", "sample data image requires a fixed registry digest")
+    ghcr_digest = None
+    if image is None:
+        tag = image_tag(version)
+        lookup = registry_digests if digests is None else digests
+        swr_digest, ghcr_digest = lookup(tag)
+        if _digests_conflict(swr_digest, ghcr_digest):
+            raise DeployError("image_unavailable", "SWR and GHCR manifest digests differ")
+        swr_digest = _usable_digest(swr_digest)
+        ghcr_digest = _usable_digest(ghcr_digest)
+        if not swr_digest and not ghcr_digest:
+            raise DeployError("image_unavailable", "no verified sample image digest is available")
+        image = f"{SWR_IMAGE}@{swr_digest}" if swr_digest else f"{GHCR_IMAGE}@{ghcr_digest}"
+    if require_ownership:
+        _assert_database_ownership(kubectl, sample, version, image)
     manifest = _manifests(sample, database, version, image, root_password or "unused", user_password or "unused")
     if secret_manifest == "":
         parts = manifest.split("---\n")
         manifest = "---\n".join(part for part in parts if "kind: Secret" not in part)
+    if require_ownership:
+        manifest = _owned_manifests(manifest, sample, version, image)
     _apply(kubectl, manifest)
-    ghcr = f"{GHCR_IMAGE}:{tag}"
+    # A mirror switch is allowed only when its independently resolved digest
+    # matches the selected artifact. Never fall back to a mutable tag.
+    ghcr = f"{GHCR_IMAGE}@{ghcr_digest}" if ghcr_digest else None
     switched = image == ghcr
     state = "pending"
     for _ in range(attempts):
@@ -357,12 +427,13 @@ def deploy_database(
         if state == "ready":
             break
         if state == "sample_data_unavailable":
-            _discard_failed_data(kubectl, sample)
+            if not require_ownership:
+                _discard_failed_data(kubectl, sample)
             raise DeployError(
                 "sample_data_unavailable",
                 "the sample data was not downloaded or did not match its lock file",
             )
-        if state == "image_pull_failed" and not switched:
+        if state == "image_pull_failed" and not switched and ghcr:
             _switch_image(kubectl, sample, ghcr)
             switched = True
             image = ghcr
