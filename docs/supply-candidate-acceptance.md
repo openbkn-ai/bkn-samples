@@ -1,6 +1,25 @@
 # 供应链候选验收计划
 
-更新：2026-10-09。当前状态：本地供应链安装、5 个 MCP 业务场景和服务重建持久性验收通过；候选未提交或正式发布。以下前期检查按时间记录，最新结果见文末。
+更新：2026-10-10。当前状态：供应链 0.1.1 已通过固定远程候选验收并进入目录；本文件保留前期检查记录，最新结果见“2026-10-10 固定远程候选验收结果”。
+
+## 2026-10-10 固定远程候选验收结果
+
+供应链 0.1.1 已由合并后的 `bkn-samples` 提交 `c1cad1917193ac84e459e17bd21a07953e00fdd2` 发布目录，并通过不可变 GitHub Release asset 完成远程安装验收。
+
+| 项目 | 结果 |
+| --- | --- |
+| 实例 | `http://localhost:8081/`，kind-bkn-dev，单实例验收 |
+| 目录提交 | `c1cad1917193ac84e459e17bd21a07953e00fdd2` |
+| sample 版本 | `0.1.1` |
+| Release asset | `sample-supply-chain-v0.1.1/package.tar.gz` |
+| 包摘要 | `sha256:cd7adf098a9fedc90bd95167477001e88ba79a35b84ed73557437850489c7056` |
+| manifest 摘要 | `sha256:722a27c7c6646c644cec48d9111a7763706a36b5c9910a7bad7852ca5b42c139` |
+| 安装时间 | `2026-10-10T07:31:33.147355Z` |
+| 安装任务 | `inst-supply-chain` |
+| 阶段结果 | database、discover、knowledge、capabilities、verify 全部 succeeded |
+| 远程资源 | 专用 MariaDB StatefulSet/PVC/Secret/Service、供应链 Catalog、`supply_ontology_hand` 知识网络均重新创建 |
+
+验收前已删除并备份 Studio 中旧的离线安装状态与供应链实例自有资源；未删除平台、Studio PVC 或其他人工资源。Studio 刷新结果的 revision 为上述合并提交，0.1.1 从 `not_installed` 变为可安装并完成远程安装。该记录证明固定目录、固定 manifest、不可变远程包和实例安装链路闭环；不代表已实现同一 sample 的原地升级、迁移或卸载。
 
 ## 实例与依赖
 
