@@ -1,12 +1,12 @@
 # 世界杯 BKN（Fjelstul · Vega `resource` 占位符版）
 
-本目录为本示例 **离线 BKN 模版**：对象类数据源为 **`resource | {{*_RES_ID}}`**（Vega table Resource UUID）。流程见 **`README.zh.md`**、**`../WORKFLOW-BRANCH-VEGA.zh.md`**。
+本目录为本示例 **离线 BKN 模版**：对象类数据源为 **`resource | {{*_RES_ID}}`**（Vega table Resource UUID）。流程见 **`README.zh.md`**、**`../README_cn.md`**。
 
 **关系 ID**：`rel_<表名>_<外键列去掉_id>`（约 **29** 条「minimal」骨架边；历史上由生成脚本按 CSV FK 推导，本树为检入快照）。
 
 ## 校验
 
-`mkdir -p .tmp && TMPDIR="$(pwd)/.tmp" kweaver bkn validate ./worldcup-bkn`
+`mkdir -p .tmp && TMPDIR="$(pwd)/.tmp" openbkn bkn validate ./kn`
 
 ## 对象类型
 
