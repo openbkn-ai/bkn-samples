@@ -327,6 +327,10 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
            if current.get("version") == version and "dataImageRef" in current else {}),
         **({"remoteRelease": current["remoteRelease"]}
            if current.get("version") == version and current.get("remoteRelease") else {}),
+        **({"offlineRelease": current["offlineRelease"]}
+           if current.get("version") == version and current.get("offlineRelease") else {}),
+        **({"packageDigest": current["packageDigest"]}
+           if current.get("version") == version and current.get("packageDigest") else {}),
     }
     write_json(state_dir / f"{sample}.json", record)
 

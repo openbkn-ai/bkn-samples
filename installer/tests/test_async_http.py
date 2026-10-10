@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from installer.state_store import write_json
+from installer.contract import build_manifest_index
 from installer.studio_api import _read_state, _write_installing
 from installer.studio_http import dispatch, main
 
@@ -37,6 +38,7 @@ class AsyncHttpTest(unittest.TestCase):
                 env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_IMAGE_INDEX": str(ROOT / "manifest-index.json"),
                        "BKN_SAMPLE_STATE_DIR": str(state)}
                 with patch.dict("os.environ", env), patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
+                     patch("installer.studio_api.load_indexes", return_value=("0.1.0", build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
                      patch("installer.runtime.install_sample", side_effect=run), patch("installer.runtime.retry_sample", side_effect=run):
                     main()
                     app = apps[0]

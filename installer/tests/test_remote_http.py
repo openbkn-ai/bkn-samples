@@ -6,6 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from installer.studio_api import _read_state
+from installer.contract import build_manifest_index
 from installer.state_store import write_json
 from installer.studio_http import main, dispatch
 from installer.task_runner import InstallationRunner
@@ -46,6 +47,7 @@ class RemoteHttpTest(unittest.TestCase):
                    "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64,
                    "BKN_SAMPLE_PLATFORM_CAPABILITIES": ",".join(fixture.entry["requires"]["capabilities"])}
             with patch.dict("os.environ", env), patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
+                 patch("installer.studio_api.load_indexes", return_value=("0.1.0", build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
                  patch("installer.catalog_source.OfficialCatalog.entries", return_value=[fixture.entry]), \
                  patch("installer.remote_installation.RemoteInstallation.execute", side_effect=execute), \
                  patch("installer.task_runner.InstallationRunner", side_effect=make_runner):
