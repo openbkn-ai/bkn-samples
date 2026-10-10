@@ -90,6 +90,16 @@ def fetch_locked_files(lock: dict, destination: Path, opener=urllib.request.urlo
     return saved
 
 
+def embedded_files(lock: dict) -> list[Path]:
+    files = []
+    for item in lock["files"]:
+        path = SAMPLE_DIR / "data" / item["path"]
+        if not path.is_file() or _sha256(path) != item["sha256"]:
+            raise SystemExit(f"embedded data missing or checksum mismatch: {item['path']}")
+        files.append(path)
+    return files
+
+
 def table_name(csv_path: Path) -> str:
     stem = "".join(char if char.isalnum() or char == "_" else "_" for char in csv_path.stem)
     return f"wc_{stem}"
@@ -265,7 +275,9 @@ def load_worldcup(opener=urllib.request.urlopen) -> None:
     version = _version()
     lock = read_lock()
     try:
-        files = fetch_locked_files(lock, cache_dir(), opener)
+        document = yaml.safe_load((SAMPLE_DIR / "sample.yaml").read_text(encoding="utf-8"))
+        files = (embedded_files(lock) if document["spec"]["data"]["mode"] == "embedded"
+                 else fetch_locked_files(lock, cache_dir(), opener))
     except SystemExit:
         raise
     _create_database(database)

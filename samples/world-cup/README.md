@@ -7,7 +7,7 @@
 ## The path
 
 ```
-                       ┌─ 1) Download CSVs   fetch 27 CSVs from jfjelstul/worldcup (cached)
+                       ┌─ 1) Check CSVs      verify the 27 pinned CSVs bundled in data/
                        │
                        ├─ 2) Import MySQL    local mysql client loads CSVs → wc_* tables
                        │                     (pre-creates wc_matches / wc_team_appearances
@@ -15,7 +15,7 @@
                        │
                        ├─ 3) Vega scan       vega catalog create + asynchronous discover
                        │
-   ./run.sh  ─────────►├─ 4) Render BKN      map vega Resources → render worldcup-bkn.tar
+   ./run.sh  ─────────►├─ 4) Render BKN      map vega Resources → render the bundled BKN directory
                        │
                        ├─ 5) Push BKN +      bkn validate + push (idempotent),
                        │   build indexes     then build vega resource OpenSearch datasets
@@ -29,7 +29,8 @@
 The pipeline ends here: a Vega catalog **BKN** (`worldcup_vega_catalog_bkn`) backed by a published, queryable **`vega_sql_execute`** tool over the 27 `wc_*` MySQL tables.
 
 Checked-in assets in this directory:
-- **`worldcup-bkn.tar`** — offline BKN tree (27 object types, 29 `rel_*` edges) packaged as a tar archive; each OT ends with **`resource | {{*_RES_ID}}`** placeholders. `network.bkn` pins id `worldcup_vega_catalog_bkn`. `run.sh` extracts to `.tmp/worldcup-bkn/` before rendering.
+- **`data/`** — the 27 CSVs from the locked upstream commit, verified by `dataset.lock` before loading.
+- **`kn/`** — the OpenBKN BKN directory (27 object types, 29 `rel_*` edges); each OT ends with **`resource | {{*_RES_ID}}`** placeholders. `network.bkn` pins id `worldcup_vega_catalog_bkn` and is validated before publication.
 - **`vega_sql_execute.openapi.json`** — OpenAPI 3.0 spec for the SQL-execute tool. Step 6 uploads it via `openbkn tool upload` (the OpenAPI parser path; sidesteps the 0.7.0 `openbkn toolbox import` bug that stored `api_spec` as null).
 - **`bkn-network-structure.html`** — single-file visual overview of the BKN: the 4 concept groups, all 27 OTs (dashed = no FK in minimal mode), the matches/tournaments hubs, and the full 29-row relation table. Open in any browser; no build step.
 

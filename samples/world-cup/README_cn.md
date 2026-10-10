@@ -7,7 +7,7 @@
 ## 主路径
 
 ```
-                       ┌─ 1) 下载 CSV     从 jfjelstul/worldcup 下载 27 个 CSV（已有则跳过）
+                       ┌─ 1) 校验 CSV     校验 data/ 中随包提供的 27 个锁定版本 CSV
                        │
                        ├─ 2) 导入 MySQL   本地 mysql 客户端装载 CSV → wc_* 表
                        │                 （预建 wc_matches / wc_team_appearances 为 VARCHAR(255)
@@ -15,7 +15,7 @@
                        │
                        ├─ 3) Vega 扫描    vega catalog create + 异步 discover
                        │
-   ./run.sh  ─────────►├─ 4) 渲染 BKN     map vega Resources → render worldcup-bkn.tar
+   ./run.sh  ─────────►├─ 4) 渲染 BKN     map vega Resources → render 内置 BKN 目录
                        │
                        ├─ 5) Push BKN +   bkn validate + push（幂等），
                        │   建索引          再为 7 张实体表的 vega resource 建 OpenSearch
@@ -30,7 +30,8 @@
 
 仓库内 checked-in 资产：
 
-- **`worldcup-bkn.tar`** — 离线 BKN 模板（27 个对象类、29 条 `rel_*` 关系）打包成 tar；每个 OT 末行带 **`resource | {{*_RES_ID}}`** 占位；`network.bkn` 的 `id` 为 **`worldcup_vega_catalog_bkn`**。`run.sh` 渲染前会解包到 `.tmp/worldcup-bkn/`。
+- **`kn/`** — OpenBKN BKN 目录（27 个对象类、29 条 `rel_*` 关系）；每个 OT 末行带 **`resource | {{*_RES_ID}}`** 占位；`network.bkn` 的 `id` 为 **`worldcup_vega_catalog_bkn`**，发布前会按原生解析器校验。
+- **`data/`** — 来自锁定上游提交的 27 个 CSV，装载前按 `dataset.lock` 校验摘要。
 - **`vega_sql_execute.openapi.json`** — SQL-execute 工具的 OpenAPI 3.0 描述。step 6 通过 `openbkn tool upload`（OpenAPI 解析器路径）注册，避开 0.7.0 `openbkn toolbox import` 把 `api_spec` 写为 null 的 bug。
 - **`bkn-network-structure.html`** — BKN 网络结构的单文件可视化：4 个概念组、全部 27 个对象类（虚线 = minimal 模式下无 FK 关系）、`matches` / `tournaments` 双枢纽，以及完整的 29 条关系类表。浏览器直接打开，无需构建。
 

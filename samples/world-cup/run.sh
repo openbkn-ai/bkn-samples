@@ -30,8 +30,7 @@ set -euo pipefail
 [ "${WC_TRACE:-0}" = 1 ] && set -x || true
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-BKN_ARCHIVE="$SCRIPT_DIR/worldcup-bkn.tar"
-BKN_EXTRACT_DIR="$SCRIPT_DIR/.tmp/worldcup-bkn"
+BKN_EXTRACT_DIR="$SCRIPT_DIR/kn"
 RENDERED_DIR="$SCRIPT_DIR/.rendered-bkn-vega"
 MAPPING_TMP="$SCRIPT_DIR/.vega-bkn-mapping.json"
 VEGA_OPENAPI_SPEC="$SCRIPT_DIR/vega_sql_execute.openapi.json"
@@ -544,27 +543,10 @@ step_4_render_bkn() {
 }
 
 _extract_bkn_archive() {
-    [ -f "$BKN_ARCHIVE" ] || {
-        echo "Error: BKN archive not found at $BKN_ARCHIVE." >&2
-        exit 1
-    }
-    if [ -f "$BKN_EXTRACT_DIR/network.bkn" ] && \
-       [ "$BKN_EXTRACT_DIR/network.bkn" -nt "$BKN_ARCHIVE" ]; then
-        echo "  reusing extracted BKN tree at $BKN_EXTRACT_DIR" >&2
-        return 0
-    fi
-    rm -rf "$BKN_EXTRACT_DIR"
-    mkdir -p "$(dirname "$BKN_EXTRACT_DIR")"
-    tar xf "$BKN_ARCHIVE" -C "$(dirname "$BKN_EXTRACT_DIR")"
-    # The archive was packed on macOS and carries AppleDouble (._*) sidecar
-    # files; they match the *.bkn glob and fail bkn validate ("must have YAML
-    # frontmatter"). Purge them.
-    find "$BKN_EXTRACT_DIR" -name '._*' -delete 2>/dev/null || true
     [ -f "$BKN_EXTRACT_DIR/network.bkn" ] || {
-        echo "Error: extracted tree missing network.bkn (expected $BKN_EXTRACT_DIR/network.bkn)." >&2
+        echo "Error: BKN directory missing network.bkn at $BKN_EXTRACT_DIR." >&2
         exit 1
     }
-    echo "  extracted BKN tree → $BKN_EXTRACT_DIR" >&2
 }
 
 # ─── Step 5: Push BKN ───────────────────────────────────────────────────────

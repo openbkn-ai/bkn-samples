@@ -11,12 +11,14 @@ import subprocess
 import tarfile
 import tempfile
 from pathlib import Path
+import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
 NOTE = re.compile(r"release-notes\.([a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*)\.md")
-DIRECTORIES = {"data", "db", "kn", "platform", "skills", "tools", "docs"}
-FILES = {"sample.yaml", "README.md", "LICENSE", "LICENSE.md"}
+DIRECTORIES = {"data", "db", "kn", "platform", "skills", "tools", "docs", "scripts"}
+FILES = {"sample.yaml", "README.md", "LICENSE", "LICENSE.md", "run.sh", "dataset.lock",
+         "vega_sql_execute.openapi.json"}
 
 
 def require(condition, message):
@@ -103,14 +105,19 @@ def build(sample_dir, version, output, data_image_ref=None):
     if data_image_ref is not None:
         require(re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[a-f0-9]{64}", data_image_ref),
                 "offline package needs a fixed data image digest")
+        contract = yaml.safe_load(by_path["sample.yaml"].decode("utf-8"))
+        components = contract["spec"]["components"]
+        native_format = "bkn-directory" if "kn/network.bkn" in by_path else "kn-json"
+        capabilities = ["vega.catalog", "knowledge-network.import." + native_format]
+        capabilities.extend("execution." + component for component, key in
+                            (("function", "functions"), ("skill", "skills")) if components[key])
         descriptor = {
             "apiVersion": "samples.openbkn.ai/offline.v1", "version": version,
             "dataImageRef": data_image_ref,
             "requires": {"installationProfiles": ["openbkn.ai/sample-install.v1"],
                          "requiredExtensions": [], "platformVersion": ">=0.2.0 <0.3.0",
                          "architectures": ["arm64", "amd64"],
-                         "capabilities": ["vega.catalog", "knowledge-network.import.kn-json",
-                                          "execution.function", "execution.skill"]},
+                         "capabilities": capabilities},
             "releaseNotes": documents,
             "files": [{"path": p, "digest": sha(data)} for p, _, data in snapshots],
         }
