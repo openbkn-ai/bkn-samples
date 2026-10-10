@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from catalog_source import OfficialCatalog
+from installer.catalog_source import OfficialCatalog
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -15,7 +15,7 @@ class PinnedCatalogTests(unittest.TestCase):
     def test_accepts_official_commit_catalog_without_reading_branch_ref(self):
         catalog = (ROOT / "catalog.json").read_bytes()
         with tempfile.TemporaryDirectory() as directory, patch(
-            "catalog_source.read_url", return_value=catalog
+            "installer.catalog_source.read_url", return_value=catalog
         ) as read:
             source = OfficialCatalog(Path(directory), SCHEMA, PINNED)
             result = source.refresh()
