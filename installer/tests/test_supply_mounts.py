@@ -46,7 +46,7 @@ class SupplyMountTest(unittest.TestCase):
         self.assertIn(['skill', 'list', '--all'], calls)
         self.assertEqual(calls[-1], ['bkn', 'capability', 'attach', 'network', '--skill',
                                     ','.join(item['skill_id'] for item in result['skills'])])
-        self.assertEqual(len(result['skills']), 3)
+        self.assertEqual(len(result['skills']), len(SKILLS.local_skills()))
 
 
 if __name__ == '__main__':
