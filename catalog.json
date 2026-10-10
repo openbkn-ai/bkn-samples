@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000003",
-    "sequence": 3,
+    "revision": "catalog-000004",
+    "sequence": 4,
     "channel": "stable",
-    "publishedAt": "2026-10-10T12:11:36Z"
+    "publishedAt": "2026-10-11T00:00:00Z"
   },
   "spec": {
     "entries": [
@@ -106,6 +106,54 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3c4dc840f638982bdfc71bf2fb5283977ea3ffce/samples/supply_ontology_hand/releases/0.1.2/verification.json",
           "digest": "sha256:9db31b704b91ff193cf7bce5b32e4e843370eaa6c4dc125f73264aa53fe27c24"
+        }
+      },
+      {
+        "sampleId": "world-cup",
+        "version": "0.1.0",
+        "displayName": "世界杯",
+        "summary": "用公开的世界杯数据体验跨表查询和已发布的 SQL 工具。",
+        "publishedAt": "2026-10-10T15:46:31Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "World Cup native BKN and embedded data release 0.1.0",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bad4b049887ac15db543fb7eae011a299e2e692d/samples/world-cup/releases/0.1.0/release-notes.en-US.md",
+              "digest": "sha256:66fb52a2da19bc5fc12f3d76705275c78d936112c6f9a5810b782faec65254a6"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bad4b049887ac15db543fb7eae011a299e2e692d/samples/world-cup/releases/0.1.0/release-notes.zh-CN.md",
+              "digest": "sha256:de3154274af1d5bfb03b01fadb3199713b7533e0bc768002649957fcfeaa14bb"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bad4b049887ac15db543fb7eae011a299e2e692d/samples/world-cup/releases/0.1.0/sample.json",
+          "digest": "sha256:0e3332647902189ddccc8fee818861429c46fd042242f79000ebd49585e8a639"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bad4b049887ac15db543fb7eae011a299e2e692d/samples/world-cup/releases/0.1.0/verification.json",
+          "digest": "sha256:b8ef0120a3cbe0abb5fb736922c3b86203e22f5bff24a25fa2468098d4c0c15e"
         }
       }
     ]
