@@ -180,7 +180,7 @@ def findings(path, snapshot):
     data = load_result(path)
     if data.get("head") != snapshot["head"] or data.get("status") != "completed":
         raise ValueError("Review missing, incomplete or for a different commit")
-    for name in ("summary", "not_covered", "external_not_covered"):
+    for name in ("summary", "coverage_notes", "external_coverage_notes"):
         if not isinstance(data.get(name), str):
             raise ValueError("Invalid review summary or coverage")
     for name in ("blockers", "unconfirmed"):
@@ -240,14 +240,14 @@ def verdict():
         if os.environ.get("REVIEW_RESULT") != "success" or os.environ.get("VERIFY_RESULT") != "success":
             raise ValueError("Review or verification job did not finish successfully")
         lines += [trim(data["summary"], 500), ""]
-        if data["not_covered"].strip():
+        if data["coverage_notes"].strip():
             complete = False
-            lines += ["未覆盖：" + trim(data["not_covered"]), ""]
-        if data["external_not_covered"].strip():
+            lines += ["覆盖说明：" + trim(data["coverage_notes"]), ""]
+        if data["external_coverage_notes"].strip():
             # Release assets and OCI image bytes are intentionally outside the
             # source-only review. Fixed digests, publication checks and fresh
             # installation evidence bind them; disclose that boundary separately.
-            lines += ["未覆盖（外部制品，已由摘要与独立验收绑定）：" + trim(data["external_not_covered"]), ""]
+            lines += ["覆盖说明（外部制品，已由摘要与独立验收绑定）：" + trim(data["external_coverage_notes"]), ""]
         if pending:
             verified = load_result("review-data/verified.json")
             items = verified.get("verdicts")

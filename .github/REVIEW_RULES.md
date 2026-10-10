@@ -14,6 +14,6 @@ Review every changed file for concrete problems that could make a sample unsafe 
 - **Blocker:** a changed file contains a concrete, reachable failure or security problem with file and line evidence. Uncertain concerns are advisory.
 - **Advisory:** at most two items on the first review and one new item on re-review. Do not report style preferences, old issues, or broad architecture ideas.
 - Re-review each carried blocker against the current commit. Close it only with evidence that it is fixed or false; otherwise mark the review incomplete.
-- The summary is at most two sentences. Put unreviewed source in `not_covered`; disclose fixed-digest Release or OCI artifacts in `external_not_covered` without blocking when fresh installation evidence binds them.
+- The summary is at most two sentences. Put unreviewed source in `coverage_notes`; disclose fixed-digest Release or OCI artifacts in `external_coverage_notes` without blocking when fresh installation evidence binds them.
 
 Do not run PR code, install dependencies, read credentials, modify the repository, or post comments. The workflow reads these rules from the default branch and uses `plan -> review -> verify -> verdict`; merging remains a human decision.
