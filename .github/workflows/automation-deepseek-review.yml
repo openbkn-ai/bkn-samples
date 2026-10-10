@@ -140,7 +140,8 @@ jobs:
              "not_covered":"未审完的源码范围或空串",
              "external_not_covered":"无法在仓库内复核的固定 Release/OCI 制品范围或空串"}
             首轮待确认最多两条，复评最多一条新疑点；不要凑数。
-            必须先写 JSON 再收尾。预算快耗尽时收敛，未审完如实写 not_covered。
+            必须先写 JSON 再收尾。预算快耗尽时收敛；只有未审完可执行源码、配置或工作流时才写 not_covered。
+            批量 CSV、图片和已按固定摘要校验的静态数据不属于未审源码，不要仅因未逐行复读而阻断。
           claude_args: |
             --model deepseek-v4-pro
             --max-turns 120
