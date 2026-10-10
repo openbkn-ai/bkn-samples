@@ -293,7 +293,7 @@ def verdict():
         if unresolved:
             lines += [f"保留 {len(unresolved)} 条待复核问题，下一轮继续核实。"]
     if complete:
-        action = "REQUEST_CHANGES" if confirmed else "APPROVE"
+        action = "REQUEST_CHANGES" if confirmed else "COMMENT"
     lines += ["", "旧阻塞项须经复核确认已修复或不成立才关闭；可回复说明理由并加 `/review`。新提交自动复评，合并由人决定。"]
     state = [{k: b[k] for k in ("key", "file", "line", "what", "scenario", "evidence", "verified")} for b in unresolved]
     blob = json.dumps({"v": 1, "open": state}, ensure_ascii=False).replace("-->", "--\\u003e")
