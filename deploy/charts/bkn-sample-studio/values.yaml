@@ -27,6 +27,9 @@ ingress:
 
 safeURL: http://bkn-safe:3000
 baseURL: ""
+# Optional acceptance-only pin to an official raw catalog at a full commit SHA.
+# Empty uses the official main branch pointer.
+catalogURL: ""
 
 # Explicit platform compatibility facts; empty values keep remote installs unavailable.
 platform:
