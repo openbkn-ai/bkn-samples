@@ -165,8 +165,10 @@ def validate_blocker(item):
         raise ValueError("Blocker needs a source line")
     if any(not isinstance(item.get(k), str) or not item[k].strip() for k in ("what", "scenario")):
         raise ValueError("Blocker needs a concrete failure scenario")
-    if not isinstance(item.get("evidence"), list) or not item["evidence"] or any(not isinstance(e, str) or not re.search(r":[1-9][0-9]*\b", e) for e in item["evidence"]):
-        raise ValueError("Blocker needs source evidence")
+    if (not isinstance(item.get("evidence"), list) or not item["evidence"]
+            or any(not isinstance(e, str) or not e.strip() for e in item["evidence"])
+            or not any(re.search(r":[1-9][0-9]*\b", e) for e in item["evidence"])):
+        raise ValueError("Blocker needs source evidence with at least one line location")
 
 
 def blocker_key(item):
@@ -258,7 +260,9 @@ def verdict():
             for v in items:
                 if v.get("status") not in {"confirmed", "refuted", "unverified"} or not isinstance(v.get("reason"), str) or not v["reason"].strip():
                     raise ValueError("Invalid verification evidence")
-                if not isinstance(v.get("evidence"), list) or any(not isinstance(e, str) or not re.search(r":[1-9][0-9]*\b", e) for e in v["evidence"]):
+                if (not isinstance(v.get("evidence"), list) or not v["evidence"]
+                        or any(not isinstance(e, str) or not e.strip() for e in v["evidence"])
+                        or not any(re.search(r":[1-9][0-9]*\b", e) for e in v["evidence"])):
                     raise ValueError("Invalid verification source locations")
                 if v["status"] != "unverified" and not v["evidence"]:
                     raise ValueError("Confirmed or refuted blocker needs source evidence")
