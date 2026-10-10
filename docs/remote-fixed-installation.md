@@ -29,7 +29,7 @@
 | `freshInstallation` | 必须为布尔值 `true` |
 | `checks` | 数据库、知识网络、能力、业务场景的实际通过记录 |
 
-`checks` 为 `{ "name": "database|knowledge|capabilities|scenario", "passed": true }` 的数组，名称不得重复。记录可补充平台、架构、安装器镜像和日志位置。发布 PR 必须审核真实证据；字段校验只绑定经审核的声明，不能替代真实验收，不能把单元测试结果填成安装通过记录。已生成正式验收记录：World Cup 0.1.1 使用固定离线包完成 database、discover、knowledge、capabilities 和 verify 全部通过。
+`checks` 为 `{ "name": "database|knowledge|capabilities|scenario", "passed": true }` 的数组，名称不得重复。记录可补充平台、架构、安装器镜像和日志位置。发布 PR 必须审核真实证据；字段校验只绑定经审核的声明，不能替代真实验收，不能把单元测试结果填成安装通过记录。已生成正式验收记录：World Cup 0.1.1 使用固定离线包完成 database、knowledge、capabilities 和 scenario 全部通过。
 
 ## 固定安装任务
 
