@@ -1,0 +1,108 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "world-cup",
+    "version": "0.1.0",
+    "displayName": "世界杯",
+    "summary": "用公开的世界杯数据体验跨表查询和已发布的 SQL 工具。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "CC-BY-SA 4.0 · Joshua C. Fjelstul"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-10T15:46:31Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:66fb52a2da19bc5fc12f3d76705275c78d936112c6f9a5810b782faec65254a6"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:de3154274af1d5bfb03b01fadb3199713b7533e0bc768002649957fcfeaa14bb"
+        }
+      ]
+    },
+    "requires": {
+      "platformVersion": ">=0.2.0 <0.3.0",
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.function"
+      ],
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "requiredExtensions": [],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ]
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:4b9413c62b728bc4ee57467479b7ba4c2252072c032d6f65c3e9cf1b20d70a62",
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-v0.1.0/package.tar.gz"
+        ]
+      },
+      {
+        "id": "database-image",
+        "type": "oci-image",
+        "digest": "sha256:805317bc1ac93e58f4149e35a7a0a75057330d8888ca54526a354996f313fcd1",
+        "locations": [
+          "oci://ghcr.io/openbkn-ai/bkn-samples"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "questions": [
+          "梅西在世界杯获得过哪些奖？",
+          "近三届男足世界杯的冠军是谁？"
+        ],
+        "contentId": "worldcup-network"
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "worldcup-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "worldcup-functions"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "worldcup-data",
+          "artifactId": "database-image",
+          "engine": "mariadb",
+          "databaseName": "worldcup",
+          "expectedTables": 27
+        }
+      ],
+      "bindings": []
+    }
+  }
+}
