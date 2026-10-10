@@ -27,10 +27,11 @@ class PublicationTest(unittest.TestCase):
         baseline = validate_catalog(ROOT, official=True)
         catalog = copy.deepcopy(baseline[0])
         catalog["metadata"]["revision"] = "changed"
+        entries = {(entry["sampleId"], entry["version"]): entry for entry in baseline[0]["spec"]["entries"]}
         with self.assertRaisesRegex(ValueError, "sequence"):
-            compare_baseline((catalog, {}), baseline)
+            compare_baseline((catalog, entries), baseline)
         catalog["metadata"]["sequence"] += 1
-        compare_baseline((catalog, {}), baseline)
+        compare_baseline((catalog, entries), baseline)
 
 
 if __name__ == "__main__":
