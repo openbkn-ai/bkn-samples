@@ -308,24 +308,11 @@ def verdict():
     payload = {"commit_id": snapshot["head"], "event": action, "body": body}
     try:
         gh("api", "--method", "POST", f"repos/{repo}/pulls/{pr}/reviews", payload=payload)
-    except subprocess.CalledProcessError as error:
+    except subprocess.CalledProcessError:
         if action != "APPROVE":
             raise
-        # GITHUB_TOKEN may be unable to approve a PR. Keep the same
-        # pull-request permission surface for the fallback review; an issues
-        # comment requires a separate issues: write permission and made clean
-        # verdicts fail with an opaque 403 in this workflow.
-        fallback = {
-            "commit_id": snapshot["head"],
-            "event": "COMMENT",
-            "body": body + "\n\nGitHub 未允许本身份批准，已改贴普通审核评论；没有 APPROVED 状态。",
-        }
-        try:
-            gh("api", "--method", "POST", f"repos/{repo}/pulls/{pr}/reviews", payload=fallback)
-        except subprocess.CalledProcessError as fallback_error:
-            details = (fallback_error.output or error.output or b"").decode("utf-8", "replace")
-            print("Unable to publish the review verdict: " + details[-2000:])
-            raise
+        gh("api", "--method", "POST", f"repos/{repo}/issues/{pr}/comments",
+           payload={"body": body + "\n\nGitHub 未允许本身份批准，已改贴评论；没有 APPROVED 状态。"})
     decision = "success" if complete and not confirmed else "failure" if complete else "error"
     output("decision", decision)
     return 0 if decision == "success" else 1
