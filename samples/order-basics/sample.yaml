@@ -1,0 +1,35 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: Sample
+metadata:
+  name: order-basics
+  aliases: []
+  displayName: 订单入门
+  summary: 用三种产品和四张虚构订单体验对象查询与订单关联。
+spec:
+  studio:
+    licenseNote: Apache-2.0 · 虚构演示数据，不能用于真实业务决策。
+    questions:
+      - 有哪些产品和订单？
+      - 每张订单关联哪个产品？
+  database:
+    engine: mariadb
+    name: order_basics
+    expectedTables: 2
+  data:
+    mode: embedded
+  knowledgeNetwork:
+    id: order_basics
+    displayName: 订单入门
+  capabilities:
+    required: false
+  components:
+    objects: true
+    relations: true
+    metrics: false
+    functions: false
+    skills: false
+  hooks:
+    dbInit: db/init.sh
+    dbVerify: db/verify.sh
+    platformInstall: platform/install.sh
+    platformVerify: platform/verify.sh
