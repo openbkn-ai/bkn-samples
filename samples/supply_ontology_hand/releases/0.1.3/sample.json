@@ -1,0 +1,123 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "supply-chain",
+    "version": "0.1.3",
+    "displayName": "供应链",
+    "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "脱敏历史回放，不能用于真实交付承诺。"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-11T05:04:51Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:a869bc1655460674f2cb5a0e1bd26088b67923ffc5ae98b11fcf409fc03e0014"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:0002c65c47e03ed34608469d1e98f17bdd6c3e52c31ef8857037c90673956ec0"
+        }
+      ]
+    },
+    "requires": {
+      "platformVersion": ">=0.2.0 <0.3.0",
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.kn-json",
+        "execution.function",
+        "execution.skill"
+      ],
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "requiredExtensions": [],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ]
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:656f4482b734914bad87b4d86e4720ce88a9f9a4d19563a0eb6b0fccbf02b7cd",
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.3/package.tar.gz"
+        ]
+      },
+      {
+        "id": "database-image",
+        "type": "oci-image",
+        "digest": "sha256:805317bc1ac93e58f4149e35a7a0a75057330d8888ca54526a354996f313fcd1",
+        "locations": [
+          "oci://ghcr.io/openbkn-ai/bkn-samples"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "questions": [
+          "这批需求能不能按当前库存和在制满足？",
+          "缺料时有哪些可用替代料？"
+        ],
+        "contentId": "supply-network"
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "kn-json",
+          "entrypoint": "supply_ontology_hand.json",
+          "contentId": "supply-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "supply-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "supply-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "supply-data",
+          "artifactId": "database-image",
+          "engine": "mariadb",
+          "databaseName": "supply_demo_hand",
+          "expectedTables": 12
+        }
+      ],
+      "bindings": [
+        {
+          "objectTypeId": "supply_ontology_hand_inventory",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_real_time_inventory",
+          "contentId": "supply-network"
+        }
+      ]
+    }
+  }
+}
