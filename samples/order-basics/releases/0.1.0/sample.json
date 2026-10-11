@@ -1,0 +1,115 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "order-basics",
+    "version": "0.1.0",
+    "displayName": "订单入门",
+    "summary": "用三种产品和四张虚构订单体验对象查询与订单关联。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "Apache-2.0 · 虚构演示数据，不能用于真实业务决策。"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-11T07:34:03Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:76d6eed7088e52995020ae2bbb6a7770a2563cbd094bd37fe07436ecedf21f9a"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:e49da55bc2b592fcb77d65080aa459c17c8690370b7d6cf1cd32adad692922cf"
+        }
+      ]
+    },
+    "requires": {
+      "platformVersion": ">=0.2.0 <0.3.0",
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.kn-json"
+      ],
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "requiredExtensions": [],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ]
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:097771fcc162113cd3d1952823c3e7a03fc64624b3f4d650a406faeb739ae305",
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-order-basics-v0.1.0/package.tar.gz"
+        ]
+      },
+      {
+        "id": "database-image",
+        "type": "oci-image",
+        "digest": "sha256:45d01ef8ec8ef947cd7d5307165cbe58e8f0624487b9103ec2259ddf742f4e06",
+        "locations": [
+          "oci://ghcr.io/openbkn-ai/bkn-samples"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "questions": [
+          "有哪些产品和订单？",
+          "每张订单关联哪个产品？"
+        ],
+        "contentId": "order-network"
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "kn-json",
+          "entrypoint": "order_basics.json",
+          "contentId": "order-network"
+        }
+      ],
+      "functionPackages": [],
+      "skillPackages": []
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "order-data",
+          "artifactId": "database-image",
+          "engine": "mariadb",
+          "databaseName": "order_basics",
+          "expectedTables": 2
+        }
+      ],
+      "bindings": [
+        {
+          "objectTypeId": "products",
+          "dataDependencyId": "order-data",
+          "tableName": "products",
+          "contentId": "order-network"
+        },
+        {
+          "objectTypeId": "orders",
+          "dataDependencyId": "order-data",
+          "tableName": "orders",
+          "contentId": "order-network"
+        }
+      ]
+    }
+  }
+}

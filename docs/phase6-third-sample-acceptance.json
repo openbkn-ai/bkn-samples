@@ -1,0 +1,309 @@
+{
+  "status": "offline-accepted-online-publication-pending",
+  "verification": {
+    "sampleId": "order-basics",
+    "version": "0.1.0",
+    "sourceCommit": "15c9a3d711a2e29e9eb4678605cb0efaca011ccc",
+    "packageDigest": "sha256:097771fcc162113cd3d1952823c3e7a03fc64624b3f4d650a406faeb739ae305",
+    "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:45d01ef8ec8ef947cd7d5307165cbe58e8f0624487b9103ec2259ddf742f4e06",
+    "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:f2d5fd597d4e2d81bf3234f47452ba3dd38ca3ec897a3e4519b003d9cb05aa17",
+    "freshInstallation": true,
+    "installation": {
+      "id": "inst-order-basics",
+      "attemptId": "3d0cc8486a8e43a1b603fc22b4538aa7",
+      "sample": "order-basics",
+      "version": "0.1.0",
+      "startedAt": "2026-10-11T07:33:28.588732Z",
+      "finishedAt": "2026-10-11T07:33:52.587834Z",
+      "installedAt": "2026-10-11T07:33:52.587834Z",
+      "status": "installed",
+      "requestedBy": "admin",
+      "stages": [
+        {
+          "id": "database",
+          "name": "准备样例库",
+          "state": "succeeded"
+        },
+        {
+          "id": "discover",
+          "name": "扫描数据资源",
+          "state": "succeeded"
+        },
+        {
+          "id": "knowledge",
+          "name": "导入并绑定知识网络",
+          "state": "succeeded"
+        },
+        {
+          "id": "capabilities",
+          "name": "发布能力",
+          "state": "succeeded"
+        },
+        {
+          "id": "verify",
+          "name": "冒烟验收",
+          "state": "succeeded"
+        }
+      ],
+      "error": null
+    },
+    "checks": [
+      {
+        "name": "database",
+        "passed": true,
+        "details": "Two locked business tables: three products, four orders."
+      },
+      {
+        "name": "knowledge",
+        "passed": true,
+        "details": "Two data-backed objects and one relation imported using standard APIs."
+      },
+      {
+        "name": "scenario",
+        "passed": true,
+        "details": "Object queries returned eight units and joined amount 750."
+      }
+    ],
+    "architectureTested": "arm64",
+    "evidence": "docs/phase6-third-sample-acceptance.json",
+    "limits": [
+      "Data image was preloaded; the tar.gz does not contain container image layers.",
+      "This sample declares no functions, metrics, or Skills. Supply-chain acceptance covers those components."
+    ]
+  },
+  "beforeImport": {
+    "sourceRefresh": {
+      "supported": true,
+      "lastSuccessfulRefreshAt": null,
+      "revision": null,
+      "status": "not_refreshed",
+      "code": "",
+      "checkedAt": null
+    },
+    "canImport": true,
+    "sampleNames": [
+      "supply-chain",
+      "world-cup"
+    ]
+  },
+  "queryResults": {
+    "products": [
+      {
+        "_display": "Widget",
+        "unit_price": "100.00",
+        "product_id": "P001",
+        "product_name": "Widget",
+        "_instance_id": "products-P001",
+        "_instance_identity": {
+          "product_id": "P001"
+        }
+      },
+      {
+        "product_id": "P002",
+        "product_name": "Sensor",
+        "unit_price": "50.00",
+        "_instance_id": "products-P002",
+        "_instance_identity": {
+          "product_id": "P002"
+        },
+        "_display": "Sensor"
+      },
+      {
+        "_display": "Pump",
+        "product_id": "P003",
+        "product_name": "Pump",
+        "unit_price": "200.00",
+        "_instance_id": "products-P003",
+        "_instance_identity": {
+          "product_id": "P003"
+        }
+      }
+    ],
+    "orders": [
+      {
+        "order_id": "O001",
+        "product_id": "P001",
+        "quantity": 2,
+        "_instance_id": "orders-O001",
+        "_instance_identity": {
+          "order_id": "O001"
+        },
+        "_display": "O001"
+      },
+      {
+        "_instance_id": "orders-O002",
+        "_instance_identity": {
+          "order_id": "O002"
+        },
+        "_display": "O002",
+        "order_id": "O002",
+        "product_id": "P002",
+        "quantity": 3
+      },
+      {
+        "_instance_id": "orders-O003",
+        "_instance_identity": {
+          "order_id": "O003"
+        },
+        "_display": "O003",
+        "order_id": "O003",
+        "product_id": "P003",
+        "quantity": 1
+      },
+      {
+        "order_id": "O004",
+        "product_id": "P001",
+        "quantity": 2,
+        "_instance_id": "orders-O004",
+        "_instance_identity": {
+          "order_id": "O004"
+        },
+        "_display": "O004"
+      }
+    ],
+    "orderedUnits": 8,
+    "joinedAmount": 750,
+    "objects": 2,
+    "relations": 1
+  },
+  "history": {
+    "items": [
+      {
+        "id": "inst-order-basics",
+        "attemptId": "3d0cc8486a8e43a1b603fc22b4538aa7",
+        "sample": "order-basics",
+        "version": "0.1.0",
+        "startedAt": "2026-10-11T07:33:28.588732Z",
+        "finishedAt": "2026-10-11T07:33:52.587834Z",
+        "installedAt": "2026-10-11T07:33:52.587834Z",
+        "status": "installed",
+        "requestedBy": "admin",
+        "stages": [
+          {
+            "id": "database",
+            "name": "准备样例库",
+            "state": "succeeded"
+          },
+          {
+            "id": "discover",
+            "name": "扫描数据资源",
+            "state": "succeeded"
+          },
+          {
+            "id": "knowledge",
+            "name": "导入并绑定知识网络",
+            "state": "succeeded"
+          },
+          {
+            "id": "capabilities",
+            "name": "发布能力",
+            "state": "succeeded"
+          },
+          {
+            "id": "verify",
+            "name": "冒烟验收",
+            "state": "succeeded"
+          }
+        ],
+        "error": null
+      },
+      {
+        "id": "inst-order-basics",
+        "attemptId": "3953481e6e1d4f1e9c1e11374c31aa50",
+        "sample": "order-basics",
+        "version": "0.1.0",
+        "startedAt": "2026-10-11T07:29:59.015463Z",
+        "finishedAt": "2026-10-11T07:29:59.310475Z",
+        "installedAt": null,
+        "status": "failed",
+        "requestedBy": "admin",
+        "stages": [
+          {
+            "id": "database",
+            "name": "准备样例库",
+            "state": "failed"
+          },
+          {
+            "id": "discover",
+            "name": "扫描数据资源",
+            "state": "pending"
+          },
+          {
+            "id": "knowledge",
+            "name": "导入并绑定知识网络",
+            "state": "pending"
+          },
+          {
+            "id": "capabilities",
+            "name": "发布能力",
+            "state": "pending"
+          },
+          {
+            "id": "verify",
+            "name": "冒烟验收",
+            "state": "pending"
+          }
+        ],
+        "error": {
+          "code": "storage_class_missing",
+          "stage": "database",
+          "message": "cannot list StorageClass"
+        }
+      },
+      {
+        "id": "inst-order-basics",
+        "attemptId": "ce87019e17ef4e9ba3f4b10d47e8f2d5",
+        "sample": "order-basics",
+        "version": "0.1.0",
+        "startedAt": "2026-10-11T06:55:14.569180Z",
+        "finishedAt": "2026-10-11T06:55:46.553447Z",
+        "installedAt": null,
+        "status": "failed",
+        "requestedBy": "admin",
+        "stages": [
+          {
+            "id": "database",
+            "name": "准备样例库",
+            "state": "succeeded"
+          },
+          {
+            "id": "discover",
+            "name": "扫描数据资源",
+            "state": "succeeded"
+          },
+          {
+            "id": "knowledge",
+            "name": "导入并绑定知识网络",
+            "state": "failed"
+          },
+          {
+            "id": "capabilities",
+            "name": "发布能力",
+            "state": "pending"
+          },
+          {
+            "id": "verify",
+            "name": "冒烟验收",
+            "state": "pending"
+          }
+        ],
+        "error": {
+          "code": "install_failed",
+          "stage": "knowledge",
+          "message": "platform hook failed"
+        }
+      }
+    ],
+    "historyComplete": true
+  },
+  "previousSampleHistoriesUnchanged": true,
+  "browserActions": [
+    "import fixed tar.gz",
+    "read local release notes",
+    "confirm installation",
+    "view failure detail",
+    "retry same fixed version",
+    "installed card"
+  ],
+  "executorImageFixed": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:f2d5fd597d4e2d81bf3234f47452ba3dd38ca3ec897a3e4519b003d9cb05aa17"
+}
