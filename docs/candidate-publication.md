@@ -1,38 +1,58 @@
 # 候选包构建与正式发布
 
-当前交付：本地作者工具，未提交，尚未完成运行时或平台验收。
+当前已交付在线官方目录和离线包导入。两种入口使用相同的版本、包摘要、数据镜像与安装流程。样例版本独立于 OpenBKN 平台版本。
 
-## 构建候选
+## 1. 修改样例并提交 PR
 
-使用 Python 3.9+，无需额外依赖：
+修改 `samples/<directory>/` 的 `sample.yaml`、数据、模型及声明的 hooks，增加 `releases/<version>/release-notes.zh-CN.md` 或英文说明。数据、知识网络、函数、指标、Skill、接口任一变化均发布整个样例的新版本。不要覆盖旧版本。
+
+详细内容更新与验收要求见 [开发指南](SAMPLE_DEVELOPMENT_GUIDE.md)。BKN 目录可用 `openbkn bkn validate <directory>/kn` 校验；KN JSON 使用现有导入接口及真实查询验收，不能将 JSON 文件路径传给目录校验命令。
+
+PR 使用英文标题和描述，完成规范检查与 AI 审核后合并。最终候选从审核过的干净提交构建。新增文件须进入 Git 索引；未跟踪的 hooks 和模型不会进入包。
+
+## 2. 准备数据镜像并构建固定包
+
+数据变化需要发布新的数据镜像，并固定 digest；数据未变可复用已经验证的镜像。镜像内须包含对应样例的数据库 hooks 和锁定数据。支持的目标架构为 amd64、arm64。
 
 ```sh
-python3 tools/publication/build_candidate.py samples/supply_ontology_hand \
-  --version 0.1.0 --output /absolute/path/outside/bkn-samples
+python3 tools/publication/build_candidate.py samples/<directory> \
+  --version <version> --output /absolute/path/outside/bkn-samples \
+  --data-image-ref ghcr.io/openbkn-ai/bkn-samples@sha256:<digest>
 ```
 
-生成 `<sampleDirectory>/<version>/package.tar.gz` 与 `build.json`。归档保留现有样例根目录布局，没有执行初始化、导入或验收脚本。`build.json` 是作者构建报告，记录包摘要、各文件摘要、执行位、源提交、本地改动标记、版本说明及未完成验收项；它不是发布协议清单，也不能交给实例安装。
+生成 `<directory>/<version>/package.tar.gz` 与 `build.json`。构建只打包，不执行样例代码，也不代表安装成功。`build.json` 记录源提交、工作区状态、逐文件摘要和包摘要，属于作者报告，不是实例安装清单。
 
-工具从 Git 索引选择已跟踪的 `sample.yaml`、README、许可证，以及 data、db、kn、platform、skills、tools、docs 目录内容。当前版本的 release notes 是唯一允许额外纳入的未跟踪文件。排除测试目录、隐藏文件、运行配置、缓存、密钥文件扩展名及评测报告目录。新代码文件须先纳入 Git 索引，否则不会进入候选包。白名单不能替代 PR 对内容和敏感信息的审核。
+归档只包含已跟踪、允许交付的文件和当前版本说明，拒绝符号链接及冲突；归档时间和顺序固定。相同输入可复现同一摘要。使用新的输出目录，不覆盖候选或已发布制品。
 
-文件和路径必须为普通文件，拒绝符号链接和未解决的索引冲突；单文件最多 128 MiB、总内容最多 512 MiB。说明必须为非空 UTF-8，最多 256 KiB。源文件一次读取后同时用于归档与摘要；归档顺序、时间、所有者和 gzip 头固定。输出位于源仓库之外，已有候选目录不能覆盖。相同版本可在不同评审输出目录重新构建，但正式发布后的版本禁止替换内容。
+数据镜像独立于 tar.gz：无外网环境必须预先将固定镜像提供到目标集群。上传 tar.gz 不会提供容器镜像层，也不意味着所有平台依赖都能离线获得。
 
-版本参数是本次候选的评审身份，不代表现有 alpha 安装器已支持独立发布版本；alpha 清单没有独立版本字段。本工具不解析业务模型、不确认对象绑定、不宣称兼容平台，也不改写 KN JSON 或现有执行脚本。
+## 3. 在测试环境验收精确候选
 
-## 正式发布的下一步
+Studio 首页 → 一键体验 → 导入离线包，选择上述 tar.gz，检查版本说明，再安装。对相同包和数据镜像记录全新安装的实际结果：
 
-供应链的实际对象绑定、固定依赖、实例连接状态和验收顺序见 [供应链候选验收计划](supply-candidate-acceptance.md)。
+- 数据库表、锁定数据及代表值；
+- 知识网络对象、关系和真实数据源绑定；
+- 声明的函数调用、指标计算及绑定、Skill 内容和引用；
+- 代表业务场景、安装版本与逐次安装记录。
 
-1. 评审候选内容与版本说明，提交作者工具及样例改动；从固定提交重新构建干净候选。
-2. 使用真实 KN JSON/BKN 解析与导入链路验证模型和绑定；确定平台版本、SDK revision、权限和支持架构。
-3. 对固定包摘要执行数据库初始化、平台导入和场景验收，记录实际结果。归档自身不包括安装器及全局 SDK，验收还必须固定这些依赖。
-4. 固定真实制品地址、说明地址及验收证明，生成发布 `sample.json` 和目录。使用可信上一版本基线检查不可改写约束，通过后经 PR 发布。
-5. 实例执行器支持固定制品后，才开放该远程版本的一键安装；Studio 消费实例 API 返回的可安装状态。
+失败不发布目录；修复后重新构建未发布候选并重新验收。安装器拒绝冲突资源，不会替作者迁移客户已有数据。首期不支持已安装样例原地升级、迁移或卸载；新版本先在干净测试安装中验收。
 
-仓库根目录现已准备空的 stable `catalog.json`，用于启动正式目录，尚未推送发布。空目录没有样例发布承诺；不会将未验收候选收录其中。草案要求目录条目有验收证明；为候选放宽它会增加协议和消费者分支。评审报告已能承载候选阶段信息，无需新增一种发布协议。实例只扫描正式 stable 目录。
+## 4. 发布固定制品和元数据
 
-PR 的 contract 工作流执行 `python tools/publication/validate.py . --official`。它检查 schema、清单与说明的一致性、验收证明 JSON 文件及摘要，并确认元数据确实存在于 URL 指定的官方仓库提交。清单位于 `samples/<directory>/releases/<version>/sample.json`，目录名称不要求等于 sampleId。相对可信 base 提交，目录改变必须递增 sequence，既有版本的固定引用不能改写，撤回须保留历史条目。
+验收通过后上传精确候选包到官方 GitHub Release，核对上传资产摘要。在 `releases/<version>/` 增加 `sample.json` 和 `verification.json`，绑定固定包、镜像、说明摘要、实际安装结果及限制。参考 [供应链 0.1.3](../samples/supply_ontology_hand/releases/0.1.3/sample.json)。
 
-这些检查不会证明安装或业务场景成功。验收证明的实际结果与日志仍由发布 PR 审核；固定包、数据镜像、安装器和平台需完成全新安装验收。通用数据库启动脚本现在通过镜像内 `sample.yaml` 的身份和 `dbInit` 选择初始化脚本，拒绝重复身份、越界路径与符号链接；镜像内容打包仍需单独准备，不代表远程安装执行器已完成。
+先提交元数据形成完整官方提交 SHA，再将 `catalog.json` 的元数据 URL 固定到该 SHA。递增目录 sequence，保留旧版本；撤回保留历史条目。目录变更同样经过英文 PR 和 AI 审核。
 
-本地已构建供应链 0.1.0 候选，说明沿用内置过渡版本。本次只执行候选制品生成，没有运行测试、业务模型校验、安装脚本或平台验收。正式供应链发布版本待候选验收和评审确定，不沿用草案示例的虚构 1.0.0 制品。
+```sh
+git show origin/main:catalog.json > /tmp/baseline-catalog.json
+python3 tools/publication/validate.py . --official \
+  --baseline-catalog /tmp/baseline-catalog.json
+```
+
+规范检查证明结构、来源和固定引用正确；不能替代真实安装及业务验收。
+
+## 5. 在实例确认发布结果
+
+合并目录 PR 后，在首页点击刷新样例，确认新版本、release notes 和可安装状态。目录不是实时推送：实例读取官方目录并保留成功缓存，刷新失败时使用已有缓存并提示失败。没有缓存的新环境不能凭空获得远程目录；仍可使用离线包入口。内置样例不等于远程目录缓存。
+
+最后用正式远程包完成安装、打开知识网络及实际查询，并记录持久状态在服务重建后保留。部署入口见 [样例服务部署](sample-service-deployment.md)，产品 Chart 位于 `openbkn-ai/openbkn-deploy`。

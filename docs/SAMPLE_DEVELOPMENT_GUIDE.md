@@ -2,6 +2,8 @@
 
 This guide defines the small, reviewable contract for adding and updating a sample in `bkn-samples`.
 
+See the [Chinese development and version guide](SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md) for the supply-chain update workflow.
+
 ## Layout
 
 Each sample lives under `samples/<sample-id>/` and must contain `sample.yaml`, release notes, and the files needed by its declared hooks. Use `kn/` for an OpenBKN BKN directory or KN JSON, `data/` for embedded locked data, `tools/` for functions, and `skills/` for skills.
@@ -23,7 +25,7 @@ python3 tools/publication/build_candidate.py samples/<sample-id> \
   --version <version> --output /tmp/sample-candidate
 ```
 
-The package contains only tracked allowlisted files. Fixed data must be checked by a lock file. Validate native BKN with `openbkn bkn validate <sample>/kn` before publication.
+The package contains only tracked allowlisted files. Fixed data must be checked by a lock file. Validate native BKN directories with `openbkn bkn validate <sample>/kn` before publication. KN JSON uses the existing standard import API and actual object-query acceptance; the directory validator does not accept a JSON file path. Installation imports packaged content and does not invoke creator or generative Skills.
 
 Add new sample files to the Git index before building; untracked hooks and models are excluded. Build the final candidate from the reviewed, clean commit and keep `build.json` with the package digest. Candidate construction does not execute hooks or prove that installation works. Never overwrite a published version; choose a new version and a new output directory.
 
