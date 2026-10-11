@@ -36,7 +36,10 @@ def apply_managed_tags(network: Path, payload: dict) -> None:
     _, front, body = text.split("---", 2)
     metadata = yaml.safe_load(front)
     required = ["bkn-samples", "bkn-sample-world-cup", f"bkn-samples-version-{version.replace('.', '-')}"]
-    metadata["tags"] = list(dict.fromkeys([*(metadata.get("tags") or []), *required]))
+    # The platform permits five tags. Keep provenance and ownership; CSV is
+    # already described by the sample data contract. Standalone rendering is unchanged.
+    provenance = [tag for tag in (metadata.get("tags") or []) if tag != "CSV"]
+    metadata["tags"] = list(dict.fromkeys([*provenance, *required]))
     network.write_text("---\n" + yaml.safe_dump(metadata, allow_unicode=True, sort_keys=False) + "---" + body, encoding="utf-8")
 
 

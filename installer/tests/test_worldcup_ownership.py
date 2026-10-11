@@ -23,6 +23,9 @@ class WorldCupOwnershipTest(unittest.TestCase):
             self.assertEqual(body, text.split("---", 2)[2])
             tags = yaml.safe_load(front)["tags"]
             self.assertTrue({"worldcup", "bkn-samples", "bkn-sample-world-cup", "bkn-samples-version-0-1-2"}.issubset(tags))
+            self.assertEqual(len(tags), 5)
+            self.assertIn("fjelstul", tags)
+            self.assertNotIn("CSV", tags)
             renderer.apply_managed_tags(path, {"sample": "world-cup", "version": "0.1.2", "ownership": {"sample": "world-cup"}})
             self.assertEqual(path.read_text(), rendered)
 
