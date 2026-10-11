@@ -80,6 +80,7 @@ class OrderBasicsTest(unittest.TestCase):
 
     def test_network_references_match_fixture(self):
         network = json.loads((ROOT / "kn/order_basics.json").read_text())
+        self.assertEqual(network["branch"], "main")
         self.assertEqual({o['id'] for o in network['object_types']}, {'products', 'orders'})
         relation = network['relation_types'][0]
         self.assertEqual(relation['source_object_type_id'], 'orders')
