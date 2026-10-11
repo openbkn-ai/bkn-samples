@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000008",
-    "sequence": 8,
+    "revision": "catalog-000009",
+    "sequence": 9,
     "channel": "stable",
-    "publishedAt": "2026-10-11T07:50:37Z"
+    "publishedAt": "2026-10-11T07:58:59Z"
   },
   "spec": {
     "entries": [
@@ -300,6 +300,53 @@
           "digest": "sha256:3d74879286217978d830fc073a2e93b0ec58951dc716be77ded2153031e3b5ba"
         },
         "withdrawalReason": "Publication receipt omitted the required capabilities check; replaced by a newly verified version."
+      },
+      {
+        "sampleId": "order-basics",
+        "version": "0.1.1",
+        "displayName": "订单入门",
+        "summary": "用三种产品和四张虚构订单体验对象查询与订单关联。",
+        "publishedAt": "2026-10-11T07:58:16Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "Order basics 0.1.1: complete fixed-artifact acceptance receipt.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82200515bbd7a3bba695b05fdceeb650abe751c9/samples/order-basics/releases/0.1.1/release-notes.en-US.md",
+              "digest": "sha256:612c47f73f5c247135aed277ab4ae22530d6e197774268078d294fde288ea6aa"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82200515bbd7a3bba695b05fdceeb650abe751c9/samples/order-basics/releases/0.1.1/release-notes.zh-CN.md",
+              "digest": "sha256:d638cc8b73c90073af884e49b39cbd0b282b037084e30f8397953998a60aea5e"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82200515bbd7a3bba695b05fdceeb650abe751c9/samples/order-basics/releases/0.1.1/sample.json",
+          "digest": "sha256:e1772a76adb5b393a59fdd1b90941ea8a9dc290acd451b9f11771cf7a075231b"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/691721fad028907625c29e5df02d7f8dfb0e5650/samples/order-basics/releases/0.1.1/verification.json",
+          "digest": "sha256:2ec07535c565067d5e8943653ddd20a9ce2ea747cca30d602b65c746fb84eb8d"
+        }
       }
     ]
   }

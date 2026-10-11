@@ -1,0 +1,558 @@
+{
+  "status": "fresh-offline-accepted-online-pending",
+  "verification": {
+    "sampleId": "order-basics",
+    "version": "0.1.1",
+    "sourceCommit": "0d9e7bef414c802a79524f9a31aba61041860474",
+    "packageDigest": "sha256:aabefbaa04a4ab3bbe1a8daa20292c6660f8187563cf0adc25380b53800eb6ce",
+    "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:45d01ef8ec8ef947cd7d5307165cbe58e8f0624487b9103ec2259ddf742f4e06",
+    "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:f2d5fd597d4e2d81bf3234f47452ba3dd38ca3ec897a3e4519b003d9cb05aa17",
+    "freshInstallation": true,
+    "installation": {
+      "id": "inst-order-basics",
+      "attemptId": "13de8b668aee4dda868830cfe1cd5b4c",
+      "sample": "order-basics",
+      "version": "0.1.1",
+      "startedAt": "2026-10-11T07:53:22.538731Z",
+      "finishedAt": "2026-10-11T07:53:51.464606Z",
+      "installedAt": "2026-10-11T07:53:51.464606Z",
+      "status": "installed",
+      "requestedBy": "admin",
+      "stages": [
+        {
+          "id": "database",
+          "name": "准备样例库",
+          "state": "succeeded"
+        },
+        {
+          "id": "discover",
+          "name": "扫描数据资源",
+          "state": "succeeded"
+        },
+        {
+          "id": "knowledge",
+          "name": "导入并绑定知识网络",
+          "state": "succeeded"
+        },
+        {
+          "id": "capabilities",
+          "name": "发布能力",
+          "state": "succeeded"
+        },
+        {
+          "id": "verify",
+          "name": "冒烟验收",
+          "state": "succeeded"
+        }
+      ],
+      "error": null
+    },
+    "checks": [
+      {
+        "name": "database",
+        "passed": true,
+        "details": "Two locked business tables: three products, four orders."
+      },
+      {
+        "name": "knowledge",
+        "passed": true,
+        "details": "Two data-backed objects and one relation imported using standard APIs."
+      },
+      {
+        "name": "scenario",
+        "passed": true,
+        "details": "Object queries returned eight units; actual managed MCP relation query returned four order/product pairs and amount 750."
+      },
+      {
+        "name": "capabilities",
+        "passed": true,
+        "details": "No optional functions, metrics or Skills are declared; actual network export and Studio show zero of each. The capability installation stage succeeded without creator Skills."
+      }
+    ],
+    "architectureTested": "arm64",
+    "evidence": "docs/phase6-order-basics-0.1.1-candidate.json",
+    "limits": [
+      "Data image was preloaded; the tar.gz does not contain container image layers.",
+      "This sample declares no functions, metrics, or Skills. Supply-chain acceptance covers those components."
+    ]
+  },
+  "queries": {
+    "network": {
+      "id": "order_basics",
+      "name": "订单入门",
+      "tags": [
+        "bkn-sample-order-basics",
+        "bkn-samples",
+        "bkn-samples-version-0-1-1"
+      ],
+      "comment": "Synthetic products and orders for the standard sample installation flow.",
+      "icon": "",
+      "color": "",
+      "branch": "main",
+      "object_types": [
+        {
+          "id": "orders",
+          "name": "订单",
+          "data_source": {
+            "type": "resource",
+            "id": "01a129f4-218e-75ed-b538-0a6ed4077626",
+            "name": "order_basics.orders"
+          },
+          "data_properties": [
+            {
+              "name": "order_id",
+              "display_name": "order_id",
+              "type": "string",
+              "comment": "",
+              "mapped_field": {
+                "name": "order_id",
+                "type": "string",
+                "display_name": "order_id"
+              },
+              "condition_operations": [
+                "==",
+                "!=",
+                "in",
+                "not_in",
+                ">",
+                ">=",
+                "<",
+                "<=",
+                "range",
+                "out_range",
+                "regex",
+                "like",
+                "not_like"
+              ]
+            },
+            {
+              "name": "product_id",
+              "display_name": "product_id",
+              "type": "string",
+              "comment": "",
+              "mapped_field": {
+                "name": "product_id",
+                "type": "string",
+                "display_name": "product_id"
+              },
+              "condition_operations": [
+                "==",
+                "!=",
+                "in",
+                "not_in",
+                ">",
+                ">=",
+                "<",
+                "<=",
+                "range",
+                "out_range",
+                "regex",
+                "like",
+                "not_like"
+              ]
+            },
+            {
+              "name": "quantity",
+              "display_name": "quantity",
+              "type": "integer",
+              "comment": "",
+              "mapped_field": {
+                "name": "quantity",
+                "type": "integer",
+                "display_name": "quantity"
+              }
+            }
+          ],
+          "primary_keys": [
+            "order_id"
+          ],
+          "display_key": "order_id",
+          "incremental_key": "",
+          "tags": [],
+          "comment": "",
+          "icon": "",
+          "color": "",
+          "kn_id": "order_basics",
+          "branch": "main",
+          "status": {
+            "incremental_key": "",
+            "incremental_value": "",
+            "index": "",
+            "doc_count": 0,
+            "storage_size": 0,
+            "update_time": 1791705229755
+          },
+          "index_status": {
+            "state": "unavailable",
+            "source_status": "unavailable"
+          },
+          "creator": {
+            "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+            "type": "user",
+            "name": "Administrator"
+          },
+          "create_time": 1791705229755,
+          "updater": {
+            "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+            "type": "user",
+            "name": "Administrator"
+          },
+          "update_time": 1791705229755,
+          "module_type": "object_type",
+          "operations": [
+            "delete",
+            "modify",
+            "query_data",
+            "view_detail"
+          ]
+        },
+        {
+          "id": "products",
+          "name": "产品",
+          "data_source": {
+            "type": "resource",
+            "id": "01a129f4-218a-7c72-a362-2bbd1385c0a4",
+            "name": "order_basics.products"
+          },
+          "data_properties": [
+            {
+              "name": "product_id",
+              "display_name": "product_id",
+              "type": "string",
+              "comment": "",
+              "mapped_field": {
+                "name": "product_id",
+                "type": "string",
+                "display_name": "product_id"
+              },
+              "condition_operations": [
+                "==",
+                "!=",
+                "in",
+                "not_in",
+                ">",
+                ">=",
+                "<",
+                "<=",
+                "range",
+                "out_range",
+                "regex",
+                "like",
+                "not_like"
+              ]
+            },
+            {
+              "name": "product_name",
+              "display_name": "product_name",
+              "type": "string",
+              "comment": "",
+              "mapped_field": {
+                "name": "product_name",
+                "type": "string",
+                "display_name": "product_name"
+              },
+              "condition_operations": [
+                "==",
+                "!=",
+                "in",
+                "not_in",
+                ">",
+                ">=",
+                "<",
+                "<=",
+                "range",
+                "out_range",
+                "regex",
+                "like",
+                "not_like"
+              ]
+            },
+            {
+              "name": "unit_price",
+              "display_name": "unit_price",
+              "type": "decimal",
+              "comment": "",
+              "mapped_field": {
+                "name": "unit_price",
+                "type": "decimal",
+                "display_name": "unit_price"
+              }
+            }
+          ],
+          "primary_keys": [
+            "product_id"
+          ],
+          "display_key": "product_name",
+          "incremental_key": "",
+          "tags": [],
+          "comment": "",
+          "icon": "",
+          "color": "",
+          "kn_id": "order_basics",
+          "branch": "main",
+          "status": {
+            "incremental_key": "",
+            "incremental_value": "",
+            "index": "",
+            "doc_count": 0,
+            "storage_size": 0,
+            "update_time": 1791705229755
+          },
+          "index_status": {
+            "state": "unavailable",
+            "source_status": "unavailable"
+          },
+          "creator": {
+            "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+            "type": "user",
+            "name": "Administrator"
+          },
+          "create_time": 1791705229755,
+          "updater": {
+            "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+            "type": "user",
+            "name": "Administrator"
+          },
+          "update_time": 1791705229755,
+          "module_type": "object_type",
+          "operations": [
+            "delete",
+            "modify",
+            "query_data",
+            "view_detail"
+          ]
+        }
+      ],
+      "relation_types": [
+        {
+          "id": "order_product",
+          "name": "订单关联产品",
+          "source_object_type_id": "orders",
+          "target_object_type_id": "products",
+          "type": "direct",
+          "mapping_rules": [
+            {
+              "source_property": {
+                "name": "product_id",
+                "display_name": ""
+              },
+              "target_property": {
+                "name": "product_id",
+                "display_name": ""
+              }
+            }
+          ],
+          "tags": [],
+          "comment": "",
+          "icon": "",
+          "color": "",
+          "kn_id": "order_basics",
+          "branch": "main",
+          "source_object_type": {
+            "id": "orders",
+            "name": "订单",
+            "branch": "",
+            "icon": "",
+            "color": ""
+          },
+          "target_object_type": {
+            "id": "products",
+            "name": "产品",
+            "branch": "",
+            "icon": "",
+            "color": ""
+          },
+          "creator": {
+            "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+            "type": "user",
+            "name": "Administrator"
+          },
+          "create_time": 1791705229814,
+          "updater": {
+            "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+            "type": "user",
+            "name": "Administrator"
+          },
+          "update_time": 1791705229814,
+          "module_type": "relation_type",
+          "operations": [
+            "delete",
+            "modify",
+            "query_data",
+            "view_detail"
+          ]
+        }
+      ],
+      "creator": {
+        "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+        "type": "user",
+        "name": "Administrator"
+      },
+      "create_time": 1791705229741,
+      "updater": {
+        "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+        "type": "user",
+        "name": "Administrator"
+      },
+      "update_time": 1791705229741,
+      "module_type": "knowledge_network",
+      "operations": [
+        "authorize",
+        "create",
+        "delete",
+        "execute",
+        "modify",
+        "query_data",
+        "view_detail"
+      ]
+    },
+    "products": {
+      "datas": [
+        {
+          "_display": "Widget",
+          "product_id": "P001",
+          "product_name": "Widget",
+          "unit_price": "100.00",
+          "_instance_id": "products-P001",
+          "_instance_identity": {
+            "product_id": "P001"
+          }
+        },
+        {
+          "unit_price": "50.00",
+          "product_id": "P002",
+          "product_name": "Sensor",
+          "_instance_id": "products-P002",
+          "_instance_identity": {
+            "product_id": "P002"
+          },
+          "_display": "Sensor"
+        },
+        {
+          "_display": "Pump",
+          "unit_price": "200.00",
+          "product_id": "P003",
+          "product_name": "Pump",
+          "_instance_id": "products-P003",
+          "_instance_identity": {
+            "product_id": "P003"
+          }
+        }
+      ],
+      "paging": {
+        "next_cursor": null,
+        "expires_at_sec": null
+      },
+      "overall_ms": 31,
+      "search_from_index": false,
+      "effective_permissions": {
+        "product_id": "full",
+        "product_name": "full",
+        "unit_price": "full"
+      }
+    },
+    "orders": {
+      "datas": [
+        {
+          "order_id": "O001",
+          "product_id": "P001",
+          "quantity": 2,
+          "_instance_id": "orders-O001",
+          "_instance_identity": {
+            "order_id": "O001"
+          },
+          "_display": "O001"
+        },
+        {
+          "_instance_identity": {
+            "order_id": "O002"
+          },
+          "_display": "O002",
+          "order_id": "O002",
+          "product_id": "P002",
+          "quantity": 3,
+          "_instance_id": "orders-O002"
+        },
+        {
+          "_instance_id": "orders-O003",
+          "_instance_identity": {
+            "order_id": "O003"
+          },
+          "_display": "O003",
+          "order_id": "O003",
+          "product_id": "P003",
+          "quantity": 1
+        },
+        {
+          "_instance_id": "orders-O004",
+          "_instance_identity": {
+            "order_id": "O004"
+          },
+          "_display": "O004",
+          "order_id": "O004",
+          "product_id": "P001",
+          "quantity": 2
+        }
+      ],
+      "paging": {
+        "next_cursor": null,
+        "expires_at_sec": null
+      },
+      "overall_ms": 134,
+      "search_from_index": false,
+      "effective_permissions": {
+        "order_id": "full",
+        "product_id": "full",
+        "quantity": "full"
+      }
+    },
+    "passed": true
+  },
+  "relationQuery": {
+    "columns": [
+      {
+        "name": "o.order_id",
+        "type": "string"
+      },
+      {
+        "name": "o.quantity",
+        "type": "integer"
+      },
+      {
+        "name": "p.product_id",
+        "type": "string"
+      },
+      {
+        "name": "p.unit_price",
+        "type": "decimal"
+      }
+    ],
+    "entries": [
+      {
+        "p.unit_price": "100.00",
+        "o.order_id": "O001",
+        "o.quantity": 2,
+        "p.product_id": "P001"
+      },
+      {
+        "o.order_id": "O002",
+        "o.quantity": 3,
+        "p.product_id": "P002",
+        "p.unit_price": "50.00"
+      },
+      {
+        "o.quantity": 1,
+        "p.product_id": "P003",
+        "p.unit_price": "200.00",
+        "o.order_id": "O003"
+      },
+      {
+        "p.product_id": "P001",
+        "p.unit_price": "100.00",
+        "o.order_id": "O004",
+        "o.quantity": 2
+      }
+    ]
+  },
+  "priorSamplesHistoriesUnchanged": true
+}
