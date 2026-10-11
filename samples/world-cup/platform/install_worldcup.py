@@ -63,6 +63,8 @@ def write_output(payload: dict, ok: bool, message: str = "", code: str = "") -> 
             "catalogId": payload["catalog"]["id"],
             "knowledgeNetworkId": KN_ID,
             "capabilitySummary": capability_summary(payload),
+            **({"ownedExecution": json.loads(Path(os.environ["BKN_SAMPLE_RECEIPT"]).read_text())}
+               if os.environ.get("BKN_SAMPLE_RECEIPT") and Path(os.environ["BKN_SAMPLE_RECEIPT"]).exists() else {}),
         },
         "checks": [],
         "degrade": degrade_notes(),
@@ -141,6 +143,10 @@ def main() -> int:
             code="ownership_conflict",
         )
         return 1
+    if os.environ.get("BKN_SAMPLE_RECEIPT"):
+        receipt = Path(os.environ["BKN_SAMPLE_RECEIPT"])
+        if not receipt.exists():
+            receipt.write_text(json.dumps({"toolboxes": [], "skills": []}), encoding="utf-8")
     result = subprocess.run(["./run.sh", "--from", "4"], cwd=SAMPLE_DIR, env=command_env(payload), check=False)
     if result.returncode != 0:
         write_output(payload, False, "run.sh failed")

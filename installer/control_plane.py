@@ -243,6 +243,8 @@ def create_installation(
     current = _read_state(state_dir, sample)
     if current and current.get("status") == "installed":
         raise ControlError("already_installed", f"{sample} is already installed")
+    if current and current.get("status") in {"uninstalling", "uninstall_failed"}:
+        raise ControlError("already_installing", "complete sample cleanup before installing")
     if current and current.get("status") == "failed":
         raise ControlError("use_retry", "retry the failed installation")
     return _advance(

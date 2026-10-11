@@ -288,6 +288,26 @@ class DeployDatabaseTest(unittest.TestCase):
         self.assertEqual(caught.exception.code, "database_not_ready")
 
 
+    def test_bundled_default_reference_has_ownership_annotations(self):
+        base, kubectl = self.remote_kubectl()
+        with patch.dict(os.environ, {}, clear=True):
+            result = deploy_database(ROOT, "supply-chain", kubectl, digests=lambda _: (None, DIGEST), require_ownership=True)
+        documents = [d for d in yaml.safe_load_all(base.applied[0]) if d.get("kind") != "Namespace"]
+        self.assertEqual(len(documents), 3)
+        for document in documents:
+            self.assertEqual(document["metadata"]["annotations"]["openbkn.ai/sample-data-image"], result["image"])
+        claim = next(d for d in documents if d["kind"] == "StatefulSet")["spec"]["volumeClaimTemplates"][0]
+        self.assertEqual(claim["metadata"]["annotations"]["openbkn.ai/sample-data-image"], result["image"])
+
+    def test_owned_database_does_not_drift_from_its_image_annotations(self):
+        base, kubectl = self.remote_kubectl(states=["image_pull_failed"])
+        with patch.dict(os.environ, {}, clear=True), self.assertRaises(DeployError) as error:
+            deploy_database(ROOT, "supply-chain", kubectl, digests=lambda _: (DIGEST, DIGEST),
+                            require_ownership=True, attempts=1)
+        self.assertEqual(error.exception.code, "image_unavailable")
+        self.assertFalse(base.patched)
+
+
 class PollingTest(unittest.TestCase):
     def test_waits_between_checks_instead_of_spinning(self):
         waits = []
@@ -295,6 +315,9 @@ class PollingTest(unittest.TestCase):
         deploy_database(ROOT, "supply-chain", kubectl, sleep=waits.append, attempts=5, poll_seconds=7,
                         digests=lambda _tag: (DIGEST, DIGEST))
         self.assertEqual(waits, [7, 7])
+
+
+
 
 
 class _Response:

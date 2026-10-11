@@ -13,6 +13,7 @@ import json
 import subprocess
 from typing import Any
 
+from ownership_receipt import require_owned, remember
 from function_catalog import FUNCTION_CATALOG
 from native_function_bundle import build_native_function_code
 
@@ -112,6 +113,8 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
         return preview
 
     box = _find_exact_box(box_name)
+    if box is not None:
+        require_owned("toolboxes", box["box_id"])
     if box is None:
         box = _call(
             [
@@ -132,6 +135,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
                 ),
             ]
         )
+        remember("toolboxes", box["box_id"])
     box_id = box["box_id"]
     tool_ids: dict[str, str] = {}
     for operation, tool_input in tool_inputs.items():

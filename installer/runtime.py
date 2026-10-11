@@ -12,6 +12,7 @@ from pathlib import Path
 
 from installer.control_plane import ControlError, create_installation, retry_installation
 from installer.deploy_database import NAMESPACE, DeployError, _sample, configured_image_ref, deploy_database
+from installer.state_store import write_json
 from installer.studio_api import ApiError, _installation_id, _read_state, _write_failed, installation_view
 
 
@@ -95,6 +96,7 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
             shared.mkdir(parents=True, exist_ok=True, mode=0o700)
             shared.chmod(0o700)
             hook_env["BKN_SAMPLE_CONFIG"] = str(shared / "config.yaml")
+            hook_env["BKN_SAMPLE_RECEIPT"] = str(shared / "owned-execution.json")
         completed = run([str(script)], hook_env)
         if output.is_file():
             try:
@@ -108,12 +110,28 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
         return {"ok": False, "message": "platform hook failed"}
 
 
+def _record_database_image(state_dir, sample, version, deployed):
+    image = deployed.get("image")
+    if not image:
+        return
+    current = _read_state(state_dir, sample)
+    if not current:
+        from installer.studio_api import _write_installing
+        _write_installing(state_dir, sample, version, data_image_ref=image)
+        return
+    if current.get("dataImageRef") and current["dataImageRef"] != image:
+        raise ApiError(409, "version_changed", "database image differs from the installation receipt")
+    current["dataImageRef"] = image
+    write_json(state_dir / f"{sample}.json", current)
+
+
 def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None) -> dict:
     if actor_role != "admin":
         raise ApiError(403, "forbidden", "an administrator must install the sample")
     cli_env = caller_env(authorization)
     try:
         deployed = deploy(sample)
+        _record_database_image(state_dir, sample, version, deployed)
         database = database_config(deployed, kubectl)
         expected_tables, knowledge_network, components = sample_contract(root, sample)
         record = create_installation(
@@ -151,9 +169,10 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
     cli_env = caller_env(authorization)
     try:
         expected_image = data_image_ref if data_image_ref is not None else configured_image_ref()
-        if "dataImageRef" in current and current["dataImageRef"] != expected_image:
+        if expected_image is not None and current.get("dataImageRef") and current["dataImageRef"] != expected_image:
             raise ApiError(409, "version_changed", "retry requires the original configured data image")
         deployed = deploy(sample)
+        _record_database_image(state_dir, sample, version, deployed)
         database = database_config(deployed, kubectl)
         expected_tables, knowledge_network, components = sample_contract(root, sample)
         record = retry_installation(
@@ -187,5 +206,5 @@ def process_run(argv: list[str], env: dict | None) -> subprocess.CompletedProces
     return subprocess.run(argv, env=merged, text=True, capture_output=True, check=False)
 
 
-def deploy(root: Path, sample: str) -> dict:
-    return deploy_database(root, sample, kubectl_run)
+def deploy(root: Path, sample: str, data_image_ref: str | None = None) -> dict:
+    return deploy_database(root, sample, kubectl_run, data_image_ref=data_image_ref, require_ownership=True)

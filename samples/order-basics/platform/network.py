@@ -71,7 +71,8 @@ def main():
     else:
         raise ValueError("expected install or verify")
     result = {"ok": True, "stage": "platform-" + sys.argv[1],
-              "resources": {"catalogId": payload["catalog"]["id"], "knowledgeNetworkId": KN},
+              "resources": {"catalogId": payload["catalog"]["id"], "knowledgeNetworkId": KN,
+                            "ownedExecution": {"toolboxes": [], "skills": []}},
               "checks": checks, "degrade": [], "message": ""}
     Path(os.environ["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps(result, ensure_ascii=False))
     print(json.dumps(result, ensure_ascii=False))

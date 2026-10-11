@@ -40,7 +40,7 @@ def merge_remote(result, entries, state_dir, role, runtime):
         selected = next((e for e, v in zip(releases, versions) if not v["reason"]), (published or releases)[0])
         state = _read_state(state_dir, name)
         old = by_name.get(name)
-        if old and state and not state.get("remoteRelease"):
+        if old and state and state.get("status") != "uninstalled" and not state.get("remoteRelease"):
             card = old
         elif old and not any(not v["reason"] for v in versions) and not (state or {}).get("remoteRelease"):
             card = old

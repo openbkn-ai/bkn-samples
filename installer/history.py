@@ -10,7 +10,7 @@ from uuid import uuid4
 
 from installer.state_store import write_json
 
-TERMINAL_STATUSES = {"installed", "failed", "conflict"}
+TERMINAL_STATUSES = {"installed", "failed", "conflict", "uninstalled", "uninstall_failed"}
 _SAFE = re.compile(r"[^a-zA-Z0-9._-]+")
 
 
@@ -36,6 +36,8 @@ def begin_installation_attempt(state_dir: Path, record: dict, previous: dict | N
         record_terminal_installation(state_dir, previous)
     _, complete = read_installation_history(state_dir, record["sample"], previous)
     record["historyComplete"] = complete if previous or (state_dir / "history" / record["sample"]).exists() else True
+    if previous and previous.get("status") == "uninstalled":
+        record["id"] = f"inst-{record['sample']}-{uuid4().hex}"
     record["attemptId"] = uuid4().hex
     record["startedAt"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     record.pop("finishedAt", None)
