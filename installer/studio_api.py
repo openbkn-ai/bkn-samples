@@ -183,11 +183,16 @@ def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
 
 def installation_view(record: dict, actor_role: str) -> dict:
     error = record.get("error") if isinstance(record.get("error"), dict) else None
-    failed_at = _failed_stage(record) if record.get("status") == "failed" else ""
+    failed_at = _failed_stage(record) if record.get("status") in {"failed", "uninstall_failed"} else ""
     stages = []
     running_assigned = False
-    for stage_id, name in STAGES:
+    from installer.uninstall import UNINSTALL_STAGES
+    stage_names = UNINSTALL_STAGES if record.get("operation") == "uninstall" else STAGES
+    for stage_id, name in stage_names:
         state = (record.get("stages") or {}).get(stage_id)
+        if record.get("operation") == "uninstall":
+            stages.append({"id": stage_id, "name": name, "state": state or "pending"})
+            continue
         if stage_id == "database" and state == "failed":
             stages.append({"id": stage_id, "name": name, "state": "failed"})
             continue
@@ -217,6 +222,7 @@ def installation_view(record: dict, actor_role: str) -> dict:
         "installedAt": record.get("installedAt") if record.get("status") == "installed" else None,
         "status": _public_status(record),
         "requestedBy": actor_role,
+        "operation": record.get("operation", "install"),
         "stages": stages,
         "error": None
         if not error
@@ -225,12 +231,18 @@ def installation_view(record: dict, actor_role: str) -> dict:
 
 
 def _card(item: dict, version: str, state: dict | None, actor_role: str, source_rejected: bool) -> dict:
-    status = "unavailable" if source_rejected or item.get("status") == "unavailable" else _public_status(state or {})
-    if state and state.get("error", {}).get("code") == "ownership_conflict":
+    status = _public_status(state or {})
+    if state and state.get("operation") != "uninstall" and state.get("error", {}).get("code") == "ownership_conflict":
         status = "conflict"
+    if status == "uninstalled":
+        status = "not_installed"
+    if status == "not_installed" and (source_rejected or item.get("status") == "unavailable"):
+        status = "unavailable"
     installable = actor_role == "admin" and status in {"not_installed", "failed", "conflict"}
     installed = status == "installed"
     installed_version = str((state or {}).get("version") or "")
+    receipt = (state or {}).get("resources", {}).get("ownedExecution")
+    has_receipt = isinstance(receipt, dict) and all(isinstance(receipt.get(k), list) for k in ("toolboxes", "skills"))
     return {
         "name": item.get("name"),
         "displayName": item.get("displayName") or item.get("name"),
@@ -243,7 +255,8 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
             "displayName": item.get("knowledgeNetworkDisplayName") or item.get("knowledgeNetworkId", ""),
         },
         "components": dict(item.get("components") or {}),
-        "installedVersion": installed_version if installed else "",
+        "installedVersion": installed_version if installed or status in {"uninstalling", "uninstall_failed"} else "",
+        "uninstallUnavailableReason": "ownership_receipt_missing" if installed and item.get("name") in {"supply-chain", "world-cup", "order-basics"} and not has_receipt else "",
         "installedAt": (state or {}).get("installedAt") if installed else None,
         "manifestSha256": item.get("manifestSha256", ""),
         "versions": [{"version": version, "hasReleaseNotes": bool(item.get("releaseNotes"))}],
@@ -251,6 +264,9 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
         "questions": list(item.get("questions") or []),
         "status": status,
         "installable": installable,
+        "canUninstall": actor_role == "admin" and item.get("name") in {"supply-chain", "world-cup", "order-basics"}
+            and status in {"installed", "uninstall_failed"}
+            and has_receipt,
         "installationId": _installation_id(state) if state else None,
         "message": (state or {}).get("error", {}).get("message", "") if state else item.get("code", ""),
     }
@@ -258,8 +274,8 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
 
 def _public_status(record: dict) -> str:
     status = record.get("status")
-    if status in {"installing", "installed", "failed"}:
-        if record.get("error", {}).get("code") == "ownership_conflict":
+    if status in {"installing", "installed", "failed", "uninstalling", "uninstall_failed", "uninstalled"}:
+        if record.get("operation") != "uninstall" and record.get("error", {}).get("code") == "ownership_conflict":
             return "conflict"
         return status
     return "not_installed"
@@ -267,6 +283,8 @@ def _public_status(record: dict) -> str:
 
 def _failed_stage(record: dict) -> str:
     stages = record.get("stages") or {}
+    if record.get("operation") == "uninstall":
+        return next((name for name, value in stages.items() if value == "failed"), "")
     if stages.get("database") == "failed":
         return "database"
     for stage_id, _name in STAGES:
@@ -318,7 +336,7 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
     }
     current = _read_state(state_dir, sample) or {}
     record = {
-        "id": f"inst-{sample}",
+        "id": current.get("id") or f"inst-{sample}",
         "sample": sample,
         "version": version,
         "status": "failed",

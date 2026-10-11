@@ -63,6 +63,21 @@ class StudioHttpTest(unittest.TestCase):
             server.shutdown()
             server.server_close()
 
+    def test_uninstall_is_admin_only_and_accepts_only_empty_body(self):
+        built, _ = app()
+        calls = []
+        built.uninstall = lambda sample, installation, role, authorization: (calls.append((sample, installation, role)) or {"id": installation, "status": "uninstalling", "operation": "uninstall"})
+        path = "/api/studio/samples/supply-chain/installations/inst-old/uninstall"
+        status, result = dispatch(built, "POST", path, "Bearer t", b"{}")
+        self.assertEqual(status, 202)
+        self.assertEqual(result["operation"], "uninstall")
+        built.authenticate = lambda _: "user"
+        self.assertEqual(dispatch(built, "POST", path, "Bearer t", b"{}")[0], 403)
+        self.assertEqual(len(calls), 1)
+        built.authenticate = lambda _: "admin"
+        self.assertEqual(dispatch(built, "POST", path, "Bearer t", b'{"ids":["unrelated"]}')[0], 400)
+        self.assertEqual(len(calls), 1)
+
     def test_role_comes_from_safe_admin_flag(self):
         self.assertEqual(role_from_safe(200, {"is_admin": True}), "admin")
         self.assertEqual(role_from_safe(200, {"is_admin": False}), "user")

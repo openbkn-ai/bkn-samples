@@ -101,6 +101,8 @@ def write_output(payload: dict, ok: bool, message: str = "", code: str = "") -> 
             "catalogId": payload["catalog"]["id"],
             "knowledgeNetworkId": KN_ID,
             "capabilitySummary": capability_summary(payload),
+            **({"ownedExecution": json.loads(Path(os.environ["BKN_SAMPLE_RECEIPT"]).read_text())}
+               if os.environ.get("BKN_SAMPLE_RECEIPT") and Path(os.environ["BKN_SAMPLE_RECEIPT"]).exists() else {}),
         },
         "checks": [],
         "degrade": [],
@@ -126,6 +128,10 @@ def main() -> int:
     if config_path is None:
         config_path = SAMPLE_DIR / "platform" / ".config.yaml"
     config_path.write_text(yaml.safe_dump(config, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    os.environ.setdefault("BKN_SAMPLE_RECEIPT", str(config_path.parent / "owned-execution.json"))
+    receipt = Path(os.environ["BKN_SAMPLE_RECEIPT"])
+    if not receipt.exists():
+        receipt.write_text(json.dumps({"toolboxes": [], "skills": []}), encoding="utf-8")
     os.environ["BKN_SAMPLE_OWNERSHIP_TAGS"] = ",".join(ownership_tags(payload))
     if os.environ.get("BKN_SAMPLE_PRINT_ONLY") == "1":
         print(json.dumps(commands(config_path), ensure_ascii=False))

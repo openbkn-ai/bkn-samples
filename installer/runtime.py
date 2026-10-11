@@ -95,6 +95,7 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
             shared.mkdir(parents=True, exist_ok=True, mode=0o700)
             shared.chmod(0o700)
             hook_env["BKN_SAMPLE_CONFIG"] = str(shared / "config.yaml")
+            hook_env["BKN_SAMPLE_RECEIPT"] = str(shared / "owned-execution.json")
         completed = run([str(script)], hook_env)
         if output.is_file():
             try:

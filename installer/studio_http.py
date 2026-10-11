@@ -23,6 +23,7 @@ _RETRY = re.compile(
 )
 _GET = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/installations/(?P<installation>[^/]+)$")
 _NOTES = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,63})/versions/(?P<version>[0-9]+\.[0-9]+\.[0-9]+)/release-notes$")
+_UNINSTALL = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/installations/(?P<installation>[^/]+)/uninstall$")
 _OFFLINE_DELETE = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/offline$")
 
 
@@ -35,7 +36,7 @@ def role_from_safe(me_status: int, permissions: dict | None) -> str:
 
 
 class StudioApp:
-    def __init__(self, *, catalog, create, retry, get, authenticate, notes=None, history=None, refresh=None, create_selected=None, import_package=None, delete_package=None):
+    def __init__(self, *, catalog, create, retry, get, authenticate, notes=None, history=None, refresh=None, create_selected=None, import_package=None, delete_package=None, uninstall=None):
         self.catalog = catalog
         self.create = create
         self.retry = retry
@@ -47,6 +48,7 @@ class StudioApp:
         self.create_selected = create_selected
         self.import_package = import_package
         self.delete_package = delete_package
+        self.uninstall = uninstall
 
 
 def _empty_body(body: bytes) -> bool:
@@ -130,6 +132,15 @@ def _route(method: str, path: str, payload: dict | None = None, locale: str = "z
                 return 404, {"code": "import_unavailable", "message": "offline import is unavailable"}
             return 200, app.delete_package(sample, role)
         return remove
+    removed = _UNINSTALL.fullmatch(path)
+    if removed and method == "POST":
+        def uninstall(app, role, authorization):
+            if role != "admin":
+                raise ApiError(403, "forbidden", "An administrator must uninstall the sample.")
+            if not app.uninstall:
+                return 404, {"code": "uninstall_failed", "message": "Uninstall unavailable."}
+            return 202, app.uninstall(removed.group("sample"), removed.group("installation"), role, authorization)
+        return uninstall
     retried = _RETRY.fullmatch(path)
     if retried and method == "POST":
         sample, installation = retried.group("sample"), retried.group("installation")
@@ -237,7 +248,7 @@ def authenticate_bearer(fetch, authorization: str | None) -> str:
     return role_from_safe(me_status, permissions if isinstance(permissions, dict) else None)
 
 
-def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate, release_notes=None, installation_history=None, refresh_catalog=None, create_selected=None, import_package=None, delete_package=None) -> StudioApp:
+def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate, release_notes=None, installation_history=None, refresh_catalog=None, create_selected=None, import_package=None, delete_package=None, uninstall=None) -> StudioApp:
     return StudioApp(
         catalog=list_samples,
         create=create_installation,
@@ -250,6 +261,7 @@ def build_app(*, list_samples, create_installation, retry_installation, get_inst
         create_selected=create_selected,
         import_package=import_package,
         delete_package=delete_package,
+        uninstall=uninstall,
     )
 
 
@@ -344,9 +356,9 @@ def main() -> None:
         if merged["sourceRejected"] or not item or item.get("status") == "unavailable":
             raise ApiError(409, "source_rejected", "sample is not currently installable")
         current = _read_state(state_dir, sample)
-        if current and current.get("status") in {"installed", "failed", "installing"}:
+        if current and current.get("status") in {"installed", "failed", "installing", "uninstalling", "uninstall_failed"}:
             code = ("already_installed" if current["status"] == "installed" else
-                    "already_installing" if current["status"] == "installing" else "use_retry")
+                    "already_installing" if current["status"] in {"installing", "uninstalling"} else "use_retry")
             raise ApiError(409, code, "an installation already exists")
         _write_installing(state_dir, sample, version, item.get("releaseNotes"), item.get("manifestSha256"),
                           data_image_ref)
@@ -483,6 +495,15 @@ def main() -> None:
         return runner.submit(sample, lambda: prepare_retry(sample, installation, role, authorization),
                              lambda: perform_retry(sample, installation, role, authorization))
 
+    def uninstall(sample, installation, role, authorization):
+        from installer.uninstall import prepare_uninstall, execute_uninstall, platform_client
+        if role != "admin":
+            raise ApiError(403, "forbidden", "An administrator must uninstall the sample.")
+        runner.register(sample)
+        return runner.submit(sample,
+            lambda: prepare_uninstall(state_dir, sample, installation, role),
+            lambda: execute_uninstall(state_dir, sample, platform_client(authorization), kubectl_run))
+
     def import_package(archive, role):
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must import the sample")
@@ -508,6 +529,7 @@ def main() -> None:
         create_selected=create_selected,
         import_package=import_package,
         delete_package=delete_package,
+        uninstall=uninstall,
         installation_history=lambda sample, role: list_sample_installations(
             sample=sample, state_dir=state_dir, actor_role=role),
     )

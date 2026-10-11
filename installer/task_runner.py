@@ -33,9 +33,12 @@ class InstallationRunner:
 
     def _fail(self, sample, code, message):
         current = _read_state(self.state_dir, sample)
-        if not current or current.get("status") != "installing":
+        if not current or current.get("status") not in {"installing", "uninstalling"}:
             return
-        current["status"] = "failed"
+        if current.get("operation") == "uninstall":
+            code = "uninstall_interrupted" if code == "install_interrupted" else "uninstall_failed"
+            message = "Uninstall was interrupted; an administrator can continue cleanup."
+        current["status"] = "uninstall_failed" if current.get("operation") == "uninstall" else "failed"
         current["error"] = {"code": code, "message": message}
         current["finishedAt"] = timestamp()
         stages = current.setdefault("stages", {})
@@ -43,7 +46,7 @@ class InstallationRunner:
             if status == "running":
                 stages[stage] = "failed"
         if not stages:
-            stages["database"] = "failed"
+            stages["knowledge" if current.get("operation") == "uninstall" else "database"] = "failed"
         write_json(self.state_dir / f"{sample}.json", current)
         record_terminal_installation(self.state_dir, current)
 

@@ -10,6 +10,8 @@ from pathlib import Path
 from typing import Any
 
 
+from ownership_receipt import require_owned, remember
+
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_DIR = ROOT / "skills"
 
@@ -61,6 +63,7 @@ def run(*, apply: bool, kn_id: str | None = None) -> dict[str, Any]:
         found = existing.get(name)
         if found and entry_id(found):
             skill_id = entry_id(found)
+            require_owned("skills", skill_id)
             run_cli(["skill", "update-package", skill_id, str(path)])
             operation = "updated"
         else:
@@ -68,6 +71,7 @@ def run(*, apply: bool, kn_id: str | None = None) -> dict[str, Any]:
             skill_id = entry_id(created)
             if not skill_id:
                 raise RuntimeError(f"Skill 注册成功但未返回 skill_id: {name}")
+            remember("skills", skill_id)
             operation = "registered"
         run_cli(["skill", "set-status", skill_id, "published"])
         results.append({"name": name, "skill_id": skill_id, "operation": operation, "status": "published"})

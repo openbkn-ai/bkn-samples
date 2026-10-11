@@ -46,8 +46,8 @@ class RemoteInstallation:
         except ValueError as error:
             raise ApiError(409, "runtime_upgrade_required", "release requirements are not supported") from error
         current = _read_state(self.state_dir, sample)
-        if current and current.get("status") in {"installed", "failed", "installing"}:
-            code = {"installed": "already_installed", "failed": "use_retry", "installing": "already_installing"}[current["status"]]
+        if current and current.get("status") in {"installed", "failed", "installing", "uninstalling", "uninstall_failed"}:
+            code = {"installed": "already_installed", "failed": "use_retry", "installing": "already_installing", "uninstalling": "already_installing", "uninstall_failed": "use_retry"}[current["status"]]
             raise ApiError(409, code, "an installation already exists")
         current = {"id": f"inst-{sample}", "sample": sample, "version": entry["version"],
                    "status": "installing", "stages": {}, "startedAt": timestamp(),

@@ -742,6 +742,10 @@ step_6_toolbox() {
     box_id="${TOOLBOX_BOX_ID:-}"
     [ -z "$box_id" ] && box_id="$(find_toolbox_id_by_name "$VEGA_TOOLBOX_NAME")"
 
+    if [ -n "${BKN_SAMPLE_RECEIPT:-}" ] && [ -n "$box_id" ]; then
+        python3 "$SCRIPT_DIR/platform/ownership_receipt.py" check toolboxes "$box_id"
+    fi
+
     if [ "${FORCE_TOOLBOX_REIMPORT:-0}" = 1 ] && [ -n "$box_id" ]; then
         echo "  FORCE_TOOLBOX_REIMPORT=1 → deleting existing $box_id" >&2
         "${KWEAV[@]}" toolbox delete "$box_id" -y || {
@@ -768,6 +772,9 @@ step_6_toolbox() {
         }
         box_id="$(printf '%s' "$create_out" | _extract_cli_json | jq -r '.box_id // .id // .data.box_id // empty' 2>/dev/null | head -1)"
         [ -z "$box_id" ] && { echo "Error: could not resolve box_id from create output:" >&2; echo "$create_out" >&2; exit 1; }
+        if [ -n "${BKN_SAMPLE_RECEIPT:-}" ]; then
+            python3 "$SCRIPT_DIR/platform/ownership_receipt.py" remember toolboxes "$box_id"
+        fi
         echo "  created box_id=$box_id" >&2
     else
         echo "  reusing existing toolbox $box_id" >&2

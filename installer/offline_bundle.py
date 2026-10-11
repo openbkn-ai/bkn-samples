@@ -105,7 +105,7 @@ class OfflinePackages:
             if not destination.exists():
                 return {"sample": sample, "deleted": False}
             current = _read_state(self.state_dir, sample)
-            if current and current.get("status") in {"installing", "installed"}:
+            if current and current.get("status") in {"installing", "installed", "uninstalling", "uninstall_failed"}:
                 raise ApiError(409, "offline_in_use", "the offline package is required by installation or retry")
             shutil.rmtree(destination)
             if current and current.get("status") == "failed" and current.get("offlineRelease"):
@@ -153,7 +153,7 @@ class OfflinePackages:
             current.pop("error", None)
         else:
             if current:
-                code = {"installed": "already_installed", "failed": "use_retry", "installing": "already_installing"}.get(current.get("status"))
+                code = {"installed": "already_installed", "failed": "use_retry", "installing": "already_installing", "uninstalling": "already_installing", "uninstall_failed": "use_retry"}.get(current.get("status"))
                 if code:
                     raise ApiError(409, code, "an installation already exists")
             current = {"id": f"inst-{sample}", "sample": sample, "version": release["version"],
