@@ -97,6 +97,19 @@ class OfflinePackages:
     def find(self, sample):
         return next((r for r in self.releases() if r["sample"] == sample), None)
 
+    def delete_package(self, sample, role):
+        if role != "admin":
+            raise ApiError(403, "forbidden", "an administrator must remove the offline sample")
+        destination = self.directory / sample
+        if not destination.exists():
+            return {"sample": sample, "deleted": False}
+        current = _read_state(self.state_dir, sample)
+        if current and current.get("status") in {"installing", "installed"}:
+            raise ApiError(409, "offline_in_use", "the offline package is used by an active installation")
+        with self.lock:
+            shutil.rmtree(destination)
+        return {"sample": sample, "deleted": True}
+
     def merge(self, result, role):
         result["canImport"] = role == "admin"
         for release in self.releases():
