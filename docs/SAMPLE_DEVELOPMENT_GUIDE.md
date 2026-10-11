@@ -33,6 +33,10 @@ After PR review and installation acceptance, publish the immutable package and d
 
 Create a new semantic version for data, BKN structure, functions, metrics, or skills. Do not overwrite an existing release. Update release notes, rebuild the package, run installation and smoke verification, and record the new installed version. Studio treats the catalog as the source for online updates and accepts the package directly for offline import.
 
+Publishing a new version does not upgrade an installed sample. In-place upgrades, data migrations, and uninstall are not supported in this phase. Validate the new version with a fresh installation in a test environment. Online and offline installation use the same manifest and fixed artifacts; importing a tar.gz does not bundle the separately referenced data image, which must also be available to the target environment.
+
+The installer retains the latest terminal record for each installation ID and version. A retry of the same version updates that record. Previously overwritten legacy records cannot be reconstructed; this is not an append-only log of every installation attempt.
+
 ## Pull request checklist
 
 - schema and capability declarations match the files;
