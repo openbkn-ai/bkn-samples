@@ -150,6 +150,9 @@ class _Handler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802
         self._handle()
 
+    def do_DELETE(self) -> None:  # noqa: N802
+        self._handle()
+
     def log_message(self, fmt: str, *args) -> None:
         return
 

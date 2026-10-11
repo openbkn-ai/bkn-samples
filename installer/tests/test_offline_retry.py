@@ -25,6 +25,9 @@ class OfflineRetryTest(unittest.TestCase):
                            "manifestSha256": "c" * 64,
                            "dataImageRef": "ghcr.io/openbkn-ai/data@sha256:" + "d" * 64,
                            "releaseNotes": {"version": "0.1.0", "documents": []}}
+                cached = offline.directory / "supply-chain"
+                cached.mkdir(parents=True)
+                (cached / "release.json").write_text(json.dumps(release))
                 offline.prepare(release)
                 original = _read_state(state, "supply-chain")
 

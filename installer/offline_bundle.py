@@ -101,12 +101,13 @@ class OfflinePackages:
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must remove the offline sample")
         destination = self.directory / sample
-        if not destination.exists():
-            return {"sample": sample, "deleted": False}
-        current = _read_state(self.state_dir, sample)
-        if current and current.get("status") in {"installing", "installed"}:
-            raise ApiError(409, "offline_in_use", "the offline package is used by an active installation")
         with self.lock:
+            if not destination.exists():
+                return {"sample": sample, "deleted": False}
+            current = _read_state(self.state_dir, sample)
+            if current and (current.get("status") in {"installing", "installed"} or
+                            current.get("offlineRelease") and current.get("status") == "failed"):
+                raise ApiError(409, "offline_in_use", "the offline package is required by installation or retry")
             shutil.rmtree(destination)
         return {"sample": sample, "deleted": True}
 
@@ -130,6 +131,12 @@ class OfflinePackages:
                 result["samples"].append(card)
 
     def prepare(self, release, retry=False):
+        with self.lock:
+            if self.find(release["sample"]) != release:
+                raise ApiError(409, "version_changed", "offline package changed; reload and confirm again")
+            return self._prepare(release, retry)
+
+    def _prepare(self, release, retry=False):
         sample = release["sample"]
         current = _read_state(self.state_dir, sample)
         self.runtime.require_executor()

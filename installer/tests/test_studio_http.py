@@ -38,6 +38,31 @@ def app(role: str = "admin", deploy=None) -> tuple[StudioApp, dict]:
 
 
 class StudioHttpTest(unittest.TestCase):
+    def test_delete_reaches_handler_and_requires_admin(self):
+        built, _ = app()
+        deleted = []
+        built.delete_package = lambda sample, role: deleted.append(sample) or {"deleted": True}
+        _Handler.app = built
+        server = ThreadingHTTPServer(("127.0.0.1", 0), _Handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        try:
+            connection = HTTPConnection("127.0.0.1", server.server_address[1], timeout=5)
+            connection.request("DELETE", "/api/studio/samples/world-cup/offline", headers={"Authorization": "Bearer t"})
+            response = connection.getresponse()
+            self.assertEqual(response.status, 200)
+            self.assertTrue(json.loads(response.read())["deleted"])
+            self.assertEqual(deleted, ["world-cup"])
+            built.authenticate = lambda _: "user"
+            connection.request("DELETE", "/api/studio/samples/world-cup/offline")
+            response = connection.getresponse()
+            self.assertEqual(response.status, 403)
+            response.read()
+            self.assertEqual(deleted, ["world-cup"])
+            connection.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+
     def test_role_comes_from_safe_admin_flag(self):
         self.assertEqual(role_from_safe(200, {"is_admin": True}), "admin")
         self.assertEqual(role_from_safe(200, {"is_admin": False}), "user")
