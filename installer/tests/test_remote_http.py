@@ -16,6 +16,40 @@ ROOT = bundle_fixture.ROOT
 
 
 class RemoteHttpTest(unittest.TestCase):
+    def test_offline_import_uses_the_same_automatic_runtime_defaults(self):
+        from tools.publication.build_candidate import build
+        from installer.studio_api import ApiError
+
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory).resolve()
+            candidate = build(ROOT / "samples/supply_ontology_hand", "0.1.2", temporary / "candidate",
+                              "ghcr.io/openbkn-ai/bkn-samples@sha256:" + "a" * 64)
+            state = temporary / "state"
+            env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_STATE_DIR": str(state),
+                   "BKN_SAMPLE_IMAGE_INDEX": str(ROOT / "manifest-index.json"),
+                   "BKN_BASE_URL": "http://gateway.example", "BKN_SAMPLE_PLATFORM_VERSION": "",
+                   "BKN_SAMPLE_PLATFORM_CAPABILITIES": "",
+                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64}
+            apps = []
+            with patch.dict("os.environ", env), \
+                 patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
+                 patch("installer.studio_api.load_indexes", return_value=("0.1.0", build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
+                 patch("installer.platform_version.read_backend_version", return_value="0.2.0") as health:
+                main()
+                result = apps[0].import_package(candidate / "package.tar.gz", "admin")
+                self.assertEqual(result["version"], "0.1.2")
+                health.assert_called_with("http://gateway.example")
+                self.assertFalse((state / "supply-chain.json").exists())
+                health.return_value = ""
+                with self.assertRaises(ApiError):
+                    apps[0].import_package(candidate / "package.tar.gz", "admin")
+                self.assertFalse((state / "supply-chain.json").exists())
+                health.return_value = "0.2.0"
+                with patch.dict("os.environ", {"BKN_SAMPLE_PLATFORM_CAPABILITIES": "vega.catalog"}):
+                    main()
+                    with self.assertRaises(ApiError):
+                        apps[-1].import_package(candidate / "package.tar.gz", "admin")
+
     def test_http_accepts_fixed_release_before_worker_and_retries_original_after_restart(self):
         fixture = bundle_fixture.RemoteBundleTest("test_fixed_release_extracts_and_matches_existing_runtime_contract")
         fixture.setUp()
@@ -43,14 +77,16 @@ class RemoteHttpTest(unittest.TestCase):
                 write_json(state / f"{sample}.json", current)
                 finished.set()
             env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_IMAGE_INDEX": str(ROOT / "manifest-index.json"),
-                   "BKN_SAMPLE_STATE_DIR": str(state), "BKN_SAMPLE_PLATFORM_VERSION": "0.2.0",
+                   "BKN_SAMPLE_STATE_DIR": str(state), "BKN_SAMPLE_PLATFORM_VERSION": "",
+                   "BKN_BASE_URL": "http://gateway.example",
                    "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64,
-                   "BKN_SAMPLE_PLATFORM_CAPABILITIES": ",".join(fixture.entry["requires"]["capabilities"])}
+                   "BKN_SAMPLE_PLATFORM_CAPABILITIES": ""}
             with patch.dict("os.environ", env), patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
                  patch("installer.studio_api.load_indexes", return_value=("0.1.0", build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
                  patch("installer.catalog_source.OfficialCatalog.entries", return_value=[fixture.entry]), \
                  patch("installer.remote_installation.RemoteInstallation.execute", side_effect=execute), \
-                 patch("installer.task_runner.InstallationRunner", side_effect=make_runner):
+                 patch("installer.task_runner.InstallationRunner", side_effect=make_runner), \
+                 patch("installer.platform_version.read_backend_version", return_value="0.2.0") as health:
                 main()
                 app = apps[0]
                 app.authenticate = lambda _: "admin"
@@ -59,6 +95,20 @@ class RemoteHttpTest(unittest.TestCase):
                 bad = json.dumps({"version": "1.0.0", "manifestSha256": "a" * 64}).encode()
                 self.assertEqual(dispatch(app, "POST", route, "Bearer test-secret", bad)[0], 409)
                 self.assertFalse((state / "supply-chain.json").exists())
+                health.assert_called_with("http://gateway.example")
+                try:
+                    health.return_value = ""
+                    self.assertEqual(dispatch(app, "POST", route, "Bearer test-secret", body)[0], 409)
+                    self.assertFalse((state / "supply-chain.json").exists())
+                finally:
+                    health.return_value = "0.2.0"
+                supported = fixture.entry["requires"]["capabilities"]
+                try:
+                    fixture.entry["requires"]["capabilities"] = ["unknown.standard.api"]
+                    self.assertEqual(dispatch(app, "POST", route, "Bearer test-secret", body)[0], 409)
+                    self.assertFalse((state / "supply-chain.json").exists())
+                finally:
+                    fixture.entry["requires"]["capabilities"] = supported
                 try:
                     status, view = dispatch(app, "POST", route, "Bearer test-secret", body)
                     self.assertEqual(status, 202)

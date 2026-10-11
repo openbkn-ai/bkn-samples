@@ -32,7 +32,9 @@ baseURL: ""
 # Empty uses the official main branch pointer.
 catalogURL: ""
 
-# Explicit platform compatibility facts; empty values keep remote installs unavailable.
+# Optional legacy/operator overrides. Empty version reads the backend health API;
+# empty capabilities uses this installer's supported standard API adapters.
+# This does not declare target API availability or licensed platform features.
 platform:
   version: ""
   capabilities: []

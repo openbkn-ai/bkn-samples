@@ -257,6 +257,8 @@ def main() -> None:
     from installer.remote_installation import RemoteInstallation
     from installer.remote_catalog import merge_remote
     from installer.offline_bundle import OfflinePackages
+    from installer.platform_version import read_backend_version
+    from installer.remote_bundle import CAPABILITIES
 
     root = Path(os.environ.get("BKN_SAMPLES_ROOT", "/opt/bkn-samples"))
     state_dir = Path(os.environ.get("BKN_SAMPLE_STATE_DIR", "/var/lib/bkn-samples/state"))
@@ -268,11 +270,18 @@ def main() -> None:
                              os.environ.get("BKN_SAMPLE_CATALOG_URL", "").strip() or None)
     runner = InstallationRunner(state_dir, [item["name"] for item in image.get("samples", []) if item.get("name")])
     runner.recover_interrupted()
-    remote = RemoteInstallation(root, state_dir, os.environ.get("BKN_SAMPLE_PLATFORM_VERSION", ""),
+    configured_version = os.environ.get("BKN_SAMPLE_PLATFORM_VERSION", "").strip()
+    configured_capabilities = os.environ.get("BKN_SAMPLE_PLATFORM_CAPABILITIES", "").strip()
+    remote = RemoteInstallation(root, state_dir, configured_version,
                                 {"aarch64": "arm64", "arm64": "arm64", "x86_64": "amd64"}.get(platform.machine(), platform.machine()),
-                                os.environ.get("BKN_SAMPLE_PLATFORM_CAPABILITIES", "").split(","),
+                                configured_capabilities.split(",") if configured_capabilities else sorted(CAPABILITIES),
                                 os.environ.get("BKN_SAMPLE_EXECUTOR_IMAGE_REF", ""))
     offline = OfflinePackages(root, state_dir, remote)
+
+    def update_platform_version():
+        # Explicit values remain supported for existing deployments. Defaults
+        # read the real backend; supported adapter APIs are not licence claims.
+        remote.platform_version = configured_version or read_backend_version(os.environ.get("BKN_BASE_URL", ""))
 
     def fetch(path: str, authorization: str):
         request = Request(safe_url + path, headers={"Authorization": authorization})
@@ -280,6 +289,7 @@ def main() -> None:
             return response.status, json.loads(response.read().decode("utf-8"))
 
     def catalog(role: str) -> dict:
+        update_platform_version()
         result = list_samples(
             pinned_version=version,
             image_index=image,
@@ -396,11 +406,14 @@ def main() -> None:
     def create_selected(sample, role, authorization, requested_version, requested_digest):
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
+        update_platform_version()
         bundled = next((i for i in merge_catalog(version, image, repo)["samples"] if i["name"] == sample), None)
         if bundled and requested_version == version and requested_digest == bundled.get("manifestSha256"):
             return create(sample, role, authorization)
         offline_release = offline.find(sample)
         if offline_release and offline_release["version"] == requested_version:
+            if not remote.platform_version:
+                raise ApiError(409, "runtime_upgrade_required", "platform version is unavailable")
             if requested_digest != offline_release["manifestSha256"]:
                 raise ApiError(409, "version_changed", "sample version or manifest changed; confirm again")
             runner.register(sample)
@@ -425,8 +438,11 @@ def main() -> None:
     def retry(sample, installation, role, authorization=None):
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
+        update_platform_version()
         current = _read_state(state_dir, sample) or {}
         if current.get("offlineRelease"):
+            if not remote.platform_version:
+                raise ApiError(409, "runtime_upgrade_required", "platform version is unavailable")
             release = offline.find(sample)
             if not release:
                 raise ApiError(409, "source_rejected", "offline package is unavailable")
@@ -450,6 +466,12 @@ def main() -> None:
         return runner.submit(sample, lambda: prepare_retry(sample, installation, role, authorization),
                              lambda: perform_retry(sample, installation, role, authorization))
 
+    def import_package(archive, role):
+        if role != "admin":
+            raise ApiError(403, "forbidden", "an administrator must import the sample")
+        update_platform_version()
+        return offline.import_package(archive, role)
+
     app = build_app(
         list_samples=catalog,
         create_installation=create,
@@ -464,7 +486,7 @@ def main() -> None:
         release_notes=release_notes,
         refresh_catalog=refresh,
         create_selected=create_selected,
-        import_package=lambda archive, role: offline.import_package(archive, role),
+        import_package=import_package,
         installation_history=lambda sample, role: list_sample_installations(
             sample=sample, state_dir=state_dir, actor_role=role),
     )

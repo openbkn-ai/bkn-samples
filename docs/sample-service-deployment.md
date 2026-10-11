@@ -2,13 +2,17 @@
 
 Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
 
-The standard Foundry product composition already includes this Chart and supplies its gateway URL. The publication workflow stamps the built service image digest into the Chart. Platform compatibility values still require explicit configuration; they must not be inferred from Chart versions or component names.
+The standard Foundry product composition already includes this Chart and supplies its gateway URL. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
 
-The SDK uses `GET /api/bkn-backend/v1/health` to read the backend version. The existing `GET /api/safe/v1/capabilities` endpoint describes licensing and paid extensions, not the five sample installation API capabilities listed below. Do not translate that response into sample compatibility claims. Automatic configuration for a fresh product installation remains an outstanding delivery item; this guide documents the current explicit configuration.
+The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint used by the SDK, when listing releases, accepting a selected installation, importing an offline package or retrying. Missing or malformed version information keeps fixed-package installation unavailable. It does not infer a version from a Chart tag.
+
+`requires.capabilities` identifies the standard API adapters needed by a sample. The installer rejects names it does not implement. This is not a claim that the target deployment has every API enabled: actual API calls enforce availability, authorization and licensing, with failures recorded in the installation stages. `GET /api/safe/v1/capabilities` describes licensing and paid extensions and is not used as the sample API inventory.
+
+Explicit `platform.version` and nonempty `platform.capabilities` values remain supported for existing deployments and operator restrictions. A version override is an operator declaration rather than a health check; use the empty defaults for automatic version reading. These overrides do not bypass platform API authorization.
 
 ## Configuration and installation
 
-Create a values file using the addresses and capabilities of the actual platform:
+Create a values file using the actual platform addresses. Leave the optional platform overrides empty:
 
 ```yaml
 image:
@@ -17,20 +21,15 @@ image:
 safeURL: http://bkn-safe:3000
 baseURL: http://<existing-platform-gateway>
 platform:
-  version: "0.2.0"
-  capabilities:
-    - vega.catalog
-    - knowledge-network.import.kn-json
-    - knowledge-network.import.bkn-directory
-    - execution.function
-    - execution.skill
+  version: ""
+  capabilities: []
 ingress:
   ingressClass: class-443
 persistence:
   existingClaim: ""
 ```
 
-Declare only capabilities supported by the platform. The example list is not automatic capability discovery. Leave `catalogURL` empty to scan official main when the administrator clicks **Refresh samples**. A page GET reads the existing cache; it does not scan GitHub on every request. A new environment has no remote cache. Network failure preserves an existing cache and installed records; a new environment can use the built-in entries or import a compatible offline package, with its data image available to the cluster.
+Leave `catalogURL` empty to scan official main when the administrator clicks **Refresh samples**. A page GET reads the existing cache; it does not scan GitHub on every request. A new environment has no remote cache. Network failure preserves an existing cache and installed records; a new environment can use the built-in entries or import a compatible offline package, with its data image available to the cluster.
 
 ```bash
 helm upgrade --install bkn-sample-studio \
@@ -55,4 +54,4 @@ Keep the same PVC during rollback. Use `helm history bkn-sample-studio -n openbk
 
 The state PVC and `openbkn-samples` namespace are retained by the Chart's `helm.sh/resource-policy: keep` annotations. Removing the service must not remove installed databases. Charts before the namespace-retention fix lack that protection: do not uninstall those releases with sample data present. A later deliberate cleanup must separately inspect and remove sample resources and retained volumes.
 
-This is the standalone published deployment entry point. The Foundry product composition already includes this Chart; full fresh-product acceptance with automatic compatibility configuration remains outstanding. Installing this Chart with explicit values does not prove that integration.
+This is the standalone published deployment entry point. The Foundry product composition already includes this Chart; full fresh-product and published-build acceptance remain outstanding until recorded separately. Installing this Chart with explicit values does not prove that integration.

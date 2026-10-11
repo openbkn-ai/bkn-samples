@@ -25,6 +25,9 @@ MAX_CONTENT = 512 * 1024 * 1024
 MAX_FILE = 128 * 1024 * 1024
 MAX_MEMBERS = 10000
 PROFILE = "openbkn.ai/sample-install.v1"
+# Standard API adapters implemented by this installation profile. This is not
+# a platform feature or licensing inventory; target API errors are recorded by
+# the installation stages. Explicit operator configuration may restrict it.
 CAPABILITIES = {"vega.catalog", "knowledge-network.import.kn-json",
                 "knowledge-network.import.bkn-directory",
                 "execution.function", "execution.skill"}
