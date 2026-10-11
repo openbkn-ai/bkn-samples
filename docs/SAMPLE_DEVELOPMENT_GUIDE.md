@@ -74,6 +74,16 @@ Publishing a new version does not upgrade an installed sample. In-place upgrades
 
 Each accepted installation or retry receives an `attemptId` and its own start time. Terminal records are archived separately, so retrying the same version preserves the earlier failure. Legacy records remain readable, but previously overwritten records cannot be reconstructed; Studio marks that history as incomplete. Requests rejected during preflight do not create attempts.
 
+## Replacing an installed version
+
+1. Publish the new version through the reviewed candidate and catalog flow above.
+2. In Studio, uninstall the installed sample and confirm that its data and user edits will be removed. The five cleanup stages appear above the release notes; installation history remains available.
+3. Wait until cleanup completes. If it stops, use **Continue uninstall**; do not start another installation until the card returns to **Not installed**.
+4. Refresh the catalog and select the new version, or remove the old cached offline package and import the new fixed package. Removing a cached package does not uninstall platform resources.
+5. Click **Install** on the card. Verify the new installed version and its database, objects/relations, declared functions, metrics and Skills. The old installation and uninstall attempts must remain in history.
+
+The new package must include its managed installation hooks and ownership receipt helper. Legacy published packages without receipts remain immutable and cannot gain uninstall support merely by updating Studio. The current knowledge-network API allows five tags; these managed samples reserve three for ownership, leaving two for provenance. Validate the rendered model against platform constraints as well as the BKN syntax.
+
 ## Pull request checklist
 
 - schema and capability declarations match the files;
