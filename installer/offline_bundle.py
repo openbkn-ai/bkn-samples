@@ -105,10 +105,13 @@ class OfflinePackages:
             if not destination.exists():
                 return {"sample": sample, "deleted": False}
             current = _read_state(self.state_dir, sample)
-            if current and (current.get("status") in {"installing", "installed"} or
-                            current.get("offlineRelease") and current.get("status") == "failed"):
+            if current and current.get("status") in {"installing", "installed"}:
                 raise ApiError(409, "offline_in_use", "the offline package is required by installation or retry")
             shutil.rmtree(destination)
+            if current and current.get("status") == "failed" and current.get("offlineRelease"):
+                state_path = self.state_dir / f"{sample}.json"
+                if state_path.exists():
+                    state_path.unlink()
         return {"sample": sample, "deleted": True}
 
     def merge(self, result, role):
