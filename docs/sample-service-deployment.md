@@ -2,7 +2,7 @@
 
 Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
 
-The standard Foundry product composition already includes this Chart and supplies its gateway URL. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
+The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart and supplies its gateway URL. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
 
 The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint used by the SDK, when listing releases, accepting a selected installation, importing an offline package or retrying. Missing or malformed version information keeps fixed-package installation unavailable. It does not infer a version from a Chart tag.
 
@@ -54,4 +54,4 @@ Keep the same PVC during rollback. Use `helm history bkn-sample-studio -n openbk
 
 The state PVC and `openbkn-samples` namespace are retained by the Chart's `helm.sh/resource-policy: keep` annotations. Removing the service must not remove installed databases. Charts before the namespace-retention fix lack that protection: do not uninstall those releases with sample data present. A later deliberate cleanup must separately inspect and remove sample resources and retained volumes.
 
-This is the standalone published deployment entry point. The Foundry product composition already includes this Chart; full fresh-product and published-build acceptance remain outstanding until recorded separately. Installing this Chart with explicit values does not prove that integration.
+Product integration is maintained in `openbkn-ai/openbkn-deploy` (reviewed PR22). Acceptance used its standard deployment entry on the existing OpenBKN instance with the official Chart. It does not claim a fresh installation of the entire platform.

@@ -22,6 +22,9 @@ class PublicationTest(unittest.TestCase):
         proof["packageDigest"] = "sha256:" + "0" * 64
         with self.assertRaisesRegex(ValueError, "other artifacts"):
             validate_verification(proof, entry, sample)
+        sample["spec"]["artifacts"] = []
+        with self.assertRaisesRegex(ValueError, "archive and data image"):
+            validate_verification(proof, entry, sample)
 
     def test_bootstrap_catalog_is_valid_and_contains_no_unverified_release(self):
         catalog, _ = validate_catalog(ROOT, official=True)

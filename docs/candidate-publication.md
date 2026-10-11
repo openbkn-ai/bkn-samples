@@ -14,6 +14,8 @@ PR 使用英文标题和描述，完成规范检查与 AI 审核后合并。最�
 
 数据变化需要发布新的数据镜像，并固定 digest；数据未变可复用已经验证的镜像。镜像内须包含对应样例的数据库 hooks 和锁定数据。支持的目标架构为 amd64、arm64。
 
+供应链与世界杯的数据镜像由主线的 `publish-sample-studio.yml` 构建（服务及数据镜像使用同一主线构建版本）；在 Actions 对应源提交的运行中取得数据镜像 tag，再用 `docker buildx imagetools inspect ghcr.io/openbkn-ai/bkn-samples:<build-version>` 读取 digest。不要使用可变 tag 代替 digest。`publish-sample-data.yml` 是当前订单入门样例的独立数据镜像入口，不能直接用于供应链。修改数据后，必须等待包含该修改的官方数据镜像发布成功。
+
 ```sh
 python3 tools/publication/build_candidate.py samples/<directory> \
   --version <version> --output /absolute/path/outside/bkn-samples \
@@ -40,6 +42,8 @@ Studio 首页 → 一键体验 → 导入离线包，选择上述 tar.gz，检�
 ## 4. 发布固定制品和元数据
 
 验收通过后上传精确候选包到官方 GitHub Release，核对上传资产摘要。在 `releases/<version>/` 增加 `sample.json` 和 `verification.json`，绑定固定包、镜像、说明摘要、实际安装结果及限制。参考 [供应链 0.1.3](../samples/supply_ontology_hand/releases/0.1.3/sample.json)。
+
+`verification.json` 必须绑定实际样例版本、包摘要、数据镜像、全新安装结果，并明确提供 `database`、`knowledge`、`capabilities`、`scenario` 四项通过检查。样例没有可选函数、指标或 Skill 时，能力检查说明未声明并确认该阶段通过，不能漏写。`evidence` 要指向当前版本的真实记录与查询结果；不能复用旧版本的安装证明。
 
 先提交元数据形成完整官方提交 SHA，再将 `catalog.json` 的元数据 URL 固定到该 SHA。递增目录 sequence，保留旧版本；撤回保留历史条目。目录变更同样经过英文 PR 和 AI 审核。
 
