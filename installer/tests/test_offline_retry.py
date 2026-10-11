@@ -13,6 +13,23 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class OfflineRetryTest(unittest.TestCase):
+    def test_failed_offline_install_can_be_withdrawn_for_reupload(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state = Path(directory)
+            runtime = RemoteInstallation(ROOT, state, "0.2.0", "arm64", [],
+                                         "ghcr.io/openbkn-ai/executor@sha256:" + "a" * 64)
+            offline = OfflinePackages(ROOT, state, runtime)
+            destination = offline.directory / "supply-chain"
+            destination.mkdir(parents=True)
+            (destination / "package.tar.gz").write_bytes(b"package")
+            (state / "supply-chain.json").write_text(json.dumps({
+                "status": "failed", "offlineRelease": {"packageDigest": "old"}}))
+
+            self.assertEqual(offline.delete_package("supply-chain", "admin"),
+                             {"sample": "supply-chain", "deleted": True})
+            self.assertFalse(destination.exists())
+            self.assertFalse((state / "supply-chain.json").exists())
+
     def test_database_failure_preserves_offline_identity_for_retry(self):
         for code in ("image_unavailable", "storage_class_missing", "database_not_ready"):
             with self.subTest(code=code), tempfile.TemporaryDirectory() as directory:
