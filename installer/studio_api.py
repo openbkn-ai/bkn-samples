@@ -151,11 +151,15 @@ def list_sample_installations(*, sample: str, state_dir: Path, actor_role: str) 
 
 def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
                              pinned_version: str, image_index: dict, repo_index: dict,
-                             state_dir: Path, locale: str = "zh-CN") -> dict:
+                             state_dir: Path, locale: str = "zh-CN",
+                             imported_release_notes: dict | None = None) -> dict:
     _require_role(actor_role)
     _require_sample(sample)
     record = _read_state(state_dir, sample)
     notes = (record or {}).get("releaseNotesSnapshot")
+    if (not isinstance(notes, dict) or notes.get("version") != version) and isinstance(imported_release_notes, dict):
+        if imported_release_notes.get("version") == version:
+            notes = imported_release_notes
     if not isinstance(notes, dict) or notes.get("version") != version:
         merged = merge_catalog(pinned_version, image_index, repo_index)
         item = next((item for item in merged["samples"] if item.get("name") == sample), None)

@@ -313,7 +313,8 @@ def main() -> None:
     def release_notes(sample, requested_version, role, locale):
         try:
             return get_sample_release_notes(sample=sample, version=requested_version, actor_role=role,
-                locale=locale, pinned_version=version, image_index=image, repo_index=repo, state_dir=state_dir)
+                locale=locale, pinned_version=version, image_index=image, repo_index=repo, state_dir=state_dir,
+                imported_release_notes=(offline.find(sample) or {}).get("releaseNotes"))
         except ApiError as error:
             if error.status != 404:
                 raise

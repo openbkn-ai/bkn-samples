@@ -1,4 +1,5 @@
 import json
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,6 +10,7 @@ from installer.studio_api import (
     ApiError,
     create_sample_installation,
     get_sample_installation,
+    get_sample_release_notes,
     installation_view,
     list_samples,
     retry_sample_installation,
@@ -38,6 +40,29 @@ def index(name: str = "supply-chain", digest: str = DIGEST) -> dict:
 
 
 class StudioApiTest(unittest.TestCase):
+    def test_new_offline_sample_notes_before_installation(self):
+        content = "Offline release notes"
+        notes = {"version": "0.1.2", "defaultLocale": "en-US", "documents": [{
+            "locale": "en-US", "content": content,
+            "digest": "sha256:" + hashlib.sha256(content.encode()).hexdigest()}]}
+        with tempfile.TemporaryDirectory() as directory:
+            args = dict(sample="new-sample", version="0.1.2", actor_role="admin",
+                pinned_version="0.1.0", image_index=index(), repo_index=index(),
+                state_dir=Path(directory), imported_release_notes=notes)
+            result = get_sample_release_notes(**args)
+            self.assertEqual(result["content"], content)
+            self.assertEqual(result["resolvedLocale"], "en-US")
+            with self.assertRaises(ApiError) as wrong_version:
+                get_sample_release_notes(**{**args, "version": "0.1.3"})
+            self.assertEqual(wrong_version.exception.status, 404)
+            with self.assertRaises(ApiError) as forbidden:
+                get_sample_release_notes(**{**args, "actor_role": "anonymous"})
+            self.assertEqual(forbidden.exception.status, 401)
+            notes["documents"][0]["content"] = "tampered"
+            with self.assertRaises(ApiError) as corrupted:
+                get_sample_release_notes(**args)
+            self.assertEqual(corrupted.exception.status, 500)
+
     def test_catalog_comes_from_the_index_and_hides_install_for_users(self):
         catalog = list_samples(
             pinned_version="0.1.0",
