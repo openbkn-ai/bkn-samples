@@ -5,6 +5,7 @@ import re
 from threading import Lock, Thread
 
 from installer.state_store import write_json
+from installer.history import record_terminal_installation
 from installer.studio_api import ApiError, _read_state, installation_view, timestamp
 
 
@@ -44,6 +45,7 @@ class InstallationRunner:
         if not stages:
             stages["database"] = "failed"
         write_json(self.state_dir / f"{sample}.json", current)
+        record_terminal_installation(self.state_dir, current)
 
     def submit(self, sample, prepare, execute):
         lock = self.locks.get(sample)
