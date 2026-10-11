@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from installer.state_store import write_json
+from installer.history import read_installation_history
 from installer.studio_api import ApiError, _read_state, _write_installing
 from installer.task_runner import InstallationRunner
 
@@ -49,6 +50,9 @@ class TaskRunnerTest(unittest.TestCase):
         self.assertEqual(recovered["stages"], {"database": "succeeded", "knowledge": "failed"})
         for key in ["manifestSha256", "releaseNotesSnapshot", "dataImageRef"]:
             self.assertEqual(recovered[key], record[key])
+        history, _ = read_installation_history(self.state, "supply-chain", None)
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0], recovered)
         self.runner.recover_interrupted()
         self.assertEqual(_read_state(self.state, "supply-chain"), recovered)
         recovered["status"] = "installed"
@@ -66,6 +70,9 @@ class TaskRunnerTest(unittest.TestCase):
         self.assertEqual(record["status"], "failed")
         self.assertNotIn("private", json.dumps(record))
         self.assertEqual(record["stages"]["database"], "failed")
+        history, _ = read_installation_history(self.state, "supply-chain", None)
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0], record)
 
     def test_preflight_failure_does_not_start_work_or_change_success(self):
         write_json(self.state / "supply-chain.json", {"sample": "supply-chain", "status": "installed"})
