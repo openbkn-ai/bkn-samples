@@ -8,7 +8,7 @@ Each sample lives under `samples/<sample-id>/` and must contain `sample.yaml`, r
 
 ## Contract
 
-Keep `sample.yaml` aligned with the OpenBKN sample schema. Declare the platform range, required capabilities, components, data mode, knowledge-network entrypoint, and installation hooks. Do not add sample-specific branches to Studio or the shared installer.
+Keep `sample.yaml` aligned with the OpenBKN sample schema. Declare the platform range, required capabilities, components, data mode, knowledge-network entrypoint, and installation hooks. Do not add sample-specific branches to Studio or the shared installer. Required capability names identify standard API adapters implemented by the installer; they do not grant authorization or assert that an API is enabled on every deployment. Installation uses the existing OpenBKN APIs and records actual API failures. The target backend version is read through its standard health endpoint by default.
 
 ## Versions and release notes
 
