@@ -38,7 +38,11 @@
       "metric_name": "物料总数",
       "title": "外购物料种数",
       "body": {
-        "condition": { "field": "materialattr", "operation": "==", "value": "外购" }
+        "condition": {
+          "field": "materialattr",
+          "operation": "==",
+          "value": "外购"
+        }
       },
       "expected_value": 3149
     },
@@ -54,7 +58,11 @@
       "metric_name": "供应商总数",
       "title": "采购员杨强云名下供应商",
       "body": {
-        "condition": { "field": "purchaserid_name", "operation": "==", "value": "杨强云" }
+        "condition": {
+          "field": "purchaserid_name",
+          "operation": "==",
+          "value": "杨强云"
+        }
       },
       "expected_value": 51
     },
@@ -70,7 +78,11 @@
       "metric_name": "销售订单数",
       "title": "382-000005 销售订单张数",
       "body": {
-        "condition": { "field": "product_code", "operation": "==", "value": "382-000005" }
+        "condition": {
+          "field": "product_code",
+          "operation": "==",
+          "value": "382-000005"
+        }
       },
       "expected_value": 40
     },
@@ -89,11 +101,19 @@
         "condition": {
           "operation": "and",
           "sub_conditions": [
-            { "field": "material_code", "operation": "==", "value": "382-000005" },
+            {
+              "field": "material_code",
+              "operation": "==",
+              "value": "382-000005"
+            },
             {
               "field": "warehouse",
               "operation": "in",
-              "value": ["苏州成品仓", "乌鲁木齐成品仓", "哈尔滨成品仓"]
+              "value": [
+                "苏州成品仓",
+                "乌鲁木齐成品仓",
+                "哈尔滨成品仓"
+              ]
             }
           ]
         }
@@ -109,7 +129,11 @@
         "condition": {
           "operation": "and",
           "sub_conditions": [
-            { "field": "material_code", "operation": "==", "value": "791-000013" },
+            {
+              "field": "material_code",
+              "operation": "==",
+              "value": "791-000013"
+            },
             {
               "field": "warehouse",
               "operation": "in",
@@ -133,8 +157,8 @@
       "metric_name": "预测需求量合计",
       "title": "预测数量全量",
       "body": {},
-      "expected_value": 106422,
-      "note": "冻结数据快照（2026-08-13）：正常预测 46840 + 已关闭预测 59582 = 106422。已与 POC 环境的指标结果交叉核对；其中正常预测 46840 与 sample-answer-set-v1.yaml 的 M-07 基准答案一致。"
+      "expected_value": 115922,
+      "note": "当前锁定 CSV：正常预测 56340 + 已关闭预测 59582 = 115922。"
     },
     {
       "id": "forecast_382_open_qty",
@@ -144,8 +168,16 @@
         "condition": {
           "operation": "and",
           "sub_conditions": [
-            { "field": "material_number", "operation": "==", "value": "382-000005" },
-            { "field": "closestatus_title", "operation": "==", "value": "正常" }
+            {
+              "field": "material_number",
+              "operation": "==",
+              "value": "382-000005"
+            },
+            {
+              "field": "closestatus_title",
+              "operation": "==",
+              "value": "正常"
+            }
           ]
         }
       },
@@ -156,10 +188,14 @@
       "metric_name": "未关闭预测单数",
       "title": "未关闭预测单张数",
       "body": {
-        "condition": { "field": "closestatus_title", "operation": "!=", "value": "已关闭" }
+        "condition": {
+          "field": "closestatus_title",
+          "operation": "!=",
+          "value": "已关闭"
+        }
       },
-      "expected_value": 87,
-      "note": "冻结数据快照（2026-08-13）：状态为“正常”的未关闭预测单数量为 87。已与 POC 环境的指标结果交叉核对，并与 sample-answer-set-v1.yaml 的 M-08 基准答案一致。定义态 condition 无效，查询时必须显式传 closestatus_title != 已关闭。"
+      "expected_value": 90,
+      "note": "当前锁定 CSV：正常预测单 90 张。查询显式传 closestatus_title != 已关闭。"
     }
   ]
 }

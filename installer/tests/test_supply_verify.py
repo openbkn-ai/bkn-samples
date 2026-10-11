@@ -76,6 +76,34 @@ class SupplyVerifyTest(unittest.TestCase):
         self.assertFalse(VERIFY.capability_ready(run))
         self.assertFalse(VERIFY.skills_ready(run))
 
+    def test_forecast_metric_expectations_match_locked_csv(self):
+        import csv
+        import json
+        from decimal import Decimal
+
+        with (VERIFY.SAMPLE_DIR / "data/erp_mds_forecast.csv").open() as source:
+            rows = list(csv.DictReader(source))
+        cases = {case["id"]: case for case in json.loads(
+            (VERIFY.SAMPLE_DIR / "tools/assets/metrics-query-examples.json").read_text())["cases"]}
+        self.assertEqual(sum(Decimal(row["qty"]) for row in rows),
+                         cases["forecast_qty_all"]["expected_value"])
+        self.assertEqual(sum(row["closestatus_title"] != "已关闭" for row in rows),
+                         cases["open_forecast_count"]["expected_value"])
+        definitions = json.loads((VERIFY.SAMPLE_DIR / "tools/assets/metrics-create.json").read_text())
+        metric = next(item for item in definitions["entries"] if item["name"] == "未关闭预测单数")
+        self.assertIn("closestatus_title", [item["name"] for item in metric["analysis_dimensions"]])
+
+    def test_metric_queries_and_bindings_must_both_pass(self):
+        report = {key: {"passed": [{"id": "metric"}], "failed": []}
+                  for key in ("verify_metrics", "verify_logic_properties")}
+        self.assertTrue(all(item["ok"] for item in VERIFY.metric_checks(report, True)))
+        self.assertFalse(any(item["ok"] for item in VERIFY.metric_checks(report, False)))
+        report["verify_metrics"]["failed"] = [{"actual": 0}]
+        checks = VERIFY.metric_checks(report, True)
+        self.assertFalse(checks[0]["ok"])
+        self.assertTrue(checks[1]["ok"])
+        self.assertFalse(any(item["ok"] for item in VERIFY.metric_checks({}, True)))
+
     def test_absent_functions_and_skills_are_not_required(self):
         calls = []
 

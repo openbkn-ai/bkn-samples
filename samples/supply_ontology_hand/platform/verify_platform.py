@@ -76,6 +76,16 @@ def build_checks(*, data_ok: bool, run_cli, components: dict) -> list[dict]:
     return checks
 
 
+def metric_checks(report: dict, command_ok: bool) -> list[dict]:
+    checks = []
+    for section, name in (("verify_metrics", "metric-query"),
+                          ("verify_logic_properties", "metric-binding")):
+        result = report.get(section) or {}
+        checks.append({"name": name, "ok": bool(command_ok and result.get("passed")
+                                               and result.get("failed") == [])})
+    return checks
+
+
 def _openbkn(args: list[str]) -> dict:
     completed = subprocess.run(["openbkn", "--json", *args], check=False, capture_output=True, text=True)
     if completed.returncode:
@@ -105,6 +115,19 @@ def main() -> int:
         run_cli=_openbkn,
         components=document["spec"]["components"],
     )
+    if document["spec"]["components"].get("metrics"):
+        metrics = subprocess.run(
+            [sys.executable, str(SAMPLE_DIR / "tools" / "power_layer.py"), "verify",
+             "--kn-id", raw["knowledgeNetwork"]["id"]],
+            check=False, capture_output=True, text=True,
+        )
+        try:
+            report = json.loads(metrics.stdout)
+            if not isinstance(report, dict):
+                report = {}
+        except ValueError:
+            report = {}
+        checks.extend(metric_checks(report, metrics.returncode == 0))
     passed = all(item["ok"] for item in checks)
     body = {
         "ok": passed,
