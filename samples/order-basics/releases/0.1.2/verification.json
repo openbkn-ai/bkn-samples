@@ -1,0 +1,72 @@
+{
+  "sampleId": "order-basics",
+  "version": "0.1.2",
+  "packageDigest": "sha256:69e59868379863ea47fd9a6f4d27cb448a34c87186bddb0a643d7714fbbe0fa6",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:45d01ef8ec8ef947cd7d5307165cbe58e8f0624487b9103ec2259ddf742f4e06",
+  "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:84d0fb8b14e4819c0ddba4dfb6384a9b9cd9660e522a3a7cce81f1df7b30f1c9",
+  "freshInstallation": true,
+  "installation": {
+    "source": "studio-offline-import",
+    "startedAt": "2026-10-11T16:17:55.205347Z",
+    "finishedAt": "2026-10-11T16:18:24.501658Z",
+    "freshAfterUninstall": true,
+    "stages": [
+      {
+        "id": "database",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "state": "succeeded"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "Two business tables loaded from the fixed database image."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Products and orders were imported with their relation; object queries and order/product joins passed."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "No optional functions, metrics or Skills are declared; the capability stage completed successfully."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Order-basics verification passed after uninstall and fresh reinstall."
+    }
+  ],
+  "architectureTested": "arm64",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-order-basics-v0.1.2/acceptance.json",
+  "evidenceDigest": "sha256:7f6858748ad22b9dad2f81d8c2a755db4f7e6d5934b41797916f13c06121a442",
+  "lifecycle": {
+    "installUninstallReinstallPassed": true,
+    "recordedResourcesAbsentAfterUninstall": true,
+    "historyRetained": true,
+    "staleUninstallRequestStatus": 404
+  },
+  "limits": [
+    "Only an arm64 runtime was exercised; amd64 runtime acceptance is not claimed.",
+    "No new model-driven Skill conversation acceptance was performed for these lifecycle releases.",
+    "Legacy published packages without ownership receipts remain unchanged."
+  ]
+}

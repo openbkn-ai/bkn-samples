@@ -1,0 +1,74 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.4",
+  "packageDigest": "sha256:cb0d3f01568c490dca22fdd4ff6273dc83804f6726a3c5c8872e4eb670a14ad0",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:805317bc1ac93e58f4149e35a7a0a75057330d8888ca54526a354996f313fcd1",
+  "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:235acdcad45957fd47aca0cfc26b0207cb01c0b3b5ea48ed4786ac52197a7f9f",
+  "freshInstallation": true,
+  "installation": {
+    "source": "studio-offline-import",
+    "startedAt": "2026-10-11T16:52:28.065056Z",
+    "finishedAt": "2026-10-11T16:53:49.851797Z",
+    "freshAfterUninstall": true,
+    "stages": [
+      {
+        "id": "database",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "state": "succeeded"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables loaded; table discovery passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Object queries, cross-table queries, metric queries and logic-property bindings passed."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Packaged functions were called successfully and all four declared Skills were discoverable."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Supply-chain verification passed after uninstall and fresh reinstall; different-version replacement also passed."
+    }
+  ],
+  "architectureTested": "arm64",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.4/acceptance.json",
+  "evidenceDigest": "sha256:8a2a7adbdee0814eefc358ea0a0a3592e29269645ff2e49f347fa48c16c56357",
+  "lifecycle": {
+    "installUninstallReinstallPassed": true,
+    "recordedResourcesAbsentAfterUninstall": true,
+    "historyRetained": true,
+    "staleUninstallRequestStatus": 404,
+    "differentVersionReplacementPassed": true
+  },
+  "limits": [
+    "Only an arm64 runtime was exercised; amd64 runtime acceptance is not claimed.",
+    "No new model-driven Skill conversation acceptance was performed for these lifecycle releases.",
+    "Legacy published packages without ownership receipts remain unchanged.",
+    "Knowledge network proxy synchronization can require Continue uninstall before cleanup completes."
+  ]
+}
