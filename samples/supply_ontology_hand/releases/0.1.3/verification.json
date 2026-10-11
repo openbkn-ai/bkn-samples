@@ -1,0 +1,80 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.3",
+  "packageDigest": "sha256:656f4482b734914bad87b4d86e4720ce88a9f9a4d19563a0eb6b0fccbf02b7cd",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:805317bc1ac93e58f4149e35a7a0a75057330d8888ca54526a354996f313fcd1",
+  "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:706ca749d657e107f0bfc1d86cb6b4f0b4ee8c021f807c1f3929f8af2813e11e",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-supply-chain",
+    "attemptId": "9718c86df1bc48e68fae76dfc2d3b606",
+    "sample": "supply-chain",
+    "version": "0.1.3",
+    "startedAt": "2026-10-11T04:41:51.152846Z",
+    "finishedAt": "2026-10-11T04:44:20.467492Z",
+    "installedAt": "2026-10-11T04:44:20.467492Z",
+    "status": "installed",
+    "requestedBy": "admin",
+    "stages": [
+      {
+        "id": "database",
+        "name": "准备样例库",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "name": "扫描数据资源",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "name": "导入并绑定知识网络",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "name": "发布能力",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "name": "冒烟验收",
+        "state": "succeeded"
+      }
+    ],
+    "error": null
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables loaded."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "15 objects, 21 relations, 11 bindings; object and cross-table queries passed."
+    },
+    {
+      "name": "metrics",
+      "passed": true,
+      "details": "Eight definitions and logic-property bindings; 13 computed values match locked CSV expectations."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "14 newly registered functions actually executed through managed MCP; four published Skills and ten references match the package."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Five business scenarios match expected values."
+    }
+  ],
+  "architectureTested": "arm64",
+  "evidence": "docs/phase6-component-acceptance.json",
+  "limits": [
+    "Browser upload automation was stopped by the computer-use tool; this run used the standard Studio import and installation APIs.",
+    "LLM-driven Skill conversations were not tested."
+  ]
+}
