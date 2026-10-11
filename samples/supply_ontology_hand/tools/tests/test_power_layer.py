@@ -124,12 +124,10 @@ def test_pack_payloads_exist_and_align():
     assert "available_qty_sum" in lp_names
     assert "available_inventory_qty" not in lp_names
     forecast_qty_all = cases_by_id["forecast_qty_all"]
-    assert forecast_qty_all["expected_value"] == 106422
-    assert "POC 环境" in forecast_qty_all["note"]
-    assert "M-07" in forecast_qty_all["note"]
+    assert forecast_qty_all["expected_value"] == 115922
+    assert "锁定 CSV" in forecast_qty_all["note"]
 
     open_forecast_count = cases_by_id["open_forecast_count"]
-    assert open_forecast_count["expected_value"] == 87
-    assert "状态为“正常”" in open_forecast_count["note"]
-    assert "POC 环境" in open_forecast_count["note"]
-    assert "M-08" in open_forecast_count["note"]
+    assert open_forecast_count["expected_value"] == 90
+    assert "正常预测单 90" in open_forecast_count["note"]
+    assert "锁定 CSV" in open_forecast_count["note"]
