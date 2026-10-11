@@ -25,9 +25,31 @@ python3 tools/publication/build_candidate.py samples/<sample-id> \
 
 The package contains only tracked allowlisted files. Fixed data must be checked by a lock file. Validate native BKN with `openbkn bkn validate <sample>/kn` before publication.
 
+Add new sample files to the Git index before building; untracked hooks and models are excluded. Build the final candidate from the reviewed, clean commit and keep `build.json` with the package digest. Candidate construction does not execute hooks or prove that installation works. Never overwrite a published version; choose a new version and a new output directory.
+
+For a package that can be imported through Studio's **Import offline package** action, add the fixed data image reference:
+
+```bash
+python3 tools/publication/build_candidate.py samples/<sample-id> \
+  --version <version> --output /tmp/sample-candidate \
+  --data-image-ref ghcr.io/openbkn-ai/bkn-samples@sha256:<digest>
+```
+
+The archive includes offline metadata bound to that image. The image itself must be reachable or preloaded in the target cluster; the archive does not contain container image layers.
+
 ## Release and catalog
 
 After PR review and installation acceptance, publish the immutable package and data image. Add `sample.json` and `verification.json` under the release directory, then update the root `catalog.json` with immutable URLs and SHA256 digests. Catalog changes also go through PR review.
+
+Use an existing release as the small reference: [World Cup 0.1.1](../samples/world-cup/releases/0.1.1/sample.json). Keep its protocol and installation profile, replacing sample identity, content, requirements and fixed artifacts. Reference release metadata at a full official repository commit, increase the catalog sequence, and preserve existing releases. Validate against the trusted PR base:
+
+```bash
+git show origin/main:catalog.json > /tmp/baseline-catalog.json
+python3 tools/publication/validate.py . --official \
+  --baseline-catalog /tmp/baseline-catalog.json
+```
+
+Record fresh installation and actual database, knowledge, capability and scenario checks for the exact package and image in `verification.json`. A passing schema check or AI approval is not an installation result. Publish catalog references only after those fixed artifacts pass acceptance. See [candidate publication](candidate-publication.md) for the build boundary and [state persistence](sample-state-persistence.md) for deployment and recovery.
 
 ## Updating a sample
 
