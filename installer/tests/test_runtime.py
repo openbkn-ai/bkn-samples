@@ -43,6 +43,7 @@ class RuntimeTest(unittest.TestCase):
                 "port": 3306,
                 "database": "supply_demo_hand",
                 "user": "bkn_sample",
+                "image": "ghcr.io/openbkn-ai/bkn-samples@sha256:" + "a" * 64,
             }
 
         def kubectl(_args, stdin=None):
@@ -61,6 +62,7 @@ class RuntimeTest(unittest.TestCase):
             seen["network"] = payload["knowledgeNetwork"]["id"]
             seen["hook_token"] = env.get("BKN_TOKEN")
             seen.setdefault("configs", []).append(env.get("BKN_SAMPLE_CONFIG"))
+            seen["recorded_image"] = json.loads((Path(env["BKN_SAMPLE_CONFIG"]).parents[1] / "supply-chain.json").read_text())["dataImageRef"]
             Path(env["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps({"ok": True, "resources": {}}), encoding="utf-8")
             return completed()
 
@@ -75,6 +77,7 @@ class RuntimeTest(unittest.TestCase):
             run=run,
             authorization="Bearer admin-token",
         )
+        self.assertEqual(seen["recorded_image"], "ghcr.io/openbkn-ai/bkn-samples@sha256:" + "a" * 64)
         self.assertEqual(seen["password"], PASSWORD)
         self.assertEqual(seen["network"], "supply_ontology_hand")
         self.assertEqual(seen["token"], "admin-token")
@@ -164,6 +167,38 @@ class RuntimeTest(unittest.TestCase):
             lambda _args: completed(base64.b64encode(b"secret").decode("ascii")),
         )
         self.assertEqual(config["password"], "secret")
+
+
+
+    def test_bundled_deploy_requires_ownership_and_pins_retry_image(self):
+        from unittest.mock import patch
+        from installer.runtime import deploy
+        image = "ghcr.io/openbkn-ai/bkn-samples@sha256:" + "a" * 64
+        with patch("installer.runtime.deploy_database", return_value={"image": image}) as called:
+            deploy(ROOT, "supply-chain", data_image_ref=image)
+        self.assertTrue(called.call_args.kwargs["require_ownership"])
+        self.assertEqual(called.call_args.kwargs["data_image_ref"], image)
+
+    def test_resolved_image_allows_retry_with_empty_chart_reference(self):
+        from unittest.mock import patch
+        from installer.runtime import _record_database_image
+        from installer.studio_api import _write_installing, _read_state
+        with tempfile.TemporaryDirectory() as directory:
+            state = Path(directory)
+            image = "ghcr.io/openbkn-ai/bkn-samples@sha256:" + "a" * 64
+            _write_installing(state, "supply-chain", "0.1.0", data_image_ref=None)
+            _record_database_image(state, "supply-chain", "0.1.0", {"image": image})
+            current = _read_state(state, "supply-chain")
+            self.assertEqual(current["dataImageRef"], image)
+            current["status"] = "failed"
+            (state / "supply-chain.json").write_text(json.dumps(current))
+            def stop_after_deploy(_sample):
+                self.assertEqual(_read_state(state, "supply-chain")["dataImageRef"], image)
+                raise ControlError("install_failed", "sentinel")
+            with patch("installer.runtime.configured_image_ref", return_value=None), self.assertRaises(ApiError) as error:
+                retry_sample(sample="supply-chain", installation_id=current["id"], actor_role="admin", state_dir=state,
+                             root=ROOT, version="0.1.0", deploy=stop_after_deploy, kubectl=lambda _: None, run=lambda *_: None)
+            self.assertEqual(error.exception.code, "install_failed")
 
 
 if __name__ == "__main__":

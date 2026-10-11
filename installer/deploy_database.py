@@ -419,7 +419,9 @@ def deploy_database(
     _apply(kubectl, manifest)
     # A mirror switch is allowed only when its independently resolved digest
     # matches the selected artifact. Never fall back to a mutable tag.
-    ghcr = f"{GHCR_IMAGE}@{ghcr_digest}" if ghcr_digest else None
+    # Owned resources retain one fixed reference in both state and annotations.
+    # Configure the alternative registry explicitly rather than switching identity.
+    ghcr = f"{GHCR_IMAGE}@{ghcr_digest}" if ghcr_digest and not require_ownership else None
     switched = image == ghcr
     state = "pending"
     for _ in range(attempts):

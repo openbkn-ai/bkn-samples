@@ -19,6 +19,8 @@
 
 删除 PVC 后的数据回收行为由 StorageClass 的 reclaimPolicy 决定；Retain 存储需由集群管理员另行回收，不宣称物理介质已经擦除。
 
+内置一键安装同样写入数据库归属注解，并在解析镜像后保存固定 `dataImageRef`；重试复用该引用。受归属管理的安装保持一个镜像引用，不在创建后切换注册表；需切换源时应在部署配置中明确指定固定镜像。
+
 ## API 和任务记录
 
 - 管理员 `POST /api/studio/samples/{sample}/installations/{installation}/uninstall`，请求为空，接受后返回 202。

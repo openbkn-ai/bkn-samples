@@ -370,7 +370,7 @@ def main() -> None:
             state_dir=state_dir,
             root=root,
             version=version,
-            deploy=lambda name: deploy_database_sample(root, name),
+            deploy=lambda name: deploy_database_sample(root, name, data_image_ref=(_read_state(state_dir, name) or {}).get("dataImageRef")),
             kubectl=kubectl_run,
             run=process_run,
             authorization=authorization,
@@ -389,7 +389,7 @@ def main() -> None:
         if current.get("status") != "failed":
             raise ApiError(409, "already_installed" if current.get("status") == "installed" else "already_installing",
                            "only a failed installation can be retried")
-        if current.get("version") != version or ("dataImageRef" in current and current["dataImageRef"] != data_image_ref):
+        if current.get("version") != version or (data_image_ref is not None and current.get("dataImageRef") and current["dataImageRef"] != data_image_ref):
             raise ApiError(409, "version_changed", "retry requires the original installed artifacts and data image")
         current["status"] = "installing"
         current.pop("error", None)
@@ -407,7 +407,7 @@ def main() -> None:
             state_dir=state_dir,
             root=root,
             version=version,
-            deploy=lambda name: deploy_database_sample(root, name),
+            deploy=lambda name: deploy_database_sample(root, name, data_image_ref=(_read_state(state_dir, name) or {}).get("dataImageRef")),
             kubectl=kubectl_run,
             run=process_run,
             authorization=authorization,
