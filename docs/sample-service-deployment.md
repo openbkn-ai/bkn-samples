@@ -54,4 +54,4 @@ Keep the same PVC during rollback. Use `helm history bkn-sample-studio -n openbk
 
 The state PVC and `openbkn-samples` namespace are retained by the Chart's `helm.sh/resource-policy: keep` annotations. Removing the service must not remove installed databases. Charts before the namespace-retention fix lack that protection: do not uninstall those releases with sample data present. A later deliberate cleanup must separately inspect and remove sample resources and retained volumes.
 
-Product integration is maintained in `openbkn-ai/openbkn-deploy` (reviewed PR22). Acceptance used its standard deployment entry on the existing OpenBKN instance with the official Chart. It does not claim a fresh installation of the entire platform.
+Product integration is maintained in [openbkn-deploy](https://github.com/openbkn-ai/openbkn-deploy). Use its standard installation entry and the official sample service Chart. Runtime state uses a PVC and a single-replica Recreate deployment. Service restart preserves installed records and history; interrupted tasks require an explicit retry.

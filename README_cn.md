@@ -43,6 +43,8 @@ samples/<slug>/
 
 在 `samples/<slug>/` 下新增 sample，提供 README（中/英）、数据、工具、文档，并更新上表。
 
-样例更新须遵循 [PR 审查规则](docs/review/sample-pr-review-rules_cn.md)，按 PR 模板说明变更与验证证据；正式发布须验收同一份固定候选制品。
+新增或更新样例请遵循 [开发指南](docs/SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md)，正式发布前验收同一份固定候选制品。
 
 样例开发、版本变更和固定包发布见 [开发指南](docs/SAMPLE_DEVELOPMENT_GUIDE.md)；现有平台的服务安装和迁移见 [部署说明](docs/sample-service-deployment.md)。
+
+产品资料：[设计与指南](docs/README.md)、[0.2.0 总体实施进度](docs/RELEASE_0.2.0_STATUS.md)。

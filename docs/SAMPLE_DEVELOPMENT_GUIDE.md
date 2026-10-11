@@ -51,7 +51,7 @@ python3 tools/publication/validate.py . --official \
   --baseline-catalog /tmp/baseline-catalog.json
 ```
 
-Record fresh installation and actual database, knowledge, capability and scenario checks for the exact package and image in `verification.json`. A passing schema check or AI approval is not an installation result. Publish catalog references only after those fixed artifacts pass acceptance. See [candidate publication](candidate-publication.md) for the build boundary and [state persistence](sample-state-persistence.md) for deployment and recovery.
+Record fresh installation and actual database, knowledge, capability and scenario checks for the exact package and image in `verification.json`. A passing schema check or AI approval is not an installation result. Publish catalog references only after those fixed artifacts pass acceptance. See [candidate publication](candidate-publication.md) for the build boundary and [service deployment](sample-service-deployment.md) for deployment and recovery.
 
 ## Updating a sample
 
