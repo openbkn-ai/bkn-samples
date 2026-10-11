@@ -3,7 +3,6 @@ import json
 import os
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,10 +55,8 @@ def main():
                 require(found["data_source"]["id"] == obj["data_source"]["id"], "knowledge network binding conflict")
         else:
             require("404" in existing.stderr + existing.stdout, "cannot confirm that knowledge network is absent")
-            with tempfile.NamedTemporaryFile(mode="w", suffix=".json", encoding="utf8") as body:
-                json.dump(source, body, ensure_ascii=False)
-                body.flush()
-                cli("bkn", "create", "--body-file", body.name)
+            cli("call", "-X", "POST", "/api/ontology-manager/v1/knowledge-networks",
+                "-d", json.dumps(source, ensure_ascii=False))
         checks = [{"name": "network-import", "ok": True}]
     elif sys.argv[1] == "verify":
         products = entries(cli("bkn", "object-type", "query", KN, "products", "--body", '{"limit":10}'))
