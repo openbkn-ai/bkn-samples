@@ -23,6 +23,7 @@ _RETRY = re.compile(
 )
 _GET = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/installations/(?P<installation>[^/]+)$")
 _NOTES = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,63})/versions/(?P<version>[0-9]+\.[0-9]+\.[0-9]+)/release-notes$")
+_OFFLINE_DELETE = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/offline$")
 
 
 def role_from_safe(me_status: int, permissions: dict | None) -> str:
@@ -34,7 +35,7 @@ def role_from_safe(me_status: int, permissions: dict | None) -> str:
 
 
 class StudioApp:
-    def __init__(self, *, catalog, create, retry, get, authenticate, notes=None, history=None, refresh=None, create_selected=None, import_package=None):
+    def __init__(self, *, catalog, create, retry, get, authenticate, notes=None, history=None, refresh=None, create_selected=None, import_package=None, delete_package=None):
         self.catalog = catalog
         self.create = create
         self.retry = retry
@@ -45,6 +46,7 @@ class StudioApp:
         self.refresh = refresh
         self.create_selected = create_selected
         self.import_package = import_package
+        self.delete_package = delete_package
 
 
 def _empty_body(body: bytes) -> bool:
@@ -118,6 +120,16 @@ def _route(method: str, path: str, payload: dict | None = None, locale: str = "z
     notes = _NOTES.fullmatch(path)
     if notes and method == "GET":
         return lambda app, role, _authorization: (200, app.notes(notes.group("sample"), notes.group("version"), role, locale)) if app.notes else (404, {"code": "release_notes_unavailable", "message": "version notes unavailable"})
+    offline_delete = _OFFLINE_DELETE.fullmatch(path)
+    if offline_delete and method == "DELETE":
+        sample = offline_delete.group("sample")
+        def remove(app, role, _authorization):
+            if role != "admin":
+                raise ApiError(403, "forbidden", "an administrator must remove the offline sample")
+            if not app.delete_package:
+                return 404, {"code": "import_unavailable", "message": "offline import is unavailable"}
+            return 200, app.delete_package(sample, role)
+        return remove
     retried = _RETRY.fullmatch(path)
     if retried and method == "POST":
         sample, installation = retried.group("sample"), retried.group("installation")
@@ -136,6 +148,9 @@ class _Handler(BaseHTTPRequestHandler):
         self._handle()
 
     def do_POST(self) -> None:  # noqa: N802
+        self._handle()
+
+    def do_DELETE(self) -> None:  # noqa: N802
         self._handle()
 
     def log_message(self, fmt: str, *args) -> None:
@@ -222,7 +237,7 @@ def authenticate_bearer(fetch, authorization: str | None) -> str:
     return role_from_safe(me_status, permissions if isinstance(permissions, dict) else None)
 
 
-def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate, release_notes=None, installation_history=None, refresh_catalog=None, create_selected=None, import_package=None) -> StudioApp:
+def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate, release_notes=None, installation_history=None, refresh_catalog=None, create_selected=None, import_package=None, delete_package=None) -> StudioApp:
     return StudioApp(
         catalog=list_samples,
         create=create_installation,
@@ -234,6 +249,7 @@ def build_app(*, list_samples, create_installation, retry_installation, get_inst
         refresh=refresh_catalog,
         create_selected=create_selected,
         import_package=import_package,
+        delete_package=delete_package,
     )
 
 
@@ -473,6 +489,9 @@ def main() -> None:
         update_platform_version()
         return offline.import_package(archive, role)
 
+    def delete_package(sample, role):
+        return offline.delete_package(sample, role)
+
     app = build_app(
         list_samples=catalog,
         create_installation=create,
@@ -488,6 +507,7 @@ def main() -> None:
         refresh_catalog=refresh,
         create_selected=create_selected,
         import_package=import_package,
+        delete_package=delete_package,
         installation_history=lambda sample, role: list_sample_installations(
             sample=sample, state_dir=state_dir, actor_role=role),
     )
