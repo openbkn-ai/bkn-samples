@@ -20,8 +20,10 @@ UNINSTALL_STAGES = (("knowledge", "删除知识网络和指标"), ("capabilities
 
 def platform_client(authorization):
     base = os.environ["BKN_BASE_URL"].rstrip("/")
-    def call(method, path):
-        request = Request(base + path, method=method, headers={"Authorization": authorization})
+    def call(method, path, body=None):
+        request = Request(base + path, method=method,
+                          data=json.dumps(body).encode() if body is not None else None,
+                          headers={"Authorization": authorization, "Content-Type": "application/json"})
         try:
             with urlopen(request, timeout=30) as response:
                 raw = response.read()
@@ -122,6 +124,11 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         for stage, paths in (("knowledge", metrics + [network_path]), ("capabilities", execution_paths), ("discover", [catalog_path])):
             checkpoint(stage, "running")
             for path in paths:
+                if stage == "capabilities":
+                    resource = _single(api("GET", path))
+                    if resource and resource.get("status") == "published":
+                        method = "PUT" if "/skills/" in path else "POST"
+                        api(method, path + "/status", {"status": "offline"})
                 api("DELETE", path)
                 if _single(api("GET", path)) is not None:
                     raise ApiError(500, "uninstall_failed", "Resource deletion has not completed; retry the uninstall.")

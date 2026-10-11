@@ -17,11 +17,27 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 from pathlib import Path
+import yaml
 
 PLACEHOLDER_RE = re.compile(r"\{\{([A-Z0-9_]+)_RES_ID\}\}")
+
+
+def apply_managed_tags(network: Path, payload: dict) -> None:
+    if payload.get("sample") != "world-cup" or payload.get("ownership", {}).get("sample") != "world-cup":
+        raise ValueError("invalid managed World Cup identity")
+    version = payload["version"]
+    if not re.fullmatch(r"\d+\.\d+\.\d+", version):
+        raise ValueError("invalid managed World Cup version")
+    text = network.read_text(encoding="utf-8")
+    _, front, body = text.split("---", 2)
+    metadata = yaml.safe_load(front)
+    required = ["bkn-samples", "bkn-sample-world-cup", f"bkn-samples-version-{version.replace('.', '-')}"]
+    metadata["tags"] = list(dict.fromkeys([*(metadata.get("tags") or []), *required]))
+    network.write_text("---\n" + yaml.safe_dump(metadata, allow_unicode=True, sort_keys=False) + "---" + body, encoding="utf-8")
 
 
 def main() -> None:
@@ -87,6 +103,8 @@ def main() -> None:
                 args.mapping,
             )
         )
+    if os.environ.get("BKN_SAMPLE_INPUT"):
+        apply_managed_tags(dst / "network.bkn", json.loads(Path(os.environ["BKN_SAMPLE_INPUT"]).read_text()))
     print(f"Wrote {dst} ({len(mapping)} mapping keys supplied)")
 
 
