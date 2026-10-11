@@ -55,6 +55,19 @@ Record fresh installation and actual database, knowledge, capability and scenari
 
 Create a new semantic version for data, BKN structure, functions, metrics, or skills. Do not overwrite an existing release. Update release notes, rebuild the package, run installation and smoke verification, and record the new installed version. Studio treats the catalog as the source for online updates and accepts the package directly for offline import.
 
+Version the sample as a whole; do not independently replace one file in an installed release. Include sample-declared interfaces and bindings in this rule:
+
+| Change | Files to update and acceptance to record |
+| --- | --- |
+| Data | Update embedded data and its lock, publish a new data image digest, verify tables and representative values. |
+| Knowledge network | Update the existing BKN / KN JSON model and bindings, validate and import it, verify objects and relations. |
+| Functions | Update packaged code and registration, invoke the changed function with a representative input and check the result. |
+| Metrics | Update metric definitions in the existing BKN model, verify their source bindings and actual calculated results. |
+| Skills | Update skill content and referenced functions/interfaces, verify discovery and the changed scenario. |
+| Interfaces | Update sample-declared tool/API contracts and bindings, verify arguments, results and compatibility; declare a new platform requirement if the sample needs a different platform API. |
+
+For each changed category, explain the change and compatibility in the new release notes. Unchanged content can remain identical, but the new package, any changed data image, and verification must all refer to the same sample version. No separate metric or interface plugin protocol is required. Keep sample versions independent from the OpenBKN platform version.
+
 Publishing a new version does not upgrade an installed sample. In-place upgrades, data migrations, and uninstall are not supported in this phase. Validate the new version with a fresh installation in a test environment. Online and offline installation use the same manifest and fixed artifacts; importing a tar.gz does not bundle the separately referenced data image, which must also be available to the target environment.
 
 Each accepted installation or retry receives an `attemptId` and its own start time. Terminal records are archived separately, so retrying the same version preserves the earlier failure. Legacy records remain readable, but previously overwritten records cannot be reconstructed; Studio marks that history as incomplete. Requests rejected during preflight do not create attempts.

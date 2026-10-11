@@ -73,6 +73,7 @@ jobs:
           username: ${{ secrets.SWR_USERNAME }}
           password: ${{ secrets.SWR_PASSWORD }}
       - uses: docker/build-push-action@v6
+        id: service_image
         with:
           context: .
           file: installer/studio/Dockerfile
@@ -108,10 +109,13 @@ jobs:
       - name: Package the chart for the same version
         env:
           VERSION: ${{ steps.version.outputs.value }}
+          SERVICE_IMAGE_DIGEST: ${{ steps.service_image.outputs.digest }}
         run: |
+          [[ "${SERVICE_IMAGE_DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]
           sed -i "s/^version: .*/version: ${VERSION}/" deploy/charts/bkn-sample-studio/Chart.yaml
           sed -i "s/^appVersion: .*/appVersion: \"${VERSION}\"/" deploy/charts/bkn-sample-studio/Chart.yaml
           sed -i "s/__VERSION__/${VERSION}/g" deploy/charts/bkn-sample-studio/values.yaml
+          sed -i "s/^  digest: .*/  digest: \"${SERVICE_IMAGE_DIGEST}\"/" deploy/charts/bkn-sample-studio/values.yaml
           helm lint deploy/charts/bkn-sample-studio
           helm package deploy/charts/bkn-sample-studio --destination /tmp/charts
       - name: Push the chart

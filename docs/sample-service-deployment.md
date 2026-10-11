@@ -2,6 +2,8 @@
 
 Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
 
+The standard Foundry product composition already includes this Chart. The paired installer change derives the 0.2 platform version and capabilities from that composition, while the publication workflow stamps the built service image digest into the Chart. After both changes are merged and published, normal product installation does not require users to fill those fields manually. The following standalone configuration remains useful for administrators and acceptance.
+
 ## Configuration and installation
 
 Create a values file using the addresses and capabilities of the actual platform:
