@@ -5,7 +5,7 @@ import re
 from threading import Lock, Thread
 
 from installer.state_store import write_json
-from installer.history import record_terminal_installation
+from installer.history import begin_installation_attempt, record_terminal_installation
 from installer.studio_api import ApiError, _read_state, installation_view, timestamp
 
 
@@ -54,8 +54,11 @@ class InstallationRunner:
         if not lock.acquire(blocking=False):
             raise ApiError(409, "already_installing", "an installation is already running")
         try:
+            previous = _read_state(self.state_dir, sample)
             prepare()
-            accepted = installation_view(_read_state(self.state_dir, sample), "admin")
+            current = _read_state(self.state_dir, sample)
+            begin_installation_attempt(self.state_dir, current, previous)
+            accepted = installation_view(current, "admin")
 
             def work():
                 try:

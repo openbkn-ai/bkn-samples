@@ -35,7 +35,7 @@ Create a new semantic version for data, BKN structure, functions, metrics, or sk
 
 Publishing a new version does not upgrade an installed sample. In-place upgrades, data migrations, and uninstall are not supported in this phase. Validate the new version with a fresh installation in a test environment. Online and offline installation use the same manifest and fixed artifacts; importing a tar.gz does not bundle the separately referenced data image, which must also be available to the target environment.
 
-The installer retains the latest terminal record for each installation ID and version. A retry of the same version updates that record. Previously overwritten legacy records cannot be reconstructed; this is not an append-only log of every installation attempt.
+Each accepted installation or retry receives an `attemptId` and its own start time. Terminal records are archived separately, so retrying the same version preserves the earlier failure. Legacy records remain readable, but previously overwritten records cannot be reconstructed; Studio marks that history as incomplete. Requests rejected during preflight do not create attempts.
 
 ## Pull request checklist
 

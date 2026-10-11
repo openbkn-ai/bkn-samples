@@ -5,8 +5,9 @@ import unittest
 from pathlib import Path
 
 from installer.state_store import write_json
+from installer.control_plane import _write_state
 from installer.history import read_installation_history
-from installer.studio_api import ApiError, _read_state, _write_installing
+from installer.studio_api import ApiError, _read_state, _write_failed, _write_installing
 from installer.task_runner import InstallationRunner
 
 
@@ -81,7 +82,45 @@ class TaskRunnerTest(unittest.TestCase):
         with self.assertRaises(ApiError):
             self.runner.submit("supply-chain", prepare, lambda: self.fail("worker started"))
         self.assertEqual(_read_state(self.state, "supply-chain")["status"], "installed")
+        self.assertNotIn("attemptId", _read_state(self.state, "supply-chain"))
+        self.assertFalse((self.state / "history").exists())
         self.assertFalse(self.runner.locks["supply-chain"].locked())
+
+    def test_failed_attempt_and_successful_retry_remain_in_history(self):
+        sample = "supply-chain"
+        def fail():
+            raise RuntimeError("test failure")
+        self.runner.submit(sample, lambda: _write_installing(self.state, sample, "0.1.0"), fail)
+        self.assertTrue(self.runner.locks[sample].acquire(timeout=2))
+        self.runner.locks[sample].release()
+        first = _read_state(self.state, sample)
+        def prepare_retry():
+            current = _read_state(self.state, sample)
+            current["status"] = "installing"
+            write_json(self.state / f"{sample}.json", current)
+        def succeed():
+            current = _read_state(self.state, sample)
+            current.update(status="installed", finishedAt="2099-01-01T00:00:00Z")
+            _write_state(self.state, current)
+        self.runner.submit(sample, prepare_retry, succeed)
+        self.assertTrue(self.runner.locks[sample].acquire(timeout=2))
+        self.runner.locks[sample].release()
+        history, complete = read_installation_history(self.state, sample, _read_state(self.state, sample))
+        self.assertTrue(complete)
+        self.assertEqual([item["status"] for item in history], ["installed", "failed"])
+        self.assertEqual(history[1], first)
+
+    def test_database_failure_writer_preserves_attempt_identity(self):
+        sample = "supply-chain"
+        self.runner.submit(sample, lambda: _write_installing(self.state, sample, "0.1.0"),
+                           lambda: _write_failed(self.state, sample, "0.1.0", "image_unavailable", "image unavailable"))
+        self.assertTrue(self.runner.locks[sample].acquire(timeout=2))
+        self.runner.locks[sample].release()
+        current = _read_state(self.state, sample)
+        self.assertTrue(current["attemptId"])
+        history, complete = read_installation_history(self.state, sample, current)
+        self.assertTrue(complete)
+        self.assertEqual(history, [current])
 
 
 if __name__ == "__main__":
