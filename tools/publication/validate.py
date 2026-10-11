@@ -86,6 +86,23 @@ def official_file(root, reference):
     return file
 
 
+def validate_verification(proof, entry, sample):
+    artifacts = sample["spec"]["artifacts"]
+    package = next(a for a in artifacts if a["type"] == "archive")
+    image = next(a for a in artifacts if a["type"] == "oci-image")
+    for key, expected in {"sampleId": entry["sampleId"], "version": entry["version"],
+                          "packageDigest": package["digest"],
+                          "dataImageRef": image["locations"][0].removeprefix("oci://") + "@" + image["digest"]}.items():
+        require(proof.get(key) == expected, "verification refers to other artifacts")
+    require(proof.get("freshInstallation") is True, "fresh installation evidence is required")
+    checks = proof.get("checks")
+    require(isinstance(checks, list) and all(isinstance(c, dict) for c in checks), "invalid verification checks")
+    unique((c.get("name") for c in checks), "verification check")
+    require({"database", "knowledge", "capabilities", "scenario"} <=
+            {c.get("name") for c in checks if c.get("passed") is True},
+            "verification checks have not passed")
+
+
 def validate_catalog(root, official=False):
     validators = {}
     for name in ("sample", "catalog"):
@@ -115,6 +132,8 @@ def validate_catalog(root, official=False):
             require(isinstance(load(proof), dict), "verification must be a JSON object")
         sample = load(manifest)
         validators["sample"].validate(sample)
+        if official and entry["releaseStatus"] == "published":
+            validate_verification(load(proof), entry, sample)
         require((sample["metadata"]["sampleId"], sample["metadata"]["version"]) == identity,
                 f"release identity mismatch: {folder}")
         require(digest(manifest) == entry["manifest"]["digest"], f"manifest digest mismatch: {folder}")
