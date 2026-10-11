@@ -2,7 +2,9 @@
 
 Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
 
-The standard Foundry product composition already includes this Chart. The paired installer change derives the 0.2 platform version and capabilities from that composition, while the publication workflow stamps the built service image digest into the Chart. After both changes are merged and published, normal product installation does not require users to fill those fields manually. The following standalone configuration remains useful for administrators and acceptance.
+The standard Foundry product composition already includes this Chart and supplies its gateway URL. The publication workflow stamps the built service image digest into the Chart. Platform compatibility values still require explicit configuration; they must not be inferred from Chart versions or component names.
+
+The SDK uses `GET /api/bkn-backend/v1/health` to read the backend version. The existing `GET /api/safe/v1/capabilities` endpoint describes licensing and paid extensions, not the five sample installation API capabilities listed below. Do not translate that response into sample compatibility claims. Automatic configuration for a fresh product installation remains an outstanding delivery item; this guide documents the current explicit configuration.
 
 ## Configuration and installation
 
@@ -53,4 +55,4 @@ Keep the same PVC during rollback. Use `helm history bkn-sample-studio -n openbk
 
 The state PVC and `openbkn-samples` namespace are retained by the Chart's `helm.sh/resource-policy: keep` annotations. Removing the service must not remove installed databases. Charts before the namespace-retention fix lack that protection: do not uninstall those releases with sample data present. A later deliberate cleanup must separately inspect and remove sample resources and retained volumes.
 
-This is the standalone published deployment entry point. Bundling it into a Foundry distribution requires changes in that distribution's deployment repository and its own acceptance; installing this Chart does not prove that integration.
+This is the standalone published deployment entry point. The Foundry product composition already includes this Chart; full fresh-product acceptance with automatic compatibility configuration remains outstanding. Installing this Chart with explicit values does not prove that integration.
