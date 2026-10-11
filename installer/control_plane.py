@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from installer.state_store import write_json
+from installer.history import record_terminal_installation
 
 OWNERSHIP_MANAGED_BY = "bkn-samples"
 CATALOG_NAME = "bkn-sample-{sample}"
@@ -50,6 +51,7 @@ def _read_state(state_dir: Path, sample: str) -> dict | None:
 
 def _write_state(state_dir: Path, record: dict) -> None:
     write_json(_state_path(state_dir, record["sample"]), record)
+    record_terminal_installation(state_dir, record)
 
 
 def _checkpoint(state_dir: Path, record: dict, **stage_updates: str) -> None:

@@ -9,6 +9,7 @@ from pathlib import Path
 
 from installer.control_plane import ControlError, create_installation, note_database_ready, retry_installation, timestamp
 from installer.state_store import write_json
+from installer.history import read_installation_history, record_terminal_installation
 from installer.contract import read_version
 from installer.release import merge_catalog
 
@@ -143,9 +144,9 @@ def list_sample_installations(*, sample: str, state_dir: Path, actor_role: str) 
     _require_role(actor_role)
     _require_sample(sample)
     record = _read_state(state_dir, sample)
-    # v1alpha1 stores only one record. Do not invent previously overwritten history.
-    return {"items": [installation_view(record, actor_role)] if record else [],
-            "historyComplete": False}
+    records, complete = read_installation_history(state_dir, sample, record)
+    return {"items": [installation_view(item, actor_role) for item in records],
+            "historyComplete": complete}
 
 
 def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
@@ -299,6 +300,7 @@ def _write_installing(state_dir: Path, sample: str, version: str, release_notes:
         **({"manifestSha256": manifest_sha256} if manifest_sha256 else {}),
     }
     write_json(state_dir / f"{sample}.json", record)
+    record_terminal_installation(state_dir, record)
 
 
 def _write_failed(state_dir: Path, sample: str, version: str, code: str, message: str) -> None:
@@ -333,6 +335,7 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
            if current.get("version") == version and current.get("packageDigest") else {}),
     }
     write_json(state_dir / f"{sample}.json", record)
+    record_terminal_installation(state_dir, record)
 
 
 def _require_role(actor_role: str) -> None:
