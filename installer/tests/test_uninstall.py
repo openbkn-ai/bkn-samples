@@ -86,6 +86,43 @@ class UninstallTest(unittest.TestCase):
         self.assertEqual(self.deleted, [])
         self.assertEqual(_read_state(self.state, "supply-chain")["error"]["code"], "ownership_conflict")
 
+    def test_published_execution_resources_are_taken_offline_before_delete(self):
+        original = self.api
+        calls = []
+        for path in self.platform:
+            if path.endswith(("skill-owned", "box-owned")):
+                self.platform[path]["status"] = "published"
+        def lifecycle(method, path, body=None):
+            calls.append((method, path))
+            if path.endswith("/status"):
+                self.assertEqual(body, {"status": "offline"})
+                self.assertEqual(method, "PUT" if "/skills/" in path else "POST")
+                self.platform[path[:-7]]["status"] = "offline"
+                return {}
+            if method == "DELETE" and path in self.platform:
+                self.assertNotEqual(self.platform[path].get("status"), "published")
+            return original(method, path)
+        self.api = lifecycle
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+        for path in ("/api/agent-operator-integration/v1/skills/skill-owned", "/api/agent-operator-integration/v1/tool-box/box-owned"):
+            down = "PUT" if "/skills/" in path else "POST"
+            self.assertLess(calls.index((down, path + "/status")), calls.index(("DELETE", path)))
+
+    def test_downline_failure_keeps_execution_resources_for_retry(self):
+        original = self.api
+        path = "/api/agent-operator-integration/v1/skills/skill-owned"
+        self.platform[path]["status"] = "published"
+        def fail(method, target, body=None):
+            if target.endswith("/status"):
+                raise RuntimeError("downline failed")
+            return original(method, target)
+        self.api = fail
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstall_failed")
+        self.assertIn(path, self.platform)
+        self.assertTrue(self.database)
+
     def test_missing_receipt_and_non_admin_are_rejected(self):
         self.record["resources"].pop("ownedExecution")
         write_json(self.state / "supply-chain.json", self.record)
