@@ -1,6 +1,6 @@
 # Supply-chain component acceptance
 
-Date: 2026-10-11. Result: candidate 0.1.3 passed fresh installation through the standard Studio APIs on the existing OpenBKN instance. It is not published in the official catalog.
+Date: 2026-10-11. Result: candidate 0.1.3 passed fresh installation through the standard Studio APIs on the existing OpenBKN instance. The exact package was subsequently published in the official catalog through reviewed PR103.
 
 ## Fixed artifacts
 
@@ -31,6 +31,6 @@ The first candidate failed verification correctly: two expected forecast values 
 
 This reused the single existing 8081 OpenBKN instance. Only disposable supply sample resources were backed up and recreated; no second platform instance was started. The official deployment entry was used for the sample service.
 
-Browser automation was stopped by the computer-use tool while selecting the offline package. This run therefore used the same standard import and installation APIs used by Studio; it does not claim a completed homepage upload click-through. LLM-driven Skill conversations were not tested.
+Browser automation was stopped by the computer-use tool while selecting the offline package. This run therefore used the same standard import and installation APIs used by Studio; it does not claim a completed homepage upload click-through. Subsequent model-driven business Skill acceptance is recorded in [model/MCP acceptance](phase6-agent-acceptance.md).
 
-After this PR is reviewed and merged, rebuild from the reviewed source, confirm the digest, publish the immutable 0.1.3 artifacts and submit its catalog references through PR review. The candidate must not be advertised as a published release before that step. In-place upgrades and migrations remain unsupported. Follow [the sample development guide](SAMPLE_DEVELOPMENT_GUIDE.md) when changing data, knowledge, functions, metrics, Skills or interfaces.
+PR103 published the exact accepted package and immutable receipt. The current official deployment also includes the imported-notes fix from PR105; the original component receipt retains its exact historical image and attempt. In-place upgrades and migrations remain unsupported. Follow [the sample development guide](SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md) when changing data, knowledge, functions, metrics, Skills or interfaces.

@@ -1,0 +1,285 @@
+{
+  "completedAt": "2026-10-11T06:42:16.502088+00:00",
+  "model": "deepseek-v4-flash",
+  "transport": "OpenBKN Model Factory OpenAI-compatible tool-calling gateway + SDK managed MCP",
+  "passed": true,
+  "businessSkillsRead": 4,
+  "knowledgeNetwork": "supply_ontology_hand",
+  "cases": [
+    {
+      "id": "sellable",
+      "passed": true,
+      "verified_values": {
+        "fg_qty": 534,
+        "demand": 100,
+        "remaining": 434
+      },
+      "tool_calls": [
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_skill_content",
+          "skill_id": "01a12946-37bc-7509-8c9f-c5942357bfa0",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_skill_content",
+          "skill_id": "01a12946-339d-7527-99bb-165e360138ad",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "execute_tool",
+          "skill_id": null,
+          "tool_id": "01a12945-d127-79aa-b227-14f3b5559f69",
+          "receipt_status": "completed"
+        },
+        {
+          "name": "execute_tool",
+          "skill_id": null,
+          "tool_id": "01a12945-d799-7995-9d25-4c5a8ec43538",
+          "receipt_status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "backward",
+      "passed": true,
+      "verified_values": {
+        "customer_earliest_available_date": "2026-09-29",
+        "customer_late_days": 19,
+        "max_delay_days": 25,
+        "critical_material": "321-000569",
+        "shortage_qty": 240
+      },
+      "tool_calls": [
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_kn_detail",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_skill_content",
+          "skill_id": "01a12946-3c6a-7950-ab30-e55c3fd100a6",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "read_skill_file",
+          "skill_id": "01a12946-3c6a-7950-ab30-e55c3fd100a6",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "read_skill_file",
+          "skill_id": "01a12946-3c6a-7950-ab30-e55c3fd100a6",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "execute_tool",
+          "skill_id": null,
+          "tool_id": "01a12946-0dc6-798c-8205-bfd2fc83a1a7",
+          "receipt_status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "substitute",
+      "passed": true,
+      "verified_values": {
+        "candidate": "356-000356",
+        "available_qty": 500,
+        "group_count": 10
+      },
+      "tool_calls": [
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_kn_detail",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_skill_content",
+          "skill_id": "01a12946-339d-7527-99bb-165e360138ad",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_skill_content",
+          "skill_id": "01a12946-2f20-7c52-ae45-b18ece8e4df9",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_skill_content",
+          "skill_id": "01a12946-37bc-7509-8c9f-c5942357bfa0",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_skill_content",
+          "skill_id": "01a12946-3c6a-7950-ab30-e55c3fd100a6",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "execute_tool",
+          "skill_id": null,
+          "tool_id": "01a12945-bec8-70c2-8197-fab4a2ebe7ec",
+          "receipt_status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "capacity",
+      "passed": true,
+      "verified_values": {
+        "fg_qty": 534,
+        "theoretical_build_qty": 0,
+        "total_sellable_qty": 534,
+        "bottleneck": "725-000105"
+      },
+      "tool_calls": [
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "search_capabilities",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_skill_content",
+          "skill_id": "01a12946-2f20-7c52-ae45-b18ece8e4df9",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "read_skill_file",
+          "skill_id": "01a12946-2f20-7c52-ae45-b18ece8e4df9",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "read_skill_file",
+          "skill_id": "01a12946-2f20-7c52-ae45-b18ece8e4df9",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "read_skill_file",
+          "skill_id": "01a12946-2f20-7c52-ae45-b18ece8e4df9",
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "execute_tool",
+          "skill_id": null,
+          "tool_id": "01a12945-d127-79aa-b227-14f3b5559f69",
+          "receipt_status": "completed"
+        },
+        {
+          "name": "execute_tool",
+          "skill_id": null,
+          "tool_id": "01a12945-c774-79f5-a6fb-4506243cb107",
+          "receipt_status": "completed"
+        },
+        {
+          "name": "execute_tool",
+          "skill_id": null,
+          "tool_id": "01a12945-b725-7dbe-bc45-96bb548f2021",
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_kn_detail",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "get_object_types",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "query_object_instance",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        },
+        {
+          "name": "query_object_instance",
+          "skill_id": null,
+          "tool_id": null,
+          "receipt_status": "completed"
+        }
+      ]
+    }
+  ]
+}

@@ -88,8 +88,10 @@ def official_file(root, reference):
 
 def validate_verification(proof, entry, sample):
     artifacts = sample["spec"]["artifacts"]
-    package = next(a for a in artifacts if a["type"] == "archive")
-    image = next(a for a in artifacts if a["type"] == "oci-image")
+    package = next((a for a in artifacts if a["type"] == "archive"), None)
+    image = next((a for a in artifacts if a["type"] == "oci-image"), None)
+    require(package is not None and image is not None,
+            "sample-install.v1 requires an archive and data image")
     for key, expected in {"sampleId": entry["sampleId"], "version": entry["version"],
                           "packageDigest": package["digest"],
                           "dataImageRef": image["locations"][0].removeprefix("oci://") + "@" + image["digest"]}.items():
