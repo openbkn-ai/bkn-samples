@@ -205,6 +205,7 @@ def installation_view(record: dict, actor_role: str) -> dict:
         stages.append({"id": stage_id, "name": name, "state": view_state})
     return {
         "id": _installation_id(record),
+        "attemptId": record.get("attemptId"),
         "sample": record.get("sample", ""),
         "version": record.get("version", ""),
         "startedAt": record.get("startedAt"),
@@ -320,6 +321,8 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
         "stages": {"database": "failed"} if code in database_codes else {},
         "error": {"code": code, "message": message},
         "startedAt": current.get("startedAt"),
+        **({"attemptId": current["attemptId"]} if current.get("attemptId") else {}),
+        **({"historyComplete": current["historyComplete"]} if "historyComplete" in current else {}),
         "finishedAt": timestamp(),
         **({"releaseNotesSnapshot": current["releaseNotesSnapshot"]}
            if current.get("version") == version and current.get("releaseNotesSnapshot") else {}),
