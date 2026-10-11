@@ -1,0 +1,110 @@
+{
+  "id": "order_basics",
+  "name": "订单入门",
+  "tags": [
+    "bkn-samples"
+  ],
+  "comment": "Synthetic products and orders for the standard sample installation flow.",
+  "object_types": [
+    {
+      "id": "products",
+      "name": "产品",
+      "data_properties": [
+        {
+          "name": "product_id",
+          "display_name": "product_id",
+          "type": "string",
+          "mapped_field": {
+            "name": "product_id",
+            "display_name": "product_id",
+            "type": "string"
+          }
+        },
+        {
+          "name": "product_name",
+          "display_name": "product_name",
+          "type": "string",
+          "mapped_field": {
+            "name": "product_name",
+            "display_name": "product_name",
+            "type": "string"
+          }
+        },
+        {
+          "name": "unit_price",
+          "display_name": "unit_price",
+          "type": "decimal",
+          "mapped_field": {
+            "name": "unit_price",
+            "display_name": "unit_price",
+            "type": "decimal"
+          }
+        }
+      ],
+      "primary_keys": [
+        "product_id"
+      ],
+      "display_key": "product_name"
+    },
+    {
+      "id": "orders",
+      "name": "订单",
+      "data_properties": [
+        {
+          "name": "order_id",
+          "display_name": "order_id",
+          "type": "string",
+          "mapped_field": {
+            "name": "order_id",
+            "display_name": "order_id",
+            "type": "string"
+          }
+        },
+        {
+          "name": "product_id",
+          "display_name": "product_id",
+          "type": "string",
+          "mapped_field": {
+            "name": "product_id",
+            "display_name": "product_id",
+            "type": "string"
+          }
+        },
+        {
+          "name": "quantity",
+          "display_name": "quantity",
+          "type": "integer",
+          "mapped_field": {
+            "name": "quantity",
+            "display_name": "quantity",
+            "type": "integer"
+          }
+        }
+      ],
+      "primary_keys": [
+        "order_id"
+      ],
+      "display_key": "order_id"
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "order_product",
+      "name": "订单关联产品",
+      "source_object_type_id": "orders",
+      "target_object_type_id": "products",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "product_id"
+          },
+          "target_property": {
+            "name": "product_id"
+          }
+        }
+      ]
+    }
+  ],
+  "action_types": []
+}

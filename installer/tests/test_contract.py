@@ -62,16 +62,17 @@ class SupplyContractTest(unittest.TestCase):
     def test_repository_accepts_supply_chain(self):
         samples = validate_repository(ROOT)
         names = [sample["metadata"]["name"] for sample in samples]
-        self.assertEqual(names, ["supply-chain", "world-cup"])
+        self.assertEqual(names, ["order-basics", "supply-chain", "world-cup"])
 
     def test_index_uses_version_and_official_repo(self):
         index = build_manifest_index(ROOT, REVISION)
         self.assertEqual(index["version"], (ROOT / "VERSION").read_text(encoding="utf-8").strip())
         self.assertEqual(index["sourceRepo"], OFFICIAL_SOURCE_REPO)
-        self.assertEqual(index["samples"][0]["name"], "supply-chain")
-        self.assertEqual(index["samples"][0]["expectedTables"], 12)
-        self.assertTrue(index["samples"][0]["components"]["skills"])
-        self.assertFalse(index["samples"][1]["components"]["skills"])
+        supply = next(item for item in index["samples"] if item["name"] == "supply-chain")
+        self.assertEqual(supply["name"], "supply-chain")
+        self.assertEqual(supply["expectedTables"], 12)
+        self.assertTrue(supply["components"]["skills"])
+        self.assertFalse(next(item for item in index["samples"] if item["name"] == "world-cup")["components"]["skills"])
         check_manifest_index(ROOT, index)
 
     def test_rejects_other_source_repo(self):
