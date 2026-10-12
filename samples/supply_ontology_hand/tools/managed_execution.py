@@ -14,13 +14,14 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 from fn.contracts import OPERATION_CONTRACTS
+from fn.leadtime import leadtime_details
 from fn import (
+    CannotCompute,
     backward_plan,
     bom_list,
     bom_shared_list,
     kitting_net_demand,
     layered_inventory,
-    leadtime_days,
     max_build_without_po,
     material_where_used,
     open_forecast_count,
@@ -104,7 +105,17 @@ def load_bkn_rows(
     material_codes = set(product_codes)
     for requirement in managed_query_plan(operation).requirements:
         dataset = requirement.dataset
-        if dataset == "bom" and operation == "material_where_used":
+        if dataset == "forecast" and operation == "backward_plan" and params.get("forecast_id"):
+            forecast_id = str(params["forecast_id"]).strip()
+            collected = _load_forecast_by_id(query_object_instance, forecast_id)
+            forecast_product = str(collected[0].get("material_number") or "").strip()
+            if not forecast_product:
+                raise CannotCompute(f"预测单 {forecast_id} 缺少产品编码")
+            if product_codes and product_codes != {forecast_product}:
+                raise CannotCompute(f"预测单 {forecast_id} 的产品为 {forecast_product}，与请求产品不一致")
+            product_codes = {forecast_product}
+            material_codes.update(product_codes)
+        elif dataset == "bom" and operation == "material_where_used":
             collected = _load_bom_rows_by_material(
                 query_object_instance,
                 str(params.get("material_code") or "").strip(),
@@ -175,6 +186,19 @@ def load_bkn_rows(
             )
             material_codes.update(product_codes)
     return rows_by_dataset
+
+
+def _load_forecast_by_id(query_object_instance, forecast_id: str) -> list[dict[str, Any]]:
+    """Prefer the exact business ID; only fall back for legacy numeric keys."""
+    rows = _query_rows(query_object_instance, _OBJECT_TYPES["forecast"], _equal_condition("id", forecast_id))
+    canonical = _canonical_document_id(forecast_id)
+    if not rows and canonical != forecast_id:
+        rows = _query_rows(query_object_instance, _OBJECT_TYPES["forecast"], _equal_condition("id", canonical))
+    if not rows:
+        raise CannotCompute(f"预测单不存在：{forecast_id}")
+    if len(rows) != 1:
+        raise CannotCompute(f"预测单 ID 匹配不唯一：{forecast_id}")
+    return rows
 
 
 def _validate_operation_parameters(operation: str, params: Mapping[str, Any]) -> None:
@@ -394,7 +418,7 @@ def _dataset_conditions(
     if dataset == "forecast":
         forecast_id = str(params.get("forecast_id") or "").strip()
         if forecast_id:
-            return (_equal_condition("id", _canonical_document_id(forecast_id)),)
+            return (_equal_condition("id", forecast_id),)
         product_code = str(params.get("product_code") or params.get("product") or "").strip()
         if product_code:
             return (_equal_condition("material_number", product_code),)
@@ -461,7 +485,7 @@ def _and_condition(conditions: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _canonical_document_id(value: str) -> str:
-    """Match CSV IDs that Vega has inferred as numbers while preserving non-numeric keys."""
+    """Legacy fallback only; exact business IDs must be queried first."""
     return str(int(value)) if value.isdigit() else value
 
 
@@ -570,7 +594,7 @@ def execute_from_bkn_rows(
         )
     if operation == "leadtime_days":
         material_code = params.get("material_code")
-        return {"material_code": material_code, "leadtime_days": leadtime_days(snapshot, material_code)}
+        return {**leadtime_details(snapshot, material_code), "object_type_id": _OBJECT_TYPES["material"]}
     if operation == "supply_status":
         return supply_status(snapshot, params.get("material_code"), due_date=params.get("due_date"), gross_requirement=params.get("gross_requirement", 0), warehouse_scope=scope, child_short=params.get("child_short", False))
     if operation == "open_forecast_count":

@@ -12,6 +12,7 @@ from power_layer import (
     extract_metric_entries,
     merge_logic_properties,
     metric_query_scalar,
+    metric_series_match,
     strip_system_parameters,
     values_close,
 )
@@ -85,7 +86,9 @@ def test_metric_query_scalar_and_tolerance():
     assert metric_query_scalar([{"labels": {}, "values": [534]}]) == 534
     assert metric_query_scalar([]) is None
     assert values_close(534, 534)
-    assert values_close(540, 534)
+    assert not values_close(540, 534)
+    assert not values_close(91, 90)
+    assert values_close(534.00000001, 534)
     assert not values_close(600, 534)
 
 
@@ -101,6 +104,9 @@ def test_pack_payloads_exist_and_align():
         "库存可用量",
         "预测需求量合计",
         "未关闭预测单数",
+        "签约数量合计",
+        "发货数量合计",
+        "按签约日期的签约数量",
     }
 
     lp_payload = json.loads(LP_FILE.read_text(encoding="utf-8"))
@@ -131,3 +137,24 @@ def test_pack_payloads_exist_and_align():
     assert open_forecast_count["expected_value"] == 90
     assert "正常预测单 90" in open_forecast_count["note"]
     assert "锁定 CSV" in open_forecast_count["note"]
+
+
+def test_sales_quantity_metrics_match_filtered_csv_aggregates():
+    import csv
+    from decimal import Decimal
+
+    metrics = {entry["name"]: entry for entry in extract_metric_entries(json.loads(METRICS_FILE.read_text()))}
+    cases = {case["metric_name"]: case for case in json.loads(QUERY_FILE.read_text())["cases"]}
+    with (PACK / "data" / "sales_order.csv").open(newline="", encoding="utf-8") as handle:
+        rows = [row for row in csv.DictReader(handle) if row["product_code"] == "382-000005"]
+    assert len(rows) == 40
+    totals = []
+    for name, field in [("签约数量合计", "signing_quantity"), ("发货数量合计", "shipping_quantity")]:
+        assert metrics[name]["scope_ref"] == "supply_ontology_hand_salesorder"
+        assert metrics[name]["calculation_formula"]["aggregation"] == {"property": field, "aggr": "sum"}
+        case = cases[name]
+        assert case["body"]["condition"] == {"field": "product_code", "operation": "==", "value": "382-000005"}
+        total = sum(Decimal(row[field]) for row in rows)
+        assert total == case["expected_value"]
+        totals.append(total)
+    assert totals[0] - totals[1] == 15

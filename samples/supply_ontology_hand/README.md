@@ -49,5 +49,6 @@ cd samples/supply_ontology_hand
 - 配置模板：`tools/config.example.yaml`
 - 导入与验收脚本：`tools/`
 - 评测包：`bkn-eval/`
+- 指标口径与时间分析：[候选查询指南](tools/assets/metric-analysis-guide.zh-CN.md)
 
 本包按 `@openbkn/bkn-sdk@0.1.4`、Node.js `>=24.19.0` 验证。

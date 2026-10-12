@@ -89,6 +89,54 @@
               "comment": "订单状态"
             }
           ]
+        },
+        {
+          "name": "signed_quantity_sum",
+          "display_name": "签约数量合计",
+          "type": "metric",
+          "metric_name": "签约数量合计",
+          "comment": "销售数量汇总；按产品编码过滤。",
+          "parameters": [
+            {
+              "name": "product_code",
+              "type": "string",
+              "value_from": "property",
+              "value": "product_code",
+              "operation": "=="
+            }
+          ]
+        },
+        {
+          "name": "shipped_quantity_sum",
+          "display_name": "发货数量合计",
+          "type": "metric",
+          "metric_name": "发货数量合计",
+          "comment": "销售数量汇总；按产品编码过滤。",
+          "parameters": [
+            {
+              "name": "product_code",
+              "type": "string",
+              "value_from": "property",
+              "value": "product_code",
+              "operation": "=="
+            }
+          ]
+        },
+        {
+          "name": "signed_quantity_by_date",
+          "display_name": "按签约日期的签约数量",
+          "type": "metric",
+          "metric_name": "按签约日期的签约数量",
+          "comment": "签约事件流量；对象默认返回本产品全期间总量，时间分析参见固定历史窗口示例。",
+          "parameters": [
+            {
+              "name": "product_code",
+              "value_from": "property",
+              "value": "product_code",
+              "type": "string",
+              "operation": "=="
+            }
+          ]
         }
       ]
     },

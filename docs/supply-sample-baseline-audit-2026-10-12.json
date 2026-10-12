@@ -1,0 +1,109 @@
+{
+  "audit_date": "2026-10-12",
+  "scope": "offline source/CSV audit; not an online Agent benchmark",
+  "upstream_main": "16f22da8bac9e2be16fff61c9e66935c965dad1c",
+  "local_revision": "5cd1199",
+  "question_set_id": "supply-sample-question-set-v1.1",
+  "answer_set_id": "supply-sample-answer-set-v1.3",
+  "id_sets_equal": true,
+  "question_counts": {
+    "M": 15,
+    "F": 15,
+    "R": 9,
+    "S": 11
+  },
+  "missing_metric_references": {
+    "产品数量": [
+      "M-01"
+    ],
+    "仓库数量": [
+      "M-05"
+    ],
+    "供应商数量": [
+      "M-03",
+      "M-15"
+    ],
+    "发货数量合计": [
+      "M-10"
+    ],
+    "物料数量": [
+      "M-02",
+      "M-13",
+      "M-14"
+    ],
+    "签约数量合计": [
+      "M-10"
+    ],
+    "销售订单数量": [
+      "M-04",
+      "M-09"
+    ]
+  },
+  "time_dimension_count": 0,
+  "metric_count": 8,
+  "current_csv": {
+    "forecast_rows": 137,
+    "open_count": 90,
+    "open_qty": "56340.000000",
+    "U00_open_count": 12,
+    "U00_open_qty": "20000.000000",
+    "extra_forecast_ids": [
+      "0000023181-FUTURE",
+      "0000023181-SHORT",
+      "0000023181-CONTENTION"
+    ],
+    "M10_order_count": 40,
+    "M10_signed": "1081",
+    "M10_shipped": "1066"
+  },
+  "leadtime_adapter_results": {
+    "606-000989": {
+      "material_code": "606-000989",
+      "leadtime_days": 14
+    },
+    "528-000036": {
+      "material_code": "528-000036",
+      "leadtime_days": 1
+    },
+    "382-000005": {
+      "material_code": "382-000005",
+      "leadtime_days": 1
+    }
+  },
+  "F14_pure_calculation_node_count": 57,
+  "F14_string_object_mock": {
+    "first_query": {
+      "kn_id": "supply_ontology_hand",
+      "ot_id": "supply_ontology_hand_forecast",
+      "limit": 500,
+      "condition": {
+        "field": "id",
+        "operation": "==",
+        "value": "23181",
+        "value_from": "const"
+      },
+      "offset": 0
+    },
+    "unfiltered_bom_query_count": 10,
+    "error": {
+      "type": "ValueError",
+      "message": "supply_ontology_hand_bom 查询结果超过 5000 行，请缩小业务范围后重试"
+    }
+  },
+  "sha256": {
+    "data/customer_entity.csv": "801d775e7ae232767aa3ae25c11873438548d6a5e0f901b433e9d333ea6918e2",
+    "data/erp_material.csv": "b053a39849ce62826e563222764aea5d17efaad4240d8aa2fc44b45798fe67b7",
+    "data/erp_material_bom.csv": "16e842f39cae75feb454a3c0f12080cc8ce1ef559d2b304cb48abaa29e51136a",
+    "data/erp_mds_forecast.csv": "d3ebd1919bfdaeefd8ef63251cc6d2a111523ba76c209ef60b1587f5f2173112",
+    "data/erp_mrp_plan_order.csv": "07ba000a91777e6effdd24f98a924f9532870aa45f8e45075576604f447475ce",
+    "data/erp_production_work_order.csv": "502d92f15a3041f46c36f9c184bbbf5f5c3122c2fa6a865e6bbd1eefca7018c5",
+    "data/erp_purchase_order.csv": "8bd9d76ae87d68327df361f84e1fb1aab45268a240ad30ec2a78ff592f3c12f5",
+    "data/erp_purchase_request.csv": "5620753dd2bc49de28570615a526366671596de476fb9add2833ba3e98d36856",
+    "data/erp_real_time_inventory.csv": "17feaeafa1136fcaca4ecc1213fe8d6a0d605a8f955ed29b625d944039adc8cc",
+    "data/erp_supplier.csv": "6101f921f5a0eca1ecfe93ae0ebf8f2228ae2563d6fe42af70b0600d3755418a",
+    "data/hd_product_view.csv": "173554e255fbf54f42ad0fd9ffb6c30c2091391993fa86db1a421fec681c70f6",
+    "data/sales_order.csv": "944507c8afa067b15109d129cd677f5022bffc7a5727ea833400afdb402b39f6",
+    "bkn-eval/datasets/sample-question-set-v1.yaml": "970f20377716a1e2ae8d6b287b3699071c712be50c68a2779eb3a82f31dfb3d9",
+    "bkn-eval/datasets/sample-answer-set-v1.yaml": "b1c77a1998a456fd0f0e74dfd4b81fe270a45b1fd9c597316bb83bd1e40313a8"
+  }
+}

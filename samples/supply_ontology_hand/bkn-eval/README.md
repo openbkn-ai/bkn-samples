@@ -18,6 +18,10 @@
 
 ## 最近一次正式评测
 
+本次优化使用独立的[完整交付 CSV 基线](baselines/2026-10-12-current-csv/README.md)，ID 为 `supply-current-csv-2026-10-12-v1`。该基线保留三张未来预测单，核心问题正文不变，M-07/M-08/M-12 金标分别为 56340、90、12 张/20000。0.1.5 本地包卸载重装后的[独立 MCP A/C 验证](baselines/2026-10-12-current-csv/runs/2026-10-12-local-015-ac/README.md)为核心 50/50、100%；时间扩展 4/5，月环比仍失败。该轮无数据库 B 对照、模型精确标识不可获得，不是历史 DeepSeek Harness 的复现或完整 A/B/C 正式 Benchmark。
+
+下面的正式 A/B 表仍属于历史 2026-08-13 POC 快照；新基线结果单独记录，不覆盖旧报告。历史证据及差异原因见[追溯报告](../../../docs/supply-sample-history-forensics.zh-CN.md)。
+
 | 项目 | 结果 |
 | --- | --- |
 | Agent 运行环境 | POC / DeepSeek Harness |

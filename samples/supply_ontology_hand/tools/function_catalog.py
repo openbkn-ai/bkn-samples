@@ -80,7 +80,7 @@ FUNCTION_CATALOG = {
     "leadtime_days": _spec(
         "标准交期",
         "leadtime_days",
-        "适用场景：查询单个物料的标准提前期。输入：物料编码。结果：提前期天数及按物料属性采用的采购或生产口径。",
+        "适用场景：查询单个物料的标准提前期。输入：物料编码。结果：leadtime_days、caliber（purchase/production）、material_attribute、source_field、unit 及正式物料 object_type_id。外购/委外取采购固定提前期，其他属性取生产固定提前期；缺失属性沿用生产默认并标记 attribute_missing，不代表已确认物料属性。",
     ),
     "supply_status": _spec(
         "供应状态诊断",

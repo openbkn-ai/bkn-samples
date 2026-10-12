@@ -1,0 +1,199 @@
+{
+  "baseline_id": "supply-current-csv-2026-10-12-v1",
+  "status": "inputs_frozen_online_validation_pending",
+  "frozen_at_date": "2026-10-12",
+  "source_revision": "16f22da8bac9e2be16fff61c9e66935c965dad1c",
+  "source_snapshot_date": "2026-08-13",
+  "snapshot_kind": "repository_fixture_freeze",
+  "business_date": "2026-08-25",
+  "knowledge_network": "supply_ontology_hand",
+  "data_policy": "All delivered CSV rows, including future forecast fixtures; do not filter fixture IDs or future enddate to reproduce old totals.",
+  "question_set": {
+    "path": "question-set-v2.yaml",
+    "set_id": "supply-sample-question-set-v2",
+    "sha256": "6e34976ab3e5380f4ada3f434ab9b3e73263c7401955a69722a6913af01a4706",
+    "audience": "evaluated_agent"
+  },
+  "answer_set": {
+    "path": "answer-set-v2.yaml",
+    "set_id": "supply-sample-answer-set-v2",
+    "sha256": "7697c5d4af19e642a43ae612940ca9b22ff82ff128f862e4b2b8d79d43360f80",
+    "audience": "evaluator_only"
+  },
+  "data_files": [
+    {
+      "path": "../../../data/customer_entity.csv",
+      "sha256": "801d775e7ae232767aa3ae25c11873438548d6a5e0f901b433e9d333ea6918e2",
+      "rows": 60
+    },
+    {
+      "path": "../../../data/erp_material.csv",
+      "sha256": "b053a39849ce62826e563222764aea5d17efaad4240d8aa2fc44b45798fe67b7",
+      "rows": 3497
+    },
+    {
+      "path": "../../../data/erp_material_bom.csv",
+      "sha256": "16e842f39cae75feb454a3c0f12080cc8ce1ef559d2b304cb48abaa29e51136a",
+      "rows": 31423
+    },
+    {
+      "path": "../../../data/erp_mds_forecast.csv",
+      "sha256": "d3ebd1919bfdaeefd8ef63251cc6d2a111523ba76c209ef60b1587f5f2173112",
+      "rows": 137
+    },
+    {
+      "path": "../../../data/erp_mrp_plan_order.csv",
+      "sha256": "07ba000a91777e6effdd24f98a924f9532870aa45f8e45075576604f447475ce",
+      "rows": 824
+    },
+    {
+      "path": "../../../data/erp_production_work_order.csv",
+      "sha256": "502d92f15a3041f46c36f9c184bbbf5f5c3122c2fa6a865e6bbd1eefca7018c5",
+      "rows": 605
+    },
+    {
+      "path": "../../../data/erp_purchase_order.csv",
+      "sha256": "8bd9d76ae87d68327df361f84e1fb1aab45268a240ad30ec2a78ff592f3c12f5",
+      "rows": 1972
+    },
+    {
+      "path": "../../../data/erp_purchase_request.csv",
+      "sha256": "5620753dd2bc49de28570615a526366671596de476fb9add2833ba3e98d36856",
+      "rows": 19333
+    },
+    {
+      "path": "../../../data/erp_real_time_inventory.csv",
+      "sha256": "17feaeafa1136fcaca4ecc1213fe8d6a0d605a8f955ed29b625d944039adc8cc",
+      "rows": 19724
+    },
+    {
+      "path": "../../../data/erp_supplier.csv",
+      "sha256": "6101f921f5a0eca1ecfe93ae0ebf8f2228ae2563d6fe42af70b0600d3755418a",
+      "rows": 230
+    },
+    {
+      "path": "../../../data/hd_product_view.csv",
+      "sha256": "173554e255fbf54f42ad0fd9ffb6c30c2091391993fa86db1a421fec681c70f6",
+      "rows": 30
+    },
+    {
+      "path": "../../../data/sales_order.csv",
+      "sha256": "944507c8afa067b15109d129cd677f5022bffc7a5727ea833400afdb402b39f6",
+      "rows": 800
+    }
+  ],
+  "expected_forecast_aggregates": {
+    "total_count": 137,
+    "open_count": 90,
+    "closed_count": 47,
+    "total_qty": "115922.000000",
+    "open_qty": "56340.000000",
+    "closed_qty": "59582.000000",
+    "U00_open_count": 12,
+    "U00_open_qty": "20000.000000"
+  },
+  "changed_answer_ids": [
+    "M-07",
+    "M-08",
+    "M-12"
+  ],
+  "unchanged_business_answer_ids": [
+    "M-01",
+    "M-02",
+    "M-03",
+    "M-04",
+    "M-05",
+    "M-06",
+    "M-09",
+    "M-10",
+    "M-11",
+    "M-13",
+    "M-14",
+    "M-15",
+    "F-01",
+    "F-02",
+    "F-03",
+    "F-04",
+    "F-05",
+    "F-06",
+    "F-07",
+    "F-08",
+    "F-09",
+    "F-10",
+    "F-11",
+    "F-12",
+    "F-13",
+    "F-14",
+    "F-15",
+    "R-01",
+    "R-02",
+    "R-03",
+    "R-04",
+    "R-05",
+    "R-06",
+    "R-07",
+    "R-08",
+    "R-09",
+    "S-01",
+    "S-02",
+    "S-03",
+    "S-04",
+    "S-05",
+    "S-06",
+    "S-07",
+    "S-08",
+    "S-09",
+    "S-10",
+    "S-11"
+  ],
+  "metric_name_aliases": {
+    "产品数量": "产品总数",
+    "物料数量": "物料总数",
+    "供应商数量": "供应商总数",
+    "销售订单数量": "销售订单数",
+    "仓库数量": "仓库数"
+  },
+  "required_release_accuracy": {
+    "total": 50,
+    "M": 15,
+    "F": 15,
+    "R": 9,
+    "S": 11
+  },
+  "candidate_sample_version": null,
+  "candidate_package_digest": null,
+  "candidate_data_image_digest": null,
+  "deployed_platform_revision": null,
+  "model_and_agent_version": null,
+  "required_runtime_check": "Bind the candidate artifact and platform identity in each run; independently verify deployed tables, forecast IDs and aggregates, then run blind online A and independent C. Offline audit is not a 50/50 result.",
+  "historical_control": {
+    "pre_fixture_revision": "d5341890185152a97d7f97b5953b4d1bcdf9711a",
+    "question_set": "../../datasets/sample-question-set-v1.yaml",
+    "answer_set": "../../datasets/sample-answer-set-v1.yaml",
+    "forecast_expected": {
+      "total_count": 134,
+      "open_count": 87,
+      "closed_count": 47,
+      "total_qty": "106422.000000",
+      "open_qty": "46840.000000",
+      "closed_qty": "59582.000000",
+      "U00_open_count": 9,
+      "U00_open_qty": "10500.000000"
+    },
+    "status": "Optional separate historical-control run; archived v1 files are not immutable representations of Aug31 set IDs, use the report revision for exact historical inputs.",
+    "exact_historical_inputs": {
+      "source_revision": "2756858697940ce97fde89de8186648a117c8d48",
+      "question_path": "samples/supply_ontology_hand/bkn-eval/datasets/sample-question-set-v1.yaml",
+      "answer_path": "samples/supply_ontology_hand/bkn-eval/datasets/sample-answer-set-v1.yaml",
+      "core_question_count": 50,
+      "extensions_excluded": true,
+      "question_sha256": "8f78a715f95873c4d2e95758b3bda4cdfeda44981ef907038867a9ca1316d378",
+      "answer_sha256": "77a5fc7b34119d626a46c9cca3891bc9767404e95c743d755d7b2d345ac049b9"
+    }
+  },
+  "required_unverified_metric_definitions": [
+    "签约数量合计",
+    "发货数量合计"
+  ],
+  "capability_note": "M10 metric definitions are implemented in the 0.1.5 candidate; clean installation and live metric verification remain pending."
+}

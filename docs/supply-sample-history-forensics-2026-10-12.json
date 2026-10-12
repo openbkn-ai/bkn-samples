@@ -1,0 +1,590 @@
+{
+  "date": "2026-10-12",
+  "evidence_kind": "Git source comparison and offline CSV/SQL audit; historical online data inferred from preserved reports and PR21, not re-read at historical time",
+  "upstream_main": "16f22da8bac9e2be16fff61c9e66935c965dad1c",
+  "pre_fixture_revision": "d5341890185152a97d7f97b5953b4d1bcdf9711a",
+  "aug31_report_revision": "2756858",
+  "data_files": [
+    {
+      "path": "data/customer_entity.csv",
+      "sha256": "801d775e7ae232767aa3ae25c11873438548d6a5e0f901b433e9d333ea6918e2",
+      "rows": 60,
+      "pre_fixture_sha256": "801d775e7ae232767aa3ae25c11873438548d6a5e0f901b433e9d333ea6918e2",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_material.csv",
+      "sha256": "b053a39849ce62826e563222764aea5d17efaad4240d8aa2fc44b45798fe67b7",
+      "rows": 3497,
+      "pre_fixture_sha256": "b053a39849ce62826e563222764aea5d17efaad4240d8aa2fc44b45798fe67b7",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_material_bom.csv",
+      "sha256": "16e842f39cae75feb454a3c0f12080cc8ce1ef559d2b304cb48abaa29e51136a",
+      "rows": 31423,
+      "pre_fixture_sha256": "16e842f39cae75feb454a3c0f12080cc8ce1ef559d2b304cb48abaa29e51136a",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_mds_forecast.csv",
+      "sha256": "d3ebd1919bfdaeefd8ef63251cc6d2a111523ba76c209ef60b1587f5f2173112",
+      "rows": 137,
+      "pre_fixture_sha256": "40ea2e3f7415dbb981b3beef84c9f8f9d3df6775d659eef41a8b7ee6b3dfc552",
+      "byte_identical_to_pre_fixture": false,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_mrp_plan_order.csv",
+      "sha256": "07ba000a91777e6effdd24f98a924f9532870aa45f8e45075576604f447475ce",
+      "rows": 824,
+      "pre_fixture_sha256": "07ba000a91777e6effdd24f98a924f9532870aa45f8e45075576604f447475ce",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_production_work_order.csv",
+      "sha256": "502d92f15a3041f46c36f9c184bbbf5f5c3122c2fa6a865e6bbd1eefca7018c5",
+      "rows": 605,
+      "pre_fixture_sha256": "502d92f15a3041f46c36f9c184bbbf5f5c3122c2fa6a865e6bbd1eefca7018c5",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_purchase_order.csv",
+      "sha256": "8bd9d76ae87d68327df361f84e1fb1aab45268a240ad30ec2a78ff592f3c12f5",
+      "rows": 1972,
+      "pre_fixture_sha256": "8bd9d76ae87d68327df361f84e1fb1aab45268a240ad30ec2a78ff592f3c12f5",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_purchase_request.csv",
+      "sha256": "5620753dd2bc49de28570615a526366671596de476fb9add2833ba3e98d36856",
+      "rows": 19333,
+      "pre_fixture_sha256": "5620753dd2bc49de28570615a526366671596de476fb9add2833ba3e98d36856",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_real_time_inventory.csv",
+      "sha256": "17feaeafa1136fcaca4ecc1213fe8d6a0d605a8f955ed29b625d944039adc8cc",
+      "rows": 19724,
+      "pre_fixture_sha256": "17feaeafa1136fcaca4ecc1213fe8d6a0d605a8f955ed29b625d944039adc8cc",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/erp_supplier.csv",
+      "sha256": "6101f921f5a0eca1ecfe93ae0ebf8f2228ae2563d6fe42af70b0600d3755418a",
+      "rows": 230,
+      "pre_fixture_sha256": "6101f921f5a0eca1ecfe93ae0ebf8f2228ae2563d6fe42af70b0600d3755418a",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/hd_product_view.csv",
+      "sha256": "173554e255fbf54f42ad0fd9ffb6c30c2091391993fa86db1a421fec681c70f6",
+      "rows": 30,
+      "pre_fixture_sha256": "173554e255fbf54f42ad0fd9ffb6c30c2091391993fa86db1a421fec681c70f6",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    },
+    {
+      "path": "data/sales_order.csv",
+      "sha256": "944507c8afa067b15109d129cd677f5022bffc7a5727ea833400afdb402b39f6",
+      "rows": 800,
+      "pre_fixture_sha256": "944507c8afa067b15109d129cd677f5022bffc7a5727ea833400afdb402b39f6",
+      "byte_identical_to_pre_fixture": true,
+      "byte_identical_to_aug31_source": true
+    }
+  ],
+  "forecast_added_rows": [
+    {
+      "id": "0000023181-CONTENTION",
+      "auditor_name": "验证用户",
+      "material_name": "北斗车载智能终端系统",
+      "material_number": "U00-000080",
+      "startdate": "2026-10-01",
+      "creator_name": "验证用户",
+      "qty": "500.000000",
+      "billno": "YCD2026081500000003",
+      "bizdate": "2026-08-15",
+      "auditdate": "2026-08-15 09:10:00",
+      "enddate": "2026-12-31",
+      "closestatus_title": "正常"
+    },
+    {
+      "id": "0000023181-FUTURE",
+      "auditor_name": "验证用户",
+      "material_name": "北斗车载智能终端系统",
+      "material_number": "U00-000080",
+      "startdate": "2026-09-01",
+      "creator_name": "验证用户",
+      "qty": "3000.000000",
+      "billno": "YCD2026081500000001",
+      "bizdate": "2026-08-15",
+      "auditdate": "2026-08-15 09:00:00",
+      "enddate": "2026-10-31",
+      "closestatus_title": "正常"
+    },
+    {
+      "id": "0000023181-SHORT",
+      "auditor_name": "验证用户",
+      "material_name": "北斗车载智能终端系统",
+      "material_number": "U00-000080",
+      "startdate": "2026-09-15",
+      "creator_name": "验证用户",
+      "qty": "6000.000000",
+      "billno": "YCD2026081500000002",
+      "bizdate": "2026-08-15",
+      "auditdate": "2026-08-15 09:05:00",
+      "enddate": "2026-11-30",
+      "closestatus_title": "正常"
+    }
+  ],
+  "forecast_modified_or_removed_original_rows": 0,
+  "pre_fixture_summary": {
+    "total_count": 134,
+    "open_count": 87,
+    "closed_count": 47,
+    "total_qty": "106422.000000",
+    "open_qty": "46840.000000",
+    "closed_qty": "59582.000000",
+    "U00_open_count": 9,
+    "U00_open_qty": "10500.000000"
+  },
+  "current_summary": {
+    "total_count": 137,
+    "open_count": 90,
+    "closed_count": 47,
+    "total_qty": "115922.000000",
+    "open_qty": "56340.000000",
+    "closed_qty": "59582.000000",
+    "U00_open_count": 12,
+    "U00_open_qty": "20000.000000"
+  },
+  "independent_sql_checks": [
+    {
+      "sql": "SELECT count(*),sum(qty) FROM forecast WHERE closestatus_title != '已关闭'",
+      "result": [
+        90,
+        56340
+      ],
+      "expected": [
+        90,
+        56340
+      ]
+    },
+    {
+      "sql": "SELECT count(*),sum(qty) FROM forecast WHERE closestatus_title != '已关闭' AND material_number = 'U00-000080'",
+      "result": [
+        12,
+        20000
+      ],
+      "expected": [
+        12,
+        20000
+      ]
+    },
+    {
+      "sql": "SELECT count(*),sum(qty) FROM forecast",
+      "result": [
+        137,
+        115922
+      ],
+      "expected": [
+        137,
+        115922
+      ]
+    }
+  ],
+  "pure_function_data_invariance_cases": [
+    {
+      "operation": "bom_list",
+      "parameters": {
+        "product": "382-000005",
+        "depth": 1,
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "b629c81da14c14e1f65f7ec4222f65582aac711b736ee2a90ddeac7078354b6e"
+    },
+    {
+      "operation": "bom_list",
+      "parameters": {
+        "product": "382-000005",
+        "depth": null,
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "edf3bd04e48253cf7207cf7242c0e280b8b45ee0f8cb23da2475d42c23aa40df"
+    },
+    {
+      "operation": "bom_list",
+      "parameters": {
+        "product": "P61-000351",
+        "depth": 1,
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "ee893b2c041b143934c5bdca109bda480bfcfd35e0477ce0804a088963d83ac7"
+    },
+    {
+      "operation": "bom_list",
+      "parameters": {
+        "product": "P61-000351",
+        "depth": null,
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "be5779cf95c98ead5952b8a2c93743910efff0dc413d3f86106cd268b0ef79f6"
+    },
+    {
+      "operation": "bom_list",
+      "parameters": {
+        "product": "U00-000080",
+        "depth": 1,
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "6ee4c7d47a9cd9ba939ee0ade0bcd6e2ebbfe136bb2d54abc4b4a471c067aefa"
+    },
+    {
+      "operation": "bom_list",
+      "parameters": {
+        "product": "U00-000080",
+        "depth": null,
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "0ac29457651075ddb00de04439c8ac7688e33ddbe0486ba6a086c06429a8805c"
+    },
+    {
+      "operation": "bom_list",
+      "parameters": {
+        "product": "U00-000151",
+        "depth": 1,
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "b41fca46709de9752d924abacbfbf14a0dfc2453806b9bb0abf46fbfc2cf781f"
+    },
+    {
+      "operation": "bom_list",
+      "parameters": {
+        "product": "U00-000151",
+        "depth": null,
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "d7e46ec9ef263a73e27955443a8f26c0769a06fc0d71377e4f3bc99ed3a13acb"
+    },
+    {
+      "operation": "bom_shared_list",
+      "parameters": {
+        "products": [
+          "382-000005",
+          "P61-000351"
+        ],
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "d5d9c3a303b9436692b47722f46d26e85a4dabfd806b41aa15db55949b69cfef"
+    },
+    {
+      "operation": "bom_shared_list",
+      "parameters": {
+        "products": [
+          "382-000005",
+          "P61-000351",
+          "U00-000151"
+        ],
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "97c774cdd8e6b0ca6969a01c1854a005126530d60e3f4066615c38065caac56d"
+    },
+    {
+      "operation": "bom_shared_list",
+      "parameters": {
+        "products": [
+          "P61-000351",
+          "U00-000151"
+        ],
+        "include_substitute": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "306ab0f105ceeeb820542650d3b69d55fe7be35dd832d58965b21cae61459eb6"
+    },
+    {
+      "operation": "bom_shared_list",
+      "parameters": {
+        "products": [
+          "382-000005",
+          "382-000006"
+        ],
+        "include_substitute": false,
+        "depth": 1
+      },
+      "complete_result_equal": true,
+      "result_sha256": "e5eaa7657ab2c2605a790ba46611e0b6ff437349bf1e73001765ba4b56d062d6"
+    },
+    {
+      "operation": "material_where_used",
+      "parameters": {
+        "material_code": "321-000569"
+      },
+      "complete_result_equal": true,
+      "result_sha256": "eede32e93f0d845500710b900a7bab0a6a1ea070749e9f6cdaf8e91a431132a5"
+    },
+    {
+      "operation": "material_where_used",
+      "parameters": {
+        "material_code": "606-000989"
+      },
+      "complete_result_equal": true,
+      "result_sha256": "3b90eae54317f8ff1d77f0f529aec506a471be4e6cf34a311f98c68926b23973"
+    },
+    {
+      "operation": "material_where_used",
+      "parameters": {
+        "material_code": "725-000226"
+      },
+      "complete_result_equal": true,
+      "result_sha256": "d535a7c6486883dae4bef701aba8cbeea2f17c9a0e66b5f81a52c8199703bdc3"
+    },
+    {
+      "operation": "layered_inventory",
+      "parameters": {
+        "product": "P61-000351",
+        "depth": 1
+      },
+      "complete_result_equal": true,
+      "result_sha256": "eee13a39173b269973e5199c5684a50ac0cc5dcd7b54487882257c9479ca6e5e"
+    },
+    {
+      "operation": "substitute_status",
+      "parameters": {
+        "material_code": "356-000061",
+        "substitute_enabled": true
+      },
+      "complete_result_equal": true,
+      "result_sha256": "648745e51a6dc1d1ecbeeb29ca49994401e162b5ee339fb2c09a3110e47dd94f"
+    },
+    {
+      "operation": "theoretical_build",
+      "parameters": {
+        "product": "382-000005",
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "64e210645331cd7e2c76d66f3563db98d102048f6a449016d18089ddc0a9f678"
+    },
+    {
+      "operation": "total_sellable",
+      "parameters": {
+        "product": "382-000005",
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "96cc617284efa47c7f99539b76f91976d17608ca4e67a96cd96f2459894fb36f"
+    },
+    {
+      "operation": "theoretical_build",
+      "parameters": {
+        "product": "U00-000151",
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "9ba3d2bb3a5edbf3ee043b25651efaa0c9a8a67df59d025ac72d0d43f633d763"
+    },
+    {
+      "operation": "total_sellable",
+      "parameters": {
+        "product": "U00-000151",
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "bb20fdcb56e355acef4e759e108d0e620f964353037a6e8ecf4db5c4673b9a82"
+    },
+    {
+      "operation": "total_sellable",
+      "parameters": {
+        "product": "382-000005",
+        "substitute_enabled": true
+      },
+      "complete_result_equal": true,
+      "result_sha256": "786cb07c49def863162ec0720b8fe063b58fbe3d049d77d6772fb2eee8519c88"
+    },
+    {
+      "operation": "max_build_without_po",
+      "parameters": {
+        "product": "382-000005",
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "35bb1478a43ccd56c58c8e65980f328d503677b084e28cec8df5177ad9516aea"
+    },
+    {
+      "operation": "leadtime_days",
+      "parameters": {
+        "material_code": "606-000989"
+      },
+      "complete_result_equal": true,
+      "result_sha256": "04393c915ef8d368c4d963946401da8d90c023cf9ef8f6690ad0b8fac9088452"
+    },
+    {
+      "operation": "leadtime_days",
+      "parameters": {
+        "material_code": "321-000569"
+      },
+      "complete_result_equal": true,
+      "result_sha256": "fc1c7577f9b40b58500c20b200ff0f5fa1845e084c21dde1ee4ed5f1405b9c94"
+    },
+    {
+      "operation": "leadtime_days",
+      "parameters": {
+        "material_code": "528-000036"
+      },
+      "complete_result_equal": true,
+      "result_sha256": "d6b62aee8fbb2956d70991af9b41cee943e12d6f570f93bf1ad4ee5523e49b18"
+    },
+    {
+      "operation": "leadtime_days",
+      "parameters": {
+        "material_code": "382-000005"
+      },
+      "complete_result_equal": true,
+      "result_sha256": "dd757a92302a0677ad159a06b175ce8ba03246637778fa1412394935eef1c111"
+    },
+    {
+      "operation": "kitting_net_demand",
+      "parameters": {
+        "product": "382-000005",
+        "qty": 50,
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "a36c498e1dde29b78db8c561c51ff5eaf04fc2afc7b7047f0a00598ae8d72f15"
+    },
+    {
+      "operation": "kitting_net_demand",
+      "parameters": {
+        "product": "P61-000351",
+        "qty": 60,
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "39e11094898e8bf43f782205456aabd85d9c7c8dbeaa0c7b8bf45c0dcfc3dc48"
+    },
+    {
+      "operation": "shared_contention",
+      "parameters": {
+        "demands": [
+          {
+            "product": "382-000005",
+            "qty": 50
+          },
+          {
+            "product": "P61-000351",
+            "qty": 60
+          }
+        ],
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "9cbf646547bebd2cad229837519f4abd90ea0f82c38affba6809be9a30f68aa4"
+    },
+    {
+      "operation": "shared_contention",
+      "parameters": {
+        "demands": [
+          {
+            "product": "P61-000351",
+            "qty": 60
+          },
+          {
+            "product": "U00-000151",
+            "qty": 50
+          }
+        ],
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "fd1ee4ec274b31539a292dd534acf847b385d32fb071c5f68d97bb5e43f34e23"
+    },
+    {
+      "operation": "supply_status",
+      "parameters": {
+        "material_code": "321-000569",
+        "due_date": "2026-09-10",
+        "gross_requirement": 240
+      },
+      "complete_result_equal": true,
+      "result_sha256": "b5314280da2b854f0a142b40e89bdd75c83d05d5add3ebde2a72529a5ca941f8"
+    },
+    {
+      "operation": "backward_plan",
+      "parameters": {
+        "forecast_id": "0000023181",
+        "substitute_enabled": false,
+        "report_grain": "full_tree"
+      },
+      "complete_result_equal": true,
+      "result_sha256": "61be86aefca7b9c3936987f8523f214cbbc45f3650efad5f9c651632f40a3932"
+    },
+    {
+      "operation": "backward_plan",
+      "parameters": {
+        "product": "P61-000351",
+        "demand_qty": 60,
+        "demand_end": "2026-09-05",
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "f33bc03cb6fd03de097a23d908a88aa469911e80419b2ee5fc179efe6e8f8c9a"
+    },
+    {
+      "operation": "backward_plan",
+      "parameters": {
+        "product": "382-000005",
+        "demand_qty": 50,
+        "demand_end": "2026-09-05",
+        "substitute_enabled": true
+      },
+      "complete_result_equal": true,
+      "result_sha256": "3c06550908efaf4d307deea36795b89f1696d7b1c4bc5761960b8e8309c341ca"
+    },
+    {
+      "operation": "backward_plan",
+      "parameters": {
+        "product": "P61-000351",
+        "demand_qty": 60,
+        "demand_end": "2026-09-10",
+        "substitute_enabled": false
+      },
+      "complete_result_equal": true,
+      "result_sha256": "8c2ab4a409e0b34c88e26557b6a3d5f92286f8e2d3975ee1e5c58d706a94acda"
+    }
+  ],
+  "historical_online_evidence": {
+    "aug31_path_b_forecast_rows": 134,
+    "aug31_path_a_open_count": 87,
+    "aug31_path_a_excluded_closed_count": 47,
+    "aug31_path_a_open_qty": 46840,
+    "aug31_path_b_open_qty": 46840,
+    "sep02_pr21": {
+      "url": "https://github.com/openbkn-ai/bkn-samples/pull/21",
+      "recorded_live_poc_verify": "power_layer.py verify --kn-id supply_ontology_hand",
+      "expected_open_count": 87,
+      "expected_total_qty": 106422
+    },
+    "raw_historical_rows_export_present": false,
+    "historical_interaction_trace_export_present": false
+  },
+  "decision": "Use all 137 delivered CSV rows for the optimization release gate, retain all 3 future fixtures, issue versioned question/answer inputs, preserve historical reports and v1 inputs."
+}

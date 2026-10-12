@@ -196,6 +196,45 @@
       },
       "expected_value": 90,
       "note": "当前锁定 CSV：正常预测单 90 张。查询显式传 closestatus_title != 已关闭。"
+    },
+    {
+      "id": "sales_382_signed_qty",
+      "metric_name": "签约数量合计",
+      "title": "382-000005 签约数量合计",
+      "body": {
+        "condition": {
+          "field": "product_code",
+          "operation": "==",
+          "value": "382-000005"
+        }
+      },
+      "expected_value": 1081,
+      "note": "M-10：40 张销售订单；签约 1081、发货 1066、未发货差额 15。"
+    },
+    {
+      "id": "sales_382_shipped_qty",
+      "metric_name": "发货数量合计",
+      "title": "382-000005 发货数量合计",
+      "body": {
+        "condition": {
+          "field": "product_code",
+          "operation": "==",
+          "value": "382-000005"
+        }
+      },
+      "expected_value": 1066,
+      "note": "M-10：40 张销售订单；签约 1081、发货 1066、未发货差额 15。"
+    },
+    {
+      "id": "signed_event_total",
+      "metric_name": "按签约日期的签约数量",
+      "title": "全部期间签约事件总量",
+      "body": {
+        "time": {
+          "instant": true
+        }
+      },
+      "expected_value": 20396
     }
   ]
 }

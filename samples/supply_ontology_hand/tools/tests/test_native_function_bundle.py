@@ -2,6 +2,7 @@
 
 import sys
 import types
+import pytest
 
 from support_bkn_rows import bkn_rows
 
@@ -34,7 +35,8 @@ def test_native_function_source_never_asks_caller_for_a_data_snapshot():
     assert "load_bkn_rows" in source
 
 
-def test_generated_native_function_loads_its_own_bkn_rows(monkeypatch):
+@pytest.mark.parametrize("numeric_ids", [False, True])
+def test_generated_native_function_loads_its_own_bkn_rows(monkeypatch, numeric_ids):
     from native_function_bundle import build_native_function_code
 
     rows = bkn_rows()
@@ -47,13 +49,12 @@ def test_generated_native_function_loads_its_own_bkn_rows(monkeypatch):
         "supply_ontology_hand_pr": "purchase_request",
         "supply_ontology_hand_mrp": "mrp",
     }
-    # Vega infers purely numeric business IDs as numbers when the resource is
-    # scanned.  Keep this mock aligned with the deployed knowledge network:
-    # the source CSV keeps `0000023181`, whereas Context Loader returns 23181.
-    rows["forecast"] = [
-        {**row, "id": int(row["id"])} if str(row.get("id", "")).isdigit() else row
-        for row in rows["forecast"]
-    ]
+    # Current imports preserve strings; older resources can expose numeric IDs.
+    if numeric_ids:
+        rows["forecast"] = [
+            {**row, "id": int(row["id"])} if str(row.get("id", "")).isdigit() else row
+            for row in rows["forecast"]
+        ]
     calls = []
 
     def matches(row, condition):
@@ -94,9 +95,11 @@ def test_generated_native_function_loads_its_own_bkn_rows(monkeypatch):
         demand_end="2026-05-31",
         demand_qty=3000,
         substitute_enabled=False,
+        report_grain="full_tree",
     )
 
     assert result["business_date"] == "2026-08-25"
     assert result["max_delay_days"] == 176
+    assert result["node_count_total"] == 57
     assert result["data_source"]["knowledge_network_id"] == "supply_ontology_hand"
     assert {call["ot_id"] for call in calls} == set(dataset_by_object_type)
