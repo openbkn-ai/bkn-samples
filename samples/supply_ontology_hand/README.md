@@ -36,7 +36,7 @@ cd samples/supply_ontology_hand
 使用唯一入口：[伙伴执行手册](docs/openbkn-hand-import-guide_cn.md)。交付完成标准为：
 
 1. 数据、本体和对象绑定完成；
-2. 指标、业务函数与 S1/S2/S3 Skill 已发布；
+2. 指标、业务函数与场景 Skill 已发布；完整自然月分析见 [月度分析 Skill](skills/sales-signing-calendar-month-analysis/SKILL.md)；
 3. Agent 经 MCP 抽样验收通过；
 4. 步骤 7：包内 [BKN-Eval](bkn-eval/README.md) 完成核心 50 题 A/B/C 对比。
 

@@ -1,0 +1,806 @@
+{
+  "capabilities": [
+    {
+      "capability_type": "skill",
+      "capability_id": "01a13053-4112-7307-af40-0265439feb42",
+      "name": "demand-fulfillment-capacity-analysis",
+      "description": "Use when analyzing current inventory-based sellable capacity on knowledge network supply_ontology_hand, with finished goods and component inventory.\n",
+      "call": {
+        "tool": "get_skill_content",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "skill_id": "01a13053-4112-7307-af40-0265439feb42"
+        }
+      }
+    },
+    {
+      "capability_type": "skill",
+      "capability_id": "01a13053-47b4-7d4b-825d-c374194d3624",
+      "name": "demand-fulfillment-requirement-coverage-analysis",
+      "description": "Use when analyzing shared BOM structure or inventory contention between multiple new customer demands on knowledge network supply_ontology_hand.\n",
+      "call": {
+        "tool": "get_skill_content",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "skill_id": "01a13053-47b4-7d4b-825d-c374194d3624"
+        }
+      }
+    },
+    {
+      "capability_type": "skill",
+      "capability_id": "01a13053-5005-78a8-8c60-e3c7aa43f0ba",
+      "name": "demand-fulfillment-risk-summary",
+      "description": "Use when summarizing confirmed inventory, net-demand allocation and dated supply risks on knowledge network supply_ontology_hand.\n",
+      "call": {
+        "tool": "get_skill_content",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "skill_id": "01a13053-5005-78a8-8c60-e3c7aa43f0ba"
+        }
+      }
+    },
+    {
+      "capability_type": "skill",
+      "capability_id": "01a13053-5766-7a01-86c0-5334ca5d0c0e",
+      "name": "production-schedule-backward-planning",
+      "description": "Use when analyzing demand deadlines, material need-by dates, backward production schedules and supply risks on knowledge network supply_ontology_hand.\n",
+      "call": {
+        "tool": "get_skill_content",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "skill_id": "01a13053-5766-7a01-86c0-5334ca5d0c0e"
+        }
+      }
+    },
+    {
+      "capability_type": "skill",
+      "capability_id": "01a13053-5f4e-7ae3-bfb1-201e73a03ea7",
+      "name": "sales-signing-calendar-month-analysis",
+      "description": "Use for sales signing quantities, complete calendar-month comparisons and monthly growth on supply_ontology_hand. Query actual BKN data through MCP, then calculate adjacent-month differences in the agent with explicit business date boundaries.\n",
+      "call": {
+        "tool": "get_skill_content",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "skill_id": "01a13053-5f4e-7ae3-bfb1-201e73a03ea7"
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+      "metadata_type": "function",
+      "name": "BOM清单",
+      "description": "适用场景：查看产品 BOM 结构、层级和单耗。输入：产品编码，可选层数和是否包含替代料。结果：默认返回结构统计和一级主料；明确要求明细时才分页返回。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "page_size": {
+                    "description": "full 明细的单页行数，1 到 500。",
+                    "type": "number"
+                  },
+                  "product": {
+                    "description": "产品编码。",
+                    "type": "string"
+                  },
+                  "report_grain": {
+                    "description": "结果粒度；默认 summary 返回结构统计和一级主料，传 full 才返回明细。",
+                    "type": "string"
+                  },
+                  "depth": {
+                    "description": "展开层数；不传为一层。",
+                    "type": "number"
+                  },
+                  "include_substitute": {
+                    "description": "是否包含替代料行。",
+                    "type": "boolean"
+                  },
+                  "offset": {
+                    "description": "full 明细的起始偏移量，默认 0。",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "product"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true,
+          "description": "Function input parameters"
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+      "metadata_type": "function",
+      "name": "产品BOM共用清单",
+      "description": "适用场景：比较两款及以上产品的共同子料。输入：至少两个产品编码，可选层数和是否包含替代料。结果：共同子料结构，不含库存或争用判断。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "required": true,
+          "description": "Function input parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "include_substitute": {
+                    "description": "是否包含替代料行。",
+                    "type": "boolean"
+                  },
+                  "products": {
+                    "type": "array",
+                    "description": "至少两个产品编码。",
+                    "items": {
+                      "description": "至少两个产品编码。",
+                      "type": "string"
+                    }
+                  },
+                  "depth": {
+                    "description": "展开层数；不传为全层。",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "products"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-0e0b-74ee-b9d8-b5e13838b2bf",
+      "metadata_type": "function",
+      "name": "子料分层库存",
+      "description": "适用场景：查看产品 BOM 子料在指定仓范围的可用库存。输入：产品编码，可选层数和仓范围。结果：各层子料、可用量、占用展示和实际仓范围。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "description": "Function input parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "include_substitute": {
+                    "type": "boolean",
+                    "description": "是否包含替代料行。"
+                  },
+                  "product": {
+                    "type": "string",
+                    "description": "产品编码。"
+                  },
+                  "warehouse_scope": {
+                    "description": "仓范围预设或明确仓库列表。",
+                    "type": "string"
+                  },
+                  "depth": {
+                    "description": "展开层数；不传为一层。",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "product"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "tool_id": "01a13053-0e0b-74ee-b9d8-b5e13838b2bf",
+          "arguments": {},
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939"
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-11c8-7e9e-8a90-28e55de901f8",
+      "metadata_type": "function",
+      "name": "替代料状态",
+      "description": "适用场景：确认产品或物料是否存在替代料及候选料库存。输入：产品编码或物料编码（二选一），可选仓范围和替代料策略。结果：替代组、候选料、可用量和策略状态。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "description": "Function input parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "substitute_enabled": {
+                    "description": "是否启用替代料；需要替代判断时必须明确。",
+                    "type": "boolean"
+                  },
+                  "warehouse_scope": {
+                    "description": "仓范围预设或明确仓库列表。",
+                    "type": "string"
+                  },
+                  "material_code": {
+                    "description": "物料编码；与产品编码二选一。",
+                    "type": "string"
+                  },
+                  "product": {
+                    "type": "string",
+                    "description": "产品编码；与物料编码二选一。"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-11c8-7e9e-8a90-28e55de901f8",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+      "metadata_type": "function",
+      "name": "理论可产",
+      "description": "适用场景：判断现有库存按逐层净扣策略支持再制造多少成品。输入：产品编码、替代料策略，仓范围默认全仓，显式范围优先。结果：默认返回策略支持再制造量和瓶颈料；传 report_grain=full 才返回全部物料约束；不含成品库存和在途。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "description": "Function input parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "product": {
+                    "description": "产品编码。",
+                    "type": "string"
+                  },
+                  "report_grain": {
+                    "description": "结果粒度；默认 summary，传 full 返回全部物料约束。",
+                    "type": "string"
+                  },
+                  "substitute_enabled": {
+                    "description": "是否启用替代料；需要替代判断时必须明确。",
+                    "type": "boolean"
+                  },
+                  "warehouse_scope": {
+                    "type": "string",
+                    "description": "仓范围预设或明确仓库列表。"
+                  }
+                },
+                "required": [
+                  "product"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "tool_id": "01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+          "arguments": {},
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939"
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+      "metadata_type": "function",
+      "name": "合计可售",
+      "description": "适用场景：判断当前最多可销售多少成品。输入：产品编码、替代料策略，生产仓和成品仓默认全仓，可显式指定。结果：成品可用、理论可产和合计可售；不含在途。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "product": {
+                    "description": "产品编码。",
+                    "type": "string"
+                  },
+                  "production_scope": {
+                    "type": "string",
+                    "description": "生产仓范围。"
+                  },
+                  "substitute_enabled": {
+                    "type": "boolean",
+                    "description": "是否启用替代料；需要替代判断时必须明确。"
+                  },
+                  "finished_goods_scope": {
+                    "type": "string",
+                    "description": "成品仓范围。"
+                  }
+                },
+                "required": [
+                  "product"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true,
+          "description": "Function input parameters"
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "arguments": {},
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-194d-799f-a67c-0f143edecf9c"
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+      "metadata_type": "function",
+      "name": "要X套净需求与齐套",
+      "description": "适用场景：判断指定数量是否齐套并找出缺料。输入：产品编码、需求套数、替代料策略，默认全仓、不计PO；先扣成品及逐层组件库存。结果：默认返回齐套结论、全部缺料清单及每项按当前需求快照建议补货量；传 report_grain=full 才返回全部物料明细。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "description": "Function input parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "product",
+                  "qty"
+                ],
+                "type": "object",
+                "properties": {
+                  "product": {
+                    "description": "产品编码。",
+                    "type": "string"
+                  },
+                  "qty": {
+                    "type": "number",
+                    "description": "需求套数。"
+                  },
+                  "report_grain": {
+                    "description": "结果粒度；默认 summary，传 full 返回全部物料明细。",
+                    "type": "string"
+                  },
+                  "substitute_enabled": {
+                    "description": "是否启用替代料；需要替代判断时必须明确。",
+                    "type": "boolean"
+                  },
+                  "warehouse_scope": {
+                    "type": "string",
+                    "description": "仓范围预设或明确仓库列表。"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+      "metadata_type": "function",
+      "name": "共用料与多需求争用",
+      "description": "适用场景：判断多条需求同时承接时的共用物料争用。输入：至少两条产品与数量需求，数组顺序代表扣减优先级。结果：默认返回逐单满足状态和缺料清单；传 report_grain=full 才返回逐料分配和完整剩余池。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "description": "Function input parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "report_grain": {
+                    "description": "结果粒度；默认 summary，传 full 返回逐料分配和完整剩余池。",
+                    "type": "string"
+                  },
+                  "substitute_enabled": {
+                    "description": "是否启用替代料；必须明确传 true 或 false。",
+                    "type": "boolean"
+                  },
+                  "warehouse_scope": {
+                    "description": "仓范围预设或明确仓库列表。",
+                    "type": "string"
+                  },
+                  "demands": {
+                    "items": {
+                      "description": "至少两条对象需求，格式 [{\"product\":\"382-000005\",\"qty\":50},{\"product\":\"P61-000351\",\"qty\":60}]；数组顺序即扣减优先级。",
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "description": "至少两条对象需求，格式 [{\"product\":\"382-000005\",\"qty\":50},{\"product\":\"P61-000351\",\"qty\":60}]；数组顺序即扣减优先级。"
+                  }
+                },
+                "required": [
+                  "demands",
+                  "substitute_enabled"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-2663-754f-b5fc-5663cf21f324",
+      "metadata_type": "function",
+      "name": "无需采购最大可产",
+      "description": "适用场景：判断不新增采购时还能生产多少。输入：产品编码、替代料策略，仓范围默认全仓，显式范围优先。结果：默认返回策略支持再制造量和瓶颈料；传 report_grain=full 才返回全部物料约束；不含成品库存和在途。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "substitute_enabled": {
+                    "description": "是否启用替代料；需要替代判断时必须明确。",
+                    "type": "boolean"
+                  },
+                  "warehouse_scope": {
+                    "description": "仓范围预设或明确仓库列表。",
+                    "type": "string"
+                  },
+                  "product": {
+                    "type": "string",
+                    "description": "产品编码。"
+                  },
+                  "report_grain": {
+                    "description": "结果粒度；默认 summary，传 full 返回全部物料约束。",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "product"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true,
+          "description": "Function input parameters"
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-2663-754f-b5fc-5663cf21f324",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-2a37-724b-bd91-82dc40706c46",
+      "metadata_type": "function",
+      "name": "标准交期",
+      "description": "适用场景：查询单个物料的标准提前期。输入：物料编码。结果：leadtime_days、caliber（purchase/production）、material_attribute、source_field、unit 及正式物料 object_type_id。外购/委外取采购固定提前期，其他属性取生产固定提前期；缺失属性沿用生产默认并标记 attribute_missing，不代表已确认物料属性。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "material_code": {
+                    "description": "物料编码。",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "material_code"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true,
+          "description": "Function input parameters"
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-2a37-724b-bd91-82dc40706c46",
+          "arguments": {},
+          "kn_id": "supply_ontology_hand"
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-2dd3-75af-af43-e3b0f571eedd",
+      "metadata_type": "function",
+      "name": "供应状态诊断",
+      "description": "适用场景：在倒排中已有到位日和毛需求时诊断单料供应状态。输入：物料编码、到位日、毛需求、business_date，可选仓范围（默认全仓）。结果：on_time_covered、on_time_shortage_qty、按期库存/PO净未收数量及逐行日期证据；到货日晚于业务日且不晚于需要日的未关闭PO才计按期供给，过期和无日期PO不计已确认覆盖。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "description": "Function input parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "warehouse_scope": {
+                    "description": "仓范围预设或明确仓库列表。",
+                    "type": "string"
+                  },
+                  "child_short": {
+                    "type": "boolean",
+                    "description": "是否已有子件短缺。"
+                  },
+                  "due_date": {
+                    "description": "到位日或交货日。",
+                    "type": "string"
+                  },
+                  "gross_requirement": {
+                    "description": "毛需求数量。",
+                    "type": "number"
+                  },
+                  "material_code": {
+                    "description": "物料编码。",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "material_code"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-2dd3-75af-af43-e3b0f571eedd",
+          "arguments": {},
+          "kn_id": "supply_ontology_hand"
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-31f6-78e1-a4a5-51a8014a2460",
+      "metadata_type": "function",
+      "name": "未关闭预测单数",
+      "description": "适用场景：统计某产品或全部产品的未关闭预测单数量。输入：可选产品编码。结果：默认返回未关闭张数与排除口径；传 report_grain=full 才返回预测单 ID 列表，不代表预测需求数量。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "description": "Function input parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_code": {
+                    "type": "string",
+                    "description": "可选产品编码；不传统计全部未关闭预测单。"
+                  },
+                  "report_grain": {
+                    "description": "结果粒度；默认 summary，传 full 返回预测单 ID 列表。",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "arguments": {},
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-31f6-78e1-a4a5-51a8014a2460"
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-35ef-7215-b176-3c5363d57d1f",
+      "metadata_type": "function",
+      "name": "生产计划齐套倒排",
+      "description": "适用场景：核查已有预测单或新客户需求能否按截止日交付。输入：已有预测单时只需预测单号和替代料策略；新增需求提供产品、数量、截止日和替代料策略。结果：先给成品直发或生产计划模式，再给客户最早可用日期、客户延期天数、内部最大延迟、缺料和供应状态；Sample 默认业务日期为 2026-08-25。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "demand_qty": {
+                    "description": "新增需求数量；预测单模式可不传。",
+                    "type": "number"
+                  },
+                  "forecast_id": {
+                    "description": "已有预测单 id；允许前导零，例如 0000023181。传入后函数自动读取产品、数量和截止日。",
+                    "type": "string"
+                  },
+                  "product": {
+                    "type": "string",
+                    "description": "新增需求的产品编码；预测单模式可不传。"
+                  },
+                  "report_grain": {
+                    "type": "string",
+                    "description": "报告粒度，默认 summary。"
+                  },
+                  "substitute_enabled": {
+                    "description": "是否启用替代料；必须明确传 true 或 false。",
+                    "type": "boolean"
+                  },
+                  "warehouse_scope": {
+                    "description": "仓范围预设或明确仓库列表。",
+                    "type": "string"
+                  },
+                  "business_date": {
+                    "description": "业务基准日；不传使用样例默认 2026-08-25。",
+                    "type": "string"
+                  },
+                  "demand_end": {
+                    "description": "新增需求的交付截止日 YYYY-MM-DD；预测单模式可不传。",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "substitute_enabled"
+                ]
+              }
+            }
+          },
+          "required": true,
+          "description": "Function input parameters"
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "arguments": {},
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-35ef-7215-b176-3c5363d57d1f"
+        }
+      }
+    },
+    {
+      "capability_type": "function",
+      "owner_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+      "capability_id": "01a13053-3980-7c94-97e0-9e2bd6d7cd35",
+      "metadata_type": "function",
+      "name": "物料反查产品",
+      "description": "适用场景：判断一个物料缺货、交期变化或替代变更会影响哪些产品。输入：物料编码。结果：affected_product_count 和产品清单；默认将替代料分支计入影响；传 report_grain=full 才返回命中 BOM 路径。",
+      "input_schema": {
+        "parameters": [],
+        "request_body": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "material_code"
+                ],
+                "type": "object",
+                "properties": {
+                  "include_substitute": {
+                    "description": "是否将替代料分支计入受影响产品；默认 true。",
+                    "type": "boolean"
+                  },
+                  "material_code": {
+                    "description": "物料编码。",
+                    "type": "string"
+                  },
+                  "report_grain": {
+                    "description": "结果粒度；默认 summary，传 full 返回命中 BOM 路径。",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true,
+          "description": "Function input parameters"
+        }
+      },
+      "call": {
+        "tool": "execute_tool",
+        "arguments": {
+          "kn_id": "supply_ontology_hand",
+          "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+          "tool_id": "01a13053-3980-7c94-97e0-9e2bd6d7cd35",
+          "arguments": {}
+        }
+      }
+    }
+  ],
+  "total_matched": 19
+}

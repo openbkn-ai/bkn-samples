@@ -1,0 +1,825 @@
+{
+  "id": "F-10",
+  "question": "产品 P61-000351 新增 60 套、不启用替代料，默认全仓；先扣成品后按层扣组件，是否有库存缺口及缺口物料数？",
+  "calls": [
+    {
+      "tool": "execute_tool",
+      "params": {
+        "kn_id": "supply_ontology_hand",
+        "toolbox_id": "01a13046-a4fb-7d6a-a8b9-9ed42cf703cf",
+        "tool_id": "01a13046-bce3-7432-ae05-3f3fa1e83a8e",
+        "arguments": {
+          "product": "P61-000351",
+          "qty": 60,
+          "substitute_enabled": false,
+          "warehouse_scope": "all"
+        },
+        "bkn_context": {
+          "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+          "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b"
+        }
+      },
+      "output": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Date": "Mon, 12 Oct 2026 13:26:33 GMT",
+          "Cache-Control": "private, no-cache"
+        },
+        "body": {
+          "exit_code": 0,
+          "execution_time_ms": 0,
+          "session_id": "sess_aoi_0",
+          "stdout": "",
+          "result": {
+            "substitute_enabled": false,
+            "report_grain": "summary",
+            "finished_goods_qty": 0,
+            "gaps": [
+              {
+                "main_material_code": "725-000130",
+                "gross_requirement": 1200,
+                "available_qty": 0,
+                "source": "main",
+                "net_requirement": 1200,
+                "recommended_replenishment_qty": 1200,
+                "allocated_qty": 0,
+                "material_name": "",
+                "in_transit_qty": 0,
+                "l1_parent": "588-000430",
+                "is_leaf": true,
+                "material_code": "725-000130"
+              },
+              {
+                "material_code": "454-000014",
+                "main_material_code": "454-000014",
+                "gross_requirement": 60,
+                "l1_parent": "588-000430",
+                "in_transit_qty": 0,
+                "net_requirement": 60,
+                "allocated_qty": 0,
+                "material_name": "",
+                "available_qty": 0,
+                "recommended_replenishment_qty": 60,
+                "source": "main",
+                "is_leaf": true
+              },
+              {
+                "allocated_qty": 0,
+                "l1_parent": "588-000430",
+                "is_leaf": true,
+                "material_code": "454-000049",
+                "net_requirement": 180,
+                "recommended_replenishment_qty": 180,
+                "material_name": "",
+                "gross_requirement": 180,
+                "available_qty": 0,
+                "main_material_code": "454-000049",
+                "in_transit_qty": 0,
+                "source": "main"
+              },
+              {
+                "material_code": "454-000111",
+                "main_material_code": "454-000111",
+                "gross_requirement": 60,
+                "net_requirement": 60,
+                "l1_parent": "588-000430",
+                "is_leaf": true,
+                "material_name": "",
+                "available_qty": 0,
+                "in_transit_qty": 0,
+                "recommended_replenishment_qty": 60,
+                "source": "main",
+                "allocated_qty": 0
+              },
+              {
+                "source": "main",
+                "in_transit_qty": 0,
+                "net_requirement": 60,
+                "recommended_replenishment_qty": 60,
+                "gross_requirement": 60,
+                "allocated_qty": 0,
+                "l1_parent": "588-000430",
+                "material_code": "454-000111",
+                "main_material_code": "454-000111",
+                "is_leaf": true,
+                "material_name": "",
+                "available_qty": 0
+              },
+              {
+                "gross_requirement": 60,
+                "net_requirement": 60,
+                "available_qty": 0,
+                "in_transit_qty": 0,
+                "recommended_replenishment_qty": 60,
+                "allocated_qty": 0,
+                "material_code": "454-000111",
+                "material_name": "",
+                "l1_parent": "588-000430",
+                "is_leaf": true,
+                "main_material_code": "454-000111",
+                "source": "main"
+              },
+              {
+                "material_code": "454-000136",
+                "gross_requirement": 120,
+                "main_material_code": "454-000136",
+                "material_name": "",
+                "source": "main",
+                "l1_parent": "588-000430",
+                "in_transit_qty": 0,
+                "available_qty": 0,
+                "net_requirement": 120,
+                "recommended_replenishment_qty": 120,
+                "is_leaf": true,
+                "allocated_qty": 0
+              },
+              {
+                "in_transit_qty": 0,
+                "material_name": "",
+                "gross_requirement": 360,
+                "available_qty": 0,
+                "net_requirement": 360,
+                "is_leaf": true,
+                "source": "main",
+                "main_material_code": "733-000001",
+                "recommended_replenishment_qty": 360,
+                "material_code": "733-000001",
+                "l1_parent": "588-000430",
+                "allocated_qty": 0
+              },
+              {
+                "available_qty": 0,
+                "in_transit_qty": 0,
+                "main_material_code": "733-000089",
+                "gross_requirement": 120,
+                "net_requirement": 120,
+                "material_name": "",
+                "recommended_replenishment_qty": 120,
+                "material_code": "733-000089",
+                "source": "main",
+                "allocated_qty": 0,
+                "l1_parent": "588-000430",
+                "is_leaf": true
+              },
+              {
+                "main_material_code": "358-000079",
+                "in_transit_qty": 0,
+                "source": "main",
+                "is_leaf": true,
+                "material_code": "358-000079",
+                "net_requirement": 120,
+                "l1_parent": "588-000430",
+                "material_name": "",
+                "gross_requirement": 120,
+                "recommended_replenishment_qty": 120,
+                "allocated_qty": 0,
+                "available_qty": 0
+              },
+              {
+                "is_leaf": true,
+                "material_name": "",
+                "l1_parent": "588-000430",
+                "in_transit_qty": 0,
+                "recommended_replenishment_qty": 60,
+                "main_material_code": "539-000479",
+                "gross_requirement": 60,
+                "net_requirement": 60,
+                "source": "main",
+                "allocated_qty": 0,
+                "material_code": "539-000479",
+                "available_qty": 0
+              },
+              {
+                "source": "main",
+                "material_code": "454-000124",
+                "material_name": "",
+                "gross_requirement": 120,
+                "l1_parent": "588-000430",
+                "in_transit_qty": 0,
+                "net_requirement": 120,
+                "main_material_code": "454-000124",
+                "recommended_replenishment_qty": 120,
+                "is_leaf": true,
+                "allocated_qty": 0,
+                "available_qty": 0
+              },
+              {
+                "gross_requirement": 60,
+                "in_transit_qty": 0,
+                "net_requirement": 60,
+                "l1_parent": "588-000430",
+                "recommended_replenishment_qty": 60,
+                "material_code": "972-000476",
+                "main_material_code": "972-000476",
+                "available_qty": 0,
+                "material_name": "",
+                "allocated_qty": 0,
+                "is_leaf": true,
+                "source": "main"
+              },
+              {
+                "net_requirement": 240,
+                "source": "main",
+                "l1_parent": "588-000430",
+                "gross_requirement": 240,
+                "available_qty": 0,
+                "allocated_qty": 0,
+                "material_name": "",
+                "in_transit_qty": 0,
+                "recommended_replenishment_qty": 240,
+                "is_leaf": true,
+                "material_code": "972-000275",
+                "main_material_code": "972-000275"
+              },
+              {
+                "l1_parent": "588-000430",
+                "available_qty": 0,
+                "material_code": "972-000473",
+                "main_material_code": "972-000473",
+                "gross_requirement": 60,
+                "in_transit_qty": 0,
+                "recommended_replenishment_qty": 60,
+                "is_leaf": true,
+                "net_requirement": 60,
+                "allocated_qty": 0,
+                "material_name": "",
+                "source": "main"
+              },
+              {
+                "in_transit_qty": 0,
+                "net_requirement": 180,
+                "recommended_replenishment_qty": 180,
+                "is_leaf": true,
+                "allocated_qty": 0,
+                "gross_requirement": 180,
+                "material_code": "972-000379",
+                "source": "main",
+                "l1_parent": "588-000430",
+                "material_name": "",
+                "available_qty": 0,
+                "main_material_code": "972-000379"
+              },
+              {
+                "gross_requirement": 60,
+                "in_transit_qty": 0,
+                "allocated_qty": 0,
+                "main_material_code": "972-000584",
+                "net_requirement": 60,
+                "material_code": "972-000584",
+                "recommended_replenishment_qty": 60,
+                "source": "main",
+                "l1_parent": "588-000430",
+                "available_qty": 0,
+                "is_leaf": true,
+                "material_name": ""
+              },
+              {
+                "net_requirement": 60,
+                "gross_requirement": 60,
+                "in_transit_qty": 0,
+                "is_leaf": true,
+                "allocated_qty": 0,
+                "recommended_replenishment_qty": 60,
+                "material_code": "972-000538",
+                "main_material_code": "972-000538",
+                "source": "main",
+                "available_qty": 0,
+                "material_name": "",
+                "l1_parent": "588-000430"
+              },
+              {
+                "material_name": "",
+                "gross_requirement": 60,
+                "available_qty": 0,
+                "recommended_replenishment_qty": 60,
+                "material_code": "321-000354",
+                "main_material_code": "321-000354",
+                "allocated_qty": 0,
+                "is_leaf": true,
+                "in_transit_qty": 0,
+                "net_requirement": 60,
+                "source": "main",
+                "l1_parent": "588-000430"
+              },
+              {
+                "net_requirement": 46,
+                "is_leaf": true,
+                "source": "main",
+                "material_name": "",
+                "allocated_qty": 14,
+                "l1_parent": "588-000430",
+                "gross_requirement": 60,
+                "available_qty": 14,
+                "main_material_code": "356-000280",
+                "in_transit_qty": 0,
+                "material_code": "356-000280",
+                "recommended_replenishment_qty": 46
+              },
+              {
+                "l1_parent": "588-000430",
+                "gross_requirement": 60,
+                "available_qty": 56,
+                "allocated_qty": 56,
+                "main_material_code": "356-000175",
+                "source": "main",
+                "is_leaf": true,
+                "material_name": "",
+                "net_requirement": 4,
+                "in_transit_qty": 0,
+                "recommended_replenishment_qty": 4,
+                "material_code": "356-000175"
+              },
+              {
+                "recommended_replenishment_qty": 41,
+                "main_material_code": "606-000069",
+                "available_qty": 19,
+                "in_transit_qty": 0,
+                "is_leaf": true,
+                "material_code": "606-000069",
+                "l1_parent": "P61-000351",
+                "material_name": "",
+                "source": "main",
+                "net_requirement": 41,
+                "allocated_qty": 19,
+                "gross_requirement": 60
+              },
+              {
+                "is_leaf": true,
+                "material_code": "606-000071",
+                "allocated_qty": 30,
+                "main_material_code": "606-000071",
+                "l1_parent": "P61-000351",
+                "recommended_replenishment_qty": 30,
+                "source": "main",
+                "material_name": "",
+                "in_transit_qty": 0,
+                "net_requirement": 30,
+                "gross_requirement": 60,
+                "available_qty": 30
+              },
+              {
+                "in_transit_qty": 0,
+                "gross_requirement": 60,
+                "l1_parent": "P61-000351",
+                "material_name": "",
+                "net_requirement": 60,
+                "recommended_replenishment_qty": 60,
+                "material_code": "994-000645",
+                "source": "main",
+                "allocated_qty": 0,
+                "available_qty": 0,
+                "is_leaf": true,
+                "main_material_code": "994-000645"
+              }
+            ],
+            "root_net_demand": 60,
+            "warehouse_filter": [],
+            "data_source": {
+              "loaded_datasets": [
+                "bom",
+                "inventory",
+                "purchase_order"
+              ],
+              "knowledge_network_id": "supply_ontology_hand"
+            },
+            "demand_qty": 60,
+            "finished_goods_allocated_qty": 0,
+            "product_code": "P61-000351",
+            "line_count": 127,
+            "kitting_ok": false,
+            "gap_count": 24,
+            "include_in_transit": false,
+            "warehouse_scope": "all"
+          },
+          "metrics": {
+            "duration_ms": 609.1672919865232,
+            "cpu_time_ms": 3.8800009999704343,
+            "peak_memory_mb": null,
+            "io_read_bytes": null,
+            "io_write_bytes": null
+          },
+          "artifacts": [],
+          "stderr": ""
+        },
+        "error": "",
+        "duration_ms": 1025,
+        "status_code": 200
+      }
+    }
+  ],
+  "start": {
+    "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "execution_status": "active"
+  },
+  "finish": {
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b"
+  },
+  "trace": {
+    "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "ordinal": 25,
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "closure_manifest": {
+      "completion_manifest_version": "3.0.0",
+      "answer_artifact_ref": "artifact:art_result_732b46281cf65c829009dab1526a7793",
+      "expected_operations": [
+        {
+          "operation_id": "op_090b7792d9d8b306d90c80ce3148f36e",
+          "required": true
+        },
+        {
+          "operation_id": "op_16807b1eb3ebafa5287836283fd604b3",
+          "required": true
+        },
+        {
+          "operation_id": "op_32f3a6cb49e7953feba2db6f655e9b47",
+          "required": true
+        },
+        {
+          "operation_id": "op_4ca612d7842949fbfc6ac546abefcceb",
+          "required": true
+        },
+        {
+          "operation_id": "op_581f33aafdbab1de5bf1254be2d5dc0a",
+          "required": true
+        },
+        {
+          "operation_id": "op_67791a1470995a371ff18bfdadc622d1",
+          "required": true
+        },
+        {
+          "operation_id": "op_921574bfa0eba7998fd931c988c26aeb",
+          "required": true
+        },
+        {
+          "operation_id": "op_f7d266ebfaaec9c33d04f5e4c3b86272",
+          "required": true
+        }
+      ],
+      "expected_receipts": [
+        {
+          "receipt_id": "rcpt_00fb2959544219f944f85555ff0e112a",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_5f3e1e5cf0130ba57c4f2a9063f9dca2",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_ba4f34b473d0aa43080224523dba01ea",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_bc1c56dfe8a576f43c78e84dd8cb79f9",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_bf814fa9d1fe27414cc5f55b265654fd",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_c6bee8b8ecab827f3694f8b9565057e4",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_e0059620b25bfbc6e02b82476248db7b",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_f30d4ff6d259c0e62c9170f21741f17d",
+          "required": true
+        }
+      ],
+      "completion_reason": "completed"
+    },
+    "lease_token": "[REDACTED]",
+    "lease_epoch": 1,
+    "lease_version": 10,
+    "lease_expires_at": "2026-10-12T13:31:32.86463Z",
+    "row_version": 18,
+    "created_at": "2026-10-12T13:26:32.171735Z",
+    "updated_at": "2026-10-12T13:26:33.263309Z",
+    "terminal_at": "2026-10-12T13:26:33.263309Z"
+  },
+  "receipts": [
+    {
+      "receipt_id": "rcpt_00fb2959544219f944f85555ff0e112a",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+      "operation_id": "op_921574bfa0eba7998fd931c988c26aeb",
+      "attempt": 1,
+      "operation_key": "mcp:d0560a13d61924ffa99832a9153080f9",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_ab6d5d13-541c-46a5-a506-0478b61ad0fe",
+      "trace_id": "896ef85709bb393e25f95d28c1f5d224",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_cb40b00397e692a90c894b6287789b93bbbcdfd6fb061eed8372a56e2b209ada"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:32.547298Z",
+      "terminal_at": "2026-10-12T13:26:32.593712Z"
+    },
+    {
+      "receipt_id": "rcpt_5f3e1e5cf0130ba57c4f2a9063f9dca2",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+      "operation_id": "op_f7d266ebfaaec9c33d04f5e4c3b86272",
+      "attempt": 1,
+      "operation_key": "mcp:11750114be690118f226a12b782ca1af",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_85112f8f-6581-4dc2-855c-a69eb4f33920",
+      "trace_id": "2d5edc642e5872f0f0fe9d14815d41e9",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_5d79b3835cf86700569c3c2939c98275ea77cdb2ab79015eac52ea790d2995c2"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:32.799352Z",
+      "terminal_at": "2026-10-12T13:26:32.845027Z"
+    },
+    {
+      "receipt_id": "rcpt_ba4f34b473d0aa43080224523dba01ea",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+      "operation_id": "op_67791a1470995a371ff18bfdadc622d1",
+      "attempt": 1,
+      "operation_key": "mcp:2c9cee2d9841936811c60476114cf9b9",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_c2f43c08-4646-44e3-9b74-9dcd66a4cf0a",
+      "trace_id": "65686709d3581d5b6a80e696279daa6e",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_fbcf1239e4f59883e918449941478f7634c211e31436936bc548cc3a28f4b0ed"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:32.726356Z",
+      "terminal_at": "2026-10-12T13:26:32.775521Z"
+    },
+    {
+      "receipt_id": "rcpt_bc1c56dfe8a576f43c78e84dd8cb79f9",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+      "operation_id": "op_16807b1eb3ebafa5287836283fd604b3",
+      "attempt": 1,
+      "operation_key": "function:11b9194a985486ed5f0e78c86ac3f166",
+      "tool_name": "01a13046-bce3-7432-ae05-3f3fa1e83a8e",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "function",
+          "ref_id": "function:supply_ontology_hand:01a13046-bce3-7432-ae05-3f3fa1e83a8e",
+          "version": "01a13046-bce2-76b9-b795-13e5830d6924",
+          "display_hint": "要X套净需求与齐套"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:26:32.21002Z",
+      "terminal_at": "2026-10-12T13:26:33.24282Z"
+    },
+    {
+      "receipt_id": "rcpt_bf814fa9d1fe27414cc5f55b265654fd",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+      "operation_id": "op_581f33aafdbab1de5bf1254be2d5dc0a",
+      "attempt": 1,
+      "operation_key": "mcp:a89e4de978ac94b7846c5c529f8f4f7b",
+      "tool_name": "execute_tool",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:26:32.184124Z",
+      "terminal_at": "2026-10-12T13:26:33.24653Z"
+    },
+    {
+      "receipt_id": "rcpt_c6bee8b8ecab827f3694f8b9565057e4",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+      "operation_id": "op_4ca612d7842949fbfc6ac546abefcceb",
+      "attempt": 1,
+      "operation_key": "mcp:81a954429d1b00d1c125a75a7ec83d1c",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_c4de808d-3a30-41cf-98ad-db7167a7eeb6",
+      "trace_id": "04fc152d331a9094bbd486b84b046184",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_033bc8e99b0c2a3bcba6c579c7180c0cfe2f6912233efb24e5c14450f0171aa1"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_po",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:32.86463Z",
+      "terminal_at": "2026-10-12T13:26:32.88704Z"
+    },
+    {
+      "receipt_id": "rcpt_e0059620b25bfbc6e02b82476248db7b",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+      "operation_id": "op_090b7792d9d8b306d90c80ce3148f36e",
+      "attempt": 1,
+      "operation_key": "mcp:9b9969deaa5f085992868f5f790504d5",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_8da32ba3-d05b-48bd-b77b-66def0c6b8c5",
+      "trace_id": "3f56a860c11de146a4a8c2e2707bf94b",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_7db15939fc3ed060045c26428b916265b36f23d00a3aa9a1ca9de174867b8495"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:32.654413Z",
+      "terminal_at": "2026-10-12T13:26:32.703415Z"
+    },
+    {
+      "receipt_id": "rcpt_f30d4ff6d259c0e62c9170f21741f17d",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_fb7df66ce6b1fb2ee0f05ad5dc615c6b",
+      "operation_id": "op_32f3a6cb49e7953feba2db6f655e9b47",
+      "attempt": 1,
+      "operation_key": "mcp:43159b44eb46eae4f9408c1baf77f6b2",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_78fc9581-5b96-451f-a8ed-e6ebac09172a",
+      "trace_id": "f4db11a82c999d8028c2a7e6a71a5493",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_9d5bb9551abec2e5ab94af3bb5a89b6780ab4a3ca10f6bea8a3ff90bf28c91dd"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:32.616006Z",
+      "terminal_at": "2026-10-12T13:26:32.643197Z"
+    }
+  ]
+}

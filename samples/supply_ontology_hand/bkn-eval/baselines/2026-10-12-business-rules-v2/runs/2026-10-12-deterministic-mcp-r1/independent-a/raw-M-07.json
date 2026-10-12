@@ -1,0 +1,128 @@
+{
+  "id": "M-07",
+  "question": "当前未关闭预测单的需求数量合计是多少？",
+  "calls": [
+    {
+      "tool": "query_metric",
+      "params": {
+        "kn_id": "supply_ontology_hand",
+        "metric_id": "01a13046-903e-7006-aded-7918640c2d7e",
+        "time": {
+          "instant": true
+        },
+        "response_format": "json",
+        "condition": {
+          "field": "closestatus_title",
+          "operation": "!=",
+          "value": "已关闭",
+          "value_from": "const"
+        },
+        "bkn_context": {
+          "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+          "interaction_id": "int_e25ea9aa274c6755542f25010ed0f1c0"
+        }
+      },
+      "output": {
+        "kn_id": "supply_ontology_hand",
+        "metric_id": "01a13046-903e-7006-aded-7918640c2d7e",
+        "datas": [
+          {
+            "times": [
+              1791811566200
+            ],
+            "values": [
+              56340
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "start": {
+    "interaction_id": "int_e25ea9aa274c6755542f25010ed0f1c0",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "execution_status": "active"
+  },
+  "finish": {
+    "execution_status": "completed",
+    "evidence_status": "assembling",
+    "interaction_id": "int_e25ea9aa274c6755542f25010ed0f1c0",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a"
+  },
+  "trace": {
+    "interaction_id": "int_e25ea9aa274c6755542f25010ed0f1c0",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "ordinal": 7,
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "closure_manifest": {
+      "completion_manifest_version": "3.0.0",
+      "answer_artifact_ref": "artifact:art_result_7de9575ba9ec13646cedb657a0e7d6c7",
+      "expected_operations": [
+        {
+          "operation_id": "op_311ae8d907879f174ab8770a4a6bf7e1",
+          "required": true
+        }
+      ],
+      "expected_receipts": [
+        {
+          "receipt_id": "rcpt_e06f36c9a317931486bcd7889699a2fe",
+          "required": true
+        }
+      ],
+      "assembler_deadline": "2026-10-12T13:31:06.212914Z",
+      "completion_reason": "completed"
+    },
+    "lease_token": "[REDACTED]",
+    "lease_epoch": 1,
+    "lease_version": 3,
+    "lease_expires_at": "2026-10-12T13:31:06.185904Z",
+    "row_version": 5,
+    "created_at": "2026-10-12T13:26:06.17158Z",
+    "updated_at": "2026-10-12T13:26:06.996224Z",
+    "terminal_at": "2026-10-12T13:26:06.212914Z"
+  },
+  "receipts": [
+    {
+      "receipt_id": "rcpt_e06f36c9a317931486bcd7889699a2fe",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_e25ea9aa274c6755542f25010ed0f1c0",
+      "operation_id": "op_311ae8d907879f174ab8770a4a6bf7e1",
+      "attempt": 1,
+      "operation_key": "mcp:fa2d6cbe6e61c7c594cf1f05ee096aee",
+      "tool_name": "query_metric",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_0cc46a60273545ffe2ae670eb49d6776ed0336ba86b9dd20c9c61917d1466a2e"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "metric",
+          "ref_id": "metric:supply_ontology_hand:01a13046-903e-7006-aded-7918640c2d7e",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:06.185904Z",
+      "terminal_at": "2026-10-12T13:26:06.201105Z"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "skill_id": "01a13047-024c-70e7-99e8-19bcdff32fbc",
+  "status": "published",
+  "content": "---\nname: production-schedule-backward-planning\ndescription: >\n  Use when analyzing demand deadlines, material need-by dates, backward production\n  schedules and supply risks on knowledge network supply_ontology_hand.\n---\n\n# 生产计划倒排 · 齐套诊断（S1）\n\n业务场景：生产计划齐套倒排与新增客户需求交付判断。\n优先指标：供应状态、物料可用量、按需日到货量。\n优先函数：生产计划齐套倒排。\n不创建监控任务，不写回 ERP。\n\n用于产品、数量和截止日的交期分析。单料标准提前期直接调用 **标准交期**；当前库存可售能力使用 S2。没有截止日不下交期结论。\n\n## 执行步骤\n\n1. 确认唯一产品、数量、截止日、替代策略及业务日期；样例业务日期缺省 `2026-08-25`，服务器当天仅作审计。\n2. 仓范围缺省 `all`，显式范围遵守；调用 **生产计划齐套倒排**。有预测单时传实际 `forecast_id` 校验，没有时按新增客户需求分析。\n3. 新增需求先扣成品，只制造剩余量；各层组件先抵扣库存再展开。不能因成品部分不足按客户全量制造，也不能把够用组件下的叶子当关键缺料。\n4. 现货足量只证明当前库存覆盖；截止日早于业务日期不能判按时。现货不足时按真实净需求与按期足量供应沿制造链传播日期，不能拿单个物料标准提前期或最坏/最好 PO 日期直接代替产品日期。\n5. 过期未收 PO 标为待确认；缺少确定到货、制造安排、提前期或替代排程支持时说明无法确认。函数不可用时，齐套与标准交期仅用来解释已知风险，不产生完整倒排承诺。\n6. 报告分开客户最早可用日/客户延期与内部 A/B 风险，回显业务日期、实际仓范围、替代适用性、PO 数量和日期证据。现实产能、工作日历、调拨及运输未纳入时明确说明。\n\n## 统一业务前提\n\n- 未指定仓范围时默认 `all`；用户明确指定的仓预设或仓名单必须遵守并回显。全仓表示不限制仓库，不能把空列表解释为零仓库。\n- 使用 `available_inventory_qty`，预留字段仅展示，不再次扣减；同一物料在多个位置或订单之间共享一个物理库存池。\n- 新增客户需求先分配成品，只对剩余数量制造；制造时每层组件先分配现货，只展开该层净缺数量。不把结构叶子缺口直接当成客户需求缺口。\n- 主料和替代料的资格限定到 BOM 位置（产品、父件、组号）；实际候选按自己的单耗计算。不得跨位置传播资格或重复使用库存。后单在剩余池上重新选择候选；不默认混合多种候选凑数。\n- 纯库存数量分析不计在途；只有明确启用现有 PO 且提供物料需要日期/交期时才分析按期供给。净未收量为 `max(0, qty-actqty)`；已关闭或净未收为零的行不参与。按需要日、业务日期及数量分配，逾期未收货 PO 标为待确认，不直接当成可靠到货。\n- 事实不完整、分页未读完、缺失提前期或函数业务口径不匹配时返回无法确认。函数执行成功不等于业务验收通过；不得强行沿用旧数值。\n- 从已发布 MCP 元数据确认函数参数，使用实际调用回执；不读取答案集、CSV、实现源码或直连数据库重建函数。能力未支持条件时说明限制，不猜参数。\n\n## 输入与完成门槛\n\n唯一产品、`demand_qty`、`demand_end`、已确认 `substitute_enabled`；`forecast_id` 可选；`business_date` 缺省样例日期；`warehouse_scope` 缺省 `all`。完整净制造树需要实际支持的 `report_grain=full_tree`；报告不得把被库存覆盖而不需展开的层级计为制造需求。\n\n仅做只读分析与人工建议，不创建采购、监控或 ERP 记录。参数和字段以 MCP 发现及实际回执为准。\n\n参考：`references/business-rules.md`、`references/io-contract.md`、`references/report-spec.md`、`references/kn-metrics.md`。\n",
+  "files": [
+    {
+      "rel_path": "SKILL.md",
+      "file_type": "reference",
+      "size": 4043,
+      "mime_type": "text/markdown"
+    },
+    {
+      "rel_path": "references/business-rules.md",
+      "file_type": "reference",
+      "size": 2367,
+      "mime_type": "text/markdown"
+    },
+    {
+      "rel_path": "references/io-contract.md",
+      "file_type": "reference",
+      "size": 1718,
+      "mime_type": "text/markdown"
+    },
+    {
+      "rel_path": "references/kn-metrics.md",
+      "file_type": "reference",
+      "size": 1226,
+      "mime_type": "text/markdown"
+    },
+    {
+      "rel_path": "references/report-spec.md",
+      "file_type": "reference",
+      "size": 1432,
+      "mime_type": "text/markdown"
+    }
+  ]
+}

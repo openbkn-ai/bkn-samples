@@ -243,7 +243,7 @@
       "supported_modes": [
         "instant",
         "trend",
-        "sameperiod",
+        "calendar_month_growth",
         "proportion"
       ],
       "analysis_dimensions": [
@@ -254,7 +254,8 @@
       "temporal_proportion_supported": true,
       "required_query_condition": null,
       "default_range_policy": "none",
-      "note": "历史演示须显式选择固定期间，最近24小时不覆盖样例。"
+      "note": "Complete calendar-month growth queries each month with signing_date >= month start and < next month start, then subtracts adjacent totals in the agent. Server sameperiod endpoint is an optional independent diagnostic, not a business acceptance gate.",
+      "calculation_location": "agent for calendar_month_growth"
     }
   ]
 }

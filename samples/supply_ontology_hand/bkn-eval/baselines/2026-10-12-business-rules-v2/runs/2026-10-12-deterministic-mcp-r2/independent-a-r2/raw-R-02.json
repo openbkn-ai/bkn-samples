@@ -1,0 +1,300 @@
+{
+  "id": "R-02",
+  "question": "产品 U00-000080 的一级主料有多少种？",
+  "calls": [
+    {
+      "tool": "execute_tool",
+      "params": {
+        "kn_id": "supply_ontology_hand",
+        "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+        "tool_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+        "arguments": {
+          "product": "U00-000080",
+          "depth": 1,
+          "include_substitute": false
+        },
+        "bkn_context": {
+          "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+          "interaction_id": "int_08480df7a820e32ecb21906b35f3c327"
+        }
+      },
+      "output": {
+        "duration_ms": 1029,
+        "status_code": 200,
+        "headers": {
+          "Date": "Mon, 12 Oct 2026 13:38:06 GMT",
+          "Content-Length": "1850",
+          "Cache-Control": "private, no-cache",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "stderr": "",
+          "result": {
+            "max_level": 3,
+            "report_grain": "summary",
+            "data_source": {
+              "knowledge_network_id": "supply_ontology_hand",
+              "loaded_datasets": [
+                "bom"
+              ]
+            },
+            "line_count": 76,
+            "l1_main_count": 5,
+            "source_rows_incl_root": 103,
+            "l1_lines": [
+              {
+                "standard_usage": 1,
+                "parent_material_code": "U00-000080",
+                "material_name": "UA500(上柴客供)整机",
+                "bom_level": 1,
+                "alt_method": "",
+                "alt_group_no": "",
+                "alt_priority": 0,
+                "is_substitute": false,
+                "bom_version": "2026-08-05T00:00:00+08:00",
+                "material_code": "815-000002"
+              },
+              {
+                "bom_level": 1,
+                "alt_method": "",
+                "is_substitute": false,
+                "material_name": "UA500衬板",
+                "alt_priority": 0,
+                "material_code": "606-000217",
+                "standard_usage": 0.08,
+                "parent_material_code": "U00-000080",
+                "alt_group_no": "",
+                "bom_version": "2026-08-05T00:00:00+08:00"
+              },
+              {
+                "material_name": "UA500夹档",
+                "parent_material_code": "U00-000080",
+                "alt_group_no": "",
+                "is_substitute": false,
+                "material_code": "606-000218",
+                "standard_usage": 0.1,
+                "alt_method": "",
+                "bom_version": "2026-08-05T00:00:00+08:00",
+                "bom_level": 1,
+                "alt_priority": 0
+              },
+              {
+                "alt_group_no": "",
+                "is_substitute": false,
+                "material_code": "606-000216",
+                "material_name": "UA500大包装箱",
+                "standard_usage": 0.02,
+                "bom_level": 1,
+                "alt_method": "",
+                "alt_priority": 0,
+                "bom_version": "2026-08-05T00:00:00+08:00",
+                "parent_material_code": "U00-000080"
+              },
+              {
+                "material_code": "849-000655",
+                "standard_usage": 1,
+                "parent_material_code": "U00-000080",
+                "alt_priority": 0,
+                "is_substitute": false,
+                "bom_level": 1,
+                "alt_group_no": "",
+                "alt_method": "",
+                "bom_version": "2026-08-05T00:00:00+08:00",
+                "material_name": "UA500安装螺丝包"
+              }
+            ],
+            "caliber": "main_only",
+            "include_substitute": false,
+            "depth": 1,
+            "rows_incl_root": 77,
+            "product_code": "U00-000080",
+            "unique_child_count": 76
+          },
+          "exit_code": 0,
+          "execution_time_ms": 0,
+          "artifacts": [],
+          "stdout": "",
+          "metrics": {
+            "cpu_time_ms": 3.5386249999760366,
+            "peak_memory_mb": null,
+            "io_read_bytes": null,
+            "io_write_bytes": null,
+            "duration_ms": 330.4934169864282
+          },
+          "session_id": "sess_aoi_0"
+        },
+        "error": ""
+      }
+    }
+  ],
+  "start": {
+    "interaction_id": "int_08480df7a820e32ecb21906b35f3c327",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+    "execution_status": "active"
+  },
+  "finish": {
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "interaction_id": "int_08480df7a820e32ecb21906b35f3c327",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9"
+  },
+  "trace": {
+    "interaction_id": "int_08480df7a820e32ecb21906b35f3c327",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+    "ordinal": 32,
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "closure_manifest": {
+      "completion_manifest_version": "3.0.0",
+      "answer_artifact_ref": "artifact:art_result_2d78a4003090d1d4913464950df0dd6c",
+      "expected_operations": [
+        {
+          "operation_id": "op_296bea8babfe489d258205dd77a5852a",
+          "required": true
+        },
+        {
+          "operation_id": "op_ad700eee08adca678353ecd2e9443124",
+          "required": true
+        },
+        {
+          "operation_id": "op_bff715c7328bd1016e4a46a7aedce301",
+          "required": true
+        }
+      ],
+      "expected_receipts": [
+        {
+          "receipt_id": "rcpt_52ed4c110ee34df2062e87a7980d781e",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_cb1297c024d074ffa71dfd5cbaeb2d0f",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_f60b38ee2cca82c60cb4bdfcb61c854c",
+          "required": true
+        }
+      ],
+      "completion_reason": "completed"
+    },
+    "lease_token": "[REDACTED]",
+    "lease_epoch": 1,
+    "lease_version": 5,
+    "lease_expires_at": "2026-10-12T13:43:05.741054Z",
+    "row_version": 8,
+    "created_at": "2026-10-12T13:38:05.235992Z",
+    "updated_at": "2026-10-12T13:38:06.355772Z",
+    "terminal_at": "2026-10-12T13:38:06.355772Z"
+  },
+  "receipts": [
+    {
+      "receipt_id": "rcpt_52ed4c110ee34df2062e87a7980d781e",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_08480df7a820e32ecb21906b35f3c327",
+      "operation_id": "op_296bea8babfe489d258205dd77a5852a",
+      "attempt": 1,
+      "operation_key": "function:fb434edd9f41935cb6637865c5e0928c",
+      "tool_name": "01a13053-06ee-7145-a3e4-4f1596425239",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_1a96affc-c90c-4425-9eda-fd7ca6ca3eaf",
+      "trace_id": "e93c33ea0283a8da6010ee50ccc5f259",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "function",
+          "ref_id": "function:supply_ontology_hand:01a13053-06ee-7145-a3e4-4f1596425239",
+          "version": "01a13053-06eb-78a6-b2d8-84d7b6b6fef8",
+          "display_hint": "BOM清单"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:38:05.294428Z",
+      "terminal_at": "2026-10-12T13:38:06.334745Z"
+    },
+    {
+      "receipt_id": "rcpt_cb1297c024d074ffa71dfd5cbaeb2d0f",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_08480df7a820e32ecb21906b35f3c327",
+      "operation_id": "op_bff715c7328bd1016e4a46a7aedce301",
+      "attempt": 1,
+      "operation_key": "mcp:edffe27bacc082304a95878ae93f12d8",
+      "tool_name": "execute_tool",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_1a96affc-c90c-4425-9eda-fd7ca6ca3eaf",
+      "trace_id": "e93c33ea0283a8da6010ee50ccc5f259",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:38:05.24937Z",
+      "terminal_at": "2026-10-12T13:38:06.34138Z"
+    },
+    {
+      "receipt_id": "rcpt_f60b38ee2cca82c60cb4bdfcb61c854c",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_08480df7a820e32ecb21906b35f3c327",
+      "operation_id": "op_ad700eee08adca678353ecd2e9443124",
+      "attempt": 1,
+      "operation_key": "mcp:cc01ba5d932851194a126242c3f57a8f",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_68074fb8-f2b4-4c2a-8c81-6bb916dc45f9",
+      "trace_id": "9b41a73cf6f6993f469806fe7bbacffa",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_5a3c1418f65d13f0306bbd001a65839d5078a1d028953a23f387c20c97606adb"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:38:05.741054Z",
+      "terminal_at": "2026-10-12T13:38:05.771843Z"
+    }
+  ]
+}

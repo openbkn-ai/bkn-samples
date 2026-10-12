@@ -1,0 +1,4096 @@
+{
+  "id": "S-05",
+  "question": "先承接382-000005共50套，再承接P61-000351共60套，均不启用替代料、全仓、只用库存不计PO。两产品共有多少种主料？按此顺序共享同一库存池，两单是否分别覆盖？列出最终缺口。",
+  "calls": [
+    {
+      "tool": "execute_tool",
+      "params": {
+        "kn_id": "supply_ontology_hand",
+        "toolbox_id": "01a13046-a4fb-7d6a-a8b9-9ed42cf703cf",
+        "tool_id": "01a13046-aad0-7a2c-8544-9dfb1d71e270",
+        "arguments": {
+          "products": [
+            "382-000005",
+            "P61-000351"
+          ],
+          "depth": 99,
+          "include_substitute": false
+        },
+        "bkn_context": {
+          "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+          "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f"
+        }
+      },
+      "output": {
+        "body": {
+          "stdout": "",
+          "stderr": "",
+          "result": {
+            "products": [
+              "382-000005",
+              "P61-000351"
+            ],
+            "include_substitute": false,
+            "depth": 99,
+            "shared_codes": [
+              "356-000081",
+              "358-000091",
+              "454-000009",
+              "454-000050",
+              "454-000258",
+              "539-000001",
+              "539-000002",
+              "539-000005",
+              "539-000008",
+              "539-000014",
+              "539-000018",
+              "539-000021",
+              "539-000022",
+              "539-000026",
+              "539-000028",
+              "539-000031",
+              "539-000120",
+              "539-000147",
+              "539-000382",
+              "725-000007",
+              "725-000012",
+              "725-000019",
+              "725-000024",
+              "725-000026",
+              "725-000028",
+              "725-000029",
+              "725-000031",
+              "725-000048",
+              "725-000070",
+              "725-000086",
+              "725-000089",
+              "725-000101",
+              "725-000104",
+              "725-000116",
+              "725-000174",
+              "725-000177",
+              "972-000270",
+              "972-000273"
+            ],
+            "shared_count": 38,
+            "details": [
+              {
+                "material_code": "356-000081",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "standard_usage": 1,
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "material_name": "IPEX天线座",
+                      "alt_group_no": "",
+                      "bom_level": 4,
+                      "material_code": "356-000081"
+                    },
+                    {
+                      "alt_group_no": "",
+                      "material_code": "356-000081",
+                      "material_name": "IPEX天线座",
+                      "bom_level": 4,
+                      "standard_usage": 1,
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000655",
+                      "alt_priority": 0
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "material_code": "356-000081",
+                      "material_name": "IPEX天线座",
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "standard_usage": 3,
+                      "parent_material_code": "588-000570"
+                    },
+                    {
+                      "parent_material_code": "588-000430",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 3,
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "material_code": "356-000081",
+                      "material_name": "IPEX天线座",
+                      "alt_group_no": ""
+                    },
+                    {
+                      "alt_method": "",
+                      "material_code": "356-000081",
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_name": "IPEX天线座",
+                      "standard_usage": 3
+                    },
+                    {
+                      "material_code": "356-000081",
+                      "standard_usage": 3,
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000570",
+                      "material_name": "IPEX天线座",
+                      "alt_method": ""
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "358-000091",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "is_substitute": false,
+                      "material_name": "NPN三极管",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "parent_material_code": "588-000712",
+                      "bom_level": 4,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "358-000091",
+                      "standard_usage": 1
+                    },
+                    {
+                      "alt_method": "替代",
+                      "is_substitute": false,
+                      "material_code": "358-000091",
+                      "standard_usage": 12,
+                      "alt_group_no": "76",
+                      "material_name": "NPN三极管",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000726",
+                      "bom_level": 4,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000655",
+                      "material_code": "358-000091",
+                      "alt_group_no": "17",
+                      "material_name": "NPN三极管",
+                      "alt_method": "替代",
+                      "standard_usage": 1,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 4
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "material_name": "NPN三极管",
+                      "material_code": "358-000091",
+                      "standard_usage": 16,
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000730",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false
+                    }
+                  ]
+                }
+              },
+              {
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "standard_usage": 2,
+                      "material_code": "454-000009",
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "material_name": "肖特基二极管",
+                      "bom_level": 4
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "454-000009",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "material_name": "肖特基二极管",
+                      "standard_usage": 1,
+                      "parent_material_code": "588-000570",
+                      "bom_level": 3,
+                      "alt_method": ""
+                    },
+                    {
+                      "alt_group_no": "",
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "454-000009",
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "standard_usage": 1,
+                      "material_name": "肖特基二极管"
+                    },
+                    {
+                      "standard_usage": 1,
+                      "is_substitute": false,
+                      "material_code": "454-000009",
+                      "material_name": "肖特基二极管",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430"
+                    },
+                    {
+                      "is_substitute": false,
+                      "standard_usage": 1,
+                      "alt_group_no": "",
+                      "material_code": "454-000009",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "parent_material_code": "588-000570",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "material_name": "肖特基二极管"
+                    }
+                  ]
+                },
+                "material_code": "454-000009"
+              },
+              {
+                "material_code": "454-000050",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "material_code": "454-000050",
+                      "is_substitute": false,
+                      "alt_group_no": "",
+                      "material_name": "ESD二极管",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000726",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 2,
+                      "bom_level": 4,
+                      "alt_method": ""
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "standard_usage": 7,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "parent_material_code": "588-000570",
+                      "material_code": "454-000050",
+                      "material_name": "ESD二极管",
+                      "bom_level": 3,
+                      "is_substitute": false
+                    },
+                    {
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "ESD二极管",
+                      "alt_group_no": "",
+                      "standard_usage": 9,
+                      "is_substitute": false,
+                      "material_code": "454-000050",
+                      "bom_level": 3,
+                      "alt_method": ""
+                    },
+                    {
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "standard_usage": 9,
+                      "is_substitute": false,
+                      "material_code": "454-000050",
+                      "material_name": "ESD二极管"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "ESD二极管",
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "material_code": "454-000050",
+                      "parent_material_code": "588-000570",
+                      "alt_method": "",
+                      "standard_usage": 7
+                    },
+                    {
+                      "standard_usage": 8,
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "material_code": "454-000050",
+                      "material_name": "ESD二极管",
+                      "alt_group_no": "",
+                      "parent_material_code": "588-000730",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "454-000258",
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 2,
+                      "parent_material_code": "588-000570",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "material_name": "ESD二极管",
+                      "material_code": "454-000258",
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "alt_group_no": ""
+                    },
+                    {
+                      "material_code": "454-000258",
+                      "material_name": "ESD二极管",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 2,
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570"
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "parent_material_code": "588-000726",
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 18,
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "alt_group_no": "",
+                      "material_name": "ESD二极管",
+                      "material_code": "454-000258",
+                      "bom_level": 4
+                    },
+                    {
+                      "material_code": "454-000258",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000655",
+                      "alt_group_no": "",
+                      "material_name": "ESD二极管",
+                      "alt_method": "",
+                      "standard_usage": 11,
+                      "bom_level": 4,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "material_name": "ESD二极管",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000653",
+                      "bom_level": 5,
+                      "material_code": "454-000258",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 6
+                    }
+                  ]
+                }
+              },
+              {
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "standard_usage": 19,
+                      "is_substitute": false,
+                      "material_code": "539-000001",
+                      "bom_level": 4,
+                      "alt_group_no": "83",
+                      "alt_method": "替代",
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "material_name": "贴片电阻",
+                      "alt_method": "替代",
+                      "material_code": "539-000001",
+                      "bom_level": 4,
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000655",
+                      "standard_usage": 1,
+                      "alt_group_no": "22",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "bom_level": 5,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 6,
+                      "material_code": "539-000001",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000620",
+                      "alt_method": "",
+                      "alt_group_no": ""
+                    },
+                    {
+                      "alt_method": "替代",
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000653",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 1,
+                      "material_code": "539-000001",
+                      "alt_group_no": "8",
+                      "bom_level": 5
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "is_substitute": false,
+                      "standard_usage": 16,
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000570",
+                      "alt_priority": 0,
+                      "material_code": "539-000001",
+                      "bom_level": 3
+                    },
+                    {
+                      "standard_usage": 16,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "material_code": "539-000001"
+                    },
+                    {
+                      "alt_method": "",
+                      "material_code": "539-000001",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000430",
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "standard_usage": 16
+                    },
+                    {
+                      "standard_usage": 16,
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "material_name": "贴片电阻",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "parent_material_code": "588-000570",
+                      "material_code": "539-000001",
+                      "is_substitute": false
+                    },
+                    {
+                      "parent_material_code": "588-000730",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 2,
+                      "material_code": "539-000001",
+                      "bom_level": 3,
+                      "alt_priority": 0
+                    }
+                  ]
+                },
+                "material_code": "539-000001"
+              },
+              {
+                "material_code": "539-000002",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "bom_level": 4,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "material_code": "539-000002",
+                      "parent_material_code": "588-000712",
+                      "alt_group_no": "",
+                      "standard_usage": 22,
+                      "alt_priority": 0,
+                      "material_name": "贴片电阻"
+                    },
+                    {
+                      "material_code": "539-000002",
+                      "parent_material_code": "588-000726",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "bom_level": 4,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 54,
+                      "alt_priority": 0
+                    },
+                    {
+                      "alt_method": "",
+                      "parent_material_code": "588-000655",
+                      "material_code": "539-000002",
+                      "bom_level": 4,
+                      "alt_priority": 0,
+                      "material_name": "贴片电阻",
+                      "standard_usage": 6,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": ""
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "standard_usage": 10,
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000570",
+                      "material_code": "539-000002",
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false
+                    },
+                    {
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "material_code": "539-000002",
+                      "standard_usage": 11,
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "parent_material_code": "588-000430",
+                      "material_name": "贴片电阻",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "material_code": "539-000002",
+                      "standard_usage": 11,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "alt_priority": 0
+                    },
+                    {
+                      "standard_usage": 10,
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "material_code": "539-000002",
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "",
+                      "alt_method": ""
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "539-000005",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "parent_material_code": "588-000712",
+                      "material_name": "贴片电阻",
+                      "bom_level": 4,
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 1,
+                      "material_code": "539-000005",
+                      "alt_group_no": "",
+                      "is_substitute": false
+                    },
+                    {
+                      "material_code": "539-000005",
+                      "standard_usage": 47,
+                      "alt_group_no": "80",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000726",
+                      "material_name": "贴片电阻",
+                      "is_substitute": false,
+                      "bom_level": 4,
+                      "alt_method": "替代"
+                    },
+                    {
+                      "material_code": "539-000005",
+                      "bom_level": 4,
+                      "alt_method": "替代",
+                      "standard_usage": 4,
+                      "alt_group_no": "20",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000655",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "standard_usage": 3,
+                      "alt_priority": 0,
+                      "bom_level": 5,
+                      "parent_material_code": "588-000620",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000005",
+                      "alt_method": ""
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 11,
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "alt_group_no": "91",
+                      "parent_material_code": "588-000570",
+                      "material_code": "539-000005",
+                      "alt_method": "替代"
+                    },
+                    {
+                      "material_name": "贴片电阻",
+                      "alt_method": "替代",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000430",
+                      "material_code": "539-000005",
+                      "is_substitute": false,
+                      "standard_usage": 11,
+                      "alt_group_no": "38"
+                    },
+                    {
+                      "standard_usage": 11,
+                      "parent_material_code": "588-000430",
+                      "is_substitute": false,
+                      "alt_group_no": "38",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "material_code": "539-000005",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻"
+                    },
+                    {
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "91",
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "material_code": "539-000005",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 11,
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "parent_material_code": "588-000730",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "standard_usage": 2,
+                      "material_code": "539-000005"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "539-000008",
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "standard_usage": 34,
+                      "material_code": "539-000008",
+                      "parent_material_code": "588-000570",
+                      "material_name": "贴片电阻",
+                      "is_substitute": false,
+                      "alt_group_no": "72"
+                    },
+                    {
+                      "standard_usage": 32,
+                      "alt_method": "替代",
+                      "material_code": "539-000008",
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "alt_group_no": "37",
+                      "is_substitute": false
+                    },
+                    {
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000008",
+                      "parent_material_code": "588-000430",
+                      "material_name": "贴片电阻",
+                      "bom_level": 3,
+                      "standard_usage": 32,
+                      "alt_group_no": "37"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000570",
+                      "standard_usage": 34,
+                      "alt_group_no": "72",
+                      "bom_level": 3,
+                      "alt_method": "替代",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "material_code": "539-000008"
+                    },
+                    {
+                      "alt_group_no": "",
+                      "material_name": "贴片电阻",
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000730",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000008",
+                      "standard_usage": 12,
+                      "is_substitute": false
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "bom_level": 4,
+                      "parent_material_code": "588-000712",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 5,
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "material_code": "539-000008",
+                      "material_name": "贴片电阻",
+                      "alt_priority": 0
+                    },
+                    {
+                      "is_substitute": false,
+                      "standard_usage": 87,
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "material_code": "539-000008",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 4,
+                      "alt_group_no": "77",
+                      "alt_method": "替代",
+                      "material_name": "贴片电阻"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "替代",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 3,
+                      "material_code": "539-000008",
+                      "bom_level": 4,
+                      "is_substitute": false,
+                      "parent_material_code": "588-000655",
+                      "alt_group_no": "19"
+                    },
+                    {
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "7",
+                      "parent_material_code": "588-000653",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000008",
+                      "standard_usage": 1,
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "bom_level": 5,
+                      "is_substitute": false
+                    }
+                  ]
+                }
+              },
+              {
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000726",
+                      "material_code": "539-000014",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 1,
+                      "bom_level": 4,
+                      "alt_method": ""
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "standard_usage": 10,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "material_code": "539-000014",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000570",
+                      "alt_method": ""
+                    },
+                    {
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000014",
+                      "standard_usage": 10,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "material_name": "贴片电阻",
+                      "is_substitute": false
+                    },
+                    {
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "parent_material_code": "588-000430",
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "material_code": "539-000014",
+                      "standard_usage": 10
+                    },
+                    {
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "",
+                      "material_code": "539-000014",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 10,
+                      "alt_method": ""
+                    }
+                  ]
+                },
+                "material_code": "539-000014"
+              },
+              {
+                "material_code": "539-000018",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "material_name": "贴片电阻",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000712",
+                      "alt_priority": 0,
+                      "bom_level": 4,
+                      "alt_method": "",
+                      "standard_usage": 2,
+                      "material_code": "539-000018",
+                      "alt_group_no": ""
+                    },
+                    {
+                      "bom_level": 4,
+                      "material_name": "贴片电阻",
+                      "material_code": "539-000018",
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "standard_usage": 4,
+                      "alt_method": "",
+                      "is_substitute": false
+                    },
+                    {
+                      "parent_material_code": "588-000620",
+                      "is_substitute": false,
+                      "alt_method": "",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 2,
+                      "bom_level": 5,
+                      "material_code": "539-000018",
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "material_code": "539-000018",
+                      "parent_material_code": "588-000570",
+                      "material_name": "贴片电阻",
+                      "is_substitute": false,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "standard_usage": 3,
+                      "bom_level": 3,
+                      "alt_priority": 0
+                    },
+                    {
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "material_code": "539-000018",
+                      "bom_level": 3,
+                      "standard_usage": 3,
+                      "parent_material_code": "588-000430"
+                    },
+                    {
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000018",
+                      "alt_priority": 0,
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "standard_usage": 3,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430",
+                      "alt_method": ""
+                    },
+                    {
+                      "is_substitute": false,
+                      "alt_method": "",
+                      "material_code": "539-000018",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 3,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3
+                    },
+                    {
+                      "bom_level": 3,
+                      "parent_material_code": "588-000730",
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000018",
+                      "standard_usage": 4
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "539-000021",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "88",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "parent_material_code": "588-000726",
+                      "material_code": "539-000021",
+                      "standard_usage": 2,
+                      "alt_method": "替代",
+                      "bom_level": 4
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "material_code": "539-000021",
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000570",
+                      "is_substitute": false,
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "standard_usage": 1,
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000021",
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000430",
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "standard_usage": 1
+                    },
+                    {
+                      "alt_priority": 0,
+                      "standard_usage": 1,
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "material_code": "539-000021",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000430"
+                    },
+                    {
+                      "is_substitute": false,
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "standard_usage": 1,
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "material_name": "贴片电阻",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000021",
+                      "parent_material_code": "588-000570"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "539-000022",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "parent_material_code": "588-000712",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "material_code": "539-000022",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 4,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 4
+                    },
+                    {
+                      "material_code": "539-000022",
+                      "material_name": "贴片电阻",
+                      "is_substitute": false,
+                      "alt_method": "替代",
+                      "alt_group_no": "89",
+                      "standard_usage": 3,
+                      "bom_level": 4,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000726"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "is_substitute": false,
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "material_code": "539-000022",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 4,
+                      "alt_method": "",
+                      "parent_material_code": "588-000730",
+                      "alt_priority": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "539-000026",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "alt_method": "",
+                      "material_code": "539-000026",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000712",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "bom_level": 4,
+                      "alt_group_no": "",
+                      "standard_usage": 1
+                    },
+                    {
+                      "material_name": "贴片电阻",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "material_code": "539-000026",
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_level": 4,
+                      "standard_usage": 2
+                    },
+                    {
+                      "parent_material_code": "588-000655",
+                      "material_name": "贴片电阻",
+                      "bom_level": 4,
+                      "alt_group_no": "",
+                      "standard_usage": 1,
+                      "material_code": "539-000026",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "alt_method": ""
+                    },
+                    {
+                      "standard_usage": 3,
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000653",
+                      "alt_method": "",
+                      "bom_level": 5,
+                      "material_code": "539-000026",
+                      "is_substitute": false
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 7,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000570",
+                      "material_code": "539-000026"
+                    },
+                    {
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "parent_material_code": "588-000430",
+                      "material_code": "539-000026",
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "standard_usage": 10,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0
+                    },
+                    {
+                      "is_substitute": false,
+                      "standard_usage": 10,
+                      "parent_material_code": "588-000430",
+                      "material_code": "539-000026",
+                      "material_name": "贴片电阻",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "alt_group_no": ""
+                    },
+                    {
+                      "material_code": "539-000026",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 7,
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "parent_material_code": "588-000570"
+                    },
+                    {
+                      "parent_material_code": "588-000730",
+                      "alt_priority": 0,
+                      "material_name": "贴片电阻",
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "alt_method": "",
+                      "alt_group_no": "",
+                      "standard_usage": 6,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000026"
+                    }
+                  ]
+                }
+              },
+              {
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000730",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 16,
+                      "bom_level": 3,
+                      "material_code": "539-000028"
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "parent_material_code": "588-000712",
+                      "standard_usage": 1,
+                      "alt_priority": 0,
+                      "material_code": "539-000028",
+                      "is_substitute": false,
+                      "bom_level": 4,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "material_name": "贴片电阻",
+                      "alt_group_no": ""
+                    },
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000726",
+                      "alt_method": "替代",
+                      "standard_usage": 8,
+                      "alt_group_no": "82",
+                      "alt_priority": 0,
+                      "material_code": "539-000028",
+                      "bom_level": 4
+                    }
+                  ]
+                },
+                "material_code": "539-000028"
+              },
+              {
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "alt_priority": 0,
+                      "material_name": "贴片电阻",
+                      "bom_level": 4,
+                      "alt_method": "",
+                      "standard_usage": 8,
+                      "parent_material_code": "588-000726",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "material_code": "539-000031",
+                      "is_substitute": false
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000730",
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "material_name": "贴片电阻",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000031",
+                      "standard_usage": 12,
+                      "is_substitute": false
+                    }
+                  ]
+                },
+                "material_code": "539-000031"
+              },
+              {
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "standard_usage": 1,
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_code": "539-000120",
+                      "parent_material_code": "588-000570",
+                      "material_name": "贴片电阻",
+                      "alt_method": ""
+                    },
+                    {
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 1,
+                      "material_code": "539-000120",
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "is_substitute": false
+                    },
+                    {
+                      "alt_priority": 0,
+                      "material_code": "539-000120",
+                      "standard_usage": 1,
+                      "alt_method": "",
+                      "material_name": "贴片电阻",
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000430",
+                      "alt_group_no": ""
+                    },
+                    {
+                      "standard_usage": 1,
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "material_code": "539-000120",
+                      "parent_material_code": "588-000570",
+                      "alt_priority": 0,
+                      "alt_group_no": "",
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻"
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "alt_method": "",
+                      "alt_group_no": "",
+                      "material_name": "贴片电阻",
+                      "is_substitute": false,
+                      "standard_usage": 4,
+                      "bom_level": 4,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000120",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000726"
+                    }
+                  ]
+                },
+                "material_code": "539-000120"
+              },
+              {
+                "material_code": "539-000147",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "material_code": "539-000147",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 4,
+                      "alt_priority": 0,
+                      "standard_usage": 4,
+                      "material_name": "贴片电阻",
+                      "parent_material_code": "588-000726",
+                      "alt_group_no": "",
+                      "alt_method": ""
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570",
+                      "alt_method": "",
+                      "standard_usage": 1,
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_code": "539-000147",
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000147",
+                      "standard_usage": 1,
+                      "material_name": "贴片电阻"
+                    },
+                    {
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "alt_method": "",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 1,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000430",
+                      "material_code": "539-000147"
+                    },
+                    {
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "material_code": "539-000147",
+                      "is_substitute": false,
+                      "parent_material_code": "588-000570",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 1,
+                      "bom_level": 3,
+                      "alt_group_no": ""
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "539-000382",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "material_code": "539-000382",
+                      "bom_level": 4,
+                      "parent_material_code": "588-000726",
+                      "is_substitute": false,
+                      "alt_group_no": "",
+                      "material_name": "贴片电阻",
+                      "alt_method": "",
+                      "standard_usage": 1
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "parent_material_code": "588-000570",
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "standard_usage": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片电阻",
+                      "alt_group_no": "",
+                      "material_code": "539-000382"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_code": "539-000382",
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 2,
+                      "bom_level": 3,
+                      "alt_group_no": ""
+                    },
+                    {
+                      "material_name": "贴片电阻",
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 2,
+                      "alt_priority": 0,
+                      "material_code": "539-000382",
+                      "parent_material_code": "588-000430",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "bom_level": 3
+                    },
+                    {
+                      "is_substitute": false,
+                      "material_name": "贴片电阻",
+                      "alt_method": "",
+                      "standard_usage": 3,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "539-000382",
+                      "alt_priority": 0,
+                      "bom_level": 3
+                    },
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "material_code": "539-000382",
+                      "is_substitute": false,
+                      "parent_material_code": "588-000730",
+                      "material_name": "贴片电阻",
+                      "standard_usage": 2,
+                      "alt_priority": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000007",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "standard_usage": 2,
+                      "alt_group_no": "",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 4,
+                      "alt_method": "",
+                      "parent_material_code": "588-000726",
+                      "is_substitute": false,
+                      "material_code": "725-000007",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "parent_material_code": "588-000430",
+                      "alt_group_no": "",
+                      "material_code": "725-000007",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 2,
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "bom_level": 3
+                    },
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430",
+                      "alt_group_no": "",
+                      "material_code": "725-000007",
+                      "standard_usage": 2,
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "alt_priority": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000012",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "standard_usage": 109,
+                      "alt_group_no": "55",
+                      "material_code": "725-000012",
+                      "is_substitute": false,
+                      "bom_level": 4,
+                      "parent_material_code": "588-000726",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "material_name": "贴片陶瓷电容"
+                    },
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000012",
+                      "alt_group_no": "14",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "alt_method": "替代",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 4,
+                      "parent_material_code": "588-000655",
+                      "standard_usage": 11
+                    },
+                    {
+                      "alt_group_no": "10",
+                      "alt_priority": 0,
+                      "material_code": "725-000012",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 5,
+                      "parent_material_code": "588-000620",
+                      "alt_method": "替代",
+                      "bom_level": 5,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "bom_level": 5,
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 1,
+                      "parent_material_code": "588-000653",
+                      "alt_group_no": "5",
+                      "alt_method": "替代",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000012"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000570",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "替代",
+                      "standard_usage": 56,
+                      "bom_level": 3,
+                      "material_code": "725-000012",
+                      "alt_group_no": "83"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "material_name": "贴片陶瓷电容",
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "parent_material_code": "588-000430",
+                      "alt_method": "",
+                      "material_code": "725-000012",
+                      "bom_level": 3,
+                      "standard_usage": 56
+                    },
+                    {
+                      "parent_material_code": "588-000430",
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "standard_usage": 56,
+                      "alt_priority": 0,
+                      "alt_group_no": "",
+                      "bom_level": 3,
+                      "material_code": "725-000012",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "83",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "alt_method": "替代",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 56,
+                      "material_code": "725-000012"
+                    },
+                    {
+                      "alt_method": "替代",
+                      "alt_group_no": "12",
+                      "standard_usage": 26,
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000730",
+                      "is_substitute": false,
+                      "material_code": "725-000012",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000019",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "bom_level": 4,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "material_code": "725-000019",
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "standard_usage": 5,
+                      "material_name": "贴片陶瓷电容"
+                    },
+                    {
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "bom_level": 4,
+                      "alt_priority": 0,
+                      "standard_usage": 6,
+                      "material_name": "贴片陶瓷电容",
+                      "is_substitute": false,
+                      "material_code": "725-000019",
+                      "parent_material_code": "588-000655"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "standard_usage": 10,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "",
+                      "alt_group_no": "",
+                      "material_code": "725-000019",
+                      "parent_material_code": "588-000570"
+                    },
+                    {
+                      "material_code": "725-000019",
+                      "standard_usage": 9,
+                      "material_name": "贴片陶瓷电容",
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": ""
+                    },
+                    {
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "material_code": "725-000019",
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "standard_usage": 9,
+                      "material_name": "贴片陶瓷电容",
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0
+                    },
+                    {
+                      "standard_usage": 10,
+                      "alt_group_no": "",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000570",
+                      "material_code": "725-000019",
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "is_substitute": false
+                    },
+                    {
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000730",
+                      "bom_level": 3,
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 4,
+                      "is_substitute": false,
+                      "material_code": "725-000019"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000024",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 3,
+                      "alt_group_no": "67",
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "bom_level": 4,
+                      "is_substitute": false,
+                      "material_code": "725-000024",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000726"
+                    },
+                    {
+                      "material_code": "725-000024",
+                      "alt_method": "替代",
+                      "standard_usage": 3,
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "parent_material_code": "588-000655",
+                      "bom_level": 4,
+                      "is_substitute": false,
+                      "alt_group_no": "15"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "alt_method": "替代",
+                      "standard_usage": 1,
+                      "material_name": "贴片陶瓷电容",
+                      "material_code": "725-000024",
+                      "bom_level": 3,
+                      "alt_group_no": "86",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000570",
+                      "alt_priority": 0
+                    },
+                    {
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "material_name": "贴片陶瓷电容",
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "material_code": "725-000024",
+                      "standard_usage": 1,
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "material_name": "贴片陶瓷电容",
+                      "alt_priority": 0,
+                      "material_code": "725-000024",
+                      "standard_usage": 1,
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000430"
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "standard_usage": 1,
+                      "alt_method": "替代",
+                      "material_code": "725-000024",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "86",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000026",
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "alt_group_no": "63",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "alt_method": "替代",
+                      "alt_priority": 0,
+                      "material_name": "贴片陶瓷电容",
+                      "material_code": "725-000026",
+                      "standard_usage": 2,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570"
+                    },
+                    {
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "",
+                      "parent_material_code": "588-000430",
+                      "standard_usage": 2,
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "material_code": "725-000026"
+                    },
+                    {
+                      "standard_usage": 2,
+                      "material_name": "贴片陶瓷电容",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "material_code": "725-000026",
+                      "parent_material_code": "588-000430"
+                    },
+                    {
+                      "standard_usage": 2,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "63",
+                      "alt_priority": 0,
+                      "material_code": "725-000026",
+                      "is_substitute": false,
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "alt_method": "替代",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "parent_material_code": "588-000726",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000026",
+                      "alt_group_no": "72",
+                      "alt_priority": 0,
+                      "standard_usage": 2,
+                      "bom_level": 4,
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "替代"
+                    }
+                  ]
+                }
+              },
+              {
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000726",
+                      "material_code": "725-000028",
+                      "standard_usage": 10,
+                      "bom_level": 4,
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "alt_group_no": "61",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "替代"
+                    },
+                    {
+                      "material_code": "725-000028",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 1,
+                      "alt_method": "替代",
+                      "alt_group_no": "8",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "bom_level": 5,
+                      "parent_material_code": "588-000620",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "alt_method": "替代",
+                      "standard_usage": 5,
+                      "alt_group_no": "93",
+                      "material_code": "725-000028",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "material_name": "贴片陶瓷电容",
+                      "parent_material_code": "588-000570",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 3,
+                      "parent_material_code": "588-000430",
+                      "material_code": "725-000028",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "alt_group_no": "",
+                      "alt_method": ""
+                    },
+                    {
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_priority": 0,
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "material_code": "725-000028",
+                      "standard_usage": 3,
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "alt_method": "替代",
+                      "parent_material_code": "588-000570",
+                      "material_code": "725-000028",
+                      "standard_usage": 5,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "alt_group_no": "93"
+                    }
+                  ]
+                },
+                "material_code": "725-000028"
+              },
+              {
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "alt_group_no": "66",
+                      "alt_method": "替代",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 4,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000029",
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "standard_usage": 7,
+                      "is_substitute": false
+                    },
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "is_substitute": false,
+                      "material_code": "725-000029",
+                      "standard_usage": 1,
+                      "parent_material_code": "588-000620",
+                      "alt_group_no": "9",
+                      "alt_priority": 0,
+                      "bom_level": 5,
+                      "alt_method": "替代"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "material_code": "725-000029",
+                      "parent_material_code": "588-000730",
+                      "alt_group_no": "",
+                      "standard_usage": 4,
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    }
+                  ]
+                },
+                "material_code": "725-000029"
+              },
+              {
+                "material_code": "725-000031",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "parent_material_code": "588-000726",
+                      "standard_usage": 7,
+                      "material_code": "725-000031",
+                      "alt_group_no": "60",
+                      "alt_priority": 0,
+                      "bom_level": 4,
+                      "alt_method": "替代",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000031",
+                      "parent_material_code": "588-000570",
+                      "alt_priority": 0,
+                      "alt_group_no": "85",
+                      "is_substitute": false,
+                      "standard_usage": 11,
+                      "alt_method": "替代",
+                      "bom_level": 3
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000430",
+                      "standard_usage": 9,
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_code": "725-000031",
+                      "alt_method": "替代",
+                      "alt_group_no": "25",
+                      "bom_level": 3
+                    },
+                    {
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 9,
+                      "material_code": "725-000031",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "alt_group_no": "26",
+                      "parent_material_code": "588-000430",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "替代"
+                    },
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000430",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "material_code": "725-000031",
+                      "alt_method": "替代",
+                      "standard_usage": 9,
+                      "material_name": "贴片陶瓷电容",
+                      "alt_group_no": "27"
+                    },
+                    {
+                      "material_code": "725-000031",
+                      "material_name": "贴片陶瓷电容",
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "standard_usage": 9,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "alt_group_no": "25",
+                      "alt_method": "替代"
+                    },
+                    {
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "26",
+                      "material_code": "725-000031",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "standard_usage": 9,
+                      "alt_method": "替代",
+                      "bom_level": 3
+                    },
+                    {
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_group_no": "27",
+                      "alt_method": "替代",
+                      "material_code": "725-000031",
+                      "parent_material_code": "588-000430",
+                      "is_substitute": false,
+                      "standard_usage": 9,
+                      "bom_level": 3
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570",
+                      "alt_method": "替代",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "material_code": "725-000031",
+                      "standard_usage": 11,
+                      "alt_group_no": "85"
+                    },
+                    {
+                      "alt_group_no": "",
+                      "parent_material_code": "588-000730",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "material_code": "725-000031",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 2
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000048",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 4,
+                      "material_name": "贴片陶瓷电容",
+                      "material_code": "725-000048",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "standard_usage": 8,
+                      "parent_material_code": "588-000726"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "parent_material_code": "588-000570",
+                      "material_code": "725-000048",
+                      "standard_usage": 8,
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "alt_group_no": ""
+                    },
+                    {
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "material_code": "725-000048",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 8,
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000070",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "alt_group_no": "71",
+                      "standard_usage": 10,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_priority": 0,
+                      "material_code": "725-000070",
+                      "alt_method": "替代",
+                      "parent_material_code": "588-000726",
+                      "is_substitute": false,
+                      "bom_level": 4
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "material_code": "725-000070",
+                      "standard_usage": 3,
+                      "parent_material_code": "588-000570",
+                      "bom_level": 3,
+                      "alt_method": "替代",
+                      "alt_group_no": "61",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "standard_usage": 3,
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000070",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "alt_group_no": ""
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "parent_material_code": "588-000430",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "material_code": "725-000070",
+                      "alt_priority": 0,
+                      "standard_usage": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "is_substitute": false,
+                      "parent_material_code": "588-000570",
+                      "alt_method": "替代",
+                      "alt_group_no": "61",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 3,
+                      "material_code": "725-000070",
+                      "bom_level": 3,
+                      "alt_priority": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000086",
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "standard_usage": 2,
+                      "material_code": "725-000086",
+                      "alt_group_no": "90",
+                      "parent_material_code": "588-000570",
+                      "alt_method": "替代",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "is_substitute": false
+                    },
+                    {
+                      "alt_group_no": "",
+                      "material_code": "725-000086",
+                      "is_substitute": false,
+                      "material_name": "贴片陶瓷电容",
+                      "parent_material_code": "588-000430",
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 2
+                    },
+                    {
+                      "bom_level": 3,
+                      "standard_usage": 2,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "material_name": "贴片陶瓷电容",
+                      "material_code": "725-000086",
+                      "parent_material_code": "588-000430",
+                      "alt_group_no": ""
+                    },
+                    {
+                      "alt_group_no": "90",
+                      "alt_method": "替代",
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "material_code": "725-000086",
+                      "parent_material_code": "588-000570",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 2
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "material_code": "725-000086",
+                      "bom_level": 4,
+                      "parent_material_code": "588-000712",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "standard_usage": 1,
+                      "alt_group_no": "",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000089",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 41,
+                      "bom_level": 4,
+                      "parent_material_code": "588-000726",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "material_code": "725-000089"
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "standard_usage": 2,
+                      "material_code": "725-000089",
+                      "parent_material_code": "588-000655",
+                      "bom_level": 4,
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "alt_group_no": "",
+                      "parent_material_code": "588-000570",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 29,
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "material_code": "725-000089",
+                      "material_name": "贴片陶瓷电容",
+                      "is_substitute": false
+                    },
+                    {
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 31,
+                      "parent_material_code": "588-000430",
+                      "material_code": "725-000089",
+                      "alt_method": "",
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "material_code": "725-000089",
+                      "standard_usage": 31,
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "parent_material_code": "588-000430",
+                      "alt_method": ""
+                    },
+                    {
+                      "material_code": "725-000089",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 29,
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "parent_material_code": "588-000570"
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "standard_usage": 12,
+                      "parent_material_code": "588-000730",
+                      "material_code": "725-000089",
+                      "alt_group_no": ""
+                    }
+                  ]
+                }
+              },
+              {
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "bom_level": 4,
+                      "alt_group_no": "",
+                      "standard_usage": 6,
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0,
+                      "material_code": "725-000101",
+                      "material_name": "贴片陶瓷电容"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 5,
+                      "alt_group_no": "60",
+                      "is_substitute": false,
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "material_code": "725-000101",
+                      "parent_material_code": "588-000570"
+                    },
+                    {
+                      "standard_usage": 5,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "parent_material_code": "588-000430",
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "material_code": "725-000101",
+                      "material_name": "贴片陶瓷电容"
+                    },
+                    {
+                      "is_substitute": false,
+                      "alt_method": "",
+                      "alt_group_no": "",
+                      "standard_usage": 5,
+                      "bom_level": 3,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_priority": 0,
+                      "parent_material_code": "588-000430",
+                      "material_name": "贴片陶瓷电容",
+                      "material_code": "725-000101"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "60",
+                      "material_code": "725-000101",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "is_substitute": false,
+                      "standard_usage": 5
+                    }
+                  ]
+                },
+                "material_code": "725-000101"
+              },
+              {
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "material_code": "725-000104",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 8,
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "material_name": "贴片陶瓷电容",
+                      "is_substitute": false,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": ""
+                    },
+                    {
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 8,
+                      "bom_level": 3,
+                      "material_code": "725-000104",
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "standard_usage": 8,
+                      "parent_material_code": "588-000430",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "alt_group_no": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000104",
+                      "bom_level": 3
+                    },
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "material_code": "725-000104",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 8,
+                      "is_substitute": false
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "standard_usage": 13,
+                      "is_substitute": false,
+                      "parent_material_code": "588-000726",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 4,
+                      "alt_priority": 0,
+                      "material_code": "725-000104",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_group_no": "",
+                      "alt_method": ""
+                    }
+                  ]
+                },
+                "material_code": "725-000104"
+              },
+              {
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "material_name": "贴片陶瓷电容",
+                      "alt_method": "替代",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000730",
+                      "standard_usage": 8,
+                      "alt_group_no": "2",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000116"
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "bom_level": 4,
+                      "alt_method": "替代",
+                      "material_name": "贴片陶瓷电容",
+                      "is_substitute": false,
+                      "material_code": "725-000116",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 3,
+                      "alt_group_no": "63",
+                      "parent_material_code": "588-000726",
+                      "alt_priority": 0
+                    }
+                  ]
+                },
+                "material_code": "725-000116"
+              },
+              {
+                "material_code": "725-000174",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "贴片陶瓷电容",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "material_code": "725-000174",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "standard_usage": 7,
+                      "bom_level": 4,
+                      "parent_material_code": "588-000726"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000730",
+                      "alt_group_no": "",
+                      "material_code": "725-000174",
+                      "standard_usage": 4,
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "material_name": "贴片陶瓷电容"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "725-000177",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "alt_method": "替代",
+                      "material_code": "725-000177",
+                      "alt_priority": 0,
+                      "bom_level": 4,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000726",
+                      "is_substitute": false,
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 7,
+                      "alt_group_no": "62"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "alt_method": "替代",
+                      "standard_usage": 1,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_code": "725-000177",
+                      "alt_priority": 0,
+                      "material_name": "贴片陶瓷电容",
+                      "alt_group_no": "84",
+                      "is_substitute": false,
+                      "bom_level": 3,
+                      "parent_material_code": "588-000570"
+                    },
+                    {
+                      "alt_method": "",
+                      "material_code": "725-000177",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430",
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 1,
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "material_name": "贴片陶瓷电容"
+                    },
+                    {
+                      "bom_level": 3,
+                      "standard_usage": 1,
+                      "alt_method": "",
+                      "material_code": "725-000177",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "parent_material_code": "588-000430",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "material_name": "贴片陶瓷电容"
+                    },
+                    {
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "material_code": "725-000177",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000570",
+                      "alt_method": "替代",
+                      "material_name": "贴片陶瓷电容",
+                      "standard_usage": 1,
+                      "alt_group_no": "84"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "972-000270",
+                "on_products": {
+                  "P61-000351": [
+                    {
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "bom_level": 3,
+                      "material_name": "音频功放",
+                      "alt_method": "",
+                      "standard_usage": 1,
+                      "alt_group_no": "",
+                      "is_substitute": false,
+                      "material_code": "972-000270"
+                    },
+                    {
+                      "bom_level": 3,
+                      "material_code": "972-000270",
+                      "alt_group_no": "",
+                      "alt_method": "",
+                      "is_substitute": false,
+                      "standard_usage": 1,
+                      "parent_material_code": "588-000430",
+                      "alt_priority": 0,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "音频功放"
+                    }
+                  ],
+                  "382-000005": [
+                    {
+                      "standard_usage": 1,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "material_name": "音频功放",
+                      "parent_material_code": "588-000726",
+                      "alt_method": "",
+                      "bom_level": 4,
+                      "is_substitute": false,
+                      "material_code": "972-000270"
+                    }
+                  ]
+                }
+              },
+              {
+                "material_code": "972-000273",
+                "on_products": {
+                  "382-000005": [
+                    {
+                      "alt_group_no": "",
+                      "alt_priority": 0,
+                      "is_substitute": false,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "alt_method": "",
+                      "material_code": "972-000273",
+                      "bom_level": 4,
+                      "material_name": "DC-DC电源芯片",
+                      "standard_usage": 2,
+                      "parent_material_code": "588-000726"
+                    }
+                  ],
+                  "P61-000351": [
+                    {
+                      "bom_level": 3,
+                      "is_substitute": false,
+                      "material_code": "972-000273",
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "standard_usage": 1,
+                      "alt_group_no": "76",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "material_name": "DC-DC电源芯片",
+                      "parent_material_code": "588-000570"
+                    },
+                    {
+                      "bom_level": 3,
+                      "alt_group_no": "",
+                      "parent_material_code": "588-000430",
+                      "is_substitute": false,
+                      "alt_priority": 0,
+                      "alt_method": "",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "standard_usage": 1,
+                      "material_code": "972-000273",
+                      "material_name": "DC-DC电源芯片"
+                    },
+                    {
+                      "material_code": "972-000273",
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "parent_material_code": "588-000430",
+                      "alt_method": "",
+                      "standard_usage": 1,
+                      "alt_group_no": "",
+                      "material_name": "DC-DC电源芯片",
+                      "alt_priority": 0,
+                      "is_substitute": false
+                    },
+                    {
+                      "parent_material_code": "588-000570",
+                      "alt_group_no": "76",
+                      "alt_priority": 0,
+                      "alt_method": "替代",
+                      "is_substitute": false,
+                      "material_name": "DC-DC电源芯片",
+                      "standard_usage": 1,
+                      "bom_version": "2026-08-05T00:00:00+08:00",
+                      "bom_level": 3,
+                      "material_code": "972-000273"
+                    }
+                  ]
+                }
+              }
+            ],
+            "caliber": "structure_intersect_only",
+            "data_source": {
+              "loaded_datasets": [
+                "bom"
+              ],
+              "knowledge_network_id": "supply_ontology_hand"
+            }
+          },
+          "exit_code": 0,
+          "execution_time_ms": 0,
+          "metrics": {
+            "cpu_time_ms": 3.684582000005321,
+            "peak_memory_mb": null,
+            "io_read_bytes": null,
+            "io_write_bytes": null,
+            "duration_ms": 445.2396669948939
+          },
+          "artifacts": [],
+          "session_id": "sess_aoi_0"
+        },
+        "error": "",
+        "duration_ms": 1028,
+        "status_code": 200,
+        "headers": {
+          "Cache-Control": "private, no-cache",
+          "Content-Type": "application/json",
+          "Date": "Mon, 12 Oct 2026 13:27:10 GMT"
+        }
+      }
+    },
+    {
+      "tool": "execute_tool",
+      "params": {
+        "kn_id": "supply_ontology_hand",
+        "toolbox_id": "01a13046-a4fb-7d6a-a8b9-9ed42cf703cf",
+        "tool_id": "01a13046-c0e8-7e1c-bfff-3b582947e34e",
+        "arguments": {
+          "demands": [
+            {
+              "product": "382-000005",
+              "qty": 50
+            },
+            {
+              "product": "P61-000351",
+              "qty": 60
+            }
+          ],
+          "substitute_enabled": false,
+          "warehouse_scope": "all"
+        },
+        "bkn_context": {
+          "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+          "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f"
+        }
+      },
+      "output": {
+        "status_code": 200,
+        "headers": {
+          "Date": "Mon, 12 Oct 2026 13:27:11 GMT",
+          "Cache-Control": "private, no-cache",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "exit_code": 0,
+          "execution_time_ms": 0,
+          "session_id": "sess_aoi_0",
+          "stderr": "",
+          "metrics": {
+            "io_read_bytes": null,
+            "io_write_bytes": null,
+            "duration_ms": 1114.3163749948144,
+            "cpu_time_ms": 3.503333000026032,
+            "peak_memory_mb": null
+          },
+          "artifacts": [],
+          "stdout": "",
+          "result": {
+            "report_grain": "summary",
+            "unsatisfied_demand_count": 1,
+            "data_source": {
+              "loaded_datasets": [
+                "bom",
+                "inventory",
+                "purchase_order"
+              ],
+              "knowledge_network_id": "supply_ontology_hand"
+            },
+            "allocations": [
+              {
+                "shortage_count": 0,
+                "shortages": [],
+                "product_code": "382-000005",
+                "demand_qty": 50,
+                "satisfied": true
+              },
+              {
+                "shortage_count": 24,
+                "shortages": [
+                  {
+                    "material_code": "725-000130",
+                    "shortage": 1200,
+                    "shared": false
+                  },
+                  {
+                    "shared": false,
+                    "material_code": "454-000014",
+                    "shortage": 60
+                  },
+                  {
+                    "material_code": "454-000049",
+                    "shortage": 180,
+                    "shared": false
+                  },
+                  {
+                    "shared": false,
+                    "material_code": "454-000111",
+                    "shortage": 60
+                  },
+                  {
+                    "material_code": "454-000111",
+                    "shortage": 60,
+                    "shared": false
+                  },
+                  {
+                    "material_code": "454-000111",
+                    "shortage": 60,
+                    "shared": false
+                  },
+                  {
+                    "material_code": "454-000136",
+                    "shortage": 120,
+                    "shared": false
+                  },
+                  {
+                    "material_code": "733-000001",
+                    "shortage": 360,
+                    "shared": false
+                  },
+                  {
+                    "shared": false,
+                    "material_code": "733-000089",
+                    "shortage": 120
+                  },
+                  {
+                    "material_code": "358-000079",
+                    "shortage": 120,
+                    "shared": false
+                  },
+                  {
+                    "material_code": "539-000479",
+                    "shortage": 60,
+                    "shared": false
+                  },
+                  {
+                    "material_code": "454-000124",
+                    "shortage": 120,
+                    "shared": false
+                  },
+                  {
+                    "material_code": "972-000476",
+                    "shortage": 60,
+                    "shared": false
+                  },
+                  {
+                    "material_code": "972-000275",
+                    "shortage": 240,
+                    "shared": false
+                  },
+                  {
+                    "shared": false,
+                    "material_code": "972-000473",
+                    "shortage": 60
+                  },
+                  {
+                    "shared": false,
+                    "material_code": "972-000379",
+                    "shortage": 180
+                  },
+                  {
+                    "material_code": "972-000584",
+                    "shortage": 60,
+                    "shared": false
+                  },
+                  {
+                    "shared": false,
+                    "material_code": "972-000538",
+                    "shortage": 60
+                  },
+                  {
+                    "shortage": 60,
+                    "shared": false,
+                    "material_code": "321-000354"
+                  },
+                  {
+                    "shared": false,
+                    "material_code": "356-000280",
+                    "shortage": 46
+                  },
+                  {
+                    "material_code": "356-000175",
+                    "shortage": 4,
+                    "shared": false
+                  },
+                  {
+                    "material_code": "606-000069",
+                    "shortage": 41,
+                    "shared": false
+                  },
+                  {
+                    "shared": false,
+                    "material_code": "606-000071",
+                    "shortage": 30
+                  },
+                  {
+                    "shortage": 60,
+                    "shared": false,
+                    "material_code": "994-000645"
+                  }
+                ],
+                "product_code": "P61-000351",
+                "demand_qty": 60,
+                "satisfied": false
+              }
+            ],
+            "substitute_enabled": false,
+            "deduction_order": [
+              "382-000005",
+              "P61-000351"
+            ],
+            "all_satisfied": false,
+            "warehouse_scope": "all",
+            "include_in_transit": false,
+            "demands": [
+              {
+                "product_code": "382-000005",
+                "qty": 50
+              },
+              {
+                "qty": 60,
+                "product_code": "P61-000351"
+              }
+            ],
+            "warehouse_filter": [],
+            "shared_shortage_count": 0
+          }
+        },
+        "error": "",
+        "duration_ms": 1522
+      }
+    }
+  ],
+  "start": {
+    "execution_status": "active",
+    "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a"
+  },
+  "finish": {
+    "execution_status": "completed",
+    "evidence_status": "assembling",
+    "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a"
+  },
+  "trace": {
+    "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "ordinal": 44,
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "closure_manifest": {
+      "completion_manifest_version": "3.0.0",
+      "answer_artifact_ref": "artifact:art_result_c4e86390f453d7b41c3319e755495478",
+      "expected_operations": [
+        {
+          "operation_id": "op_09de02abeced4caa12fc501364a1edaf",
+          "required": true
+        },
+        {
+          "operation_id": "op_12aca0c274ab9e073fb11a21ad33960f",
+          "required": true
+        },
+        {
+          "operation_id": "op_1d80075778a37fee84f644e310553af5",
+          "required": true
+        },
+        {
+          "operation_id": "op_21de6db5e4d9d519a9f5cfbf35222e73",
+          "required": true
+        },
+        {
+          "operation_id": "op_27dfea0788e5bf2418b1debb03d99704",
+          "required": true
+        },
+        {
+          "operation_id": "op_2ab03cb1014ea2b198ebff06124a3067",
+          "required": true
+        },
+        {
+          "operation_id": "op_46cc1515b605b5160756779c11ce30e7",
+          "required": true
+        },
+        {
+          "operation_id": "op_4b164920d1495f8a76fb4ce8f8174e66",
+          "required": true
+        },
+        {
+          "operation_id": "op_57628bae0fef5e99bca9b5af761ca9fa",
+          "required": true
+        },
+        {
+          "operation_id": "op_66b52482621076478bccd454ec9596d9",
+          "required": true
+        },
+        {
+          "operation_id": "op_66cc641c13db6c5db3b5d678f018641c",
+          "required": true
+        },
+        {
+          "operation_id": "op_7284542ca360c1ff3040eeea02e43445",
+          "required": true
+        },
+        {
+          "operation_id": "op_8b322b6cfa8cfd6ae46f9a496a687fcf",
+          "required": true
+        },
+        {
+          "operation_id": "op_9303dcc1062120043c36e7ffc79a5ff7",
+          "required": true
+        },
+        {
+          "operation_id": "op_9d92b41db87207d0f5b95a018d8320d2",
+          "required": true
+        },
+        {
+          "operation_id": "op_a702162023794983917951b9506a5f11",
+          "required": true
+        },
+        {
+          "operation_id": "op_c82001fc526f292c27160ccde37772c5",
+          "required": true
+        },
+        {
+          "operation_id": "op_c8d90efc46d76e1403666eb89df88668",
+          "required": true
+        },
+        {
+          "operation_id": "op_e639201ddc7d6caf0ba91c8e57bf1b12",
+          "required": true
+        }
+      ],
+      "expected_receipts": [
+        {
+          "receipt_id": "rcpt_0684e8bdea2bdc3c889956d55eaa3755",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_0a85888fcca6358d5af31fc40f02a27b",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_10f4c3197eb365aad5aeb32f551dd439",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_19131792a8c70d71d1ddce5885949d2e",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_193c3885ce38c2fd916e775a1e1a6037",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_1bf7f422d573fa82ec703c8ac6ec8dbc",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_1d72dc964c7e825a4dd2016fde6336d3",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_4c79d580df3d68b478d29be11f4b9197",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_4d720e9f174f8e137da9528aacaaf4e1",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_61cce3c5a87eac035acd16616d6ed339",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_7f5fa948a77338d89547d256744dad29",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_85dfd600eb5150cb9808fef545891daf",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_b6f65ae0079b8ff800787625065903e7",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_bff78cb829693bb1190e30891e23cbce",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_c2274d4a69764e9b445db72f1b7f4910",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_cd450190af326882ed8dc28a79a0a514",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_dac96c4cc858f85e15dd323e6ba930fb",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_f3dc21c295f3a42ded4b7d898c8f0fc8",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_fa8634291560649662cf34425e87edf3",
+          "required": true
+        }
+      ],
+      "assembler_deadline": "2026-10-12T13:32:12.003836Z",
+      "completion_reason": "completed"
+    },
+    "lease_token": "[REDACTED]",
+    "lease_epoch": 1,
+    "lease_version": 21,
+    "lease_expires_at": "2026-10-12T13:32:11.506361Z",
+    "row_version": 41,
+    "created_at": "2026-10-12T13:27:09.269873Z",
+    "updated_at": "2026-10-12T13:27:12.070655Z",
+    "terminal_at": "2026-10-12T13:27:12.003836Z"
+  },
+  "receipts": [
+    {
+      "receipt_id": "rcpt_0684e8bdea2bdc3c889956d55eaa3755",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_09de02abeced4caa12fc501364a1edaf",
+      "attempt": 1,
+      "operation_key": "mcp:461490fd6a2a451a76357006674a0fba",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_a4e2647f-90cd-49a1-8ac1-8fc8bcedd217",
+      "trace_id": "d0dcb0fd153092b484c1481c914ecf98",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_c85c85b356b6a8361663f867ce5963f53af46864fffd941bab2721bf41991ecf"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:10.993678Z",
+      "terminal_at": "2026-10-12T13:27:11.047185Z"
+    },
+    {
+      "receipt_id": "rcpt_0a85888fcca6358d5af31fc40f02a27b",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_27dfea0788e5bf2418b1debb03d99704",
+      "attempt": 1,
+      "operation_key": "mcp:6a253fc7e448c39f38431e0c48541937",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_326e0d30-e9bf-4a22-985f-241d4f47e2c7",
+      "trace_id": "5b206b1cab02c1bf5229d7df933ca533",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_642c9d264452bf988157635ac54ac96d3014c9b5f0ef79ae501880e83d942e34"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:11.451486Z",
+      "terminal_at": "2026-10-12T13:27:11.495468Z"
+    },
+    {
+      "receipt_id": "rcpt_10f4c3197eb365aad5aeb32f551dd439",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_66b52482621076478bccd454ec9596d9",
+      "attempt": 1,
+      "operation_key": "mcp:166356fcfe75a736519411ca7d335479",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_faf02dc2-ae28-4171-a976-6641ad35f131",
+      "trace_id": "ca88132ff809856ac4a120f3e01b9fda",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_962225e32cd722186040d9e19f6f6c311c42423307840f52ae69c51346fb3601"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:10.746838Z",
+      "terminal_at": "2026-10-12T13:27:10.790534Z"
+    },
+    {
+      "receipt_id": "rcpt_19131792a8c70d71d1ddce5885949d2e",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_9303dcc1062120043c36e7ffc79a5ff7",
+      "attempt": 1,
+      "operation_key": "mcp:c5070ec7b1a00d0cd0d761787dc90fc7",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_102d90f3-2d5f-4d67-8bb4-cdb32c4430bc",
+      "trace_id": "7c5324ef28894819d3b5e70b0a76067e",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_1d79e1483d04c9350ef352763034d4156e1624b13d90f2104affcc1a191e3ba1"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:10.87819Z",
+      "terminal_at": "2026-10-12T13:27:10.904973Z"
+    },
+    {
+      "receipt_id": "rcpt_193c3885ce38c2fd916e775a1e1a6037",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_9d92b41db87207d0f5b95a018d8320d2",
+      "attempt": 1,
+      "operation_key": "function:e8e125dfa8e0bcdf92c04a106061c494",
+      "tool_name": "01a13046-c0e8-7e1c-bfff-3b582947e34e",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "function",
+          "ref_id": "function:supply_ontology_hand:01a13046-c0e8-7e1c-bfff-3b582947e34e",
+          "version": "01a13046-c0e8-706e-88fc-a1b5c8f6b1b5",
+          "display_hint": "共用料与多需求争用"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:27:10.404689Z",
+      "terminal_at": "2026-10-12T13:27:11.93149Z"
+    },
+    {
+      "receipt_id": "rcpt_1bf7f422d573fa82ec703c8ac6ec8dbc",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_57628bae0fef5e99bca9b5af761ca9fa",
+      "attempt": 1,
+      "operation_key": "mcp:68e61f35107c0efc9b147e1582ef3e78",
+      "tool_name": "execute_tool",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:27:10.376692Z",
+      "terminal_at": "2026-10-12T13:27:11.935755Z"
+    },
+    {
+      "receipt_id": "rcpt_1d72dc964c7e825a4dd2016fde6336d3",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_46cc1515b605b5160756779c11ce30e7",
+      "attempt": 1,
+      "operation_key": "mcp:99ca5bfa1d6d557f9ad98a84199cd678",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_d102aaf0-6354-491c-a675-8ecc6ca73b56",
+      "trace_id": "937150f39aff6aa485329ed27433d53d",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_38e35552d0ae8d161dc28e3db7c65bb7e471712f2b517664211c4ea0f937c050"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:09.792456Z",
+      "terminal_at": "2026-10-12T13:27:09.836902Z"
+    },
+    {
+      "receipt_id": "rcpt_4c79d580df3d68b478d29be11f4b9197",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_21de6db5e4d9d519a9f5cfbf35222e73",
+      "attempt": 1,
+      "operation_key": "mcp:736d4f2ae430023aaea0ff3eedae8bfe",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_15fe808d-f3d9-4e70-b21b-597890937021",
+      "trace_id": "f2421eea01fc2e4a03682b9145a59eac",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_c37eacd2b1259b44517206e93c7a02ac6b2e53edc75d29c5c50a17952587a628"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:10.91603Z",
+      "terminal_at": "2026-10-12T13:27:10.965869Z"
+    },
+    {
+      "receipt_id": "rcpt_4d720e9f174f8e137da9528aacaaf4e1",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_8b322b6cfa8cfd6ae46f9a496a687fcf",
+      "attempt": 1,
+      "operation_key": "mcp:2dd9899f312b56491da64a11feab2039",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_98bc9612-7117-41b6-bf35-e218181ba002",
+      "trace_id": "83deef9c9b3beaef6679e202719e381b",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_a22641ebda12a9719f7eedaf9f85d9f61f7b7c777dff15d50dc80127582320ff"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:11.217792Z",
+      "terminal_at": "2026-10-12T13:27:11.266578Z"
+    },
+    {
+      "receipt_id": "rcpt_61cce3c5a87eac035acd16616d6ed339",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_66cc641c13db6c5db3b5d678f018641c",
+      "attempt": 1,
+      "operation_key": "mcp:6e00c686db43b03505fa823c43e8f1a0",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_32a9f897-009f-4489-a90e-43a34a6bf358",
+      "trace_id": "d891f476d4f89ef5cd2599e80f405d88",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_4fccba9a0ab1b80e8b2d24d2b066322ab19798e9e488f8d83cc3c7999fdab789"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_po",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:11.506361Z",
+      "terminal_at": "2026-10-12T13:27:11.557232Z"
+    },
+    {
+      "receipt_id": "rcpt_7f5fa948a77338d89547d256744dad29",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_1d80075778a37fee84f644e310553af5",
+      "attempt": 1,
+      "operation_key": "mcp:7b8e7916d92eb2301d6870615713e005",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_2e985dc2-fa88-4acd-b5f1-94e2dcbca257",
+      "trace_id": "0b63b7d160cbc78150f72637a27fd892",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_4858e72a12911e15670d7588d76c852a229ecceeaf3163a87c287fac30a496c6"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:10.811637Z",
+      "terminal_at": "2026-10-12T13:27:10.856677Z"
+    },
+    {
+      "receipt_id": "rcpt_85dfd600eb5150cb9808fef545891daf",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_c82001fc526f292c27160ccde37772c5",
+      "attempt": 1,
+      "operation_key": "mcp:cb4f164aba1af320a6d7c6e41849fdb0",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_0fd5e9fa-9624-4d50-91fe-f20551b107ac",
+      "trace_id": "cd4ff712d38b13914739992164a11d01",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_e3b34cc9dc3174408d7c1303da2abb07fc90885067218fbe0d8c38ded8214a22"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:09.724284Z",
+      "terminal_at": "2026-10-12T13:27:09.770884Z"
+    },
+    {
+      "receipt_id": "rcpt_b6f65ae0079b8ff800787625065903e7",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_2ab03cb1014ea2b198ebff06124a3067",
+      "attempt": 1,
+      "operation_key": "function:a088aab027b96eeafdc4dd1688d627b1",
+      "tool_name": "01a13046-aad0-7a2c-8544-9dfb1d71e270",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "function",
+          "ref_id": "function:supply_ontology_hand:01a13046-aad0-7a2c-8544-9dfb1d71e270",
+          "version": "01a13046-aacf-774a-a014-54dcd2dc1f5a",
+          "display_hint": "产品BOM共用清单"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:27:09.307353Z",
+      "terminal_at": "2026-10-12T13:27:10.346837Z"
+    },
+    {
+      "receipt_id": "rcpt_bff78cb829693bb1190e30891e23cbce",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_12aca0c274ab9e073fb11a21ad33960f",
+      "attempt": 1,
+      "operation_key": "mcp:ee5bdc058b592f5e221096e96b985038",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_4b1eebf6-b5af-49cd-9cc9-0c1350ebf090",
+      "trace_id": "37bf7a2cffc11b724ff61e5a14c78380",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_323daf8ea31564b6b54d8ce9406bfd3149f029931fb58f04ae517eed520b2549"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:11.291815Z",
+      "terminal_at": "2026-10-12T13:27:11.341669Z"
+    },
+    {
+      "receipt_id": "rcpt_c2274d4a69764e9b445db72f1b7f4910",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_c8d90efc46d76e1403666eb89df88668",
+      "attempt": 1,
+      "operation_key": "mcp:0e9adab84760c5bb5b57964306f0c621",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_1925e946-398d-46e0-800f-366cfb6b0efe",
+      "trace_id": "d6a1c0fb82c217b87dd3797cea5e4aba",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_c51fb0be41b309c37ae9701a526c4b3842f909109dd103fb716e83c274fd92ec"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:11.143727Z",
+      "terminal_at": "2026-10-12T13:27:11.193407Z"
+    },
+    {
+      "receipt_id": "rcpt_cd450190af326882ed8dc28a79a0a514",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_7284542ca360c1ff3040eeea02e43445",
+      "attempt": 1,
+      "operation_key": "mcp:f415d43296452df0bfa8269dfe73a32c",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_e3a35bb5-43c1-4a81-a0ca-53468cb11f10",
+      "trace_id": "818e0a63eae1f92d64c04e7d675fb64a",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_9d9162d3dd88b7a529ac85f949b8168d7d26c0a30b04bec7351964451c4d69d6"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:11.069477Z",
+      "terminal_at": "2026-10-12T13:27:11.120371Z"
+    },
+    {
+      "receipt_id": "rcpt_dac96c4cc858f85e15dd323e6ba930fb",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_a702162023794983917951b9506a5f11",
+      "attempt": 1,
+      "operation_key": "mcp:628302fd855c2e37aca7bf389a4e5f57",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_02562ff3-b608-434b-9460-7604e76e0358",
+      "trace_id": "2b02e97f101977f581e8ee507f700210",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_ff1b0baf82f544d9f4c7532c1ad16c78a3eb6bb959cc8013c6078e1c9f8be841"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:11.367648Z",
+      "terminal_at": "2026-10-12T13:27:11.418684Z"
+    },
+    {
+      "receipt_id": "rcpt_f3dc21c295f3a42ded4b7d898c8f0fc8",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_e639201ddc7d6caf0ba91c8e57bf1b12",
+      "attempt": 1,
+      "operation_key": "mcp:d6a2cff24591fa04dcaa75082484b8c6",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_ac0b8ac6-3435-4d65-b70f-3d883c80981c",
+      "trace_id": "9c4379e95f423723221a32be8484a6f1",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_85765f79d9aee5759b5be030a626c864f9e2c81cb94e8981353a43cae757eb6c"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:27:09.858321Z",
+      "terminal_at": "2026-10-12T13:27:09.885153Z"
+    },
+    {
+      "receipt_id": "rcpt_fa8634291560649662cf34425e87edf3",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_de5cc2c37a02a1f8b4a758a59735d07f",
+      "operation_id": "op_4b164920d1495f8a76fb4ce8f8174e66",
+      "attempt": 1,
+      "operation_key": "mcp:03996968e4166899519fc531ac368f7e",
+      "tool_name": "execute_tool",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:27:09.281309Z",
+      "terminal_at": "2026-10-12T13:27:10.354455Z"
+    }
+  ]
+}

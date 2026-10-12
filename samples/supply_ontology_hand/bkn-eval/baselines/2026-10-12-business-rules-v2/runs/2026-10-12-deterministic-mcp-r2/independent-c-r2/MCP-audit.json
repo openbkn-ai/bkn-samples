@@ -1,0 +1,2038 @@
+{
+  "round": 2,
+  "questions": [
+    {
+      "question_id": "F-01",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-01.json",
+      "sha256": "58479b994556f9cfff6e0a198aaf1acde0ec85673dd06c8e11f8b52bcbb51d01",
+      "interaction_id": "int_551152d0c37f50180bac934207418920",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 4,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+            "arguments": {
+              "product": "382-000005",
+              "depth": 1,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_551152d0c37f50180bac934207418920"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_6a775cb62a35dbcfa97a23b5baa0d964"
+          ],
+          "published_function_name": "BOM清单",
+          "published_metadata_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+          "function_receipt_ids": [
+            "rcpt_2b5688a8a1bb2a19b326c48e977111cb"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-02",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-02.json",
+      "sha256": "8b2fb3e08da955166d4bca2ea6f69895a4d568d15cfb3655e56e80517ae29c53",
+      "interaction_id": "int_1ac562fe930b72a813cdf6f1c5a86e68",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+            "arguments": {
+              "products": [
+                "382-000005",
+                "P61-000351"
+              ],
+              "depth": 99,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_1ac562fe930b72a813cdf6f1c5a86e68"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_0f09b76676522905611add8361a0fb56"
+          ],
+          "published_function_name": "产品BOM共用清单",
+          "published_metadata_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+          "function_receipt_ids": [
+            "rcpt_efeaa822d5ae4c468c7d681f8efa6690"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-03",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-03.json",
+      "sha256": "03041cef8100edda4b361f5a07dea5a79b5cad344bd7616c4cd5dc5a2f15e51d",
+      "interaction_id": "int_d769b9794715866de24c2b2a47c3cc3d",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+            "arguments": {
+              "products": [
+                "382-000005",
+                "P61-000351",
+                "U00-000151"
+              ],
+              "depth": 99,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_d769b9794715866de24c2b2a47c3cc3d"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_74729b33ae3041fd258f3b42aae8da62"
+          ],
+          "published_function_name": "产品BOM共用清单",
+          "published_metadata_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+          "function_receipt_ids": [
+            "rcpt_57ff0cbb2622841d7a26d848ab8ec4f1"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-04",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-04.json",
+      "sha256": "0be70f3af18edb78cf0860a5faea4f09c20e0e97845372dc261286683e500470",
+      "interaction_id": "int_94b6d2be0a9f9d087e75e55353c06d09",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 11,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product": "382-000005",
+              "substitute_enabled": false,
+              "production_scope": "all",
+              "finished_goods_scope": "all"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_94b6d2be0a9f9d087e75e55353c06d09"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_3fd29b07b104f303ca082f1283366f88"
+          ],
+          "published_function_name": "合计可售",
+          "published_metadata_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+          "function_receipt_ids": [
+            "rcpt_af623d9ec741ab9f9811514cf77beebe"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-05",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-05.json",
+      "sha256": "98d3637a7463774f44a16128a75118f479ddb3b2f8c64df0c086b4812e8c74d5",
+      "interaction_id": "int_830ae80c08a1cc2ff8341629d29e6821",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product": "U00-000151",
+              "substitute_enabled": false,
+              "production_scope": "all",
+              "finished_goods_scope": "all"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_830ae80c08a1cc2ff8341629d29e6821"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_e4c36ac12f6c525dfe1e396e41701fbd"
+          ],
+          "published_function_name": "合计可售",
+          "published_metadata_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+          "function_receipt_ids": [
+            "rcpt_d6d67cfdfe57e8913f2ef6b7c4ac3625"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-06",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-06.json",
+      "sha256": "df362b41b92f76406b7921de37ee8d53d65d7d76276b1d15548e522d16c75647",
+      "interaction_id": "int_59dfa0a0ecb3b1660e019aadd2476eaa",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 12,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+            "arguments": {
+              "product": "382-000005",
+              "qty": 50,
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_59dfa0a0ecb3b1660e019aadd2476eaa"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_0c9e269bdbe4c37b1a685864ffa4c6aa"
+          ],
+          "published_function_name": "要X套净需求与齐套",
+          "published_metadata_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+          "function_receipt_ids": [
+            "rcpt_9b56221fb5049cb571e2b7f750edd510"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-07",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-07.json",
+      "sha256": "b6a127963cee71c4e7cd9c54b3547d84ac3450526ab7b3067d38c489b6e873b7",
+      "interaction_id": "int_6b57e0d906a9332c65d31e81dc6f3665",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 3,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-2a37-724b-bd91-82dc40706c46",
+            "arguments": {
+              "material_code": "606-000989"
+            },
+            "kn_id": "supply_ontology_hand",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_6b57e0d906a9332c65d31e81dc6f3665"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_1eb557c902e1a4aaaaf5a375925e3327"
+          ],
+          "published_function_name": "标准交期",
+          "published_metadata_id": "01a13053-2a37-724b-bd91-82dc40706c46",
+          "function_receipt_ids": [
+            "rcpt_8c6455385441dd4304328d6575357de7"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-08",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-08.json",
+      "sha256": "850a819cac551ca55edb39310a1dd52a944620f87ab8e83ea6676ee82111a35d",
+      "interaction_id": "int_51149165a1ccba205eb49650002a2f7c",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 11,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "tool_id": "01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+            "arguments": {
+              "product": "382-000005",
+              "substitute_enabled": false,
+              "warehouse_scope": "production_available"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_51149165a1ccba205eb49650002a2f7c"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_d1ff2b71be0ac8927dc5b9068aec3646"
+          ],
+          "published_function_name": "理论可产",
+          "published_metadata_id": "01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+          "function_receipt_ids": [
+            "rcpt_859c4261fde40cc9410e72c116cfa3f6"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-09",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-09.json",
+      "sha256": "4e6c6276f75c2d96a62ef399115d0dc02f782ac54156b6aac8d1499ee0f10921",
+      "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "tool_id": "01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+            "arguments": {
+              "product": "U00-000151",
+              "substitute_enabled": false,
+              "warehouse_scope": "production_available"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_724f90ae9a55f713a73f5898c7061826"
+          ],
+          "published_function_name": "理论可产",
+          "published_metadata_id": "01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+          "function_receipt_ids": [
+            "rcpt_d64cc413ec904be9433b4810b9442c63"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-10",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-10.json",
+      "sha256": "627c29184c50767b37d6e11ccdcc5fd25c4cd8bd08fdb320340ff06ec9bf145c",
+      "interaction_id": "int_cfaf1e37371581992d356ec2d1596b0f",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 8,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+            "arguments": {
+              "product": "P61-000351",
+              "qty": 60,
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_cfaf1e37371581992d356ec2d1596b0f"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_b382edb207fb676da3358527ca117d9b"
+          ],
+          "published_function_name": "要X套净需求与齐套",
+          "published_metadata_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+          "function_receipt_ids": [
+            "rcpt_0dbae8fed4308b6711bc9ed1f856d99e"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-11",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-11.json",
+      "sha256": "1a93b8904f29eb4e95f6890f0cfa87a8129ec56f64c285f06a850f7a23fb9033",
+      "interaction_id": "int_455114ce4384460e41bf548c96af0af3",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 15,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+            "arguments": {
+              "demands": [
+                {
+                  "product": "382-000005",
+                  "qty": 50
+                },
+                {
+                  "product": "P61-000351",
+                  "qty": 60
+                }
+              ],
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_455114ce4384460e41bf548c96af0af3"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_055e406edd790c02988e2f79d5d22e68"
+          ],
+          "published_function_name": "共用料与多需求争用",
+          "published_metadata_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+          "function_receipt_ids": [
+            "rcpt_d567b136de1e57b1ff936e63a916b0fc"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-12",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-12.json",
+      "sha256": "cfa2cd4ca5a06f6a5c029e4cd08c8c2e21e70ed9f43dcfc9529546fef9001f12",
+      "interaction_id": "int_ce4dab56d3634b096c541a3b77f36f69",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 4,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+            "arguments": {
+              "products": [
+                "P61-000351",
+                "U00-000151"
+              ],
+              "depth": 99,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_ce4dab56d3634b096c541a3b77f36f69"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_81985830fa47cf7cf28f08fb98ec5a08"
+          ],
+          "published_function_name": "产品BOM共用清单",
+          "published_metadata_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+          "function_receipt_ids": [
+            "rcpt_6eaba2c46a7d28507a5bb00db0e2df1d"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-13",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-13.json",
+      "sha256": "7e6dd57a74cdb707f8a44477982ab410b29133df561ce80028fdcc0b43bb33a2",
+      "interaction_id": "int_3a26f4028515c1bb89b45ca163e45f6a",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 11,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-2663-754f-b5fc-5663cf21f324",
+            "arguments": {
+              "product": "382-000005",
+              "substitute_enabled": false,
+              "warehouse_scope": "production_available"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_3a26f4028515c1bb89b45ca163e45f6a"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_aca883297753f1794089e59ceb939b97"
+          ],
+          "published_function_name": "无需采购最大可产",
+          "published_metadata_id": "01a13053-2663-754f-b5fc-5663cf21f324",
+          "function_receipt_ids": [
+            "rcpt_c882eb88d79902d75b9cb3d645ead24e"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-14",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-14.json",
+      "sha256": "44db54876eb4f275f71dbf9186ac65d14cc5d32226555d06747fe14b463c6879",
+      "interaction_id": "int_1f49bb02513b8ccfea29bfdeba17554c",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 3,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+            "arguments": {
+              "product": "U00-000080",
+              "depth": 99,
+              "include_substitute": false,
+              "report_grain": "full",
+              "page_size": 500,
+              "offset": 0
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_1f49bb02513b8ccfea29bfdeba17554c"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_632974318cfe705e0bd4fe8aeeac805b"
+          ],
+          "published_function_name": "BOM清单",
+          "published_metadata_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+          "function_receipt_ids": [
+            "rcpt_b7885363fe32a62d59ba4a4911dc54c5"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "F-15",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-F-15.json",
+      "sha256": "1ed58caf472177ad91448bbfeec88b0b73ea1b06953029b797d422fc7b07d7e9",
+      "interaction_id": "int_1e82dc942f52e79d8a4e585fa75ba12b",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 13,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product": "382-000005",
+              "substitute_enabled": true,
+              "production_scope": "all",
+              "finished_goods_scope": "all"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_1e82dc942f52e79d8a4e585fa75ba12b"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_254a3637621422083c55fc748f619ddf"
+          ],
+          "published_function_name": "合计可售",
+          "published_metadata_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+          "function_receipt_ids": [
+            "rcpt_d63ae918473d3d638cc8847470f5fe54"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-01",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-01.json",
+      "sha256": "275649658d2c67cea3d05c277e934590327511f0b15baf7b0cf686ef1c623619",
+      "interaction_id": "int_6805be4269d014d1a14d82c682cd09d7",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b43-b5c2-6e8ca64d1cc8",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_6805be4269d014d1a14d82c682cd09d7"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_520193126f505ac6da48020997c6310d"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_520193126f505ac6da48020997c6310d"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-02",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-02.json",
+      "sha256": "f03daac6b36efe71138550d6e419f36c157c178b694a2dd2542dff3fdf9b9084",
+      "interaction_id": "int_31abce049587aca3475a0671bbe45479",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b45-bb84-2d8df1fcb7d7",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_31abce049587aca3475a0671bbe45479"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_c97c0f80e3fcc8e58b03bba78bc11aad"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_c97c0f80e3fcc8e58b03bba78bc11aad"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-03",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-03.json",
+      "sha256": "102ad5f356b80d8971237b67cd0de327626a34648d874277d293170916560523",
+      "interaction_id": "int_a93a21d323d14df61df7f77f380cdff4",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b46-a7b5-568b8b9c6bbe",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_a93a21d323d14df61df7f77f380cdff4"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_bcda8d5703c364832b8d66c249047bb4"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_bcda8d5703c364832b8d66c249047bb4"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-04",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-04.json",
+      "sha256": "465263da005fdbb06bf6090be21c8cb8919a6aa882cd8c2743ed0c935ab3e3c7",
+      "interaction_id": "int_5a87c23b4d24c880e2958171e99779ad",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b47-ba9b-2c7d3df75f36",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_5a87c23b4d24c880e2958171e99779ad"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_c8f1d43620307b8139d0a81739c58324"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_c8f1d43620307b8139d0a81739c58324"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-05",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-05.json",
+      "sha256": "6ed584e5f4ce830c4c9884ef3a2accf23aa8ffa0bd4747cefdfd27bff10d7cb8",
+      "interaction_id": "int_e6b0596d920310daa771c842c376252c",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b48-b46d-753d9c6f678d",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_e6b0596d920310daa771c842c376252c"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_46b97eb3ae15ee7466410e07c63a2a43"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_46b97eb3ae15ee7466410e07c63a2a43"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-06",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-06.json",
+      "sha256": "b7a31fe04267477deb41ac24dd8afbf4897d9cd06ac08f10936cbc337033f2a2",
+      "interaction_id": "int_1ff134660f239f24e8812a4206ace163",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 11,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product": "382-000005",
+              "substitute_enabled": false,
+              "production_scope": "all",
+              "finished_goods_scope": "finished_goods"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_1ff134660f239f24e8812a4206ace163"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_8f5cd5e44ac7bd0999b7ed1a9d2f18d0"
+          ],
+          "published_function_name": "合计可售",
+          "published_metadata_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+          "function_receipt_ids": [
+            "rcpt_8801e9b49f6ba88de2d78d81ee245015"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-07",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-07.json",
+      "sha256": "74298396dd5f3e6f3e2ae6d7245f54ca658ab217a895203ed242267325de4616",
+      "interaction_id": "int_8ce09d1d5c292d808260f691ff1d4adc",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b4a-988d-1d3d46bfba3f",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "field": "closestatus_title",
+              "operation": "!=",
+              "value": "已关闭",
+              "value_from": "const"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_8ce09d1d5c292d808260f691ff1d4adc"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_ebb9f554713e8fa93d1dec291d685e99"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_ebb9f554713e8fa93d1dec291d685e99"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-08",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-08.json",
+      "sha256": "2ded82ffa206b37c8866c2a89bb504f7de98a86d2cc76c67cf4063db10dd4654",
+      "interaction_id": "int_4975e3c326a7d3365b8e4c85530e4205",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 3,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {},
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-31f6-78e1-a4a5-51a8014a2460",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_4975e3c326a7d3365b8e4c85530e4205"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_a2b07a01d248cebf19ab0bd3767a90c3"
+          ],
+          "published_function_name": "未关闭预测单数",
+          "published_metadata_id": "01a13053-31f6-78e1-a4a5-51a8014a2460",
+          "function_receipt_ids": [
+            "rcpt_49df3168da74d615ede42f7f0354f1de"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-09",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-09.json",
+      "sha256": "261302eb370c070b8e06bd5c8b4a7a069d842f13847da6028a0184c4a2bd268b",
+      "interaction_id": "int_9d2d4ad8ad96132987e9af7265acf751",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b47-ba9b-2c7d3df75f36",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "field": "order_status",
+              "operation": "==",
+              "value": "执行中",
+              "value_from": "const"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_9d2d4ad8ad96132987e9af7265acf751"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_58c899bd212f78234e607171d6836ef2"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_58c899bd212f78234e607171d6836ef2"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-10",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-10.json",
+      "sha256": "373d91e14cb26b70cd3247d64b1f61974dc4aabae2dbaa0e71a7b3ef85a8a3b6",
+      "interaction_id": "int_4059af879292a5fd9e2efeb621ea8acd",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 2,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b4c-a2a1-82a1a962c209",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "field": "product_code",
+              "operation": "==",
+              "value": "382-000005",
+              "value_from": "const"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_4059af879292a5fd9e2efeb621ea8acd"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_4085bbb421b7687d522f66b9c29059f8",
+            "rcpt_bba07445fd687ed3750420f079a55029"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_bba07445fd687ed3750420f079a55029"
+          ]
+        },
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b4d-b414-e031947ef66d",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "field": "product_code",
+              "operation": "==",
+              "value": "382-000005",
+              "value_from": "const"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_4059af879292a5fd9e2efeb621ea8acd"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_4085bbb421b7687d522f66b9c29059f8",
+            "rcpt_bba07445fd687ed3750420f079a55029"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_4085bbb421b7687d522f66b9c29059f8"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-11",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-11.json",
+      "sha256": "9daea9231c144bf4e4f993e73be82988752eb13707ea84c81f0eb30ce75552dd",
+      "interaction_id": "int_ff5ce02e3c361469f78ab47a784b6068",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 4,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product_code": "382-000005"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-31f6-78e1-a4a5-51a8014a2460",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_ff5ce02e3c361469f78ab47a784b6068"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_a1516b88f0f30a06e39f0a4077b00995"
+          ],
+          "published_function_name": "未关闭预测单数",
+          "published_metadata_id": "01a13053-31f6-78e1-a4a5-51a8014a2460",
+          "function_receipt_ids": [
+            "rcpt_b7e0d144791db992d1bdc98ad550faef"
+          ]
+        },
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b4a-988d-1d3d46bfba3f",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "operation": "and",
+              "sub_conditions": [
+                {
+                  "field": "closestatus_title",
+                  "operation": "!=",
+                  "value": "已关闭",
+                  "value_from": "const"
+                },
+                {
+                  "field": "material_number",
+                  "operation": "==",
+                  "value": "382-000005",
+                  "value_from": "const"
+                }
+              ]
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_ff5ce02e3c361469f78ab47a784b6068"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_58d51aae11ad34560fbb012f11838920"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_58d51aae11ad34560fbb012f11838920"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-12",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-12.json",
+      "sha256": "922d7b79da58cec2779d8bffd6e0a9a0d72b7c29d867bfa95ecfb31c58aa0798",
+      "interaction_id": "int_c29be47ff69d4a889e9b47a90a147b56",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 4,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product_code": "U00-000080"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-31f6-78e1-a4a5-51a8014a2460",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_c29be47ff69d4a889e9b47a90a147b56"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_da8ef64d341461b4c290fe2b97bf9a3f"
+          ],
+          "published_function_name": "未关闭预测单数",
+          "published_metadata_id": "01a13053-31f6-78e1-a4a5-51a8014a2460",
+          "function_receipt_ids": [
+            "rcpt_9e0adb27264c680535623ad060a29913"
+          ]
+        },
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b4a-988d-1d3d46bfba3f",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "operation": "and",
+              "sub_conditions": [
+                {
+                  "field": "closestatus_title",
+                  "operation": "!=",
+                  "value": "已关闭",
+                  "value_from": "const"
+                },
+                {
+                  "field": "material_number",
+                  "operation": "==",
+                  "value": "U00-000080",
+                  "value_from": "const"
+                }
+              ]
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_c29be47ff69d4a889e9b47a90a147b56"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_a66cfb64cd8245b335e31af782e13f3e"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_a66cfb64cd8245b335e31af782e13f3e"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-13",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-13.json",
+      "sha256": "96e883f6d8dd005cc362677c4ebf7ab936341adc940e6c4329248383d7575b2b",
+      "interaction_id": "int_9b35f6828bd60e4d447a63a7552255dd",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b45-bb84-2d8df1fcb7d7",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "field": "materialattr",
+              "operation": "==",
+              "value": "外购",
+              "value_from": "const"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_9b35f6828bd60e4d447a63a7552255dd"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_dfd36be289f777a2aaf85f0801654e7c"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_dfd36be289f777a2aaf85f0801654e7c"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-14",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-14.json",
+      "sha256": "3f4b90057ef0134a421eac8ac8e052cf4c4c9a4f0bcd67dc9adefa176dcce9cf",
+      "interaction_id": "int_8c864ca1f1e555cbc951d222fe4d49f9",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b45-bb84-2d8df1fcb7d7",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "field": "materialattr",
+              "operation": "==",
+              "value": "自制",
+              "value_from": "const"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_8c864ca1f1e555cbc951d222fe4d49f9"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_3e295b450192418c0fd6efd2634589a2"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_3e295b450192418c0fd6efd2634589a2"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "M-15",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-M-15.json",
+      "sha256": "69ee1107d59593fde5649fca2df69bd322c4d5115bb0eb2d5ba4e691aac3fa00",
+      "interaction_id": "int_cc41f90db92a5ed7111a37f5b124b3ad",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 1,
+      "calls": [
+        {
+          "tool": "query_metric",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "metric_id": "01a13052-ed26-7b46-a7b5-568b8b9c6bbe",
+            "time": {
+              "instant": true
+            },
+            "response_format": "json",
+            "condition": {
+              "field": "purchaserid_name",
+              "operation": "==",
+              "value": "杨强云",
+              "value_from": "const"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_cc41f90db92a5ed7111a37f5b124b3ad"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_596e0a4d021703449097312b4b6ab49c"
+          ],
+          "metric_receipt_ids": [
+            "rcpt_596e0a4d021703449097312b4b6ab49c"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-01",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-01.json",
+      "sha256": "27ca3d83d7cf447c917d13ae8e718b596307e6dde347e5dea1073a42a6da5687",
+      "interaction_id": "int_087758238fe41dda7d99495bf83b0054",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 4,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+            "arguments": {
+              "product": "P61-000351",
+              "depth": 1,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_087758238fe41dda7d99495bf83b0054"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_f09acdc8129e2b54ef9656c8d1813c8e"
+          ],
+          "published_function_name": "BOM清单",
+          "published_metadata_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+          "function_receipt_ids": [
+            "rcpt_452382d7d3a82c9f4a8ad89556d09051"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-02",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-02.json",
+      "sha256": "31e3da5f2e12935db4441d70a02bd953ecc300f9704b959bb8270c59abba3bff",
+      "interaction_id": "int_08480df7a820e32ecb21906b35f3c327",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 3,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+            "arguments": {
+              "product": "U00-000080",
+              "depth": 1,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_08480df7a820e32ecb21906b35f3c327"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_cb1297c024d074ffa71dfd5cbaeb2d0f"
+          ],
+          "published_function_name": "BOM清单",
+          "published_metadata_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+          "function_receipt_ids": [
+            "rcpt_52ed4c110ee34df2062e87a7980d781e"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-03",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-03.json",
+      "sha256": "caed880fcebc5dedc1a10f3f322914bcbd50379df2502cce03a35527e0626cb2",
+      "interaction_id": "int_a1fc9ad96f5a460c5fa7c7ffd8bfa20d",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 3,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+            "arguments": {
+              "product": "U00-000080",
+              "depth": 99,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_a1fc9ad96f5a460c5fa7c7ffd8bfa20d"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_e85ea9e388b33a6ac234d9a212652483"
+          ],
+          "published_function_name": "BOM清单",
+          "published_metadata_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+          "function_receipt_ids": [
+            "rcpt_d77935cd79e5f2e4f88f2b83748f059d"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-04",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-04.json",
+      "sha256": "a3e096d6fa2804261da8125d46df0a89a90b535dc2bbaecb3db710c5c88cfc35",
+      "interaction_id": "int_d5c5bfa27b96df2a8fb2b8a57de3976a",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 4,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+            "arguments": {
+              "product": "382-000005",
+              "depth": 99,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_d5c5bfa27b96df2a8fb2b8a57de3976a"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_67147c7d0e8fdd54dc80781b57db6a6a"
+          ],
+          "published_function_name": "BOM清单",
+          "published_metadata_id": "01a13053-06ee-7145-a3e4-4f1596425239",
+          "function_receipt_ids": [
+            "rcpt_a041b77d41e5f9a53fb96318c2543054"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-05",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-05.json",
+      "sha256": "d3baf7241b4e55377ba82053a22f26a31f57c2b8fc94a269a86802b4baf8da72",
+      "interaction_id": "int_c083c8f8d736b900d69ca2ac3ec0a299",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 10,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-3980-7c94-97e0-9e2bd6d7cd35",
+            "arguments": {
+              "material_code": "321-000569"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_c083c8f8d736b900d69ca2ac3ec0a299"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_22b5ae4b53e68a32a8d76f4d7f4a7ae1"
+          ],
+          "published_function_name": "物料反查产品",
+          "published_metadata_id": "01a13053-3980-7c94-97e0-9e2bd6d7cd35",
+          "function_receipt_ids": [
+            "rcpt_2490c2e56b8feb7bc0d932d238c9564c"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-06",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-06.json",
+      "sha256": "b3018c6837b031e6389622611834aef52a53792125d76d8ea7c29e5e09a37be8",
+      "interaction_id": "int_9f6a2a4b83d495b6be7e0b525e1fa40c",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-3980-7c94-97e0-9e2bd6d7cd35",
+            "arguments": {
+              "material_code": "606-000989"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_9f6a2a4b83d495b6be7e0b525e1fa40c"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_f6b20175266c7b9fd8060e84d0f54c01"
+          ],
+          "published_function_name": "物料反查产品",
+          "published_metadata_id": "01a13053-3980-7c94-97e0-9e2bd6d7cd35",
+          "function_receipt_ids": [
+            "rcpt_f17f6ac5056d6a4381934d5e197b98b3"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-07",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-07.json",
+      "sha256": "ced09d3dd3a5ddd4fb6c996d92c7b32181b091655608ad3ed9feab20e7863c4a",
+      "interaction_id": "int_85376131098664eda8ec13857fb62d40",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 203,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-3980-7c94-97e0-9e2bd6d7cd35",
+            "arguments": {
+              "material_code": "725-000226"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_85376131098664eda8ec13857fb62d40"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_6345053b4ec2e981927f880b6f5639ef"
+          ],
+          "published_function_name": "物料反查产品",
+          "published_metadata_id": "01a13053-3980-7c94-97e0-9e2bd6d7cd35",
+          "function_receipt_ids": [
+            "rcpt_76510cab582365cf8ec10014ccfe8c05"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-08",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-08.json",
+      "sha256": "ae2ae53f1dce108bf14d3d2df00e4a1893098dae299fb8312e5f44960888684b",
+      "interaction_id": "int_defbe64bcf2bf7c7586bd5058f5dc103",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+            "arguments": {
+              "products": [
+                "382-000005",
+                "382-000006"
+              ],
+              "depth": 1,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_defbe64bcf2bf7c7586bd5058f5dc103"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_11e3fe297225a542b15d3123914bd185"
+          ],
+          "published_function_name": "产品BOM共用清单",
+          "published_metadata_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+          "function_receipt_ids": [
+            "rcpt_8d2615912f0fe9bcaf02454b307f2b2d"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "R-09",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-R-09.json",
+      "sha256": "972f1c2b77a5bee710d2b4c42b80114a8f2bafc826dbc072a90168e8121804fa",
+      "interaction_id": "int_c5b055ab6ebc54f4b7f28dc2896a313f",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 13,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-11c8-7e9e-8a90-28e55de901f8",
+            "arguments": {
+              "product": "382-000005",
+              "warehouse_scope": "all",
+              "substitute_enabled": true
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_c5b055ab6ebc54f4b7f28dc2896a313f"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_b44c39cc301140871ce4a16788a0ceb3"
+          ],
+          "published_function_name": "替代料状态",
+          "published_metadata_id": "01a13053-11c8-7e9e-8a90-28e55de901f8",
+          "function_receipt_ids": [
+            "rcpt_1dffd979c9c5f2ef9b242aaad17372ff"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-01",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-01.json",
+      "sha256": "0b05f81dd0619ec4c11f08387c4522ffcfbca61f7c72f97a3bbc7fe99d1beb15",
+      "interaction_id": "int_8810e5617b8a4545f3f5b42cc4aaa93c",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 8,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+            "arguments": {
+              "product": "P61-000351",
+              "qty": 60,
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_8810e5617b8a4545f3f5b42cc4aaa93c"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_557a7eb7c0771551171a394992cfcc12"
+          ],
+          "published_function_name": "要X套净需求与齐套",
+          "published_metadata_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+          "function_receipt_ids": [
+            "rcpt_67fa380741cd8eac116df33631d6972e"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-02",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-02.json",
+      "sha256": "c01cd073bb2227684233e853543629ea7019a313c4135124bed06a89f724581f",
+      "interaction_id": "int_0b8a2dd10834463bcdd97b7ca27f75bb",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product": "U00-000151",
+              "substitute_enabled": false,
+              "production_scope": "all",
+              "finished_goods_scope": "all"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_0b8a2dd10834463bcdd97b7ca27f75bb"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_135e3d4a4ee610cab9fddbdade9dbdca"
+          ],
+          "published_function_name": "合计可售",
+          "published_metadata_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+          "function_receipt_ids": [
+            "rcpt_8921fc128cfc47f87807537077141509"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-03",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-03.json",
+      "sha256": "c811107b7955ebc4d16e66eb0f5915ae2aec1ec75463d7f6dfd8491b878bb5b6",
+      "interaction_id": "int_0c0198cbf951f258e360dc2fe6371fac",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 12,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+            "arguments": {
+              "product": "382-000005",
+              "qty": 50,
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_0c0198cbf951f258e360dc2fe6371fac"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_c3eec6ad269f8ff8be9e36f95f1f24eb"
+          ],
+          "published_function_name": "要X套净需求与齐套",
+          "published_metadata_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+          "function_receipt_ids": [
+            "rcpt_e98f56d1965f39df1d3e78c2fa8ae09f"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-04",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-04.json",
+      "sha256": "2a7f61087d42e87f612d1bdaca96ca452687bd4308ef112b8fca279cf3a8dc21",
+      "interaction_id": "int_d4daa65c9bb719017f9f97c621460a6a",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 15,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+            "arguments": {
+              "demands": [
+                {
+                  "product": "382-000005",
+                  "qty": 50
+                },
+                {
+                  "product": "P61-000351",
+                  "qty": 60
+                }
+              ],
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_d4daa65c9bb719017f9f97c621460a6a"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_95185e5128ab4f0fdccbaf7837a0ba88"
+          ],
+          "published_function_name": "共用料与多需求争用",
+          "published_metadata_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+          "function_receipt_ids": [
+            "rcpt_beabb5d59df497aceb114f233d6eb2ee"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-05",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-05.json",
+      "sha256": "260aa832c590e097986ca1dad1a83189c6d7ac5b4c5039cd8629ada8e9cf4ac8",
+      "interaction_id": "int_7214509081bf6a9ecaacfb53446d349f",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 20,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+            "arguments": {
+              "products": [
+                "382-000005",
+                "P61-000351"
+              ],
+              "depth": 99,
+              "include_substitute": false
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_7214509081bf6a9ecaacfb53446d349f"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_02c43b3dd990b0248f2bd809ef6ac033",
+            "rcpt_49ab39488fbd1696171d12b43b8ecddb"
+          ],
+          "published_function_name": "产品BOM共用清单",
+          "published_metadata_id": "01a13053-0a77-7e09-abf9-0bc7a66d813d",
+          "function_receipt_ids": [
+            "rcpt_042aa65436d64075ff2453ccf5eca9be"
+          ]
+        },
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+            "arguments": {
+              "demands": [
+                {
+                  "product": "382-000005",
+                  "qty": 50
+                },
+                {
+                  "product": "P61-000351",
+                  "qty": 60
+                }
+              ],
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_7214509081bf6a9ecaacfb53446d349f"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_02c43b3dd990b0248f2bd809ef6ac033",
+            "rcpt_49ab39488fbd1696171d12b43b8ecddb"
+          ],
+          "published_function_name": "共用料与多需求争用",
+          "published_metadata_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+          "function_receipt_ids": [
+            "rcpt_1c9683e99a2986853d78577441563708"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-06",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-06.json",
+      "sha256": "d72f31d4b49209138add78b2622abec26a6a91e9d742f2ff3ca24a617f333470",
+      "interaction_id": "int_999f87a07ba617026fb25bd0d159c534",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 8,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+            "arguments": {
+              "product": "P61-000351",
+              "qty": 60,
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_999f87a07ba617026fb25bd0d159c534"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_8132efff3cdb506fe98cd2fa6d114500"
+          ],
+          "published_function_name": "要X套净需求与齐套",
+          "published_metadata_id": "01a13053-1e29-7cbb-af13-1a9724b729be",
+          "function_receipt_ids": [
+            "rcpt_d905ccba23be5ca86a935261ff8e3e1d"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-07",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-07.json",
+      "sha256": "79afe09281a6470b27c8c4b1fe4fdf39192d8ccf08ac0ceaaa12c51a5548c589",
+      "interaction_id": "int_d2b8eefd47f3056d09c921c3f95d5248",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 18,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product": "382-000005",
+              "demand_qty": 50,
+              "demand_end": "2026-09-05",
+              "business_date": "2026-08-25",
+              "substitute_enabled": true,
+              "warehouse_scope": "all"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-35ef-7215-b176-3c5363d57d1f",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_d2b8eefd47f3056d09c921c3f95d5248"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_761b40d65f02f41b6176881ec1d775b7"
+          ],
+          "published_function_name": "生产计划齐套倒排",
+          "published_metadata_id": "01a13053-35ef-7215-b176-3c5363d57d1f",
+          "function_receipt_ids": [
+            "rcpt_05604054d26cb3f21333c724ec1bb32e"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-08",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-08.json",
+      "sha256": "44b034ad29ec740f04ad814df31102e9aab56081afc21c965146db698eb5bdc8",
+      "interaction_id": "int_d7bda62c9b03ebb71e468b36e25d2e58",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 7,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-2dd3-75af-af43-e3b0f571eedd",
+            "arguments": {
+              "material_code": "321-000569",
+              "due_date": "2026-09-08",
+              "gross_requirement": 240,
+              "warehouse_scope": "all"
+            },
+            "kn_id": "supply_ontology_hand",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_d7bda62c9b03ebb71e468b36e25d2e58"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_181f517ff680984bec7170f6b50fb403"
+          ],
+          "published_function_name": "供应状态诊断",
+          "published_metadata_id": "01a13053-2dd3-75af-af43-e3b0f571eedd",
+          "function_receipt_ids": [
+            "rcpt_4af952bad438aa115abc8a88b80739c7"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-09",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-09.json",
+      "sha256": "70580642dcaf8f42c1db372e848279076dc1647fc3f1c811e37b0bc8d77b604f",
+      "interaction_id": "int_fb69a5d17a0111a82eac282753acb13a",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product": "U00-000151",
+              "substitute_enabled": false,
+              "production_scope": "all",
+              "finished_goods_scope": "all"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_fb69a5d17a0111a82eac282753acb13a"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_79d654a19e372a38bcf2f0b74fbd29b8"
+          ],
+          "published_function_name": "合计可售",
+          "published_metadata_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+          "function_receipt_ids": [
+            "rcpt_20dae9aa868fa53566cb64f29611793a"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-10",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-10.json",
+      "sha256": "d926e7bf7c8fd8a86576423e20053a7bc4c187624c2beb63bcd0b65d7fd892db",
+      "interaction_id": "int_0839d11a3e6c3f406653b5322cf7426b",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 5,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "arguments": {
+              "product": "U00-000151",
+              "substitute_enabled": false,
+              "production_scope": "all",
+              "finished_goods_scope": "all"
+            },
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_0839d11a3e6c3f406653b5322cf7426b"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_007a385656245a31bba5c573ee076e9f"
+          ],
+          "published_function_name": "合计可售",
+          "published_metadata_id": "01a13053-194d-799f-a67c-0f143edecf9c",
+          "function_receipt_ids": [
+            "rcpt_d953d5f9279a415b1836bc0204e57b42"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "S-11",
+      "evidence_path": "artifacts/acceptance/supply-deterministic-v3/independent-a-r2/raw-S-11.json",
+      "sha256": "3565a1415618ecd088fcb411016431b512e8d549c018ecad3b84bb1e677fddc0",
+      "interaction_id": "int_7bf2e33f1751b0ddc63de512e416ca5d",
+      "execution_status": "completed",
+      "evidence_status": "complete",
+      "receipt_count": 9,
+      "calls": [
+        {
+          "tool": "execute_tool",
+          "parameters": {
+            "kn_id": "supply_ontology_hand",
+            "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+            "tool_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+            "arguments": {
+              "demands": [
+                {
+                  "product": "P61-000351",
+                  "qty": 60
+                },
+                {
+                  "product": "U00-000151",
+                  "qty": 50
+                }
+              ],
+              "substitute_enabled": false,
+              "warehouse_scope": "all"
+            },
+            "bkn_context": {
+              "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+              "interaction_id": "int_7bf2e33f1751b0ddc63de512e416ca5d"
+            }
+          },
+          "MCP_output_present": true,
+          "receipt_ids": [
+            "rcpt_f1eab7fa7cbca73a94050a748c3c933d"
+          ],
+          "published_function_name": "共用料与多需求争用",
+          "published_metadata_id": "01a13053-222f-783e-b823-4c6ffc34268a",
+          "function_receipt_ids": [
+            "rcpt_2c0b301af3ba8649330d6f9e47b52d9f"
+          ]
+        }
+      ]
+    }
+  ]
+}

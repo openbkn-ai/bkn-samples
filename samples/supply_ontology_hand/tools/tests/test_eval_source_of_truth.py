@@ -54,9 +54,14 @@ def test_bkn_eval_covers_every_registered_skill():
         for name in answer["basis"].get("skills", [])
     }
     registered = {name for name, _ in local_skills()}
+    calendar_questions = yaml.safe_load(
+        (EVAL_DATASETS / "calendar-month-question-set-v1.yaml").read_text(encoding="utf-8")
+    )
+    extension_skills = set(calendar_questions["required_skills"])
 
     assert used <= registered
-    assert registered <= used
+    assert extension_skills <= registered
+    assert registered <= used | extension_skills
 
 
 def test_current_baseline_metric_basis_resolves_to_delivered_definitions():

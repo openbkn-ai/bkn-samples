@@ -1,0 +1,350 @@
+{
+  "id": "F-09",
+  "question": "产品 U00-000151 不启用替代料、显式 production_available 七仓中，按确定分配策略还能支持制造多少套？",
+  "calls": [
+    {
+      "tool": "execute_tool",
+      "params": {
+        "tool_id": "01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+        "arguments": {
+          "product": "U00-000151",
+          "substitute_enabled": false,
+          "warehouse_scope": "production_available"
+        },
+        "kn_id": "supply_ontology_hand",
+        "toolbox_id": "01a13053-049b-7a4d-9d6b-4994c73c7939",
+        "bkn_context": {
+          "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+          "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7"
+        }
+      },
+      "output": {
+        "duration_ms": 1033,
+        "status_code": 200,
+        "headers": {
+          "Cache-Control": "private, no-cache",
+          "Content-Type": "application/json",
+          "Date": "Mon, 12 Oct 2026 13:37:51 GMT",
+          "Content-Length": "923"
+        },
+        "body": {
+          "metrics": {
+            "io_read_bytes": null,
+            "io_write_bytes": null,
+            "duration_ms": 462.27950099273585,
+            "cpu_time_ms": 4.440041000009387,
+            "peak_memory_mb": null
+          },
+          "exit_code": 0,
+          "artifacts": [],
+          "session_id": "sess_aoi_0",
+          "stdout": "",
+          "stderr": "",
+          "result": {
+            "bottleneck": {
+              "material_name": "YN100大纸箱格栅衬板",
+              "max_build_qty": 120,
+              "source": "main",
+              "material_code": "606-000065",
+              "main_material_code": "606-000065"
+            },
+            "warehouse_scope": "production_available",
+            "product_code": "U00-000151",
+            "constraint_count": 12,
+            "theoretical_build_qty": 120,
+            "data_source": {
+              "loaded_datasets": [
+                "bom",
+                "inventory"
+              ],
+              "knowledge_network_id": "supply_ontology_hand"
+            },
+            "substitute_enabled": false,
+            "include_in_transit": false,
+            "report_grain": "summary",
+            "include_finished_goods": false,
+            "warehouse_filter": [
+              "苏州半成品仓",
+              "苏州成品仓",
+              "苏州电子原料仓",
+              "苏州无人机原料仓",
+              "苏州装配原料仓",
+              "乌鲁木齐成品仓",
+              "哈尔滨成品仓"
+            ]
+          },
+          "execution_time_ms": 0
+        },
+        "error": ""
+      }
+    }
+  ],
+  "start": {
+    "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+    "execution_status": "active"
+  },
+  "finish": {
+    "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+    "execution_status": "completed",
+    "evidence_status": "complete"
+  },
+  "trace": {
+    "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+    "ordinal": 24,
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "closure_manifest": {
+      "completion_manifest_version": "3.0.0",
+      "answer_artifact_ref": "artifact:art_result_6dee25bd722ab748f8451f62a806cdfc",
+      "expected_operations": [
+        {
+          "operation_id": "op_02919124fd0613ab1bc64d00cdbcaba7",
+          "required": true
+        },
+        {
+          "operation_id": "op_4ff8f4ad0d3b07f258c422827669b256",
+          "required": true
+        },
+        {
+          "operation_id": "op_6e7b8691cae9f29a1dbc0751fc922e30",
+          "required": true
+        },
+        {
+          "operation_id": "op_c9d6747b22be2a22abfb43daa78e3823",
+          "required": true
+        },
+        {
+          "operation_id": "op_df96eb9acbb44049fa4793a7e612a5a6",
+          "required": true
+        }
+      ],
+      "expected_receipts": [
+        {
+          "receipt_id": "rcpt_1b6f27ceffe1c3d6059225fd679fade9",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_3fbab429a07c5533ec44e9a3a6027711",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_668c5e67cc3ed654448d54cdf7d0cbba",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_724f90ae9a55f713a73f5898c7061826",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_d64cc413ec904be9433b4810b9442c63",
+          "required": true
+        }
+      ],
+      "completion_reason": "completed"
+    },
+    "lease_token": "[REDACTED]",
+    "lease_epoch": 1,
+    "lease_version": 7,
+    "lease_expires_at": "2026-10-12T13:42:50.738543Z",
+    "row_version": 12,
+    "created_at": "2026-10-12T13:37:50.144449Z",
+    "updated_at": "2026-10-12T13:37:51.262457Z",
+    "terminal_at": "2026-10-12T13:37:51.262457Z"
+  },
+  "receipts": [
+    {
+      "receipt_id": "rcpt_1b6f27ceffe1c3d6059225fd679fade9",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+      "operation_id": "op_df96eb9acbb44049fa4793a7e612a5a6",
+      "attempt": 1,
+      "operation_key": "mcp:22ce8734afbae1f947a52dcb376c29bf",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_f53be3b7-1003-4e89-920d-f5c6459906eb",
+      "trace_id": "19aacb82739075ac0cc3fade2a4fdd95",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_a7cc1045ca3d67c47335be15bae6718173502677a30b8f0c6629ac94628df8c6"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:37:50.738543Z",
+      "terminal_at": "2026-10-12T13:37:50.780319Z"
+    },
+    {
+      "receipt_id": "rcpt_3fbab429a07c5533ec44e9a3a6027711",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+      "operation_id": "op_02919124fd0613ab1bc64d00cdbcaba7",
+      "attempt": 1,
+      "operation_key": "mcp:e4c2a8dae4e54c46e1e447fd8595ffd5",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_a61ec96b-9090-4670-a25a-2eee73879828",
+      "trace_id": "11346e1ad810adc909ce48267241940f",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_638df645b8f5f0b9e0f5041ad482dd15d6a9d3a57c6281fd1dae355841eea28e"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_inventory",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:37:50.662699Z",
+      "terminal_at": "2026-10-12T13:37:50.712289Z"
+    },
+    {
+      "receipt_id": "rcpt_668c5e67cc3ed654448d54cdf7d0cbba",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+      "operation_id": "op_6e7b8691cae9f29a1dbc0751fc922e30",
+      "attempt": 1,
+      "operation_key": "mcp:10b51d448023d4dec4e72d7d7098c89e",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_3481234b-2c79-409c-9e22-af18e97c09ff",
+      "trace_id": "f1d79c3087ffe775b6681790fbd43536",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_670d1af86a58697649bd46f85d3d533b55e61544296c3fcd50b95ef0c4d5a99c"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_bom",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:37:50.615639Z",
+      "terminal_at": "2026-10-12T13:37:50.6504Z"
+    },
+    {
+      "receipt_id": "rcpt_724f90ae9a55f713a73f5898c7061826",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+      "operation_id": "op_4ff8f4ad0d3b07f258c422827669b256",
+      "attempt": 1,
+      "operation_key": "mcp:c17eaf90c3fb4cdd8bf764a7fd17182f",
+      "tool_name": "execute_tool",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_1a96affc-c90c-4425-9eda-fd7ca6ca3eaf",
+      "trace_id": "e93c33ea0283a8da6010ee50ccc5f259",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:37:50.158285Z",
+      "terminal_at": "2026-10-12T13:37:51.250147Z"
+    },
+    {
+      "receipt_id": "rcpt_d64cc413ec904be9433b4810b9442c63",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_cc59eb93b12b80f39de10d06ffac71c7",
+      "operation_id": "op_c9d6747b22be2a22abfb43daa78e3823",
+      "attempt": 1,
+      "operation_key": "function:937622d4c01fcd0deca591ebb5495660",
+      "tool_name": "01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_1a96affc-c90c-4425-9eda-fd7ca6ca3eaf",
+      "trace_id": "e93c33ea0283a8da6010ee50ccc5f259",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "function",
+          "ref_id": "function:supply_ontology_hand:01a13053-15eb-7a51-afeb-4b2ff2dc8cb8",
+          "version": "01a13053-15e9-7dfe-89ed-341190491997",
+          "display_hint": "理论可产"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:37:50.200703Z",
+      "terminal_at": "2026-10-12T13:37:51.244179Z"
+    }
+  ]
+}

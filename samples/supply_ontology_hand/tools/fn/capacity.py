@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 
-from .bom import explode_leaf_usage
+from .allocation import net_requirements
 from .errors import CannotCompute
 from .inventory import available_qty
 from .warehouse import resolve_warehouse_scope
@@ -18,7 +18,7 @@ def theoretical_build(
     snap,
     product: str,
     *,
-    warehouse_scope: str | list[str] | None = "production_available",
+    warehouse_scope: str | list[str] | None = "all",
     substitute_enabled: bool | None = False,
     report_grain: str = "summary",
 ) -> dict:
@@ -29,52 +29,50 @@ def theoretical_build(
         raise CannotCompute("未确认是否启用替代料，不能算理论可产")
     if report_grain not in {"summary", "full"}:
         raise CannotCompute(f"report_grain 只能是 summary 或 full：{report_grain}")
-    leaves = explode_leaf_usage(
-        snap, product, include_substitute=bool(substitute_enabled)
-    )
     warehouses = resolve_warehouse_scope(warehouse_scope)
+    def allocate(quantity):
+        return net_requirements(snap, product, quantity, scope=warehouse_scope,
+                                substitute_enabled=bool(substitute_enabled),
+                                include_finished_goods=False)
+    # Integer search with a proved infeasible upper bound. A sum of inventory
+    # quantities is not a bound when BOM usage is fractional.
+    lo, hi = 0, 1
+    while allocate(hi)["feasible"]:
+        lo = hi
+        hi *= 2
+        if hi > 2**53:
+            raise CannotCompute("理论产量超过可精确计算的整数范围")
+    while lo + 1 < hi:
+        mid = (lo + hi) // 2
+        if allocate(mid)["feasible"]:
+            lo = mid
+        else:
+            hi = mid
+    theoretical = lo
+    boundary = allocate(theoretical + 1)
     constraints = []
-    qty = None
-    bottleneck = None
-    for code, item in leaves.items():
-        usage = float(item["usage_per_unit"] or 0)
-        main_avail = available_qty(snap, code, warehouse_scope)
-        main_can = _floor_div(main_avail, usage)
-        used_code = code
-        used_can = main_can
-        source = "main"
-        if substitute_enabled:
-            for alt in item.get("substitutes") or []:
-                alt_usage = float(alt.get("usage_per_unit") or usage)
-                alt_can = _floor_div(
-                    available_qty(snap, alt["material_code"], warehouse_scope),
-                    alt_usage,
-                )
-                if alt_can > used_can:
-                    used_can = alt_can
-                    used_code = alt["material_code"]
-                    source = "substitute"
-        constraints.append(
-            {
-                "material_code": code,
-                "material_name": item.get("material_name", ""),
-                "usage_per_unit": usage,
-                "available_qty": main_avail,
-                "max_build_qty": main_can,
-                "chosen_code": used_code,
-                "chosen_qty": used_can,
-                "source": source,
-            }
-        )
-        if qty is None or used_can < qty:
-            qty = used_can
-            bottleneck = {
-                "material_code": used_code,
-                "main_material_code": code,
-                "max_build_qty": used_can,
-                "source": source,
-            }
-    theoretical = 0 if qty is None else int(qty)
+    for item in boundary["lines"]:
+        if not item["is_leaf"]:
+            continue
+        constraints.append({
+            "material_code": item["material_code"],
+            "material_name": item["material_name"],
+            "usage_per_unit": item["usage_per_unit"],
+            "available_qty": item["available_qty"],
+            "max_build_qty": theoretical if item["net_requirement"] > 1e-9 else None,
+            "chosen_code": item["material_code"],
+            "chosen_qty": theoretical,
+            "source": item["source"],
+            "boundary_demand_qty": theoretical + 1,
+            "boundary_shortage": item["net_requirement"],
+        })
+    blocked = next((item for item in boundary["lines"]
+                    if item["is_leaf"] and item["net_requirement"] > 1e-9), None)
+    bottleneck = ({"material_code": blocked["material_code"],
+                   "main_material_code": blocked["main_material_code"],
+                   "material_name": blocked["material_name"],
+                   "max_build_qty": theoretical, "source": blocked["source"]}
+                  if blocked else None)
     result = {
         "product_code": product,
         "theoretical_build_qty": theoretical,
@@ -96,8 +94,8 @@ def total_sellable(
     snap,
     product: str,
     *,
-    production_scope: str | list[str] | None = "production_available",
-    finished_goods_scope: str | list[str] | None = "finished_goods",
+    production_scope: str | list[str] | None = "all",
+    finished_goods_scope: str | list[str] | None = "all",
     substitute_enabled: bool | None = False,
 ) -> dict:
     product = (product or "").strip()
@@ -134,7 +132,7 @@ def max_build_without_po(
     snap,
     product: str,
     *,
-    warehouse_scope: str | list[str] | None = "production_available",
+    warehouse_scope: str | list[str] | None = "all",
     substitute_enabled: bool | None = False,
     report_grain: str = "summary",
 ) -> dict:

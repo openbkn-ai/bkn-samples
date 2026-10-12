@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .bom import explode_leaf_usage
+from .allocation import finite_quantity, net_requirements
 from .errors import CannotCompute
 from .inventory import available_qty, in_transit_qty
 from .warehouse import resolve_warehouse_scope
@@ -11,7 +11,7 @@ def kitting_net_demand(
     product: str,
     qty: float,
     *,
-    warehouse_scope: str | list[str] | None = "production_available",
+    warehouse_scope: str | list[str] | None = "all",
     substitute_enabled: bool | None = False,
     report_grain: str = "summary",
 ) -> dict:
@@ -26,43 +26,27 @@ def kitting_net_demand(
         demand_qty = float(qty)
     except (TypeError, ValueError) as exc:
         raise CannotCompute("数量 X 无效") from exc
-    if demand_qty < 0:
-        raise CannotCompute("数量 X 不能为负")
+    demand_qty = finite_quantity(demand_qty, "数量 X")
     if report_grain not in {"summary", "full"}:
         raise CannotCompute(f"report_grain 只能是 summary 或 full：{report_grain}")
 
-    leaves = explode_leaf_usage(
-        snap, product, include_substitute=bool(substitute_enabled)
-    )
+    allocation = net_requirements(snap, product, demand_qty, scope=warehouse_scope, substitute_enabled=bool(substitute_enabled), include_finished_goods=True)
     warehouses = resolve_warehouse_scope(warehouse_scope)
     lines = []
     gaps = []
-    for code, item in leaves.items():
-        usage = float(item["usage_per_unit"] or 0)
-        gross = demand_qty * usage
-        avail = available_qty(snap, code, warehouse_scope)
-        transit = in_transit_qty(snap, code)
-        chosen = code
-        source = "main"
-        if substitute_enabled:
-            best_cover = avail + transit
-            for alt in item.get("substitutes") or []:
-                alt_code = alt["material_code"]
-                cover = available_qty(snap, alt_code, warehouse_scope) + in_transit_qty(
-                    snap, alt_code
-                )
-                if cover > best_cover:
-                    best_cover = cover
-                    chosen = alt_code
-                    source = "substitute"
-                    avail = available_qty(snap, alt_code, warehouse_scope)
-                    transit = in_transit_qty(snap, alt_code)
-        net = max(0.0, gross - avail - transit)
+    for item in allocation["lines"]:
+        code = item["material_code"]
+        gross = item["gross_requirement"]
+        avail = item["available_qty"]
+        net = item["net_requirement"]
+        source = item["source"]
+        usage = item["usage_per_unit"]
+        transit = 0.0
         rec = {
-            "material_code": chosen,
-            "main_material_code": code,
-            "l1_parent": item.get("l1_parent", ""),
-            "material_name": item.get("material_name", ""),
+            "material_code": code,
+            "main_material_code": item["main_material_code"],
+            "l1_parent": item.get("parent_material_code", ""),
+            "material_name": "",
             "gross_requirement": gross,
             "available_qty": avail,
             "in_transit_qty": transit,
@@ -74,7 +58,9 @@ def kitting_net_demand(
             "source": source,
         }
         lines.append(rec)
-        if net > 0:
+        rec["is_leaf"] = item["is_leaf"]
+        rec["allocated_qty"] = item["allocated_qty"]
+        if net > 1e-9 and item["is_leaf"]:
             gaps.append(rec)
     result = {
         "product_code": product,
@@ -87,7 +73,10 @@ def kitting_net_demand(
         "warehouse_scope": warehouse_scope if not isinstance(warehouse_scope, list) else "custom",
         "warehouse_filter": warehouses,
         "substitute_enabled": bool(substitute_enabled),
-        "include_in_transit": True,
+        "include_in_transit": False,
+        "finished_goods_qty": allocation["finished_goods_qty"],
+        "finished_goods_allocated_qty": allocation["finished_goods_allocated_qty"],
+        "root_net_demand": allocation["root_net_demand"],
     }
     if report_grain == "full":
         result["lines"] = lines

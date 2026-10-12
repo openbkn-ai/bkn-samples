@@ -1,60 +1,13 @@
-# 输入输出契约：生产计划倒排（S1）
+# 输入输出契约：生产计划倒排
 
-## user_input
+输入：唯一产品、数量、截止日、已确认替代策略；预测单可选；业务日期缺省 `2026-08-25`；仓范围缺省 `all`，用户指定范围必须遵守。一张预测单或新增客户需求映射到 `product_query` 与 `backward_plan`。通过 MCP 发现实际参数，不能用统一宽入口推断每个 operation 都采用某参数。
 
-```json
-{
-  "knowledge_network_id": "supply_ontology_hand",
-  "product_query": "382-000005",
-  "forecast_id": "FC-001",
-  "demand_end": "2026-05-14",
-  "demand_qty": 50,
-  "business_date": "2026-08-25",
-  "warehouse_scope": "production_available",
-  "substitute_enabled": false,
-  "report_grain": "summary"
-}
-```
+调用 **生产计划齐套倒排**，由函数读取 BOM、库存、PO、物料提前期及预测事实。输出回显 `business_date`、实际仓范围、成品可用与已分配、剩余制造量、`fulfillment_mode`、客户最早可用日、客户延期、内部 A/B 风险、缺口及待确认供应。
 
-- `product_query`、`demand_end`、`demand_qty`、`substitute_enabled` 必填；`forecast_id` 可选；`business_date` 缺省时为 `2026-08-25`。
-- 一个产品对应一张需求预测；名称命中多个产品编码时先追问。
-- 无日期或替代策略未确认时，不下齐套或交期结论。
+`finished_goods` 模式表示成品已覆盖，不进入制造链；截止日已过不能标按时。`production_plan` 模式按净制造树和按期足量供给传播日期，未知日期不填为零延期或确定承诺。完整树才要求 `full_tree`，应区分结构 BOM 节点与实际净制造节点。
 
-## 函数调用合同
+字段使用实际函数出参；不伪造 JSON 固定数值。无法支持业务口径时输出限制并保留回执；标准交期和库存齐套仅作风险对照，不足以替代完整倒排。只输出人工建议，不写入业务记录。
 
-使用已发布的 **生产计划齐套倒排** 函数。函数调用只传业务参数，函数在运行时自行读取知识网络中的预测、BOM、库存、采购和 MRP 事实。
+## 确定的按期供给检查
 
-已有预测单时，函数校验产品、数量和截止日与预测一致；新增客户需求可不传 `forecast_id`，直接以产品、数量、截止日倒排。Agent 不读取 Skill 源码、不传快照、Token 或内部会话字段，也不在本地重写倒排算法。
-
-函数不可用时，可分别调用 **要 X 套净需求与齐套** 和 **标准交期** 解释已知风险；此时应明确“无法形成完整倒排结论”。
-
-## analysis_result
-
-```json
-{
-  "product_code": "382-000005",
-  "forecast_id": "FC-001",
-  "demand_end": "2026-05-14",
-  "demand_qty": 50,
-  "business_date": "2026-08-25",
-  "warehouse_filter": "production_available",
-  "finished_goods_qty": 534,
-  "fulfillment_mode": "finished_goods",
-  "production_plan_required": false,
-  "customer_earliest_available_date": "2026-08-25",
-  "customer_late_days": 0,
-  "can_deliver_on_time": false,
-  "max_delay_days": 12,
-  "delay_a": [],
-  "delay_b": [],
-  "supply_status_summary": {},
-  "gaps": []
-}
-```
-
-- `business_date`、`warehouse_filter`、`finished_goods_qty`、`fulfillment_mode` 必须回显。
-- `fulfillment_mode=finished_goods` 表示成品现货已覆盖需求：`can_deliver_on_time=true`、最早可用日为业务日期，**不进入制造倒排**。
-- `fulfillment_mode=production_plan` 表示现货不足：`customer_earliest_available_date` / `customer_late_days` 用于客户交期沟通；`max_delay_days` 仅表示内部倒排风险，不能直接表述为客户延期天数。
-- 报告同时说明数据范围、替代策略与所用计算口径。
-
-后续处置只输出人工建议；本版本不创建监控、采购申请、采购订单或 ERP 记录。
+对明确的物料、毛需求、业务日和需要日调用 **供应状态诊断**。读取 `on_time_covered`、`on_time_shortage_qty`、`available_qty`、`on_time_po_qty` 及 `po_receipts`，计算库存＋有效按期净未收PO是否覆盖给定数量。逾期、关闭及无日期PO不计已确认供给；这条封闭供给口径输出确定的覆盖是/否，不代替对未知未来采购的承诺。

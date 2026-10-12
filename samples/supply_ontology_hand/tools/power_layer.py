@@ -338,6 +338,46 @@ def metric_series_match(datas: Any, expected: list[dict], business_timezone: str
     return True
 
 
+def calendar_month_growth(metric_id: str, kn_id: str, case: dict, zone_name: str, cmd) -> tuple[list, list]:
+    """Acceptance orchestration: query full months, then compute adjacent differences."""
+    zone = ZoneInfo(zone_name)
+    queries = case.get("queries") or []
+    if len(queries) < 2:
+        raise ValueError("calendar month comparison requires a baseline month")
+    periods, totals, evidence = [], [], []
+    previous_end = None
+    for query in queries:
+        period = query["period"]
+        year, month = map(int, period.split("-"))
+        start = datetime(year, month, 1, tzinfo=zone)
+        end = datetime(year + (month == 12), month % 12 + 1, 1, tzinfo=zone)
+        if previous_end is not None and start != previous_end:
+            raise ValueError("comparison months must be consecutive")
+        previous_end = end
+        body = query["body"]
+        expected_condition = {"operation": "and", "sub_conditions": [
+            {"field": "signing_date", "operation": ">=", "value": int(start.timestamp() * 1000)},
+            {"field": "signing_date", "operation": "<", "value": int(end.timestamp() * 1000)},
+        ]}
+        if body != {"time": {"instant": True}, "condition": expected_condition}:
+            raise ValueError(f"{period}: expected explicit complete calendar month boundaries")
+        payload = json.loads(cmd(["openbkn", "--json", "bkn", "metric", "query", kn_id,
+                                 metric_id, "--body", json.dumps(body, ensure_ascii=False)]))
+        datas = payload.get("datas")
+        if (not isinstance(datas, list) or len(datas) != 1 or not isinstance(datas[0], dict)
+                or datas[0].get("labels") or len(datas[0].get("values") or []) != 1):
+            raise ValueError(f"{period}: missing or ambiguous monthly total")
+        total = datas[0]["values"][0]
+        if isinstance(total, bool) or not isinstance(total, (int, float)) or not math.isfinite(total):
+            raise ValueError(f"{period}: invalid monthly total")
+        evidence.append({"period": period, "body": body, "response": payload})
+        periods.append(period)
+        totals.append(total)
+    actual = [{"labels": {}, "time_strs": periods[1:], "values": totals[1:],
+               "growth_values": [current - prior for prior, current in zip(totals, totals[1:])]}]
+    return actual, evidence
+
+
 def verify_metrics(
     kn_id: str,
     cases: list[dict],
@@ -356,6 +396,25 @@ def verify_metrics(
             report["failed"].append(
                 {"id": case.get("id"), "metric_name": name, "error": "metric not found"}
             )
+            continue
+        if case.get("calculation") == "calendar_month_growth":
+            try:
+                actual, evidence = calendar_month_growth(str(metric["id"]), kn_id, case, business_timezone, cmd)
+                expected = case.get("expected_series")
+                monthly_gold = case.get("expected_monthly_totals")
+                totals = [item["response"]["datas"][0]["values"][0] for item in evidence]
+                matched = (isinstance(expected, list) and isinstance(monthly_gold, list)
+                           and len(monthly_gold) == len(totals)
+                           and all(values_close(a, b) for a, b in zip(totals, monthly_gold))
+                           and metric_series_match(actual, expected, business_timezone))
+                row = {"id": case.get("id"), "metric_name": name, "metric_id": metric["id"],
+                       "actual": actual, "expected": expected, "queries": evidence,
+                       "calculation_location": "acceptance client; agent performs arithmetic in live evaluation"}
+                if not matched:
+                    row["error"] = "monthly total or calculated growth mismatch"
+                report["passed" if matched else "failed"].append(row)
+            except (ValueError, TypeError, KeyError, ZoneInfoNotFoundError) as exc:
+                report["failed"].append({"id": case.get("id"), "metric_name": name, "error": str(exc)})
             continue
         body = case.get("body") or {}
         raw = cmd(

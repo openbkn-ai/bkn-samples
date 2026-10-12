@@ -725,3 +725,32 @@ def test_build_snapshot_does_not_mutate_synthetic_rows():
     original = deepcopy(synthetic)
     run_plan(build_snapshot(synthetic))
     assert synthetic == original
+
+
+def test_partial_finished_goods_reduces_production_requirement():
+    synthetic = rows(
+        inventories=[inventory(PRODUCT, 4, warehouse="苏州成品仓")],
+        bom=[bom_row("RM-001")],
+        mrps=[mrp("RM-001")],
+    )
+    result = run_plan(build_snapshot(synthetic), demand_qty=10)
+    assert result["fulfillment_mode"] == "production_plan"
+    assert result["finished_goods_qty"] == 4
+    assert result["demand_qty"] == 10
+    assert node(result, PRODUCT)["gross_requirement"] == 6
+    assert node(result, "RM-001")["gross_requirement"] == 6
+
+
+def test_sufficient_component_does_not_expand_its_children():
+    synthetic = rows(
+        bom=[bom_row("SUB"), bom_row("LEAF", parent="SUB", level=2)],
+        materials=[
+            material(PRODUCT, attr="自制", production_lt=1),
+            material("SUB", attr="自制", production_lt=2),
+            material("LEAF", purchase_lt=3),
+        ],
+        inventories=[inventory("SUB", 10)],
+        mrps=[mrp("SUB")],
+    )
+    result = run_plan(build_snapshot(synthetic), demand_qty=10)
+    assert {item["material_code"] for item in result["nodes"]} == {PRODUCT, "SUB"}
