@@ -1,0 +1,11 @@
+# Supply chain 0.1.5 (development candidate)
+
+- Preserve forecast business identifiers, including leading zeroes and suffixes. Query the exact value first and use a legacy numeric fallback only after a miss. Reject missing, ambiguous, incomplete, or conflicting forecasts before reading BOM data.
+- Preserve material_code and leadtime_days while adding the selected purchase/production caliber, material attribute, source field, day unit, object type ID, and selection rule. Missing attributes explicitly retain the existing production default.
+- Add signed and shipped quantity sum metrics, sales-order logic properties, and product-filtered query examples. Product 382-000005 has 1081 signed, 1066 shipped, and a difference of 15.
+- Add a separate signing-date event metric, an explicit capability matrix, and fixed historical examples for monthly trends, comparisons, grouped proportions, and temporal proportions. Validate every series and bucket; remove the 2% tolerance that could hide count errors. Platform UI request behavior is recorded as an external environment limitation, outside this sample delivery.
+- Freeze separate v2 evaluation inputs against all delivered CSV rows, including the three future forecast fixtures. The business date remains 2026-08-25. Open forecasts total 90 and 56340 units; U00-000080 totals 12 and 20000 units.
+
+Temporal examples use Asia/Shanghai business-month boundaries. Instant period totals use explicit date comparisons to avoid the MariaDB range boundary difference in deployment 628dd24. Bucket verification interprets timestamps in the declared business timezone. The monthly comparison window and bucket alignment have not passed live acceptance; CSV-derived expected answers remain a failing gate, and this mode is not claimed as verified.
+
+CSV data is unchanged. Local 0.1.5 candidates have completed uninstall/reinstall and basic metric/function validation. An independent Codex MCP A/C run scored 50/50 on the frozen core question set; it does not reproduce the historical DeepSeek Harness or include a direct-database B comparison. Each rebuilt package still requires its own acceptance. Platform source is outside scope, and publication gates are incomplete. Published versions remain immutable. In-place upgrades and migrations are unsupported.

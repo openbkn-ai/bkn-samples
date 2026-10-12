@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import yaml
+import json
 
 from function_catalog import FUNCTION_CATALOG
 from register_skills import local_skills
@@ -56,3 +57,25 @@ def test_bkn_eval_covers_every_registered_skill():
 
     assert used <= registered
     assert registered <= used
+
+
+def test_current_baseline_metric_basis_resolves_to_delivered_definitions():
+    baseline = PACKAGE / "bkn-eval" / "baselines" / "2026-10-12-current-csv"
+    manifest = json.loads((baseline / "manifest.json").read_text())
+    answers = yaml.safe_load((baseline / manifest["answer_set"]["path"]).read_text())
+    names = {entry["name"] for entry in json.loads((PACKAGE / "tools/assets/metrics-create.json").read_text())["entries"]}
+    aliases = manifest["metric_name_aliases"]
+    references = {name for answer in answers["answers"] for name in answer["basis"].get("metrics", [])}
+    assert {aliases.get(name, name) for name in references} <= names
+
+
+def test_current_baseline_keeps_questions_and_versions_the_three_data_changes():
+    baseline = PACKAGE / "bkn-eval" / "baselines" / "2026-10-12-current-csv"
+    questions = yaml.safe_load((baseline / "question-set-v2.yaml").read_text())
+    historical = yaml.safe_load((EVAL_DATASETS / "sample-question-set-v1.yaml").read_text())
+    current_answers = yaml.safe_load((baseline / "answer-set-v2.yaml").read_text())
+    old_answers = yaml.safe_load((EVAL_DATASETS / "sample-answer-set-v1.yaml").read_text())
+    assert questions["questions"] == historical["questions"]
+    assert {entry["id"] for entry in questions["questions"]} == {entry["id"] for entry in current_answers["answers"]}
+    changed = {current["id"] for old, current in zip(old_answers["answers"], current_answers["answers"]) if old != current}
+    assert changed == {"M-07", "M-08", "M-12"}
