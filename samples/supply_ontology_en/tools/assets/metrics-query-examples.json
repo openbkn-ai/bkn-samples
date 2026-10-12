@@ -1,0 +1,240 @@
+{
+  "comment": "Query body for openbkn bkn metric query --body. Resolve metric_id from metric_name. Each case expands warehouse presets. Avoid exhaustive analysis_dimensions acceptance because the deployed API returns about 20 groups.",
+  "kn_id": "supply_ontology_en",
+  "warehouse_scope_presets": {
+    "production_available": [
+      "Suzhou Subassemblies",
+      "Suzhou Finished Goods",
+      "Suzhou Electronics",
+      "Suzhou Drone Materials",
+      "Suzhou Assembly",
+      "Urumqi Finished Goods",
+      "Harbin Finished Goods"
+    ],
+    "finished_goods": [
+      "Suzhou Finished Goods",
+      "Urumqi Finished Goods",
+      "Harbin Finished Goods"
+    ],
+    "all": []
+  },
+  "cases": [
+    {
+      "id": "product_count",
+      "metric_name": "Supply EN: Product Count",
+      "title": "Finished Product Count",
+      "body": {},
+      "expected_value": 30
+    },
+    {
+      "id": "material_count",
+      "metric_name": "Supply EN: Material Count",
+      "title": "Supply EN: Material Count",
+      "body": {},
+      "expected_value": 3497
+    },
+    {
+      "id": "material_purchased",
+      "metric_name": "Supply EN: Material Count",
+      "title": "Purchased Material Count",
+      "body": {
+        "condition": {
+          "field": "materialattr",
+          "operation": "==",
+          "value": "Purchased"
+        }
+      },
+      "expected_value": 3149
+    },
+    {
+      "id": "supplier_count",
+      "metric_name": "Supply EN: Supplier Count",
+      "title": "Supply EN: Supplier Count",
+      "body": {},
+      "expected_value": 230
+    },
+    {
+      "id": "supplier_alex_reed",
+      "metric_name": "Supply EN: Supplier Count",
+      "title": "Suppliers Managed by Alex Reed",
+      "body": {
+        "condition": {
+          "field": "purchaserid_name",
+          "operation": "==",
+          "value": "Alex Reed"
+        }
+      },
+      "expected_value": 51
+    },
+    {
+      "id": "salesorder_count",
+      "metric_name": "Supply EN: Sales Order Count",
+      "title": "Supply EN: Sales Order Count",
+      "body": {},
+      "expected_value": 800
+    },
+    {
+      "id": "salesorder_382",
+      "metric_name": "Supply EN: Sales Order Count",
+      "title": "382-000005 Sales Order Count",
+      "body": {
+        "condition": {
+          "field": "product_code",
+          "operation": "==",
+          "value": "382-000005"
+        }
+      },
+      "expected_value": 40
+    },
+    {
+      "id": "warehouse_count",
+      "metric_name": "Supply EN: Warehouse Count",
+      "title": "Distinct warehouses present in stock records.",
+      "body": {},
+      "expected_value": 29
+    },
+    {
+      "id": "inv_382_fg",
+      "metric_name": "Supply EN: Available Stock",
+      "title": "382-000005 Finished Goods Stock",
+      "body": {
+        "condition": {
+          "operation": "and",
+          "sub_conditions": [
+            {
+              "field": "material_code",
+              "operation": "==",
+              "value": "382-000005"
+            },
+            {
+              "field": "warehouse",
+              "operation": "in",
+              "value": [
+                "Suzhou Finished Goods",
+                "Urumqi Finished Goods",
+                "Harbin Finished Goods"
+              ]
+            }
+          ]
+        }
+      },
+      "expected_value": 534,
+      "note": "Use this body when and + sub_conditions is supported. On UnsupportConditionOperation, query separately and intersect the results."
+    },
+    {
+      "id": "inv_791_prod",
+      "metric_name": "Supply EN: Available Stock",
+      "title": "791-000013 Production Stock",
+      "body": {
+        "condition": {
+          "operation": "and",
+          "sub_conditions": [
+            {
+              "field": "material_code",
+              "operation": "==",
+              "value": "791-000013"
+            },
+            {
+              "field": "warehouse",
+              "operation": "in",
+              "value": [
+                "Suzhou Subassemblies",
+                "Suzhou Finished Goods",
+                "Suzhou Electronics",
+                "Suzhou Drone Materials",
+                "Suzhou Assembly",
+                "Urumqi Finished Goods",
+                "Harbin Finished Goods"
+              ]
+            }
+          ]
+        }
+      },
+      "expected_value": 1000
+    },
+    {
+      "id": "forecast_qty_all",
+      "metric_name": "Supply EN: Total Forecast Demand",
+      "title": "All Forecast Quantity",
+      "body": {},
+      "expected_value": 115922,
+      "note": "Frozen CSV: Open forecast quantity 56340 + Closed forecast quantity 59582 = 115922."
+    },
+    {
+      "id": "forecast_382_open_qty",
+      "metric_name": "Supply EN: Total Forecast Demand",
+      "title": "382-000005 Open Forecast Quantity",
+      "body": {
+        "condition": {
+          "operation": "and",
+          "sub_conditions": [
+            {
+              "field": "material_number",
+              "operation": "==",
+              "value": "382-000005"
+            },
+            {
+              "field": "closestatus_title",
+              "operation": "==",
+              "value": "Open"
+            }
+          ]
+        }
+      },
+      "expected_value": 2605
+    },
+    {
+      "id": "open_forecast_count",
+      "metric_name": "Supply EN: Open_Forecast_Count",
+      "title": "Supply EN: Open_Forecast_Count",
+      "body": {
+        "condition": {
+          "field": "closestatus_title",
+          "operation": "!=",
+          "value": "Closed"
+        }
+      },
+      "expected_value": 90,
+      "note": "Frozen CSV: 90 open forecasts. Explicitly filter closestatus_title != Closed."
+    },
+    {
+      "id": "sales_382_signed_qty",
+      "metric_name": "Supply EN: Total Signed Quantity",
+      "title": "382-000005 Signed Quantity",
+      "body": {
+        "condition": {
+          "field": "product_code",
+          "operation": "==",
+          "value": "382-000005"
+        }
+      },
+      "expected_value": 1081,
+      "note": "M-10: 40 sales orders; 1081 signed, 1066 shipped, 15 unshipped."
+    },
+    {
+      "id": "sales_382_shipped_qty",
+      "metric_name": "Supply EN: Total Shipped Quantity",
+      "title": "382-000005 Shipped Quantity",
+      "body": {
+        "condition": {
+          "field": "product_code",
+          "operation": "==",
+          "value": "382-000005"
+        }
+      },
+      "expected_value": 1066,
+      "note": "M-10: 40 sales orders; 1081 signed, 1066 shipped, 15 unshipped."
+    },
+    {
+      "id": "signed_event_total",
+      "metric_name": "Supply EN: Signing Events",
+      "title": "All-Time Signed Quantity",
+      "body": {
+        "time": {
+          "instant": true
+        }
+      },
+      "expected_value": 20396
+    }
+  ]
+}

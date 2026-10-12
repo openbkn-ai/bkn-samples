@@ -1,0 +1,126 @@
+schema_version: '2.0'
+set_id: supply-business-rules-v3
+snapshot_date: '2026-10-12'
+business_date: '2026-08-25'
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: M-01
+  question: 当前成品主数据有多少种？
+- id: M-02
+  question: 当前物料主数据有多少种？
+- id: M-03
+  question: 当前供应商档案有多少家？
+- id: M-04
+  question: 当前销售订单共有多少张？
+- id: M-05
+  question: 库存记录中一共出现过多少个仓库？
+- id: M-06
+  question: 产品 382-000005 在三个成品仓的可用库存是多少？
+- id: M-07
+  question: 当前未关闭预测单的需求数量合计是多少？
+- id: M-08
+  question: 当前还有多少张预测单未关闭？
+- id: M-09
+  question: 当前处于执行中的销售订单有多少张？
+- id: M-10
+  question: 产品 382-000005 已签约多少套、已发货多少套，还有多少套未发货？
+- id: M-11
+  question: 产品 382-000005 当前未关闭的需求预测有多少张、合计多少套？
+- id: M-12
+  question: 产品 U00-000080 当前未关闭的需求预测有多少张、合计多少套？
+- id: M-13
+  question: 当前物料中，外购物料有多少种？
+- id: M-14
+  question: 当前物料中，自制物料有多少种？
+- id: M-15
+  question: 采购员杨强云负责维护多少家供应商档案？
+- id: F-01
+  question: 请列出产品 382-000005 的一级主料，不需要库存信息。
+- id: F-02
+  question: 产品 382-000005 与 P61-000351 的 完整主料 BOM（不含根、不含替代） 共同物料有多少种？
+- id: F-03
+  question: 产品 382-000005、P61-000351 与 U00-000151 三者共同的 完整主料 BOM（不含根、不含替代） 物料有多少种？
+- id: F-04
+  question: 产品 382-000005 不启用替代料、全仓可用库存、不计PO；请给出成品现货、库存支持再制造数量和合计可售数量。制造时先扣每层组件库存再展开净缺。
+- id: F-05
+  question: 产品 U00-000151 不启用替代料、全仓可用库存、不计PO；请给出成品现货、库存支持再制造数量和合计可售数量。
+- id: F-06
+  question: 产品 382-000005 新增 50 套、不启用替代料，默认全仓；先扣成品后按层扣组件，是否有库存缺口？
+- id: F-07
+  question: 外购件 606-000989 的标准采购交期是多少天？
+- id: F-08
+  question: 产品 382-000005 不启用替代料、显式 production_available 七仓中，按确定分配策略还能支持制造多少套？
+- id: F-09
+  question: 产品 U00-000151 不启用替代料、显式 production_available 七仓中，按确定分配策略还能支持制造多少套？
+- id: F-10
+  question: 产品 P61-000351 新增 60 套、不启用替代料，默认全仓；先扣成品后按层扣组件，是否有库存缺口及缺口物料数？
+- id: F-11
+  question: 按数组顺序先承接 382-000005 的 50 套、再承接 P61-000351 的 60 套，不启用替代料、默认全仓；共享库存先扣成品再逐层扣组件，两单各自能否覆盖？
+- id: F-12
+  question: 产品 P61-000351 与 U00-000151 的 BOM 共同物料有多少种？
+- id: F-13
+  question: 产品 382-000005 不采购、不计在途且不启用替代料，在显式 production_available 七仓中，按确定分配策略最多支持制造多少套？
+- id: F-14
+  question: 产品 U00-000080 的完整主料 BOM（不含替代）共有多少条非根行、含根共多少个结构节点？请查询完整结构，不使用净制造倒排节点数代替。
+- id: F-15
+  question: 产品 382-000005 启用位置合格替代料、全仓可用库存、不计PO；请给出成品现货、确定分配策略支持再制造数量和合计可售数量。每位置单选候选、不混料，并使用候选自身单耗与共享库存。
+- id: R-01
+  question: 产品 P61-000351 的一级主料有多少种？
+- id: R-02
+  question: 产品 U00-000080 的一级主料有多少种？
+- id: R-03
+  question: 生产产品 U00-000080 的完整主料物料清单（不含根、不含替代）一共涉及多少种物料？
+- id: R-04
+  question: 生产产品 382-000005 的完整主料物料清单（不含根、不含替代）一共涉及多少种物料？
+- id: R-05
+  question: 物料 321-000569 被哪些产品使用？
+- id: R-06
+  question: 物料 606-000989 被哪些产品使用？
+- id: R-07
+  question: 物料 725-000226 被多少种产品使用？
+- id: R-08
+  question: 产品 382-000005 与 382-000006 的一级主料中，有哪些是共同的？
+- id: R-09
+  question: 产品 382-000005 的父件 588-000620、替代组12中，主料356-000061对应什么替代物料？请返回替代料在全仓可用库存及其单耗，禁止合并其他父件或产品的同号组。
+- id: S-01
+  question: 客户新增 P61-000351 共60套，不启用替代料，全仓可用库存；只允许使用成品和现有组件/原料，不计PO、不新增采购。按先成品、逐层净扣规则，现有库存能否完整覆盖该需求？列出最终叶子缺口及数量，输出确定的是/否。
+- id: S-02
+  question: 客户要产品 U00-000151，先不启用替代料。请给出当前可售能力，并明确这是否等于交期承诺。
+- id: S-03
+  question: 客户新增产品 382-000005 的 50 套需求，不能使用替代料、默认全仓；先扣成品再逐层扣组件，请判断库存是否覆盖，并列出净缺料情况。
+- id: S-04
+  question: 两个客户同时新增需求：382-000005 共 50 套、P61-000351 共 60 套，均不能使用替代料。请判断是否可以同时承接，并说明各自的缺料情况。
+    全仓、只用库存不计PO，按题中产品出现顺序扣减共享池。
+- id: S-05
+  question: 先承接382-000005共50套，再承接P61-000351共60套，均不启用替代料、全仓、只用库存不计PO。两产品共有多少种主料？按此顺序共享同一库存池，两单是否分别覆盖？列出最终缺口。
+- id: S-06
+  question: 客户新增P61-000351共60套，不启用替代料、全仓、只用库存不计PO。先扣成品与每层组件库存后，物料321-000569的最终叶子净缺口是多少？建议补货量仅等于该净缺口，不加MOQ或安全库存。
+- id: S-07
+  question: 业务日2026-08-25，客户需要382-000005共50套，截止2026-09-05。显式全仓，允许替代；若成品现货已覆盖则当天直发，不计运输时间、不新增采购或制造。请给出成品可用数量、是否按时覆盖和发货后剩余数量。
+- id: S-08
+  question: 业务日2026-08-25，物料321-000569毛需求240个，需要日2026-09-08，全仓。只统计可用库存与已存在PO的净未收量max(qty-actqty,0)，关闭PO、到货日不晚于业务日的逾期未收PO和无有效日期PO不计已确认供给。不假设新增采购。已确认供给能否按需要日覆盖240个？返回库存、有效按期PO数量、按期供给及缺口，输出确定的是/否。
+- id: S-09
+  question: 客户需要 U00-000151 共 3850 套，不能使用替代料。请判断当前供货能力是否满足该数量。
+- id: S-10
+  question: 客户需要 U00-000151 共 3851 套，不能使用替代料。请判断当前供货能力是否满足该数量，并说明差额。
+- id: S-11
+  question: 两个客户同时新增需求：P61-000351 共 60 套、U00-000151 共 50 套，均不能使用替代料。请判断两单各自是否齐套，并说明缺料情况。
+    全仓、只用库存不计PO，按题中产品出现顺序扣减共享池。
+snapshot_kind: repository_fixture_freeze
+baseline_id: supply-business-rules-v3-deterministic
+source_snapshot_date: '2026-08-13'
+snapshot_note: Freeze of delivered CSV fixtures, including three forecast rows added
+  on 2026-08-15; not a new capture from a live ERP.
+evaluation_policy:
+  inventory_scope: all unless explicitly specified
+  stock_status: 可用
+  quantity_supply: inventory only; exclude PO and new procurement
+  allocation: finished goods first, each component stock before expansion; shared
+    pool; array order then BOM row order
+  substitution: one candidate per position; own usage; max parent coverage; ties main
+    then source order
+  date_supply: existing net unreceived PO only, today < deliverdate <= need_by; overdue/undated
+    exclude from confirmed coverage
+  date_claim: closed-world confirmed supply coverage, not unknown future procurement
+    promise

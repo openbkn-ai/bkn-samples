@@ -1,0 +1,188 @@
+schema_version: '2.0'
+set_id: supply-en-question-set-v1
+snapshot_date: '2026-10-12'
+business_date: '2026-08-25'
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: M-01
+  question: How many finished products are in the current master data?
+- id: M-02
+  question: How many materials are in the current master data?
+- id: M-03
+  question: How many suppliers are registered?
+- id: M-04
+  question: How many sales orders are in the current snapshot?
+- id: M-05
+  question: How many distinct warehouses appear in stock records?
+- id: M-06
+  question: What is the available stock of product 382-000005 across the three finished
+    goods warehouses?
+- id: M-07
+  question: What is the total demand quantity of open forecasts?
+- id: M-08
+  question: How many forecasts remain open?
+- id: M-09
+  question: How many sales orders are In Progress?
+- id: M-10
+  question: For product 382-000005, how many sets are signed, shipped and still unshipped?
+- id: M-11
+  question: For product 382-000005, how many open forecasts and forecast sets are
+    there?
+- id: M-12
+  question: For product U00-000080, how many open forecasts and forecast sets are
+    there?
+- id: M-13
+  question: How many materials are Purchased?
+- id: M-14
+  question: How many materials are Manufactured?
+- id: M-15
+  question: How many supplier records does buyer Alex Reed manage?
+- id: F-01
+  question: List the first-level main components of product 382-000005, without stock
+    information.
+- id: F-02
+  question: How many distinct materials are shared by the complete main-component
+    BOMs of 382-000005 and P61-000351, excluding roots and alternatives?
+- id: F-03
+  question: How many distinct materials are shared by the complete main-component
+    BOMs of 382-000005, P61-000351 and U00-000151, excluding roots and alternatives?
+- id: F-04
+  question: For 382-000005, disable alternatives, use available stock in all warehouses
+    and exclude POs. Report finished stock, stock-supported manufacturing capacity
+    and total sellable quantity. Deduct component stock at every level before expanding
+    net shortages.
+- id: F-05
+  question: For U00-000151, disable alternatives, use available stock in all warehouses
+    and exclude POs. Report finished stock, stock-supported manufacturing capacity
+    and total sellable quantity.
+- id: F-06
+  question: Can all-warehouse stock cover a new demand for 50 sets of 382-000005 with
+    alternatives disabled? Allocate finished stock first, then component stock at
+    each level. Are there any final stock shortages?
+- id: F-07
+  question: What is the standard purchase lead time in days for Purchased material
+    606-000989?
+- id: F-08
+  question: With alternatives disabled, how many sets of 382-000005 can be manufactured
+    under the deterministic allocation policy using the explicit seven-warehouse production_available
+    preset?
+- id: F-09
+  question: With alternatives disabled, how many sets of U00-000151 can be manufactured
+    under the deterministic allocation policy using the explicit seven-warehouse production_available
+    preset?
+- id: F-10
+  question: Can all-warehouse stock cover a new demand for 60 sets of P61-000351 with
+    alternatives disabled? Allocate finished stock first, then component stock at
+    each level. Report coverage and the number of final shortage materials.
+- id: F-11
+  question: 'Allocate demands in array order: 50 sets of 382-000005, then 60 sets
+    of P61-000351. Disable alternatives and use all warehouses. Share one stock pool,
+    allocating finished stock first and then components at each level. Is each demand
+    covered?'
+- id: F-12
+  question: How many distinct BOM materials are shared by P61-000351 and U00-000151?
+- id: F-13
+  question: Without purchases, incoming supply or alternatives, how many sets of 382-000005
+    can be manufactured under the deterministic policy using the explicit seven-warehouse
+    production_available preset?
+- id: F-14
+  question: For the complete main-component BOM of U00-000080, excluding alternatives,
+    how many non-root rows and total structural nodes including the root are there?
+    Query the full structure; do not substitute net manufacturing backward-plan node
+    counts.
+- id: F-15
+  question: For 382-000005, enable position-eligible alternatives, use all-warehouse
+    available stock and exclude POs. Report finished stock, deterministic stock-supported
+    manufacturing capacity and total sellable quantity. Select one candidate per position
+    without mixing, using its own usage ratio and shared stock.
+- id: R-01
+  question: How many first-level main components does P61-000351 have?
+- id: R-02
+  question: How many first-level main components does U00-000080 have?
+- id: R-03
+  question: How many distinct materials are in the complete main-component BOM of
+    U00-000080, excluding the root and alternatives?
+- id: R-04
+  question: How many distinct materials are in the complete main-component BOM of
+    382-000005, excluding the root and alternatives?
+- id: R-05
+  question: Which products use material 321-000569?
+- id: R-06
+  question: Which products use material 606-000989?
+- id: R-07
+  question: How many products use material 725-000226?
+- id: R-08
+  question: Which first-level main components are shared by 382-000005 and 382-000006?
+- id: R-09
+  question: For product 382-000005, parent 588-000620 and alternate group 12, which
+    alternative replaces main component 356-000061? Report its all-warehouse available
+    stock and usage ratio. Do not merge group 12 from other parents or products.
+- id: S-01
+  question: A customer needs 60 sets of P61-000351. Disable alternatives; use only
+    available finished, component and raw-material stock in all warehouses. Exclude
+    POs and new purchases. Allocate finished stock first and deduct stock at each
+    level. Can stock cover the whole demand? Give a definite yes/no and final leaf
+    shortage quantities.
+- id: S-02
+  question: A customer asks for U00-000151 with alternatives disabled. Report current
+    sellable capacity and state whether that establishes a delivery deadline promise.
+- id: S-03
+  question: A customer adds 50 sets of 382-000005. Disable alternatives and use all
+    warehouses. Allocate finished stock first, then components at each level. Is demand
+    covered? List net shortages.
+- id: S-04
+  question: Two customers add 50 sets of 382-000005 and 60 sets of P61-000351. Disable
+    alternatives. Can both demands be covered, and what are their shortages? Use all
+    warehouses, current stock only and no POs; deduct from one shared pool in the
+    stated product order.
+- id: S-05
+  question: Allocate 50 sets of 382-000005, then 60 sets of P61-000351. Disable alternatives;
+    use all warehouses, current stock only and no POs. How many main materials do
+    the products share? Using one shared stock pool in this order, is each demand
+    covered? List final shortages.
+- id: S-06
+  question: A customer adds 60 sets of P61-000351. Disable alternatives; use all warehouses,
+    current stock only and no POs. After deducting finished stock and component stock
+    at each level, what is the final leaf shortage of material 321-000569? Recommend
+    exactly that shortage quantity, without MOQ or safety stock.
+- id: S-07
+  question: 'Business date: 2026-08-25. A customer needs 50 sets of 382-000005 by
+    2026-09-05. Explicitly use all warehouses and allow alternatives. If finished
+    stock covers demand, ship that day; exclude transport time, new purchases and
+    manufacturing. Report available finished stock, on-time coverage and stock remaining
+    after shipment.'
+- id: S-08
+  question: 'Business date: 2026-08-25. Material 321-000569 has gross demand 240 pcs
+    due 2026-09-08 across all warehouses. Count only available stock and net unreceived
+    quantities max(qty-actqty,0) of existing POs. Exclude closed POs, overdue unreceived
+    POs arriving on or before the business date, and POs without valid dates from
+    confirmed supply. Assume no new purchases. Can confirmed supply cover 240 pcs
+    by the need date? Give a definite yes/no, stock, valid on-time PO quantity, total
+    on-time supply and shortage.'
+- id: S-09
+  question: A customer needs 3850 sets of U00-000151 with alternatives disabled. Can
+    current supply capacity cover this quantity?
+- id: S-10
+  question: A customer needs 3851 sets of U00-000151 with alternatives disabled. Can
+    current supply capacity cover this quantity? Report the difference.
+- id: S-11
+  question: Two customers add 60 sets of P61-000351 and 50 sets of U00-000151. Disable
+    alternatives. Is each demand covered, and what are the shortages? Use all warehouses,
+    current stock only and no POs; allocate one shared pool in the stated product
+    order.
+snapshot_kind: repository_fixture_freeze
+baseline_id: supply-en-frozen-v1
+snapshot_note: Frozen supply-chain fixture with three future forecast scenarios.
+evaluation_policy:
+  inventory_scope: all unless explicitly specified
+  stock_status: Available
+  quantity_supply: inventory only; exclude PO and new procurement
+  allocation: finished goods first, each component stock before expansion; shared
+    pool; array order then BOM row order
+  substitution: one candidate per position; own usage; max parent coverage; ties main
+    then source order
+  date_supply: existing net unreceived PO only, today < deliverdate <= need_by; overdue/undated
+    exclude from confirmed coverage
+  date_claim: closed-world confirmed supply coverage, not unknown future procurement
+    promise

@@ -1,0 +1,261 @@
+{
+  "schema_version": "1.0",
+  "comment": "Sample documentation and acceptance contract, not additional API fields. The installer excludes this file. Creating an existing metric name does not update it; release a new version and reinstall cleanly.",
+  "metrics": [
+    {
+      "metric_name": "Supply EN: Product Count",
+      "scope_ref": "supply_ontology_en_product",
+      "aggregation": {
+        "property": "material_number",
+        "aggr": "count"
+      },
+      "time_property": null,
+      "caliber": "Complete master data or current order status.",
+      "supported_modes": [
+        "instant"
+      ],
+      "analysis_dimensions": [],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Material Count",
+      "scope_ref": "supply_ontology_en_material",
+      "aggregation": {
+        "property": "material_code",
+        "aggr": "count"
+      },
+      "time_property": null,
+      "caliber": "Complete master data or current order status.",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "materialattr",
+        "group_name"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Supplier Count",
+      "scope_ref": "supply_ontology_en_supplier",
+      "aggregation": {
+        "property": "supplier_code",
+        "aggr": "count"
+      },
+      "time_property": null,
+      "caliber": "Complete master data or current order status.",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "purchaserid_name"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Sales Order Count",
+      "scope_ref": "supply_ontology_en_salesorder",
+      "aggregation": {
+        "property": "sales_order_id",
+        "aggr": "count"
+      },
+      "time_property": null,
+      "caliber": "Complete master data or current order status.",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "product_code",
+        "order_status"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Warehouse Count",
+      "scope_ref": "supply_ontology_en_inventory",
+      "aggregation": {
+        "property": "warehouse",
+        "aggr": "count_distinct"
+      },
+      "time_property": null,
+      "caliber": "Current Stock Snapshot",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "stock_status"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Available Stock",
+      "scope_ref": "supply_ontology_en_inventory",
+      "aggregation": {
+        "property": "available_inventory_qty",
+        "aggr": "sum"
+      },
+      "time_property": null,
+      "caliber": "Current Stock Snapshot",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "material_code",
+        "warehouse",
+        "stock_status"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Total Forecast Demand",
+      "scope_ref": "supply_ontology_en_forecast",
+      "aggregation": {
+        "property": "qty",
+        "aggr": "sum"
+      },
+      "time_property": null,
+      "caliber": "Complete master data or current order status.",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "material_number",
+        "closestatus_title"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Open_Forecast_Count",
+      "scope_ref": "supply_ontology_en_forecast",
+      "aggregation": {
+        "property": "id",
+        "aggr": "count"
+      },
+      "time_property": null,
+      "caliber": "Complete master data or current order status.",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "material_number",
+        "closestatus_title"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": {
+        "field": "closestatus_title",
+        "operation": "!=",
+        "value": "Closed"
+      },
+      "default_range_policy": "none",
+      "note": "Open-forecast queries require an explicit closure filter. An empty query does not establish this business result."
+    },
+    {
+      "metric_name": "Supply EN: Total Signed Quantity",
+      "scope_ref": "supply_ontology_en_salesorder",
+      "aggregation": {
+        "property": "signing_quantity",
+        "aggr": "sum"
+      },
+      "time_property": null,
+      "caliber": "Complete master data or current order status.",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "product_code",
+        "order_status"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Total Shipped Quantity",
+      "scope_ref": "supply_ontology_en_salesorder",
+      "aggregation": {
+        "property": "shipping_quantity",
+        "aggr": "sum"
+      },
+      "time_property": null,
+      "caliber": "Complete master data or current order status.",
+      "supported_modes": [
+        "instant",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "product_code",
+        "order_status"
+      ],
+      "period_filter_supported": false,
+      "temporal_proportion_supported": false,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
+    },
+    {
+      "metric_name": "Supply EN: Signing Events",
+      "scope_ref": "supply_ontology_en_salesorder",
+      "aggregation": {
+        "property": "signing_quantity",
+        "aggr": "sum"
+      },
+      "time_property": "signing_date",
+      "caliber": "Signing Event Date",
+      "supported_modes": [
+        "instant",
+        "trend",
+        "calendar_month_growth",
+        "proportion"
+      ],
+      "analysis_dimensions": [
+        "order_status",
+        "product_code"
+      ],
+      "period_filter_supported": true,
+      "temporal_proportion_supported": true,
+      "required_query_condition": null,
+      "default_range_policy": "none",
+      "note": "Complete calendar-month growth queries each month with signing_date >= month start and < next month start, then subtracts adjacent totals in the agent. Server sameperiod endpoint is an optional independent diagnostic, not a business acceptance gate.",
+      "calculation_location": "agent for calendar_month_growth"
+    }
+  ]
+}

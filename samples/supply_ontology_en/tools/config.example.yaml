@@ -1,0 +1,22 @@
+openbkn:
+  kn_id: supply_ontology_en
+  kn_name: Supply Chain EN
+database:
+  engine: mysql
+  host: 127.0.0.1
+  port: 3306
+  database: supply_demo_en
+  user: supply_en
+  password: change_me
+load:
+  sample_dir: ../data
+  mode: recreate
+  on_error: stop
+vega:
+  catalog_id: ''
+  catalog_name: supply-demo-en
+  catalog_host: ''
+  connector_type: mysql
+  connector_options: {}
+bind:
+  dry_run: false
