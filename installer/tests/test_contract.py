@@ -62,7 +62,7 @@ class SupplyContractTest(unittest.TestCase):
     def test_repository_accepts_supply_chain(self):
         samples = validate_repository(ROOT)
         names = [sample["metadata"]["name"] for sample in samples]
-        self.assertEqual(names, ["order-basics", "supply-chain", "world-cup"])
+        self.assertEqual(names, ["order-basics", "supply-chain-en", "supply-chain", "world-cup"])
 
     def test_index_uses_version_and_official_repo(self):
         index = build_manifest_index(ROOT, REVISION)
