@@ -23,7 +23,7 @@ PRESETS = {
 
 def resolve_warehouse_scope(scope: str | list[str] | None) -> list[str]:
     if scope is None:
-        return list(PRODUCTION_AVAILABLE)
+        return []
     if isinstance(scope, list):
         return list(scope)
     key = str(scope).strip()

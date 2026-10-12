@@ -12,4 +12,5 @@ def test_register_skills_dry_run_discovers_the_local_business_skills():
         "demand-fulfillment-requirement-coverage-analysis",
         "demand-fulfillment-risk-summary",
         "production-schedule-backward-planning",
+        "sales-signing-calendar-month-analysis",
     ]

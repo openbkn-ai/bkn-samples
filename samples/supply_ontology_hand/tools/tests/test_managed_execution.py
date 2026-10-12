@@ -60,7 +60,7 @@ def test_managed_execution_runs_backward_plan_from_internal_bkn_rows():
     )
 
     assert result["business_date"] == "2026-08-25"
-    assert result["max_delay_days"] == 176
+    assert result["max_delay_days"] == 111
 
 
 def test_forecast_mode_needs_no_agent_copied_product_quantity_or_due_date():

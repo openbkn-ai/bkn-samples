@@ -1,0 +1,13 @@
+{
+  "skill_id": "01a13047-0a97-7eea-8bdc-5da80bcd2ff4",
+  "status": "published",
+  "content": "---\nname: sales-signing-calendar-month-analysis\ndescription: >\n  Use for sales signing quantities, complete calendar-month comparisons and monthly\n  growth on supply_ontology_hand. Query actual BKN data through MCP, then calculate\n  adjacent-month differences in the agent with explicit business date boundaries.\n---\n\n# 销售签约数量 · 完整自然月分析\n\n本 Skill 指导第三方 Agent 查询真实月份数据并计算业务结果。用于签约数量，不用于发货事件、库存历史、物料交期或排产。\n\n## 路径与边界\n\n1. 确认用户要的是完整自然月还是截至某日的同期比较；不得把二者混用。没有明确年份、月份或业务时区时先澄清。样例默认业务时区 Asia/Shanghai。\n2. 通过 MCP 发现 `supply_ontology_hand_salesorder` 的对象/属性，以及已发布的 **按签约日期的签约数量** 指标；使用发现的实际 ID，不硬编码实例 ID。字段是 `signing_date`、`signing_quantity`。\n3. 需要产品过滤时，解析唯一产品编码。当前月与比较月使用相同产品、状态等过滤口径。仅“当前发货数量合计”不能推导月度发货事件。\n4. 每个完整业务月单独查询：`signing_date >= 本月1日00:00` 且 `signing_date < 下月1日00:00`；月份边界按业务时区换算。不要把 6 月30日向前平移成 5 月30日，或假定每月有30天。处理12月跨年、2月和闰年。\n5. MCP 指标查询使用 `time: {instant: true}` 与显式日期比较条件。`condition` 的 AND 结构、时间戳单位、工具名称与参数以当前 MCP 元数据为准。不要附加 `sameperiod` 让服务端代替本路径计算业务月环比。\n6. 查询第一个报告月的完整前一月作为基线；例如报告4—6月，必须取得完整3—6月数据。先核对每月单个汇总值，再由 Agent 计算：增长量 = 本月数量 − 上月数量；增长率 = 增长量 / 上月数量 × 100%。上月为0时增长率不可定义，明确说明，不除以0。\n7. null、缺失、工具失败、分页不完整或多个不明分组不能当作0。空月只有在实际对象查询确认无符合条件记录且汇总口径明确时才可报告0；需要原始行时分页取齐再求和，不能只汇总第一页。\n8. 输出业务时区、各月左闭右开边界、原始汇总值、相邻月增长量及明确公式。仅在用户要求时输出增长率。保留 MCP 操作/回执与错误恢复证据。\n\n## 能力选择\n\n现有供应链函数负责 BOM、库存、齐套、可售与倒排，不负责月份窗口或销售月环比。不得调用 **标准交期** 做月份减法，不重建生产函数计算，也不读取样例 CSV/答案集。简单月份差值按以上明示公式由 Agent 计算；本 Skill 不内置任何月份数量或预期答案。\n\n## 验收要求\n\n先证明已发布的本 Skill 可经 MCP 发现并读取，再核对真实请求的日期范围、每月数量和计算结果。CLI/验收脚本通过不等于 Agent 路径通过。服务端 `sameperiod` 接口诊断独立记录，不用于替代或阻断这条自然月业务路径。\n",
+  "files": [
+    {
+      "rel_path": "SKILL.md",
+      "file_type": "reference",
+      "size": 3132,
+      "mime_type": "text/markdown"
+    }
+  ]
+}

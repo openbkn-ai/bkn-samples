@@ -1,0 +1,235 @@
+{
+  "id": "F-07",
+  "question": "外购件 606-000989 的标准采购交期是多少天？",
+  "calls": [
+    {
+      "tool": "execute_tool",
+      "params": {
+        "kn_id": "supply_ontology_hand",
+        "toolbox_id": "01a13046-a4fb-7d6a-a8b9-9ed42cf703cf",
+        "tool_id": "01a13046-c8a7-7358-9115-55d40280394c",
+        "arguments": {
+          "material_code": "606-000989"
+        },
+        "bkn_context": {
+          "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+          "interaction_id": "int_b39b8e8ab979d81e47b4e7f7506bddd9"
+        }
+      },
+      "output": {
+        "body": {
+          "stderr": "",
+          "result": {
+            "selection_rule": "外购/委外取采购固定提前期；其他属性取生产固定提前期",
+            "leadtime_days": 14,
+            "object_type_id": "supply_ontology_hand_material",
+            "material_code": "606-000989",
+            "source_field": "purchase_fixedleadtime",
+            "data_source": {
+              "knowledge_network_id": "supply_ontology_hand",
+              "loaded_datasets": [
+                "material"
+              ]
+            },
+            "caliber": "purchase",
+            "attribute_missing": false,
+            "material_attribute": "外购",
+            "unit": "day"
+          },
+          "metrics": {
+            "cpu_time_ms": 5.945999999994456,
+            "peak_memory_mb": null,
+            "io_read_bytes": null,
+            "io_write_bytes": null,
+            "duration_ms": 289.2522090114653
+          },
+          "artifacts": [],
+          "session_id": "sess_aoi_0",
+          "stdout": "",
+          "exit_code": 0,
+          "execution_time_ms": 0
+        },
+        "error": "",
+        "duration_ms": 519,
+        "status_code": 200,
+        "headers": {
+          "Cache-Control": "private, no-cache",
+          "Content-Type": "application/json",
+          "Date": "Mon, 12 Oct 2026 13:26:27 GMT",
+          "Content-Length": "670"
+        }
+      }
+    }
+  ],
+  "start": {
+    "interaction_id": "int_b39b8e8ab979d81e47b4e7f7506bddd9",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "execution_status": "active"
+  },
+  "finish": {
+    "interaction_id": "int_b39b8e8ab979d81e47b4e7f7506bddd9",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "execution_status": "completed",
+    "evidence_status": "assembling"
+  },
+  "trace": {
+    "interaction_id": "int_b39b8e8ab979d81e47b4e7f7506bddd9",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "ordinal": 22,
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "closure_manifest": {
+      "completion_manifest_version": "3.0.0",
+      "answer_artifact_ref": "artifact:art_result_3b62448b6184ac4c411e4166872bf4ea",
+      "expected_operations": [
+        {
+          "operation_id": "op_35578d78ec4ed184dc97d4af131eaf8c",
+          "required": true
+        },
+        {
+          "operation_id": "op_a8bb981faa50a61cc8b1c0e8266bb1b5",
+          "required": true
+        },
+        {
+          "operation_id": "op_c34bf939e36e470c8c82d330af1dfbbf",
+          "required": true
+        }
+      ],
+      "expected_receipts": [
+        {
+          "receipt_id": "rcpt_bd911e48c99da801adf24556daf3e2e7",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_ecb4374424612c9d0d9ea5b7f174c859",
+          "required": true
+        },
+        {
+          "receipt_id": "rcpt_f5e0a521af1c9fb5086f2ae4a65d10db",
+          "required": true
+        }
+      ],
+      "assembler_deadline": "2026-10-12T13:31:27.795659Z",
+      "completion_reason": "completed"
+    },
+    "lease_token": "[REDACTED]",
+    "lease_epoch": 1,
+    "lease_version": 5,
+    "lease_expires_at": "2026-10-12T13:31:27.580987Z",
+    "row_version": 9,
+    "created_at": "2026-10-12T13:26:27.209701Z",
+    "updated_at": "2026-10-12T13:26:27.999813Z",
+    "terminal_at": "2026-10-12T13:26:27.795659Z"
+  },
+  "receipts": [
+    {
+      "receipt_id": "rcpt_bd911e48c99da801adf24556daf3e2e7",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_b39b8e8ab979d81e47b4e7f7506bddd9",
+      "operation_id": "op_a8bb981faa50a61cc8b1c0e8266bb1b5",
+      "attempt": 1,
+      "operation_key": "mcp:a41f4b88f4738fa67f8ad6bb7b7f988a",
+      "tool_name": "query_object_instance",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_4a1b56d7-a67c-44c3-8e5b-c974cdbb4577",
+      "trace_id": "22a932004ccf527762602f6d44718042",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_4668dc74e471d41df758f44f36b9931f560a7cdb54161bb070cc219865ce81bf"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "object_type",
+          "ref_id": "object:supply_ontology_hand:supply_ontology_hand_material",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:27.580987Z",
+      "terminal_at": "2026-10-12T13:26:27.602444Z"
+    },
+    {
+      "receipt_id": "rcpt_ecb4374424612c9d0d9ea5b7f174c859",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_b39b8e8ab979d81e47b4e7f7506bddd9",
+      "operation_id": "op_35578d78ec4ed184dc97d4af131eaf8c",
+      "attempt": 1,
+      "operation_key": "function:0e4a2e97bffbb8395898726546956acd",
+      "tool_name": "01a13046-c8a7-7358-9115-55d40280394c",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "function",
+          "ref_id": "function:supply_ontology_hand:01a13046-c8a7-7358-9115-55d40280394c",
+          "version": "01a13046-c8a6-7450-912e-c15762b8ff02",
+          "display_hint": "标准交期"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:26:27.247328Z",
+      "terminal_at": "2026-10-12T13:26:27.774621Z"
+    },
+    {
+      "receipt_id": "rcpt_f5e0a521af1c9fb5086f2ae4a65d10db",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_b39b8e8ab979d81e47b4e7f7506bddd9",
+      "operation_id": "op_c34bf939e36e470c8c82d330af1dfbbf",
+      "attempt": 1,
+      "operation_key": "mcp:2aebf8ecfc721e5784a7a60be0ec1d4c",
+      "tool_name": "execute_tool",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [],
+      "business_refs": [],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 2,
+      "issued_at": "2026-10-12T13:26:27.221637Z",
+      "terminal_at": "2026-10-12T13:26:27.783131Z"
+    }
+  ]
+}

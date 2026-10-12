@@ -99,7 +99,7 @@ def test_generated_native_function_loads_its_own_bkn_rows(monkeypatch, numeric_i
     )
 
     assert result["business_date"] == "2026-08-25"
-    assert result["max_delay_days"] == 176
-    assert result["node_count_total"] == 57
+    assert result["max_delay_days"] == 111
+    assert result["node_count_total"] == 14
     assert result["data_source"]["knowledge_network_id"] == "supply_ontology_hand"
     assert {call["ot_id"] for call in calls} == set(dataset_by_object_type)

@@ -1,0 +1,128 @@
+{
+  "id": "M-14",
+  "question": "当前物料中，自制物料有多少种？",
+  "calls": [
+    {
+      "tool": "query_metric",
+      "params": {
+        "kn_id": "supply_ontology_hand",
+        "metric_id": "01a13052-ed26-7b45-bb84-2d8df1fcb7d7",
+        "time": {
+          "instant": true
+        },
+        "response_format": "json",
+        "condition": {
+          "field": "materialattr",
+          "operation": "==",
+          "value": "自制",
+          "value_from": "const"
+        },
+        "bkn_context": {
+          "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+          "interaction_id": "int_8c864ca1f1e555cbc951d222fe4d49f9"
+        }
+      },
+      "output": {
+        "kn_id": "supply_ontology_hand",
+        "metric_id": "01a13052-ed26-7b45-bb84-2d8df1fcb7d7",
+        "datas": [
+          {
+            "times": [
+              1791812250946
+            ],
+            "values": [
+              233
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "start": {
+    "interaction_id": "int_8c864ca1f1e555cbc951d222fe4d49f9",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+    "execution_status": "active"
+  },
+  "finish": {
+    "interaction_id": "int_8c864ca1f1e555cbc951d222fe4d49f9",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+    "execution_status": "completed",
+    "evidence_status": "assembling"
+  },
+  "trace": {
+    "interaction_id": "int_8c864ca1f1e555cbc951d222fe4d49f9",
+    "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+    "ordinal": 14,
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "closure_manifest": {
+      "completion_manifest_version": "3.0.0",
+      "answer_artifact_ref": "artifact:art_result_469bff53e65bad6a1eafd1f88846987c",
+      "expected_operations": [
+        {
+          "operation_id": "op_4828144d6713b18ce495304a6b3fd0be",
+          "required": true
+        }
+      ],
+      "expected_receipts": [
+        {
+          "receipt_id": "rcpt_3e295b450192418c0fd6efd2634589a2",
+          "required": true
+        }
+      ],
+      "assembler_deadline": "2026-10-12T13:42:30.958898Z",
+      "completion_reason": "completed"
+    },
+    "lease_token": "[REDACTED]",
+    "lease_epoch": 1,
+    "lease_version": 3,
+    "lease_expires_at": "2026-10-12T13:42:30.932635Z",
+    "row_version": 5,
+    "created_at": "2026-10-12T13:37:30.915521Z",
+    "updated_at": "2026-10-12T13:37:30.994937Z",
+    "terminal_at": "2026-10-12T13:37:30.958898Z"
+  },
+  "receipts": [
+    {
+      "receipt_id": "rcpt_3e295b450192418c0fd6efd2634589a2",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_b520c03d7a40de110b79cc37083a88f9",
+      "interaction_id": "int_8c864ca1f1e555cbc951d222fe4d49f9",
+      "operation_id": "op_4828144d6713b18ce495304a6b3fd0be",
+      "attempt": 1,
+      "operation_key": "mcp:0f0e00be99032a67452202990038e4c1",
+      "tool_name": "query_metric",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_1a96affc-c90c-4425-9eda-fd7ca6ca3eaf",
+      "trace_id": "e93c33ea0283a8da6010ee50ccc5f259",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_9dee8ae1428a12cf6643917610ca686900da686a6c3290834b2f4a2bdcc37cf6"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "metric",
+          "ref_id": "metric:supply_ontology_hand:01a13052-ed26-7b45-bb84-2d8df1fcb7d7",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:37:30.932635Z",
+      "terminal_at": "2026-10-12T13:37:30.947193Z"
+    }
+  ]
+}

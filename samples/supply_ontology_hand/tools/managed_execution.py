@@ -10,11 +10,13 @@ It deliberately has no
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 from collections.abc import Callable, Mapping
 from typing import Any
 
 from fn.contracts import OPERATION_CONTRACTS
 from fn.leadtime import leadtime_details
+from fn.bom import is_main_row
 from fn import (
     CannotCompute,
     backward_plan,
@@ -116,7 +118,7 @@ def load_bkn_rows(
             product_codes = {forecast_product}
             material_codes.update(product_codes)
         elif dataset == "bom" and operation == "material_where_used":
-            collected = _load_bom_rows_by_material(
+            collected = _load_bom_ancestor_rows(
                 query_object_instance,
                 str(params.get("material_code") or "").strip(),
             )
@@ -139,7 +141,7 @@ def load_bkn_rows(
             # under its root product.  One root-key query is both exact and
             # bounded; recursive parent ``IN`` queries become slow for a wide
             # level even when the finished BOM itself is modest (for example
-            # product 382-000005 has 313 primary lines).
+            # product 382-000005 has 399 primary lines).
             collected = _load_root_bom_rows(
                 query_object_instance,
                 product_codes,
@@ -339,6 +341,30 @@ def _load_bom_rows_by_material(
     )
 
 
+def _load_bom_ancestor_rows(query_object_instance, material_code: str) -> list[dict[str, Any]]:
+    """Acquire parent links as well as direct hits for non-expanded BOMs."""
+    pending = [material_code]
+    seen = set()
+    rows = []
+    identities = set()
+    while pending:
+        child = pending.pop(0)
+        if not child or child in seen:
+            continue
+        seen.add(child)
+        for row in _load_bom_rows_by_material(query_object_instance, child):
+            identity = tuple(sorted((key, repr(value)) for key, value in row.items()))
+            if identity not in identities:
+                identities.add(identity)
+                rows.append(row)
+                if len(rows) > _MAX_ROWS_PER_DATASET:
+                    raise CannotCompute("物料反查结果超过安全上限，请缩小范围")
+            parent = str(row.get("parent_material_code") or "").strip()
+            if parent and parent not in seen:
+                pending.append(parent)
+    return rows
+
+
 def _load_bom_rows_for_material_substitutes(
     query_object_instance: Callable[..., Mapping[str, Any]], material_code: str
 ) -> list[dict[str, Any]]:
@@ -375,16 +401,19 @@ def _load_bom_rows_for_material_substitutes(
 
 
 def _is_main_bom_row(row: Mapping[str, Any]) -> bool:
-    """Mirror the calculation layer's primary-BOM rule during tree expansion."""
-    try:
-        priority = int(row.get("alt_priority") or 0)
-    except (TypeError, ValueError):
-        priority = 0
-    return priority == 0 and str(row.get("alt_method") or "").strip() != "替代"
+    """Use the same primary rule for inventory acquisition and calculation.
+
+    ERP marks the whole replacement group alt_method=替代, including its
+    priority-zero main. Excluding those mains here silently removes their
+    component and raw-material inventory while retaining their BOM demand.
+    """
+    return is_main_row(dict(row))
 
 
 def _include_substitute_branch(operation: str, params: Mapping[str, Any]) -> bool:
     """Only traverse alternate BOM branches when that operation explicitly needs them."""
+    if operation == "substitute_status":
+        return True
     if operation in {"bom_list", "bom_shared_list", "layered_inventory"}:
         return bool(params.get("include_substitute"))
     return bool(params.get("substitute_enabled"))
@@ -452,13 +481,10 @@ def _scoped_dataset_condition(
     """Add only filters that are semantically required by the operation."""
     conditions: list[dict[str, Any]] = [material_condition]
     if dataset == "inventory" and operation in {"kitting_net_demand", "backward_plan"}:
-        warehouses = resolve_warehouse_scope(params.get("warehouse_scope", "production_available"))
-        conditions.extend(
-            [
-                _in_condition("warehouse", warehouses),
-                _equal_condition("stock_status", "可用"),
-            ]
-        )
+        warehouses = resolve_warehouse_scope(params.get("warehouse_scope", "all"))
+        if warehouses:
+            conditions.append(_in_condition("warehouse", warehouses))
+        conditions.append(_equal_condition("stock_status", "可用"))
     if dataset in {"purchase_order", "purchase_request"} and operation in {"kitting_net_demand", "backward_plan"}:
         conditions.append(_not_equal_condition("rowclosestatus_title", "已关闭"))
     if dataset == "mrp" and operation == "backward_plan":
@@ -526,7 +552,7 @@ def execute_from_bkn_rows(
     params = dict(parameters)
     snapshot = build_snapshot(dict(rows))
     product = params.get("product")
-    scope = params.get("warehouse_scope", "production_available")
+    scope = params.get("warehouse_scope", "all")
     substitute = params.get("substitute_enabled")
     if operation == "bom_list":
         return bom_list(
@@ -566,7 +592,7 @@ def execute_from_bkn_rows(
             report_grain=params.get("report_grain", "summary"),
         )
     if operation == "total_sellable":
-        return total_sellable(snapshot, product, production_scope=params.get("production_scope", "production_available"), finished_goods_scope=params.get("finished_goods_scope", "finished_goods"), substitute_enabled=substitute)
+        return total_sellable(snapshot, product, production_scope=params.get("production_scope", "all"), finished_goods_scope=params.get("finished_goods_scope", "all"), substitute_enabled=substitute)
     if operation == "kitting_net_demand":
         return kitting_net_demand(
             snapshot,
@@ -596,7 +622,7 @@ def execute_from_bkn_rows(
         material_code = params.get("material_code")
         return {**leadtime_details(snapshot, material_code), "object_type_id": _OBJECT_TYPES["material"]}
     if operation == "supply_status":
-        return supply_status(snapshot, params.get("material_code"), due_date=params.get("due_date"), gross_requirement=params.get("gross_requirement", 0), warehouse_scope=scope, child_short=params.get("child_short", False))
+        return supply_status(snapshot, params.get("material_code"), due_date=params.get("due_date"), gross_requirement=params.get("gross_requirement", 0), warehouse_scope=scope, child_short=params.get("child_short", False), today=date.fromisoformat(params.get("business_date", "2026-08-25")))
     if operation == "open_forecast_count":
         return open_forecast_count(
             rows.get("forecast") or [],

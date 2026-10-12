@@ -1,4 +1,4 @@
-"""Register the sample's three local Skills, then publish them idempotently."""
+"""Discover, register and publish the sample's local Skills idempotently."""
 
 from __future__ import annotations
 

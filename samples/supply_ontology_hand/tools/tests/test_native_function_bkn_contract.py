@@ -80,7 +80,6 @@ def test_backward_plan_loader_uses_business_filters_instead_of_scanning_all_tabl
         "operation": "and",
         "sub_conditions": [
             {"field": "material_code", "operation": "in", "value": ["U00-000080"], "value_from": "const"},
-            {"field": "warehouse", "operation": "in", "value": ["苏州半成品仓", "苏州成品仓", "苏州电子原料仓", "苏州无人机原料仓", "苏州装配原料仓", "乌鲁木齐成品仓", "哈尔滨成品仓"], "value_from": "const"},
             {"field": "stock_status", "operation": "==", "value": "可用", "value_from": "const"},
         ],
     }
@@ -296,7 +295,6 @@ def test_kitting_loader_scopes_inventory_and_purchase_orders_before_loading_rows
         "operation": "and",
         "sub_conditions": [
             {"field": "material_code", "operation": "in", "value": ["FG-382", "RM-001", "RM-002"], "value_from": "const"},
-            {"field": "warehouse", "operation": "in", "value": ["苏州半成品仓", "苏州成品仓", "苏州电子原料仓", "苏州无人机原料仓", "苏州装配原料仓", "乌鲁木齐成品仓", "哈尔滨成品仓"], "value_from": "const"},
             {"field": "stock_status", "operation": "==", "value": "可用", "value_from": "const"},
         ],
     }
@@ -375,3 +373,19 @@ def test_native_tool_schemas_never_expose_bkn_context_or_credentials():
     }
     for payload in _tool_inputs().values():
         assert not ({item["name"] for item in payload["inputs"]} & forbidden)
+
+
+def test_kitting_loader_honors_explicit_production_warehouse_preset():
+    from managed_execution import load_bkn_rows
+    from fn.warehouse import PRODUCTION_AVAILABLE
+    calls = []
+    def query_object_instance(**kwargs):
+        calls.append(kwargs)
+        if kwargs["ot_id"] == "supply_ontology_hand_bom":
+            return {"datas": [{"bom_material_code": "P", "material_code": "L", "parent_material_code": "P", "bom_level": 1, "alt_priority": 0}]}
+        return {"datas": []}
+    load_bkn_rows("kitting_net_demand", query_object_instance,
+                  {"product": "P", "substitute_enabled": False, "warehouse_scope": "production_available"})
+    inventory = next(c for c in calls if c["ot_id"] == "supply_ontology_hand_inventory")
+    assert {"field": "warehouse", "operation": "in", "value": PRODUCTION_AVAILABLE,
+            "value_from": "const"} in inventory["condition"]["sub_conditions"]

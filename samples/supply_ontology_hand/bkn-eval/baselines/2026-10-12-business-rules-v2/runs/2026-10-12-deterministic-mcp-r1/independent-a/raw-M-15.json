@@ -1,0 +1,128 @@
+{
+  "id": "M-15",
+  "question": "采购员杨强云负责维护多少家供应商档案？",
+  "calls": [
+    {
+      "tool": "query_metric",
+      "params": {
+        "kn_id": "supply_ontology_hand",
+        "metric_id": "01a13046-903e-7002-a318-4086dda5ade7",
+        "time": {
+          "instant": true
+        },
+        "response_format": "json",
+        "condition": {
+          "field": "purchaserid_name",
+          "operation": "==",
+          "value": "杨强云",
+          "value_from": "const"
+        },
+        "bkn_context": {
+          "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+          "interaction_id": "int_cfceb243e4035d90b703501ebb0549a3"
+        }
+      },
+      "output": {
+        "kn_id": "supply_ontology_hand",
+        "metric_id": "01a13046-903e-7002-a318-4086dda5ade7",
+        "datas": [
+          {
+            "times": [
+              1791811577108
+            ],
+            "values": [
+              51
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "start": {
+    "interaction_id": "int_cfceb243e4035d90b703501ebb0549a3",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "execution_status": "active"
+  },
+  "finish": {
+    "execution_status": "completed",
+    "evidence_status": "assembling",
+    "interaction_id": "int_cfceb243e4035d90b703501ebb0549a3",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a"
+  },
+  "trace": {
+    "interaction_id": "int_cfceb243e4035d90b703501ebb0549a3",
+    "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+    "ordinal": 15,
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "closure_manifest": {
+      "completion_manifest_version": "3.0.0",
+      "answer_artifact_ref": "artifact:art_result_0d72a3ab230ec7f09abe5459d87baee0",
+      "expected_operations": [
+        {
+          "operation_id": "op_b7c02ef0154dce57556c226d33f2d68c",
+          "required": true
+        }
+      ],
+      "expected_receipts": [
+        {
+          "receipt_id": "rcpt_71290ef4f1e298a1738035201076a651",
+          "required": true
+        }
+      ],
+      "assembler_deadline": "2026-10-12T13:31:17.122982Z",
+      "completion_reason": "completed"
+    },
+    "lease_token": "[REDACTED]",
+    "lease_epoch": 1,
+    "lease_version": 3,
+    "lease_expires_at": "2026-10-12T13:31:17.092499Z",
+    "row_version": 5,
+    "created_at": "2026-10-12T13:26:17.072122Z",
+    "updated_at": "2026-10-12T13:26:17.996797Z",
+    "terminal_at": "2026-10-12T13:26:17.122982Z"
+  },
+  "receipts": [
+    {
+      "receipt_id": "rcpt_71290ef4f1e298a1738035201076a651",
+      "schema_version": "3.0.0",
+      "owner": {
+        "application_principal_id": "openbkn-sdk",
+        "effective_subject_type": "user",
+        "effective_subject_id": "266c6a42-6131-4d62-8f39-853e7093701c"
+      },
+      "conversation_id": "conv_67f107cc8f6d93acf03214e942710f9a",
+      "interaction_id": "int_cfceb243e4035d90b703501ebb0549a3",
+      "operation_id": "op_b7c02ef0154dce57556c226d33f2d68c",
+      "attempt": 1,
+      "operation_key": "mcp:1cc9c88f1b2197d905445718816f586e",
+      "tool_name": "query_metric",
+      "receipt_status": "completed",
+      "evidence_durability": "durable",
+      "required": true,
+      "request_id": "req_b0406724-eedf-44ab-b1fe-027ac4704212",
+      "trace_id": "4fac5e0804b391ca9fbd9182b23fa725",
+      "causation_event_ids": [],
+      "observed_evidence_refs": [
+        "evt_e9a69662ac476a82579bcc55721cfde80873f69ee432b4bc5ba211f0924c83f5"
+      ],
+      "business_refs": [
+        {
+          "ref_type": "knowledge_network",
+          "ref_id": "kn:supply_ontology_hand",
+          "version": "unversioned"
+        },
+        {
+          "ref_type": "metric",
+          "ref_id": "metric:supply_ontology_hand:01a13046-903e-7002-a318-4086dda5ade7",
+          "version": "unversioned"
+        }
+      ],
+      "artifact_refs": [],
+      "partial_reasons": [],
+      "row_version": 3,
+      "issued_at": "2026-10-12T13:26:17.092499Z",
+      "terminal_at": "2026-10-12T13:26:17.109528Z"
+    }
+  ]
+}

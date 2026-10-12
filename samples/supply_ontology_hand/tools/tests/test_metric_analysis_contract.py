@@ -9,7 +9,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
 
-from power_layer import metric_series_match, verify_metrics
+from power_layer import calendar_month_growth, metric_series_match, verify_metrics
 
 PACK = Path(__file__).resolve().parents[2]
 ASSETS = PACK / "tools" / "assets"
@@ -29,6 +29,16 @@ def test_query_windows_preserve_complete_business_months():
     assert (lower["field"], lower["operation"], upper["field"], upper["operation"]) == ("signing_date", ">=", "signing_date", "<")
     assert datetime.fromtimestamp(lower["value"] / 1000, zone).isoformat() == "2026-04-01T00:00:00+08:00"
     assert datetime.fromtimestamp(upper["value"] / 1000, zone).isoformat() == "2026-05-01T00:00:00+08:00"
+    growth = cases["signed_month_growth"]
+    assert "body" not in growth
+    assert growth["calculation"] == "calendar_month_growth"
+    for query in growth["queries"]:
+        lower, upper = query["body"]["condition"]["sub_conditions"]
+        start = datetime.fromtimestamp(lower["value"] / 1000, zone)
+        end = datetime.fromtimestamp(upper["value"] / 1000, zone)
+        assert start.strftime("%Y-%m") == query["period"]
+        assert start.day == end.day == 1
+        assert lower["operation"] == ">=" and upper["operation"] == "<"
 
 
 def test_temporal_definition_and_periods_match_existing_csv():
@@ -144,3 +154,38 @@ def test_grouped_proportion_gold_uses_independent_csv_denominators():
         quantity = statuses[group["labels"]["order_status"]]
         assert group["values"] == [quantity]
         assert group["proportions"] == [float(quantity / sum(statuses.values()) * 100)]
+
+
+def test_calendar_month_acceptance_queries_each_complete_month_and_verifies_baseline():
+    case = next(c for c in json.loads((ASSETS / "metrics-analysis-examples.json").read_text())["cases"]
+                if c["id"] == "signed_month_growth")
+    def runner(totals):
+        values = iter(totals)
+        def run(command):
+            if "list" in command:
+                return json.dumps({"entries": [{"id": "metric", "name": case["metric_name"]}]})
+            body = json.loads(command[-1])
+            assert body["time"] == {"instant": True} and "metrics" not in body
+            return json.dumps({"datas": [{"labels": {}, "values": [next(values)]}]})
+        return run
+    good = verify_metrics("network", [case], run_cmd=runner([6083, 5319, 4565, 4429]), business_timezone="Asia/Shanghai")
+    assert len(good["passed"][0]["queries"]) == 4
+    assert good["passed"][0]["actual"][0]["growth_values"] == [-764, -754, -136]
+    # Equal errors in all months preserve differences but must still fail monthly evidence.
+    bad = verify_metrics("network", [case], run_cmd=runner([6084, 5320, 4566, 4430]), business_timezone="Asia/Shanghai")
+    assert bad["failed"]
+    may30 = copy.deepcopy(case)
+    may30["queries"][2]["body"]["condition"]["sub_conditions"][1]["value"] -= 86400000
+    assert verify_metrics("network", [may30], run_cmd=runner([6083, 5319, 4517, 4429]), business_timezone="Asia/Shanghai")["failed"]
+
+
+def test_calendar_month_acceptance_rejects_missing_or_ambiguous_totals():
+    case = next(c for c in json.loads((ASSETS / "metrics-analysis-examples.json").read_text())["cases"]
+                if c["id"] == "signed_month_growth")
+    for datas in [[], [{"values": [None]}], [{"values": [1, 2]}], [{"values": [True]}],
+                  [{"values": [1]}, {"values": [2]}]]:
+        def run(command):
+            if "list" in command:
+                return json.dumps({"entries": [{"id": "metric", "name": case["metric_name"]}]})
+            return json.dumps({"datas": datas})
+        assert verify_metrics("network", [case], run_cmd=run, business_timezone="Asia/Shanghai")["failed"]
