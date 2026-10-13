@@ -1,0 +1,368 @@
+{
+  "comment": "Input for tools/power_layer.py create or openbkn bkn metric create --body-file. The script reads entries; extra fields are ignored. See metrics-query-examples.json for presets and acceptance queries and logic-properties.json for object bindings. Open-forecast queries must repeat the closure filter.",
+  "kn_id": "supply_ontology_en",
+  "warehouse_scope_presets": {
+    "production_available": [
+      "Suzhou Subassemblies",
+      "Suzhou Finished Goods",
+      "Suzhou Electronics",
+      "Suzhou Drone Materials",
+      "Suzhou Assembly",
+      "Urumqi Finished Goods",
+      "Harbin Finished Goods"
+    ],
+    "finished_goods": [
+      "Suzhou Finished Goods",
+      "Urumqi Finished Goods",
+      "Harbin Finished Goods"
+    ],
+    "all": []
+  },
+  "csv_snapshot": {
+    "product_count": 30,
+    "material_count": 3497,
+    "material_attr": {
+      "Purchased": 3149,
+      "Manufactured": 233,
+      "Subcontracted": 114,
+      "Phantom": 1
+    },
+    "supplier_count": 230,
+    "purchaser_alex_reed": 51,
+    "salesorder_count": 800,
+    "salesorder_382": 40,
+    "warehouse_distinct": 29,
+    "forecast_open_count": 90,
+    "forecast_qty_all": 115922,
+    "forecast_qty_open": 56340,
+    "inv_382_fg": 534,
+    "inv_791_000013_prod": 1000
+  },
+  "entries": [
+    {
+      "name": "Supply EN: Product Count",
+      "comment": "count(material_number). Fixture total: 30.",
+      "tags": [
+        "p0",
+        "scale",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_product",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "material_number",
+          "aggr": "count"
+        }
+      }
+    },
+    {
+      "name": "Supply EN: Material Count",
+      "comment": "count(material_code). Filter or group by materialattr / group_name. Fixture total: 3497.",
+      "tags": [
+        "p0",
+        "scale",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_material",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "material_code",
+          "aggr": "count"
+        }
+      },
+      "analysis_dimensions": [
+        {
+          "name": "materialattr",
+          "display_name": "Material Type"
+        },
+        {
+          "name": "group_name",
+          "display_name": "Stock Category"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Supplier Count",
+      "comment": "count(supplier_code). Filter by purchaserid_name. Fixture total: 230.",
+      "tags": [
+        "p0",
+        "scale",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_supplier",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "supplier_code",
+          "aggr": "count"
+        }
+      },
+      "analysis_dimensions": [
+        {
+          "name": "purchaserid_name",
+          "display_name": "Buyer"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Sales Order Count",
+      "comment": "count(sales_order_id). Filter or group by product_code / order_status. Fixture total: 800.",
+      "tags": [
+        "p0",
+        "scale",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "transaction",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_salesorder",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "sales_order_id",
+          "aggr": "count"
+        }
+      },
+      "analysis_dimensions": [
+        {
+          "name": "product_code",
+          "display_name": "Product Code"
+        },
+        {
+          "name": "order_status",
+          "display_name": "Order Status"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Warehouse Count",
+      "comment": "Distinct warehouse values in stock records: 29. The production_available preset contains 7 warehouses and is a separate measure.",
+      "tags": [
+        "p0",
+        "scale",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_inventory",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "warehouse",
+          "aggr": "count_distinct"
+        }
+      },
+      "analysis_dimensions": [
+        {
+          "name": "stock_status",
+          "display_name": "Stock Status"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Available Stock",
+      "comment": "sum(available_inventory_qty). Expand production_available / finished_goods with warehouse in at query time, or leave all unrestricted.",
+      "tags": [
+        "p0",
+        "inventory",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_inventory",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "available_inventory_qty",
+          "aggr": "sum"
+        }
+      },
+      "analysis_dimensions": [
+        {
+          "name": "material_code",
+          "display_name": "Material Code"
+        },
+        {
+          "name": "warehouse",
+          "display_name": "Warehouse"
+        },
+        {
+          "name": "stock_status",
+          "display_name": "Stock Status"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Total Forecast Demand",
+      "comment": "sum(qty). Filter or group by material_number / closestatus_title.",
+      "tags": [
+        "p0",
+        "planning",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_forecast",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "qty",
+          "aggr": "sum"
+        }
+      },
+      "analysis_dimensions": [
+        {
+          "name": "material_number",
+          "display_name": "Product Code"
+        },
+        {
+          "name": "closestatus_title",
+          "display_name": "Closure Status"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Open_Forecast_Count",
+      "comment": "count(id) with closestatus_title != Closed. Repeat the closure filter at query time because definition-level condition is discarded. Fixture total: 90.",
+      "tags": [
+        "p0",
+        "planning",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "transaction",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_forecast",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "id",
+          "aggr": "count"
+        }
+      },
+      "condition": {
+        "field": "closestatus_title",
+        "operation": "!=",
+        "value": "Closed"
+      },
+      "analysis_dimensions": [
+        {
+          "name": "material_number",
+          "display_name": "Product Code"
+        },
+        {
+          "name": "closestatus_title",
+          "display_name": "Closure Status"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Total Signed Quantity",
+      "comment": "sum(signing_quantity), filtered server-side by product_code. Product 382-000005: 40 orders and 1081 sets signed. Snapshot total only.",
+      "tags": [
+        "p0",
+        "sales",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_salesorder",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "signing_quantity",
+          "aggr": "sum"
+        }
+      },
+      "analysis_dimensions": [
+        {
+          "name": "product_code",
+          "display_name": "Product Code"
+        },
+        {
+          "name": "order_status",
+          "display_name": "Order Status"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Total Shipped Quantity",
+      "comment": "sum(shipping_quantity), filtered server-side by product_code. Product 382-000005: 40 orders and 1066 sets shipped. Snapshot total only.",
+      "tags": [
+        "p0",
+        "sales",
+        "open-caliber"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_salesorder",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "shipping_quantity",
+          "aggr": "sum"
+        }
+      },
+      "analysis_dimensions": [
+        {
+          "name": "product_code",
+          "display_name": "Product Code"
+        },
+        {
+          "name": "order_status",
+          "display_name": "Order Status"
+        }
+      ]
+    },
+    {
+      "name": "Supply EN: Signing Events",
+      "comment": "Aggregate signing_quantity by sales_order.signing_date as signing events. Fixed window: 2026-03-01 through 2026-06-30. No default rolling window; choose the historical period explicitly.",
+      "tags": [
+        "p0",
+        "sales",
+        "temporal"
+      ],
+      "unit_type": "countUnit",
+      "unit": "piece",
+      "metric_type": "atomic",
+      "scope_type": "object_type",
+      "scope_ref": "supply_ontology_en_salesorder",
+      "calculation_formula": {
+        "aggregation": {
+          "property": "signing_quantity",
+          "aggr": "sum"
+        }
+      },
+      "time_dimension": {
+        "property": "signing_date",
+        "default_range_policy": "none"
+      },
+      "analysis_dimensions": [
+        {
+          "name": "order_status",
+          "display_name": "Order Status"
+        },
+        {
+          "name": "product_code",
+          "display_name": "Product Code"
+        }
+      ]
+    }
+  ]
+}

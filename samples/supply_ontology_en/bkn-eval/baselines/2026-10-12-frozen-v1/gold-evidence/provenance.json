@@ -1,0 +1,64 @@
+{
+  "source_manifest": {
+    "hd_product_view": {
+      "path": "data/hd_product_view.csv",
+      "rows": 30,
+      "sha256": "72bd1508e6565cf9bf60ed047093fac0ead379965cd7333effdca3b6d37ef728"
+    },
+    "erp_material": {
+      "path": "data/erp_material.csv",
+      "rows": 3497,
+      "sha256": "74d03abb3958443ed9dcf58adc3b47a1a53783c2165973cecd23ff4b3175502c"
+    },
+    "erp_supplier": {
+      "path": "data/erp_supplier.csv",
+      "rows": 230,
+      "sha256": "23f161032c705613837a23fdd0cc77aef02d6368d54493cf8fa29979ed1b4e90"
+    },
+    "sales_order": {
+      "path": "data/sales_order.csv",
+      "rows": 800,
+      "sha256": "23ad2c124007eed99be2273c25a0224302758e21c3e1b1796adf68b719aa936e"
+    },
+    "erp_real_time_inventory": {
+      "path": "data/erp_real_time_inventory.csv",
+      "rows": 19724,
+      "sha256": "b8ede9368c09b5085c708c7acf9bcb838e58d17c81256c84d760b97d618e68bf"
+    },
+    "erp_mds_forecast": {
+      "path": "data/erp_mds_forecast.csv",
+      "rows": 137,
+      "sha256": "0a41a9ea15b66672ff5543c0eac48d17e60fabfd3bfce7a2e1f4d88a0b0fc9b3"
+    },
+    "erp_material_bom": {
+      "path": "data/erp_material_bom.csv",
+      "rows": 31423,
+      "sha256": "b2c90fbf8d05b25715c5509f59a4db9b7191835311bda87db19727ed8a3c7dc0"
+    },
+    "erp_purchase_order": {
+      "path": "data/erp_purchase_order.csv",
+      "rows": 1972,
+      "sha256": "ba6a048da33cdbcce95966cf551bd314734e6e3a8a833cf1994ebe8f2c274b2a"
+    }
+  },
+  "repeated_parent_validation": [
+    {
+      "product": "P61-000351",
+      "parent": "588-000570",
+      "child_level": 3,
+      "occurrences": 2,
+      "raw_child_rows": 262,
+      "rows_per_occurrence": 131
+    },
+    {
+      "product": "P61-000351",
+      "parent": "588-000430",
+      "child_level": 3,
+      "occurrences": 2,
+      "raw_child_rows": 222,
+      "rows_per_occurrence": 111
+    }
+  ],
+  "question_set_sha256": "44cd5a4ac018443b85d7a387f3aef3c2484727fabff8383791181f81e8d3385a",
+  "script_sha256": "fd142ea5b8ab865ae147f30e5aa10464575b5457ad643a541b8f4a3e8239014f"
+}

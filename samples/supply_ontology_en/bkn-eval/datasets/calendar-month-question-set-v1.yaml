@@ -1,0 +1,23 @@
+schema_version: calendar-month-eval/1
+set_id: supply-en-calendar-month-v1
+audience: evaluated_agent
+answer_set_access: forbidden
+required_skills:
+- supply-en-sales-signing-calendar-month-analysis
+questions:
+- id: CM-01
+  question: Using complete Asia/Shanghai calendar months, query sales signing quantities
+    for April–June 2026 and changes from each previous month. Report exact query boundaries,
+    comparison baseline and calculations.
+- id: CM-02
+  question: Query sales signing quantity for the complete month of May 2026 and separately
+    for May 31. State whether full May includes the 31st and report exact half-open
+    boundaries for both queries in Asia/Shanghai.
+- id: CM-03
+  question: For product 382-000005 only, query complete April and May 2026 signing
+    quantities and the May change from April. Confirm identical filters in both months.
+    Use Asia/Shanghai.
+- id: CM-04
+  question: Calculate June 2026 sales signing growth relative to complete May, rounded
+    to two decimal places. Report numerator, denominator and exact complete-month
+    boundaries in Asia/Shanghai.

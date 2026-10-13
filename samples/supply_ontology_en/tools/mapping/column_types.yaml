@@ -1,0 +1,73 @@
+# Business semantics take precedence over sample-value inference.
+# Lengths are deliberately generous for the demo and can be tightened when
+# the source-system contract supplies exact limits.
+overrides:
+  customer_entity:
+    contact_phone: {type: VARCHAR, length: 32}
+    customer_code: {type: VARCHAR, length: 64}
+  erp_material:
+    material_code: {type: VARCHAR, length: 64}
+    material_standard_price: {type: DECIMAL, precision: 18, scale: 6}
+  erp_material_bom:
+    material_code: {type: VARCHAR, length: 64}
+    bom_material_code: {type: VARCHAR, length: 64}
+    parent_material_code: {type: VARCHAR, length: 64}
+    usage_numerator: {type: DECIMAL, precision: 18, scale: 6}
+    usage_denominator: {type: DECIMAL, precision: 18, scale: 6}
+    standard_usage: {type: DECIMAL, precision: 18, scale: 6}
+    variable_loss_rate: {type: DECIMAL, precision: 18, scale: 6}
+    demand_quantity: {type: DECIMAL, precision: 18, scale: 6}
+  erp_mds_forecast:
+    id: {type: VARCHAR, length: 64}
+    billno: {type: VARCHAR, length: 64}
+    material_number: {type: VARCHAR, length: 64}
+    qty: {type: DECIMAL, precision: 18, scale: 6}
+  erp_mrp_plan_order:
+    billno: {type: VARCHAR, length: 64}
+    rootdemandbillno: {type: VARCHAR, length: 64}
+    materialplanid_number: {type: VARCHAR, length: 64}
+    adviseorderqty: {type: DECIMAL, precision: 18, scale: 6}
+    bizorderqty: {type: DECIMAL, precision: 18, scale: 6}
+    bizdropqty: {type: DECIMAL, precision: 18, scale: 6}
+  erp_production_work_order:
+    billno: {type: VARCHAR, length: 64}
+    material_number: {type: VARCHAR, length: 64}
+    sourcebillnumber: {type: VARCHAR, length: 64}
+    qty: {type: DECIMAL, precision: 18, scale: 6}
+    xkquainwaqty: {type: DECIMAL, precision: 18, scale: 6}
+  erp_purchase_order:
+    billno: {type: VARCHAR, length: 64}
+    supplier_number: {type: VARCHAR, length: 64}
+    material_number: {type: VARCHAR, length: 64}
+    srcbillnumber: {type: VARCHAR, length: 64}
+    tax_price: {type: DECIMAL, precision: 18, scale: 6}
+    qty: {type: DECIMAL, precision: 18, scale: 6}
+    taxrate: {type: DECIMAL, precision: 18, scale: 6}
+    invqty: {type: DECIMAL, precision: 18, scale: 6}
+    returnqty: {type: DECIMAL, precision: 18, scale: 6}
+    actqty: {type: DECIMAL, precision: 18, scale: 6}
+  erp_purchase_request:
+    billno: {type: VARCHAR, length: 64}
+    material_number: {type: VARCHAR, length: 64}
+    srcbillnumber: {type: VARCHAR, length: 64}
+    qty: {type: DECIMAL, precision: 18, scale: 6}
+    joinqty: {type: DECIMAL, precision: 18, scale: 6}
+  erp_real_time_inventory:
+    material_code: {type: VARCHAR, length: 64}
+    batch_no: {type: VARCHAR, length: 64}
+    batch_master: {type: VARCHAR, length: 64}
+    inventory_qty: {type: DECIMAL, precision: 18, scale: 6}
+    reserved_inventory_qty: {type: DECIMAL, precision: 18, scale: 6}
+    available_inventory_qty: {type: DECIMAL, precision: 18, scale: 6}
+    base_qty: {type: DECIMAL, precision: 18, scale: 6}
+    reserved_base_qty: {type: DECIMAL, precision: 18, scale: 6}
+    available_base_qty: {type: DECIMAL, precision: 18, scale: 6}
+  erp_supplier:
+    supplier_code: {type: VARCHAR, length: 64}
+    societycreditcode: {type: VARCHAR, length: 64}
+  hd_product_view:
+    material_code: {type: VARCHAR, length: 64}
+  sales_order:
+    sales_order_id: {type: VARCHAR, length: 64}
+    contract_number: {type: VARCHAR, length: 64}
+    product_code: {type: VARCHAR, length: 64}

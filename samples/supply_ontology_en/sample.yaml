@@ -1,0 +1,35 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: Sample
+metadata:
+  name: supply-chain-en
+  aliases: []
+  displayName: Supply Chain (EN)
+  summary: Assess demand coverage using sample orders, stock, BOMs and supply.
+spec:
+  studio:
+    licenseNote: Fictional historical data for demonstration only.
+    questions:
+      - Can current stock and work in progress cover this demand?
+      - Which alternatives can cover material shortages?
+  database:
+    engine: mariadb
+    name: supply_demo_en
+    expectedTables: 12
+  data:
+    mode: embedded
+  knowledgeNetwork:
+    id: supply_ontology_en
+    displayName: Supply Chain EN
+  capabilities:
+    required: true
+  components:
+    objects: true
+    relations: true
+    metrics: true
+    functions: true
+    skills: true
+  hooks:
+    dbInit: db/init.sh
+    dbVerify: db/verify.sh
+    platformInstall: platform/install.sh
+    platformVerify: platform/verify.sh

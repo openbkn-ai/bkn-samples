@@ -1,0 +1,90 @@
+"""Tests for import_kn step-2 script."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import import_kn as import_kn_module
+from import_kn import import_kn
+
+KN = Path(__file__).resolve().parents[2] / "kn" / "supply_ontology_en.json"
+
+
+def test_import_reuses_the_same_network(tmp_path, monkeypatch):
+    json_path = tmp_path / "kn.json"
+    json_path.write_text(
+        json.dumps({"id": "supply_ontology_en", "name": 'Supply Chain EN'}),
+        encoding="utf-8",
+    )
+    calls = []
+
+    def fake_run_cmd(args):
+        calls.append(args)
+        if args[2:4] == ["bkn", "get"]:
+            return json.dumps({"id": "supply_ontology_en", "name": 'Supply Chain EN'})
+        raise AssertionError(args)
+
+    monkeypatch.setattr(import_kn_module, "run_cmd", fake_run_cmd)
+    report = import_kn_module.import_kn(json_path)
+    assert report["action"] == "reuse"
+    assert all(call[2] != "call" for call in calls)
+
+
+def test_import_kn_dry_run():
+    report = import_kn(KN, dry_run=True)
+    assert report["kn_id"] == "supply_ontology_en"
+    assert report["kn_name"] == 'Supply Chain EN'
+    assert report["action"] == "would_import"
+
+
+def test_kn_json_has_required_fields():
+    payload = json.loads(KN.read_text(encoding="utf-8"))
+    assert payload["id"] == "supply_ontology_en"
+    assert len(payload["id"]) <= 32
+    assert isinstance(payload.get("object_types"), list)
+    assert len(payload["object_types"]) > 0
+
+
+def test_import_retries_without_index_config_when_platform_rejects_it(tmp_path, monkeypatch):
+    payload = {
+        "id": "test_network",
+        "name": "Test network",
+        "object_types": [
+            {
+                "data_properties": [
+                    {
+                        "name": "material_name",
+                        "index_config": {"vector_config": {"enabled": True}},
+                    },
+                ],
+            },
+        ],
+    }
+    json_path = tmp_path / "kn.json"
+    json_path.write_text(json.dumps(payload), encoding="utf-8")
+    posted_bodies = []
+    lookups = {"count": 0}
+
+    def fake_run_cmd(args):
+        if args[2:4] == ["bkn", "get"]:
+            lookups["count"] += 1
+            if lookups["count"] == 1:
+                raise RuntimeError("not found")
+            return json.dumps({"id": "test_network", "name": "Test network"})
+        if args[2] == "call":
+            posted_bodies.append(json.loads(args[-1]))
+            if len(posted_bodies) == 1:
+                raise RuntimeError('Data property material_name no longer supports index_config')
+            return json.dumps({"ok": True})
+        raise AssertionError(args)
+
+    monkeypatch.setattr(import_kn_module, "run_cmd", fake_run_cmd)
+
+    report = import_kn_module.import_kn(json_path)
+
+    assert report["index_config_stripped"] is True
+    assert len(posted_bodies) == 2
+    assert "index_config" in posted_bodies[0]["object_types"][0]["data_properties"][0]
+    assert "index_config" not in posted_bodies[1]["object_types"][0]["data_properties"][0]
+    assert "index_config" in json.loads(json_path.read_text(encoding="utf-8"))["object_types"][0]["data_properties"][0]

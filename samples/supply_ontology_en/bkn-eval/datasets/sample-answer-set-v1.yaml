@@ -1,0 +1,1120 @@
+schema_version: '2.0'
+set_id: supply-en-question-set-v1
+baseline_id: supply-en-frozen-v1
+snapshot_kind: repository_fixture_freeze
+snapshot_date: '2026-10-12'
+business_date: '2026-08-25'
+generation_method: independent raw CSV Decimal oracle; no evaluated function imports
+  or calls
+scope_presets:
+  finished_goods:
+  - Suzhou Finished Goods
+  - Urumqi Finished Goods
+  - Harbin Finished Goods
+  production_available:
+  - Suzhou Subassemblies
+  - Suzhou Finished Goods
+  - Suzhou Electronics
+  - Suzhou Drone Materials
+  - Suzhou Assembly
+  - Urumqi Finished Goods
+  - Harbin Finished Goods
+answers:
+- id: M-01
+  inputs: {}
+  expected:
+    value: 30
+  answer: '{"value": 30}'
+  evidence_ref: gold-evidence/facts.json#M-01
+  question: How many finished products are in the current master data?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Product Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-02
+  inputs: {}
+  expected:
+    value: 3497
+  answer: '{"value": 3497}'
+  evidence_ref: gold-evidence/facts.json#M-02
+  question: How many materials are in the current master data?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Material Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-03
+  inputs: {}
+  expected:
+    value: 230
+  answer: '{"value": 230}'
+  evidence_ref: gold-evidence/facts.json#M-03
+  question: How many suppliers are registered?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Supplier Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-04
+  inputs: {}
+  expected:
+    value: 800
+  answer: '{"value": 800}'
+  evidence_ref: gold-evidence/facts.json#M-04
+  question: How many sales orders are in the current snapshot?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Sales Order Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-05
+  inputs: {}
+  expected:
+    value: 29
+  answer: '{"value": 29}'
+  evidence_ref: gold-evidence/facts.json#M-05
+  question: How many distinct warehouses appear in stock records?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Warehouse Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-06
+  inputs:
+    product_code: 382-000005
+    scope: finished_goods
+  expected:
+    value: 534
+  answer: '{"value": 534}'
+  evidence_ref: gold-evidence/facts.json#M-06
+  question: What is the available stock of product 382-000005 across the three finished
+    goods warehouses?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Available Stock'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-07
+  inputs: {}
+  expected:
+    value: 56340
+  answer: '{"value": 56340}'
+  evidence_ref: gold-evidence/facts.json#M-07
+  question: What is the total demand quantity of open forecasts?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Total Forecast Demand'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-08
+  inputs: {}
+  expected:
+    value: 90
+  answer: '{"value": 90}'
+  evidence_ref: gold-evidence/facts.json#M-08
+  question: How many forecasts remain open?
+  basis:
+    functions:
+    - Open_Forecast_Count
+    metrics:
+    - 'Supply EN: Open_Forecast_Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-09
+  inputs: {}
+  expected:
+    value: 16
+  answer: '{"value": 16}'
+  evidence_ref: gold-evidence/facts.json#M-09
+  question: How many sales orders are In Progress?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Sales Order Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-10
+  inputs:
+    product_code: 382-000005
+  expected:
+    signing_qty: 1081
+    shipping_qty: 1066
+    unshipped_qty: 15
+  answer: '{"signing_qty": 1081, "shipping_qty": 1066, "unshipped_qty": 15}'
+  evidence_ref: gold-evidence/facts.json#M-10
+  question: For product 382-000005, how many sets are signed, shipped and still unshipped?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Total Signed Quantity'
+    - 'Supply EN: Total Shipped Quantity'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-11
+  inputs:
+    product_code: 382-000005
+  expected:
+    count: 6
+    qty: 2605
+  answer: '{"count": 6, "qty": 2605}'
+  evidence_ref: gold-evidence/facts.json#M-11
+  question: For product 382-000005, how many open forecasts and forecast sets are
+    there?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Open_Forecast_Count'
+    - 'Supply EN: Total Forecast Demand'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-12
+  inputs:
+    product_code: U00-000080
+  expected:
+    count: 12
+    qty: 20000
+  answer: '{"count": 12, "qty": 20000}'
+  evidence_ref: gold-evidence/facts.json#M-12
+  question: For product U00-000080, how many open forecasts and forecast sets are
+    there?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Open_Forecast_Count'
+    - 'Supply EN: Total Forecast Demand'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-13
+  inputs: {}
+  expected:
+    value: 3149
+  answer: '{"value": 3149}'
+  evidence_ref: gold-evidence/facts.json#M-13
+  question: How many materials are Purchased?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Material Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-14
+  inputs: {}
+  expected:
+    value: 233
+  answer: '{"value": 233}'
+  evidence_ref: gold-evidence/facts.json#M-14
+  question: How many materials are Manufactured?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Material Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: M-15
+  inputs:
+    purchaser: Alex Reed
+  expected:
+    value: 51
+  answer: '{"value": 51}'
+  evidence_ref: gold-evidence/facts.json#M-15
+  question: How many supplier records does buyer Alex Reed manage?
+  basis:
+    functions: []
+    metrics:
+    - 'Supply EN: Supplier Count'
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-01
+  inputs:
+    product_code: 382-000005
+    depth: 1
+    include_substitutes: false
+  expected:
+    material_codes:
+    - 468-000493
+    - 468-000530
+    - 528-000036
+    - 606-000989
+    - 606-000990
+    - 791-000007
+    - 791-000013
+    - 791-000015
+    - 994-000550
+  answer: '{"material_codes": ["468-000493", "468-000530", "528-000036", "606-000989",
+    "606-000990", "791-000007", "791-000013", "791-000015", "994-000550"]}'
+  evidence_ref: gold-evidence/facts.json#F-01
+  question: List the first-level main components of product 382-000005, without stock
+    information.
+  basis:
+    functions:
+    - BOM_Structure
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-02
+  inputs:
+    product_codes:
+    - 382-000005
+    - P61-000351
+    include_substitutes: false
+    include_root: false
+  expected:
+    shared_count: 38
+  answer: '{"shared_count": 38}'
+  evidence_ref: gold-evidence/facts.json#F-02
+  question: How many distinct materials are shared by the complete main-component
+    BOMs of 382-000005 and P61-000351, excluding roots and alternatives?
+  basis:
+    functions:
+    - Shared_BOM
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-03
+  inputs:
+    product_codes:
+    - 382-000005
+    - P61-000351
+    - U00-000151
+    include_substitutes: false
+    include_root: false
+  expected:
+    shared_count: 17
+  answer: '{"shared_count": 17}'
+  evidence_ref: gold-evidence/facts.json#F-03
+  question: How many distinct materials are shared by the complete main-component
+    BOMs of 382-000005, P61-000351 and U00-000151, excluding roots and alternatives?
+  basis:
+    functions:
+    - Shared_BOM
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-04
+  inputs:
+    product_code: 382-000005
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    fg_qty: 816
+    theoretical_build_qty: 51
+    total_sellable_qty: 867
+  answer: '{"fg_qty": 816, "theoretical_build_qty": 51, "total_sellable_qty": 867}'
+  evidence_ref: gold-evidence/facts.json#F-04
+  question: For 382-000005, disable alternatives, use available stock in all warehouses
+    and exclude POs. Report finished stock, stock-supported manufacturing capacity
+    and total sellable quantity. Deduct component stock at every level before expanding
+    net shortages.
+  basis:
+    functions:
+    - Total_Sellable
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-05
+  inputs:
+    product_code: U00-000151
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    fg_qty: 4609
+    theoretical_build_qty: 129
+    total_sellable_qty: 4738
+  answer: '{"fg_qty": 4609, "theoretical_build_qty": 129, "total_sellable_qty": 4738}'
+  evidence_ref: gold-evidence/facts.json#F-05
+  question: For U00-000151, disable alternatives, use available stock in all warehouses
+    and exclude POs. Report finished stock, stock-supported manufacturing capacity
+    and total sellable quantity.
+  basis:
+    functions:
+    - Total_Sellable
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-06
+  inputs:
+    demands:
+    - product_code: 382-000005
+      qty: 50
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    inventory_covers: true
+  answer: '{"inventory_covers": true}'
+  evidence_ref: gold-evidence/facts.json#F-06
+  question: Can all-warehouse stock cover a new demand for 50 sets of 382-000005 with
+    alternatives disabled? Allocate finished stock first, then component stock at
+    each level. Are there any final stock shortages?
+  basis:
+    functions:
+    - Demand_Coverage
+    - BOM_Stock
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-07
+  inputs:
+    material_code: 606-000989
+  expected:
+    leadtime_days: 14
+  answer: '{"leadtime_days": 14}'
+  evidence_ref: gold-evidence/facts.json#F-07
+  question: What is the standard purchase lead time in days for Purchased material
+    606-000989?
+  basis:
+    functions:
+    - Lead_Time
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-08
+  inputs:
+    product_code: 382-000005
+    scope: production_available
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    theoretical_build_qty: 34
+  answer: '{"theoretical_build_qty": 34}'
+  evidence_ref: gold-evidence/facts.json#F-08
+  question: With alternatives disabled, how many sets of 382-000005 can be manufactured
+    under the deterministic allocation policy using the explicit seven-warehouse production_available
+    preset?
+  basis:
+    functions:
+    - Manufacturing_Capacity
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-09
+  inputs:
+    product_code: U00-000151
+    scope: production_available
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    theoretical_build_qty: 120
+  answer: '{"theoretical_build_qty": 120}'
+  evidence_ref: gold-evidence/facts.json#F-09
+  question: With alternatives disabled, how many sets of U00-000151 can be manufactured
+    under the deterministic allocation policy using the explicit seven-warehouse production_available
+    preset?
+  basis:
+    functions:
+    - Manufacturing_Capacity
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-10
+  inputs:
+    demands:
+    - product_code: P61-000351
+      qty: 60
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    inventory_covers: false
+    shortage_material_count: 3
+  answer: '{"inventory_covers": false, "shortage_material_count": 3}'
+  evidence_ref: gold-evidence/facts.json#F-10
+  question: Can all-warehouse stock cover a new demand for 60 sets of P61-000351 with
+    alternatives disabled? Allocate finished stock first, then component stock at
+    each level. Report coverage and the number of final shortage materials.
+  basis:
+    functions:
+    - Demand_Coverage
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-11
+  inputs:
+    demands:
+    - product_code: 382-000005
+      qty: 50
+    - product_code: P61-000351
+      qty: 60
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    demands:
+    - product_code: 382-000005
+      inventory_covers: true
+    - product_code: P61-000351
+      inventory_covers: false
+  answer: '{"demands": [{"product_code": "382-000005", "inventory_covers": true},
+    {"product_code": "P61-000351", "inventory_covers": false}]}'
+  evidence_ref: gold-evidence/facts.json#F-11
+  question: 'Allocate demands in array order: 50 sets of 382-000005, then 60 sets
+    of P61-000351. Disable alternatives and use all warehouses. Share one stock pool,
+    allocating finished stock first and then components at each level. Is each demand
+    covered?'
+  basis:
+    functions:
+    - Shared_Demand_Allocation
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-12
+  inputs:
+    product_codes:
+    - P61-000351
+    - U00-000151
+    include_substitutes: false
+    include_root: false
+  expected:
+    shared_count: 26
+  answer: '{"shared_count": 26}'
+  evidence_ref: gold-evidence/facts.json#F-12
+  question: How many distinct BOM materials are shared by P61-000351 and U00-000151?
+  basis:
+    functions:
+    - Shared_BOM
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-13
+  inputs:
+    product_code: 382-000005
+    scope: production_available
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    theoretical_build_qty: 34
+  answer: '{"theoretical_build_qty": 34}'
+  evidence_ref: gold-evidence/facts.json#F-13
+  question: Without purchases, incoming supply or alternatives, how many sets of 382-000005
+    can be manufactured under the deterministic policy using the explicit seven-warehouse
+    production_available preset?
+  basis:
+    functions:
+    - Stock_Only_Capacity
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-14
+  inputs:
+    product_code: U00-000080
+    include_substitutes: false
+    grain: full_structure
+  expected:
+    non_root_line_count: 76
+    node_count: 77
+  answer: '{"non_root_line_count": 76, "node_count": 77}'
+  evidence_ref: gold-evidence/facts.json#F-14
+  question: For the complete main-component BOM of U00-000080, excluding alternatives,
+    how many non-root rows and total structural nodes including the root are there?
+    Query the full structure; do not substitute net manufacturing backward-plan node
+    counts.
+  basis:
+    functions:
+    - BOM_Structure
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: F-15
+  inputs:
+    product_code: 382-000005
+    scope: all
+    substitute_enabled: true
+    include_in_transit: false
+  expected:
+    fg_qty: 816
+    theoretical_build_qty: 344
+    total_sellable_qty: 1160
+  answer: '{"fg_qty": 816, "theoretical_build_qty": 344, "total_sellable_qty": 1160}'
+  evidence_ref: gold-evidence/facts.json#F-15
+  question: For 382-000005, enable position-eligible alternatives, use all-warehouse
+    available stock and exclude POs. Report finished stock, deterministic stock-supported
+    manufacturing capacity and total sellable quantity. Select one candidate per position
+    without mixing, using its own usage ratio and shared stock.
+  basis:
+    functions:
+    - Total_Sellable
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-01
+  inputs:
+    product_code: P61-000351
+    depth: 1
+    include_root: false
+    include_substitutes: false
+  expected:
+    count: 16
+  answer: '{"count": 16}'
+  evidence_ref: gold-evidence/facts.json#R-01
+  question: How many first-level main components does P61-000351 have?
+  basis:
+    functions:
+    - BOM_Structure
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-02
+  inputs:
+    product_code: U00-000080
+    depth: 1
+    include_root: false
+    include_substitutes: false
+  expected:
+    count: 5
+  answer: '{"count": 5}'
+  evidence_ref: gold-evidence/facts.json#R-02
+  question: How many first-level main components does U00-000080 have?
+  basis:
+    functions:
+    - BOM_Structure
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-03
+  inputs:
+    product_code: U00-000080
+    depth: all
+    include_root: false
+    include_substitutes: false
+  expected:
+    count: 76
+  answer: '{"count": 76}'
+  evidence_ref: gold-evidence/facts.json#R-03
+  question: How many distinct materials are in the complete main-component BOM of
+    U00-000080, excluding the root and alternatives?
+  basis:
+    functions:
+    - BOM_Structure
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-04
+  inputs:
+    product_code: 382-000005
+    depth: all
+    include_root: false
+    include_substitutes: false
+  expected:
+    count: 333
+  answer: '{"count": 333}'
+  evidence_ref: gold-evidence/facts.json#R-04
+  question: How many distinct materials are in the complete main-component BOM of
+    382-000005, excluding the root and alternatives?
+  basis:
+    functions:
+    - BOM_Structure
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-05
+  inputs:
+    material_code: 321-000569
+    include_substitute_occurrences: true
+  expected:
+    product_codes:
+    - P61-000328
+    - P61-000331
+    - P61-000351
+  answer: '{"product_codes": ["P61-000328", "P61-000331", "P61-000351"]}'
+  evidence_ref: gold-evidence/facts.json#R-05
+  question: Which products use material 321-000569?
+  basis:
+    functions:
+    - Where_Used
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-06
+  inputs:
+    material_code: 606-000989
+    include_substitute_occurrences: true
+  expected:
+    product_codes:
+    - 382-000005
+    - 382-000006
+  answer: '{"product_codes": ["382-000005", "382-000006"]}'
+  evidence_ref: gold-evidence/facts.json#R-06
+  question: Which products use material 606-000989?
+  basis:
+    functions:
+    - Where_Used
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-07
+  inputs:
+    material_code: 725-000226
+    include_substitute_occurrences: true
+  expected:
+    count: 30
+  answer: '{"count": 30}'
+  evidence_ref: gold-evidence/facts.json#R-07
+  question: How many products use material 725-000226?
+  basis:
+    functions:
+    - Where_Used
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-08
+  inputs:
+    product_codes:
+    - 382-000005
+    - 382-000006
+    depth: 1
+    include_substitutes: false
+  expected:
+    material_codes:
+    - 468-000493
+    - 606-000989
+    - 606-000990
+    - 994-000550
+  answer: '{"material_codes": ["468-000493", "606-000989", "606-000990", "994-000550"]}'
+  evidence_ref: gold-evidence/facts.json#R-08
+  question: Which first-level main components are shared by 382-000005 and 382-000006?
+  basis:
+    functions:
+    - Shared_BOM
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: R-09
+  inputs:
+    product_code: 382-000005
+    parent_material_code: 588-000620
+    alt_group_no: '12'
+    scope: all
+  expected:
+    substitutes:
+    - material_code: 356-000356
+      available_qty: 4673
+      usage: 1
+  answer: '{"substitutes": [{"material_code": "356-000356", "available_qty": 4673,
+    "usage": 1}]}'
+  evidence_ref: gold-evidence/facts.json#R-09
+  question: For product 382-000005, parent 588-000620 and alternate group 12, which
+    alternative replaces main component 356-000061? Report its all-warehouse available
+    stock and usage ratio. Do not merge group 12 from other parents or products.
+  basis:
+    functions:
+    - Alternate_Status
+    metrics: []
+    skills: []
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-01
+  inputs:
+    demands:
+    - product_code: P61-000351
+      qty: 60
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    inventory_covers: false
+    leaf_shortages:
+      606-000069: 41
+      606-000071: 30
+      994-000645: 20
+  answer: '{"inventory_covers": false, "leaf_shortages": {"606-000069": 41, "606-000071":
+    30, "994-000645": 20}}'
+  evidence_ref: gold-evidence/facts.json#S-01
+  question: A customer needs 60 sets of P61-000351. Disable alternatives; use only
+    available finished, component and raw-material stock in all warehouses. Exclude
+    POs and new purchases. Allocate finished stock first and deduct stock at each
+    level. Can stock cover the whole demand? Give a definite yes/no and final leaf
+    shortage quantities.
+  basis:
+    functions:
+    - Demand_Coverage
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-02
+  inputs:
+    product_code: U00-000151
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    fg_qty: 4609
+    theoretical_build_qty: 129
+    total_sellable_qty: 4738
+    delivery_promise: false
+  answer: '{"fg_qty": 4609, "theoretical_build_qty": 129, "total_sellable_qty": 4738,
+    "delivery_promise": false}'
+  evidence_ref: gold-evidence/facts.json#S-02
+  question: A customer asks for U00-000151 with alternatives disabled. Report current
+    sellable capacity and state whether that establishes a delivery deadline promise.
+  basis:
+    functions:
+    - Total_Sellable
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-capacity-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-03
+  inputs:
+    demands:
+    - product_code: 382-000005
+      qty: 50
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    inventory_covers: true
+    leaf_shortages: {}
+  answer: '{"inventory_covers": true, "leaf_shortages": {}}'
+  evidence_ref: gold-evidence/facts.json#S-03
+  question: A customer adds 50 sets of 382-000005. Disable alternatives and use all
+    warehouses. Allocate finished stock first, then components at each level. Is demand
+    covered? List net shortages.
+  basis:
+    functions:
+    - Demand_Coverage
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-04
+  inputs:
+    demands:
+    - product_code: 382-000005
+      qty: 50
+    - product_code: P61-000351
+      qty: 60
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    all_covered: false
+    demands:
+    - product_code: 382-000005
+      inventory_covers: true
+      leaf_shortages: {}
+    - product_code: P61-000351
+      inventory_covers: false
+      leaf_shortages:
+        606-000069: 41
+        606-000071: 30
+        994-000645: 20
+  answer: '{"all_covered": false, "demands": [{"product_code": "382-000005", "inventory_covers":
+    true, "leaf_shortages": {}}, {"product_code": "P61-000351", "inventory_covers":
+    false, "leaf_shortages": {"606-000069": 41, "606-000071": 30, "994-000645": 20}}]}'
+  evidence_ref: gold-evidence/facts.json#S-04
+  question: Two customers add 50 sets of 382-000005 and 60 sets of P61-000351. Disable
+    alternatives. Can both demands be covered, and what are their shortages? Use all
+    warehouses, current stock only and no POs; deduct from one shared pool in the
+    stated product order.
+  basis:
+    functions:
+    - Shared_Demand_Allocation
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-05
+  inputs:
+    demands:
+    - product_code: 382-000005
+      qty: 50
+    - product_code: P61-000351
+      qty: 60
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    shared_count: 38
+    demands:
+    - product_code: 382-000005
+      inventory_covers: true
+      leaf_shortages: {}
+    - product_code: P61-000351
+      inventory_covers: false
+      leaf_shortages:
+        606-000069: 41
+        606-000071: 30
+        994-000645: 20
+  answer: '{"shared_count": 38, "demands": [{"product_code": "382-000005", "inventory_covers":
+    true, "leaf_shortages": {}}, {"product_code": "P61-000351", "inventory_covers":
+    false, "leaf_shortages": {"606-000069": 41, "606-000071": 30, "994-000645": 20}}]}'
+  evidence_ref: gold-evidence/facts.json#S-05
+  question: Allocate 50 sets of 382-000005, then 60 sets of P61-000351. Disable alternatives;
+    use all warehouses, current stock only and no POs. How many main materials do
+    the products share? Using one shared stock pool in this order, is each demand
+    covered? List final shortages.
+  basis:
+    functions:
+    - Shared_BOM
+    - Shared_Demand_Allocation
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-06
+  inputs:
+    product_code: P61-000351
+    demand_qty: 60
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    net_shortage: 0
+    recommended_replenishment_qty: 0
+  answer: '{"net_shortage": 0, "recommended_replenishment_qty": 0}'
+  evidence_ref: gold-evidence/facts.json#S-06
+  question: A customer adds 60 sets of P61-000351. Disable alternatives; use all warehouses,
+    current stock only and no POs. After deducting finished stock and component stock
+    at each level, what is the final leaf shortage of material 321-000569? Recommend
+    exactly that shortage quantity, without MOQ or safety stock.
+  basis:
+    functions:
+    - Demand_Coverage
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-07
+  inputs:
+    product_code: 382-000005
+    demand_qty: 50
+    scope: all
+    substitute_enabled: true
+    business_date: '2026-08-25'
+    demand_end: '2026-09-05'
+  expected:
+    fg_qty: 816
+    on_time: true
+    remaining_qty: 766
+  answer: '{"fg_qty": 816, "on_time": true, "remaining_qty": 766}'
+  evidence_ref: gold-evidence/facts.json#S-07
+  question: 'Business date: 2026-08-25. A customer needs 50 sets of 382-000005 by
+    2026-09-05. Explicitly use all warehouses and allow alternatives. If finished
+    stock covers demand, ship that day; exclude transport time, new purchases and
+    manufacturing. Report available finished stock, on-time coverage and stock remaining
+    after shipment.'
+  basis:
+    functions:
+    - Backward_Plan
+    metrics: []
+    skills:
+    - supply-en-production-schedule-backward-planning
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-08
+  inputs:
+    material_code: 321-000569
+    gross_demand_qty: 240
+    scope: all
+    business_date: '2026-08-25'
+    need_by: '2026-09-08'
+    include_in_transit: true
+  expected:
+    inventory_qty: 40
+    on_time_po_qty: 0
+    confirmed_supply_qty: 40
+    shortage_qty: 200
+    covers: false
+  answer: '{"inventory_qty": 40, "on_time_po_qty": 0, "confirmed_supply_qty": 40,
+    "shortage_qty": 200, "covers": false}'
+  evidence_ref: gold-evidence/facts.json#S-08
+  question: 'Business date: 2026-08-25. Material 321-000569 has gross demand 240 pcs
+    due 2026-09-08 across all warehouses. Count only available stock and net unreceived
+    quantities max(qty-actqty,0) of existing POs. Exclude closed POs, overdue unreceived
+    POs arriving on or before the business date, and POs without valid dates from
+    confirmed supply. Assume no new purchases. Can confirmed supply cover 240 pcs
+    by the need date? Give a definite yes/no, stock, valid on-time PO quantity, total
+    on-time supply and shortage.'
+  basis:
+    functions:
+    - Supply_Status
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-risk-summary
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-09
+  inputs:
+    product_code: U00-000151
+    demand_qty: 3850
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    covers: true
+  answer: '{"covers": true}'
+  evidence_ref: gold-evidence/facts.json#S-09
+  question: A customer needs 3850 sets of U00-000151 with alternatives disabled. Can
+    current supply capacity cover this quantity?
+  basis:
+    functions:
+    - Total_Sellable
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-capacity-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-10
+  inputs:
+    product_code: U00-000151
+    demand_qty: 3851
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    covers: true
+    capacity_shortfall: 0
+  answer: '{"covers": true, "capacity_shortfall": 0}'
+  evidence_ref: gold-evidence/facts.json#S-10
+  question: A customer needs 3851 sets of U00-000151 with alternatives disabled. Can
+    current supply capacity cover this quantity? Report the difference.
+  basis:
+    functions:
+    - Total_Sellable
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-capacity-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
+- id: S-11
+  inputs:
+    demands:
+    - product_code: P61-000351
+      qty: 60
+    - product_code: U00-000151
+      qty: 50
+    scope: all
+    substitute_enabled: false
+    include_in_transit: false
+  expected:
+    demands:
+    - product_code: P61-000351
+      inventory_covers: false
+      leaf_shortages:
+        606-000069: 41
+        606-000071: 30
+        994-000645: 20
+    - product_code: U00-000151
+      inventory_covers: true
+      leaf_shortages: {}
+  answer: '{"demands": [{"product_code": "P61-000351", "inventory_covers": false,
+    "leaf_shortages": {"606-000069": 41, "606-000071": 30, "994-000645": 20}}, {"product_code":
+    "U00-000151", "inventory_covers": true, "leaf_shortages": {}}]}'
+  evidence_ref: gold-evidence/facts.json#S-11
+  question: Two customers add 60 sets of P61-000351 and 50 sets of U00-000151. Disable
+    alternatives. Is each demand covered, and what are the shortages? Use all warehouses,
+    current stock only and no POs; allocate one shared pool in the stated product
+    order.
+  basis:
+    functions:
+    - Shared_Demand_Allocation
+    metrics: []
+    skills:
+    - supply-en-demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    evidence: Independent raw CSV calculation; see evidence_ref. Discover runtime
+      capability IDs through MCP.
