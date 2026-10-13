@@ -1,0 +1,80 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.1",
+  "packageDigest": "sha256:6c52c81007eeb632bcdab41a7e0f166aec39543edf986080cab724b34dc27d2b",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:08b7233ab1d0c1976e0a49c968e4fc31867a2a15b5c40725d2817036dbd3e306",
+  "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:b782b89ef0f2d2f432fa3fe3fce219a559d6f7351d2acd5a8dc6d869abfe3913",
+  "freshInstallation": true,
+  "installation": {
+    "source": "studio-offline-import",
+    "startedAt": "2026-10-13T08:00:08.206818Z",
+    "finishedAt": "2026-10-13T08:01:49.748125Z",
+    "freshAfterUninstall": true,
+    "stages": [
+      {
+        "id": "database",
+        "name": "准备样例库",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "name": "扫描数据资源",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "name": "导入并绑定知识网络",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "name": "发布能力",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "name": "冒烟验收",
+        "state": "succeeded"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "Verified 12 business tables and all 12 image CSV hashes against dataset.lock."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Installed model and bound resources passed object-query and cross-table checks."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "14 native functions called through MCP, five published Skills read, 11 unprefixed metrics discovered; metric queries and logic-property bindings passed."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Fresh scripted MCP regression matched 50/50 core business answers and 4/4 calendar scenarios."
+    }
+  ],
+  "architectureTested": "arm64",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.1/acceptance.json",
+  "evidenceDigest": "sha256:924d220796e872a93d1703f9dfc32d8f12963971822f8d5c301f9a3cc826121b",
+  "lifecycle": {
+    "installUninstallReinstallPassed": true,
+    "recordedResourcesAbsentAfterUninstall": true,
+    "historyRetained": true,
+    "staleUninstallRequestStatus": 404,
+    "standardContinueUninstallRequired": true
+  },
+  "limits": [
+    "Only an arm64 runtime was exercised. Both amd64 and arm64 data images were built; amd64 runtime acceptance is not claimed.",
+    "The core50 and calendar4 checks are scripted MCP regressions using the prior business-input plan with fresh discovery and results, not a new blind agent evaluation.",
+    "Knowledge-network deletion returned HTTP409 on the first uninstall attempt. The second lifecycle completed through the standard Continue uninstall API without manual resource deletion. First-attempt uninstall success is not claimed.",
+    "The first lifecycle included a direct knowledge-network deletion retry; it is retained separately and is not used as evidence of an unattended lifecycle.",
+    "Online discovery and remote installation remain to be checked after the catalog PR merges. No online-entry acceptance is claimed by this pre-registration proof."
+  ]
+}
