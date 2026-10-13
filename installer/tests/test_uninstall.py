@@ -171,3 +171,14 @@ class UninstallTest(unittest.TestCase):
         write_json(self.state / "order-basics.json", record)
         prepare_uninstall(self.state, "order-basics", record["id"], "admin")
         self.assertEqual(_read_state(self.state, "order-basics")["status"], "uninstalling")
+
+    def test_registered_sample_outside_legacy_allowlist_can_be_uninstalled(self):
+        record = {**self.record, "sample": "supply-chain-en", "id": "inst-supply-chain-en"}
+        write_json(self.state / "supply-chain-en.json", record)
+        prepare_uninstall(self.state, "supply-chain-en", record["id"], "admin")
+        self.assertEqual(_read_state(self.state, "supply-chain-en")["status"], "uninstalling")
+
+    def test_dynamic_sample_card_uses_recorded_receipt(self):
+        card = _card({"name": "supply-chain-en"}, "0.1.0",
+                     self.record | {"id": "inst-supply-chain-en", "sample": "supply-chain-en"}, "admin", False)
+        self.assertTrue(card["canUninstall"])
