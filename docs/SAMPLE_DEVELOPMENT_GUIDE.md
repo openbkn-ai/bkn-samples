@@ -12,6 +12,20 @@ Each sample lives under `samples/<sample-id>/` and must contain `sample.yaml`, r
 
 Keep `sample.yaml` aligned with the OpenBKN sample schema. Declare the platform range, required capabilities, components, data mode, knowledge-network entrypoint, and installation hooks. Do not add sample-specific branches to Studio or the shared installer. Required capability names identify standard API adapters implemented by the installer; they do not grant authorization or assert that an API is enabled on every deployment. Installation uses the existing OpenBKN APIs and records actual API failures. The target backend version is read through its standard health endpoint by default.
 
+## Online delivery is a separate release step
+
+Merging sample source or updating the installer does not publish an online sample. `sample.yaml` declares package identity; the root `catalog.json` registers downloadable releases. The refresh action reads that catalog, not arbitrary sample directories in Git. Do not add sample-name branches to Studio or the installer.
+
+A release is complete only when all of these have been verified:
+
+- The exact reviewed package and fixed data image were installed and tested.
+- The package is available from an immutable official Release asset, and the data image is reachable by digest.
+- `sample.json` and `verification.json` bind those exact artifacts and genuine acceptance evidence.
+- A catalog entry references the metadata at a full official commit SHA and the catalog sequence increases.
+- With the sample uninstalled and its offline cache removed, **Refresh samples** discovers the online version. Install from that online card, query the declared capabilities, uninstall, and verify resources and history.
+
+Do not mark source merge, offline import, or installer deployment as online-release acceptance. Updating the installer does not replace cached packages. If a card disappears after removing its offline package, first check the catalog registration and refresh status.
+
 ## Versions and release notes
 
 Use semantic versions. Every version gets `releases/<version>/release-notes.en-US.md` and/or `release-notes.zh-CN.md`. Describe changes, compatibility, data or network changes, and known limits. Installed version and release notes are shown by Studio.

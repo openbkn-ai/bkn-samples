@@ -4,9 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       sample:
-        type: choice
-        options: [order-basics]
+        description: Sample ID from sample.yaml metadata.name
+        type: string
         required: true
+      build_context:
+        description: Dockerfile COPY paths are relative to this context
+        type: choice
+        options: [sample, repository]
+        default: sample
       version:
         description: Sample version with reviewed release notes
         required: true
@@ -29,11 +34,18 @@ jobs:
       VERSION: ${{ inputs.version }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: Check release identity
+        id: plan
+        env:
+          BUILD_CONTEXT: ${{ inputs.build_context }}
         run: |
-          [[ "$SAMPLE" == "order-basics" ]]
-          [[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
-          test -f "samples/$SAMPLE/releases/$VERSION/release-notes.en-US.md"
+          python -m pip install "PyYAML>=6"
+          PYTHONPATH=. python tools/publication/plan_data_image.py \
+            --sample "$SAMPLE" --version "$VERSION" --context "$BUILD_CONTEXT" \
+            --github-output "$GITHUB_OUTPUT"
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
@@ -50,12 +62,12 @@ jobs:
       - uses: docker/build-push-action@v6
         id: image
         with:
-          context: samples/${{ inputs.sample }}
-          file: samples/${{ inputs.sample }}/db/Dockerfile
+          context: ${{ steps.plan.outputs.context }}
+          file: ${{ steps.plan.outputs.dockerfile }}
           push: true
           platforms: linux/amd64,linux/arm64
           provenance: false
           sbom: false
-          tags: ghcr.io/openbkn-ai/bkn-samples:sample-${{ inputs.sample }}-v${{ inputs.version }}
+          tags: ${{ steps.plan.outputs.tag }}
       - name: Record image digest
         run: echo 'Published digest ${{ steps.image.outputs.digest }}' >> "$GITHUB_STEP_SUMMARY"

@@ -14,7 +14,7 @@ PR 使用英文标题和描述，完成规范检查与 AI 审核后合并。最�
 
 数据变化需要发布新的数据镜像，并固定 digest；数据未变可复用已经验证的镜像。镜像内须包含对应样例的数据库 hooks 和锁定数据。支持的目标架构为 amd64、arm64。
 
-供应链与世界杯的数据镜像由主线的 `publish-sample-studio.yml` 构建（服务及数据镜像使用同一主线构建版本）；在 Actions 对应源提交的运行中取得数据镜像 tag，再用 `docker buildx imagetools inspect ghcr.io/openbkn-ai/bkn-samples:<build-version>` 读取 digest。不要使用可变 tag 代替 digest。`publish-sample-data.yml` 是当前订单入门样例的独立数据镜像入口，不能直接用于供应链。修改数据后，必须等待包含该修改的官方数据镜像发布成功。
+供应链与世界杯的数据镜像由主线的 `publish-sample-studio.yml` 构建（服务及数据镜像使用同一主线构建版本）；在 Actions 对应源提交的运行中取得数据镜像 tag，再用 `docker buildx imagetools inspect ghcr.io/openbkn-ai/bkn-samples:<build-version>` 读取 digest。不要使用可变 tag 代替 digest。`publish-sample-data.yml` 按 `sample.yaml` 的 `metadata.name` 动态解析样例目录，不使用固定名称白名单。传入 sample ID、版本以及 Dockerfile 的构建上下文：`sample` 表示相对样例目录，`repository` 表示相对仓库根目录。样例目录名可以与 sample ID 不同。修改数据后，必须等待包含该修改的官方数据镜像发布成功。
 
 ```sh
 python3 tools/publication/build_candidate.py samples/<directory> \
@@ -60,3 +60,18 @@ python3 tools/publication/validate.py . --official \
 合并目录 PR 后，在首页点击刷新样例，确认新版本、release notes 和可安装状态。目录不是实时推送：实例读取官方目录并保留成功缓存，刷新失败时使用已有缓存并提示失败。没有缓存的新环境不能凭空获得远程目录；仍可使用离线包入口。内置样例不等于远程目录缓存。
 
 最后用正式远程包完成安装、打开知识网络及实际查询，并记录持久状态在服务重建后保留。部署入口见 [样例服务部署](sample-service-deployment.md)，产品 Chart 位于 `openbkn-ai/openbkn-deploy`。
+
+## 独立数据镜像发布入口
+
+先合并包含样例 Dockerfile、该版本说明及动态发布入口的 PR，再从 main 发起构建。例如英文供应链 Dockerfile 使用仓库根目录上下文：
+
+```sh
+gh workflow run publish-sample-data.yml --ref main \
+  -f sample=supply-chain-en -f version=0.1.1 -f build_context=repository
+```
+
+该工作流生成 amd64/arm64 镜像，拒绝覆盖现有版本 tag。记录成功构建的源 SHA 及 digest，之后才能构建绑定该 digest 的候选包。不要将共享数据镜像未包含某个 sample 的情况误当成“已有可复用镜像”。
+
+## 发布结束前的必做检查
+
+删除已卸载样例的离线缓存包，再刷新官方目录。必须还能找到本次发布的在线身份、版本、说明和可安装状态。随后从在线入口安装并验证实际内容，完成卸载及历史检查。若删除离线包后卡片消失，说明在线交付尚未完成；不能只因源码、数据镜像或安装器已经合并而关闭发布工作项。
