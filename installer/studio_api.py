@@ -256,7 +256,7 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
         },
         "components": dict(item.get("components") or {}),
         "installedVersion": installed_version if installed or status in {"uninstalling", "uninstall_failed"} else "",
-        "uninstallUnavailableReason": "ownership_receipt_missing" if installed and item.get("name") in {"supply-chain", "world-cup", "order-basics"} and not has_receipt else "",
+        "uninstallUnavailableReason": "ownership_receipt_missing" if installed and not has_receipt else "",
         "installedAt": (state or {}).get("installedAt") if installed else None,
         "manifestSha256": item.get("manifestSha256", ""),
         "versions": [{"version": version, "hasReleaseNotes": bool(item.get("releaseNotes"))}],
@@ -264,8 +264,7 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
         "questions": list(item.get("questions") or []),
         "status": status,
         "installable": installable,
-        "canUninstall": actor_role == "admin" and item.get("name") in {"supply-chain", "world-cup", "order-basics"}
-            and status in {"installed", "uninstall_failed"}
+        "canUninstall": actor_role == "admin" and status in {"installed", "uninstall_failed"}
             and has_receipt,
         "installationId": _installation_id(state) if state else None,
         "message": (state or {}).get("error", {}).get("message", "") if state else item.get("code", ""),
