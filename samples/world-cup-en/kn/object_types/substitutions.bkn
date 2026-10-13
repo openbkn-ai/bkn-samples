@@ -1,0 +1,53 @@
+---
+type: object_type
+id: worldcup_en_substitutions
+name: Substitutions
+tags: [worldcup, fjelstul]
+---
+
+## Substitutions
+
+One player entering or leaving a match. A substitution can produce two rows; do not count paired rows as two substitution events.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| substitution_id | Substitution ID | string | Stable substitution identifier; join using this value. | substitution_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| match_id | Match ID | string | Stable match identifier; join using this value. | match_id |
+| match_name | Match Name | string | Recorded match name. | match_name |
+| match_date | Match Date | string | Local match date as recorded, in YYYY-MM-DD format. | match_date |
+| stage_name | Stage Name | string | Recorded competition stage, such as group stage or final. | stage_name |
+| group_name | Group Name | string | Recorded group name; not applicable for some knockout matches. | group_name |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+| home_team | Home Side | integer | 1 for the designated home side, otherwise 0; not the host-country flag. | home_team |
+| away_team | Away Side | integer | 1 for the designated away side, otherwise 0. | away_team |
+| player_id | Player ID | string | Stable player identifier; join using this value. | player_id |
+| family_name | Family Name | string | Recorded family name; use the person ID to identify a unique individual. | family_name |
+| given_name | Given Name | string | Recorded given name, preserving source spelling and accents. | given_name |
+| shirt_number | Shirt Number | integer | Recorded squad or match shirt number. | shirt_number |
+| minute_label | Minute Label | string | Recorded event minute, retaining stoppage-time notation. | minute_label |
+| minute_regulation | Regulation Minute | integer | Regulation component of the recorded event minute. | minute_regulation |
+| minute_stoppage | Stoppage Minute | integer | Stoppage-time component of the recorded event minute. | minute_stoppage |
+| match_period | Match Period | string | Match period containing the event. | match_period |
+| going_off | Going Off | integer | 1 for the player leaving the pitch, otherwise 0. | going_off |
+| coming_on | Coming On | integer | 1 for the player entering the pitch, otherwise 0. | coming_on |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: match_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{SUBSTITUTIONS_RES_ID}} | wc_substitutions |

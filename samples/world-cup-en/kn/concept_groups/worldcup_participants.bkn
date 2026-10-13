@@ -1,0 +1,26 @@
+---
+type: concept_group
+id: worldcup_en_worldcup_participants
+name: Teams and People
+tags: [worldcup, fjelstul]
+---
+
+## Teams and People
+
+### Object Types
+
+| ID | Name | Description |
+|----|------|-------------|
+| worldcup_en_teams | Teams | National-team identities, federation and men’s/women’s team flags. Preserve historical team identities. |
+| worldcup_en_players | Players | Player identities and recorded playing positions. Join using player_id, not surname. |
+| worldcup_en_managers | Managers | Manager identities. Names alone need not be unique. |
+| worldcup_en_referees | Referees | Referee identities and recorded national affiliations. |
+| worldcup_en_confederations | Confederations | Football confederations and their regions. |
+| worldcup_en_squads | Squads | Players named in a tournament squad. Squad membership is different from match appearances. |
+| worldcup_en_qualified_teams | Tournament Entrants | One team’s entry and recorded final performance in a tournament. This is not a table of every qualification match. |
+| worldcup_en_manager_appointments | Manager Appointments | Managers appointed to a national team for a tournament. |
+| worldcup_en_referee_appointments | Referee Appointments | Referees appointed to a tournament. |
+| worldcup_en_team_appearances | Team Match Appearances | One team’s side of one match. Every match has two team rows, so count distinct match_id when counting matches. |
+| worldcup_en_player_appearances | Player Match Appearances | One player’s match appearance. Starter and substitute flags describe participation. Absence of rows is not proof that no players appeared; coverage varies by tournament. |
+| worldcup_en_manager_appearances | Manager Match Appearances | One manager’s participation in a match. Join match and manager IDs. |
+| worldcup_en_referee_appearances | Referee Match Appearances | The referee recorded for a match. |

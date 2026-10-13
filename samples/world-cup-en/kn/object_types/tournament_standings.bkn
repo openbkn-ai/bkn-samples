@@ -1,0 +1,36 @@
+---
+type: object_type
+id: worldcup_en_tournament_standings
+name: Tournament Standings
+tags: [worldcup, fjelstul]
+---
+
+## Tournament Standings
+
+Final tournament rankings and totals for recorded teams.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| position | Rank | integer | Rank recorded in the standings. | position |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: team_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{TOURNAMENT_STANDINGS_RES_ID}} | wc_tournament_standings |

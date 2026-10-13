@@ -1,0 +1,48 @@
+---
+type: object_type
+id: worldcup_en_group_standings
+name: Group Standings
+tags: [worldcup, fjelstul]
+---
+
+## Group Standings
+
+One team’s standings in a tournament group. Use tournament, group and team together.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| stage_number | Stage Number | integer | Stage order within the tournament. | stage_number |
+| stage_name | Stage Name | string | Recorded competition stage, such as group stage or final. | stage_name |
+| group_name | Group Name | string | Recorded group name; not applicable for some knockout matches. | group_name |
+| position | Rank | integer | Rank recorded in the standings. | position |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+| played | Matches Played | integer | Matches played in the standings scope. | played |
+| wins | Wins | integer | Number of wins. | wins |
+| draws | Draws | integer | Number of draws. | draws |
+| losses | Losses | integer | Number of losses. | losses |
+| goals_for | Goals For | integer | Goals scored for this team, excluding shootout kicks. | goals_for |
+| goals_against | Goals Against | integer | Goals conceded by this team, excluding shootout kicks. | goals_against |
+| goal_difference | Goal Difference | integer | Goals scored minus goals conceded. | goal_difference |
+| points | Points | integer | Points recorded in the standings; do not assume one points rule across eras. | points |
+| advanced | Advanced | integer | 1 when the team or stage advanced as recorded, otherwise 0. | advanced |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: team_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{GROUP_STANDINGS_RES_ID}} | wc_group_standings |

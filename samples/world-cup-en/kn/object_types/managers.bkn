@@ -1,0 +1,36 @@
+---
+type: object_type
+id: worldcup_en_managers
+name: Managers
+tags: [worldcup, fjelstul]
+---
+
+## Managers
+
+Manager identities. Names alone need not be unique.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| manager_id | Manager ID | string | Stable manager identifier; join using this value. | manager_id |
+| family_name | Family Name | string | Recorded family name; use the person ID to identify a unique individual. | family_name |
+| given_name | Given Name | string | Recorded given name, preserving source spelling and accents. | given_name |
+| female | Female Player | integer | 1 for a female player, otherwise 0. | female |
+| country_name | Country Name | string | Recorded country name. | country_name |
+| manager_wikipedia_link | Manager Wikipedia Link | string | Wikipedia reference for manager. | manager_wikipedia_link |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: family_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{MANAGERS_RES_ID}} | wc_managers |

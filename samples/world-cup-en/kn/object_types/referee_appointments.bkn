@@ -1,0 +1,39 @@
+---
+type: object_type
+id: worldcup_en_referee_appointments
+name: Referee Appointments
+tags: [worldcup, fjelstul]
+---
+
+## Referee Appointments
+
+Referees appointed to a tournament.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| referee_id | Referee ID | string | Stable referee identifier; join using this value. | referee_id |
+| family_name | Family Name | string | Recorded family name; use the person ID to identify a unique individual. | family_name |
+| given_name | Given Name | string | Recorded given name, preserving source spelling and accents. | given_name |
+| country_name | Country Name | string | Recorded country name. | country_name |
+| confederation_id | Confederation ID | string | Stable confederation identifier; join using this value. | confederation_id |
+| confederation_name | Confederation Name | string | Recorded confederation name. | confederation_name |
+| confederation_code | Confederation Code | string | Recorded confederation code. | confederation_code |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: tournament_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{REFEREE_APPOINTMENTS_RES_ID}} | wc_referee_appointments |

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_matches_home_team
+name: Matches — Home Team
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Matches — Home Team
+
+Join `matches.home_team_id` to `teams.team_id`. Home means the designated match side, not the host country. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_matches | worldcup_en_teams | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| home_team_id | team_id |

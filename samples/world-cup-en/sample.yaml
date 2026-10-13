@@ -1,0 +1,35 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: Sample
+metadata:
+  name: world-cup-en
+  aliases: []
+  displayName: World Cup (EN)
+  summary: Explore World Cup tournaments, teams, players and match events.
+spec:
+  studio:
+    licenseNote: CC-BY-SA 4.0 · Joshua C. Fjelstul
+    questions:
+    - Which awards did Lionel Messi receive in the 2014 and 2022 tournaments?
+    - Who won the 2014, 2018 and 2022 men’s tournaments?
+  database:
+    engine: mariadb
+    name: worldcup_en
+    expectedTables: 27
+  data:
+    mode: embedded
+  knowledgeNetwork:
+    id: worldcup_en
+    displayName: World Cup
+  capabilities:
+    required: false
+  components:
+    objects: true
+    relations: true
+    metrics: false
+    functions: false
+    skills: false
+  hooks:
+    dbInit: db/init.sh
+    dbVerify: db/verify.sh
+    platformInstall: platform/install.sh
+    platformVerify: platform/verify.sh

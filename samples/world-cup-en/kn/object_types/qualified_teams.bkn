@@ -1,0 +1,37 @@
+---
+type: object_type
+id: worldcup_en_qualified_teams
+name: Tournament Entrants
+tags: [worldcup, fjelstul]
+---
+
+## Tournament Entrants
+
+One team’s entry and recorded final performance in a tournament. This is not a table of every qualification match.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+| count_matches | Match Count | integer | Number of matches in the row’s tournament, team or stage scope. | count_matches |
+| performance | Performance | string | Recorded tournament finishing stage or performance. | performance |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: team_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{QUALIFIED_TEAMS_RES_ID}} | wc_qualified_teams |

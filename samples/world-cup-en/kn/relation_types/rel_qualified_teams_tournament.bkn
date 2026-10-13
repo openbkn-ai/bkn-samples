@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_qualified_teams_tournament
+name: Tournament Entrants — Tournament
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Tournament Entrants — Tournament
+
+Join `qualified_teams.tournament_id` to `tournaments.tournament_id`. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_qualified_teams | worldcup_en_tournaments | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| tournament_id | tournament_id |

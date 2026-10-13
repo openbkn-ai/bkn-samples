@@ -1,0 +1,34 @@
+---
+type: object_type
+id: worldcup_en_awards
+name: Awards
+tags: [worldcup, fjelstul]
+---
+
+## Awards
+
+Award definitions and the year each award was introduced.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| award_id | Award ID | string | Stable award identifier; join using this value. | award_id |
+| award_name | Award Name | string | Recorded award name. | award_name |
+| award_description | Award Description | string | Description of the award and its selection criteria. | award_description |
+| year_introduced | Year Introduced | integer | Year the award was first introduced. | year_introduced |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: award_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{AWARDS_RES_ID}} | wc_awards |

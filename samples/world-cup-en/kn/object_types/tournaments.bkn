@@ -1,0 +1,47 @@
+---
+type: object_type
+id: worldcup_en_tournaments
+name: Tournaments
+tags: [worldcup, fjelstul]
+---
+
+## Tournaments
+
+Tournament editions and winners. The snapshot has 22 men’s editions through 2022 and eight women’s editions through 2019.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| year | Year | integer | Year of the tournament edition. | year |
+| start_date | Start Date | string | Tournament start date in YYYY-MM-DD format. | start_date |
+| end_date | End Date | string | Tournament end date in YYYY-MM-DD format. | end_date |
+| host_country | Host Country | string | Recorded host-country label; see host_countries for individual hosts. | host_country |
+| winner | Winner | string | Recorded winning team name. | winner |
+| host_won | Host Won | integer | 1 if a host won the tournament, otherwise 0. | host_won |
+| count_teams | Team Count | integer | Number of teams in the row’s tournament, team or stage scope. | count_teams |
+| group_stage | Group Stage | integer | 1 when a group stage applies in this row’s scope, otherwise 0. | group_stage |
+| second_group_stage | Second Group Stage | integer | 1 when a second group stage applies in this row’s scope, otherwise 0. | second_group_stage |
+| final_round | Final Round | integer | 1 when a final round applies in this row’s scope, otherwise 0. | final_round |
+| round_of_16 | Round Of 16 | integer | 1 when a round of 16 applies in this row’s scope, otherwise 0. | round_of_16 |
+| quarter_finals | Quarter Finals | integer | 1 when quarter-finals applies in this row’s scope, otherwise 0. | quarter_finals |
+| semi_finals | Semi Finals | integer | 1 when semi-finals applies in this row’s scope, otherwise 0. | semi_finals |
+| third_place_match | Third Place Match | integer | 1 when a third-place match applies in this row’s scope, otherwise 0. | third_place_match |
+| final | Final | integer | 1 when a final applies in this row’s scope, otherwise 0. | final |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: tournament_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{TOURNAMENTS_RES_ID}} | wc_tournaments |

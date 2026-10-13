@@ -1,0 +1,34 @@
+---
+type: object_type
+id: worldcup_en_confederations
+name: Confederations
+tags: [worldcup, fjelstul]
+---
+
+## Confederations
+
+Football confederations and their regions.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| confederation_id | Confederation ID | string | Stable confederation identifier; join using this value. | confederation_id |
+| confederation_name | Confederation Name | string | Recorded confederation name. | confederation_name |
+| confederation_code | Confederation Code | string | Recorded confederation code. | confederation_code |
+| confederation_wikipedia_link | Confederation Wikipedia Link | string | Wikipedia reference for confederation. | confederation_wikipedia_link |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: confederation_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{CONFEDERATIONS_RES_ID}} | wc_confederations |

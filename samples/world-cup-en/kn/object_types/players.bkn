@@ -1,0 +1,42 @@
+---
+type: object_type
+id: worldcup_en_players
+name: Players
+tags: [worldcup, fjelstul]
+---
+
+## Players
+
+Player identities and recorded playing positions. Join using player_id, not surname.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| player_id | Player ID | string | Stable player identifier; join using this value. | player_id |
+| family_name | Family Name | string | Recorded family name; use the person ID to identify a unique individual. | family_name |
+| given_name | Given Name | string | Recorded given name, preserving source spelling and accents. | given_name |
+| birth_date | Birth Date | string | Recorded birth date in YYYY-MM-DD format. | birth_date |
+| female | Female Player | integer | 1 for a female player, otherwise 0. | female |
+| goal_keeper | Goalkeeper | integer | 1 when goalkeeper is a recorded playing position, otherwise 0. | goal_keeper |
+| defender | Defender | integer | 1 when defender is a recorded playing position, otherwise 0. | defender |
+| midfielder | Midfielder | integer | 1 when midfielder is a recorded playing position, otherwise 0. | midfielder |
+| forward | Forward | integer | 1 when forward is a recorded playing position, otherwise 0. | forward |
+| count_tournaments | Tournament Count | integer | Number of tournaments in the row’s tournament, team or stage scope. | count_tournaments |
+| list_tournaments | List Tournaments | string | Recorded list of tournament editions associated with the person. | list_tournaments |
+| player_wikipedia_link | Player Wikipedia Link | string | Wikipedia reference for player. | player_wikipedia_link |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: family_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{PLAYERS_RES_ID}} | wc_players |

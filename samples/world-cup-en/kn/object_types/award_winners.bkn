@@ -1,0 +1,41 @@
+---
+type: object_type
+id: worldcup_en_award_winners
+name: Award Winners
+tags: [worldcup, fjelstul]
+---
+
+## Award Winners
+
+One award recipient in a tournament. Join the award, recipient and tournament IDs.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| award_id | Award ID | string | Stable award identifier; join using this value. | award_id |
+| award_name | Award Name | string | Recorded award name. | award_name |
+| shared | Shared Rank | integer | 1 when the recorded position is shared, otherwise 0. | shared |
+| player_id | Player ID | string | Stable player identifier; join using this value. | player_id |
+| family_name | Family Name | string | Recorded family name; use the person ID to identify a unique individual. | family_name |
+| given_name | Given Name | string | Recorded given name, preserving source spelling and accents. | given_name |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: team_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{AWARD_WINNERS_RES_ID}} | wc_award_winners |
