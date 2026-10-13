@@ -1,6 +1,7 @@
-"""Official sample uninstall: fixed recorded IDs, checked ownership, persistent progress."""
+"""Sample uninstall using recorded resource IDs, ownership checks and progress."""
 import json
 import os
+import re
 import time
 from urllib.error import HTTPError
 from urllib.parse import quote
@@ -12,7 +13,7 @@ from installer.history import record_terminal_installation
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, timestamp
 
-SUPPORTED_SAMPLES = {"supply-chain", "world-cup", "order-basics"}
+SAMPLE_NAME_RE = re.compile(r"^[a-z0-9-]{1,32}$")
 
 UNINSTALL_STAGES = (("knowledge", "删除知识网络和指标"), ("capabilities", "删除函数和 Skill"),
                     ("discover", "删除数据源"), ("database", "删除样例库和存储"), ("verify", "验证清理结果"))
@@ -56,7 +57,10 @@ def prepare_uninstall(state_dir, sample, installation_id, role):
     if role != "admin":
         raise ApiError(403, "forbidden", "An administrator must uninstall the sample.")
     record = _read_state(state_dir, sample) or {}
-    if sample not in SUPPORTED_SAMPLES or record.get("id") != installation_id:
+    # Samples are registered through the catalog at runtime.  The installation
+    # record and its ownership receipt are the authority; do not maintain a
+    # second static allowlist here.
+    if not SAMPLE_NAME_RE.fullmatch(sample) or record.get("sample") != sample or record.get("id") != installation_id:
         raise ApiError(404, "uninstall_failed", "Sample installation not found.")
     if record.get("status") not in {"installed", "uninstall_failed"}:
         raise ApiError(409, "already_installing", "Only an installed sample or a failed uninstall can be uninstalled.")
