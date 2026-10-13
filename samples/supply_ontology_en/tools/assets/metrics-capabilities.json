@@ -3,7 +3,7 @@
   "comment": "Sample documentation and acceptance contract, not additional API fields. The installer excludes this file. Creating an existing metric name does not update it; release a new version and reinstall cleanly.",
   "metrics": [
     {
-      "metric_name": "Supply EN: Product Count",
+      "metric_name": "Product Count",
       "scope_ref": "supply_ontology_en_product",
       "aggregation": {
         "property": "material_number",
@@ -22,7 +22,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Material Count",
+      "metric_name": "Material Count",
       "scope_ref": "supply_ontology_en_material",
       "aggregation": {
         "property": "material_code",
@@ -45,7 +45,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Supplier Count",
+      "metric_name": "Supplier Count",
       "scope_ref": "supply_ontology_en_supplier",
       "aggregation": {
         "property": "supplier_code",
@@ -67,7 +67,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Sales Order Count",
+      "metric_name": "Sales Order Count",
       "scope_ref": "supply_ontology_en_salesorder",
       "aggregation": {
         "property": "sales_order_id",
@@ -90,7 +90,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Warehouse Count",
+      "metric_name": "Warehouse Count",
       "scope_ref": "supply_ontology_en_inventory",
       "aggregation": {
         "property": "warehouse",
@@ -112,7 +112,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Available Stock",
+      "metric_name": "Available Stock",
       "scope_ref": "supply_ontology_en_inventory",
       "aggregation": {
         "property": "available_inventory_qty",
@@ -136,7 +136,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Total Forecast Demand",
+      "metric_name": "Total Forecast Demand",
       "scope_ref": "supply_ontology_en_forecast",
       "aggregation": {
         "property": "qty",
@@ -159,7 +159,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Open_Forecast_Count",
+      "metric_name": "Open_Forecast_Count",
       "scope_ref": "supply_ontology_en_forecast",
       "aggregation": {
         "property": "id",
@@ -186,7 +186,7 @@
       "note": "Open-forecast queries require an explicit closure filter. An empty query does not establish this business result."
     },
     {
-      "metric_name": "Supply EN: Total Signed Quantity",
+      "metric_name": "Total Signed Quantity",
       "scope_ref": "supply_ontology_en_salesorder",
       "aggregation": {
         "property": "signing_quantity",
@@ -209,7 +209,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Total Shipped Quantity",
+      "metric_name": "Total Shipped Quantity",
       "scope_ref": "supply_ontology_en_salesorder",
       "aggregation": {
         "property": "shipping_quantity",
@@ -232,7 +232,7 @@
       "note": "Current snapshot only. Receipt and need dates cannot provide historical stock trends."
     },
     {
-      "metric_name": "Supply EN: Signing Events",
+      "metric_name": "Signing Events",
       "scope_ref": "supply_ontology_en_salesorder",
       "aggregation": {
         "property": "signing_quantity",

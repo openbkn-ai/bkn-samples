@@ -26,14 +26,14 @@ QUERY_FILE = PAYLOADS / "metrics-query-examples.json"
 
 def test_extract_entries_from_wrapper():
     entries = extract_metric_entries(
-        {"comment": "x", "entries": [{"name": 'Supply EN: Product Count', "scope_ref": "ot"}]}
+        {"comment": "x", "entries": [{"name": 'Product Count', "scope_ref": "ot"}]}
     )
-    assert entries[0]["name"] == 'Supply EN: Product Count'
+    assert entries[0]["name"] == 'Product Count'
 
 
 def test_extract_entries_from_list():
-    entries = extract_metric_entries([{"name": 'Supply EN: Material Count'}])
-    assert entries[0]["name"] == 'Supply EN: Material Count'
+    entries = extract_metric_entries([{"name": 'Material Count'}])
+    assert entries[0]["name"] == 'Material Count'
 
 
 def test_extract_entries_rejects_empty():
@@ -68,7 +68,7 @@ def test_merge_logic_properties_replaces_by_name():
         build_logic_property(
             {
                 "name": "product_total_count",
-                "display_name": 'Supply EN: Product Count',
+                "display_name": 'Product Count',
                 "comment": "new",
                 "parameters": [],
             },
@@ -96,17 +96,17 @@ def test_pack_payloads_exist_and_align():
     metrics = extract_metric_entries(json.loads(METRICS_FILE.read_text(encoding="utf-8")))
     metric_names = {e["name"] for e in metrics}
     assert metric_names == {
-        'Supply EN: Product Count',
-        'Supply EN: Material Count',
-        'Supply EN: Supplier Count',
-        'Supply EN: Sales Order Count',
-        'Supply EN: Warehouse Count',
-        'Supply EN: Available Stock',
-        'Supply EN: Total Forecast Demand',
-        'Supply EN: Open_Forecast_Count',
-        'Supply EN: Total Signed Quantity',
-        'Supply EN: Total Shipped Quantity',
-        'Supply EN: Signing Events',
+        'Product Count',
+        'Material Count',
+        'Supplier Count',
+        'Sales Order Count',
+        'Warehouse Count',
+        'Available Stock',
+        'Total Forecast Demand',
+        'Open_Forecast_Count',
+        'Total Signed Quantity',
+        'Total Shipped Quantity',
+        'Signing Events',
     }
 
     lp_payload = json.loads(LP_FILE.read_text(encoding="utf-8"))
@@ -149,7 +149,7 @@ def test_sales_quantity_metrics_match_filtered_csv_aggregates():
         rows = [row for row in csv.DictReader(handle) if row["product_code"] == "382-000005"]
     assert len(rows) == 40
     totals = []
-    for name, field in [('Supply EN: Total Signed Quantity', "signing_quantity"), ('Supply EN: Total Shipped Quantity', "shipping_quantity")]:
+    for name, field in [('Total Signed Quantity', "signing_quantity"), ('Total Shipped Quantity', "shipping_quantity")]:
         assert metrics[name]["scope_ref"] == "supply_ontology_en_salesorder"
         assert metrics[name]["calculation_formula"]["aggregation"] == {"property": field, "aggr": "sum"}
         case = cases[name]

@@ -8,7 +8,7 @@ description: Complete calendar-month sales signing comparisons on supply_ontolog
 Analyze signing quantities, not shipping events, stock history or production lead times.
 
 1. Distinguish complete calendar months from same-date month-to-date comparisons. Confirm year, months and business timezone; the sample uses `Asia/Shanghai`.
-2. Discover `supply_ontology_en_salesorder`, its `signing_date` and `signing_quantity` properties, and **Supply EN: Signing Events** through MCP. Use actual published IDs.
+2. Discover `supply_ontology_en_salesorder`, its `signing_date` and `signing_quantity` properties, and **Signing Events** through MCP. Use actual published IDs.
 3. Resolve any product filter and use the same product/status filters for every month. Current shipped totals cannot establish monthly shipping events.
 4. Query each complete business month with `signing_date >= first day 00:00` and `signing_date < next month's first day 00:00`, converted from the business timezone. Months have different lengths; May has 31 days. Handle December rollover, February and leap years.
 5. Use metric `time: {instant: true}` with explicit date conditions. Discover the actual AND syntax, timestamp unit, tool name and parameters. Do not attach `sameperiod` to this path.

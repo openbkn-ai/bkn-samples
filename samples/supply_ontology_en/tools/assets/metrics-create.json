@@ -40,7 +40,7 @@
   },
   "entries": [
     {
-      "name": "Supply EN: Product Count",
+      "name": "Product Count",
       "comment": "count(material_number). Fixture total: 30.",
       "tags": [
         "p0",
@@ -60,7 +60,7 @@
       }
     },
     {
-      "name": "Supply EN: Material Count",
+      "name": "Material Count",
       "comment": "count(material_code). Filter or group by materialattr / group_name. Fixture total: 3497.",
       "tags": [
         "p0",
@@ -90,7 +90,7 @@
       ]
     },
     {
-      "name": "Supply EN: Supplier Count",
+      "name": "Supplier Count",
       "comment": "count(supplier_code). Filter by purchaserid_name. Fixture total: 230.",
       "tags": [
         "p0",
@@ -116,7 +116,7 @@
       ]
     },
     {
-      "name": "Supply EN: Sales Order Count",
+      "name": "Sales Order Count",
       "comment": "count(sales_order_id). Filter or group by product_code / order_status. Fixture total: 800.",
       "tags": [
         "p0",
@@ -146,7 +146,7 @@
       ]
     },
     {
-      "name": "Supply EN: Warehouse Count",
+      "name": "Warehouse Count",
       "comment": "Distinct warehouse values in stock records: 29. The production_available preset contains 7 warehouses and is a separate measure.",
       "tags": [
         "p0",
@@ -172,7 +172,7 @@
       ]
     },
     {
-      "name": "Supply EN: Available Stock",
+      "name": "Available Stock",
       "comment": "sum(available_inventory_qty). Expand production_available / finished_goods with warehouse in at query time, or leave all unrestricted.",
       "tags": [
         "p0",
@@ -206,7 +206,7 @@
       ]
     },
     {
-      "name": "Supply EN: Total Forecast Demand",
+      "name": "Total Forecast Demand",
       "comment": "sum(qty). Filter or group by material_number / closestatus_title.",
       "tags": [
         "p0",
@@ -236,7 +236,7 @@
       ]
     },
     {
-      "name": "Supply EN: Open_Forecast_Count",
+      "name": "Open_Forecast_Count",
       "comment": "count(id) with closestatus_title != Closed. Repeat the closure filter at query time because definition-level condition is discarded. Fixture total: 90.",
       "tags": [
         "p0",
@@ -271,7 +271,7 @@
       ]
     },
     {
-      "name": "Supply EN: Total Signed Quantity",
+      "name": "Total Signed Quantity",
       "comment": "sum(signing_quantity), filtered server-side by product_code. Product 382-000005: 40 orders and 1081 sets signed. Snapshot total only.",
       "tags": [
         "p0",
@@ -301,7 +301,7 @@
       ]
     },
     {
-      "name": "Supply EN: Total Shipped Quantity",
+      "name": "Total Shipped Quantity",
       "comment": "sum(shipping_quantity), filtered server-side by product_code. Product 382-000005: 40 orders and 1066 sets shipped. Snapshot total only.",
       "tags": [
         "p0",
@@ -331,7 +331,7 @@
       ]
     },
     {
-      "name": "Supply EN: Signing Events",
+      "name": "Signing Events",
       "comment": "Aggregate signing_quantity by sales_order.signing_date as signing events. Fixed window: 2026-03-01 through 2026-06-30. No default rolling window; choose the historical period explicitly.",
       "tags": [
         "p0",
