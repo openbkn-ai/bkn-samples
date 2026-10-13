@@ -1,0 +1,75 @@
+{
+  "sampleId": "world-cup-en",
+  "version": "0.1.0",
+  "packageDigest": "sha256:d6c7fabfe2f477e40f6d25a645f6f0bc4524a23110fed204a59341e74e627d17",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:c995a52ad1f97b696f099cdb0df84fd06462751d533517a4d58a6d2c82bc5428",
+  "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:b782b89ef0f2d2f432fa3fe3fce219a559d6f7351d2acd5a8dc6d869abfe3913",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-world-cup-en-a5d15a67ef4948f09e4182b4984f2630",
+    "attemptId": "ceb7d781f1024bedb474144390abd399",
+    "sample": "world-cup-en",
+    "version": "0.1.0",
+    "startedAt": "2026-10-13T15:37:07.442992Z",
+    "finishedAt": "2026-10-13T15:38:03.073455Z",
+    "status": "installed",
+    "operation": "install",
+    "stages": [
+      {
+        "id": "database",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "state": "succeeded"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "27 tables loaded; 81,200 locked CSV rows and all 27 runtime image CSV hashes match dataset.lock."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "27 object types, 410 fields, 29 relationships and four concept groups passed native validation and managed installation; independent MCP schema and object queries succeeded."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "No optional functions, metrics or executable Skills are declared; the managed capability stage succeeded."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Two independent child agents answered all 50 questions correctly using only network-scoped MCP schema and object-instance tools; no gold, CSV, reference SQL or platform-internal agent was provided."
+    }
+  ],
+  "architectureTested": "arm64",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-en-v0.1.0/acceptance.json",
+  "evidenceDigest": "sha256:ec5db2f5ef13a88f9228b3832be8d74c2fa76f8f7801d10b2ea5bf4079d221f2",
+  "lifecycle": {
+    "installUninstallReinstallPassed": true,
+    "recordedResourcesAbsentAfterUninstall": true,
+    "historyRetained": true,
+    "offlineCacheRemovedBeforeReimport": true
+  },
+  "limits": [
+    "Runtime acceptance was performed on arm64. Both amd64 and arm64 images were published; amd64 runtime acceptance is not claimed.",
+    "Online discovery and remote installation require the catalog PR to merge; this pre-registration evidence does not claim online-entry acceptance."
+  ]
+}
