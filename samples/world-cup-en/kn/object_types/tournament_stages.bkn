@@ -1,0 +1,45 @@
+---
+type: object_type
+id: worldcup_en_tournament_stages
+name: Tournament Stages
+tags: [worldcup, fjelstul]
+---
+
+## Tournament Stages
+
+Stages within each tournament, including schedule and progression flags.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| stage_number | Stage Number | integer | Stage order within the tournament. | stage_number |
+| stage_name | Stage Name | string | Recorded competition stage, such as group stage or final. | stage_name |
+| group_stage | Group Stage | integer | 1 when a group stage applies in this row’s scope, otherwise 0. | group_stage |
+| knockout_stage | Knockout Stage | integer | 1 when a knockout stage applies in this row’s scope, otherwise 0. | knockout_stage |
+| unbalanced_groups | Unbalanced Groups | integer | 1 when group sizes differ, otherwise 0. | unbalanced_groups |
+| start_date | Start Date | string | Stage start date in YYYY-MM-DD format. | start_date |
+| end_date | End Date | string | Stage end date in YYYY-MM-DD format. | end_date |
+| count_matches | Match Count | integer | Number of matches in the row’s tournament, team or stage scope. | count_matches |
+| count_teams | Team Count | integer | Number of teams in the row’s tournament, team or stage scope. | count_teams |
+| count_scheduled | Count Scheduled | integer | Number of scheduled matches in the row’s tournament, team or stage scope. | count_scheduled |
+| count_replays | Count Replays | integer | Number of replay matches in the row’s tournament, team or stage scope. | count_replays |
+| count_playoffs | Count Playoffs | integer | Number of playoff matches in the row’s tournament, team or stage scope. | count_playoffs |
+| count_walkovers | Count Walkovers | integer | Number of walkovers in the row’s tournament, team or stage scope. | count_walkovers |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: tournament_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{TOURNAMENT_STAGES_RES_ID}} | wc_tournament_stages |

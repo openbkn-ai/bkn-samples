@@ -1,0 +1,65 @@
+---
+type: object_type
+id: worldcup_en_team_appearances
+name: Team Match Appearances
+tags: [worldcup, fjelstul]
+---
+
+## Team Match Appearances
+
+One team’s side of one match. Every match has two team rows, so count distinct match_id when counting matches.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| match_id | Match ID | string | Stable match identifier; join using this value. | match_id |
+| match_name | Match Name | string | Recorded match name. | match_name |
+| stage_name | Stage Name | string | Recorded competition stage, such as group stage or final. | stage_name |
+| group_name | Group Name | string | Recorded group name; not applicable for some knockout matches. | group_name |
+| group_stage | Group Stage | integer | 1 when a group stage applies in this row’s scope, otherwise 0. | group_stage |
+| knockout_stage | Knockout Stage | integer | 1 when a knockout stage applies in this row’s scope, otherwise 0. | knockout_stage |
+| replayed | Replayed | integer | 1 when this match had to be replayed, otherwise 0. | replayed |
+| replay | Replay | integer | 1 when this row is a replay match, otherwise 0. | replay |
+| match_date | Match Date | string | Local match date as recorded, in YYYY-MM-DD format. | match_date |
+| match_time | Match Time | string | Local match time as recorded; no timezone conversion is implied. | match_time |
+| stadium_id | Stadium ID | string | Stable stadium identifier; join using this value. | stadium_id |
+| stadium_name | Stadium Name | string | Recorded stadium name. | stadium_name |
+| city_name | City Name | string | Recorded city name. | city_name |
+| country_name | Country Name | string | Recorded country name. | country_name |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+| opponent_id | Opponent ID | string | Stable opponent identifier; join using this value. | opponent_id |
+| opponent_name | Opponent Name | string | Recorded opponent name. | opponent_name |
+| opponent_code | Opponent Code | string | Recorded opponent code. | opponent_code |
+| home_team | Home Side | integer | 1 for the designated home side, otherwise 0; not the host-country flag. | home_team |
+| away_team | Away Side | integer | 1 for the designated away side, otherwise 0. | away_team |
+| goals_for | Goals For | integer | Goals scored for this team, excluding shootout kicks. | goals_for |
+| goals_against | Goals Against | integer | Goals conceded by this team, excluding shootout kicks. | goals_against |
+| goal_differential | Goal Differential | integer | Goals scored minus goals conceded. | goal_differential |
+| extra_time | Extra Time | integer | 1 when extra time was played, otherwise 0. | extra_time |
+| penalty_shootout | Penalty Shootout | integer | 1 when the match was decided by a penalty shootout, otherwise 0. | penalty_shootout |
+| penalties_for | Penalties For | integer | Successful shootout kicks for this team. | penalties_for |
+| penalties_against | Penalties Against | integer | Successful shootout kicks for the opponent. | penalties_against |
+| result | Result | string | Recorded match result for the side, or the source’s match result label. | result |
+| win | Win | integer | 1 for a win, otherwise 0. | win |
+| lose | Loss | integer | 1 for a loss, otherwise 0. | lose |
+| draw | Draw | integer | 1 for a draw, otherwise 0. | draw |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: match_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{TEAM_APPEARANCES_RES_ID}} | wc_team_appearances |

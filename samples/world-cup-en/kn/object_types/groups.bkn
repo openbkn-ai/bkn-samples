@@ -1,0 +1,36 @@
+---
+type: object_type
+id: worldcup_en_groups
+name: Groups
+tags: [worldcup, fjelstul]
+---
+
+## Groups
+
+Tournament group structure, including the stage and group size.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| stage_number | Stage Number | integer | Stage order within the tournament. | stage_number |
+| stage_name | Stage Name | string | Recorded competition stage, such as group stage or final. | stage_name |
+| group_name | Group Name | string | Recorded group name; not applicable for some knockout matches. | group_name |
+| count_teams | Team Count | integer | Number of teams in the row’s tournament, team or stage scope. | count_teams |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: group_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{GROUPS_RES_ID}} | wc_groups |

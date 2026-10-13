@@ -62,7 +62,12 @@ class SupplyContractTest(unittest.TestCase):
     def test_repository_accepts_supply_chain(self):
         samples = validate_repository(ROOT)
         names = [sample["metadata"]["name"] for sample in samples]
-        self.assertEqual(names, ["order-basics", "supply-chain-en", "supply-chain", "world-cup"])
+        # Adding a valid sample must not require editing a fixed sample roster.
+        declared = {yaml.safe_load(path.read_text())["metadata"]["name"]
+                    for path in (ROOT / "samples").glob("*/sample.yaml")}
+        self.assertEqual(set(names), declared)
+        self.assertEqual(len(names), len(declared))
+        self.assertIn("supply-chain", names)
 
     def test_index_uses_version_and_official_repo(self):
         index = build_manifest_index(ROOT, REVISION)

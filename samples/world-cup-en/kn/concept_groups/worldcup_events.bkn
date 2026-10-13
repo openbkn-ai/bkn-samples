@@ -1,0 +1,17 @@
+---
+type: concept_group
+id: worldcup_en_worldcup_events
+name: Match Events
+tags: [worldcup, fjelstul]
+---
+
+## Match Events
+
+### Object Types
+
+| ID | Name | Description |
+|----|------|-------------|
+| worldcup_en_goals | Goals | One match goal. team_id identifies the credited team; player_team_id identifies the scorer’s team. Own goals do not count toward personal scoring totals. Shootout kicks are recorded separately. |
+| worldcup_en_penalty_kicks | Shootout Kicks | One kick in a penalty shootout. converted=1 indicates a successful kick. Match penalties are identified by goals.penalty. |
+| worldcup_en_substitutions | Substitutions | One player entering or leaving a match. A substitution can produce two rows; do not count paired rows as two substitution events. |
+| worldcup_en_bookings | Bookings | Individual booking events. Distinguish straight red cards, second yellows and sending off. |

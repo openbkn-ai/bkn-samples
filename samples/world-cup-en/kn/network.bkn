@@ -1,0 +1,16 @@
+---
+type: knowledge_network
+id: worldcup_en
+name: World Cup
+tags: [worldcup, fjelstul, CSV]
+---
+
+# World Cup
+
+Explore the locked Fjelstul World Cup Database: 27 object types, 410 properties, 29 relationships and four concept groups.
+
+The snapshot covers 22 men's tournaments through 2022 and eight women's tournaments through 2019. Individual detail tables can have narrower coverage. Use explicit tournament IDs and refer to the snapshot rather than current events.
+
+Use stable IDs for joins. Count matches from matches or distinct match_id, not the two rows per match in team_appearances. Exclude own_goal=1 from player scoring totals; penalty_kicks records shootout kicks separately. Names and historical team identities retain their source spelling.
+
+The 29 relationships form a minimal backbone. Additional joins can be computed by an external agent using validated source fields, including substitutions and player_team_id. Do not invent a missing relationship.

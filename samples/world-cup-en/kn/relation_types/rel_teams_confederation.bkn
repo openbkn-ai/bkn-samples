@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_teams_confederation
+name: Teams — Confederation
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Teams — Confederation
+
+Join `teams.confederation_id` to `confederations.confederation_id`. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_teams | worldcup_en_confederations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| confederation_id | confederation_id |

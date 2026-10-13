@@ -1,0 +1,48 @@
+---
+type: object_type
+id: worldcup_en_penalty_kicks
+name: Shootout Kicks
+tags: [worldcup, fjelstul]
+---
+
+## Shootout Kicks
+
+One kick in a penalty shootout. converted=1 indicates a successful kick. Match penalties are identified by goals.penalty.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| penalty_kick_id | Shootout Kick ID | string | Stable penalty kick identifier; join using this value. | penalty_kick_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| match_id | Match ID | string | Stable match identifier; join using this value. | match_id |
+| match_name | Match Name | string | Recorded match name. | match_name |
+| match_date | Match Date | string | Local match date as recorded, in YYYY-MM-DD format. | match_date |
+| stage_name | Stage Name | string | Recorded competition stage, such as group stage or final. | stage_name |
+| group_name | Group Name | string | Recorded group name; not applicable for some knockout matches. | group_name |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+| home_team | Home Side | integer | 1 for the designated home side, otherwise 0; not the host-country flag. | home_team |
+| away_team | Away Side | integer | 1 for the designated away side, otherwise 0. | away_team |
+| player_id | Player ID | string | Stable player identifier; join using this value. | player_id |
+| family_name | Family Name | string | Recorded family name; use the person ID to identify a unique individual. | family_name |
+| given_name | Given Name | string | Recorded given name, preserving source spelling and accents. | given_name |
+| shirt_number | Shirt Number | integer | Recorded squad or match shirt number. | shirt_number |
+| converted | Scored | integer | 1 when the shootout kick was scored, otherwise 0. | converted |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: match_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{PENALTY_KICKS_RES_ID}} | wc_penalty_kicks |

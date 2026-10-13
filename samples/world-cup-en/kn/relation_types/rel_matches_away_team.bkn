@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_matches_away_team
+name: Matches — Away Team
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Matches — Away Team
+
+Join `matches.away_team_id` to `teams.team_id`. Away means the designated match side. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_matches | worldcup_en_teams | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| away_team_id | team_id |

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_bookings_match
+name: Bookings — Match
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Bookings — Match
+
+Join `bookings.match_id` to `matches.match_id`. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_bookings | worldcup_en_matches | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| match_id | match_id |

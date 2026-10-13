@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_goals_team
+name: Goals — Team
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Goals — Team
+
+Join `goals.team_id` to `teams.team_id`. This is the team credited with the goal, including own goals; player_team_id identifies the scorer’s team. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_goals | worldcup_en_teams | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| team_id | team_id |

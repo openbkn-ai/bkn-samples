@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_player_appearances_team
+name: Player Match Appearances — Team
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Player Match Appearances — Team
+
+Join `player_appearances.team_id` to `teams.team_id`. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_player_appearances | worldcup_en_teams | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| team_id | team_id |

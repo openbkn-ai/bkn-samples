@@ -1,0 +1,844 @@
+[
+  {
+    "id": "B-01",
+    "question": "How many men’s and women’s tournament editions are in the snapshot? Return one count for each competition.",
+    "sql": "SELECT CASE WHEN tournament_name LIKE '%FIFA Women''s World Cup%' THEN 'women' ELSE 'men' END AS competition,COUNT(*) AS editions FROM tournaments GROUP BY competition ORDER BY competition",
+    "tables": [
+      "tournaments"
+    ],
+    "row_order": "competition ascending",
+    "output_fields": [
+      "competition",
+      "editions"
+    ]
+  },
+  {
+    "id": "B-02",
+    "question": "How many matches are recorded in the full snapshot? Count match records once.",
+    "sql": "SELECT COUNT(*) AS matches FROM matches",
+    "tables": [
+      "matches"
+    ],
+    "row_order": "single row",
+    "output_fields": [
+      "matches"
+    ]
+  },
+  {
+    "id": "B-03",
+    "question": "Give the year, start date, end date, host and winner of WC-2022.",
+    "sql": "SELECT year,start_date,end_date,host_country,winner FROM tournaments WHERE tournament_id='WC-2022'",
+    "tables": [
+      "tournaments"
+    ],
+    "row_order": "single row",
+    "output_fields": [
+      "year",
+      "start_date",
+      "end_date",
+      "host_country",
+      "winner"
+    ]
+  },
+  {
+    "id": "B-04",
+    "question": "Count team records by their men’s-team and women’s-team flags. Report each flag combination separately.",
+    "sql": "SELECT mens_team,womens_team,COUNT(*) AS teams FROM teams GROUP BY mens_team,womens_team ORDER BY mens_team,womens_team",
+    "tables": [
+      "teams"
+    ],
+    "row_order": "mens_team, then womens_team ascending",
+    "output_fields": [
+      "mens_team",
+      "womens_team",
+      "teams"
+    ]
+  },
+  {
+    "id": "B-05",
+    "question": "Count player records by the female flag.",
+    "sql": "SELECT female,COUNT(*) AS players FROM players GROUP BY female ORDER BY female",
+    "tables": [
+      "players"
+    ],
+    "row_order": "female ascending",
+    "output_fields": [
+      "female",
+      "players"
+    ]
+  },
+  {
+    "id": "B-06",
+    "question": "For WC-2022, count booking rows with yellow_card=1, red_card=1, second_yellow_card=1 and sending_off=1 separately. Flags may overlap.",
+    "sql": "SELECT SUM(yellow_card) AS yellow_cards,SUM(red_card) AS red_cards,SUM(second_yellow_card) AS second_yellows,SUM(sending_off) AS sendings_off FROM bookings WHERE tournament_id='WC-2022'",
+    "tables": [
+      "bookings"
+    ],
+    "row_order": "single row",
+    "output_fields": [
+      "yellow_cards",
+      "red_cards",
+      "second_yellows",
+      "sendings_off"
+    ]
+  },
+  {
+    "id": "B-07",
+    "question": "Give the recorded match ID, date, team names, match score and shootout score for the WC-2022 final.",
+    "sql": "SELECT match_id,match_date,home_team_name,away_team_name,score,score_penalties FROM matches WHERE tournament_id='WC-2022' AND stage_name='final' ORDER BY match_id",
+    "tables": [
+      "matches"
+    ],
+    "row_order": "match_id ascending",
+    "output_fields": [
+      "match_id",
+      "match_date",
+      "home_team_name",
+      "away_team_name",
+      "score",
+      "score_penalties"
+    ]
+  },
+  {
+    "id": "B-08",
+    "question": "How many WC-2022 goal events were regular goals, own goals and match penalties? Return total events, non-own-goal events, own-goal events and penalty=1 events separately.",
+    "sql": "SELECT COUNT(*) AS all_goals,SUM(CASE WHEN own_goal=0 THEN 1 ELSE 0 END) AS personal_goals,SUM(own_goal) AS own_goals,SUM(penalty) AS match_penalties FROM goals WHERE tournament_id='WC-2022'",
+    "tables": [
+      "goals"
+    ],
+    "row_order": "single row",
+    "output_fields": [
+      "all_goals",
+      "personal_goals",
+      "own_goals",
+      "match_penalties"
+    ]
+  },
+  {
+    "id": "B-09",
+    "question": "How many player-appearance rows for WC-1999 are present in this snapshot? Report the recorded row count, without inferring actual participation.",
+    "sql": "SELECT COUNT(*) AS recorded_appearances FROM player_appearances WHERE tournament_id='WC-1999'",
+    "tables": [
+      "player_appearances"
+    ],
+    "row_order": "single row",
+    "output_fields": [
+      "recorded_appearances"
+    ]
+  },
+  {
+    "id": "B-10",
+    "question": "List every stadium tied for the largest recorded capacity in the snapshot. Include stadium ID, name and capacity.",
+    "sql": "SELECT stadium_id,stadium_name,stadium_capacity FROM stadiums WHERE CAST(stadium_capacity AS SIGNED)=(SELECT MAX(CAST(stadium_capacity AS SIGNED)) FROM stadiums) ORDER BY stadium_id",
+    "tables": [
+      "stadiums"
+    ],
+    "row_order": "stadium_id ascending",
+    "output_fields": [
+      "stadium_id",
+      "stadium_name",
+      "stadium_capacity"
+    ]
+  },
+  {
+    "id": "J-01",
+    "question": "List Lionel Messi’s awards in WC-2014 and WC-2022, joining award and tournament definitions. Return tournament ID, award ID, player ID and readable names.",
+    "sql": "SELECT w.tournament_id,t.tournament_name,w.award_id,a.award_name,w.player_id,CONCAT(w.given_name,' ',w.family_name) AS player_name FROM award_winners w JOIN awards a ON a.award_id=w.award_id JOIN tournaments t ON t.tournament_id=w.tournament_id WHERE w.given_name='Lionel' AND w.family_name='Messi' AND w.tournament_id IN ('WC-2014','WC-2022') ORDER BY w.tournament_id,w.award_id",
+    "tables": [
+      "award_winners",
+      "awards",
+      "tournaments"
+    ],
+    "row_order": "tournament_id, then award_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "tournament_name",
+      "award_id",
+      "award_name",
+      "player_id",
+      "player_name"
+    ]
+  },
+  {
+    "id": "J-02",
+    "question": "For the WC-2022 final, join the designated home team, away team and stadium. Return their IDs and names, stadium city and country.",
+    "sql": "SELECT m.match_id,h.team_id AS home_id,h.team_name AS home_name,a.team_id AS away_id,a.team_name AS away_name,s.stadium_id,s.stadium_name,s.city_name,s.country_name FROM matches m JOIN teams h ON h.team_id=m.home_team_id JOIN teams a ON a.team_id=m.away_team_id JOIN stadiums s ON s.stadium_id=m.stadium_id WHERE m.tournament_id='WC-2022' AND m.stage_name='final' ORDER BY m.match_id",
+    "tables": [
+      "matches",
+      "teams",
+      "stadiums"
+    ],
+    "row_order": "match_id ascending",
+    "output_fields": [
+      "match_id",
+      "home_id",
+      "home_name",
+      "away_id",
+      "away_name",
+      "stadium_id",
+      "stadium_name",
+      "city_name",
+      "country_name"
+    ]
+  },
+  {
+    "id": "J-03",
+    "question": "List the Argentina squad for WC-2022 with player IDs, full names, shirt numbers and recorded positions. Identify the team through teams.",
+    "sql": "SELECT s.player_id,CONCAT(p.given_name,' ',p.family_name) AS player_name,s.shirt_number,s.position_name FROM squads s JOIN players p ON p.player_id=s.player_id JOIN teams t ON t.team_id=s.team_id WHERE s.tournament_id='WC-2022' AND t.team_name='Argentina' ORDER BY s.player_id",
+    "tables": [
+      "squads",
+      "players",
+      "teams"
+    ],
+    "row_order": "player_id ascending",
+    "output_fields": [
+      "player_id",
+      "player_name",
+      "shirt_number",
+      "position_name"
+    ]
+  },
+  {
+    "id": "J-04",
+    "question": "Who was appointed to manage Germany at WC-2014? Join the team and manager identities and return their IDs and names.",
+    "sql": "SELECT a.team_id,t.team_name,a.manager_id,CONCAT(m.given_name,' ',m.family_name) AS manager_name FROM manager_appointments a JOIN managers m ON m.manager_id=a.manager_id JOIN teams t ON t.team_id=a.team_id WHERE a.tournament_id='WC-2014' AND t.team_name='Germany' ORDER BY a.manager_id",
+    "tables": [
+      "manager_appointments",
+      "managers",
+      "teams"
+    ],
+    "row_order": "manager_id ascending",
+    "output_fields": [
+      "team_id",
+      "team_name",
+      "manager_id",
+      "manager_name"
+    ]
+  },
+  {
+    "id": "J-05",
+    "question": "Identify the referee recorded for the WC-2022 final. Return match ID, referee ID, full name and country, verifying the tournament referee appointment.",
+    "sql": "SELECT m.match_id,r.referee_id,CONCAT(r.given_name,' ',r.family_name) AS referee_name,r.country_name FROM matches m JOIN referee_appearances a ON a.match_id=m.match_id JOIN referees r ON r.referee_id=a.referee_id JOIN referee_appointments q ON q.referee_id=r.referee_id AND q.tournament_id=m.tournament_id WHERE m.tournament_id='WC-2022' AND m.stage_name='final' ORDER BY m.match_id,r.referee_id",
+    "tables": [
+      "matches",
+      "referee_appearances",
+      "referees",
+      "referee_appointments"
+    ],
+    "row_order": "match_id, then referee_id ascending",
+    "output_fields": [
+      "match_id",
+      "referee_id",
+      "referee_name",
+      "country_name"
+    ]
+  },
+  {
+    "id": "J-06",
+    "question": "Give the WC-2022 Group A standings with team names, ranks, played, wins, draws, losses, goals, points and the group’s recorded team count. Order by recorded position.",
+    "sql": "SELECT s.team_id,t.team_name,s.position,s.played,s.wins,s.draws,s.losses,s.goals_for,s.goals_against,s.points,g.count_teams FROM group_standings s JOIN teams t ON t.team_id=s.team_id JOIN groups g ON g.tournament_id=s.tournament_id AND g.stage_number=s.stage_number AND g.group_name=s.group_name WHERE s.tournament_id='WC-2022' AND s.group_name='Group A' ORDER BY s.position,s.team_id",
+    "tables": [
+      "group_standings",
+      "teams",
+      "groups"
+    ],
+    "row_order": "position, then team_id ascending",
+    "output_fields": [
+      "team_id",
+      "team_name",
+      "position",
+      "played",
+      "wins",
+      "draws",
+      "losses",
+      "goals_for",
+      "goals_against",
+      "points",
+      "count_teams"
+    ]
+  },
+  {
+    "id": "J-07",
+    "question": "List every host country of WC-2002 with the tournament name. Do not collapse a co-hosted tournament into one country.",
+    "sql": "SELECT h.tournament_id,t.tournament_name,h.team_name AS host_country FROM host_countries h JOIN tournaments t ON t.tournament_id=h.tournament_id WHERE h.tournament_id='WC-2002' ORDER BY h.team_name",
+    "tables": [
+      "host_countries",
+      "tournaments"
+    ],
+    "row_order": "host_country ascending",
+    "output_fields": [
+      "tournament_id",
+      "tournament_name",
+      "host_country"
+    ]
+  },
+  {
+    "id": "J-08",
+    "question": "List the shootout kicks in the WC-2022 final with kick ID, team name, player ID, full name and converted flag. Order by source row key.",
+    "sql": "SELECT k.penalty_kick_id,t.team_name,k.player_id,CONCAT(p.given_name,' ',p.family_name) AS player_name,k.converted FROM penalty_kicks k JOIN matches m ON m.match_id=k.match_id JOIN teams t ON t.team_id=k.team_id JOIN players p ON p.player_id=k.player_id WHERE m.tournament_id='WC-2022' AND m.stage_name='final' ORDER BY k.key_id",
+    "tables": [
+      "penalty_kicks",
+      "matches",
+      "teams",
+      "players"
+    ],
+    "row_order": "numeric source key_id ascending",
+    "output_fields": [
+      "penalty_kick_id",
+      "team_name",
+      "player_id",
+      "player_name",
+      "converted"
+    ]
+  },
+  {
+    "id": "J-09",
+    "question": "For each Argentina match at WC-2022, give the manager recorded in manager_appearances, the opponent, match date and tournament stage number.",
+    "sql": "SELECT a.match_id,m.match_date,st.stage_number,CASE WHEN m.home_team_id=a.team_id THEN m.away_team_name ELSE m.home_team_name END AS opponent,a.manager_id,CONCAT(g.given_name,' ',g.family_name) AS manager_name FROM manager_appearances a JOIN managers g ON g.manager_id=a.manager_id JOIN matches m ON m.match_id=a.match_id JOIN teams t ON t.team_id=a.team_id JOIN tournament_stages st ON st.tournament_id=m.tournament_id AND st.stage_name=m.stage_name WHERE a.tournament_id='WC-2022' AND t.team_name='Argentina' ORDER BY m.match_date,a.match_id",
+    "tables": [
+      "manager_appearances",
+      "managers",
+      "matches",
+      "teams",
+      "tournament_stages"
+    ],
+    "row_order": "match_date, then match_id ascending",
+    "output_fields": [
+      "match_id",
+      "match_date",
+      "stage_number",
+      "opponent",
+      "manager_id",
+      "manager_name"
+    ]
+  },
+  {
+    "id": "J-10",
+    "question": "List Kylian Mbappé’s non-own-goal events at WC-2022 with goal ID, match, stage, minute and match-penalty flag.",
+    "sql": "SELECT g.goal_id,g.match_id,m.match_name,m.stage_name,g.minute_label,g.penalty FROM goals g JOIN matches m ON m.match_id=g.match_id JOIN players p ON p.player_id=g.player_id WHERE g.tournament_id='WC-2022' AND p.given_name='Kylian' AND p.family_name='Mbappé' AND g.own_goal=0 ORDER BY m.match_date,g.match_id,CAST(g.minute_regulation AS SIGNED),CAST(g.minute_stoppage AS SIGNED),g.goal_id",
+    "tables": [
+      "goals",
+      "matches",
+      "players"
+    ],
+    "row_order": "match date, match_id, numeric regulation minute, numeric stoppage minute, then goal_id ascending",
+    "output_fields": [
+      "goal_id",
+      "match_id",
+      "match_name",
+      "stage_name",
+      "minute_label",
+      "penalty"
+    ]
+  },
+  {
+    "id": "J-11",
+    "question": "List the teams entered in WC-2022 and their confederations. Return team and confederation IDs and names.",
+    "sql": "SELECT q.team_id,t.team_name,c.confederation_id,c.confederation_name FROM qualified_teams q JOIN teams t ON t.team_id=q.team_id JOIN confederations c ON c.confederation_id=t.confederation_id WHERE q.tournament_id='WC-2022' ORDER BY q.team_id",
+    "tables": [
+      "qualified_teams",
+      "teams",
+      "confederations"
+    ],
+    "row_order": "team_id ascending",
+    "output_fields": [
+      "team_id",
+      "team_name",
+      "confederation_id",
+      "confederation_name"
+    ]
+  },
+  {
+    "id": "J-12",
+    "question": "List the recorded substitution rows in the WC-2022 final with player names, teams, minute and entering/leaving flags. Keep each source row; do not pair unrelated simultaneous changes.",
+    "sql": "SELECT s.substitution_id,t.team_name,s.player_id,CONCAT(p.given_name,' ',p.family_name) AS player_name,s.minute_label,s.coming_on,s.going_off FROM substitutions s JOIN matches m ON m.match_id=s.match_id JOIN teams t ON t.team_id=s.team_id JOIN players p ON p.player_id=s.player_id WHERE m.tournament_id='WC-2022' AND m.stage_name='final' ORDER BY s.key_id",
+    "tables": [
+      "substitutions",
+      "matches",
+      "teams",
+      "players"
+    ],
+    "row_order": "numeric source key_id ascending",
+    "output_fields": [
+      "substitution_id",
+      "team_name",
+      "player_id",
+      "player_name",
+      "minute_label",
+      "coming_on",
+      "going_off"
+    ]
+  },
+  {
+    "id": "R-01",
+    "question": "Rank men’s World Cup scorers in the snapshot by non-own-goal events. Use competition ranking and include every player with rank 10 or better; return player ID, goals and rank.",
+    "sql": "WITH totals AS (SELECT g.player_id,COUNT(*) AS goals FROM goals g JOIN tournaments t ON t.tournament_id=g.tournament_id WHERE g.own_goal=0 AND t.tournament_name LIKE '%FIFA Men''s World Cup%' GROUP BY g.player_id), ranked AS (SELECT totals.*,RANK() OVER (ORDER BY goals DESC) AS ranking FROM totals) SELECT player_id,goals,ranking FROM ranked WHERE ranking<=10 ORDER BY ranking,player_id",
+    "tables": [
+      "goals",
+      "tournaments"
+    ],
+    "row_order": "ranking, then player_id ascending",
+    "output_fields": [
+      "player_id",
+      "goals",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-02",
+    "question": "Rank women’s World Cup scorers in the snapshot by non-own-goal events. Use competition ranking and include every player with rank 10 or better; return player ID, goals and rank.",
+    "sql": "WITH totals AS (SELECT g.player_id,COUNT(*) AS goals FROM goals g JOIN tournaments t ON t.tournament_id=g.tournament_id WHERE g.own_goal=0 AND t.tournament_name LIKE '%FIFA Women''s World Cup%' GROUP BY g.player_id), ranked AS (SELECT totals.*,RANK() OVER (ORDER BY goals DESC) AS ranking FROM totals) SELECT player_id,goals,ranking FROM ranked WHERE ranking<=10 ORDER BY ranking,player_id",
+    "tables": [
+      "goals",
+      "tournaments"
+    ],
+    "row_order": "ranking, then player_id ascending",
+    "output_fields": [
+      "player_id",
+      "goals",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-03",
+    "question": "Rank WC-2022 scorers by non-own-goal events. Use competition ranking and include all players with rank 5 or better.",
+    "sql": "WITH totals AS (SELECT g.player_id,COUNT(*) AS goals FROM goals g JOIN tournaments t ON t.tournament_id=g.tournament_id WHERE g.own_goal=0 AND g.tournament_id='WC-2022' GROUP BY g.player_id), ranked AS (SELECT totals.*,RANK() OVER (ORDER BY goals DESC) AS ranking FROM totals) SELECT player_id,goals,ranking FROM ranked WHERE ranking<=5 ORDER BY ranking,player_id",
+    "tables": [
+      "goals",
+      "tournaments"
+    ],
+    "row_order": "ranking, then player_id ascending",
+    "output_fields": [
+      "player_id",
+      "goals",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-04",
+    "question": "For WC-2014, WC-2018 and WC-2022, list all teams tied for the most credited goal events in each edition. Include own goals credited to the team, exclude shootout kicks.",
+    "sql": "WITH totals AS (SELECT tournament_id,team_id,COUNT(*) AS goals FROM goals WHERE tournament_id IN ('WC-2014','WC-2018','WC-2022') GROUP BY tournament_id,team_id), ranked AS (SELECT totals.*,RANK() OVER (PARTITION BY tournament_id ORDER BY goals DESC) AS ranking FROM totals) SELECT tournament_id,team_id,goals FROM ranked WHERE ranking=1 ORDER BY tournament_id,team_id",
+    "tables": [
+      "goals"
+    ],
+    "row_order": "tournament_id, then team_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "team_id",
+      "goals"
+    ]
+  },
+  {
+    "id": "R-05",
+    "question": "Across WC-2014, WC-2018 and WC-2022, rank teams by the sum of their recorded win flags. Include every team ranked 5 or better with competition ranking.",
+    "sql": "WITH totals AS (SELECT team_id,SUM(win) AS wins FROM team_appearances WHERE tournament_id IN ('WC-2014','WC-2018','WC-2022') GROUP BY team_id), ranked AS (SELECT totals.*,RANK() OVER (ORDER BY wins DESC) AS ranking FROM totals) SELECT team_id,wins,ranking FROM ranked WHERE ranking<=5 ORDER BY ranking,team_id",
+    "tables": [
+      "team_appearances"
+    ],
+    "row_order": "ranking, then team_id ascending",
+    "output_fields": [
+      "team_id",
+      "wins",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-06",
+    "question": "List the ten stadium records with the largest recorded capacity. Break equal capacities by stadium ID so exactly ten rows are returned.",
+    "sql": "SELECT stadium_id,stadium_name,stadium_capacity FROM stadiums ORDER BY CAST(stadium_capacity AS SIGNED) DESC,stadium_id LIMIT 10",
+    "tables": [
+      "stadiums"
+    ],
+    "row_order": "stadium_capacity descending, then stadium_id ascending",
+    "output_fields": [
+      "stadium_id",
+      "stadium_name",
+      "stadium_capacity"
+    ]
+  },
+  {
+    "id": "R-07",
+    "question": "Rank WC-2022 matches by absolute goal margin, excluding shootout scores. Use competition ranking and include all matches ranked 5 or better.",
+    "sql": "WITH ranked AS (SELECT match_id,ABS(home_team_score-away_team_score) AS margin,RANK() OVER (ORDER BY ABS(home_team_score-away_team_score) DESC) AS ranking FROM matches WHERE tournament_id='WC-2022') SELECT match_id,margin,ranking FROM ranked WHERE ranking<=5 ORDER BY ranking,match_id",
+    "tables": [
+      "matches"
+    ],
+    "row_order": "ranking, then match_id ascending",
+    "output_fields": [
+      "match_id",
+      "margin",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-08",
+    "question": "Compare WC-2014, WC-2018 and WC-2022: report match counts, total home-plus-away match goals and goals per match rounded to three decimals. Exclude shootout scores.",
+    "sql": "SELECT tournament_id,COUNT(*) AS matches,SUM(home_team_score+away_team_score) AS goals,ROUND(1.0*SUM(home_team_score+away_team_score)/COUNT(*),3) AS goals_per_match FROM matches WHERE tournament_id IN ('WC-2014','WC-2018','WC-2022') GROUP BY tournament_id ORDER BY tournament_id",
+    "tables": [
+      "matches"
+    ],
+    "row_order": "tournament_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "matches",
+      "goals",
+      "goals_per_match"
+    ]
+  },
+  {
+    "id": "R-09",
+    "question": "List Lionel Messi’s non-own-goal totals in each tournament with at least one such goal, ordered by edition.",
+    "sql": "SELECT g.tournament_id,COUNT(*) AS goals FROM goals g JOIN players p ON p.player_id=g.player_id WHERE p.given_name='Lionel' AND p.family_name='Messi' AND g.own_goal=0 GROUP BY g.tournament_id ORDER BY g.tournament_id",
+    "tables": [
+      "goals",
+      "players"
+    ],
+    "row_order": "tournament_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "goals"
+    ]
+  },
+  {
+    "id": "R-10",
+    "question": "Give Sun Wen’s snapshot total of non-own goals and competition rank among all women’s tournament scorers. Identify her by player ID and full name.",
+    "sql": "WITH totals AS (SELECT g.player_id,COUNT(*) AS goals FROM goals g JOIN tournaments t ON t.tournament_id=g.tournament_id WHERE g.own_goal=0 AND t.tournament_name LIKE '%FIFA Women''s World Cup%' GROUP BY g.player_id), ranked AS (SELECT totals.*,RANK() OVER (ORDER BY goals DESC) AS ranking FROM totals) SELECT r.player_id,CONCAT(p.given_name,' ',p.family_name) AS player_name,r.goals,r.ranking FROM ranked r JOIN players p ON p.player_id=r.player_id WHERE p.given_name='Wen' AND p.family_name='Sun' ORDER BY r.player_id",
+    "tables": [
+      "goals",
+      "tournaments",
+      "players"
+    ],
+    "row_order": "single row",
+    "output_fields": [
+      "player_id",
+      "player_name",
+      "goals",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-11",
+    "question": "For each of WC-2014, WC-2018 and WC-2022, rank confederations by the sum of team win flags. Include all confederations, with competition ranking. Include zero wins for confederations with no teams entered.",
+    "sql": "WITH editions AS (SELECT tournament_id FROM tournaments WHERE tournament_id IN ('WC-2014','WC-2018','WC-2022')), wins AS (SELECT a.tournament_id,t.confederation_id,SUM(a.win) AS wins FROM team_appearances a JOIN teams t ON t.team_id=a.team_id WHERE a.tournament_id IN ('WC-2014','WC-2018','WC-2022') GROUP BY a.tournament_id,t.confederation_id), totals AS (SELECT e.tournament_id,c.confederation_id,COALESCE(w.wins,0) AS wins FROM editions e CROSS JOIN confederations c LEFT JOIN wins w ON w.tournament_id=e.tournament_id AND w.confederation_id=c.confederation_id), ranked AS (SELECT totals.*,RANK() OVER (PARTITION BY tournament_id ORDER BY wins DESC) AS ranking FROM totals) SELECT tournament_id,confederation_id,wins,ranking FROM ranked ORDER BY tournament_id,ranking,confederation_id",
+    "tables": [
+      "team_appearances",
+      "teams",
+      "confederations",
+      "tournaments"
+    ],
+    "row_order": "tournament_id, ranking, then confederation_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "confederation_id",
+      "wins",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-12",
+    "question": "Rank referees by recorded appearances across the snapshot. Use competition ranking and include every referee with rank 5 or better.",
+    "sql": "WITH totals AS (SELECT referee_id,COUNT(*) AS matches FROM referee_appearances GROUP BY referee_id), ranked AS (SELECT totals.*,RANK() OVER (ORDER BY matches DESC) AS ranking FROM totals) SELECT referee_id,matches,ranking FROM ranked WHERE ranking<=5 ORDER BY ranking,referee_id",
+    "tables": [
+      "referee_appearances"
+    ],
+    "row_order": "ranking, then referee_id ascending",
+    "output_fields": [
+      "referee_id",
+      "matches",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-13",
+    "question": "Rank players by WC-2022 recorded match appearances, counting distinct match IDs per player. Include every player with rank 5 or better and use competition ranking.",
+    "sql": "WITH totals AS (SELECT player_id,COUNT(DISTINCT match_id) AS appearances FROM player_appearances WHERE tournament_id='WC-2022' GROUP BY player_id), ranked AS (SELECT totals.*,RANK() OVER (ORDER BY appearances DESC) AS ranking FROM totals) SELECT player_id,appearances,ranking FROM ranked WHERE ranking<=5 ORDER BY ranking,player_id",
+    "tables": [
+      "player_appearances"
+    ],
+    "row_order": "ranking, then player_id ascending",
+    "output_fields": [
+      "player_id",
+      "appearances",
+      "ranking"
+    ]
+  },
+  {
+    "id": "R-14",
+    "question": "Compare each men’s edition from WC-2010 through WC-2022 by yellow-card event count and number of matches. Return counts and yellow-card events per match rounded to three decimals.",
+    "sql": "WITH cards AS (SELECT tournament_id,SUM(yellow_card) AS yellow_cards FROM bookings WHERE tournament_id IN ('WC-2010','WC-2014','WC-2018','WC-2022') GROUP BY tournament_id), games AS (SELECT tournament_id,COUNT(*) AS matches FROM matches WHERE tournament_id IN ('WC-2010','WC-2014','WC-2018','WC-2022') GROUP BY tournament_id) SELECT g.tournament_id,c.yellow_cards,g.matches,ROUND(1.0*c.yellow_cards/g.matches,3) AS cards_per_match FROM games g JOIN cards c ON c.tournament_id=g.tournament_id ORDER BY g.tournament_id",
+    "tables": [
+      "bookings",
+      "matches"
+    ],
+    "row_order": "tournament_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "yellow_cards",
+      "matches",
+      "cards_per_match"
+    ]
+  },
+  {
+    "id": "A-01",
+    "question": "Reconstruct Argentina’s WC-2022 match sequence. Return date, match ID, stage, opponent, goals for/against, shootout scores and recorded win/loss/draw flags; preserve match grain.",
+    "sql": "SELECT a.match_date,a.match_id,a.stage_name,a.opponent_id,a.opponent_name,a.goals_for,a.goals_against,a.penalties_for,a.penalties_against,a.win,a.lose,a.draw FROM team_appearances a JOIN teams t ON t.team_id=a.team_id WHERE a.tournament_id='WC-2022' AND t.team_name='Argentina' ORDER BY a.match_date,a.match_id",
+    "tables": [
+      "team_appearances",
+      "teams"
+    ],
+    "row_order": "match_date, then match_id ascending",
+    "output_fields": [
+      "match_date",
+      "match_id",
+      "stage_name",
+      "opponent_id",
+      "opponent_name",
+      "goals_for",
+      "goals_against",
+      "penalties_for",
+      "penalties_against",
+      "win",
+      "lose",
+      "draw"
+    ]
+  },
+  {
+    "id": "A-02",
+    "question": "For France’s WC-2022 match sequence, return stage, opponent, stadium, goals for/against and whether a shootout occurred. Order by date and match ID.",
+    "sql": "SELECT a.match_id,a.stage_name,a.opponent_name,s.stadium_name,a.goals_for,a.goals_against,a.penalty_shootout FROM team_appearances a JOIN teams t ON t.team_id=a.team_id JOIN stadiums s ON s.stadium_id=a.stadium_id WHERE a.tournament_id='WC-2022' AND t.team_name='France' ORDER BY a.match_date,a.match_id",
+    "tables": [
+      "team_appearances",
+      "teams",
+      "stadiums"
+    ],
+    "row_order": "match date, then match_id ascending",
+    "output_fields": [
+      "match_id",
+      "stage_name",
+      "opponent_name",
+      "stadium_name",
+      "goals_for",
+      "goals_against",
+      "penalty_shootout"
+    ]
+  },
+  {
+    "id": "A-03",
+    "question": "Break down Argentina’s credited WC-2022 goal events by scorer. Return player ID, non-own goals and match-penalty goals, plus the total credited team-goal denominator for each scorer. Do not add shootout kicks.",
+    "sql": "WITH team_goals AS (SELECT g.* FROM goals g JOIN teams t ON t.team_id=g.team_id WHERE g.tournament_id='WC-2022' AND t.team_name='Argentina') SELECT player_id,SUM(CASE WHEN own_goal=0 THEN 1 ELSE 0 END) AS personal_goals,SUM(CASE WHEN own_goal=0 AND penalty=1 THEN 1 ELSE 0 END) AS match_penalties,(SELECT COUNT(*) FROM team_goals) AS team_goal_denominator FROM team_goals GROUP BY player_id ORDER BY personal_goals DESC,player_id",
+    "tables": [
+      "goals",
+      "teams"
+    ],
+    "row_order": "personal_goals descending, then player_id ascending",
+    "output_fields": [
+      "player_id",
+      "personal_goals",
+      "match_penalties",
+      "team_goal_denominator"
+    ]
+  },
+  {
+    "id": "A-04",
+    "question": "For the WC-2022 final, return every match-goal event with scorer, credited team, player team, minute, period, own-goal and match-penalty flags. Keep shootout kicks out of this timeline.",
+    "sql": "SELECT g.goal_id,g.minute_label,g.match_period,g.player_id,CONCAT(p.given_name,' ',p.family_name) AS player_name,g.team_id,g.team_name,g.player_team_id,g.player_team_name,g.own_goal,g.penalty FROM goals g JOIN players p ON p.player_id=g.player_id JOIN matches m ON m.match_id=g.match_id WHERE m.tournament_id='WC-2022' AND m.stage_name='final' ORDER BY CAST(g.minute_regulation AS SIGNED),CAST(g.minute_stoppage AS SIGNED),g.goal_id",
+    "tables": [
+      "goals",
+      "players",
+      "matches"
+    ],
+    "row_order": "numeric regulation minute, numeric stoppage minute, then goal_id ascending",
+    "output_fields": [
+      "goal_id",
+      "minute_label",
+      "match_period",
+      "player_id",
+      "player_name",
+      "team_id",
+      "team_name",
+      "player_team_id",
+      "player_team_name",
+      "own_goal",
+      "penalty"
+    ]
+  },
+  {
+    "id": "A-05",
+    "question": "For Argentina’s WC-2022 squad, report each player ID with distinct match appearances and non-own goals, including players with zero appearances or zero goals. Aggregate each fact table before joining.",
+    "sql": "WITH apps AS (SELECT player_id,COUNT(DISTINCT match_id) AS appearances FROM player_appearances WHERE tournament_id='WC-2022' GROUP BY player_id), scores AS (SELECT player_id,COUNT(*) AS goals FROM goals WHERE tournament_id='WC-2022' AND own_goal=0 GROUP BY player_id) SELECT s.player_id,COALESCE(a.appearances,0) AS appearances,COALESCE(g.goals,0) AS goals FROM squads s JOIN teams t ON t.team_id=s.team_id LEFT JOIN apps a ON a.player_id=s.player_id LEFT JOIN scores g ON g.player_id=s.player_id WHERE s.tournament_id='WC-2022' AND t.team_name='Argentina' ORDER BY s.player_id",
+    "tables": [
+      "squads",
+      "teams",
+      "player_appearances",
+      "goals"
+    ],
+    "row_order": "player_id ascending",
+    "output_fields": [
+      "player_id",
+      "appearances",
+      "goals"
+    ]
+  },
+  {
+    "id": "A-06",
+    "question": "Classify WC-2022 non-own goals by the scorer’s recorded starter/substitute flags for that match. Return both flags and goal counts; do not infer the precise time of a substitution.",
+    "sql": "SELECT a.starter,a.substitute,COUNT(*) AS goals FROM goals g JOIN player_appearances a ON a.match_id=g.match_id AND a.player_id=g.player_id AND a.team_id=g.player_team_id WHERE g.tournament_id='WC-2022' AND g.own_goal=0 GROUP BY a.starter,a.substitute ORDER BY a.starter,a.substitute",
+    "tables": [
+      "goals",
+      "player_appearances"
+    ],
+    "row_order": "starter, then substitute ascending",
+    "output_fields": [
+      "starter",
+      "substitute",
+      "goals"
+    ]
+  },
+  {
+    "id": "A-07",
+    "question": "For Argentina’s WC-2022 shootouts, count the opponent’s successful and unsuccessful kicks per match. Report these as kick outcomes, not goalkeeper saves.",
+    "sql": "SELECT k.match_id,m.match_name,SUM(k.converted) AS opponent_scored,SUM(CASE WHEN k.converted=0 THEN 1 ELSE 0 END) AS opponent_unsuccessful FROM penalty_kicks k JOIN matches m ON m.match_id=k.match_id JOIN teams a ON a.team_name='Argentina' WHERE k.tournament_id='WC-2022' AND k.team_id<>a.team_id AND (m.home_team_id=a.team_id OR m.away_team_id=a.team_id) GROUP BY k.match_id,m.match_name ORDER BY k.match_id",
+    "tables": [
+      "penalty_kicks",
+      "matches",
+      "teams"
+    ],
+    "row_order": "match_id ascending",
+    "output_fields": [
+      "match_id",
+      "match_name",
+      "opponent_scored",
+      "opponent_unsuccessful"
+    ]
+  },
+  {
+    "id": "A-08",
+    "question": "For WC-2019 and WC-2022, give every Golden Boot recipient and their non-own-goal total in that tournament. Join award definitions, recipients and goal events without duplicating recipients.",
+    "sql": "WITH scores AS (SELECT tournament_id,player_id,COUNT(*) AS goals FROM goals WHERE own_goal=0 GROUP BY tournament_id,player_id) SELECT w.tournament_id,w.player_id,CONCAT(w.given_name,' ',w.family_name) AS player_name,a.award_name,COALESCE(g.goals,0) AS goals FROM award_winners w JOIN awards a ON a.award_id=w.award_id LEFT JOIN scores g ON g.tournament_id=w.tournament_id AND g.player_id=w.player_id WHERE w.tournament_id IN ('WC-2019','WC-2022') AND a.award_name='Golden Boot' ORDER BY w.tournament_id,w.player_id",
+    "tables": [
+      "award_winners",
+      "awards",
+      "goals"
+    ],
+    "row_order": "tournament_id, then player_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "player_id",
+      "player_name",
+      "award_name",
+      "goals"
+    ]
+  },
+  {
+    "id": "A-09",
+    "question": "For WC-1950, report the tournament’s final_round and final flags, the number of final-round matches and the number of matches labelled final. Do not invent a knockout final.",
+    "sql": "SELECT t.tournament_id,t.final_round,t.final,SUM(CASE WHEN m.stage_name='final round' THEN 1 ELSE 0 END) AS final_round_matches,SUM(CASE WHEN m.stage_name='final' THEN 1 ELSE 0 END) AS final_matches FROM tournaments t JOIN matches m ON m.tournament_id=t.tournament_id WHERE t.tournament_id='WC-1950' GROUP BY t.tournament_id,t.final_round,t.final",
+    "tables": [
+      "tournaments",
+      "matches"
+    ],
+    "row_order": "single row",
+    "output_fields": [
+      "tournament_id",
+      "final_round",
+      "final",
+      "final_round_matches",
+      "final_matches"
+    ]
+  },
+  {
+    "id": "A-10",
+    "question": "Compare Gerd Müller and Thomas Müller: return each player ID, recorded squad editions and non-own goals across the snapshot. Count distinct squad editions and aggregate facts before joining.",
+    "sql": "WITH editions AS (SELECT player_id,COUNT(DISTINCT tournament_id) AS editions FROM squads GROUP BY player_id), scores AS (SELECT player_id,COUNT(*) AS goals FROM goals WHERE own_goal=0 GROUP BY player_id) SELECT p.player_id,CONCAT(p.given_name,' ',p.family_name) AS player_name,COALESCE(s.editions,0) AS editions,COALESCE(g.goals,0) AS goals FROM players p LEFT JOIN editions s ON s.player_id=p.player_id LEFT JOIN scores g ON g.player_id=p.player_id WHERE p.family_name='Müller' AND p.given_name IN ('Gerd','Thomas') ORDER BY p.player_id",
+    "tables": [
+      "players",
+      "squads",
+      "goals"
+    ],
+    "row_order": "player_id ascending",
+    "output_fields": [
+      "player_id",
+      "player_name",
+      "editions",
+      "goals"
+    ]
+  },
+  {
+    "id": "A-11",
+    "question": "Compare France at WC-2018 and WC-2022: return final recorded rank, match count, win/loss/draw flag totals and goals for/against. Join aggregate match facts to tournament standings without multiplying rows.",
+    "sql": "WITH totals AS (SELECT tournament_id,team_id,COUNT(*) AS matches,SUM(win) AS wins,SUM(lose) AS losses,SUM(draw) AS draws,SUM(goals_for) AS goals_for,SUM(goals_against) AS goals_against FROM team_appearances WHERE tournament_id IN ('WC-2018','WC-2022') GROUP BY tournament_id,team_id) SELECT a.tournament_id,s.position,a.matches,a.wins,a.losses,a.draws,a.goals_for,a.goals_against FROM totals a JOIN teams t ON t.team_id=a.team_id JOIN tournament_standings s ON s.tournament_id=a.tournament_id AND s.team_id=a.team_id WHERE t.team_name='France' ORDER BY a.tournament_id",
+    "tables": [
+      "team_appearances",
+      "teams",
+      "tournament_standings"
+    ],
+    "row_order": "tournament_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "position",
+      "matches",
+      "wins",
+      "losses",
+      "draws",
+      "goals_for",
+      "goals_against"
+    ]
+  },
+  {
+    "id": "A-12",
+    "question": "For the WC-2022 top four finishers, report final rank, match goals for/against and booking-event flag totals. Aggregate bookings before joining to standings; flags may overlap.",
+    "sql": "WITH games AS (SELECT team_id,SUM(goals_for) AS goals_for,SUM(goals_against) AS goals_against FROM team_appearances WHERE tournament_id='WC-2022' GROUP BY team_id), cards AS (SELECT team_id,SUM(yellow_card) AS yellow_cards,SUM(red_card) AS red_cards,SUM(second_yellow_card) AS second_yellows,SUM(sending_off) AS sendings_off FROM bookings WHERE tournament_id='WC-2022' GROUP BY team_id) SELECT s.position,s.team_id,t.team_name,g.goals_for,g.goals_against,COALESCE(c.yellow_cards,0) AS yellow_cards,COALESCE(c.red_cards,0) AS red_cards,COALESCE(c.second_yellows,0) AS second_yellows,COALESCE(c.sendings_off,0) AS sendings_off FROM tournament_standings s JOIN teams t ON t.team_id=s.team_id JOIN games g ON g.team_id=s.team_id LEFT JOIN cards c ON c.team_id=s.team_id WHERE s.tournament_id='WC-2022' AND s.position<=4 ORDER BY s.position,s.team_id",
+    "tables": [
+      "bookings",
+      "tournament_standings",
+      "teams",
+      "team_appearances"
+    ],
+    "row_order": "position, then team_id ascending",
+    "output_fields": [
+      "position",
+      "team_id",
+      "team_name",
+      "goals_for",
+      "goals_against",
+      "yellow_cards",
+      "red_cards",
+      "second_yellows",
+      "sendings_off"
+    ]
+  },
+  {
+    "id": "A-13",
+    "question": "Audit WC-1999 detail coverage: return recorded row counts for matches, squads, goals and player_appearances. These are snapshot counts, not claims about missing real-world participation.",
+    "sql": "SELECT 'goals' AS table_name,COUNT(*) AS rows FROM goals WHERE tournament_id='WC-1999' UNION ALL SELECT 'matches',COUNT(*) FROM matches WHERE tournament_id='WC-1999' UNION ALL SELECT 'player_appearances',COUNT(*) FROM player_appearances WHERE tournament_id='WC-1999' UNION ALL SELECT 'squads',COUNT(*) FROM squads WHERE tournament_id='WC-1999' ORDER BY table_name",
+    "tables": [
+      "goals",
+      "matches",
+      "player_appearances",
+      "squads"
+    ],
+    "row_order": "table_name ascending",
+    "output_fields": [
+      "table_name",
+      "rows"
+    ]
+  },
+  {
+    "id": "A-14",
+    "question": "For WC-2014, WC-2018 and WC-2022, reconcile match-score goals, credited goal-event counts, own-goal counts and shootout-kick counts. Aggregate each table separately and keep shootout kicks out of match goals.",
+    "sql": "WITH games AS (SELECT tournament_id,SUM(home_team_score+away_team_score) AS match_goals FROM matches WHERE tournament_id IN ('WC-2014','WC-2018','WC-2022') GROUP BY tournament_id), events AS (SELECT tournament_id,COUNT(*) AS goal_events,SUM(own_goal) AS own_goals FROM goals WHERE tournament_id IN ('WC-2014','WC-2018','WC-2022') GROUP BY tournament_id), kicks AS (SELECT tournament_id,COUNT(*) AS shootout_kicks FROM penalty_kicks WHERE tournament_id IN ('WC-2014','WC-2018','WC-2022') GROUP BY tournament_id) SELECT m.tournament_id,m.match_goals,e.goal_events,e.own_goals,COALESCE(k.shootout_kicks,0) AS shootout_kicks FROM games m JOIN events e ON e.tournament_id=m.tournament_id LEFT JOIN kicks k ON k.tournament_id=m.tournament_id ORDER BY m.tournament_id",
+    "tables": [
+      "matches",
+      "goals",
+      "penalty_kicks"
+    ],
+    "row_order": "tournament_id ascending",
+    "output_fields": [
+      "tournament_id",
+      "match_goals",
+      "goal_events",
+      "own_goals",
+      "shootout_kicks"
+    ]
+  }
+]

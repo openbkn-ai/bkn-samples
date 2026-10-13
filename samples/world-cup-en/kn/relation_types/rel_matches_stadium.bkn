@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_matches_stadium
+name: Matches — Stadium
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Matches — Stadium
+
+Join `matches.stadium_id` to `stadiums.stadium_id`. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_matches | worldcup_en_stadiums | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| stadium_id | stadium_id |

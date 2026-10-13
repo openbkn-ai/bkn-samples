@@ -1,0 +1,43 @@
+---
+type: object_type
+id: worldcup_en_teams
+name: Teams
+tags: [worldcup, fjelstul]
+---
+
+## Teams
+
+National-team identities, federation and men’s/women’s team flags. Preserve historical team identities.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+| mens_team | Men’s Team | integer | 1 for a men’s national team, otherwise 0. | mens_team |
+| womens_team | Women’s Team | integer | 1 for a women’s national team, otherwise 0. | womens_team |
+| federation_name | Federation Name | string | Name of the national football federation. | federation_name |
+| region_name | Region Name | string | Geographic region of the confederation. | region_name |
+| confederation_id | Confederation ID | string | Stable confederation identifier; join using this value. | confederation_id |
+| confederation_name | Confederation Name | string | Recorded confederation name. | confederation_name |
+| confederation_code | Confederation Code | string | Recorded confederation code. | confederation_code |
+| mens_team_wikipedia_link | Mens Team Wikipedia Link | string | Wikipedia reference for mens team. | mens_team_wikipedia_link |
+| womens_team_wikipedia_link | Womens Team Wikipedia Link | string | Wikipedia reference for womens team. | womens_team_wikipedia_link |
+| federation_wikipedia_link | Federation Wikipedia Link | string | Wikipedia reference for federation. | federation_wikipedia_link |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: team_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{TEAMS_RES_ID}} | wc_teams |

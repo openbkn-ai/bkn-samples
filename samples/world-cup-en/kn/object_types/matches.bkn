@@ -1,0 +1,66 @@
+---
+type: object_type
+id: worldcup_en_matches
+name: Matches
+tags: [worldcup, fjelstul]
+---
+
+## Matches
+
+One match, with designated home and away sides, scores and stage. These designations do not establish the host-country team. Regulation/extra-time scores and shootout scores are separate.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| match_id | Match ID | string | Stable match identifier; join using this value. | match_id |
+| match_name | Match Name | string | Recorded match name. | match_name |
+| stage_name | Stage Name | string | Recorded competition stage, such as group stage or final. | stage_name |
+| group_name | Group Name | string | Recorded group name; not applicable for some knockout matches. | group_name |
+| group_stage | Group Stage | integer | 1 when a group stage applies in this row’s scope, otherwise 0. | group_stage |
+| knockout_stage | Knockout Stage | integer | 1 when a knockout stage applies in this row’s scope, otherwise 0. | knockout_stage |
+| replayed | Replayed | integer | 1 when this match had to be replayed, otherwise 0. | replayed |
+| replay | Replay | integer | 1 when this row is a replay match, otherwise 0. | replay |
+| match_date | Match Date | string | Local match date as recorded, in YYYY-MM-DD format. | match_date |
+| match_time | Match Time | string | Local match time as recorded; no timezone conversion is implied. | match_time |
+| stadium_id | Stadium ID | string | Stable stadium identifier; join using this value. | stadium_id |
+| stadium_name | Stadium Name | string | Recorded stadium name. | stadium_name |
+| city_name | City Name | string | Recorded city name. | city_name |
+| country_name | Country Name | string | Recorded country name. | country_name |
+| home_team_id | Home Team ID | string | Stable home team identifier; join using this value. | home_team_id |
+| home_team_name | Home Team Name | string | Recorded home team name. | home_team_name |
+| home_team_code | Home Team Code | string | Recorded home team code. | home_team_code |
+| away_team_id | Away Team ID | string | Stable away team identifier; join using this value. | away_team_id |
+| away_team_name | Away Team Name | string | Recorded away team name. | away_team_name |
+| away_team_code | Away Team Code | string | Recorded away team code. | away_team_code |
+| score | Score | string | Recorded match score, excluding the separately recorded shootout score. | score |
+| home_team_score | Home Team Score | integer | Goals scored by the designated home side, excluding shootout kicks. | home_team_score |
+| away_team_score | Away Team Score | integer | Goals scored by the designated away side, excluding shootout kicks. | away_team_score |
+| home_team_score_margin | Home Team Score Margin | integer | Goal margin for the designated home side. | home_team_score_margin |
+| away_team_score_margin | Away Team Score Margin | integer | Goal margin for the designated away side. | away_team_score_margin |
+| extra_time | Extra Time | integer | 1 when extra time was played, otherwise 0. | extra_time |
+| penalty_shootout | Penalty Shootout | integer | 1 when the match was decided by a penalty shootout, otherwise 0. | penalty_shootout |
+| score_penalties | Score Penalties | string | Recorded penalty-shootout score. | score_penalties |
+| home_team_score_penalties | Home Team Score Penalties | integer | Successful shootout kicks by the designated home side. | home_team_score_penalties |
+| away_team_score_penalties | Away Team Score Penalties | integer | Successful shootout kicks by the designated away side. | away_team_score_penalties |
+| result | Result | string | Recorded match result for the side, or the source’s match result label. | result |
+| home_team_win | Home Team Win | integer | 1 when the designated home side won, otherwise 0. | home_team_win |
+| away_team_win | Away Team Win | integer | 1 when the designated away side won, otherwise 0. | away_team_win |
+| draw | Draw | integer | 1 for a draw, otherwise 0. | draw |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: match_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{MATCHES_RES_ID}} | wc_matches |

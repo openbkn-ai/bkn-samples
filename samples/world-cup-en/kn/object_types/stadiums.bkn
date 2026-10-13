@@ -1,0 +1,37 @@
+---
+type: object_type
+id: worldcup_en_stadiums
+name: Stadiums
+tags: [worldcup, fjelstul]
+---
+
+## Stadiums
+
+Stadium identities, location and recorded capacity.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| stadium_id | Stadium ID | string | Stable stadium identifier; join using this value. | stadium_id |
+| stadium_name | Stadium Name | string | Recorded stadium name. | stadium_name |
+| city_name | City Name | string | Recorded city name. | city_name |
+| country_name | Country Name | string | Recorded country name. | country_name |
+| stadium_capacity | Stadium Capacity | integer | Recorded stadium capacity; not an estimate of match attendance. | stadium_capacity |
+| stadium_wikipedia_link | Stadium Wikipedia Link | string | Wikipedia reference for stadium. | stadium_wikipedia_link |
+| city_wikipedia_link | City Wikipedia Link | string | Wikipedia reference for city. | city_wikipedia_link |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: stadium_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{STADIUMS_RES_ID}} | wc_stadiums |

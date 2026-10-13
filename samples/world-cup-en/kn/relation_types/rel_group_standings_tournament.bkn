@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: wc_en_rel_group_standings_tournament
+name: Group Standings — Tournament
+tags: [worldcup, fjelstul, backbone]
+---
+
+## Group Standings — Tournament
+
+Join `group_standings.tournament_id` to `tournaments.tournament_id`. Use IDs for the join and name properties for readable results.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| worldcup_en_group_standings | worldcup_en_tournaments | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| tournament_id | tournament_id |

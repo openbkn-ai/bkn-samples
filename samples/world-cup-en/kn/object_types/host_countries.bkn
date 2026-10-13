@@ -1,0 +1,36 @@
+---
+type: object_type
+id: worldcup_en_host_countries
+name: Host Countries
+tags: [worldcup, fjelstul]
+---
+
+## Host Countries
+
+Host-country records. A tournament can have more than one host.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| key_id | Row Key | integer | Source row key; not a person, team or tournament identity. | key_id |
+| tournament_id | Tournament ID | string | Stable tournament identifier; join using this value. | tournament_id |
+| tournament_name | Tournament Name | string | Recorded tournament name. | tournament_name |
+| team_id | Team ID | string | Stable team identifier; join using this value. | team_id |
+| team_name | Team Name | string | Recorded team name. | team_name |
+| team_code | Team Code | string | Recorded team code. | team_code |
+| performance | Performance | string | Recorded tournament finishing stage or performance. | performance |
+
+### Keys
+
+Primary Keys: key_id
+Display Key: team_name
+Incremental Key:
+
+### Logic Properties
+
+### Data Source
+
+| Type | ID | Name |
+|------|-----|------|
+| resource | {{HOST_COUNTRIES_RES_ID}} | wc_host_countries |
