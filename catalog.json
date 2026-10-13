@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000010",
-    "sequence": 10,
+    "revision": "catalog-000011",
+    "sequence": 11,
     "channel": "stable",
-    "publishedAt": "2026-10-11T22:56:01Z"
+    "publishedAt": "2026-10-13T08:20:11Z"
   },
   "spec": {
     "entries": [
@@ -490,6 +490,50 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/order-basics/releases/0.1.2/verification.json",
           "digest": "sha256:7327a94db936c18daa6c18485d4d73d81eb4ac9cf1d890ffb78e3fe88ad02985"
+        }
+      },
+      {
+        "sampleId": "supply-chain-en",
+        "version": "0.1.1",
+        "displayName": "Supply Chain (EN)",
+        "summary": "Assess demand coverage using sample orders, stock, BOMs and supply.",
+        "publishedAt": "2026-10-13T08:17:13Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Supply Chain EN 0.1.1: concise metric names and verified supply-chain scenarios.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/43ee50f772a76de3c68d4de4ec1ced1c9e897095/samples/supply_ontology_en/releases/0.1.1/release-notes.en-US.md",
+              "digest": "sha256:c3b107d01d3a1bda57d1198dbf1ed2720198e78672ba495aa23c3604779f09a2"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/43ee50f772a76de3c68d4de4ec1ced1c9e897095/samples/supply_ontology_en/releases/0.1.1/sample.json",
+          "digest": "sha256:afc02050e596cd2b85bffad640268fd38fe7bb623c3014085733eea78d92b1e3"
+        },
+        "requires": {
+          "architectures": [
+            "arm64",
+            "amd64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/43ee50f772a76de3c68d4de4ec1ced1c9e897095/samples/supply_ontology_en/releases/0.1.1/verification.json",
+          "digest": "sha256:11ba5d27e8f1739e75ab7819e389286cd42e48a54d41bfad8d3b13ca30d57b2c"
         }
       }
     ]

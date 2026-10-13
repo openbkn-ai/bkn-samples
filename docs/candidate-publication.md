@@ -45,7 +45,7 @@ Studio 首页 → 一键体验 → 导入离线包，选择上述 tar.gz，检�
 
 `verification.json` 必须绑定实际样例版本、包摘要、数据镜像、全新安装结果，并明确提供 `database`、`knowledge`、`capabilities`、`scenario` 四项通过检查。样例没有可选函数、指标或 Skill 时，能力检查说明未声明并确认该阶段通过，不能漏写。`evidence` 要指向当前版本的真实记录与查询结果；不能复用旧版本的安装证明。
 
-先提交元数据形成完整官方提交 SHA，再将 `catalog.json` 的元数据 URL 固定到该 SHA。递增目录 sequence，保留旧版本；撤回保留历史条目。目录变更同样经过英文 PR 和 AI 审核。
+先提交元数据形成完整官方提交 SHA，再将 `catalog.json` 的元数据 URL 固定到该 SHA。 该提交须在主线历史或保留的发布 tag 中可达；不要只依赖随后会删除的 PR 分支。若同一个 PR 中先提交元数据、再提交目录并采用 squash 合并，应保留元数据提交的发布 tag，确保后续 CI 可以取得并校验固定 SHA。递增目录 sequence，保留旧版本；撤回保留历史条目。目录变更同样经过英文 PR 和 AI 审核。
 
 ```sh
 git show origin/main:catalog.json > /tmp/baseline-catalog.json
