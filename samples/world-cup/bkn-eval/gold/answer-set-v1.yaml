@@ -1,0 +1,1648 @@
+schema_version: '1.0'
+baseline_id: worldcup-cn-fjelstul-v1
+source_commit: 35a8667f518b07469182ae16d35574dd0e7a00fb
+dataset_lock_sha256: 92a8d663cc552ebeb375341b34bfad3b4f215097225a61c2c0b080e708430461
+question_set_sha256: 9a4cb74d8cc086a3c8d0b5365c33f67a3123fbf4d496f75d6d6e384bae02fe89
+case_specification_sha256: 37077291319fbc7f9520b7cad62a4f144c06c7688586b5183bc5d57ab6e3e506
+row_counts:
+  tournaments: 30
+  confederations: 6
+  teams: 88
+  players: 10401
+  managers: 475
+  referees: 493
+  stadiums: 240
+  matches: 1248
+  awards: 8
+  qualified_teams: 625
+  squads: 13843
+  manager_appointments: 637
+  referee_appointments: 668
+  team_appearances: 2496
+  player_appearances: 27432
+  manager_appearances: 2538
+  referee_appearances: 1248
+  goals: 3637
+  penalty_kicks: 396
+  bookings: 3178
+  substitutions: 10222
+  host_countries: 31
+  tournament_stages: 155
+  groups: 159
+  group_standings: 626
+  tournament_standings: 120
+  award_winners: 200
+unmodeled_csv_fields:
+  matches:
+  - away_team_name
+  - city_name
+  - country_name
+  - group_name
+  - home_team_name
+  - match_name
+  - result
+  - stadium_name
+  - stage_name
+  - tournament_name
+  team_appearances:
+  - city_name
+  - country_name
+  - group_name
+  - match_name
+  - opponent_name
+  - result
+  - stadium_name
+  - stage_name
+  - team_name
+  - tournament_name
+answers:
+- id: B-01
+  rows:
+  - competition: men
+    editions: 22
+  - competition: women
+    editions: 8
+- id: B-02
+  rows:
+  - matches: 1248
+- id: B-03
+  rows:
+  - year: 2022
+    start_date: '2022-11-20'
+    end_date: '2022-12-18'
+    host_country: Qatar
+    winner: Argentina
+- id: B-04
+  rows:
+  - mens_team: 0
+    womens_team: 1
+    teams: 3
+  - mens_team: 1
+    womens_team: 0
+    teams: 52
+  - mens_team: 1
+    womens_team: 1
+    teams: 33
+- id: B-05
+  rows:
+  - female: 0
+    players: 8482
+  - female: 1
+    players: 1919
+- id: B-06
+  rows:
+  - yellow_cards: 224
+    red_cards: 1
+    second_yellows: 3
+    sendings_off: 4
+- id: B-07
+  rows:
+  - match_id: M-2022-64
+    match_date: '2022-12-18'
+    home_team_name: Argentina
+    away_team_name: France
+    score: 3–3
+    score_penalties: 4–2
+- id: B-08
+  rows:
+  - all_goals: 172
+    personal_goals: 170
+    own_goals: 2
+    match_penalties: 17
+- id: B-09
+  rows:
+  - recorded_appearances: 0
+- id: B-10
+  rows:
+  - stadium_id: S-020
+    stadium_name: Estádio do Maracanã
+    stadium_capacity: 200000
+- id: J-01
+  rows:
+  - tournament_id: WC-2014
+    tournament_name: 2014 FIFA Men's World Cup
+    award_id: A-1
+    award_name: Golden Ball
+    player_id: P-14758
+    player_name: Lionel Messi
+  - tournament_id: WC-2022
+    tournament_name: 2022 FIFA Men's World Cup
+    award_id: A-1
+    award_name: Golden Ball
+    player_id: P-14758
+    player_name: Lionel Messi
+  - tournament_id: WC-2022
+    tournament_name: 2022 FIFA Men's World Cup
+    award_id: A-5
+    award_name: Silver Boot
+    player_id: P-14758
+    player_name: Lionel Messi
+- id: J-02
+  rows:
+  - match_id: M-2022-64
+    home_id: T-03
+    home_name: Argentina
+    away_id: T-30
+    away_name: France
+    stadium_id: S-147
+    stadium_name: Lusail Stadium
+    city_name: Lusail
+    country_name: Qatar
+- id: J-03
+  rows:
+  - player_id: P-00652
+    player_name: Juan Foyth
+    shirt_number: 2
+    position_name: defender
+  - player_id: P-03265
+    player_name: Guido Rodríguez
+    shirt_number: 18
+    position_name: midfielder
+  - player_id: P-10231
+    player_name: Papu Gómez
+    shirt_number: 17
+    position_name: midfielder
+  - player_id: P-10739
+    player_name: Enzo Fernández
+    shirt_number: 24
+    position_name: midfielder
+  - player_id: P-13162
+    player_name: Emiliano Martínez
+    shirt_number: 23
+    position_name: goal keeper
+  - player_id: P-14758
+    player_name: Lionel Messi
+    shirt_number: 10
+    position_name: forward
+  - player_id: P-19776
+    player_name: Julián Álvarez
+    shirt_number: 9
+    position_name: forward
+  - player_id: P-23070
+    player_name: Lisandro Martínez
+    shirt_number: 25
+    position_name: defender
+  - player_id: P-27582
+    player_name: Leandro Paredes
+    shirt_number: 5
+    position_name: midfielder
+  - player_id: P-28151
+    player_name: Paulo Dybala
+    shirt_number: 21
+    position_name: forward
+  - player_id: P-29298
+    player_name: Germán Pezzella
+    shirt_number: 6
+    position_name: defender
+  - player_id: P-35173
+    player_name: Nicolás Tagliafico
+    shirt_number: 3
+    position_name: defender
+  - player_id: P-36188
+    player_name: Gerónimo Rulli
+    shirt_number: 12
+    position_name: goal keeper
+  - player_id: P-37314
+    player_name: Rodrigo De Paul
+    shirt_number: 7
+    position_name: midfielder
+  - player_id: P-39788
+    player_name: Franco Armani
+    shirt_number: 1
+    position_name: goal keeper
+  - player_id: P-40147
+    player_name: Exequiel Palacios
+    shirt_number: 14
+    position_name: midfielder
+  - player_id: P-42113
+    player_name: Ángel Di María
+    shirt_number: 11
+    position_name: forward
+  - player_id: P-49114
+    player_name: Nicolás Otamendi
+    shirt_number: 19
+    position_name: defender
+  - player_id: P-56659
+    player_name: Thiago Almada
+    shirt_number: 16
+    position_name: midfielder
+  - player_id: P-71343
+    player_name: Alexis Mac Allister
+    shirt_number: 20
+    position_name: midfielder
+  - player_id: P-73712
+    player_name: Marcos Acuña
+    shirt_number: 8
+    position_name: midfielder
+  - player_id: P-79650
+    player_name: Cristian Romero
+    shirt_number: 13
+    position_name: defender
+  - player_id: P-81505
+    player_name: Lautaro Martínez
+    shirt_number: 22
+    position_name: forward
+  - player_id: P-84430
+    player_name: Nahuel Molina
+    shirt_number: 26
+    position_name: defender
+  - player_id: P-91431
+    player_name: Gonzalo Montiel
+    shirt_number: 4
+    position_name: defender
+  - player_id: P-92353
+    player_name: Ángel Correa
+    shirt_number: 15
+    position_name: forward
+- id: J-04
+  rows:
+  - team_id: T-31
+    team_name: Germany
+    manager_id: M-234
+    manager_name: Joachim Löw
+- id: J-05
+  rows:
+  - match_id: M-2022-64
+    referee_id: R-269
+    referee_name: Szymon Marciniak
+    country_name: Poland
+- id: J-06
+  rows:
+  - team_id: T-48
+    team_name: Netherlands
+    position: 1
+    played: 3
+    wins: 2
+    draws: 1
+    losses: 0
+    goals_for: 5
+    goals_against: 1
+    points: 7
+    count_teams: 4
+  - team_id: T-65
+    team_name: Senegal
+    position: 2
+    played: 3
+    wins: 2
+    draws: 0
+    losses: 1
+    goals_for: 5
+    goals_against: 4
+    points: 6
+    count_teams: 4
+  - team_id: T-25
+    team_name: Ecuador
+    position: 3
+    played: 3
+    wins: 1
+    draws: 1
+    losses: 1
+    goals_for: 4
+    goals_against: 3
+    points: 4
+    count_teams: 4
+  - team_id: T-59
+    team_name: Qatar
+    position: 4
+    played: 3
+    wins: 0
+    draws: 0
+    losses: 3
+    goals_for: 1
+    goals_against: 7
+    points: 0
+    count_teams: 4
+- id: J-07
+  rows:
+  - tournament_id: WC-2002
+    tournament_name: 2002 FIFA Men's World Cup
+    host_country: Japan
+  - tournament_id: WC-2002
+    tournament_name: 2002 FIFA Men's World Cup
+    host_country: South Korea
+- id: J-08
+  rows:
+  - penalty_kick_id: PK-389
+    team_name: Argentina
+    player_id: P-14758
+    player_name: Lionel Messi
+    converted: 1
+  - penalty_kick_id: PK-390
+    team_name: Argentina
+    player_id: P-28151
+    player_name: Paulo Dybala
+    converted: 1
+  - penalty_kick_id: PK-391
+    team_name: Argentina
+    player_id: P-27582
+    player_name: Leandro Paredes
+    converted: 1
+  - penalty_kick_id: PK-392
+    team_name: Argentina
+    player_id: P-91431
+    player_name: Gonzalo Montiel
+    converted: 1
+  - penalty_kick_id: PK-393
+    team_name: France
+    player_id: P-64077
+    player_name: Kylian Mbappé
+    converted: 1
+  - penalty_kick_id: PK-394
+    team_name: France
+    player_id: P-06614
+    player_name: Kingsley Coman
+    converted: 0
+  - penalty_kick_id: PK-395
+    team_name: France
+    player_id: P-54517
+    player_name: Aurélien Tchouaméni
+    converted: 0
+  - penalty_kick_id: PK-396
+    team_name: France
+    player_id: P-92987
+    player_name: Randal Kolo Muani
+    converted: 1
+- id: J-09
+  rows:
+  - match_id: M-2022-05
+    match_date: '2022-11-22'
+    stage_number: 1
+    opponent: Saudi Arabia
+    manager_id: M-383
+    manager_name: Lionel Scaloni
+  - match_id: M-2022-24
+    match_date: '2022-11-26'
+    stage_number: 1
+    opponent: Mexico
+    manager_id: M-383
+    manager_name: Lionel Scaloni
+  - match_id: M-2022-39
+    match_date: '2022-11-30'
+    stage_number: 1
+    opponent: Poland
+    manager_id: M-383
+    manager_name: Lionel Scaloni
+  - match_id: M-2022-50
+    match_date: '2022-12-03'
+    stage_number: 2
+    opponent: Australia
+    manager_id: M-383
+    manager_name: Lionel Scaloni
+  - match_id: M-2022-58
+    match_date: '2022-12-09'
+    stage_number: 3
+    opponent: Netherlands
+    manager_id: M-383
+    manager_name: Lionel Scaloni
+  - match_id: M-2022-61
+    match_date: '2022-12-13'
+    stage_number: 4
+    opponent: Croatia
+    manager_id: M-383
+    manager_name: Lionel Scaloni
+  - match_id: M-2022-64
+    match_date: '2022-12-18'
+    stage_number: 6
+    opponent: France
+    manager_id: M-383
+    manager_name: Lionel Scaloni
+- id: J-10
+  rows:
+  - goal_id: G-3486
+    match_id: M-2022-08
+    match_name: France vs Australia
+    stage_name: group stage
+    minute_label: 68'
+    penalty: 0
+  - goal_id: G-3518
+    match_id: M-2022-23
+    match_name: France vs Denmark
+    stage_name: group stage
+    minute_label: 61'
+    penalty: 0
+  - goal_id: G-3520
+    match_id: M-2022-23
+    match_name: France vs Denmark
+    stage_name: group stage
+    minute_label: 86'
+    penalty: 0
+  - goal_id: G-3594
+    match_id: M-2022-51
+    match_name: France vs Poland
+    stage_name: round of 16
+    minute_label: 74'
+    penalty: 0
+  - goal_id: G-3595
+    match_id: M-2022-51
+    match_name: France vs Poland
+    stage_name: round of 16
+    minute_label: 90'+1'
+    penalty: 0
+  - goal_id: G-3634
+    match_id: M-2022-64
+    match_name: Argentina vs France
+    stage_name: final
+    minute_label: 80'
+    penalty: 1
+  - goal_id: G-3635
+    match_id: M-2022-64
+    match_name: Argentina vs France
+    stage_name: final
+    minute_label: 81'
+    penalty: 0
+  - goal_id: G-3637
+    match_id: M-2022-64
+    match_name: Argentina vs France
+    stage_name: final
+    minute_label: 118'
+    penalty: 1
+- id: J-11
+  rows:
+  - team_id: T-03
+    team_name: Argentina
+    confederation_id: CF-4
+    confederation_name: South American Football Confederation
+  - team_id: T-04
+    team_name: Australia
+    confederation_id: CF-1
+    confederation_name: Asian Football Confederation
+  - team_id: T-06
+    team_name: Belgium
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-09
+    team_name: Brazil
+    confederation_id: CF-4
+    confederation_name: South American Football Confederation
+  - team_id: T-11
+    team_name: Cameroon
+    confederation_id: CF-2
+    confederation_name: Confederation of African Football
+  - team_id: T-12
+    team_name: Canada
+    confederation_id: CF-3
+    confederation_name: Confederation of North, Central American and Caribbean Association
+      Football
+  - team_id: T-17
+    team_name: Costa Rica
+    confederation_id: CF-3
+    confederation_name: Confederation of North, Central American and Caribbean Association
+      Football
+  - team_id: T-18
+    team_name: Croatia
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-22
+    team_name: Denmark
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-25
+    team_name: Ecuador
+    confederation_id: CF-4
+    confederation_name: South American Football Confederation
+  - team_id: T-28
+    team_name: England
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-30
+    team_name: France
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-31
+    team_name: Germany
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-32
+    team_name: Ghana
+    confederation_id: CF-2
+    confederation_name: Confederation of African Football
+  - team_id: T-38
+    team_name: Iran
+    confederation_id: CF-1
+    confederation_name: Asian Football Confederation
+  - team_id: T-44
+    team_name: Japan
+    confederation_id: CF-1
+    confederation_name: Asian Football Confederation
+  - team_id: T-46
+    team_name: Mexico
+    confederation_id: CF-3
+    confederation_name: Confederation of North, Central American and Caribbean Association
+      Football
+  - team_id: T-47
+    team_name: Morocco
+    confederation_id: CF-2
+    confederation_name: Confederation of African Football
+  - team_id: T-48
+    team_name: Netherlands
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-57
+    team_name: Poland
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-58
+    team_name: Portugal
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-59
+    team_name: Qatar
+    confederation_id: CF-1
+    confederation_name: Asian Football Confederation
+  - team_id: T-63
+    team_name: Saudi Arabia
+    confederation_id: CF-1
+    confederation_name: Asian Football Confederation
+  - team_id: T-65
+    team_name: Senegal
+    confederation_id: CF-2
+    confederation_name: Confederation of African Football
+  - team_id: T-66
+    team_name: Serbia
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-71
+    team_name: South Korea
+    confederation_id: CF-1
+    confederation_name: Asian Football Confederation
+  - team_id: T-73
+    team_name: Spain
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-75
+    team_name: Switzerland
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+  - team_id: T-79
+    team_name: Tunisia
+    confederation_id: CF-2
+    confederation_name: Confederation of African Football
+  - team_id: T-83
+    team_name: United States
+    confederation_id: CF-3
+    confederation_name: Confederation of North, Central American and Caribbean Association
+      Football
+  - team_id: T-84
+    team_name: Uruguay
+    confederation_id: CF-4
+    confederation_name: South American Football Confederation
+  - team_id: T-85
+    team_name: Wales
+    confederation_id: CF-6
+    confederation_name: Union of European Football Associations
+- id: J-12
+  rows:
+  - substitution_id: S-10197
+    team_name: France
+    player_id: P-97778
+    player_name: Ousmane Dembélé
+    minute_label: 41'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10198
+    team_name: France
+    player_id: P-89750
+    player_name: Olivier Giroud
+    minute_label: 41'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10199
+    team_name: France
+    player_id: P-92987
+    player_name: Randal Kolo Muani
+    minute_label: 41'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10200
+    team_name: France
+    player_id: P-13613
+    player_name: Marcus Thuram
+    minute_label: 41'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10201
+    team_name: Argentina
+    player_id: P-42113
+    player_name: Ángel Di María
+    minute_label: 64'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10202
+    team_name: Argentina
+    player_id: P-73712
+    player_name: Marcos Acuña
+    minute_label: 64'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10203
+    team_name: France
+    player_id: P-09867
+    player_name: Théo Hernandez
+    minute_label: 71'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10204
+    team_name: France
+    player_id: P-90908
+    player_name: Antoine Griezmann
+    minute_label: 71'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10205
+    team_name: France
+    player_id: P-06614
+    player_name: Kingsley Coman
+    minute_label: 71'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10206
+    team_name: France
+    player_id: P-80996
+    player_name: Eduardo Camavinga
+    minute_label: 71'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10207
+    team_name: Argentina
+    player_id: P-84430
+    player_name: Nahuel Molina
+    minute_label: 91'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10208
+    team_name: Argentina
+    player_id: P-91431
+    player_name: Gonzalo Montiel
+    minute_label: 91'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10209
+    team_name: France
+    player_id: P-57401
+    player_name: Adrien Rabiot
+    minute_label: 96'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10210
+    team_name: France
+    player_id: P-23304
+    player_name: Youssouf Fofana
+    minute_label: 96'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10211
+    team_name: Argentina
+    player_id: P-37314
+    player_name: Rodrigo De Paul
+    minute_label: 102'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10212
+    team_name: Argentina
+    player_id: P-19776
+    player_name: Julián Álvarez
+    minute_label: 102'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10213
+    team_name: Argentina
+    player_id: P-27582
+    player_name: Leandro Paredes
+    minute_label: 102'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10214
+    team_name: Argentina
+    player_id: P-81505
+    player_name: Lautaro Martínez
+    minute_label: 102'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10215
+    team_name: France
+    player_id: P-42326
+    player_name: Raphaël Varane
+    minute_label: 113'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10216
+    team_name: France
+    player_id: P-86920
+    player_name: Ibrahima Konaté
+    minute_label: 113'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10217
+    team_name: Argentina
+    player_id: P-71343
+    player_name: Alexis Mac Allister
+    minute_label: 116'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10218
+    team_name: Argentina
+    player_id: P-29298
+    player_name: Germán Pezzella
+    minute_label: 116'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10219
+    team_name: Argentina
+    player_id: P-35173
+    player_name: Nicolás Tagliafico
+    minute_label: 120'+1'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10220
+    team_name: France
+    player_id: P-78484
+    player_name: Jules Koundé
+    minute_label: 120'+1'
+    coming_on: 0
+    going_off: 1
+  - substitution_id: S-10221
+    team_name: Argentina
+    player_id: P-28151
+    player_name: Paulo Dybala
+    minute_label: 120'+1'
+    coming_on: 1
+    going_off: 0
+  - substitution_id: S-10222
+    team_name: France
+    player_id: P-91324
+    player_name: Axel Disasi
+    minute_label: 120'+1'
+    coming_on: 1
+    going_off: 0
+- id: R-01
+  rows:
+  - player_id: P-27787
+    goals: 16
+    ranking: 1
+  - player_id: P-62722
+    goals: 15
+    ranking: 2
+  - player_id: P-72441
+    goals: 14
+    ranking: 3
+  - player_id: P-14758
+    goals: 13
+    ranking: 4
+  - player_id: P-77939
+    goals: 13
+    ranking: 4
+  - player_id: P-38906
+    goals: 12
+    ranking: 6
+  - player_id: P-64077
+    goals: 12
+    ranking: 6
+  - player_id: P-07028
+    goals: 11
+    ranking: 8
+  - player_id: P-91373
+    goals: 11
+    ranking: 8
+  - player_id: P-08136
+    goals: 10
+    ranking: 10
+  - player_id: P-21597
+    goals: 10
+    ranking: 10
+  - player_id: P-28154
+    goals: 10
+    ranking: 10
+  - player_id: P-36651
+    goals: 10
+    ranking: 10
+  - player_id: P-84542
+    goals: 10
+    ranking: 10
+  - player_id: P-96979
+    goals: 10
+    ranking: 10
+- id: R-02
+  rows:
+  - player_id: P-07458
+    goals: 17
+    ranking: 1
+  - player_id: P-52478
+    goals: 14
+    ranking: 2
+  - player_id: P-89236
+    goals: 14
+    ranking: 2
+  - player_id: P-54794
+    goals: 12
+    ranking: 4
+  - player_id: P-14903
+    goals: 11
+    ranking: 5
+  - player_id: P-53366
+    goals: 11
+    ranking: 5
+  - player_id: P-93057
+    goals: 11
+    ranking: 5
+  - player_id: P-29915
+    goals: 10
+    ranking: 8
+  - player_id: P-30335
+    goals: 10
+    ranking: 8
+  - player_id: P-62104
+    goals: 10
+    ranking: 8
+  - player_id: P-97813
+    goals: 10
+    ranking: 8
+- id: R-03
+  rows:
+  - player_id: P-64077
+    goals: 8
+    ranking: 1
+  - player_id: P-14758
+    goals: 7
+    ranking: 2
+  - player_id: P-19776
+    goals: 4
+    ranking: 3
+  - player_id: P-89750
+    goals: 4
+    ranking: 3
+  - player_id: P-28911
+    goals: 3
+    ranking: 5
+  - player_id: P-29274
+    goals: 3
+    ranking: 5
+  - player_id: P-41647
+    goals: 3
+    ranking: 5
+  - player_id: P-59837
+    goals: 3
+    ranking: 5
+  - player_id: P-68016
+    goals: 3
+    ranking: 5
+  - player_id: P-75912
+    goals: 3
+    ranking: 5
+  - player_id: P-76842
+    goals: 3
+    ranking: 5
+- id: R-04
+  rows:
+  - tournament_id: WC-2014
+    team_id: T-31
+    goals: 18
+  - tournament_id: WC-2018
+    team_id: T-06
+    goals: 16
+  - tournament_id: WC-2022
+    team_id: T-30
+    goals: 16
+- id: R-05
+  rows:
+  - team_id: T-30
+    wins: 14
+    ranking: 1
+  - team_id: T-03
+    wins: 13
+    ranking: 2
+  - team_id: T-06
+    wins: 11
+    ranking: 3
+  - team_id: T-18
+    wins: 11
+    ranking: 3
+  - team_id: T-09
+    wins: 10
+    ranking: 5
+- id: R-06
+  rows:
+  - stadium_id: S-020
+    stadium_name: Estádio do Maracanã
+    stadium_capacity: 200000
+  - stadium_id: S-182
+    stadium_name: Camp Nou
+    stadium_capacity: 121000
+  - stadium_id: S-132
+    stadium_name: Estadio Azteca
+    stadium_capacity: 115000
+  - stadium_id: S-049
+    stadium_name: Wembley Stadium
+    stadium_capacity: 99000
+  - stadium_id: S-225
+    stadium_name: Rose Bowl
+    stadium_capacity: 96000
+  - stadium_id: S-228
+    stadium_name: Rose Bowl
+    stadium_capacity: 94000
+  - stadium_id: S-187
+    stadium_name: Estadio Santiago Bernabéu
+    stadium_capacity: 90000
+  - stadium_id: S-238
+    stadium_name: Estadio Centenario
+    stadium_capacity: 90000
+  - stadium_id: S-147
+    stadium_name: Lusail Stadium
+    stadium_capacity: 89000
+  - stadium_id: S-080
+    stadium_name: Olympiastadion
+    stadium_capacity: 86000
+- id: R-07
+  rows:
+  - match_id: M-2022-11
+    margin: 7
+    ranking: 1
+  - match_id: M-2022-56
+    margin: 5
+    ranking: 2
+  - match_id: M-2022-02
+    margin: 4
+    ranking: 3
+  - match_id: M-2022-08
+    margin: 3
+    ranking: 4
+  - match_id: M-2022-27
+    margin: 3
+    ranking: 4
+  - match_id: M-2022-36
+    margin: 3
+    ranking: 4
+  - match_id: M-2022-52
+    margin: 3
+    ranking: 4
+  - match_id: M-2022-54
+    margin: 3
+    ranking: 4
+  - match_id: M-2022-61
+    margin: 3
+    ranking: 4
+- id: R-08
+  rows:
+  - tournament_id: WC-2014
+    matches: 64
+    goals: 171
+    goals_per_match: 2.672
+  - tournament_id: WC-2018
+    matches: 64
+    goals: 169
+    goals_per_match: 2.641
+  - tournament_id: WC-2022
+    matches: 64
+    goals: 172
+    goals_per_match: 2.688
+- id: R-09
+  rows:
+  - tournament_id: WC-2006
+    goals: 1
+  - tournament_id: WC-2014
+    goals: 4
+  - tournament_id: WC-2018
+    goals: 1
+  - tournament_id: WC-2022
+    goals: 7
+- id: R-10
+  rows:
+  - player_id: P-14903
+    player_name: Wen Sun
+    goals: 11
+    ranking: 5
+- id: R-11
+  rows:
+  - tournament_id: WC-2014
+    confederation_id: CF-6
+    wins: 27
+    ranking: 1
+  - tournament_id: WC-2014
+    confederation_id: CF-4
+    wins: 19
+    ranking: 2
+  - tournament_id: WC-2014
+    confederation_id: CF-3
+    wins: 6
+    ranking: 3
+  - tournament_id: WC-2014
+    confederation_id: CF-2
+    wins: 3
+    ranking: 4
+  - tournament_id: WC-2014
+    confederation_id: CF-1
+    wins: 0
+    ranking: 5
+  - tournament_id: WC-2014
+    confederation_id: CF-5
+    wins: 0
+    ranking: 5
+  - tournament_id: WC-2018
+    confederation_id: CF-6
+    wins: 35
+    ranking: 1
+  - tournament_id: WC-2018
+    confederation_id: CF-4
+    wins: 11
+    ranking: 2
+  - tournament_id: WC-2018
+    confederation_id: CF-1
+    wins: 4
+    ranking: 3
+  - tournament_id: WC-2018
+    confederation_id: CF-2
+    wins: 3
+    ranking: 4
+  - tournament_id: WC-2018
+    confederation_id: CF-3
+    wins: 2
+    ranking: 5
+  - tournament_id: WC-2018
+    confederation_id: CF-5
+    wins: 0
+    ranking: 6
+  - tournament_id: WC-2022
+    confederation_id: CF-6
+    wins: 24
+    ranking: 1
+  - tournament_id: WC-2022
+    confederation_id: CF-4
+    wins: 11
+    ranking: 2
+  - tournament_id: WC-2022
+    confederation_id: CF-2
+    wins: 9
+    ranking: 3
+  - tournament_id: WC-2022
+    confederation_id: CF-1
+    wins: 7
+    ranking: 4
+  - tournament_id: WC-2022
+    confederation_id: CF-3
+    wins: 3
+    ranking: 5
+  - tournament_id: WC-2022
+    confederation_id: CF-5
+    wins: 0
+    ranking: 6
+- id: R-12
+  rows:
+  - referee_id: R-202
+    matches: 11
+    ranking: 1
+  - referee_id: R-342
+    matches: 10
+    ranking: 2
+  - referee_id: R-120
+    matches: 9
+    ranking: 3
+  - referee_id: R-322
+    matches: 9
+    ranking: 3
+  - referee_id: R-346
+    matches: 9
+    ranking: 3
+  - referee_id: R-400
+    matches: 9
+    ranking: 3
+- id: R-13
+  rows:
+  - player_id: P-07670
+    appearances: 7
+    ranking: 1
+  - player_id: P-10739
+    appearances: 7
+    ranking: 1
+  - player_id: P-13162
+    appearances: 7
+    ranking: 1
+  - player_id: P-14758
+    appearances: 7
+    ranking: 1
+  - player_id: P-19776
+    appearances: 7
+    ranking: 1
+  - player_id: P-23330
+    appearances: 7
+    ranking: 1
+  - player_id: P-29491
+    appearances: 7
+    ranking: 1
+  - player_id: P-37314
+    appearances: 7
+    ranking: 1
+  - player_id: P-40619
+    appearances: 7
+    ranking: 1
+  - player_id: P-42517
+    appearances: 7
+    ranking: 1
+  - player_id: P-45288
+    appearances: 7
+    ranking: 1
+  - player_id: P-49114
+    appearances: 7
+    ranking: 1
+  - player_id: P-54517
+    appearances: 7
+    ranking: 1
+  - player_id: P-58420
+    appearances: 7
+    ranking: 1
+  - player_id: P-59033
+    appearances: 7
+    ranking: 1
+  - player_id: P-64077
+    appearances: 7
+    ranking: 1
+  - player_id: P-64353
+    appearances: 7
+    ranking: 1
+  - player_id: P-65182
+    appearances: 7
+    ranking: 1
+  - player_id: P-70715
+    appearances: 7
+    ranking: 1
+  - player_id: P-71023
+    appearances: 7
+    ranking: 1
+  - player_id: P-79650
+    appearances: 7
+    ranking: 1
+  - player_id: P-84430
+    appearances: 7
+    ranking: 1
+  - player_id: P-89948
+    appearances: 7
+    ranking: 1
+  - player_id: P-90908
+    appearances: 7
+    ranking: 1
+  - player_id: P-93884
+    appearances: 7
+    ranking: 1
+  - player_id: P-97778
+    appearances: 7
+    ranking: 1
+  - player_id: P-99988
+    appearances: 7
+    ranking: 1
+- id: R-14
+  rows:
+  - tournament_id: WC-2010
+    yellow_cards: 254
+    matches: 64
+    cards_per_match: 3.969
+  - tournament_id: WC-2014
+    yellow_cards: 184
+    matches: 64
+    cards_per_match: 2.875
+  - tournament_id: WC-2018
+    yellow_cards: 221
+    matches: 64
+    cards_per_match: 3.453
+  - tournament_id: WC-2022
+    yellow_cards: 224
+    matches: 64
+    cards_per_match: 3.5
+- id: A-01
+  rows:
+  - match_date: '2022-11-22'
+    match_id: M-2022-05
+    stage_name: group stage
+    opponent_id: T-63
+    opponent_name: Saudi Arabia
+    goals_for: 1
+    goals_against: 2
+    penalties_for: 0
+    penalties_against: 0
+    win: 0
+    lose: 1
+    draw: 0
+  - match_date: '2022-11-26'
+    match_id: M-2022-24
+    stage_name: group stage
+    opponent_id: T-46
+    opponent_name: Mexico
+    goals_for: 2
+    goals_against: 0
+    penalties_for: 0
+    penalties_against: 0
+    win: 1
+    lose: 0
+    draw: 0
+  - match_date: '2022-11-30'
+    match_id: M-2022-39
+    stage_name: group stage
+    opponent_id: T-57
+    opponent_name: Poland
+    goals_for: 2
+    goals_against: 0
+    penalties_for: 0
+    penalties_against: 0
+    win: 1
+    lose: 0
+    draw: 0
+  - match_date: '2022-12-03'
+    match_id: M-2022-50
+    stage_name: round of 16
+    opponent_id: T-04
+    opponent_name: Australia
+    goals_for: 2
+    goals_against: 1
+    penalties_for: 0
+    penalties_against: 0
+    win: 1
+    lose: 0
+    draw: 0
+  - match_date: '2022-12-09'
+    match_id: M-2022-58
+    stage_name: quarter-finals
+    opponent_id: T-48
+    opponent_name: Netherlands
+    goals_for: 2
+    goals_against: 2
+    penalties_for: 4
+    penalties_against: 3
+    win: 1
+    lose: 0
+    draw: 0
+  - match_date: '2022-12-13'
+    match_id: M-2022-61
+    stage_name: semi-finals
+    opponent_id: T-18
+    opponent_name: Croatia
+    goals_for: 3
+    goals_against: 0
+    penalties_for: 0
+    penalties_against: 0
+    win: 1
+    lose: 0
+    draw: 0
+  - match_date: '2022-12-18'
+    match_id: M-2022-64
+    stage_name: final
+    opponent_id: T-30
+    opponent_name: France
+    goals_for: 3
+    goals_against: 3
+    penalties_for: 4
+    penalties_against: 2
+    win: 1
+    lose: 0
+    draw: 0
+- id: A-02
+  rows:
+  - match_id: M-2022-08
+    stage_name: group stage
+    opponent_name: Australia
+    stadium_name: Al Janoub Stadium
+    goals_for: 4
+    goals_against: 1
+    penalty_shootout: 0
+  - match_id: M-2022-23
+    stage_name: group stage
+    opponent_name: Denmark
+    stadium_name: Stadium 974
+    goals_for: 2
+    goals_against: 1
+    penalty_shootout: 0
+  - match_id: M-2022-38
+    stage_name: group stage
+    opponent_name: Tunisia
+    stadium_name: Education City Stadium
+    goals_for: 0
+    goals_against: 1
+    penalty_shootout: 0
+  - match_id: M-2022-51
+    stage_name: round of 16
+    opponent_name: Poland
+    stadium_name: Al Thumama Stadium
+    goals_for: 3
+    goals_against: 1
+    penalty_shootout: 0
+  - match_id: M-2022-60
+    stage_name: quarter-finals
+    opponent_name: England
+    stadium_name: Al Bayt Stadium
+    goals_for: 2
+    goals_against: 1
+    penalty_shootout: 0
+  - match_id: M-2022-62
+    stage_name: semi-finals
+    opponent_name: Morocco
+    stadium_name: Al Bayt Stadium
+    goals_for: 2
+    goals_against: 0
+    penalty_shootout: 0
+  - match_id: M-2022-64
+    stage_name: final
+    opponent_name: Argentina
+    stadium_name: Lusail Stadium
+    goals_for: 3
+    goals_against: 3
+    penalty_shootout: 1
+- id: A-03
+  rows:
+  - player_id: P-14758
+    personal_goals: 7
+    match_penalties: 4
+    team_goal_denominator: 15
+  - player_id: P-19776
+    personal_goals: 4
+    match_penalties: 0
+    team_goal_denominator: 15
+  - player_id: P-10739
+    personal_goals: 1
+    match_penalties: 0
+    team_goal_denominator: 15
+  - player_id: P-42113
+    personal_goals: 1
+    match_penalties: 0
+    team_goal_denominator: 15
+  - player_id: P-71343
+    personal_goals: 1
+    match_penalties: 0
+    team_goal_denominator: 15
+  - player_id: P-84430
+    personal_goals: 1
+    match_penalties: 0
+    team_goal_denominator: 15
+- id: A-04
+  rows:
+  - goal_id: G-3632
+    minute_label: 23'
+    match_period: first half
+    player_id: P-14758
+    player_name: Lionel Messi
+    team_id: T-03
+    team_name: Argentina
+    player_team_id: T-03
+    player_team_name: Argentina
+    own_goal: 0
+    penalty: 1
+  - goal_id: G-3633
+    minute_label: 36'
+    match_period: first half
+    player_id: P-42113
+    player_name: Ángel Di María
+    team_id: T-03
+    team_name: Argentina
+    player_team_id: T-03
+    player_team_name: Argentina
+    own_goal: 0
+    penalty: 0
+  - goal_id: G-3634
+    minute_label: 80'
+    match_period: second half
+    player_id: P-64077
+    player_name: Kylian Mbappé
+    team_id: T-30
+    team_name: France
+    player_team_id: T-30
+    player_team_name: France
+    own_goal: 0
+    penalty: 1
+  - goal_id: G-3635
+    minute_label: 81'
+    match_period: second half
+    player_id: P-64077
+    player_name: Kylian Mbappé
+    team_id: T-30
+    team_name: France
+    player_team_id: T-30
+    player_team_name: France
+    own_goal: 0
+    penalty: 0
+  - goal_id: G-3636
+    minute_label: 108'
+    match_period: extra time, second half
+    player_id: P-14758
+    player_name: Lionel Messi
+    team_id: T-03
+    team_name: Argentina
+    player_team_id: T-03
+    player_team_name: Argentina
+    own_goal: 0
+    penalty: 0
+  - goal_id: G-3637
+    minute_label: 118'
+    match_period: extra time, second half
+    player_id: P-64077
+    player_name: Kylian Mbappé
+    team_id: T-30
+    team_name: France
+    player_team_id: T-30
+    player_team_name: France
+    own_goal: 0
+    penalty: 1
+- id: A-05
+  rows:
+  - player_id: P-00652
+    appearances: 1
+    goals: 0
+  - player_id: P-03265
+    appearances: 1
+    goals: 0
+  - player_id: P-10231
+    appearances: 2
+    goals: 0
+  - player_id: P-10739
+    appearances: 7
+    goals: 1
+  - player_id: P-13162
+    appearances: 7
+    goals: 0
+  - player_id: P-14758
+    appearances: 7
+    goals: 7
+  - player_id: P-19776
+    appearances: 7
+    goals: 4
+  - player_id: P-23070
+    appearances: 5
+    goals: 0
+  - player_id: P-27582
+    appearances: 5
+    goals: 0
+  - player_id: P-28151
+    appearances: 2
+    goals: 0
+  - player_id: P-29298
+    appearances: 3
+    goals: 0
+  - player_id: P-35173
+    appearances: 6
+    goals: 0
+  - player_id: P-36188
+    appearances: 0
+    goals: 0
+  - player_id: P-37314
+    appearances: 7
+    goals: 0
+  - player_id: P-39788
+    appearances: 0
+    goals: 0
+  - player_id: P-40147
+    appearances: 3
+    goals: 0
+  - player_id: P-42113
+    appearances: 5
+    goals: 1
+  - player_id: P-49114
+    appearances: 7
+    goals: 0
+  - player_id: P-56659
+    appearances: 1
+    goals: 0
+  - player_id: P-71343
+    appearances: 6
+    goals: 1
+  - player_id: P-73712
+    appearances: 6
+    goals: 0
+  - player_id: P-79650
+    appearances: 7
+    goals: 0
+  - player_id: P-81505
+    appearances: 6
+    goals: 0
+  - player_id: P-84430
+    appearances: 7
+    goals: 1
+  - player_id: P-91431
+    appearances: 4
+    goals: 0
+  - player_id: P-92353
+    appearances: 1
+    goals: 0
+- id: A-06
+  rows:
+  - starter: 0
+    substitute: 1
+    goals: 30
+  - starter: 1
+    substitute: 0
+    goals: 140
+- id: A-07
+  rows:
+  - match_id: M-2022-58
+    match_name: Netherlands vs Argentina
+    opponent_scored: 3
+    opponent_unsuccessful: 2
+  - match_id: M-2022-64
+    match_name: Argentina vs France
+    opponent_scored: 2
+    opponent_unsuccessful: 2
+- id: A-08
+  rows:
+  - tournament_id: WC-2019
+    player_id: P-09273
+    player_name: Megan Rapinoe
+    award_name: Golden Boot
+    goals: 6
+  - tournament_id: WC-2022
+    player_id: P-64077
+    player_name: Kylian Mbappé
+    award_name: Golden Boot
+    goals: 8
+- id: A-09
+  rows:
+  - tournament_id: WC-1950
+    final_round: 1
+    final: 0
+    final_round_matches: 6
+    final_matches: 0
+- id: A-10
+  rows:
+  - player_id: P-28154
+    player_name: Thomas Müller
+    editions: 4
+    goals: 10
+  - player_id: P-72441
+    player_name: Gerd Müller
+    editions: 2
+    goals: 14
+- id: A-11
+  rows:
+  - tournament_id: WC-2018
+    position: 1
+    matches: 7
+    wins: 6
+    losses: 0
+    draws: 1
+    goals_for: 14
+    goals_against: 6
+  - tournament_id: WC-2022
+    position: 2
+    matches: 7
+    wins: 5
+    losses: 2
+    draws: 0
+    goals_for: 16
+    goals_against: 8
+- id: A-12
+  rows:
+  - position: 1
+    team_id: T-03
+    team_name: Argentina
+    goals_for: 15
+    goals_against: 8
+    yellow_cards: 17
+    red_cards: 0
+    second_yellows: 0
+    sendings_off: 0
+  - position: 2
+    team_id: T-30
+    team_name: France
+    goals_for: 16
+    goals_against: 8
+    yellow_cards: 8
+    red_cards: 0
+    second_yellows: 0
+    sendings_off: 0
+  - position: 3
+    team_id: T-18
+    team_name: Croatia
+    goals_for: 8
+    goals_against: 7
+    yellow_cards: 8
+    red_cards: 0
+    second_yellows: 0
+    sendings_off: 0
+  - position: 4
+    team_id: T-47
+    team_name: Morocco
+    goals_for: 6
+    goals_against: 5
+    yellow_cards: 8
+    red_cards: 0
+    second_yellows: 1
+    sendings_off: 1
+- id: A-13
+  rows:
+  - table_name: goals
+    rows: 123
+  - table_name: matches
+    rows: 32
+  - table_name: player_appearances
+    rows: 0
+  - table_name: squads
+    rows: 320
+- id: A-14
+  rows:
+  - tournament_id: WC-2014
+    match_goals: 171
+    goal_events: 171
+    own_goals: 5
+    shootout_kicks: 36
+  - tournament_id: WC-2018
+    match_goals: 169
+    goal_events: 169
+    own_goals: 12
+    shootout_kicks: 39
+  - tournament_id: WC-2022
+    match_goals: 172
+    goal_events: 172
+    own_goals: 2
+    shootout_kicks: 41
