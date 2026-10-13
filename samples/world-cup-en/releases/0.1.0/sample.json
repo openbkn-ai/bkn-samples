@@ -1,0 +1,97 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "world-cup-en",
+    "version": "0.1.0",
+    "displayName": "World Cup (EN)",
+    "summary": "Explore World Cup tournaments, teams, players and match events.",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "CC-BY-SA 4.0 · Joshua C. Fjelstul"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-13T15:45:03Z",
+      "defaultLocale": "en-US",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:48892bb3764926bcd240ab716b4e03c02b8f58ae4c0b55a6dab4fe2d243b557c"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "arm64",
+        "amd64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.0 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:d6c7fabfe2f477e40f6d25a645f6f0bc4524a23110fed204a59341e74e627d17",
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-en-v0.1.0/package.tar.gz"
+        ]
+      },
+      {
+        "id": "database-image",
+        "type": "oci-image",
+        "digest": "sha256:c995a52ad1f97b696f099cdb0df84fd06462751d533517a4d58a6d2c82bc5428",
+        "locations": [
+          "oci://ghcr.io/openbkn-ai/bkn-samples"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "questions": [
+          "Which awards did Lionel Messi receive in the 2014 and 2022 tournaments?",
+          "Who won the 2014, 2018 and 2022 men’s tournaments?"
+        ],
+        "contentId": "worldcup-en-network"
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "worldcup-en-network"
+        }
+      ],
+      "functionPackages": [],
+      "skillPackages": []
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "worldcup-en-data",
+          "artifactId": "database-image",
+          "engine": "mariadb",
+          "databaseName": "worldcup_en",
+          "expectedTables": 27
+        }
+      ],
+      "bindings": []
+    }
+  }
+}

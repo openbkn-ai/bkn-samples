@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000011",
-    "sequence": 11,
+    "revision": "catalog-000012",
+    "sequence": 12,
     "channel": "stable",
-    "publishedAt": "2026-10-13T08:20:11Z"
+    "publishedAt": "2026-10-13T15:45:03Z"
   },
   "spec": {
     "entries": [
@@ -534,6 +534,48 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/43ee50f772a76de3c68d4de4ec1ced1c9e897095/samples/supply_ontology_en/releases/0.1.1/verification.json",
           "digest": "sha256:11ba5d27e8f1739e75ab7819e389286cd42e48a54d41bfad8d3b13ca30d57b2c"
+        }
+      },
+      {
+        "sampleId": "world-cup-en",
+        "version": "0.1.0",
+        "displayName": "World Cup (EN)",
+        "summary": "Explore World Cup tournaments, teams, players and match events.",
+        "publishedAt": "2026-10-13T15:45:03Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3cfc309bee08a76960b72c9d946142f920944a7d/samples/world-cup-en/releases/0.1.0/release-notes.en-US.md",
+              "digest": "sha256:48892bb3764926bcd240ab716b4e03c02b8f58ae4c0b55a6dab4fe2d243b557c"
+            }
+          ],
+          "summary": "Initial English World Cup sample with 27 tables, complete model fields and 50 independently verified MCP scenarios."
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3cfc309bee08a76960b72c9d946142f920944a7d/samples/world-cup-en/releases/0.1.0/sample.json",
+          "digest": "sha256:c94e46d4e1e9a145bea620269073d0deec5459f0668721e3970371daae7325e2"
+        },
+        "requires": {
+          "architectures": [
+            "arm64",
+            "amd64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3cfc309bee08a76960b72c9d946142f920944a7d/samples/world-cup-en/releases/0.1.0/verification.json",
+          "digest": "sha256:1b61b7f4057082aa90a8039cdd170925ef393d734543a4c1d22a398ba34117c6"
         }
       }
     ]
