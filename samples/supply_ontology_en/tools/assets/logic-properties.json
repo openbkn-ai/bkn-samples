@@ -7,9 +7,9 @@
       "logic_properties": [
         {
           "name": "product_total_count",
-          "display_name": "Supply EN: Product Count",
+          "display_name": "Product Count",
           "type": "metric",
-          "metric_name": "Supply EN: Product Count",
+          "metric_name": "Product Count",
           "comment": "Class-level finished product count. Use metric query for values; discover the metric through product logic properties.",
           "parameters": []
         }
@@ -20,9 +20,9 @@
       "logic_properties": [
         {
           "name": "material_total_count",
-          "display_name": "Supply EN: Material Count",
+          "display_name": "Material Count",
           "type": "metric",
-          "metric_name": "Supply EN: Material Count",
+          "metric_name": "Material Count",
           "comment": "Class-level material count; filter by material type or stock category.",
           "parameters": [
             {
@@ -48,9 +48,9 @@
       "logic_properties": [
         {
           "name": "supplier_total_count",
-          "display_name": "Supply EN: Supplier Count",
+          "display_name": "Supplier Count",
           "type": "metric",
-          "metric_name": "Supply EN: Supplier Count",
+          "metric_name": "Supplier Count",
           "comment": "Class-level supplier count; supports buyer filters.",
           "parameters": [
             {
@@ -69,9 +69,9 @@
       "logic_properties": [
         {
           "name": "sales_order_count",
-          "display_name": "Supply EN: Sales Order Count",
+          "display_name": "Sales Order Count",
           "type": "metric",
-          "metric_name": "Supply EN: Sales Order Count",
+          "metric_name": "Sales Order Count",
           "comment": "Order count; use product_code for an instance and optionally filter order_status.",
           "parameters": [
             {
@@ -92,9 +92,9 @@
         },
         {
           "name": "signed_quantity_sum",
-          "display_name": "Supply EN: Total Signed Quantity",
+          "display_name": "Total Signed Quantity",
           "type": "metric",
-          "metric_name": "Supply EN: Total Signed Quantity",
+          "metric_name": "Total Signed Quantity",
           "comment": "Aggregate sales quantity; filter by product code.",
           "parameters": [
             {
@@ -108,9 +108,9 @@
         },
         {
           "name": "shipped_quantity_sum",
-          "display_name": "Supply EN: Total Shipped Quantity",
+          "display_name": "Total Shipped Quantity",
           "type": "metric",
-          "metric_name": "Supply EN: Total Shipped Quantity",
+          "metric_name": "Total Shipped Quantity",
           "comment": "Aggregate sales quantity; filter by product code.",
           "parameters": [
             {
@@ -124,9 +124,9 @@
         },
         {
           "name": "signed_quantity_by_date",
-          "display_name": "Supply EN: Signing Events",
+          "display_name": "Signing Events",
           "type": "metric",
-          "metric_name": "Supply EN: Signing Events",
+          "metric_name": "Signing Events",
           "comment": "Signing event quantity. Objects default to the product all-time total; use the fixed historical examples for time analysis.",
           "parameters": [
             {
@@ -145,9 +145,9 @@
       "logic_properties": [
         {
           "name": "warehouse_count",
-          "display_name": "Supply EN: Warehouse Count",
+          "display_name": "Warehouse Count",
           "type": "metric",
-          "metric_name": "Supply EN: Warehouse Count",
+          "metric_name": "Warehouse Count",
           "comment": "Distinct warehouses in stock records, regardless of the production_available preset.",
           "parameters": [
             {
@@ -161,9 +161,9 @@
         },
         {
           "name": "available_qty_sum",
-          "display_name": "Supply EN: Available Stock",
+          "display_name": "Available Stock",
           "type": "metric",
-          "metric_name": "Supply EN: Available Stock",
+          "metric_name": "Available Stock",
           "comment": "sum(available_inventory_qty). Expand warehouse presets with warehouse in at query time; keep them out of the metric definition.",
           "parameters": [
             {
@@ -196,9 +196,9 @@
       "logic_properties": [
         {
           "name": "forecast_qty_sum",
-          "display_name": "Supply EN: Total Forecast Demand",
+          "display_name": "Total Forecast Demand",
           "type": "metric",
-          "metric_name": "Supply EN: Total Forecast Demand",
+          "metric_name": "Total Forecast Demand",
           "comment": "sum(qty). Add a closestatus_title filter for open forecasts.",
           "parameters": [
             {
@@ -219,9 +219,9 @@
         },
         {
           "name": "open_forecast_count",
-          "display_name": "Supply EN: Open_Forecast_Count",
+          "display_name": "Open_Forecast_Count",
           "type": "metric",
-          "metric_name": "Supply EN: Open_Forecast_Count",
+          "metric_name": "Open_Forecast_Count",
           "comment": "Definition-level condition is discarded by the deployed API. Queries must include closestatus_title != Closed or == Open.",
           "parameters": [
             {

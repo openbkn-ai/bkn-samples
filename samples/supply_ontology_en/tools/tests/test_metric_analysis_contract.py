@@ -43,7 +43,7 @@ def test_query_windows_preserve_complete_business_months():
 
 def test_temporal_definition_and_periods_match_existing_csv():
     definitions = json.loads((ASSETS / "metrics-create.json").read_text())["entries"]
-    metric = next(m for m in definitions if m["name"] == 'Supply EN: Signing Events')
+    metric = next(m for m in definitions if m["name"] == 'Signing Events')
     assert metric["time_dimension"] == {"property": "signing_date", "default_range_policy": "none"}
     network = json.loads((PACK / "kn" / "supply_ontology_en.json").read_text())
     # Check the actual mapped object property rather than assuming a date-like name.

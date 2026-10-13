@@ -3,7 +3,7 @@
 1. Prepare OpenBKN authentication and confirm the target environment. Use the standard sample offline package for one-click onboarding.
 2. Install `supply-chain-en` with database `supply_demo_en` and knowledge network `supply_ontology_en`. Its standard hooks initialize and verify 12 tables, then import and bind the sample resources.
 3. Confirm dataset hashes against `dataset.lock`, preserving leading-zero forecast IDs and all three future forecasts. Configure the independent catalog if importing manually.
-4. Verify object types, relations, metrics and object logic-property bindings. English metrics have the `Supply EN:` prefix. Discover actual platform IDs at runtime.
+4. Verify object types, relations, metrics and object logic-property bindings. Discover actual platform IDs at runtime.
 5. Register the **Native Function Toolbox** `Supply_EN_Functions` and the five `supply-en-` Skills. `tools/fn/` holds sample calculations; callers do not build or pass `resolved_context`. Runtime functions read their bound BKN objects.
 
 ## Step 6: Capabilities and MCP Acceptance
