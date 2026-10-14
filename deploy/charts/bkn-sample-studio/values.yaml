@@ -27,7 +27,7 @@ ingress:
   path: /api/studio
 
 safeURL: http://bkn-safe:3000
-baseURL: ""
+baseURL: "http://bkn-backend-svc.openbkn.svc.cluster.local:13014"
 # Optional acceptance-only pin to an official raw catalog at a full commit SHA.
 # Empty uses the official main branch pointer.
 catalogURL: ""
