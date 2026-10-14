@@ -150,6 +150,11 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                 continue
             value = _single(api("GET", path))
             if value is not None and not required.issubset(set(value.get("tags") or [])):
+                if path == network_path and resources.get("knowledgeNetworkPlanned") is True:
+                    # A failed hook's intended target is not a receipt of ownership.
+                    # Leave an unrelated existing network untouched and clean only owned resources.
+                    network_path = None
+                    continue
                 raise ApiError(409, "ownership_conflict", "A resource no longer belongs to this sample; nothing will be deleted.")
         execution_paths = [_path("/api/agent-operator-integration/v1/skills/", id_)
                            for id_ in resources["ownedExecution"]["skills"]]

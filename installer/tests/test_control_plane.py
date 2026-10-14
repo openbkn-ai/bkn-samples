@@ -163,6 +163,23 @@ class ControlPlaneTest(unittest.TestCase):
             self.assertEqual(len(history), 1)
             self.assertEqual(json.loads(history[0].read_text(encoding="utf-8")), saved)
 
+    def test_missing_execution_receipt_is_not_assumed_empty_without_explicit_declarations(self):
+        from installer.studio_api import ApiError
+        from installer.uninstall import prepare_uninstall
+        for components in (None, {}, {"functions": False}, {"functions": True, "skills": False},
+                           {"functions": False, "skills": True}):
+            with self.subTest(components=components), tempfile.TemporaryDirectory() as directory:
+                state = Path(directory)
+                with self.assertRaises(ControlError):
+                    create_installation(sample="supply-chain", version=VERSION, actor_role="admin", database=DATABASE,
+                        state_dir=state, openbkn=OpenBKN(), hook_runner=lambda *_: {"ok": False, "message": "hook failed"},
+                        expected_tables=12, knowledge_network=NETWORK, components=components)
+                saved = json.loads((state / "supply-chain.json").read_text())
+                self.assertNotIn("ownedExecution", saved["resources"])
+                with self.assertRaises(ApiError) as caught:
+                    prepare_uninstall(state, "supply-chain", saved["id"], "admin")
+                self.assertEqual(caught.exception.code, "ownership_receipt_missing")
+
     def test_each_finished_step_is_saved_before_the_next_one(self):
         state = Path(tempfile.mkdtemp())
         seen: dict = {}
