@@ -4,7 +4,7 @@ A minimal independent sample using the existing `openbkn.ai/sample-install.v1` p
 
 The package creates two data-backed object types and one order-to-product relation. It intentionally declares no functions, metrics or Skills. The supply-chain sample provides those components.
 
-Install through **One-click onboarding** on the OpenBKN homepage: refresh the official catalog, select **Order Basics** and click **Install**. After verification completes, open the knowledge network and inspect the four orders and their products.
+Install through **One-click onboarding** on the OpenBKN homepage: refresh the official catalog, select **订单入门** (Order Basics) and click **Install**. After verification completes, open the knowledge network and inspect the four orders and their products.
 
 If the catalog is unreachable, download this sample's `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases), then choose **Import offline package** and install it. The referenced data image must be available to the target cluster; ask the administrator to prepare it for restricted networks. Users do not need to run build commands.
 
