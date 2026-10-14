@@ -6,7 +6,6 @@ from pathlib import Path
 from unittest.mock import patch
 import yaml
 
-from installer.contract import read_version
 from installer.deploy_database import (
     GHCR_IMAGE,
     SWR_IMAGE,
@@ -231,7 +230,7 @@ class DeployDatabaseTest(unittest.TestCase):
             if document["kind"] != "Namespace":
                 self.assertEqual(document["metadata"]["annotations"]["openbkn.ai/sample-data-image"], image)
         sts = next(d for d in documents if d["kind"] == "StatefulSet")
-        self.assertEqual(sts["spec"]["volumeClaimTemplates"][0]["metadata"]["annotations"]["openbkn.ai/sample-version"], read_version(ROOT))
+        self.assertEqual(sts["spec"]["volumeClaimTemplates"][0]["metadata"]["annotations"]["openbkn.ai/sample-version"], "0.1.0")
 
     def test_remote_deploy_rejects_any_unowned_database_resource_before_apply(self):
         for kind in ("statefulset", "service", "secret", "pvc"):

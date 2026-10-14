@@ -67,6 +67,8 @@ python3 tools/publication/validate.py . --official \
 
 Record fresh installation and actual database, knowledge, capability and scenario checks for the exact package and image in `verification.json`. A passing schema check or AI approval is not an installation result. Publish catalog references only after those fixed artifacts pass acceptance. See [candidate publication](candidate-publication.md) for the build boundary and [service deployment](sample-service-deployment.md) for deployment and recovery.
 
+For bundled `v1alpha1` samples, declare the independent sample version in `sample.yaml` as `metadata.version`. Legacy manifests without it retain their original `0.1.0` identity, never the service `VERSION`. Online and offline packages use their fixed release version. The index top-level version and shared data-image tag remain service artifact versions.
+
 ## Updating a sample
 
 Create a new semantic version for data, BKN structure, functions, metrics, or skills. Do not overwrite an existing release. Update release notes, rebuild the package, run installation and smoke verification, and record the new installed version. Studio treats the catalog as the source for online updates and accepts the package directly for offline import.

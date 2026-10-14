@@ -292,7 +292,8 @@ def main() -> None:
     state_dir = Path(os.environ.get("BKN_SAMPLE_STATE_DIR", "/var/lib/bkn-samples/state"))
     image_index = Path(os.environ.get("BKN_SAMPLE_IMAGE_INDEX", str(root / "manifest-index.json")))
     safe_url = os.environ.get("BKN_SAFE_URL", "http://bkn-safe:3000").rstrip("/")
-    version, image, repo = load_indexes(root, image_index)
+    from installer.contract import sample_version
+    service_version, image, repo = load_indexes(root, image_index)
     data_image_ref = configured_image_ref()
     source = OfficialCatalog(state_dir, root / "protocol/draft/schemas/catalog.schema.json",
                              os.environ.get("BKN_SAMPLE_CATALOG_URL", "").strip() or None,
@@ -320,7 +321,7 @@ def main() -> None:
     def catalog(role: str) -> dict:
         update_platform_version()
         result = list_samples(
-            pinned_version=version,
+            pinned_version=service_version,
             image_index=image,
             repo_index=repo,
             state_dir=state_dir,
@@ -342,17 +343,24 @@ def main() -> None:
     def release_notes(sample, requested_version, role, locale):
         try:
             return get_sample_release_notes(sample=sample, version=requested_version, actor_role=role,
-                locale=locale, pinned_version=version, image_index=image, repo_index=repo, state_dir=state_dir,
+                locale=locale, pinned_version=service_version, image_index=image, repo_index=repo, state_dir=state_dir,
                 imported_release_notes=(offline.find(sample) or {}).get("releaseNotes"))
         except ApiError as error:
             if error.status != 404:
                 raise
             return source.notes(sample, requested_version, locale)
 
+    def bundled_version(sample):
+        item = next((item for item in merge_catalog(service_version, image, repo)["samples"]
+                     if item.get("name") == sample), None)
+        if item is None:
+            raise ApiError(409, "source_rejected", "sample is not currently installable")
+        return sample_version(item)
+
     def prepare_create(sample: str, role: str, authorization: str | None = None) -> None:
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
-        merged = merge_catalog(version, image, repo)
+        merged = merge_catalog(service_version, image, repo)
         item = next((item for item in merged["samples"] if item.get("name") == sample), None)
         if merged["sourceRejected"] or not item or item.get("status") == "unavailable":
             raise ApiError(409, "source_rejected", "sample is not currently installable")
@@ -361,7 +369,7 @@ def main() -> None:
             code = ("already_installed" if current["status"] == "installed" else
                     "already_installing" if current["status"] in {"installing", "uninstalling"} else "use_retry")
             raise ApiError(409, code, "an installation already exists")
-        _write_installing(state_dir, sample, version, item.get("releaseNotes"), item.get("manifestSha256"),
+        _write_installing(state_dir, sample, sample_version(item), item.get("releaseNotes"), item.get("manifestSha256"),
                           data_image_ref)
 
     def perform_create(sample, role, authorization):
@@ -370,7 +378,7 @@ def main() -> None:
             actor_role=role,
             state_dir=state_dir,
             root=root,
-            version=version,
+            version=bundled_version(sample),
             deploy=lambda name: deploy_database_sample(root, name, data_image_ref=(_read_state(state_dir, name) or {}).get("dataImageRef")),
             kubectl=kubectl_run,
             run=process_run,
@@ -379,7 +387,7 @@ def main() -> None:
 
     def prepare_retry(sample: str, installation: str, role: str, authorization: str | None = None) -> None:
         current = _read_state(state_dir, sample) or {}
-        merged = merge_catalog(version, image, repo)
+        merged = merge_catalog(service_version, image, repo)
         item = next((item for item in merged["samples"] if item.get("name") == sample), None)
         if merged["sourceRejected"] or not item or item.get("status") == "unavailable":
             raise ApiError(409, "source_rejected", "sample is not currently installable")
@@ -390,7 +398,7 @@ def main() -> None:
         if current.get("status") != "failed":
             raise ApiError(409, "already_installed" if current.get("status") == "installed" else "already_installing",
                            "only a failed installation can be retried")
-        if current.get("version") != version or (data_image_ref is not None and current.get("dataImageRef") and current["dataImageRef"] != data_image_ref):
+        if current.get("version") != sample_version(item) or (data_image_ref is not None and current.get("dataImageRef") and current["dataImageRef"] != data_image_ref):
             raise ApiError(409, "version_changed", "retry requires the original installed artifacts and data image")
         current["status"] = "installing"
         current.pop("error", None)
@@ -407,7 +415,7 @@ def main() -> None:
             actor_role=role,
             state_dir=state_dir,
             root=root,
-            version=version,
+            version=bundled_version(sample),
             deploy=lambda name: deploy_database_sample(root, name, data_image_ref=(_read_state(state_dir, name) or {}).get("dataImageRef")),
             kubectl=kubectl_run,
             run=process_run,
@@ -425,7 +433,7 @@ def main() -> None:
         def install_fixed(bundle_root, fixed_version, fixed_image, is_retry):
             arguments = dict(sample=sample, actor_role=role, state_dir=state_dir, root=bundle_root,
                 version=fixed_version, deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                    data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
+                    data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version), kubectl=kubectl_run,
                 run=process_run, authorization=authorization)
             if is_retry:
                 return retry_sample(**arguments, installation_id=_installation_id(_read_state(state_dir, sample)),
@@ -437,8 +445,8 @@ def main() -> None:
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
         update_platform_version()
-        bundled = next((i for i in merge_catalog(version, image, repo)["samples"] if i["name"] == sample), None)
-        if bundled and requested_version == version and requested_digest == bundled.get("manifestSha256"):
+        bundled = next((i for i in merge_catalog(service_version, image, repo)["samples"] if i["name"] == sample), None)
+        if bundled and requested_version == sample_version(bundled) and requested_digest == bundled.get("manifestSha256"):
             return create(sample, role, authorization)
         offline_release = offline.find(sample)
         if offline_release and offline_release["version"] == requested_version:
@@ -452,12 +460,12 @@ def main() -> None:
                                      retry_sample(sample=sample, installation_id=_installation_id(_read_state(state_dir, sample)),
                                                   actor_role=role, state_dir=state_dir, root=bundle_root, version=fixed_version,
                                                   deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                                                      data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
+                                                      data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version), kubectl=kubectl_run,
                                                   run=process_run, authorization=authorization, accepted=True,
                                                   data_image_ref=fixed_image) if retry else install_sample(
                                      sample=sample, actor_role=role, state_dir=state_dir, root=bundle_root,
                                      version=fixed_version, deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                                         data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
+                                         data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version), kubectl=kubectl_run,
                                      run=process_run, authorization=authorization)))
         entry = next((e for e in source.entries() if e["sampleId"] == sample and e["version"] == requested_version), None)
         if not entry or requested_digest != entry["manifest"]["digest"].removeprefix("sha256:"):
@@ -482,7 +490,7 @@ def main() -> None:
                                      retry_sample(sample=sample, installation_id=_installation_id(_read_state(state_dir, sample)),
                                                   actor_role=role, state_dir=state_dir, root=bundle_root, version=fixed_version,
                                                   deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                                                      data_image_ref=fixed_image, require_ownership=True), kubectl=kubectl_run,
+                                                      data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version), kubectl=kubectl_run,
                                                   run=process_run, authorization=authorization, accepted=True,
                                                   data_image_ref=fixed_image), retry=True))
         if current.get("remoteRelease"):

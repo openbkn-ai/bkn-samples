@@ -17,6 +17,8 @@ REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
 REQUIRED_HOOKS = ("dbInit", "dbVerify", "platformInstall", "platformVerify")
 COMPONENT_KEYS = ("objects", "relations", "metrics", "functions", "skills")
 DB_HOOKS = ("dbInit", "dbVerify", "dbUpgrade")
+# v1alpha1 bundles shipped as 0.1.0 before service VERSION became independent.
+LEGACY_SAMPLE_VERSION = "0.1.0"
 
 
 class ContractError(Exception):
@@ -30,6 +32,15 @@ def read_version(root: Path) -> str:
     if not re.fullmatch(r"\d+\.\d+\.\d+", text):
         raise ContractError([f"VERSION must be MAJOR.MINOR.PATCH, got {text!r}"])
     return text
+
+
+def sample_version(metadata: dict) -> str:
+    """Read a sample identity; never fall back to the service VERSION."""
+    version = metadata.get("version", LEGACY_SAMPLE_VERSION)
+    if not isinstance(version, str) or not re.fullmatch(
+            r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)", version):
+        raise ContractError(["sample version must be MAJOR.MINOR.PATCH"])
+    return version
 
 
 def discover_sample_dirs(root: Path) -> list[Path]:
@@ -78,6 +89,10 @@ def validate_document(sample_dir: Path, document: dict) -> list[str]:
     if document.get("kind") != "Sample":
         errors.append("kind must be Sample")
     metadata = _require_mapping(document.get("metadata"), "metadata", errors)
+    try:
+        sample_version(metadata)
+    except ContractError as error:
+        errors.extend(error.errors)
     name = metadata.get("name")
     if not isinstance(name, str) or not NAME_RE.fullmatch(name):
         errors.append("metadata.name must match [a-z0-9-]{1,32}")
@@ -220,10 +235,11 @@ def build_manifest_index(root: Path, revision: str, source_repo: str = OFFICIAL_
         database = document["spec"]["database"]
         network = document["spec"]["knowledgeNetwork"]
         from installer.release_notes import bundled_notes
-        notes = bundled_notes(sample_dir, version)
+        notes = bundled_notes(sample_dir, sample_version(document["metadata"]))
         samples.append(
             {
                 "name": document["metadata"]["name"],
+                "version": sample_version(document["metadata"]),
                 "displayName": document["metadata"]["displayName"],
                 "summary": document["metadata"]["summary"],
                 "licenseNote": studio["licenseNote"],
