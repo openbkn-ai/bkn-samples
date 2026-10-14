@@ -12,6 +12,8 @@ Explicit `platform.version` and nonempty `platform.capabilities` values remain s
 
 The repository `VERSION` is the product service and image base version, aligned with OpenBKN 0.2.0. Both `bkn-sample-studio` and `bkn-samples` images, and the service Chart, use this base version; main builds append `-main.<UTC timestamp>.sha<commit>`. Individual sample packages retain their own independently published versions and immutable artifact references.
 
+For a release candidate, open GitHub Actions → **Publish sample catalog service** → **Run workflow** on the default branch, then enter `release/X.Y.Z` in **source_branch**. The workflow checks out that branch and publishes both images and the service Chart as `X.Y.Z-release.<UTC timestamp>.sha<commit>`; the branch version must match `VERSION`. A normal `main` push still creates a main build. A final `vX.Y.Z` tag uses the separate release-tag publication path.
+
 ## Configuration and installation
 
 Create a values file using the actual platform addresses. Leave the optional platform overrides empty:
@@ -22,6 +24,8 @@ image:
   digest: sha256:<service-image-digest>
 safeURL: http://bkn-safe:3000
 baseURL: http://<existing-platform-gateway>
+# Optional: version detection only; business operations still use baseURL.
+backendURL: ""
 platform:
   version: ""
   capabilities: []
@@ -56,4 +60,8 @@ Keep the same PVC during rollback. Use `helm history bkn-sample-studio -n openbk
 
 The state PVC and `openbkn-samples` namespace are retained by the Chart's `helm.sh/resource-policy: keep` annotations. Removing the service must not remove installed databases. Charts before the namespace-retention fix lack that protection: do not uninstall those releases with sample data present. A later deliberate cleanup must separately inspect and remove sample resources and retained volumes.
 
-Product integration is maintained in `openbkn-ai/openbkn-deploy` (reviewed PR22). Acceptance used its standard deployment entry on the existing OpenBKN instance with the official Chart. It does not claim a fresh installation of the entire platform.
+Product integration is maintained in [openbkn-deploy](https://github.com/openbkn-ai/openbkn-deploy). Use its standard installation entry and the official sample service Chart. Runtime state uses a PVC and a single-replica Recreate deployment. Service restart preserves installed records and history; interrupted tasks require an explicit retry.
+
+`baseURL` must reach the unified OpenBKN gateway, including Backend, Vega and capability APIs. A Backend-only service will pass version detection but fail sample installation with a Vega 404. For deployments whose public gateway uses a private CA, trust that CA for business API calls; optionally set `backendURL` to the in-cluster Backend service for unauthenticated version detection. Do not disable TLS verification or replace `baseURL` with that service. An empty `backendURL` preserves gateway-based version detection.
+
+When upgrading a deployment affected by the Backend-only default, explicitly set `baseURL` to its existing unified gateway. Helm upgrades that reuse prior values can preserve the incorrect address; updating the image alone does not correct it.
