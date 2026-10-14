@@ -5,6 +5,12 @@ on:
     branches: [main]
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: Release branch to build and publish (release/X.Y.Z)
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -18,15 +24,32 @@ jobs:
       SWR_PASSWORD: ${{ secrets.SWR_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/heads/{0}', inputs.source_branch) || github.ref }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - uses: azure/setup-helm@v4
       - name: Resolve the image and chart version
         id: version
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
         run: |
           python -m pip install "PyYAML>=6"
-          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            if [[ ! "${SOURCE_BRANCH}" =~ ^release/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+              echo "source_branch must be release/X.Y.Z" >&2
+              exit 1
+            fi
+            base_version="$(cat VERSION)"
+            if [[ "${BASH_REMATCH[1]}" != "${base_version}" ]]; then
+              echo "source_branch version must match VERSION ${base_version}" >&2
+              exit 1
+            fi
+            stamp="$(TZ=UTC git show -s --format=%cd --date=format-local:%Y%m%d%H%M%S HEAD)"
+            sha="$(git rev-parse --short=7 HEAD)"
+            version="${base_version}-release.${stamp}.sha${sha}"
+          elif [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             version="$(PYTHONPATH=. python installer/release.py check-tag --tag "${GITHUB_REF_NAME}")"
           else
             stamp="$(TZ=UTC git show -s --format=%cd --date=format-local:%Y%m%d%H%M%S HEAD)"
@@ -60,7 +83,7 @@ jobs:
       - name: Write the manifest index for this commit
         # Match the samples actually copied by installer/image/Dockerfile.
         # Other samples are delivered through fixed packages and the catalog.
-        run: PYTHONPATH=. python installer/build_manifest_index.py --revision "${GITHUB_SHA}" --output manifest-index.json --samples supply-chain world-cup
+        run: PYTHONPATH=. python installer/build_manifest_index.py --revision "$(git rev-parse HEAD)" --output manifest-index.json --samples supply-chain world-cup
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
