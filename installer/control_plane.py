@@ -340,6 +340,9 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
         record["status"] = "failed"
         record["finishedAt"] = timestamp()
         record["error"] = {"code": exc.code, "message": exc.message}
+        for stage, status in record["stages"].items():
+            if status == "running":
+                record["stages"][stage] = "failed"
         _write_state(state_dir, record)
         raise
     _write_state(state_dir, record)

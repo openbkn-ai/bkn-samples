@@ -143,6 +143,25 @@ class ControlPlaneTest(unittest.TestCase):
             )
         self.assertEqual(caught.exception.code, "already_installed")
 
+    def test_discovery_failure_finishes_running_stages_and_preserves_diagnostics(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            state = Path(temporary)
+            with patch("installer.control_plane.scan_catalog", side_effect=ControlError(
+                    "discover_incomplete", "discovered 2 tables, expected 12")):
+                with self.assertRaises(ControlError) as caught:
+                    create_installation(
+                        sample="supply-chain", version=VERSION, actor_role="admin", database=DATABASE,
+                        state_dir=state, openbkn=OpenBKN(), hook_runner=hooks,
+                        expected_tables=12, knowledge_network=NETWORK,
+                    )
+            saved = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
+            self.assertEqual(saved["status"], "failed")
+            self.assertEqual(saved["stages"], {"database": "succeeded", "discover": "failed"})
+            self.assertEqual(saved["error"], {"code": caught.exception.code, "message": caught.exception.message})
+            history = list((state / "history" / "supply-chain").glob("*.json"))
+            self.assertEqual(len(history), 1)
+            self.assertEqual(json.loads(history[0].read_text(encoding="utf-8")), saved)
+
     def test_each_finished_step_is_saved_before_the_next_one(self):
         state = Path(tempfile.mkdtemp())
         seen: dict = {}
@@ -194,6 +213,7 @@ class ControlPlaneTest(unittest.TestCase):
         saved = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
         self.assertEqual(saved["status"], "failed")
         self.assertEqual(saved["stages"]["discover"], "succeeded")
+        self.assertEqual(saved["stages"]["knowledge"], "failed")
         retried = retry_installation(
             sample="supply-chain",
             version=VERSION,
