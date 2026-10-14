@@ -206,5 +206,7 @@ def process_run(argv: list[str], env: dict | None) -> subprocess.CompletedProces
     return subprocess.run(argv, env=merged, text=True, capture_output=True, check=False)
 
 
-def deploy(root: Path, sample: str, data_image_ref: str | None = None) -> dict:
-    return deploy_database(root, sample, kubectl_run, data_image_ref=data_image_ref, require_ownership=True)
+def deploy(root: Path, sample: str, data_image_ref: str | None = None,
+           sample_release_version: str | None = None) -> dict:
+    return deploy_database(root, sample, kubectl_run, data_image_ref=data_image_ref,
+                           require_ownership=True, sample_release_version=sample_release_version)

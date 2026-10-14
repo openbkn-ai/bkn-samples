@@ -281,7 +281,7 @@ def main() -> None:
     from installer.state_store import write_json
     from installer.task_runner import InstallationRunner
     from installer.deploy_database import configured_image_ref
-    from installer.deploy_database import deploy_database
+    from installer.deploy_database import deploy_database, _sample
     from installer.remote_installation import RemoteInstallation
     from installer.remote_catalog import merge_remote
     from installer.offline_bundle import OfflinePackages
@@ -357,6 +357,11 @@ def main() -> None:
             raise ApiError(409, "source_rejected", "sample is not currently installable")
         return sample_version(item)
 
+    def require_published_version(sample, requested_version):
+        if any(entry["sampleId"] == sample and entry["version"] == requested_version
+               and entry["releaseStatus"] == "withdrawn" for entry in source.entries()):
+            raise ApiError(409, "release_withdrawn", "release has been withdrawn")
+
     def prepare_create(sample: str, role: str, authorization: str | None = None) -> None:
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
@@ -364,6 +369,7 @@ def main() -> None:
         item = next((item for item in merged["samples"] if item.get("name") == sample), None)
         if merged["sourceRejected"] or not item or item.get("status") == "unavailable":
             raise ApiError(409, "source_rejected", "sample is not currently installable")
+        require_published_version(sample, sample_version(item))
         current = _read_state(state_dir, sample)
         if current and current.get("status") in {"installed", "failed", "installing", "uninstalling", "uninstall_failed"}:
             code = ("already_installed" if current["status"] == "installed" else
@@ -398,8 +404,18 @@ def main() -> None:
         if current.get("status") != "failed":
             raise ApiError(409, "already_installed" if current.get("status") == "installed" else "already_installing",
                            "only a failed installation can be retried")
-        if current.get("version") != sample_version(item) or (data_image_ref is not None and current.get("dataImageRef") and current["dataImageRef"] != data_image_ref):
-            raise ApiError(409, "version_changed", "retry requires the original installed artifacts and data image")
+        if current.get("version") != sample_version(item):
+            # #135/#136 stamped the service VERSION onto unversioned bundles.
+            # Resume that original accepted identity only with the original manifest.
+            metadata = _sample(root, sample)[1]["metadata"]
+            legacy_service_identity = (current.get("version") == "0.2.0"
+                and "version" not in metadata and sample_version(item) == "0.1.0"
+                and bool(current.get("manifestSha256"))
+                and current["manifestSha256"] == item.get("manifestSha256"))
+            if not legacy_service_identity:
+                raise ApiError(409, "version_changed", "retry requires the original installed artifacts")
+        if data_image_ref is not None and current.get("dataImageRef") and current["dataImageRef"] != data_image_ref:
+            raise ApiError(409, "version_changed", "retry requires the original data image")
         current["status"] = "installing"
         current.pop("error", None)
         current.pop("finishedAt", None)
@@ -409,14 +425,16 @@ def main() -> None:
         write_json(state_dir / f"{sample}.json", current)
 
     def perform_retry(sample, installation, role, authorization):
+        original_version = _read_state(state_dir, sample)["version"]
         return retry_sample(
             sample=sample,
             installation_id=installation,
             actor_role=role,
             state_dir=state_dir,
             root=root,
-            version=bundled_version(sample),
-            deploy=lambda name: deploy_database_sample(root, name, data_image_ref=(_read_state(state_dir, name) or {}).get("dataImageRef")),
+            version=original_version,
+            deploy=lambda name: deploy_database_sample(root, name, data_image_ref=(_read_state(state_dir, name) or {}).get("dataImageRef"),
+                                                     sample_release_version=original_version),
             kubectl=kubectl_run,
             run=process_run,
             authorization=authorization,
@@ -444,6 +462,7 @@ def main() -> None:
     def create_selected(sample, role, authorization, requested_version, requested_digest):
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
+        require_published_version(sample, requested_version)
         update_platform_version()
         bundled = next((i for i in merge_catalog(service_version, image, repo)["samples"] if i["name"] == sample), None)
         if bundled and requested_version == sample_version(bundled) and requested_digest == bundled.get("manifestSha256"):

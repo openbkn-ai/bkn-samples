@@ -4,7 +4,7 @@ name: DeepSeek Code Review
 # Include data, KN JSON, BKN and SKILL.md; they are executable/sample inputs.
 on:
   pull_request_target:
-    branches: [main]
+    branches: [main, release/0.2.0]
     types: [opened, reopened, ready_for_review, synchronize]
   issue_comment:
     types: [created]

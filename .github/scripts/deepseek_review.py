@@ -14,6 +14,13 @@ TRUSTED = {"OWNER", "MEMBER", "COLLABORATOR"}
 MAX_FILES = 500
 MAX_BLOCKERS = 20
 STATUS_CONTEXT = "sample-ai-review"
+SUPPORTED_BASES = {"main", "release/0.2.0"}
+
+
+def reviewable(metadata, repo):
+    return (metadata["state"] == "open" and not metadata["draft"]
+            and metadata["base"]["ref"] in SUPPORTED_BASES
+            and (metadata["head"].get("repo") or {}).get("full_name") == repo)
 
 
 def gh(*args, payload=None):
@@ -70,7 +77,7 @@ def status():
         print("Review target changed or closed; no status posted to the new commit.")
         return 1
     decision = os.environ.get("REVIEW_DECISION", "error")
-    if current["base"]["sha"] != base or current["draft"] or current["base"]["ref"] != "main":
+    if current["base"]["sha"] != base or current["draft"] or not reviewable(current, repo):
         decision = "error"
     descriptions = {"success": "完整审核通过，没有确认阻塞",
                     "failure": "独立复核确认存在阻塞",
@@ -91,9 +98,7 @@ def plan():
                     not any(t in comment.get("body", "") for t in ("/review", "@deepseek", "@claude"))):
         return
     metadata = api(f"repos/{repo}/pulls/{pr}")
-    eligible = (metadata["state"] == "open" and not metadata["draft"]
-                and metadata["base"]["ref"] == "main"
-                and (metadata["head"].get("repo") or {}).get("full_name") == repo)
+    eligible = reviewable(metadata, repo)
     if not eligible:
         return
     head, base = metadata["head"]["sha"], metadata["base"]["sha"]
@@ -306,7 +311,7 @@ def verdict():
     if current["state"] != "open":
         print("PR closed; no review posted.")
         return 0
-    if current["draft"] or current["head"]["sha"] != snapshot["head"] or current["base"]["sha"] != snapshot["base"]:
+    if not reviewable(current, repo) or current["head"]["sha"] != snapshot["head"] or current["base"]["sha"] != snapshot["base"]:
         print("PR changed during review; discarded stale verdict.")
         return 1
     # Use the same review command as the other repositories.  The head was

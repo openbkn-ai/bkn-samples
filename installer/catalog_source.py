@@ -123,7 +123,8 @@ class OfficialCatalog:
     def refresh(self) -> dict:
         with self.refresh_lock:
             if time.monotonic() - self.last_attempt < 60:
-                return {**self.result, "throttled": True}
+                # Reuse the last real outcome; cooling down is not a new outcome.
+                return dict(self.result)
             self.last_attempt = time.monotonic()
             checked_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
             try:
