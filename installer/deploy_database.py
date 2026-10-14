@@ -15,7 +15,7 @@ import urllib.request
 from pathlib import Path
 import yaml
 
-from installer.contract import OFFICIAL_SOURCE_REPO, discover_sample_dirs, load_sample, read_version
+from installer.contract import OFFICIAL_SOURCE_REPO, discover_sample_dirs, load_sample, read_version, sample_version
 
 NAMESPACE = "openbkn-samples"
 SWR_IMAGE = "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples"
@@ -378,10 +378,12 @@ def deploy_database(
     digests=None,
     data_image_ref: str | None = None,
     require_ownership: bool = False,
+    sample_release_version: str | None = None,
 ) -> dict:
     """Apply the sample database and wait until it is ready. Never creates a Catalog."""
     _sample_dir, document = _sample(root, sample)
-    version = read_version(root)
+    version = sample_version({"version": sample_release_version}
+                             if sample_release_version is not None else document["metadata"])
     database = document["spec"]["database"]["name"]
     _default_storage_class(kubectl)
     name = _workload_name(sample)
@@ -398,7 +400,7 @@ def deploy_database(
         raise DeployError("image_unavailable", "sample data image requires a fixed registry digest")
     ghcr_digest = None
     if image is None:
-        tag = image_tag(version)
+        tag = image_tag(read_version(root))
         lookup = registry_digests if digests is None else digests
         swr_digest, ghcr_digest = lookup(tag)
         if _digests_conflict(swr_digest, ghcr_digest):

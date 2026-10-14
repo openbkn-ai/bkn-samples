@@ -23,6 +23,25 @@ class PinnedCatalogTests(unittest.TestCase):
         self.assertEqual(result["status"], "updated")
         read.assert_called_once_with(PINNED, 2 * 1024 * 1024)
 
+    def test_repeat_click_keeps_real_success_or_failure_without_another_fetch(self):
+        for expected in ('updated', 'unchanged', 'failed'):
+            with self.subTest(expected=expected), tempfile.TemporaryDirectory() as directory:
+                source = OfficialCatalog(Path(directory), SCHEMA, PINNED)
+                clock = [100, 100, 200, 200, 201] if expected == 'unchanged' else [100, 100, 101]
+                with patch('installer.catalog_source.time.monotonic', side_effect=clock), \
+                     patch('installer.catalog_source.read_url', return_value=(ROOT / 'catalog.json').read_bytes(),
+                           side_effect=OSError('unreachable') if expected == 'failed' else None) as read:
+                    if expected == 'unchanged':
+                        source.refresh()
+                    first = source.refresh()
+                    last_success = source.metadata()['lastSuccessfulRefreshAt']
+                    repeated = source.refresh()
+                self.assertEqual(first['status'], expected)
+                self.assertEqual(repeated, first)
+                self.assertNotIn('throttled', repeated)
+                self.assertEqual(source.metadata()['lastSuccessfulRefreshAt'], last_success)
+                self.assertEqual(read.call_count, 2 if expected == 'unchanged' else 1)
+
     def test_rejects_non_catalog_pinned_path(self):
         with self.assertRaises(ValueError):
             OfficialCatalog(Path(tempfile.mkdtemp()), SCHEMA, PINNED.replace("catalog.json", "README.md"))

@@ -64,7 +64,15 @@ def merge_remote(result, entries, state_dir, role, runtime):
         card["latestPublishedVersion"] = published[0]["version"] if published else None
         existing = {v["version"] for v in card["versions"]}
         if card is old:
+            views = {v["version"]: v for v in versions}
+            card["versions"] = [views.get(v["version"], v) for v in card["versions"]]
             card["versions"].extend(v for v in versions if v["version"] not in existing)
+            selected_view = views.get(card["version"], {})
+            if selected_view.get("releaseStatus") == "withdrawn":
+                card["installable"] = False
+                card["code"] = "release_withdrawn"
+                if card["status"] == "not_installed":
+                    card["status"] = "unavailable"
         else:
             card["versions"] = versions
     return result
