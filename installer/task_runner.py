@@ -66,7 +66,10 @@ class InstallationRunner:
             def work():
                 try:
                     execute()
-                    self._fail(sample, "install_failed", "Installation did not complete; an administrator can retry.")
+                    current = _read_state(self.state_dir, sample)
+                    if current and current.get("status") in {"installing", "uninstalling"}:
+                        # A returned callback must have persisted its terminal result.
+                        self._fail(sample, "install_failed", "Installation execution returned without a terminal status; an administrator can retry.")
                 except Exception:
                     # Expected failures already persist their details. Never expose an
                     # unexpected exception, which could contain credentials or commands.

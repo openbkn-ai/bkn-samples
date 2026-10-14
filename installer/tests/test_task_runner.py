@@ -40,6 +40,55 @@ class TaskRunnerTest(unittest.TestCase):
             gate.set()
             self.assertTrue(done.wait(2))
 
+    def test_successful_callback_preserves_terminal_record_and_stages(self):
+        expected = {}
+        def execute():
+            record = _read_state(self.state, "supply-chain")
+            record.update(status="installed", stages={"database": "succeeded", "discover": "running"})
+            expected.update(record)
+            _write_state(self.state, record)
+        self.runner.submit("supply-chain", lambda: _write_installing(self.state, "supply-chain", "0.1.0"), execute)
+        self.assertTrue(self.runner.locks["supply-chain"].acquire(timeout=2))
+        self.runner.locks["supply-chain"].release()
+        self.assertEqual(_read_state(self.state, "supply-chain"), expected)
+        history, _ = read_installation_history(self.state, "supply-chain", None)
+        self.assertEqual(history, [expected])
+
+    def test_persisted_business_failure_survives_callback_return_or_exception(self):
+        for raises in (False, True):
+            with self.subTest(raises=raises):
+                expected = {}
+                def execute():
+                    record = _read_state(self.state, "supply-chain")
+                    record.update(status="failed", stages={"database": "succeeded", "discover": "failed"},
+                                  error={"code": "discover_incomplete", "message": "discovered 2 tables, expected 3"})
+                    expected.update(record)
+                    _write_state(self.state, record)
+                    if raises:
+                        raise ApiError(500, "discover_incomplete", record["error"]["message"])
+                self.runner.submit("supply-chain", lambda: _write_installing(self.state, "supply-chain", "0.1.0"), execute)
+                self.assertTrue(self.runner.locks["supply-chain"].acquire(timeout=2))
+                self.runner.locks["supply-chain"].release()
+                self.assertEqual(_read_state(self.state, "supply-chain"), expected)
+                history, _ = read_installation_history(self.state, "supply-chain", None)
+                self.assertIn(expected, history)
+
+    def test_callback_without_terminal_status_fails_instead_of_remaining_inflight(self):
+        def execute():
+            record = _read_state(self.state, "supply-chain")
+            record["stages"] = {"database": "succeeded", "discover": "running"}
+            write_json(self.state / "supply-chain.json", record)
+        self.runner.submit("supply-chain", lambda: _write_installing(self.state, "supply-chain", "0.1.0"), execute)
+        self.assertTrue(self.runner.locks["supply-chain"].acquire(timeout=2))
+        self.runner.locks["supply-chain"].release()
+        record = _read_state(self.state, "supply-chain")
+        self.assertEqual(record["status"], "failed")
+        self.assertEqual(record["stages"], {"database": "succeeded", "discover": "failed"})
+        self.assertEqual(record["error"]["code"], "install_failed")
+        self.assertIn("returned without a terminal status", record["error"]["message"])
+        history, _ = read_installation_history(self.state, "supply-chain", None)
+        self.assertEqual(history, [record])
+
     def test_restart_marks_only_inflight_tasks_failed_and_keeps_snapshots(self):
         record = {"id": "inst-supply-chain", "sample": "supply-chain", "version": "0.1.0", "status": "installing",
                   "stages": {"database": "succeeded", "knowledge": "running"},
