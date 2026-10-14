@@ -27,7 +27,12 @@ ingress:
   path: /api/studio
 
 safeURL: http://bkn-safe:3000
-baseURL: "http://bkn-backend-svc.openbkn.svc.cluster.local:13014"
+# Unified OpenBKN gateway for Vega, knowledge networks and capabilities.
+# The product deployment supplies this address; never use a Backend-only service.
+baseURL: ""
+# Optional direct Backend address for public version detection only.
+# Empty uses baseURL. It does not change CLI, hook or uninstall routing.
+backendURL: ""
 # Optional acceptance-only pin to an official raw catalog at a full commit SHA.
 # Empty uses the official main branch pointer.
 catalogURL: ""
