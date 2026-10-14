@@ -4,14 +4,18 @@ import json
 import tarfile
 import tempfile
 import unittest
+from http.client import IncompleteRead
 from pathlib import Path
+from ssl import SSLError
+from unittest.mock import Mock
+from urllib.error import HTTPError, URLError
 
 from installer.remote_bundle import (AssetRedirect, compatibility, extract_package,
                                      load_release, sha, validate_package)
 from installer.remote_installation import RemoteInstallation
 from installer.remote_catalog import merge_remote
 from installer.state_store import write_json
-from installer.studio_api import ApiError, _read_state, _write_failed
+from installer.studio_api import ApiError, _read_state, _write_failed, installation_view
 from installer.task_runner import InstallationRunner
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -192,6 +196,75 @@ class RemoteBundleTest(unittest.TestCase):
         self.assertEqual(retried["remoteRelease"]["entry"]["version"], "1.0.0")
         _write_failed(coordinator.state_dir, "supply-chain", "1.0.0", "image_unavailable", "unavailable")
         self.assertEqual(_read_state(coordinator.state_dir, "supply-chain")["remoteRelease"], failed["remoteRelease"])
+
+    def test_transport_failures_report_download_failure_without_starting_business_stages(self):
+        self.load()
+        coordinator = self.coordinator()
+        runner = InstallationRunner(coordinator.state_dir, ["supply-chain"])
+        cases = [
+            (self.entry["manifest"]["url"], URLError("private transport details")),
+            (self.entry["verification"]["url"], TimeoutError("private transport details")),
+            (self.entry["releaseNotes"]["documents"][0]["url"], SSLError("private transport details")),
+            ("archive", HTTPError("https://example.invalid/private", 503, "unavailable", {}, None)),
+            ("archive", ConnectionResetError("private transport details")),
+            ("archive", IncompleteRead(b"partial")),
+        ]
+        for target, failure in cases:
+            with self.subTest(target=target, failure=type(failure).__name__):
+                previous = _read_state(coordinator.state_dir, "supply-chain")
+                install = Mock()
+                failed_requests = []
+                def reader(url, limit):
+                    if url == target:
+                        failed_requests.append(url)
+                        raise failure
+                    return self.reader(url, limit)
+                def downloader(package, destination):
+                    if target == "archive":
+                        destination.write_bytes(b"partial")
+                        failed_requests.append(target)
+                        raise failure
+                    destination.write_bytes(self.archive.read_bytes())
+                prepare = (lambda: coordinator.prepare_retry("supply-chain", previous["id"])) if previous else (lambda: coordinator.prepare(self.entry))
+                runner.submit("supply-chain", prepare,
+                    lambda: coordinator.execute("supply-chain", install, retry=bool(previous), reader=reader, downloader=downloader))
+                self.assertTrue(runner.locks["supply-chain"].acquire(timeout=2))
+                runner.locks["supply-chain"].release()
+                record = _read_state(coordinator.state_dir, "supply-chain")
+                self.assertEqual(record["status"], "failed")
+                self.assertEqual(record["error"]["code"], "release_download_failed")
+                self.assertEqual(record["remoteRelease"]["entry"], self.entry)
+                self.assertNotIn("private", record["error"]["message"])
+                self.assertEqual(failed_requests, [target])
+                install.assert_not_called()
+                view = installation_view(record, "admin")
+                self.assertEqual(view["error"]["stage"], "")
+                self.assertEqual([stage["state"] for stage in view["stages"]], ["pending"] * 5)
+                self.assertEqual(list((coordinator.state_dir / "work").iterdir()), [])
+
+    def test_integrity_and_local_storage_errors_are_not_reported_as_download_failures(self):
+        self.load()
+        coordinator = self.coordinator()
+        coordinator.prepare(self.entry)
+        for failure in (ValueError("release metadata digest mismatch"), PermissionError("disk unavailable")):
+            with self.subTest(failure=type(failure).__name__):
+                def reader(url, limit):
+                    raise failure
+                with self.assertRaises(type(failure)):
+                    coordinator.execute("supply-chain", Mock(), reader=reader)
+                self.assertNotIn("error", _read_state(coordinator.state_dir, "supply-chain"))
+
+    def test_business_timeout_is_not_reported_as_a_download_failure(self):
+        self.load()
+        coordinator = self.coordinator()
+        coordinator.prepare(self.entry)
+        def downloader(package, destination):
+            destination.write_bytes(self.archive.read_bytes())
+        def install(*args):
+            raise TimeoutError("business API timeout")
+        with self.assertRaisesRegex(TimeoutError, "business API"):
+            coordinator.execute("supply-chain", install, reader=self.reader, downloader=downloader)
+        self.assertNotIn("error", _read_state(coordinator.state_dir, "supply-chain"))
 
     def test_retry_refuses_a_changed_executor_without_replacing_the_record(self):
         self.load()
