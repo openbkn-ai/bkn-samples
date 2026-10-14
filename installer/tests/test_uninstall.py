@@ -3,6 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 from installer.control_plane import ownership_tags
 from installer.history import read_installation_history, begin_installation_attempt, record_terminal_installation
@@ -33,6 +34,9 @@ class UninstallTest(unittest.TestCase):
         self.deleted = []
 
     def api(self, method, path):
+        if method == "GET" and path.startswith("/api/vega-backend/v1/catalogs?"):
+            return {"entries": [value for target, value in self.platform.items()
+                                if target.startswith("/api/vega-backend/v1/catalogs/")]}
         if method == "GET" and "/metrics?" in path:
             return {"entries": [{"id": "metric-owned"}]} if path.split("/metrics?")[0] + "/metrics/metric-owned" in self.platform else {"entries": []}
         if method == "GET":
@@ -182,3 +186,271 @@ class UninstallTest(unittest.TestCase):
         card = _card({"name": "supply-chain-en"}, "0.1.0",
                      self.record | {"id": "inst-supply-chain-en", "sample": "supply-chain-en"}, "admin", False)
         self.assertTrue(card["canUninstall"])
+
+    def fail_installation(self, **updates):
+        self.record.update(status="failed", error={"code": "discover_incomplete", "message": "original scan error"},
+                           finishedAt="2026-01-01T00:00:00Z")
+        self.record.update(updates)
+        write_json(self.state / "supply-chain.json", self.record)
+
+    def test_failed_download_without_resources_can_be_cleaned(self):
+        self.fail_installation(resources={}, stages={}, catalogId=None, dataImageRef=None,
+                               error={"code": "release_download_failed", "message": "download failed"})
+        self.platform.clear()
+        self.database.clear()
+        original = _read_state(self.state, "supply-chain")
+        self.start()
+        cleaned = _read_state(self.state, "supply-chain")
+        self.assertEqual(cleaned["status"], "uninstalled")
+        self.assertEqual(self.deleted, [])
+        history, _ = read_installation_history(self.state, "supply-chain", None)
+        self.assertIn(original, history)
+
+    def test_legacy_discovery_failure_finds_owned_catalog_without_hook_receipt(self):
+        self.fail_installation(resources={}, stages={"database": "succeeded", "discover": "failed"}, catalogId=None)
+        self.platform = {"/api/vega-backend/v1/catalogs/catalog-owned": {
+            "id": "catalog-owned", "name": "bkn-sample-supply-chain", "tags": ownership_tags("supply-chain", "0.1.3")}}
+        self.start()
+        cleaned = _read_state(self.state, "supply-chain")
+        self.assertEqual(cleaned["status"], "uninstalled")
+        self.assertFalse(self.platform)
+        self.assertFalse(self.database)
+        self.assertEqual(cleaned["catalogId"], "catalog-owned")
+
+    def test_failed_catalog_lookup_is_not_treated_as_no_resources(self):
+        self.fail_installation(resources={}, stages={"discover": "failed"}, catalogId=None)
+        self.platform.clear()
+        original = self.api
+        self.api = lambda method, path: None if "catalogs?" in path else original(method, path)
+        self.start()
+        current = _read_state(self.state, "supply-chain")
+        self.assertEqual(current["status"], "uninstall_failed")
+        self.assertEqual(self.deleted, [])
+        self.assertTrue(self.database)
+        self.assertTrue(_card({"name": "supply-chain"}, "0.1.4", current, "admin", False)["canUninstall"])
+        self.api = lambda method, path: {"entries": []} if "catalogs?" in path else original(method, path)
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+
+    def test_foreign_or_ambiguous_legacy_catalog_blocks_all_deletion(self):
+        for ambiguous in (False, True):
+            with self.subTest(ambiguous=ambiguous):
+                self.fail_installation(resources={}, stages={"discover": "failed"}, catalogId=None)
+                entry = {"id": "catalog-owned", "name": "bkn-sample-supply-chain", "tags": []}
+                self.platform = {"/api/vega-backend/v1/catalogs/catalog-owned": entry}
+                if ambiguous:
+                    self.platform["/api/vega-backend/v1/catalogs/catalog-other"] = {**entry, "id": "catalog-other"}
+                self.start()
+                self.assertEqual(_read_state(self.state, "supply-chain")["error"]["code"], "ownership_conflict")
+                self.assertEqual(self.deleted, [])
+                self.assertTrue(self.database)
+
+    def test_partial_hook_uses_local_receipts_and_can_resume_cleanup(self):
+        self.fail_installation(resources={}, catalogId=None, stages={"knowledge": "failed"})
+        shared = self.state / "supply-chain"
+        shared.mkdir()
+        (shared / "config.yaml").write_text('openbkn:\n  kn_id: network-owned\nvega:\n  catalog_id: catalog-owned\n')
+        write_json(shared / "owned-execution.json", {"toolboxes": ["box-owned"], "skills": ["skill-owned"]})
+        original_error = self.record["error"]
+        original = self.api
+        def fail(method, path):
+            if method == "DELETE" and path.endswith("skill-owned"):
+                raise RuntimeError("cleanup failed")
+            return original(method, path)
+        self.api = fail
+        self.start()
+        current = _read_state(self.state, "supply-chain")
+        self.assertEqual(current["status"], "uninstall_failed")
+        self.assertTrue((shared / "owned-execution.json").exists())
+        self.assertTrue(_card({"name": "supply-chain"}, "0.1.4", current, "admin", False)["canUninstall"])
+        self.api = original
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+        self.assertFalse((shared / "owned-execution.json").exists())
+        self.assertFalse(self.database)
+        self.assertEqual(list(self.platform), ["/api/agent-operator-integration/v1/skills/other-sample"])
+        history, _ = read_installation_history(self.state, "supply-chain", None)
+        self.assertTrue(any(item.get("error") == original_error for item in history))
+
+    def test_missing_or_corrupt_partial_hook_receipt_blocks_preparation(self):
+        for content in (None, '{', '{"skills": [7], "toolboxes": []}'):
+            with self.subTest(content=content):
+                self.fail_installation(resources={"knowledgeNetworkId": "network-owned"}, stages={"knowledge": "failed"})
+                shared = self.state / "supply-chain"
+                shared.mkdir(exist_ok=True)
+                if content is not None:
+                    (shared / "owned-execution.json").write_text(content)
+                with self.assertRaises(ApiError) as caught:
+                    prepare_uninstall(self.state, "supply-chain", self.record["id"], "admin")
+                self.assertEqual(caught.exception.code, "ownership_receipt_missing")
+                self.assertEqual(_read_state(self.state, "supply-chain"), self.record)
+                self.assertEqual(self.deleted, [])
+
+    def test_disagreeing_local_configuration_blocks_cleanup(self):
+        self.fail_installation(stages={"knowledge": "failed"})
+        shared = self.state / "supply-chain"
+        shared.mkdir()
+        (shared / "config.yaml").write_text('openbkn:\n  kn_id: other-network\nvega:\n  catalog_id: catalog-owned\n')
+        with self.assertRaises(ApiError) as caught:
+            prepare_uninstall(self.state, "supply-chain", self.record["id"], "admin")
+        self.assertEqual(caught.exception.code, "ownership_receipt_missing")
+        self.assertEqual(_read_state(self.state, "supply-chain"), self.record)
+        self.assertEqual(self.deleted, [])
+
+    def test_cleanup_capability_uses_existing_retry_role(self):
+        self.fail_installation(resources={}, stages={})
+        for role, allowed in (("admin", True), ("user", False)):
+            self.assertEqual(_card({"name": "supply-chain"}, "0.1.4", self.record, role, False)["canUninstall"], allowed)
+        with self.assertRaises(ApiError) as caught:
+            prepare_uninstall(self.state, "supply-chain", self.record["id"], "user")
+        self.assertEqual(caught.exception.status, 403)
+
+    def test_network_only_hook_failure_can_be_cleaned_without_local_receipt_files(self):
+        from installer.control_plane import ControlError, create_installation
+        from installer.tests.test_control_plane import OpenBKN
+        for network_owner in ("absent", "owned", "foreign"):
+            with self.subTest(network_owner=network_owner):
+                sample, version = "order-basics", "0.1.0"
+                initial = {"id": "inst-order-basics", "attemptId": network_owner,
+                           "sample": sample, "version": version, "status": "installing",
+                           "dataImageRef": "image@sha256:abc", "historyComplete": True,
+                           "offlineRelease": {"packageDigest": "fixed"}}
+                write_json(self.state / f"{sample}.json", initial)
+                def fail_hook(_stage, _payload):
+                    return {"ok": False, "message": "knowledge hook failed before writing output"}
+                with self.assertRaises(ControlError):
+                    create_installation(sample=sample, version=version, actor_role="admin", state_dir=self.state,
+                        database={"host": "db", "port": 3306, "name": "order_basics", "user": "sample", "password": "test"},
+                        openbkn=OpenBKN(tables=2), hook_runner=fail_hook, expected_tables=2,
+                        knowledge_network={"id": "order_basics", "displayName": "Orders"},
+                        components={"objects": True, "relations": True, "metrics": False, "functions": False, "skills": False})
+                failed = _read_state(self.state, sample)
+                self.assertEqual(failed["status"], "failed")
+                self.assertEqual(failed["stages"]["knowledge"], "failed")
+                self.assertEqual(failed["resources"]["ownedExecution"], {"toolboxes": [], "skills": []})
+                self.assertTrue(failed["resources"]["knowledgeNetworkPlanned"])
+                self.assertFalse((self.state / sample / "config.yaml").exists())
+                self.assertFalse((self.state / sample / "owned-execution.json").exists())
+                tags = ownership_tags(sample, version)
+                network_path = "/api/bkn-backend/v1/knowledge-networks/order_basics"
+                unrelated = "/api/agent-operator-integration/v1/skills/other-sample"
+                self.platform = {"/api/vega-backend/v1/catalogs/cat-new": {"tags": tags}, unrelated: {}}
+                if network_owner != "absent":
+                    self.platform[network_path] = {"tags": tags if network_owner == "owned" else []}
+                expected_network = self.platform.get(network_path)
+                name = "bkn-sample-order-basics"
+                annotations = {"openbkn.ai/sample-id": sample, "openbkn.ai/sample-version": version,
+                               "openbkn.ai/sample-data-image": initial["dataImageRef"]}
+                self.database = {(kind, resource): {"metadata": {"uid": kind, "annotations": annotations}}
+                    for kind, resource in (("statefulset", name), ("service", name), ("secret", name), ("pvc", f"data-{name}-0"))}
+                self.deleted = []
+                prepare_uninstall(self.state, sample, initial["id"], "admin")
+                current = _read_state(self.state, sample)
+                begin_installation_attempt(self.state, current, failed)
+                execute_uninstall(self.state, sample, self.api, self.kubectl)
+                self.assertEqual(_read_state(self.state, sample)["status"], "uninstalled")
+                self.assertFalse(self.database)
+                self.assertIn(unrelated, self.platform)
+                if network_owner == "foreign":
+                    self.assertEqual(self.platform[network_path], expected_network)
+                    self.assertNotIn(network_path, self.deleted)
+                else:
+                    self.assertNotIn(network_path, self.platform)
+                history, _ = read_installation_history(self.state, sample, None)
+                self.assertIn(failed, history)
+
+    def test_confirmed_network_ownership_change_still_blocks_all_deletion(self):
+        self.fail_installation(stages={"verify": "failed"})
+        self.platform["/api/bkn-backend/v1/knowledge-networks/network-owned"]["tags"] = []
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["error"]["code"], "ownership_conflict")
+        self.assertEqual(self.deleted, [])
+        self.assertTrue(self.database)
+
+    def test_worldcup_network_conflict_before_hook_can_be_cleaned_and_package_removed(self):
+        from installer.contract import load_sample
+        from installer.control_plane import ControlError, create_installation
+        from installer.offline_bundle import OfflinePackages
+        from installer.remote_installation import RemoteInstallation
+        from installer.tests.test_control_plane import OpenBKN
+        root = Path(__file__).resolve().parents[2]
+        document = load_sample(root / "samples/world-cup")
+        spec = document["spec"]
+        sample, version = document["metadata"]["name"], "0.1.2"
+        self.assertTrue(spec["components"]["functions"])
+        initial = {"id": "inst-world-cup", "attemptId": "initial", "sample": sample, "version": version,
+                   "status": "installing", "dataImageRef": "image@sha256:abc", "historyComplete": True,
+                   "offlineRelease": {"packageDigest": "fixed"}}
+        write_json(self.state / f"{sample}.json", initial)
+        foreign = {"id": spec["knowledgeNetwork"]["id"], "tags": ["external-owner"]}
+        catalog = OpenBKN(tables=spec["database"]["expectedTables"])
+        def openbkn(args):
+            return foreign if args[:2] == ["bkn", "get"] else catalog(args)
+        hook = Mock(side_effect=AssertionError("resource-creating hook must not run"))
+        with self.assertRaises(ControlError) as caught:
+            create_installation(sample=sample, version=version, actor_role="admin", state_dir=self.state,
+                database={"host": "db", "port": 3306, "name": spec["database"]["name"], "user": "sample", "password": "test"},
+                openbkn=openbkn, hook_runner=hook, expected_tables=spec["database"]["expectedTables"],
+                knowledge_network=spec["knowledgeNetwork"], components=spec["components"])
+        self.assertEqual(caught.exception.code, "ownership_conflict")
+        hook.assert_not_called()
+        failed = _read_state(self.state, sample)
+        self.assertEqual(failed["resources"]["ownedExecution"], {"toolboxes": [], "skills": []})
+        self.assertFalse((self.state / sample / "owned-execution.json").exists())
+        runtime = RemoteInstallation(root, self.state, "0.2.0", "arm64", [], "ghcr.io/example/executor@sha256:" + "a" * 64)
+        offline = OfflinePackages(root, self.state, runtime)
+        cache = offline.directory / sample
+        cache.mkdir(parents=True)
+        (cache / "package.tar.gz").write_bytes(b"cached-package")
+        with self.assertRaises(ApiError):
+            offline.delete_package(sample, "admin")
+        tags = ownership_tags(sample, version)
+        network_path = "/api/bkn-backend/v1/knowledge-networks/" + foreign["id"]
+        unrelated = "/api/agent-operator-integration/v1/skills/other-sample"
+        self.platform = {network_path: dict(foreign), "/api/vega-backend/v1/catalogs/cat-new": {"tags": tags}, unrelated: {}}
+        name = "bkn-sample-world-cup"
+        annotations = {"openbkn.ai/sample-id": sample, "openbkn.ai/sample-version": version,
+                       "openbkn.ai/sample-data-image": initial["dataImageRef"]}
+        self.database = {(kind, resource): {"metadata": {"uid": kind, "annotations": annotations}}
+            for kind, resource in (("statefulset", name), ("service", name), ("secret", name), ("pvc", f"data-{name}-0"))}
+        self.deleted = []
+        prepare_uninstall(self.state, sample, initial["id"], "admin")
+        current = _read_state(self.state, sample)
+        begin_installation_attempt(self.state, current, failed)
+        execute_uninstall(self.state, sample, self.api, self.kubectl)
+        self.assertEqual(_read_state(self.state, sample)["status"], "uninstalled")
+        self.assertFalse(self.database)
+        self.assertEqual(self.platform, {network_path: foreign, unrelated: {}})
+        self.assertNotIn(network_path, self.deleted)
+        self.assertTrue(offline.delete_package(sample, "admin")["deleted"])
+        self.assertFalse(cache.exists())
+        history, _ = read_installation_history(self.state, sample, None)
+        self.assertIn(failed, history)
+
+    def test_failed_installation_cleanup_then_offline_reinstall_gets_new_identity(self):
+        from installer.offline_bundle import OfflinePackages
+        from installer.remote_installation import RemoteInstallation
+        self.fail_installation(stages={"verify": "failed"}, remoteRelease={"entry": {"version": "0.1.3"}})
+        original = _read_state(self.state, "supply-chain")
+        self.start()
+        cleaned = _read_state(self.state, "supply-chain")
+        root = Path(__file__).resolve().parents[2]
+        runtime = RemoteInstallation(root, self.state, "0.2.0", "arm64", [], "ghcr.io/example/executor@sha256:" + "a" * 64)
+        offline = OfflinePackages(root, self.state, runtime)
+        release = {"sample": "supply-chain", "version": "0.1.4", "packageDigest": "sha256:" + "b" * 64,
+                   "manifestSha256": "c" * 64, "dataImageRef": "image@sha256:" + "d" * 64,
+                   "releaseNotes": {"version": "0.1.4", "documents": []}}
+        cache = offline.directory / "supply-chain"
+        cache.mkdir(parents=True)
+        write_json(cache / "release.json", release)
+        offline.prepare(release)
+        new = _read_state(self.state, "supply-chain")
+        begin_installation_attempt(self.state, new, cleaned)
+        self.assertNotEqual(new["id"], original["id"])
+        self.assertIn("offlineRelease", new)
+        self.assertNotIn("remoteRelease", new)
+        with self.assertRaises(ApiError) as caught:
+            prepare_uninstall(self.state, "supply-chain", original["id"], "admin")
+        self.assertEqual(caught.exception.status, 404)
+        history, _ = read_installation_history(self.state, "supply-chain", new)
+        self.assertIn(original, history)

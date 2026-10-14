@@ -16,6 +16,68 @@ ROOT = bundle_fixture.ROOT
 
 
 class RemoteHttpTest(unittest.TestCase):
+    def test_cleaned_installation_uses_imported_package_even_when_bundled_release_matches(self):
+        from installer.contract import sample_version
+        from installer.offline_bundle import OfflinePackages
+        from installer.control_plane import _write_state
+        from installer.history import read_installation_history
+        with tempfile.TemporaryDirectory() as directory:
+            state = Path(directory)
+            index = build_manifest_index(ROOT, "a" * 40)
+            bundled = next(item for item in index["samples"] if item["name"] == "supply-chain")
+            version = sample_version(bundled)
+            document = bundled["document"] if "document" in bundled else None
+            if document is None:
+                from installer.contract import load_sample
+                document = load_sample(ROOT / "samples/supply_ontology_hand")
+            release = {"sample": "supply-chain", "version": version,
+                       "manifestSha256": bundled["manifestSha256"], "packageDigest": "sha256:" + "b" * 64,
+                       "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:" + "c" * 64,
+                       "releaseNotes": {"version": version, "documents": []}, "document": document}
+            cache = state / "offline/supply-chain"
+            cache.mkdir(parents=True)
+            write_json(cache / "release.json", release)
+            previous = {"id": "inst-old", "sample": "supply-chain", "version": version, "status": "uninstalled",
+                        "historyComplete": True, "remoteRelease": {"entry": {"version": version}}}
+            write_json(state / "supply-chain.json", previous)
+            apps, runners = [], []
+            def runner(*args):
+                instance = InstallationRunner(*args)
+                runners.append(instance)
+                return instance
+            def execute(_offline, selected, _install, retry=False):
+                self.assertEqual(selected, release)
+                self.assertFalse(retry)
+                current = _read_state(state, "supply-chain")
+                self.assertIn("offlineRelease", current)
+                self.assertNotIn("remoteRelease", current)
+                current.update(status="installed", finishedAt="2099-01-01T00:00:00Z")
+                _write_state(state, current)
+            env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_STATE_DIR": directory,
+                   "BKN_SAMPLE_PLATFORM_VERSION": "0.2.0", "BKN_SAMPLE_CATALOG_URL": "",
+                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/executor@sha256:" + "d" * 64}
+            with patch.dict("os.environ", env), \
+                 patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
+                 patch("installer.task_runner.InstallationRunner", side_effect=runner), \
+                 patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), index, index)), \
+                 patch.object(OfflinePackages, "execute", execute), \
+                 patch("installer.remote_installation.RemoteInstallation.execute") as remote, \
+                 patch("installer.catalog_source.read_url") as network:
+                main()
+                apps[0].authenticate = lambda _: "admin"
+                status, _ = dispatch(apps[0], "POST", "/api/studio/samples/supply-chain/installations", "Bearer test",
+                                     json.dumps({"version": version, "manifestSha256": release["manifestSha256"]}).encode())
+                self.assertEqual(status, 202)
+                self.assertTrue(runners[0].locks["supply-chain"].acquire(timeout=2))
+                runners[0].locks["supply-chain"].release()
+                new = _read_state(state, "supply-chain")
+                self.assertEqual(new["status"], "installed")
+                self.assertNotEqual(new["id"], previous["id"])
+                history, _ = read_installation_history(state, "supply-chain", new)
+                self.assertIn(previous, history)
+                remote.assert_not_called()
+                network.assert_not_called()
+
     def test_default_directory_exposes_published_versions_without_a_refresh(self):
         apps = []
         with tempfile.TemporaryDirectory() as directory:
