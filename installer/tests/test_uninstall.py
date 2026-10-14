@@ -33,6 +33,9 @@ class UninstallTest(unittest.TestCase):
         self.deleted = []
 
     def api(self, method, path):
+        if method == "GET" and path.startswith("/api/vega-backend/v1/catalogs?"):
+            return {"entries": [value for target, value in self.platform.items()
+                                if target.startswith("/api/vega-backend/v1/catalogs/")]}
         if method == "GET" and "/metrics?" in path:
             return {"entries": [{"id": "metric-owned"}]} if path.split("/metrics?")[0] + "/metrics/metric-owned" in self.platform else {"entries": []}
         if method == "GET":
@@ -182,3 +185,149 @@ class UninstallTest(unittest.TestCase):
         card = _card({"name": "supply-chain-en"}, "0.1.0",
                      self.record | {"id": "inst-supply-chain-en", "sample": "supply-chain-en"}, "admin", False)
         self.assertTrue(card["canUninstall"])
+
+    def fail_installation(self, **updates):
+        self.record.update(status="failed", error={"code": "discover_incomplete", "message": "original scan error"},
+                           finishedAt="2026-01-01T00:00:00Z")
+        self.record.update(updates)
+        write_json(self.state / "supply-chain.json", self.record)
+
+    def test_failed_download_without_resources_can_be_cleaned(self):
+        self.fail_installation(resources={}, stages={}, catalogId=None, dataImageRef=None,
+                               error={"code": "release_download_failed", "message": "download failed"})
+        self.platform.clear()
+        self.database.clear()
+        original = _read_state(self.state, "supply-chain")
+        self.start()
+        cleaned = _read_state(self.state, "supply-chain")
+        self.assertEqual(cleaned["status"], "uninstalled")
+        self.assertEqual(self.deleted, [])
+        history, _ = read_installation_history(self.state, "supply-chain", None)
+        self.assertIn(original, history)
+
+    def test_legacy_discovery_failure_finds_owned_catalog_without_hook_receipt(self):
+        self.fail_installation(resources={}, stages={"database": "succeeded", "discover": "failed"}, catalogId=None)
+        self.platform = {"/api/vega-backend/v1/catalogs/catalog-owned": {
+            "id": "catalog-owned", "name": "bkn-sample-supply-chain", "tags": ownership_tags("supply-chain", "0.1.3")}}
+        self.start()
+        cleaned = _read_state(self.state, "supply-chain")
+        self.assertEqual(cleaned["status"], "uninstalled")
+        self.assertFalse(self.platform)
+        self.assertFalse(self.database)
+        self.assertEqual(cleaned["catalogId"], "catalog-owned")
+
+    def test_failed_catalog_lookup_is_not_treated_as_no_resources(self):
+        self.fail_installation(resources={}, stages={"discover": "failed"}, catalogId=None)
+        self.platform.clear()
+        original = self.api
+        self.api = lambda method, path: None if "catalogs?" in path else original(method, path)
+        self.start()
+        current = _read_state(self.state, "supply-chain")
+        self.assertEqual(current["status"], "uninstall_failed")
+        self.assertEqual(self.deleted, [])
+        self.assertTrue(self.database)
+        self.assertTrue(_card({"name": "supply-chain"}, "0.1.4", current, "admin", False)["canUninstall"])
+        self.api = lambda method, path: {"entries": []} if "catalogs?" in path else original(method, path)
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+
+    def test_foreign_or_ambiguous_legacy_catalog_blocks_all_deletion(self):
+        for ambiguous in (False, True):
+            with self.subTest(ambiguous=ambiguous):
+                self.fail_installation(resources={}, stages={"discover": "failed"}, catalogId=None)
+                entry = {"id": "catalog-owned", "name": "bkn-sample-supply-chain", "tags": []}
+                self.platform = {"/api/vega-backend/v1/catalogs/catalog-owned": entry}
+                if ambiguous:
+                    self.platform["/api/vega-backend/v1/catalogs/catalog-other"] = {**entry, "id": "catalog-other"}
+                self.start()
+                self.assertEqual(_read_state(self.state, "supply-chain")["error"]["code"], "ownership_conflict")
+                self.assertEqual(self.deleted, [])
+                self.assertTrue(self.database)
+
+    def test_partial_hook_uses_local_receipts_and_can_resume_cleanup(self):
+        self.fail_installation(resources={}, catalogId=None, stages={"knowledge": "failed"})
+        shared = self.state / "supply-chain"
+        shared.mkdir()
+        (shared / "config.yaml").write_text('openbkn:\n  kn_id: network-owned\nvega:\n  catalog_id: catalog-owned\n')
+        write_json(shared / "owned-execution.json", {"toolboxes": ["box-owned"], "skills": ["skill-owned"]})
+        original_error = self.record["error"]
+        original = self.api
+        def fail(method, path):
+            if method == "DELETE" and path.endswith("skill-owned"):
+                raise RuntimeError("cleanup failed")
+            return original(method, path)
+        self.api = fail
+        self.start()
+        current = _read_state(self.state, "supply-chain")
+        self.assertEqual(current["status"], "uninstall_failed")
+        self.assertTrue((shared / "owned-execution.json").exists())
+        self.assertTrue(_card({"name": "supply-chain"}, "0.1.4", current, "admin", False)["canUninstall"])
+        self.api = original
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+        self.assertFalse((shared / "owned-execution.json").exists())
+        self.assertFalse(self.database)
+        self.assertEqual(list(self.platform), ["/api/agent-operator-integration/v1/skills/other-sample"])
+        history, _ = read_installation_history(self.state, "supply-chain", None)
+        self.assertTrue(any(item.get("error") == original_error for item in history))
+
+    def test_missing_or_corrupt_partial_hook_receipt_blocks_preparation(self):
+        for content in (None, '{', '{"skills": [7], "toolboxes": []}'):
+            with self.subTest(content=content):
+                self.fail_installation(resources={"knowledgeNetworkId": "network-owned"}, stages={"knowledge": "failed"})
+                shared = self.state / "supply-chain"
+                shared.mkdir(exist_ok=True)
+                if content is not None:
+                    (shared / "owned-execution.json").write_text(content)
+                with self.assertRaises(ApiError) as caught:
+                    prepare_uninstall(self.state, "supply-chain", self.record["id"], "admin")
+                self.assertEqual(caught.exception.code, "ownership_receipt_missing")
+                self.assertEqual(_read_state(self.state, "supply-chain"), self.record)
+                self.assertEqual(self.deleted, [])
+
+    def test_disagreeing_local_configuration_blocks_cleanup(self):
+        self.fail_installation(stages={"knowledge": "failed"})
+        shared = self.state / "supply-chain"
+        shared.mkdir()
+        (shared / "config.yaml").write_text('openbkn:\n  kn_id: other-network\nvega:\n  catalog_id: catalog-owned\n')
+        with self.assertRaises(ApiError) as caught:
+            prepare_uninstall(self.state, "supply-chain", self.record["id"], "admin")
+        self.assertEqual(caught.exception.code, "ownership_receipt_missing")
+        self.assertEqual(_read_state(self.state, "supply-chain"), self.record)
+        self.assertEqual(self.deleted, [])
+
+    def test_cleanup_capability_uses_existing_retry_role(self):
+        self.fail_installation(resources={}, stages={})
+        for role, allowed in (("admin", True), ("user", False)):
+            self.assertEqual(_card({"name": "supply-chain"}, "0.1.4", self.record, role, False)["canUninstall"], allowed)
+        with self.assertRaises(ApiError) as caught:
+            prepare_uninstall(self.state, "supply-chain", self.record["id"], "user")
+        self.assertEqual(caught.exception.status, 403)
+
+    def test_failed_installation_cleanup_then_offline_reinstall_gets_new_identity(self):
+        from installer.offline_bundle import OfflinePackages
+        from installer.remote_installation import RemoteInstallation
+        self.fail_installation(stages={"verify": "failed"}, remoteRelease={"entry": {"version": "0.1.3"}})
+        original = _read_state(self.state, "supply-chain")
+        self.start()
+        cleaned = _read_state(self.state, "supply-chain")
+        root = Path(__file__).resolve().parents[2]
+        runtime = RemoteInstallation(root, self.state, "0.2.0", "arm64", [], "ghcr.io/example/executor@sha256:" + "a" * 64)
+        offline = OfflinePackages(root, self.state, runtime)
+        release = {"sample": "supply-chain", "version": "0.1.4", "packageDigest": "sha256:" + "b" * 64,
+                   "manifestSha256": "c" * 64, "dataImageRef": "image@sha256:" + "d" * 64,
+                   "releaseNotes": {"version": "0.1.4", "documents": []}}
+        cache = offline.directory / "supply-chain"
+        cache.mkdir(parents=True)
+        write_json(cache / "release.json", release)
+        offline.prepare(release)
+        new = _read_state(self.state, "supply-chain")
+        begin_installation_attempt(self.state, new, cleaned)
+        self.assertNotEqual(new["id"], original["id"])
+        self.assertIn("offlineRelease", new)
+        self.assertNotIn("remoteRelease", new)
+        with self.assertRaises(ApiError) as caught:
+            prepare_uninstall(self.state, "supply-chain", original["id"], "admin")
+        self.assertEqual(caught.exception.status, 404)
+        history, _ = read_installation_history(self.state, "supply-chain", new)
+        self.assertIn(original, history)

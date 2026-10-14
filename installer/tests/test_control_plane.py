@@ -156,6 +156,7 @@ class ControlPlaneTest(unittest.TestCase):
                     )
             saved = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
             self.assertEqual(saved["status"], "failed")
+            self.assertEqual(saved["catalogId"], "cat-new")
             self.assertEqual(saved["stages"], {"database": "succeeded", "discover": "failed"})
             self.assertEqual(saved["error"], {"code": caught.exception.code, "message": caught.exception.message})
             history = list((state / "history" / "supply-chain").glob("*.json"))
@@ -214,6 +215,7 @@ class ControlPlaneTest(unittest.TestCase):
         self.assertEqual(saved["status"], "failed")
         self.assertEqual(saved["stages"]["discover"], "succeeded")
         self.assertEqual(saved["stages"]["knowledge"], "failed")
+        self.assertEqual(saved["resources"]["knowledgeNetworkId"], NETWORK["id"])
         retried = retry_installation(
             sample="supply-chain",
             version=VERSION,

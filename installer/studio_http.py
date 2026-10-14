@@ -466,8 +466,6 @@ def main() -> None:
         require_published_version(sample, requested_version)
         update_platform_version()
         bundled = next((i for i in merge_catalog(service_version, image, repo)["samples"] if i["name"] == sample), None)
-        if bundled and requested_version == sample_version(bundled) and requested_digest == bundled.get("manifestSha256"):
-            return create(sample, role, authorization)
         offline_release = offline.find(sample)
         if offline_release and offline_release["version"] == requested_version:
             if not remote.platform_version:
@@ -487,6 +485,8 @@ def main() -> None:
                                      version=fixed_version, deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
                                          data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version), kubectl=kubectl_run,
                                      run=process_run, authorization=authorization)))
+        if bundled and requested_version == sample_version(bundled) and requested_digest == bundled.get("manifestSha256"):
+            return create(sample, role, authorization)
         entry = next((e for e in source.entries() if e["sampleId"] == sample and e["version"] == requested_version), None)
         if not entry or requested_digest != entry["manifest"]["digest"].removeprefix("sha256:"):
             raise ApiError(409, "version_changed", "sample version or manifest changed; confirm again")

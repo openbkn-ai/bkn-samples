@@ -310,8 +310,10 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
     _checkpoint(state_dir, record, database="succeeded", discover="running")
     try:
         catalog = ensure_catalog(sample, version, database, openbkn)
-        scan_catalog(catalog, expected_tables, openbkn)
         record["catalogId"] = catalog["id"]
+        _write_state(state_dir, record)
+        scan_catalog(catalog, expected_tables, openbkn)
+        record.setdefault("resources", {}).setdefault("knowledgeNetworkId", knowledge_network["id"])
         _checkpoint(state_dir, record, discover="succeeded", knowledge="running")
         payload = _hook_input(sample, version, database, catalog["id"], knowledge_network, components)
         if record["stages"].get("knowledge") != "succeeded" or record["stages"].get("capabilities") != "succeeded":
