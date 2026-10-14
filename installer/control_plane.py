@@ -306,6 +306,8 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
     }
     record.setdefault("id", f"inst-{sample}")
     record.setdefault("stages", {})
+    hook_was_started = (any(stage in record["stages"] for stage in ("knowledge", "capabilities", "verify"))
+                        or bool((record.get("resources") or {}).get("knowledgeNetworkId")))
     record.pop("finishedAt", None)
     _checkpoint(state_dir, record, database="succeeded", discover="running")
     try:
@@ -321,6 +323,19 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
         _checkpoint(state_dir, record, discover="succeeded", knowledge="running")
         payload = _hook_input(sample, version, database, catalog["id"], knowledge_network, components)
         if record["stages"].get("knowledge") != "succeeded" or record["stages"].get("capabilities") != "succeeded":
+            try:
+                network = openbkn(["bkn", "get", knowledge_network["id"]])
+            except (ControlError, ValueError):
+                # Absence or an inconclusive lookup remains the hook's responsibility.
+                network = None
+            entries = _payload_entries(network)
+            if len(entries) == 1:
+                network = entries[0]
+            if isinstance(network, dict) and network.get("id") == knowledge_network["id"] and not _owned(network, sample, version):
+                if not hook_was_started:
+                    # This attempt stopped before calling any resource-creating hook.
+                    resources.setdefault("ownedExecution", {"toolboxes": [], "skills": []})
+                raise ControlError("ownership_conflict", "knowledge network already exists and is not managed by this installer")
             if record.get("capabilitySummary"):
                 payload = {**payload, "capabilitySummary": record["capabilitySummary"]}
             installed = _run_hook(hook_runner, payload, "platform-install")

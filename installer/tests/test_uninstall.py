@@ -3,6 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 from installer.control_plane import ownership_tags
 from installer.history import read_installation_history, begin_installation_attempt, record_terminal_installation
@@ -365,6 +366,66 @@ class UninstallTest(unittest.TestCase):
         self.assertEqual(_read_state(self.state, "supply-chain")["error"]["code"], "ownership_conflict")
         self.assertEqual(self.deleted, [])
         self.assertTrue(self.database)
+
+    def test_worldcup_network_conflict_before_hook_can_be_cleaned_and_package_removed(self):
+        from installer.contract import load_sample
+        from installer.control_plane import ControlError, create_installation
+        from installer.offline_bundle import OfflinePackages
+        from installer.remote_installation import RemoteInstallation
+        from installer.tests.test_control_plane import OpenBKN
+        root = Path(__file__).resolve().parents[2]
+        document = load_sample(root / "samples/world-cup")
+        spec = document["spec"]
+        sample, version = document["metadata"]["name"], "0.1.2"
+        self.assertTrue(spec["components"]["functions"])
+        initial = {"id": "inst-world-cup", "attemptId": "initial", "sample": sample, "version": version,
+                   "status": "installing", "dataImageRef": "image@sha256:abc", "historyComplete": True,
+                   "offlineRelease": {"packageDigest": "fixed"}}
+        write_json(self.state / f"{sample}.json", initial)
+        foreign = {"id": spec["knowledgeNetwork"]["id"], "tags": ["external-owner"]}
+        catalog = OpenBKN(tables=spec["database"]["expectedTables"])
+        def openbkn(args):
+            return foreign if args[:2] == ["bkn", "get"] else catalog(args)
+        hook = Mock(side_effect=AssertionError("resource-creating hook must not run"))
+        with self.assertRaises(ControlError) as caught:
+            create_installation(sample=sample, version=version, actor_role="admin", state_dir=self.state,
+                database={"host": "db", "port": 3306, "name": spec["database"]["name"], "user": "sample", "password": "test"},
+                openbkn=openbkn, hook_runner=hook, expected_tables=spec["database"]["expectedTables"],
+                knowledge_network=spec["knowledgeNetwork"], components=spec["components"])
+        self.assertEqual(caught.exception.code, "ownership_conflict")
+        hook.assert_not_called()
+        failed = _read_state(self.state, sample)
+        self.assertEqual(failed["resources"]["ownedExecution"], {"toolboxes": [], "skills": []})
+        self.assertFalse((self.state / sample / "owned-execution.json").exists())
+        runtime = RemoteInstallation(root, self.state, "0.2.0", "arm64", [], "ghcr.io/example/executor@sha256:" + "a" * 64)
+        offline = OfflinePackages(root, self.state, runtime)
+        cache = offline.directory / sample
+        cache.mkdir(parents=True)
+        (cache / "package.tar.gz").write_bytes(b"cached-package")
+        with self.assertRaises(ApiError):
+            offline.delete_package(sample, "admin")
+        tags = ownership_tags(sample, version)
+        network_path = "/api/bkn-backend/v1/knowledge-networks/" + foreign["id"]
+        unrelated = "/api/agent-operator-integration/v1/skills/other-sample"
+        self.platform = {network_path: dict(foreign), "/api/vega-backend/v1/catalogs/cat-new": {"tags": tags}, unrelated: {}}
+        name = "bkn-sample-world-cup"
+        annotations = {"openbkn.ai/sample-id": sample, "openbkn.ai/sample-version": version,
+                       "openbkn.ai/sample-data-image": initial["dataImageRef"]}
+        self.database = {(kind, resource): {"metadata": {"uid": kind, "annotations": annotations}}
+            for kind, resource in (("statefulset", name), ("service", name), ("secret", name), ("pvc", f"data-{name}-0"))}
+        self.deleted = []
+        prepare_uninstall(self.state, sample, initial["id"], "admin")
+        current = _read_state(self.state, sample)
+        begin_installation_attempt(self.state, current, failed)
+        execute_uninstall(self.state, sample, self.api, self.kubectl)
+        self.assertEqual(_read_state(self.state, sample)["status"], "uninstalled")
+        self.assertFalse(self.database)
+        self.assertEqual(self.platform, {network_path: foreign, unrelated: {}})
+        self.assertNotIn(network_path, self.deleted)
+        self.assertTrue(offline.delete_package(sample, "admin")["deleted"])
+        self.assertFalse(cache.exists())
+        history, _ = read_installation_history(self.state, sample, None)
+        self.assertIn(failed, history)
 
     def test_failed_installation_cleanup_then_offline_reinstall_gets_new_identity(self):
         from installer.offline_bundle import OfflinePackages
