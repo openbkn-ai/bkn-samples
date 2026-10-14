@@ -17,10 +17,6 @@ spec:
     metadata:
       labels:
         app: bkn-sample-studio
-      {{- if .Values.internalGateway.enabled }}
-      annotations:
-        checksum/internal-gateway: {{ include (print $.Template.BasePath "/internal-gateway.yaml") . | sha256sum }}
-      {{- end }}
     spec:
       serviceAccountName: bkn-sample-studio
       containers:
@@ -33,7 +29,7 @@ spec:
             - name: BKN_SAFE_URL
               value: {{ .Values.safeURL | quote }}
             - name: BKN_BASE_URL
-              value: {{ if .Values.internalGateway.enabled }}"http://127.0.0.1:8082"{{ else }}{{ required "baseURL must supply a unified gateway when internalGateway is disabled" .Values.baseURL | quote }}{{ end }}
+              value: {{ .Values.baseURL | quote }}
             - name: BKN_BACKEND_URL
               value: {{ .Values.backendURL | default "" | quote }}
             - name: BKN_SAMPLE_CATALOG_URL
@@ -61,31 +57,7 @@ spec:
           volumeMounts:
             - name: state
               mountPath: /var/lib/bkn-samples
-        {{- if .Values.internalGateway.enabled }}
-        - name: internal-gateway
-          image: "{{ .Values.internalGateway.image.repository }}{{ if .Values.internalGateway.image.digest }}@{{ .Values.internalGateway.image.digest }}{{ else }}:{{ .Values.internalGateway.image.tag }}{{ end }}"
-          imagePullPolicy: {{ .Values.internalGateway.image.pullPolicy }}
-          env:
-            - name: NGINX_ENTRYPOINT_LOCAL_RESOLVERS
-              value: "1"
-            - name: NGINX_ENVSUBST_FILTER
-              value: "^NGINX_LOCAL_RESOLVERS$"
-          readinessProbe:
-            exec:
-              command: ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8082/healthz"]
-          resources:
-            {{- toYaml .Values.internalGateway.resources | nindent 12 }}
-          volumeMounts:
-            - name: internal-gateway
-              mountPath: /etc/nginx/templates
-              readOnly: true
-        {{- end }}
       volumes:
-        {{- if .Values.internalGateway.enabled }}
-        - name: internal-gateway
-          configMap:
-            name: bkn-sample-studio-gateway
-        {{- end }}
         - name: state
           persistentVolumeClaim:
             claimName: {{ default "bkn-sample-studio-state" .Values.persistence.existingClaim | quote }}
