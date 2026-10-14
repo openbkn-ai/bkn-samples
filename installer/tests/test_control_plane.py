@@ -36,6 +36,8 @@ class OpenBKN:
 
     def __call__(self, args: list[str]):
         self.calls.append(args)
+        if args[:2] == ["bkn", "get"]:
+            return {}
         if args[:3] == ["vega", "catalog", "list"]:
             name = args[args.index("--name") + 1]
             return {"entries": [item for item in self.catalogs if item.get("name") == name]}
@@ -156,11 +158,74 @@ class ControlPlaneTest(unittest.TestCase):
                     )
             saved = json.loads((state / "supply-chain.json").read_text(encoding="utf-8"))
             self.assertEqual(saved["status"], "failed")
+            self.assertEqual(saved["catalogId"], "cat-new")
             self.assertEqual(saved["stages"], {"database": "succeeded", "discover": "failed"})
             self.assertEqual(saved["error"], {"code": caught.exception.code, "message": caught.exception.message})
             history = list((state / "history" / "supply-chain").glob("*.json"))
             self.assertEqual(len(history), 1)
             self.assertEqual(json.loads(history[0].read_text(encoding="utf-8")), saved)
+
+    def test_missing_execution_receipt_is_not_assumed_empty_without_explicit_declarations(self):
+        from installer.studio_api import ApiError
+        from installer.uninstall import prepare_uninstall
+        for components in (None, {}, {"functions": False}, {"functions": True, "skills": False},
+                           {"functions": False, "skills": True}):
+            with self.subTest(components=components), tempfile.TemporaryDirectory() as directory:
+                state = Path(directory)
+                with self.assertRaises(ControlError):
+                    create_installation(sample="supply-chain", version=VERSION, actor_role="admin", database=DATABASE,
+                        state_dir=state, openbkn=OpenBKN(), hook_runner=lambda *_: {"ok": False, "message": "hook failed"},
+                        expected_tables=12, knowledge_network=NETWORK, components=components)
+                saved = json.loads((state / "supply-chain.json").read_text())
+                self.assertNotIn("ownedExecution", saved["resources"])
+                with self.assertRaises(ApiError) as caught:
+                    prepare_uninstall(state, "supply-chain", saved["id"], "admin")
+                self.assertEqual(caught.exception.code, "ownership_receipt_missing")
+
+    def test_preflight_conflict_does_not_invent_or_clear_receipts_from_an_earlier_hook(self):
+        from installer.state_store import write_json
+        for receipt in (None, {"toolboxes": ["owned-box"], "skills": ["owned-skill"]}):
+            with self.subTest(receipt=receipt), tempfile.TemporaryDirectory() as directory:
+                state = Path(directory)
+                resources = {"knowledgeNetworkId": NETWORK["id"]}
+                if receipt is not None:
+                    resources["ownedExecution"] = receipt
+                write_json(state / "supply-chain.json", {"id": "inst-supply-chain", "sample": "supply-chain",
+                    "version": VERSION, "status": "installing", "stages": {"knowledge": "failed"}, "resources": resources})
+                catalog = OpenBKN()
+                def openbkn(args):
+                    if args[:2] == ["bkn", "get"]:
+                        return {"entries": [{"id": NETWORK["id"], "tags": []}]}
+                    return catalog(args)
+                with self.assertRaises(ControlError) as caught:
+                    create_installation(sample="supply-chain", version=VERSION, actor_role="admin", database=DATABASE,
+                        state_dir=state, openbkn=openbkn, hook_runner=lambda *_: self.fail("hook ran"),
+                        expected_tables=12, knowledge_network=NETWORK, components={"functions": True, "skills": True})
+                self.assertEqual(caught.exception.code, "ownership_conflict")
+                saved = json.loads((state / "supply-chain.json").read_text())
+                self.assertEqual(saved["resources"], resources)
+
+    def test_owned_or_inconclusive_network_lookup_still_runs_the_hook(self):
+        owned = {"id": NETWORK["id"], "tags": ownership_tags("supply-chain", VERSION)}
+        for result in (owned, {"entries": [owned]}, [owned], {}, ControlError("install_failed", "not found"),
+                       ValueError("invalid lookup JSON")):
+            with self.subTest(result=result), tempfile.TemporaryDirectory() as directory:
+                catalog = OpenBKN()
+                calls = []
+                def openbkn(args):
+                    if args[:2] == ["bkn", "get"]:
+                        if isinstance(result, Exception):
+                            raise result
+                        return result
+                    return catalog(args)
+                def hook(stage, payload):
+                    calls.append(stage)
+                    return hooks(stage, payload)
+                record = create_installation(sample="supply-chain", version=VERSION, actor_role="admin", database=DATABASE,
+                    state_dir=Path(directory), openbkn=openbkn, hook_runner=hook,
+                    expected_tables=12, knowledge_network=NETWORK, components={"functions": True, "skills": True})
+                self.assertEqual(record["status"], "installed")
+                self.assertEqual(calls, ["platform-install", "platform-verify"])
 
     def test_each_finished_step_is_saved_before_the_next_one(self):
         state = Path(tempfile.mkdtemp())
@@ -214,6 +279,7 @@ class ControlPlaneTest(unittest.TestCase):
         self.assertEqual(saved["status"], "failed")
         self.assertEqual(saved["stages"]["discover"], "succeeded")
         self.assertEqual(saved["stages"]["knowledge"], "failed")
+        self.assertEqual(saved["resources"]["knowledgeNetworkId"], NETWORK["id"])
         retried = retry_installation(
             sample="supply-chain",
             version=VERSION,

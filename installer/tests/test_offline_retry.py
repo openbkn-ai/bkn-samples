@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class OfflineRetryTest(unittest.TestCase):
-    def test_failed_offline_install_can_be_withdrawn_for_reupload(self):
+    def test_failed_offline_install_must_be_cleaned_before_package_removal(self):
         with tempfile.TemporaryDirectory() as directory:
             state = Path(directory)
             runtime = RemoteInstallation(ROOT, state, "0.2.0", "arm64", [],
@@ -25,10 +25,16 @@ class OfflineRetryTest(unittest.TestCase):
             (state / "supply-chain.json").write_text(json.dumps({
                 "status": "failed", "offlineRelease": {"packageDigest": "old"}}))
 
+            with self.assertRaises(ApiError) as caught:
+                offline.delete_package("supply-chain", "admin")
+            self.assertEqual(caught.exception.code, "offline_in_use")
+            self.assertTrue(destination.exists())
+            self.assertTrue((state / "supply-chain.json").exists())
+            cleaned = {"status": "uninstalled", "offlineRelease": {"packageDigest": "old"}}
+            (state / "supply-chain.json").write_text(json.dumps(cleaned))
             self.assertEqual(offline.delete_package("supply-chain", "admin"),
                              {"sample": "supply-chain", "deleted": True})
-            self.assertFalse(destination.exists())
-            self.assertFalse((state / "supply-chain.json").exists())
+            self.assertEqual(_read_state(state, "supply-chain"), cleaned)
 
     def test_withdrawing_offline_package_keeps_remote_failure_state(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -91,3 +97,19 @@ class OfflineRetryTest(unittest.TestCase):
             failed = _read_state(state, "supply-chain")
             self.assertNotIn("offlineRelease", failed)
             self.assertNotIn("packageDigest", failed)
+
+    def test_retry_failure_preserves_resource_receipts_for_cleanup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state = Path(directory)
+            original = {"sample": "supply-chain", "id": "inst-old", "version": "0.1.4", "status": "installing",
+                        "catalogId": "catalog-owned", "resources": {"knowledgeNetworkId": "network-owned",
+                        "ownedExecution": {"skills": ["skill-owned"], "toolboxes": []}}}
+            (state / "supply-chain.json").write_text(json.dumps(original))
+            _write_failed(state, "supply-chain", "0.1.4", "database_not_ready", "database retry failed")
+            failed = _read_state(state, "supply-chain")
+            self.assertEqual(failed["catalogId"], original["catalogId"])
+            self.assertEqual(failed["resources"], original["resources"])
+            _write_failed(state, "supply-chain", "0.1.5", "database_not_ready", "different release")
+            changed = _read_state(state, "supply-chain")
+            self.assertNotIn("catalogId", changed)
+            self.assertNotIn("resources", changed)
