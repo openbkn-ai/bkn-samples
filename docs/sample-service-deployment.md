@@ -24,6 +24,8 @@ image:
   digest: sha256:<service-image-digest>
 safeURL: http://bkn-safe:3000
 baseURL: http://<existing-platform-gateway>
+# Optional: version detection only; business operations still use baseURL.
+backendURL: ""
 platform:
   version: ""
   capabilities: []
@@ -59,3 +61,5 @@ Keep the same PVC during rollback. Use `helm history bkn-sample-studio -n openbk
 The state PVC and `openbkn-samples` namespace are retained by the Chart's `helm.sh/resource-policy: keep` annotations. Removing the service must not remove installed databases. Charts before the namespace-retention fix lack that protection: do not uninstall those releases with sample data present. A later deliberate cleanup must separately inspect and remove sample resources and retained volumes.
 
 Product integration is maintained in [openbkn-deploy](https://github.com/openbkn-ai/openbkn-deploy). Use its standard installation entry and the official sample service Chart. Runtime state uses a PVC and a single-replica Recreate deployment. Service restart preserves installed records and history; interrupted tasks require an explicit retry.
+
+`baseURL` must reach the unified OpenBKN gateway, including Backend, Vega and capability APIs. A Backend-only service will pass version detection but fail sample installation with a Vega 404. For deployments whose public gateway uses a private CA, trust that CA for business API calls; optionally set `backendURL` to the in-cluster Backend service for unauthenticated version detection. Do not disable TLS verification or replace `baseURL` with that service. An empty `backendURL` preserves gateway-based version detection.

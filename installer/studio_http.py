@@ -311,7 +311,8 @@ def main() -> None:
     def update_platform_version():
         # Explicit values remain supported for existing deployments. Defaults
         # read the real backend; supported adapter APIs are not licence claims.
-        remote.platform_version = configured_version or read_backend_version(os.environ.get("BKN_BASE_URL", ""))
+        backend_url = os.environ.get("BKN_BACKEND_URL") or os.environ.get("BKN_BASE_URL", "")
+        remote.platform_version = configured_version or read_backend_version(backend_url)
 
     def fetch(path: str, authorization: str):
         request = Request(safe_url + path, headers={"Authorization": authorization})
