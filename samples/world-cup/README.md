@@ -22,7 +22,7 @@ The locked snapshot contains **27 CSV tables and 81,200 rows**: 22 men's edition
 4. Connect an external agent through MCP to inspect object definitions, retrieve complete instance pages and perform joins and calculations.
 5. Use **Uninstall** to remove the sample. Reinstall after cleanup completes; installation history is retained.
 
-Offline installation uses a fixed `.tar.gz` package and its referenced data image. See the [development and publication guide](../../docs/SAMPLE_DEVELOPMENT_GUIDE.md). The [official catalog](../../catalog.json) determines installable versions; new source-controlled evaluation material does not replace an existing release package.
+If the catalog is unreachable, download this sample’s `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases) and use **Import offline package**, then install it. Its referenced data image must also be reachable or preloaded in the target cluster. See the [development and publication guide](../../docs/SAMPLE_DEVELOPMENT_GUIDE.md). The [official catalog](../../catalog.json) determines installable versions; new source-controlled evaluation material does not replace an existing release package.
 
 ## Questions to try
 
@@ -66,7 +66,7 @@ The current model omits ten CSV display fields each from matches and team appear
 
 ## Development and publication
 
-[sample.yaml](sample.yaml) declares the installed components and hooks. `run.sh` retains the existing manual import logic; its historical SQL tool registration is not the query path described here.
+[sample.yaml](sample.yaml) declares the installed components and hooks. Installation hooks call `run.sh` internally; users install through one-click onboarding or offline package import. Historical SQL tool registration is not the query path described here.
 
 Follow the [Sample Development Guide](../../docs/SAMPLE_DEVELOPMENT_GUIDE.md) to build a fixed candidate, validate installation and business scenarios, and publish a new immutable version when changing data or models.
 

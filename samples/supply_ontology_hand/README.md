@@ -1,54 +1,30 @@
-# 供应链本体 · 手工体验包
+# 供应链
 
-这是一个脱敏、静态的供应链体验样例，用于演示产品、订单、库存、齐套和交期风险的可解释业务结论。
+用脱敏的历史样例数据体验订单、预测、BOM、库存、采购、缺料和交期分析，包含 12 张数据表、本体、指标、原生函数和业务 Skill。
 
-它不使用客户生产数据，也不会自动创建采购订单或写入 ERP。真实写回须另行配置工具、权限和审批。
+## 安装与体验
 
-## 获取最新发布版
+1. 登录 OpenBKN，进入首页的**一键体验**。
+2. 刷新官方目录，选择**供应链**并点击**安装**。
+3. 等待安装和验证完成，打开对应知识网络。
+4. 接入外部 Agent，通过 MCP 查询对象、调用已发布函数和使用 Skill。
 
-新使用者直接拉取已验证发布版：
+无法访问官方目录时，从 [Releases](https://github.com/openbkn-ai/bkn-samples/releases) 下载供应链的 `package.tar.gz`，在一键体验中选择**导入离线包**，导入后安装。包引用的数据镜像也必须在目标集群可用；受限网络环境请由管理员提前准备该镜像。
 
-```bash
-git clone --branch supply-ontology-hand-v0.1.4 --depth 1 https://github.com/openbkn-ai/bkn-samples.git
-cd bkn-samples/samples/supply_ontology_hand
-```
+安装无需用户配置 Python、CLI 或数据库连接。详细操作与验收见[安装与验收指南](docs/openbkn-hand-import-guide_cn.md)。
 
-已有仓库先进入 `bkn-samples` 根目录再更新 tag：
+## 业务场景
 
-```bash
-git fetch origin --tags --force
-git checkout --detach supply-ontology-hand-v0.1.4
-cd samples/supply_ontology_hand
-```
+- 查询产品 `382-000005` 的销售订单及成品仓可用库存。
+- 按明确的业务日期、需求和供应条件分析齐套、缺料及交付风险。
+- 使用[月度分析 Skill](skills/sales-signing-calendar-month-analysis/SKILL.md)比较完整自然月。
 
-## 给客户
+样例是历史回放，不代表实时库存或真实交付承诺，不会自动创建采购订单或写入 ERP。
 
-完成交付后，第三方 Agent 可经 MCP 回答：
+## 验收与维护
 
-- `382-000005` 有多少销售订单；
-- 该产品在三个成品仓的可用库存；
-- 指定日期能否交付、缺什么、为什么有风险。
+安装成功后，通过 MCP 检查对象、指标、函数和 Skill，再按 [BKN-Eval](bkn-eval/README.md)运行核心 50 题；完整自然月的四题单独验收。评测题与参考答案在源码仓库中维护，不随安装包交付。
 
-样例是历史回放，不能用于真实交付承诺。
+升级时先卸载旧样例，再安装新版本。卸载会清理样例数据和用户修改；删除离线包缓存不会卸载已安装资源。
 
-## 给实施伙伴
-
-使用唯一入口：[伙伴执行手册](docs/openbkn-hand-import-guide_cn.md)。交付完成标准为：
-
-1. 数据、本体和对象绑定完成；
-2. 指标、业务函数与场景 Skill 已发布；完整自然月分析见 [月度分析 Skill](skills/sales-signing-calendar-month-analysis/SKILL.md)；
-3. Agent 经 MCP 抽样验收通过；
-4. 步骤 7：包内 [BKN-Eval](bkn-eval/README.md) 完成核心 50 题 A/B/C 对比。
-
-开始前需要可登录的 OpenBKN、专用 PostgreSQL/MySQL 体验库、可管理 Catalog 的账号，以及平台到数据库的网络连通性。不要把体验脚本指向生产库。
-
-## 关键资产
-
-- KN：`kn/supply_ontology_hand.json`
-- 样例数据：`data/`（12 张 CSV）
-- 配置模板：`tools/config.example.yaml`
-- 导入与验收脚本：`tools/`
-- 评测包：`bkn-eval/`
-- 指标口径与时间分析：[候选查询指南](tools/assets/metric-analysis-guide.zh-CN.md)
-
-本包按 `@openbkn/bkn-sdk@0.1.4`、Node.js `>=24.19.0` 验证。
+开发者可查看 `sample.yaml`、`db/`、`platform/` 和 [tools/](tools/README.md)。这些脚本由标准安装 hooks 调用，客户和伙伴不需要逐个执行。

@@ -1,25 +1,24 @@
-# Supply Chain EN
+# Supply Chain
 
-An independent English sample for OpenBKN. Explore orders, forecasts, BOMs, stock and procurement using concise fictional English names. This sample has its own database, knowledge network, metrics, functions and Skills.
+Explore orders, forecasts, BOMs, stock, procurement, shortages and delivery risk with fictional sample data. The sample includes 12 tables, a knowledge network, metrics, native functions and business Skills.
 
-Import its standard offline package through one-click onboarding. For manual development, follow [the import guide](docs/import-guide.en-US.md). Finish Step 7 with the core 50-question BKN-Eval; the four calendar-month checks are separate.
+## Install and explore
 
-- Sample: `supply-chain-en`
-- Knowledge network: `supply_ontology_en`
-- Database: `supply_demo_en`
-- Function toolbox: `Supply_EN_Functions`
-- Business date: `2026-08-25`
-- Candidate version: `0.1.0`
+1. Sign in to OpenBKN and open **One-click onboarding** from the homepage.
+2. Refresh the official catalog, select **Supply Chain (EN)** and click **Install**.
+3. Wait for installation and verification to complete, then open the knowledge network.
+4. Connect an external agent through MCP to query objects, call published functions and use Skills.
 
-The fixture contains fictional people and companies, engineering specifications and stable business identifiers. Use the included forecast scenarios to explore stock coverage, shortages and shared demand allocation.
+If the official catalog is unreachable, download this sample's `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases), choose **Import offline package**, then install it. The referenced data image must also be available to the target cluster; ask the administrator to prepare it for restricted networks.
 
-See [BKN-Eval](bkn-eval/README.md), [FAQ](docs/faq.md) and [release notes](releases/0.1.0/release-notes.en-US.md). Evaluation material and tests are excluded from the installable package. Candidate scores apply only to the exact tested package.
+Users do not need to configure Python, the CLI or database connections. See the [installation and acceptance guide](docs/import-guide.en-US.md) and [FAQ](docs/faq.md).
 
-When `supply-ontology-en-v0.1.0` is published, obtain that frozen release with:
+## Scenarios and acceptance
 
-```sh
-git fetch origin --tags --force
-git clone --branch supply-ontology-en-v0.1.0 https://github.com/openbkn-ai/bkn-samples.git
-```
+The fixture uses fictional people and companies, engineering specifications and stable business identifiers. Explore stock coverage, shortages, shared demand allocation and delivery risk with explicit business dates. Keep identifiers as strings, including leading zeroes. These historical scenarios do not promise real-world delivery or create purchase orders.
 
-The tag above is a planned release identifier, not a claim that this candidate has been published.
+After installation, verify objects, metrics, functions and Skills through MCP. Use [BKN-Eval](bkn-eval/README.md) for the core 50 questions and run the four calendar-month checks separately. Evaluation questions and reference answers are maintained in the source repository and excluded from installable packages.
+
+To install a new version, uninstall the existing sample first. Uninstallation removes sample data and user edits. Deleting a cached offline package does not uninstall platform resources.
+
+Developers can inspect `sample.yaml`, `db/`, `platform/` and [tools/](tools/README.md). Standard installation hooks run these scripts; users do not execute them individually.

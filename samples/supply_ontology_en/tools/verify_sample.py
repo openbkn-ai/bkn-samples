@@ -35,7 +35,6 @@ def verify(pack: str | Path, *, run_tests: bool = True) -> dict[str, Any]:
         root / "docs/import-guide.en-US.md",
         root / "docs/faq.md",
         root / 'bkn-eval/README.md',
-        root / "tools/preflight.py",
         root / "tools/register_native_function_toolbox.py",
         root / "tools/register_skills.py",
         root / "tools/fn",
