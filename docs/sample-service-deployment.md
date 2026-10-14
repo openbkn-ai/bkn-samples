@@ -66,3 +66,15 @@ Product integration is maintained in [openbkn-deploy](https://github.com/openbkn
 `baseURL` must reach the unified OpenBKN gateway, including Backend, Vega and capability APIs. A Backend-only service will pass version detection but fail sample installation with a Vega 404. For deployments whose public gateway uses a private CA, trust that CA for business API calls; optionally set `backendURL` to the in-cluster Backend service for unauthenticated version detection. Do not disable TLS verification or replace `baseURL` with that service. An empty `backendURL` preserves gateway-based version detection.
 
 For an existing deployment that recorded a Backend-only or untrusted external `baseURL`, correct that stored override during upgrade. Helm upgrades that reuse prior values may preserve it; updating the image alone does not correct it. Keep the existing PVC and fixed data/executor images. A different internal topology may require an operator override. Before using that override, verify Backend health, authenticated Vega/knowledge-network/capability APIs, Host matching and the absence of an unwanted HTTPS redirect.
+
+For a direct Chart upgrade of an affected deployment in the standard product topology, the following command corrects the stored addresses while preserving other Helm values, including the PVC and pinned images:
+
+```bash
+helm upgrade bkn-sample-studio \
+  oci://ghcr.io/openbkn-ai/charts/bkn-sample-studio \
+  --version <published-chart-version> -n openbkn --reuse-values \
+  --set-string baseURL=http://ingress-nginx-controller.ingress-nginx.svc.cluster.local \
+  --set-string backendURL=
+```
+
+Use a published Chart/image pair compatible with the current platform version. This routing-only correction does not require reversioning samples or replacing their data images. The standard product installer performs the same address correction, including when the Chart version has not changed. Use the operator-approved gateway instead for a nonstandard topology; do not disable TLS or SDK version checks.
