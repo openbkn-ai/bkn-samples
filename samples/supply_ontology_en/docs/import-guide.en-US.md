@@ -1,19 +1,36 @@
-# Import and Acceptance
+# Installation and Acceptance
 
-1. Prepare OpenBKN authentication and confirm the target environment. Use the standard sample offline package for one-click onboarding.
-2. Install `supply-chain-en` with database `supply_demo_en` and knowledge network `supply_ontology_en`. Its standard hooks initialize and verify 12 tables, then import and bind the sample resources.
-3. Confirm dataset hashes against `dataset.lock`, preserving leading-zero forecast IDs and all three future forecasts. Configure the independent catalog if importing manually.
-4. Verify object types, relations, metrics and object logic-property bindings. Discover actual platform IDs at runtime.
-5. Register the **Native Function Toolbox** `Supply_EN_Functions` and the five `supply-en-` Skills. `tools/fn/` holds sample calculations; callers do not build or pass `resolved_context`. Runtime functions read their bound BKN objects.
+## Online installation
 
-## Step 6: Capabilities and MCP Acceptance
+1. Sign in to OpenBKN and open **One-click onboarding** from the homepage.
+2. Refresh the official catalog, select **Supply Chain (EN)** and click **Install** for the intended version.
+3. Wait for data preparation, resource scanning, model import and binding, capability publication and verification to complete.
+4. Open the knowledge network and inspect its objects and relationships.
 
-Discover functions and Skills through actual MCP metadata. Read the published Skills and invoke the named functions with their declared parameters. Check resolved warehouse scopes, alternate policies, finished/component-first allocation, shared stock and leading-zero forecast lookup. Use the standard lifecycle for a clean candidate reinstall; do not upgrade in place or remove unrelated samples.
+The installation service loads data and publishes capabilities automatically. Users do not create databases, copy configuration files or run individual scripts.
 
-## Step 7: Core 50-Question Evaluation
+## Offline package import
 
-Use only `bkn-eval/datasets/sample-question-set-v1.yaml` for the core questions. A blind independent agent answers through MCP without CSVs, answers or implementation source. A separate judge compares required business outputs against the independent CSV gold. Require exact agreement for all 50 questions.
+Download this sample's `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases). Choose **Import offline package** in one-click onboarding, upload the package, then install the imported version.
 
-Run the four complete-calendar-month questions separately. Verify the published Monthly Sales Skill, half-open Asia/Shanghai boundaries, May 31 inclusion, identical filters and agent arithmetic. Do not substitute a server-side `sameperiod` diagnostic for this business path.
+The package references a fixed data image; it does not contain the image itself. The target cluster must be able to pull it. For restricted networks, ask the administrator to prepare the image in the target environment first.
 
-Keep exact package/image digests, installation receipts, discovered capability IDs, calls, answers and judgments in a local workspace outside the committed sample. Execution success or a previous package's score is insufficient evidence.
+## Capabilities and MCP acceptance
+
+Connect an external agent through MCP. Verify that it can discover the knowledge network, metrics, Native Function Toolbox and Skills. Query orders and stock, then invoke functions with their declared business parameters. Check warehouse scopes, allocation policies and leading-zero forecast lookup. Installation success alone does not prove the business path.
+
+The native implementations in `tools/fn/` are published by installation hooks. Callers do not construct `resolved_context`, pass credentials or supply inventory snapshots. Runtime functions read their bound BKN objects; local CSV calculations cannot replace actual MCP results.
+
+## Core 50-question evaluation
+
+Use the source repository's [BKN-Eval](../bkn-eval/README.md) for the core 50 questions. An independent external agent answers through MCP without seeing reference answers, CSVs or implementation source. Compare required fields, ordering and business values after completion, using the exact installed version and data baseline.
+
+Run the four complete-calendar-month questions separately. Verify the published Monthly Sales Skill, half-open Asia/Shanghai boundaries, May 31 inclusion, identical filters and agent arithmetic. Keep execution evidence locally outside the committed sample.
+
+## Failure and reinstallation
+
+Read installation failure details, resolve the cause and retry the same installation record. If the original manifest no longer matches, retain the error and version information for the administrator; do not overwrite the failed record with a manual import of another version.
+
+Before installing a new version, uninstall the old sample and wait for cleanup to finish. Uninstallation deletes sample data and user edits. Removing a cached package does not uninstall resources. Contact the administrator if uninstallation is unavailable or cleanup fails.
+
+See the [FAQ](faq.md) for common questions.

@@ -14,7 +14,9 @@ No custom functions, metrics or executable business Skills are declared in this 
 
 ## Installation
 
-Import a reviewed, fixed release package through Studio’s **Import offline package**, then select **Install**. Its referenced data image must be reachable or preloaded in the target cluster. Online discovery requires a published release registered in the repository catalog; source files alone do not make an online card available.
+Open **Studio → One-click onboarding**, refresh the official catalog, select **World Cup (EN)** and click **Install**. Wait for installation and verification to complete, then open the knowledge network.
+
+If the catalog is unreachable, download this sample’s `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases), choose **Import offline package**, then install it. The referenced data image must be reachable or preloaded in the target cluster.
 
 See [the import guide](docs/import-guide.en-US.md), [model semantics](kn/README.md) and the repository’s [evaluation suite](https://github.com/openbkn-ai/bkn-samples/tree/main/samples/world-cup-en/bkn-eval). The evaluation suite is maintained in source control and is excluded from the runtime installation package. To remove an installed sample, use **Uninstall** and wait for cleanup to finish before reinstalling. Installation history is retained.
 

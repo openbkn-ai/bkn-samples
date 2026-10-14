@@ -11,11 +11,11 @@ def test_delivery_path_ends_with_core_bkn_eval_without_extension_questions():
     question_set = (PACKAGE / "bkn-eval" / "datasets" / "sample-question-set-v1.yaml").read_text(encoding="utf-8")
     answer_set = (PACKAGE / "bkn-eval" / "datasets" / "sample-answer-set-v1.yaml").read_text(encoding="utf-8")
 
-    assert 'Step 6: Capabilities and MCP Acceptance' in guide
-    assert 'Step 7: Core 50-Question Evaluation' in guide
+    assert 'Capabilities and MCP acceptance' in guide
+    assert 'Core 50-question evaluation' in guide
     assert 'Step 8' not in guide
     assert 'Optional scenarios' not in guide
-    assert 'Step 7' in readme and "BKN-Eval" in readme
+    assert 'core 50 questions' in readme and "BKN-Eval" in readme
     assert '14 functions' not in evaluation_guide
     assert "X-01" not in evaluation_guide
     assert "extensions:" not in question_set

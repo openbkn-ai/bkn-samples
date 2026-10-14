@@ -26,9 +26,9 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 | [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Online catalog |
 | [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Online catalog |
 | [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Online catalog |
-| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Source merged; online release pending |
+| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Online catalog |
 
-The [official catalog](catalog.json) determines downloadable versions. Merging sample source does not publish an online package. English World Cup source and local installation acceptance are complete; its official image, release package and catalog registration remain separate release steps.
+All five samples are published in the [official catalog](catalog.json). Download their offline packages from [Releases](https://github.com/openbkn-ai/bkn-samples/releases). The catalog determines the available versions; sample package versions are independent of the platform version.
 
 World Cup data is a locked historical snapshot covering men's editions through 2022 and women's editions through 2019. Detailed coverage varies by table. See each sample's README for its data scope, license and scenario assumptions.
 

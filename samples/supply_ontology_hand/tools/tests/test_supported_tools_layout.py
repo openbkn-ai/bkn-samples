@@ -8,7 +8,6 @@ def test_tools_only_expose_supported_import_and_capability_entries():
     required = {
         "README.md",
         "config.example.yaml",
-        "preflight.py",
         "load_sample_data.py",
         "import_kn.py",
         "setup_catalog.py",
