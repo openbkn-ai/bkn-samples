@@ -10,6 +10,8 @@ The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint us
 
 Explicit `platform.version` and nonempty `platform.capabilities` values remain supported for existing deployments and operator restrictions. A version override is an operator declaration rather than a health check; use the empty defaults for automatic version reading. These overrides do not bypass platform API authorization.
 
+The repository `VERSION` is the product service and image base version, aligned with OpenBKN 0.2.0. Both `bkn-sample-studio` and `bkn-samples` images, and the service Chart, use this base version; main builds append `-main.<UTC timestamp>.sha<commit>`. Individual sample packages retain their own independently published versions and immutable artifact references.
+
 ## Configuration and installation
 
 Create a values file using the actual platform addresses. Leave the optional platform overrides empty:
