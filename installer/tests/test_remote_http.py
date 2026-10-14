@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from installer.studio_api import _read_state
-from installer.contract import build_manifest_index
+from installer.contract import build_manifest_index, read_version
 from installer.state_store import write_json
 from installer.studio_http import main, dispatch
 from installer.task_runner import InstallationRunner
@@ -27,7 +27,7 @@ class RemoteHttpTest(unittest.TestCase):
                    "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64}
             with patch.dict("os.environ", env), \
                  patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
-                 patch("installer.studio_api.load_indexes", return_value=("0.1.0", index, index)), \
+                 patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), index, index)), \
                  patch("installer.catalog_source.read_url") as network:
                 main()
                 catalog = apps[0].catalog("admin")
@@ -55,7 +55,7 @@ class RemoteHttpTest(unittest.TestCase):
             apps = []
             with patch.dict("os.environ", env), \
                  patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
-                 patch("installer.studio_api.load_indexes", return_value=("0.1.0", build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
+                 patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
                  patch("installer.platform_version.read_backend_version", return_value="0.2.0") as health:
                 main()
                 result = apps[0].import_package(candidate / "package.tar.gz", "admin")
@@ -104,7 +104,7 @@ class RemoteHttpTest(unittest.TestCase):
                    "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64,
                    "BKN_SAMPLE_PLATFORM_CAPABILITIES": ""}
             with patch.dict("os.environ", env), patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
-                 patch("installer.studio_api.load_indexes", return_value=("0.1.0", build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
+                 patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
                  patch("installer.catalog_source.OfficialCatalog.entries", return_value=[fixture.entry]), \
                  patch("installer.remote_installation.RemoteInstallation.execute", side_effect=execute), \
                  patch("installer.task_runner.InstallationRunner", side_effect=make_runner), \
