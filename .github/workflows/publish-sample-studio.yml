@@ -39,24 +39,26 @@ jobs:
           else
             echo "swr=false" >> "$GITHUB_OUTPUT"
           fi
-          {
-            echo "tags<<EOF"
-            echo "ghcr.io/openbkn-ai/bkn-sample-studio:${version}"
-            if [[ -n "${SWR_PASSWORD}" ]]; then
-              echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio:${version}"
-            fi
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-          {
-            echo "data_tags<<EOF"
-            if [[ "${GITHUB_REF_TYPE}" != "tag" ]]; then
-              echo "ghcr.io/openbkn-ai/bkn-samples:${version}"
+          for arch in amd64 arm64; do
+            {
+              echo "service_${arch}_tags<<EOF"
+              echo "ghcr.io/openbkn-ai/bkn-sample-studio:${version}-${arch}"
               if [[ -n "${SWR_PASSWORD}" ]]; then
-                echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}"
+                echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio:${version}-${arch}"
               fi
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+            if [[ "${GITHUB_REF_TYPE}" != "tag" ]]; then
+              {
+                echo "data_${arch}_tags<<EOF"
+                echo "ghcr.io/openbkn-ai/bkn-samples:${version}-${arch}"
+                if [[ -n "${SWR_PASSWORD}" ]]; then
+                  echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}-${arch}"
+                fi
+                echo "EOF"
+              } >> "$GITHUB_OUTPUT"
             fi
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          done
       - name: Write the manifest index for this commit
         # Match the samples actually copied by installer/image/Dockerfile.
         # Other samples are delivered through fixed packages and the catalog.
@@ -74,26 +76,83 @@ jobs:
           registry: swr.cn-east-3.myhuaweicloud.com
           username: ${{ secrets.SWR_USERNAME }}
           password: ${{ secrets.SWR_PASSWORD }}
-      - uses: docker/build-push-action@v6
-        id: service_image
+      # Push each architecture using Docker v2 media types; Basic SWR rejects OCI manifests.
+      # Publish Docker manifest lists below after both architecture images are available.
+      - name: Build and push the service image (amd64)
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: installer/studio/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           provenance: false
           sbom: false
-          tags: ${{ steps.version.outputs.tags }}
-      - uses: docker/build-push-action@v6
+          tags: ${{ steps.version.outputs.service_amd64_tags }}
+          outputs: type=image,oci-mediatypes=false,push=true
+      - name: Build and push the service image (arm64)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: installer/studio/Dockerfile
+          platforms: linux/arm64
+          provenance: false
+          sbom: false
+          tags: ${{ steps.version.outputs.service_arm64_tags }}
+          outputs: type=image,oci-mediatypes=false,push=true
+      - name: Build and push the sample data image (amd64)
         if: github.ref_type != 'tag'
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: installer/image/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           provenance: false
           sbom: false
-          tags: ${{ steps.version.outputs.data_tags }}
+          tags: ${{ steps.version.outputs.data_amd64_tags }}
+          outputs: type=image,oci-mediatypes=false,push=true
+      - name: Build and push the sample data image (arm64)
+        if: github.ref_type != 'tag'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: installer/image/Dockerfile
+          platforms: linux/arm64
+          provenance: false
+          sbom: false
+          tags: ${{ steps.version.outputs.data_arm64_tags }}
+          outputs: type=image,oci-mediatypes=false,push=true
+      - name: Publish Docker manifest lists
+        id: manifest
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+          SWR_ENABLED: ${{ steps.version.outputs.swr }}
+        run: |
+          set -euo pipefail
+          publish_manifest() {
+            local repository="$1"
+            local image="$2"
+            local reference="${repository}/${image}:${VERSION}"
+            docker manifest create "${reference}" \
+              "${repository}/${image}:${VERSION}-amd64" \
+              "${repository}/${image}:${VERSION}-arm64"
+            docker manifest push "${reference}"
+          }
+
+          publish_manifest ghcr.io/openbkn-ai bkn-sample-studio
+          if [[ "${SWR_ENABLED}" == "true" ]]; then
+            publish_manifest swr.cn-east-3.myhuaweicloud.com/openbkn-ai bkn-sample-studio
+          fi
+
+          if [[ "${GITHUB_REF_TYPE}" != "tag" ]]; then
+            publish_manifest ghcr.io/openbkn-ai bkn-samples
+            if [[ "${SWR_ENABLED}" == "true" ]]; then
+              publish_manifest swr.cn-east-3.myhuaweicloud.com/openbkn-ai bkn-samples
+            fi
+          fi
+
+          service_digest="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' \
+            "ghcr.io/openbkn-ai/bkn-sample-studio:${VERSION}")"
+          [[ "${service_digest}" =~ ^sha256:[0-9a-f]{64}$ ]]
+          printf 'service_digest=%s\n' "${service_digest}" >> "$GITHUB_OUTPUT"
       - name: Require SWR and GHCR digests to match
         if: steps.version.outputs.swr == 'true'
         run: |
@@ -111,7 +170,7 @@ jobs:
       - name: Package the chart for the same version
         env:
           VERSION: ${{ steps.version.outputs.value }}
-          SERVICE_IMAGE_DIGEST: ${{ steps.service_image.outputs.digest }}
+          SERVICE_IMAGE_DIGEST: ${{ steps.manifest.outputs.service_digest }}
         run: |
           [[ "${SERVICE_IMAGE_DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]
           sed -i "s/^version: .*/version: ${VERSION}/" deploy/charts/bkn-sample-studio/Chart.yaml

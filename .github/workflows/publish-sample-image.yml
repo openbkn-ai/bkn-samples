@@ -30,14 +30,16 @@ jobs:
           else
             echo "swr=false" >> "$GITHUB_OUTPUT"
           fi
-          {
-            echo "tags<<EOF"
-            echo "ghcr.io/openbkn-ai/bkn-samples:${version}"
-            if [[ -n "${SWR_PASSWORD}" ]]; then
-              echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}"
-            fi
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          for arch in amd64 arm64; do
+            {
+              echo "tags_${arch}<<EOF"
+              echo "ghcr.io/openbkn-ai/bkn-samples:${version}-${arch}"
+              if [[ -n "${SWR_PASSWORD}" ]]; then
+                echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}-${arch}"
+              fi
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          done
       - name: Write the manifest index for this commit
         run: python installer/build_manifest_index.py --revision "${GITHUB_SHA}" --output manifest-index.json --samples supply-chain world-cup
       - uses: docker/setup-qemu-action@v3
@@ -53,15 +55,48 @@ jobs:
           registry: swr.cn-east-3.myhuaweicloud.com
           username: ${{ secrets.SWR_USERNAME }}
           password: ${{ secrets.SWR_PASSWORD }}
-      - uses: docker/build-push-action@v6
+      # Push each architecture using Docker v2 media types; Basic SWR rejects OCI manifests.
+      # Publish a Docker manifest list below after both architecture images are available.
+      - name: Build and push the sample image (amd64)
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: installer/image/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           provenance: false
           sbom: false
-          tags: ${{ steps.version.outputs.tags }}
+          tags: ${{ steps.version.outputs.tags_amd64 }}
+          outputs: type=image,oci-mediatypes=false,push=true
+      - name: Build and push the sample image (arm64)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: installer/image/Dockerfile
+          platforms: linux/arm64
+          provenance: false
+          sbom: false
+          tags: ${{ steps.version.outputs.tags_arm64 }}
+          outputs: type=image,oci-mediatypes=false,push=true
+      - name: Publish Docker manifest lists
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+          SWR_ENABLED: ${{ steps.version.outputs.swr }}
+        run: |
+          set -euo pipefail
+          publish_manifest() {
+            local repository="$1"
+            local image="$2"
+            local reference="${repository}/${image}:${VERSION}"
+            docker manifest create "${reference}" \
+              "${repository}/${image}:${VERSION}-amd64" \
+              "${repository}/${image}:${VERSION}-arm64"
+            docker manifest push "${reference}"
+          }
+
+          publish_manifest ghcr.io/openbkn-ai bkn-samples
+          if [[ "${SWR_ENABLED}" == "true" ]]; then
+            publish_manifest swr.cn-east-3.myhuaweicloud.com/openbkn-ai bkn-samples
+          fi
       - name: Require SWR and GHCR digests to match
         if: steps.version.outputs.swr == 'true'
         run: |
