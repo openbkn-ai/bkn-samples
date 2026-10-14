@@ -1,0 +1,72 @@
+{
+  "sampleId": "world-cup",
+  "version": "0.1.2",
+  "packageDigest": "sha256:b95a3d326cdefd6ec2a519c1d4464b5665c064cd70581fe5a3d9592f01b30ff4",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:805317bc1ac93e58f4149e35a7a0a75057330d8888ca54526a354996f313fcd1",
+  "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:235acdcad45957fd47aca0cfc26b0207cb01c0b3b5ea48ed4786ac52197a7f9f",
+  "freshInstallation": true,
+  "installation": {
+    "source": "studio-offline-import",
+    "startedAt": "2026-10-11T16:51:34.845542Z",
+    "finishedAt": "2026-10-11T16:52:08.109288Z",
+    "freshAfterUninstall": true,
+    "stages": [
+      {
+        "id": "database",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "state": "succeeded"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "27 World Cup tables loaded; table discovery passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Native BKN objects and relations were imported and bound; cross-table queries passed."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "The published SQL execution function was actually invoked successfully."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "World Cup verification passed after uninstall and fresh reinstall."
+    }
+  ],
+  "architectureTested": "arm64",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-v0.1.2/acceptance.json",
+  "evidenceDigest": "sha256:88ca2001e83797fcf2274acc9df71efbe1f869d545f020f788791e8cbdffdde5",
+  "lifecycle": {
+    "installUninstallReinstallPassed": true,
+    "recordedResourcesAbsentAfterUninstall": true,
+    "historyRetained": true,
+    "staleUninstallRequestStatus": 404
+  },
+  "limits": [
+    "Only an arm64 runtime was exercised; amd64 runtime acceptance is not claimed.",
+    "No new model-driven Skill conversation acceptance was performed for these lifecycle releases.",
+    "Legacy published packages without ownership receipts remain unchanged."
+  ]
+}
