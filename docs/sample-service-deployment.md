@@ -2,7 +2,7 @@
 
 Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
 
-The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart and supplies its gateway URL. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
+The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart. The sample service uses the existing internal ingress-nginx HTTP entrypoint by default, independently of the public HTTPS address. It does not create another gateway or change public Ingress/TLS settings. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
 
 The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint used by the SDK, when listing releases, accepting a selected installation, importing an offline package or retrying. Missing or malformed version information keeps fixed-package installation unavailable. It does not infer a version from a Chart tag.
 
@@ -23,7 +23,8 @@ image:
   repository: ghcr.io/openbkn-ai/bkn-sample-studio
   digest: sha256:<service-image-digest>
 safeURL: http://bkn-safe:3000
-baseURL: http://<existing-platform-gateway>
+# Default internal gateway; no manual value is needed in the standard product topology.
+baseURL: http://ingress-nginx-controller.ingress-nginx.svc.cluster.local
 # Optional: version detection only; business operations still use baseURL.
 backendURL: ""
 platform:
@@ -64,4 +65,16 @@ Product integration is maintained in [openbkn-deploy](https://github.com/openbkn
 
 `baseURL` must reach the unified OpenBKN gateway, including Backend, Vega and capability APIs. A Backend-only service will pass version detection but fail sample installation with a Vega 404. For deployments whose public gateway uses a private CA, trust that CA for business API calls; optionally set `backendURL` to the in-cluster Backend service for unauthenticated version detection. Do not disable TLS verification or replace `baseURL` with that service. An empty `backendURL` preserves gateway-based version detection.
 
-When upgrading a deployment affected by the Backend-only default, explicitly set `baseURL` to its existing unified gateway. Helm upgrades that reuse prior values can preserve the incorrect address; updating the image alone does not correct it.
+For an existing deployment that recorded a Backend-only or untrusted external `baseURL`, correct that stored override during upgrade. Helm upgrades that reuse prior values may preserve it; updating the image alone does not correct it. Keep the existing PVC and fixed data/executor images. A different internal topology may require an operator override. Before using that override, verify Backend health, authenticated Vega/knowledge-network/capability APIs, Host matching and the absence of an unwanted HTTPS redirect.
+
+For a direct Chart upgrade of an affected deployment in the standard product topology, the following command corrects the stored addresses while preserving other Helm values, including the PVC and pinned images:
+
+```bash
+helm upgrade bkn-sample-studio \
+  oci://ghcr.io/openbkn-ai/charts/bkn-sample-studio \
+  --version <published-chart-version> -n openbkn --reuse-values \
+  --set-string baseURL=http://ingress-nginx-controller.ingress-nginx.svc.cluster.local \
+  --set-string backendURL=
+```
+
+Use a published Chart/image pair compatible with the current platform version. This routing-only correction does not require reversioning samples or replacing their data images. The standard product installer performs the same address correction, including when the Chart version has not changed. Use the operator-approved gateway instead for a nonstandard topology; do not disable TLS or SDK version checks.
