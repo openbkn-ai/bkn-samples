@@ -7,9 +7,11 @@ from urllib.error import HTTPError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-from installer.control_plane import ownership_tags
+import yaml
+
+from installer.control_plane import catalog_name, ownership_tags
 from installer.deploy_database import NAMESPACE, _workload_name
-from installer.history import record_terminal_installation
+from installer.history import read_installation_history, record_terminal_installation
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, timestamp
 
@@ -53,6 +55,47 @@ def _path(prefix, resource_id):
     return prefix + quote(resource_id, safe="")
 
 
+def _failed_resources(state_dir, sample, record):
+    """Recover only this installation's local receipts, never infer ownership from a new package."""
+    resources = dict(record.get("resources") or {})
+    shared = state_dir / sample
+    history, _ = read_installation_history(state_dir, sample, record)
+    hook_started = any(
+        any(stage in (attempt.get("stages") or {}) for stage in ("knowledge", "capabilities", "verify"))
+        for attempt in [record, *history]
+        if attempt.get("id") == record.get("id") and attempt.get("operation") != "uninstall"
+    )
+    hook_started = hook_started or bool(resources.get("knowledgeNetworkId"))
+    catalog_id = record.get("catalogId")
+    try:
+        if (shared / "config.yaml").exists():
+            config = yaml.safe_load((shared / "config.yaml").read_text())
+            if (resources.get("knowledgeNetworkId") not in (None, config["openbkn"]["kn_id"])
+                    or catalog_id not in (None, config["vega"]["catalog_id"])):
+                raise ValueError("local configuration differs from installation receipt")
+            resources.setdefault("knowledgeNetworkId", config["openbkn"]["kn_id"])
+            catalog_id = catalog_id or config["vega"]["catalog_id"]
+            hook_started = True
+        receipts = [resources["ownedExecution"]] if "ownedExecution" in resources else []
+        if (shared / "owned-execution.json").exists():
+            receipts.append(json.loads((shared / "owned-execution.json").read_text()))
+            hook_started = True
+        if hook_started and (not resources.get("knowledgeNetworkId") or not receipts):
+            raise ValueError("missing hook receipt")
+        owned = {"toolboxes": [], "skills": []}
+        for receipt in receipts:
+            for kind in owned:
+                ids = receipt[kind]
+                if not isinstance(ids, list) or any(not isinstance(id_, str) or not id_ for id_ in ids):
+                    raise ValueError("invalid hook receipt")
+                owned[kind] = list(dict.fromkeys([*owned[kind], *ids]))
+        resources["ownedExecution"] = owned
+        resources.setdefault("knowledgeNetworkId", None)
+    except (ValueError, KeyError, TypeError, OSError, yaml.YAMLError):
+        raise ApiError(409, "ownership_receipt_missing", "The failed installation resource receipt is incomplete; nothing will be deleted.") from None
+    return resources, catalog_id
+
+
 def prepare_uninstall(state_dir, sample, installation_id, role):
     if role != "admin":
         raise ApiError(403, "forbidden", "An administrator must uninstall the sample.")
@@ -62,13 +105,16 @@ def prepare_uninstall(state_dir, sample, installation_id, role):
     # second static allowlist here.
     if not SAMPLE_NAME_RE.fullmatch(sample) or record.get("sample") != sample or record.get("id") != installation_id:
         raise ApiError(404, "uninstall_failed", "Sample installation not found.")
-    if record.get("status") not in {"installed", "uninstall_failed"}:
-        raise ApiError(409, "already_installing", "Only an installed sample or a failed uninstall can be uninstalled.")
+    if record.get("status") not in {"installed", "failed", "uninstall_failed"}:
+        raise ApiError(409, "already_installing", "Only an installed sample, a failed installation or a failed uninstall can be cleaned up.")
+    failed_resources = _failed_resources(state_dir, sample, record) if record["status"] == "failed" else None
     resources = record.get("resources") or {}
     receipt = resources.get("ownedExecution")
-    if not isinstance(receipt, dict) or any(not isinstance(receipt.get(k), list) for k in ("toolboxes", "skills")):
+    if failed_resources is None and (not isinstance(receipt, dict) or any(not isinstance(receipt.get(k), list) for k in ("toolboxes", "skills"))):
         raise ApiError(409, "ownership_receipt_missing", "This installation has no execution resource ownership receipt; automatic uninstall is unavailable.")
     record_terminal_installation(state_dir, record)
+    if failed_resources is not None:
+        record["resources"], record["catalogId"] = failed_resources
     record.update(status="uninstalling", operation="uninstall", stages={})
     record.pop("error", None)
     write_json(state_dir / f"{sample}.json", record)
@@ -82,13 +128,33 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         write_json(destination, record)
     try:
         resources = record["resources"]
-        network_path = _path("/api/bkn-backend/v1/knowledge-networks/", resources.get("knowledgeNetworkId"))
-        catalog_path = _path("/api/vega-backend/v1/catalogs/", record.get("catalogId"))
+        network_id = resources["knowledgeNetworkId"]
+        network_path = _path("/api/bkn-backend/v1/knowledge-networks/", network_id) if network_id else None
+        if not record.get("catalogId"):
+            name = catalog_name(sample)
+            found = api("GET", "/api/vega-backend/v1/catalogs?name=" + quote(name, safe="") + "&limit=-1")
+            if not isinstance(found, dict) or not isinstance(found.get("entries"), list) or any(not isinstance(item, dict) for item in found["entries"]):
+                raise ApiError(500, "uninstall_failed", "Cannot check the failed installation catalog.")
+            matches = [item for item in found["entries"] if item.get("name") == name]
+            if len(matches) > 1:
+                raise ApiError(409, "ownership_conflict", "The sample catalog is ambiguous; nothing will be deleted.")
+            if matches:
+                record["catalogId"] = matches[0].get("id")
+                _path("/api/vega-backend/v1/catalogs/", record["catalogId"])
+                write_json(destination, record)
+        catalog_path = _path("/api/vega-backend/v1/catalogs/", record["catalogId"]) if record.get("catalogId") else None
         required = set(ownership_tags(sample, record["version"]))
         # Validate every resource before the first deletion. Missing IDs are already removed.
         for path in (network_path, catalog_path):
+            if path is None:
+                continue
             value = _single(api("GET", path))
             if value is not None and not required.issubset(set(value.get("tags") or [])):
+                if path == network_path and resources.get("knowledgeNetworkPlanned") is True:
+                    # A failed hook's intended target is not a receipt of ownership.
+                    # Leave an unrelated existing network untouched and clean only owned resources.
+                    network_path = None
+                    continue
                 raise ApiError(409, "ownership_conflict", "A resource no longer belongs to this sample; nothing will be deleted.")
         execution_paths = [_path("/api/agent-operator-integration/v1/skills/", id_)
                            for id_ in resources["ownedExecution"]["skills"]]
@@ -111,7 +177,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
             database_resources.append((kind, resource, value["metadata"]["uid"]))
         # Metrics are owned by the network scope, including user edits in this sample.
         metrics = []
-        if _single(api("GET", network_path)) is not None:
+        if network_path and _single(api("GET", network_path)) is not None:
             offset = 0
             while True:
                 page = api("GET", network_path + f"/metrics?limit=500&offset={offset}")
@@ -125,12 +191,14 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                 if len(entries) < 500:
                     break
                 offset += len(entries)
-        for stage, paths in (("knowledge", metrics + [network_path]), ("capabilities", execution_paths), ("discover", [catalog_path])):
+        for stage, paths in (("knowledge", metrics + ([network_path] if network_path else [])), ("capabilities", execution_paths), ("discover", [catalog_path] if catalog_path else [])):
             checkpoint(stage, "running")
             for path in paths:
+                resource = _single(api("GET", path))
+                if resource is None:
+                    continue
                 if stage == "capabilities":
-                    resource = _single(api("GET", path))
-                    if resource and resource.get("status") == "published":
+                    if resource.get("status") == "published":
                         method = "PUT" if "/skills/" in path else "POST"
                         api(method, path + "/status", {"status": "offline"})
                 api("DELETE", path)

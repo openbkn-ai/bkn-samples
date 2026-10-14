@@ -269,8 +269,8 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
         "questions": list(item.get("questions") or []),
         "status": status,
         "installable": installable,
-        "canUninstall": actor_role == "admin" and status in {"installed", "uninstall_failed"}
-            and has_receipt,
+        "canUninstall": actor_role == "admin" and (status in {"failed", "conflict", "uninstall_failed"}
+            or (status == "installed" and has_receipt)),
         "installationId": _installation_id(state) if state else None,
         "message": (state or {}).get("error", {}).get("message", "") if state else item.get("code", ""),
     }
@@ -362,6 +362,8 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
            if current.get("version") == version and current.get("offlineRelease") else {}),
         **({"packageDigest": current["packageDigest"]}
            if current.get("version") == version and current.get("packageDigest") else {}),
+        **({key: current[key] for key in ("catalogId", "resources") if key in current}
+           if current.get("version") == version else {}),
     }
     write_json(state_dir / f"{sample}.json", record)
     record_terminal_installation(state_dir, record)
