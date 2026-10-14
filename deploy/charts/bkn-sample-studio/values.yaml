@@ -28,35 +28,9 @@ ingress:
 
 safeURL: http://bkn-safe:3000
 # Unified OpenBKN gateway for Vega, knowledge networks and capabilities.
-# Used only when internalGateway.enabled=false; never use a Backend-only service.
-baseURL: ""
-# Pod-local proxy for sample API calls. It has no Service or Ingress.
-# Disable only when baseURL supplies a reachable, trusted unified gateway.
-internalGateway:
-  enabled: true
-  image:
-    repository: docker.io/library/nginx
-    tag: 1.28-alpine
-    digest: sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236
-    pullPolicy: IfNotPresent
-  # Administrator-controlled service addresses; tpl expands the release namespace.
-  upstreams:
-    backend: "http://bkn-backend-svc.{{ .Release.Namespace }}.svc.cluster.local:13014"
-    vega: "http://vega-backend-svc.{{ .Release.Namespace }}.svc.cluster.local:13014"
-    capabilities: "http://agent-operator-integration.{{ .Release.Namespace }}.svc.cluster.local:9000"
-    query: "http://ontology-query-svc.{{ .Release.Namespace }}.svc.cluster.local:13018"
-    retrieval: "http://agent-retrieval.{{ .Release.Namespace }}.svc.cluster.local:30779"
-    modelManager: "http://mf-model-manager.{{ .Release.Namespace }}.svc.cluster.local:9898"
-    modelAPI: "http://mf-model-api.{{ .Release.Namespace }}.svc.cluster.local:9898"
-    observability: "http://agent-observability.{{ .Release.Namespace }}.svc.cluster.local:8080"
-  resources:
-    requests:
-      cpu: 10m
-      memory: 16Mi
-    limits:
-      cpu: 200m
-      memory: 64Mi
-
+# Reuse the product ingress-nginx HTTP entrypoint, independently of public TLS.
+# Operators may override it for a different internal topology.
+baseURL: "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local"
 # Optional direct Backend address for public version detection only.
 # Empty uses baseURL. It does not change CLI, hook or uninstall routing.
 backendURL: ""

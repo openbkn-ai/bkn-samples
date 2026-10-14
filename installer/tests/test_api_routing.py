@@ -95,5 +95,5 @@ class ApiRoutingTest(unittest.TestCase):
 
     def test_chart_does_not_default_business_calls_to_backend_only(self):
         values = yaml.safe_load((ROOT / 'deploy/charts/bkn-sample-studio/values.yaml').read_text())
-        self.assertEqual(values['baseURL'], '')
+        self.assertEqual(values['baseURL'], 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local')
         self.assertEqual(values['backendURL'], '')
