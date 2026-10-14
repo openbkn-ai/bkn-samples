@@ -57,7 +57,8 @@ def pinned_url(url: str) -> None:
 
 
 class OfficialCatalog:
-    def __init__(self, state_dir: Path, schema_path: Path, catalog_url: str | None = None):
+    def __init__(self, state_dir: Path, schema_path: Path, catalog_url: str | None = None,
+                 *, bundled_catalog: Path | None = None):
         self.path = state_dir / "catalogs" / "official.json"
         self.lock = threading.Lock()
         self.refresh_lock = threading.Lock()
@@ -79,6 +80,13 @@ class OfficialCatalog:
                 self.cache = cached
             except Exception:
                 self.result = {"status": "failed", "code": "invalid_cache", "checkedAt": None}
+
+        if not self.catalog_url and bundled_catalog is not None and bundled_catalog.is_file():
+            bundled = json.loads(bundled_catalog.read_text(encoding="utf-8"), object_pairs_hook=object_pairs)
+            self.validate(bundled, freshness=False)
+            if self.cache is None or bundled["metadata"]["sequence"] > self.cache["catalog"]["metadata"]["sequence"]:
+                self.cache = {"catalog": bundled, "commit": None, "fetchedAt": None}
+                self.result = {"status": "not_refreshed", "code": "", "checkedAt": None}
 
     def validate(self, catalog: dict, freshness: bool = True) -> None:
         self.validator.validate(catalog)

@@ -295,7 +295,8 @@ def main() -> None:
     version, image, repo = load_indexes(root, image_index)
     data_image_ref = configured_image_ref()
     source = OfficialCatalog(state_dir, root / "protocol/draft/schemas/catalog.schema.json",
-                             os.environ.get("BKN_SAMPLE_CATALOG_URL", "").strip() or None)
+                             os.environ.get("BKN_SAMPLE_CATALOG_URL", "").strip() or None,
+                             bundled_catalog=root / "catalog.json")
     runner = InstallationRunner(state_dir, [item["name"] for item in image.get("samples", []) if item.get("name")])
     runner.recover_interrupted()
     configured_version = os.environ.get("BKN_SAMPLE_PLATFORM_VERSION", "").strip()
