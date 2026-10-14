@@ -1,4 +1,4 @@
-"""Pin a sample release to one version shared by the git tag, VERSION, and image tag."""
+"""Pin service artifacts to VERSION; preserve separate sample release identities."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import argparse
 import re
 import sys
 
-from installer.contract import OFFICIAL_SOURCE_REPO, ContractError, read_version
+from installer.contract import OFFICIAL_SOURCE_REPO, ContractError, read_version, sample_version
 from installer.deploy_database import GHCR_IMAGE, SWR_IMAGE
 
 VERSION_RE = re.compile(r"\d+\.\d+\.\d+")
@@ -63,7 +63,9 @@ def merge_catalog(pinned_version: str, image_index: dict, repo_index: dict) -> d
     repo_by_name = {item["name"]: item for item in _samples(repo_index)}
     for image_sample in _samples(image_index):
         repo_sample = repo_by_name.get(image_sample.get("name"))
-        if repo_sample is None or image_sample.get("manifestSha256") != repo_sample.get("manifestSha256"):
+        if (repo_sample is None
+                or image_sample.get("manifestSha256") != repo_sample.get("manifestSha256")
+                or sample_version(image_sample) != sample_version(repo_sample)):
             merged.append({**image_sample, "status": "unavailable", "installable": False, "code": "source_rejected"})
             continue
         merged.append({**repo_sample, "status": "not_installed", "installable": True, "code": ""})

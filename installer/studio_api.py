@@ -10,7 +10,7 @@ from pathlib import Path
 from installer.control_plane import ControlError, create_installation, note_database_ready, retry_installation, timestamp
 from installer.state_store import write_json
 from installer.history import read_installation_history, record_terminal_installation
-from installer.contract import read_version
+from installer.contract import read_version, sample_version
 from installer.release import merge_catalog
 
 NAME_RE = re.compile(r"^[a-z0-9-]{1,32}$")
@@ -35,7 +35,7 @@ def list_samples(*, pinned_version: str, image_index: dict, repo_index: dict, st
     _require_role(actor_role)
     merged = merge_catalog(pinned_version, image_index, repo_index)
     samples = [
-        _card(item, pinned_version, _read_state(state_dir, item.get("name", "")), actor_role, merged["sourceRejected"])
+        _card(item, sample_version(item), _read_state(state_dir, item.get("name", "")), actor_role, merged["sourceRejected"])
         for item in merged["samples"]
         if item.get("name")
     ]
@@ -163,7 +163,7 @@ def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
     if not isinstance(notes, dict) or notes.get("version") != version:
         merged = merge_catalog(pinned_version, image_index, repo_index)
         item = next((item for item in merged["samples"] if item.get("name") == sample), None)
-        if version != pinned_version or merged["sourceRejected"] or not item or item.get("status") == "unavailable":
+        if merged["sourceRejected"] or not item or item.get("status") == "unavailable" or version != sample_version(item):
             raise ApiError(404, "release_notes_unavailable", "version notes are unavailable")
         notes = item.get("releaseNotes")
     if not isinstance(notes, dict) or notes.get("version") != version:
