@@ -31,6 +31,27 @@ class ReleasePinTest(unittest.TestCase):
         )
         self.assertIn("git rev-parse HEAD", manifest_index["run"])
 
+    def test_swr_publish_workflows_use_docker_manifest_lists(self):
+        root = Path(__file__).resolve().parents[2]
+        for workflow_name in ("publish-sample-studio.yml", "publish-sample-image.yml"):
+            with self.subTest(workflow=workflow_name):
+                workflow = yaml.load(
+                    (root / ".github/workflows" / workflow_name).read_text(),
+                    Loader=yaml.BaseLoader,
+                )
+                steps = workflow["jobs"]["publish"]["steps"]
+                builds = [step for step in steps if step.get("uses") == "docker/build-push-action@v6"]
+                self.assertEqual(
+                    {step["with"]["platforms"] for step in builds},
+                    {"linux/amd64", "linux/arm64"},
+                )
+                for step in builds:
+                    self.assertIn("oci-mediatypes=false", step["with"]["outputs"])
+                    self.assertIn("push=true", step["with"]["outputs"])
+                manifest = next(step for step in steps if step.get("name") == "Publish Docker manifest lists")
+                self.assertIn("docker manifest create", manifest["run"])
+                self.assertIn("docker manifest push", manifest["run"])
+
     def test_service_chart_base_version_matches_repository_version(self):
         root = Path(__file__).resolve().parents[2]
         version = read_version(root)
