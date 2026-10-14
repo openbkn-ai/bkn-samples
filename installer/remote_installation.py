@@ -4,11 +4,14 @@ import copy
 import hashlib
 import re
 import tempfile
+from http.client import HTTPException
 from pathlib import Path
+from ssl import SSLError
+from urllib.error import URLError
 
 from installer.remote_bundle import compatibility, download_package, extract_package, load_release, validate_package
 from installer.state_store import write_json
-from installer.studio_api import ApiError, _read_state, timestamp
+from installer.studio_api import ApiError, _read_state, _write_failed, timestamp
 
 
 def executor_digest(root):
@@ -90,15 +93,20 @@ class RemoteInstallation:
                 or current["remoteRelease"].get("executorImage") != self.executor_image):
             raise ValueError("fixed remote installation plan is unavailable")
         entry = current["remoteRelease"]["entry"]
-        release = load_release(entry, self.root / "protocol/draft/schemas/sample.schema.json",
-                               self.platform_version, self.architecture, self.capabilities,
-                               **({"reader": reader} if reader else {}))
         work = self.state_dir / "work"
         work.mkdir(parents=True, exist_ok=True, mode=0o700)
         with tempfile.TemporaryDirectory(prefix=f"{sample}-", dir=work) as temporary:
             directory = Path(temporary)
             archive = directory / "package.tar.gz"
-            downloader(release["package"], archive)
+            try:
+                release = load_release(entry, self.root / "protocol/draft/schemas/sample.schema.json",
+                                       self.platform_version, self.architecture, self.capabilities,
+                                       **({"reader": reader} if reader else {}))
+                downloader(release["package"], archive)
+            except (URLError, TimeoutError, ConnectionError, SSLError, HTTPException) as error:
+                message = "Sample download failed. Download an offline package and import it."
+                _write_failed(self.state_dir, sample, entry["version"], "release_download_failed", message)
+                raise ApiError(502, "release_download_failed", message) from error
             root = directory / "root"
             sample_dir = root / "samples" / sample
             extract_package(archive, sample_dir, release["package"])

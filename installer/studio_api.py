@@ -183,13 +183,18 @@ def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
 
 def installation_view(record: dict, actor_role: str) -> dict:
     error = record.get("error") if isinstance(record.get("error"), dict) else None
-    failed_at = _failed_stage(record) if record.get("status") in {"failed", "uninstall_failed"} else ""
+    download_failed = (record.get("status") == "failed" and record.get("operation") != "uninstall"
+                       and (error or {}).get("code") == "release_download_failed")
+    failed_at = _failed_stage(record) if record.get("status") in {"failed", "uninstall_failed"} and not download_failed else ""
     stages = []
     running_assigned = False
     from installer.uninstall import UNINSTALL_STAGES
     stage_names = UNINSTALL_STAGES if record.get("operation") == "uninstall" else STAGES
     for stage_id, name in stage_names:
         state = (record.get("stages") or {}).get(stage_id)
+        if download_failed:
+            stages.append({"id": stage_id, "name": name, "state": "pending"})
+            continue
         if record.get("operation") == "uninstall":
             stages.append({"id": stage_id, "name": name, "state": state or "pending"})
             continue
