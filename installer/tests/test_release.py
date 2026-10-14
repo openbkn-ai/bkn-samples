@@ -18,6 +18,19 @@ def index(version: str, name: str, digest: str, repo: str = OFFICIAL_SOURCE_REPO
 
 
 class ReleasePinTest(unittest.TestCase):
+    def test_catalog_service_workflow_can_be_started_manually(self):
+        root = Path(__file__).resolve().parents[2]
+        workflow = yaml.load((root / ".github/workflows/publish-sample-studio.yml").read_text(), Loader=yaml.BaseLoader)
+        dispatch = workflow["on"]["workflow_dispatch"]
+        self.assertEqual(dispatch["inputs"]["source_branch"]["required"], "true")
+        checkout = workflow["jobs"]["publish"]["steps"][0]
+        self.assertIn("inputs.source_branch", checkout["with"]["ref"])
+        manifest_index = next(
+            step for step in workflow["jobs"]["publish"]["steps"]
+            if step.get("name") == "Write the manifest index for this commit"
+        )
+        self.assertIn("git rev-parse HEAD", manifest_index["run"])
+
     def test_service_chart_base_version_matches_repository_version(self):
         root = Path(__file__).resolve().parents[2]
         version = read_version(root)
