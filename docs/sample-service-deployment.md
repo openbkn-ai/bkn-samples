@@ -2,7 +2,7 @@
 
 Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
 
-The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart and supplies its gateway URL. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
+The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart. By default, a Nginx sidecar provides the sample service with a Pod-local HTTP gateway at `http://127.0.0.1:8082`. It forwards only configured platform API prefixes to internal Services and does not expose a Service or Ingress. The supplied external gateway URL is used only when `internalGateway.enabled=false`. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
 
 The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint used by the SDK, when listing releases, accepting a selected installation, importing an offline package or retrying. Missing or malformed version information keeps fixed-package installation unavailable. It does not infer a version from a Chart tag.
 
@@ -23,7 +23,9 @@ image:
   repository: ghcr.io/openbkn-ai/bkn-sample-studio
   digest: sha256:<service-image-digest>
 safeURL: http://bkn-safe:3000
-baseURL: http://<existing-platform-gateway>
+internalGateway:
+  enabled: true
+baseURL: ""
 # Optional: version detection only; business operations still use baseURL.
 backendURL: ""
 platform:
@@ -40,7 +42,7 @@ Leave `catalogURL` empty to scan official main when the administrator clicks **R
 ```bash
 helm upgrade --install bkn-sample-studio \
   oci://ghcr.io/openbkn-ai/charts/bkn-sample-studio \
-  --version <published-chart-version> -n openbkn -f sample-service-values.yaml
+  --version <published-chart-version> -n openbkn --reset-then-reuse-values -f sample-service-values.yaml
 kubectl -n openbkn rollout status deployment/bkn-sample-studio
 ```
 
@@ -62,6 +64,8 @@ The state PVC and `openbkn-samples` namespace are retained by the Chart's `helm.
 
 Product integration is maintained in [openbkn-deploy](https://github.com/openbkn-ai/openbkn-deploy). Use its standard installation entry and the official sample service Chart. Runtime state uses a PVC and a single-replica Recreate deployment. Service restart preserves installed records and history; interrupted tasks require an explicit retry.
 
-`baseURL` must reach the unified OpenBKN gateway, including Backend, Vega and capability APIs. A Backend-only service will pass version detection but fail sample installation with a Vega 404. For deployments whose public gateway uses a private CA, trust that CA for business API calls; optionally set `backendURL` to the in-cluster Backend service for unauthenticated version detection. Do not disable TLS verification or replace `baseURL` with that service. An empty `backendURL` preserves gateway-based version detection.
+The internal gateway covers Backend (including the ontology-manager compatibility alias), Vega, capability registration/publication, object queries, retrieval, model metadata/API and SDK observability calls. It preserves the request path, query, method, body and caller authorization. Multipart BKN, tool and Skill uploads use the same route. Unknown paths return 404. The official Nginx image is pinned by digest; configure `internalGateway.image` for a preloaded or mirrored image in an offline cluster. Operators may override `internalGateway.upstreams` when Service names, namespaces or ports differ. Upstream DNS is resolved on demand from the Pod's configured resolvers, so an optional platform component is not a gateway startup dependency.
 
-When upgrading a deployment affected by the Backend-only default, explicitly set `baseURL` to its existing unified gateway. Helm upgrades that reuse prior values can preserve the incorrect address; updating the image alone does not correct it.
+When upgrading, use `--reset-then-reuse-values` to load the new Chart defaults while preserving existing overrides, image digests and the state PVC. Enabling the internal gateway takes precedence over a previously recorded external or Backend-only `baseURL`. No sample package, installation record or database migration is required. The gateway does not bypass authentication, TLS checks or SDK version checks and does not change public Ingress settings.
+
+To retain an existing trusted unified gateway, set `internalGateway.enabled=false` and explicitly supply `baseURL`. `backendURL` remains an optional address for public version detection only. A Backend-only `baseURL` is not valid in this mode. If the external gateway uses a private CA, configure Python and Node.js trust for it rather than disabling certificate verification.
