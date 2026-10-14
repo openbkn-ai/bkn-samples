@@ -1,6 +1,9 @@
 import unittest
+from pathlib import Path
 
-from installer.contract import OFFICIAL_SOURCE_REPO
+import yaml
+
+from installer.contract import OFFICIAL_SOURCE_REPO, read_version
 from installer.release import ReleaseError, assert_release_tag, assert_same_digest, image_refs, main_build_version, merge_catalog
 
 DIGEST = "sha256:" + "ab" * 32
@@ -15,6 +18,14 @@ def index(version: str, name: str, digest: str, repo: str = OFFICIAL_SOURCE_REPO
 
 
 class ReleasePinTest(unittest.TestCase):
+    def test_service_chart_base_version_matches_repository_version(self):
+        root = Path(__file__).resolve().parents[2]
+        version = read_version(root)
+        chart = yaml.safe_load((root / "deploy/charts/bkn-sample-studio/Chart.yaml").read_text())
+        self.assertEqual(chart["version"], version)
+        self.assertEqual(chart["appVersion"], version)
+
+
     def test_tag_must_equal_version_and_cannot_be_latest(self):
         self.assertEqual(assert_release_tag("0.1.0", "0.1.0"), "0.1.0")
         self.assertEqual(assert_release_tag("v0.1.0", "0.1.0"), "0.1.0")
