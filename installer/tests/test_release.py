@@ -55,6 +55,7 @@ class ReleasePinTest(unittest.TestCase):
         self.assertEqual(values["image"]["registry"], "ghcr.io/openbkn-ai")
         self.assertEqual(values["image"]["repository"], "bkn-sample-studio")
         self.assertEqual(template.count(".Values.image.registry"), 4)
+        self.assertIn('{{ .Values.image.repository }}:{{ .Values.image.tag }}', template)
         self.assertIn("BKN_SAMPLE_EXECUTOR_IMAGE_REF", template)
         self.assertIn(".Values.image.digest", template)
 
