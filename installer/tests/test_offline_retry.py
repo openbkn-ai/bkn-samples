@@ -17,7 +17,7 @@ class OfflineRetryTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             state = Path(directory)
             runtime = RemoteInstallation(ROOT, state, "0.2.0", "arm64", [],
-                                         "ghcr.io/openbkn-ai/executor@sha256:" + "a" * 64)
+                                         "ghcr.io/openbkn-ai/executor:0.2.0")
             offline = OfflinePackages(ROOT, state, runtime)
             destination = offline.directory / "supply-chain"
             destination.mkdir(parents=True)
@@ -40,7 +40,7 @@ class OfflineRetryTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             state = Path(directory)
             runtime = RemoteInstallation(ROOT, state, "0.2.0", "arm64", [],
-                                         "ghcr.io/openbkn-ai/executor@sha256:" + "a" * 64)
+                                         "ghcr.io/openbkn-ai/executor:0.2.0")
             offline = OfflinePackages(ROOT, state, runtime)
             destination = offline.directory / "supply-chain"
             destination.mkdir(parents=True)
@@ -58,7 +58,7 @@ class OfflineRetryTest(unittest.TestCase):
             with self.subTest(code=code), tempfile.TemporaryDirectory() as directory:
                 state = Path(directory)
                 runtime = RemoteInstallation(ROOT, state, "0.2.0", "arm64", [],
-                                             "ghcr.io/openbkn-ai/executor@sha256:" + "a" * 64)
+                                             "ghcr.io/openbkn-ai/executor:0.2.0")
                 offline = OfflinePackages(ROOT, state, runtime)
                 release = {"sample": "supply-chain", "version": "0.1.0",
                            "packageDigest": "sha256:" + "b" * 64,

@@ -121,7 +121,6 @@ jobs:
           tags: ${{ steps.version.outputs.data_arm64_tags }}
           outputs: type=image,oci-mediatypes=false,push=true
       - name: Publish Docker manifest lists
-        id: manifest
         env:
           VERSION: ${{ steps.version.outputs.value }}
           SWR_ENABLED: ${{ steps.version.outputs.swr }}
@@ -149,10 +148,6 @@ jobs:
             fi
           fi
 
-          service_digest="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' \
-            "ghcr.io/openbkn-ai/bkn-sample-studio:${VERSION}")"
-          [[ "${service_digest}" =~ ^sha256:[0-9a-f]{64}$ ]]
-          printf 'service_digest=%s\n' "${service_digest}" >> "$GITHUB_OUTPUT"
       - name: Require SWR and GHCR digests to match
         if: steps.version.outputs.swr == 'true'
         run: |
@@ -170,13 +165,10 @@ jobs:
       - name: Package the chart for the same version
         env:
           VERSION: ${{ steps.version.outputs.value }}
-          SERVICE_IMAGE_DIGEST: ${{ steps.manifest.outputs.service_digest }}
         run: |
-          [[ "${SERVICE_IMAGE_DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]
           sed -i "s/^version: .*/version: ${VERSION}/" deploy/charts/bkn-sample-studio/Chart.yaml
           sed -i "s/^appVersion: .*/appVersion: \"${VERSION}\"/" deploy/charts/bkn-sample-studio/Chart.yaml
           sed -i "s/__VERSION__/${VERSION}/g" deploy/charts/bkn-sample-studio/values.yaml
-          sed -i "s/^  digest: .*/  digest: \"${SERVICE_IMAGE_DIGEST}\"/" deploy/charts/bkn-sample-studio/values.yaml
           helm lint deploy/charts/bkn-sample-studio
           helm package deploy/charts/bkn-sample-studio --destination /tmp/charts
       - name: Push the chart

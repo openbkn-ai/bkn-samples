@@ -54,10 +54,13 @@ class ReleasePinTest(unittest.TestCase):
 
         self.assertEqual(values["image"]["registry"], "ghcr.io/openbkn-ai")
         self.assertEqual(values["image"]["repository"], "bkn-sample-studio")
+        self.assertEqual(values["image"]["tag"], "__VERSION__")
+        self.assertNotIn("digest", values["image"])
         self.assertEqual(template.count(".Values.image.registry"), 4)
         self.assertIn('{{ .Values.image.repository }}:{{ .Values.image.tag }}', template)
         self.assertIn("BKN_SAMPLE_EXECUTOR_IMAGE_REF", template)
-        self.assertIn(".Values.image.digest", template)
+        self.assertNotIn(".Values.image.digest", template)
+        self.assertNotIn("SERVICE_IMAGE_DIGEST", (root / ".github/workflows/publish-sample-studio.yml").read_text())
 
 
     def test_tag_must_equal_version_and_cannot_be_latest(self):

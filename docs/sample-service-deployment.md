@@ -1,8 +1,8 @@
 # Deploying the one-click sample service
 
-Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
+Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release; the Chart uses the service version tag with the configured registry, consistent with other Foundry services. The service currently supports one replica with `Recreate`.
 
-The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart. The sample service uses the existing internal ingress-nginx HTTP entrypoint by default, independently of the public HTTPS address. It does not create another gateway or change public Ingress/TLS settings. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
+The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart and passes the image registry. The sample service uses the existing internal ingress-nginx HTTP entrypoint by default, independently of the public HTTPS address. It does not create another gateway or change public Ingress/TLS settings. The publication workflow stamps the service version tag into the Chart. Default installation no longer needs manually filled platform version or API capability values.
 
 The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint used by the SDK, when listing releases, accepting a selected installation, importing an offline package or retrying. Missing or malformed version information keeps fixed-package installation unavailable. It does not infer a version from a Chart tag.
 

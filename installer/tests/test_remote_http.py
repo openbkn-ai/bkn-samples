@@ -55,7 +55,7 @@ class RemoteHttpTest(unittest.TestCase):
                 _write_state(state, current)
             env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_STATE_DIR": directory,
                    "BKN_SAMPLE_PLATFORM_VERSION": "0.2.0", "BKN_SAMPLE_CATALOG_URL": "",
-                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/executor@sha256:" + "d" * 64}
+                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/executor:0.2.0"}
             with patch.dict("os.environ", env), \
                  patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
                  patch("installer.task_runner.InstallationRunner", side_effect=runner), \
@@ -86,7 +86,7 @@ class RemoteHttpTest(unittest.TestCase):
             env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_STATE_DIR": directory,
                    "BKN_SAMPLE_PLATFORM_VERSION": "0.2.0", "BKN_SAMPLE_PLATFORM_CAPABILITIES": "",
                    "BKN_SAMPLE_CATALOG_URL": "",
-                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64}
+                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio:0.2.0"}
             with patch.dict("os.environ", env), \
                  patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
                  patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), index, index)), \
@@ -113,7 +113,7 @@ class RemoteHttpTest(unittest.TestCase):
                    "BKN_SAMPLE_IMAGE_INDEX": str(ROOT / "manifest-index.json"),
                    "BKN_BASE_URL": "http://gateway.example", "BKN_SAMPLE_PLATFORM_VERSION": "",
                    "BKN_SAMPLE_PLATFORM_CAPABILITIES": "",
-                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64}
+                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio:0.2.0"}
             apps = []
             with patch.dict("os.environ", env), \
                  patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
@@ -163,7 +163,7 @@ class RemoteHttpTest(unittest.TestCase):
             env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_IMAGE_INDEX": str(ROOT / "manifest-index.json"),
                    "BKN_SAMPLE_STATE_DIR": str(state), "BKN_SAMPLE_PLATFORM_VERSION": "",
                    "BKN_BASE_URL": "http://gateway.example",
-                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64,
+                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio:0.2.0",
                    "BKN_SAMPLE_PLATFORM_CAPABILITIES": ""}
             with patch.dict("os.environ", env), patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
                  patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
