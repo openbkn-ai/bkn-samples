@@ -20,8 +20,9 @@ Create a values file using the actual platform addresses. Leave the optional pla
 
 ```yaml
 image:
-  repository: ghcr.io/openbkn-ai/bkn-sample-studio
-  digest: sha256:<service-image-digest>
+  registry: ghcr.io/openbkn-ai
+  repository: bkn-sample-studio
+  tag: <published-chart-version>
 safeURL: http://bkn-safe:3000
 # Default internal gateway; no manual value is needed in the standard product topology.
 baseURL: http://ingress-nginx-controller.ingress-nginx.svc.cluster.local
@@ -35,6 +36,8 @@ ingress:
 persistence:
   existingClaim: ""
 ```
+
+The published Chart and service image use the same version. Set `image.tag` to that version when overriding it; for SWR, change `image.registry` to `swr.cn-east-3.myhuaweicloud.com/openbkn-ai`. Keep `image.repository` as `bkn-sample-studio` and do not configure an image digest.
 
 Leave `catalogURL` empty to scan official main when the administrator clicks **Refresh samples**. A page GET reads the existing cache; it does not scan GitHub on every request. A new environment has no remote cache. Network failure preserves an existing cache and installed records; a new environment can use the built-in entries or import a compatible offline package, with its data image available to the cluster.
 
