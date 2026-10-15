@@ -75,6 +75,14 @@ class RemoteBundleTest(unittest.TestCase):
         return load_release(self.entry, ROOT / "protocol/draft/schemas/sample.schema.json", "0.2.0", "arm64",
                             self.entry["requires"]["capabilities"], reader)
 
+    def test_executor_reference_uses_registry_repository_and_tag(self):
+        runtime = RemoteInstallation(ROOT, self.root / "state", "0.2.0", "arm64", [],
+                                     "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio:0.2.0")
+        runtime.require_executor()
+        runtime.executor_image = "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64
+        with self.assertRaises(ValueError):
+            runtime.require_executor()
+
     def test_fixed_release_extracts_and_matches_existing_runtime_contract(self):
         release = self.load()
         target = self.root / "samples/supply-chain"
@@ -158,7 +166,7 @@ class RemoteBundleTest(unittest.TestCase):
 
     def coordinator(self):
         return RemoteInstallation(ROOT, self.root / "state", "0.2.0", "arm64", self.entry["requires"]["capabilities"],
-                                  "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64)
+                                  "ghcr.io/openbkn-ai/bkn-sample-studio:0.2.0")
 
     def test_remote_plan_is_saved_before_work_and_worker_uses_fixed_files(self):
         self.load()

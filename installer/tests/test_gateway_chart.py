@@ -28,10 +28,12 @@ class GatewayChartTest(unittest.TestCase):
         env={e['name']:e.get('value','') for e in pod['containers'][0]['env']}
         self.assertEqual(env['BKN_BASE_URL'],'http://custom-internal.example')
         self.assertEqual(env['BKN_BACKEND_URL'],'http://backend.example')
-    def test_gateway_change_does_not_modify_installer_or_data_image_selection(self):
-        _,pod=self.render('--set','image.digest=sha256:'+'a'*64,'--set','dataImage.reference=registry.example/data@sha256:'+'b'*64)
+    def test_chart_uses_registry_tag_and_keeps_data_reference_independent(self):
+        _,pod=self.render('--set','image.registry=swr.cn-east-3.myhuaweicloud.com/openbkn-ai',
+                          '--set','image.tag=0.2.0',
+                          '--set','dataImage.reference=registry.example/data@sha256:'+'b'*64)
         studio=pod['containers'][0]
         env={e['name']:e.get('value','') for e in studio['env']}
-        self.assertTrue(studio['image'].endswith('@sha256:'+'a'*64))
+        self.assertEqual(studio['image'],'swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio:0.2.0')
         self.assertEqual(env['BKN_SAMPLE_EXECUTOR_IMAGE_REF'],studio['image'])
         self.assertEqual(env['BKN_SAMPLE_DATA_IMAGE_REF'],'registry.example/data@sha256:'+'b'*64)

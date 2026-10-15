@@ -12,6 +12,11 @@ class KubectlDeleteBodyTest(unittest.TestCase):
     def test_raw_delete_sends_uid_precondition_from_stdin(self):
         received = []
         class Handler(BaseHTTPRequestHandler):
+            def handle_expect_100(self):
+                self.send_response_only(100)
+                self.end_headers()
+                return True
+
             def do_DELETE(self):
                 if self.headers.get("Transfer-Encoding") == "chunked":
                     chunks = []

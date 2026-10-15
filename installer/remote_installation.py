@@ -34,8 +34,8 @@ class RemoteInstallation:
         self.executor_image = executor_image
 
     def require_executor(self):
-        if not re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[0-9a-f]{64}", self.executor_image):
-            raise ValueError("remote installation requires a fixed executor image")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*:[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}", self.executor_image):
+            raise ValueError("remote installation requires a tagged executor image")
 
     def prepare(self, entry):
         sample = entry["sampleId"]

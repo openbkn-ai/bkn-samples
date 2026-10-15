@@ -1,8 +1,8 @@
 # Deploying the one-click sample service
 
-Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
+Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release; the Chart uses the service version tag with the configured registry, consistent with other Foundry services. The service currently supports one replica with `Recreate`.
 
-The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart. The sample service uses the existing internal ingress-nginx HTTP entrypoint by default, independently of the public HTTPS address. It does not create another gateway or change public Ingress/TLS settings. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
+The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart and passes the image registry. The sample service uses the existing internal ingress-nginx HTTP entrypoint by default, independently of the public HTTPS address. It does not create another gateway or change public Ingress/TLS settings. The publication workflow stamps the service version tag into the Chart. Default installation no longer needs manually filled platform version or API capability values.
 
 The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint used by the SDK, when listing releases, accepting a selected installation, importing an offline package or retrying. Missing or malformed version information keeps fixed-package installation unavailable. It does not infer a version from a Chart tag.
 
@@ -20,8 +20,9 @@ Create a values file using the actual platform addresses. Leave the optional pla
 
 ```yaml
 image:
-  repository: ghcr.io/openbkn-ai/bkn-sample-studio
-  digest: sha256:<service-image-digest>
+  registry: ghcr.io/openbkn-ai
+  repository: bkn-sample-studio
+  tag: <published-chart-version>
 safeURL: http://bkn-safe:3000
 # Default internal gateway; no manual value is needed in the standard product topology.
 baseURL: http://ingress-nginx-controller.ingress-nginx.svc.cluster.local
@@ -35,6 +36,8 @@ ingress:
 persistence:
   existingClaim: ""
 ```
+
+The published Chart and service image use the same version. Set `image.tag` to that version when overriding it; for SWR, change `image.registry` to `swr.cn-east-3.myhuaweicloud.com/openbkn-ai`. Keep `image.repository` as `bkn-sample-studio` and do not configure an image digest.
 
 Leave `catalogURL` empty to scan official main when the administrator clicks **Refresh samples**. A page GET reads the existing cache; it does not scan GitHub on every request. A new environment has no remote cache. Network failure preserves an existing cache and installed records; a new environment can use the built-in entries or import a compatible offline package, with its data image available to the cluster.
 

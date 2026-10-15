@@ -28,7 +28,7 @@ class ApiRoutingTest(unittest.TestCase):
                 env = {'BKN_SAMPLES_ROOT': str(ROOT), 'BKN_SAMPLE_STATE_DIR': directory,
                        'BKN_BASE_URL': 'http://gateway.example', 'BKN_BACKEND_URL': backend,
                        'BKN_SAMPLE_PLATFORM_VERSION': '', 'BKN_SAMPLE_CATALOG_URL': '',
-                       'BKN_SAMPLE_EXECUTOR_IMAGE_REF': 'ghcr.io/openbkn-ai/bkn-sample-studio@sha256:' + 'd' * 64}
+                       'BKN_SAMPLE_EXECUTOR_IMAGE_REF': 'ghcr.io/openbkn-ai/bkn-sample-studio:0.2.0'}
                 with patch.dict('os.environ', env), \
                      patch('installer.studio_api.load_indexes', return_value=(read_version(ROOT), index, index)), \
                      patch('installer.studio_http.serve', side_effect=lambda app, *args: apps.append(app)), \

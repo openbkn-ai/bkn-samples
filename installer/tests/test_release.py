@@ -46,6 +46,22 @@ class ReleasePinTest(unittest.TestCase):
         self.assertEqual(chart["version"], version)
         self.assertEqual(chart["appVersion"], version)
 
+    def test_service_chart_uses_configurable_registry_for_runtime_and_executor(self):
+        root = Path(__file__).resolve().parents[2]
+        chart = root / "deploy/charts/bkn-sample-studio"
+        values = yaml.safe_load((chart / "values.yaml").read_text())
+        template = (chart / "templates/deployment.yaml").read_text()
+
+        self.assertEqual(values["image"]["registry"], "ghcr.io/openbkn-ai")
+        self.assertEqual(values["image"]["repository"], "bkn-sample-studio")
+        self.assertEqual(values["image"]["tag"], "__VERSION__")
+        self.assertNotIn("digest", values["image"])
+        self.assertEqual(template.count(".Values.image.registry"), 4)
+        self.assertIn('{{ .Values.image.repository }}:{{ .Values.image.tag }}', template)
+        self.assertIn("BKN_SAMPLE_EXECUTOR_IMAGE_REF", template)
+        self.assertNotIn(".Values.image.digest", template)
+        self.assertNotIn("SERVICE_IMAGE_DIGEST", (root / ".github/workflows/publish-sample-studio.yml").read_text())
+
 
     def test_tag_must_equal_version_and_cannot_be_latest(self):
         self.assertEqual(assert_release_tag("0.1.0", "0.1.0"), "0.1.0")

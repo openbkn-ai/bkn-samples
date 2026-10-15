@@ -397,7 +397,7 @@ class UninstallTest(unittest.TestCase):
         failed = _read_state(self.state, sample)
         self.assertEqual(failed["resources"]["ownedExecution"], {"toolboxes": [], "skills": []})
         self.assertFalse((self.state / sample / "owned-execution.json").exists())
-        runtime = RemoteInstallation(root, self.state, "0.2.0", "arm64", [], "ghcr.io/example/executor@sha256:" + "a" * 64)
+        runtime = RemoteInstallation(root, self.state, "0.2.0", "arm64", [], "ghcr.io/example/executor:0.2.0")
         offline = OfflinePackages(root, self.state, runtime)
         cache = offline.directory / sample
         cache.mkdir(parents=True)
@@ -435,7 +435,7 @@ class UninstallTest(unittest.TestCase):
         self.start()
         cleaned = _read_state(self.state, "supply-chain")
         root = Path(__file__).resolve().parents[2]
-        runtime = RemoteInstallation(root, self.state, "0.2.0", "arm64", [], "ghcr.io/example/executor@sha256:" + "a" * 64)
+        runtime = RemoteInstallation(root, self.state, "0.2.0", "arm64", [], "ghcr.io/example/executor:0.2.0")
         offline = OfflinePackages(root, self.state, runtime)
         release = {"sample": "supply-chain", "version": "0.1.4", "packageDigest": "sha256:" + "b" * 64,
                    "manifestSha256": "c" * 64, "dataImageRef": "image@sha256:" + "d" * 64,
