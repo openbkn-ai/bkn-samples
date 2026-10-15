@@ -7,7 +7,8 @@ persistence:
   size: 1Gi
 
 image:
-  repository: ghcr.io/openbkn-ai/bkn-sample-studio
+  registry: ghcr.io/openbkn-ai
+  repository: bkn-sample-studio
   tag: "__VERSION__"
   # The publication workflow stamps the digest of this build for remote installs.
   digest: ""
