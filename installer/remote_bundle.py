@@ -28,7 +28,7 @@ PROFILE = "openbkn.ai/sample-install.v1"
 # Standard API adapters implemented by this installation profile. This is not
 # a platform feature or licensing inventory; target API errors are recorded by
 # the installation stages. Explicit operator configuration may restrict it.
-CAPABILITIES = {"vega.catalog", "knowledge-network.import.kn-json",
+CAPABILITIES = {"database.shared", "vega.catalog", "knowledge-network.import.kn-json",
                 "knowledge-network.import.bkn-directory",
                 "execution.function", "execution.skill"}
 
@@ -113,20 +113,27 @@ def load_release(entry, schema_path, platform_version, architecture, capabilitie
     require(spec["release"]["publishedAt"] == entry["publishedAt"], "catalog release date differs")
     require(spec["delivery"]["profile"] == PROFILE, "unsupported delivery profile")
     artifacts = spec["artifacts"]
-    require(len(artifacts) == 2 and {a["type"] for a in artifacts} == {"archive", "oci-image"},
-            "this profile requires one package and one database image")
-    require(len({a["id"] for a in artifacts}) == 2, "duplicate artifact identity")
+    shared = "database.shared" in spec["requires"]["capabilities"]
+    require(len(artifacts) == (1 if shared else 2)
+            and {a["type"] for a in artifacts} == ({"archive"} if shared else {"archive", "oci-image"}),
+            "invalid artifacts for the selected database runtime")
+    require(len({a["id"] for a in artifacts}) == len(artifacts), "duplicate artifact identity")
     package = next(a for a in artifacts if a["type"] == "archive")
-    image = next(a for a in artifacts if a["type"] == "oci-image")
     expected_url = ("https://github.com/openbkn-ai/bkn-samples/releases/download/"
                     f"sample-{entry['sampleId']}-v{entry['version']}/package.tar.gz")
     require(package["locations"] == [expected_url], "package must use the official sample release asset")
-    require(image["locations"] == ["oci://ghcr.io/openbkn-ai/bkn-samples"],
-            "database image must use the official image repository")
-    image_ref = "ghcr.io/openbkn-ai/bkn-samples@" + image["digest"]
     dependencies = spec["delivery"]["dataDependencies"]
-    require(len(dependencies) == 1 and dependencies[0]["artifactId"] == image["id"],
-            "this profile requires one database dependency")
+    image_ref = None
+    if shared:
+        require(len(dependencies) == 1 and dependencies[0]["artifactId"] == package["id"],
+                "shared runtime data must come from the sample archive")
+    else:
+        image = next(a for a in artifacts if a["type"] == "oci-image")
+        require(image["locations"] == ["oci://ghcr.io/openbkn-ai/bkn-samples"],
+                "database image must use the official image repository")
+        image_ref = "ghcr.io/openbkn-ai/bkn-samples@" + image["digest"]
+        require(len(dependencies) == 1 and dependencies[0]["artifactId"] == image["id"],
+                "legacy packages require one database dependency")
     networks = spec["contents"]["knowledgeNetworks"]
     require(len(networks) == 1 and networks[0]["format"] in {"kn-json", "bkn-directory"},
             "this runtime requires one native KN JSON or BKN directory")
@@ -147,6 +154,8 @@ def load_release(entry, schema_path, platform_version, architecture, capabilitie
     for key, expected in {"sampleId": entry["sampleId"], "version": entry["version"],
                           "packageDigest": package["digest"], "dataImageRef": image_ref}.items():
         require(proof.get(key) == expected, "verification receipt refers to other artifacts")
+    if shared:
+        require(proof.get("databaseRuntime") == "shared-mariadb", "verification runtime differs")
     require(proof.get("freshInstallation") is True, "fresh installation evidence is required")
     checks = proof.get("checks")
     require(isinstance(checks, list) and all(isinstance(c, dict) for c in checks), "invalid verification checks")

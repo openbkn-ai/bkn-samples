@@ -71,7 +71,7 @@ def create_sample_installation(
     except Exception as exc:
         code = getattr(exc, "code", "database_not_ready")
         message = getattr(exc, "message", str(exc))
-        _write_failed(state_dir, sample, version, code, message)
+        _write_failed(state_dir, sample, version, code, message, stage="database")
         raise ApiError(409 if code in {"already_installed", "use_retry"} else 500, code, message) from exc
     current = _read_state(state_dir, sample)
     if not current or current.get("status") not in {"installed", "failed"}:
@@ -330,7 +330,7 @@ def _write_installing(state_dir: Path, sample: str, version: str, release_notes:
     record_terminal_installation(state_dir, record)
 
 
-def _write_failed(state_dir: Path, sample: str, version: str, code: str, message: str) -> None:
+def _write_failed(state_dir: Path, sample: str, version: str, code: str, message: str, *, stage: str | None = None) -> None:
     state_dir.mkdir(parents=True, exist_ok=True)
     database_codes = {
         "database_not_ready",
@@ -345,7 +345,7 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
         "sample": sample,
         "version": version,
         "status": "failed",
-        "stages": {"database": "failed"} if code in database_codes else {},
+        "stages": {stage: "failed"} if stage else ({"database": "failed"} if code in database_codes else {}),
         "error": {"code": code, "message": message},
         "startedAt": current.get("startedAt"),
         **({"attemptId": current["attemptId"]} if current.get("attemptId") else {}),
@@ -363,7 +363,7 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
            if current.get("version") == version and current.get("offlineRelease") else {}),
         **({"packageDigest": current["packageDigest"]}
            if current.get("version") == version and current.get("packageDigest") else {}),
-        **({key: current[key] for key in ("catalogId", "resources") if key in current}
+        **({key: current[key] for key in ("catalogId", "resources", "databaseRuntime") if key in current}
            if current.get("version") == version else {}),
     }
     write_json(state_dir / f"{sample}.json", record)

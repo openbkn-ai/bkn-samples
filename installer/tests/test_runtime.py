@@ -3,11 +3,13 @@ import json
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from installer.control_plane import ControlError
 from installer.runtime import database_config, install_sample, openbkn_json, retry_sample, run_platform_hook
-from installer.studio_api import ApiError
+from installer.deploy_database import DeployError
+from installer.studio_api import ApiError, installation_view, _write_installing
 
 ROOT = Path(__file__).resolve().parents[2]
 PASSWORD = "secret-password"
@@ -18,6 +20,31 @@ def completed(stdout: str = "", code: int = 0) -> subprocess.CompletedProcess:
 
 
 class RuntimeTest(unittest.TestCase):
+    def test_deploy_error_is_reported_at_database_without_false_success(self):
+        for retry, code in ((retry, code) for retry in (False, True)
+                            for code in ("install_failed", "database_permission_denied", "ownership_conflict")):
+            with self.subTest(retry=retry, code=code), tempfile.TemporaryDirectory() as directory:
+                state = Path(directory)
+                def deploy(_sample):
+                    raise DeployError(code, "Database preflight failed")
+                kwargs = {}
+                if retry:
+                    _write_installing(state, "supply-chain", "0.1.0")
+                    kwargs = {"installation_id": "inst-supply-chain", "accepted": True}
+                with patch("installer.runtime.shared_database.configured", return_value=True), \
+                     patch("installer.runtime.shared_database.prepare", side_effect=DeployError(code, "Database preflight failed")), \
+                     self.assertRaises(ApiError):
+                    (retry_sample if retry else install_sample)(
+                        sample="supply-chain", actor_role="admin", state_dir=state,
+                        root=ROOT, version="0.1.0", deploy=deploy,
+                        kubectl=lambda *_: self.fail("Must not read credentials"),
+                        run=lambda *_: self.fail("Must not execute hooks"), **kwargs)
+                record = json.loads((state / "supply-chain.json").read_text())
+                view = installation_view(record, "admin")
+                self.assertEqual(view["error"]["stage"], "database")
+                self.assertEqual([s["state"] for s in view["stages"]],
+                                 ["failed", "pending", "pending", "pending", "pending"])
+
     def test_hook_keeps_a_structured_failure_without_a_code(self):
         def run(_argv, env):
             Path(env["BKN_SAMPLE_OUTPUT"]).write_text(
@@ -32,7 +59,9 @@ class RuntimeTest(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertEqual(result["message"], "import_kn.py failed")
 
-    def test_install_passes_the_secret_to_the_hook_and_hides_it(self):
+    @patch("installer.runtime.shared_database.configured", return_value=True)
+    @patch("installer.runtime.shared_database.prepare", return_value={"name": "supply_demo_hand", "host": "shared-db", "port": 3306, "user": "sample-user", "password": PASSWORD})
+    def test_install_passes_the_secret_to_the_hook_and_hides_it(self, prepare, configured):
         seen = {}
 
         def deploy(_sample):
@@ -57,12 +86,12 @@ class RuntimeTest(unittest.TestCase):
                 if "list" in argv:
                     return completed(json.dumps({"entries": []}))
                 return completed(json.dumps({"id": "cat-1", "name": "bkn-sample-supply-chain"}))
-            payload = json.loads(Path(env["BKN_SAMPLE_INPUT"]).read_text(encoding="utf-8"))
+            payload = json.loads(env["_BKN_HOOK_INPUT"])
             seen["password"] = payload["database"]["password"]
             seen["network"] = payload["knowledgeNetwork"]["id"]
             seen["hook_token"] = env.get("BKN_TOKEN")
             seen.setdefault("configs", []).append(env.get("BKN_SAMPLE_CONFIG"))
-            seen["recorded_image"] = json.loads((Path(env["BKN_SAMPLE_CONFIG"]).parents[1] / "supply-chain.json").read_text())["dataImageRef"]
+            self.assertFalse((Path(env["BKN_SAMPLE_CONFIG"]).parents[1] / "supply-chain.json").exists())
             Path(env["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps({"ok": True, "resources": {}}), encoding="utf-8")
             return completed()
 
@@ -77,14 +106,14 @@ class RuntimeTest(unittest.TestCase):
             run=run,
             authorization="Bearer admin-token",
         )
-        self.assertEqual(seen["recorded_image"], "ghcr.io/openbkn-ai/bkn-samples@sha256:" + "a" * 64)
+        prepare.assert_called_once()
         self.assertEqual(seen["password"], PASSWORD)
         self.assertEqual(seen["network"], "supply_ontology_hand")
         self.assertEqual(seen["token"], "admin-token")
         self.assertEqual(seen["hook_token"], "admin-token")
         self.assertEqual(len(seen["configs"]), 2)
         self.assertTrue(seen["configs"][0])
-        self.assertEqual(seen["configs"][0], seen["configs"][1])
+        self.assertNotEqual(seen["configs"][0], seen["configs"][1])
         self.assertNotIn(PASSWORD, Path(seen["configs"][0]).read_text(encoding="utf-8") if Path(seen["configs"][0]).is_file() else "")
         self.assertEqual(view["status"], "installed")
         rendered = json.dumps(view)
@@ -195,7 +224,10 @@ class RuntimeTest(unittest.TestCase):
             def stop_after_deploy(_sample):
                 self.assertEqual(_read_state(state, "supply-chain")["dataImageRef"], image)
                 raise ControlError("install_failed", "sentinel")
-            with patch("installer.runtime.configured_image_ref", return_value=None), self.assertRaises(ApiError) as error:
+            with patch("installer.runtime.configured_image_ref", return_value=None), \
+                 patch("installer.runtime.shared_database.configured", return_value=True), \
+                 patch("installer.runtime.shared_database.prepare", side_effect=ControlError("install_failed", "sentinel")), \
+                 self.assertRaises(ApiError) as error:
                 retry_sample(sample="supply-chain", installation_id=current["id"], actor_role="admin", state_dir=state,
                              root=ROOT, version="0.1.0", deploy=stop_after_deploy, kubectl=lambda _: None, run=lambda *_: None)
             self.assertEqual(error.exception.code, "install_failed")

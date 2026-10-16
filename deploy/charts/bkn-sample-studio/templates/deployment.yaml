@@ -19,13 +19,24 @@ spec:
         app: bkn-sample-studio
     spec:
       serviceAccountName: bkn-sample-studio
+      automountServiceAccountToken: false
       containers:
         - name: studio
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: false
           image: "{{- if .Values.image.registry }}{{ .Values.image.registry }}/{{ end }}{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8080
           env:
+            - name: BKN_SAMPLE_DB_HOST
+              value: bkn-sample-database.{{ .Release.Namespace }}.svc.cluster.local
+            - name: BKN_SAMPLE_DB_REGISTRY
+              value: {{ .Values.sampleDatabase.registryDatabase | quote }}
+            - name: BKN_SAMPLE_DB_PASSWORD_FILE
+              value: /var/run/bkn-sample-database/mariadb-root-password
             - name: BKN_SAFE_URL
               value: {{ .Values.safeURL | quote }}
             - name: BKN_BASE_URL
@@ -55,9 +66,36 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            - name: kube-api-access
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              readOnly: true
+            - name: database-credentials
+              mountPath: /var/run/bkn-sample-database
+              readOnly: true
             - name: state
               mountPath: /var/lib/bkn-samples
       volumes:
+        - name: kube-api-access
+          projected:
+            defaultMode: 0400
+            sources:
+              - serviceAccountToken:
+                  path: token
+                  expirationSeconds: 3600
+              - configMap:
+                  name: kube-root-ca.crt
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+              - downwardAPI:
+                  items:
+                    - path: namespace
+                      fieldRef:
+                        fieldPath: metadata.namespace
+        - name: database-credentials
+          secret:
+            secretName: {{ default "bkn-sample-database" .Values.sampleDatabase.existingSecret | quote }}
+            defaultMode: 0400
         - name: state
           persistentVolumeClaim:
             claimName: {{ default "bkn-sample-studio-state" .Values.persistence.existingClaim | quote }}

@@ -3,11 +3,18 @@
 from __future__ import annotations
 
 import base64
+from contextlib import ExitStack
 import json
 import os
 import re
 import subprocess
 import tempfile
+import signal
+import sys
+
+from installer.hook_process import run_hook
+
+from installer import shared_database
 from pathlib import Path
 
 from installer.control_plane import ControlError, create_installation, retry_installation
@@ -85,11 +92,9 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
     script = sample_dir / document["spec"]["hooks"][hook_name]
     with tempfile.TemporaryDirectory() as tmp:
         directory = Path(tmp)
-        source = directory / "input.json"
         output = directory / "output.json"
-        source.write_text(json.dumps(payload), encoding="utf-8")
         hook_env = dict(env or {})
-        hook_env["BKN_SAMPLE_INPUT"] = str(source)
+        hook_env["BKN_SAMPLE_INPUT"] = "/dev/stdin"
         hook_env["BKN_SAMPLE_OUTPUT"] = str(output)
         if state_dir is not None:
             shared = state_dir / payload["sample"]
@@ -97,7 +102,7 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
             shared.chmod(0o700)
             hook_env["BKN_SAMPLE_CONFIG"] = str(shared / "config.yaml")
             hook_env["BKN_SAMPLE_RECEIPT"] = str(shared / "owned-execution.json")
-        completed = run([str(script)], hook_env)
+        completed = run_hook(sample_dir, script, run, hook_env, input_data=json.dumps(payload))
         if output.is_file():
             try:
                 result = json.loads(output.read_text(encoding="utf-8"))
@@ -130,9 +135,9 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
         raise ApiError(403, "forbidden", "an administrator must install the sample")
     cli_env = caller_env(authorization)
     try:
-        deployed = deploy(sample)
-        _record_database_image(state_dir, sample, version, deployed)
-        database = database_config(deployed, kubectl)
+        if not shared_database.configured():
+            raise DeployError("runtime_upgrade_required", "The product sample database is not configured; upgrade the sample service Chart.")
+        database = shared_database.prepare(root, sample, version, state_dir, run)
         expected_tables, knowledge_network, components = sample_contract(root, sample)
         record = create_installation(
             sample=sample,
@@ -147,7 +152,7 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
             components=components,
         )
     except DeployError as exc:
-        _write_failed(state_dir, sample, version, exc.code, exc.message)
+        _write_failed(state_dir, sample, version, exc.code, exc.message, stage="database")
         raise ApiError(500, exc.code, exc.message) from exc
     except ControlError as exc:
         status = 403 if exc.code == "forbidden" else 409 if exc.code in {"already_installed", "use_retry", "ownership_conflict"} else 500
@@ -168,12 +173,9 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
                        "only a failed installation can be retried")
     cli_env = caller_env(authorization)
     try:
-        expected_image = data_image_ref if data_image_ref is not None else configured_image_ref()
-        if expected_image is not None and current.get("dataImageRef") and current["dataImageRef"] != expected_image:
-            raise ApiError(409, "version_changed", "retry requires the original configured data image")
-        deployed = deploy(sample)
-        _record_database_image(state_dir, sample, version, deployed)
-        database = database_config(deployed, kubectl)
+        if not shared_database.configured():
+            raise DeployError("runtime_upgrade_required", "The product sample database is not configured; upgrade the sample service Chart.")
+        database = shared_database.prepare(root, sample, version, state_dir, run)
         expected_tables, knowledge_network, components = sample_contract(root, sample)
         record = retry_installation(
             sample=sample,
@@ -190,7 +192,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
         )
     except (DeployError, ControlError) as exc:
         if isinstance(exc, DeployError):
-            _write_failed(state_dir, sample, version, exc.code, exc.message)
+            _write_failed(state_dir, sample, version, exc.code, exc.message, stage="database")
         code = getattr(exc, "code", "install_failed")
         status = 409 if code in {"already_installed", "use_retry", "ownership_conflict"} else 500
         raise ApiError(status, code, exc.message) from exc
@@ -198,14 +200,47 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
 
 
 def kubectl_run(argv: list[str], stdin: str | None = None) -> subprocess.CompletedProcess:
-    return subprocess.run(["kubectl", *argv], input=stdin, text=True, capture_output=True, check=False)
+    return subprocess.run(["kubectl", "--request-timeout=20s", *argv], input=stdin, text=True, capture_output=True, check=False, timeout=30)
 
 
 def process_run(argv: list[str], env: dict | None) -> subprocess.CompletedProcess:
-    merged = os.environ.copy()
-    if env:
-        merged.update(env)
-    return subprocess.run(argv, env=merged, text=True, capture_output=True, check=False)
+    identity = (env or {}).get("_BKN_HOOK_UID")
+    if identity is not None:
+        if sys.platform != "linux" or os.geteuid() != 0:
+            raise ControlError("hook_isolation_unavailable", "Sample hooks require the product's Linux installation runtime.")
+        # Hook environments are an allowlist, never the parent service environment.
+        merged = {key: value for key, value in env.items() if key not in {"_BKN_HOOK_UID", "_BKN_HOOK_INPUT"}}
+        identity_options = {"user": int(identity), "group": int(identity), "extra_groups": [], "umask": 0o077}
+    else:
+        merged = os.environ.copy()
+        if env:
+            merged.update(env)
+        identity_options = {}
+    # Bound the whole hook process tree, including children spawned by shell scripts.
+    input_data = (env or {}).get("_BKN_HOOK_INPUT")
+    with ExitStack() as stack:
+        source = None
+        if input_data is not None:
+            # An anonymous memory file avoids credential storage on disk. Assign
+            # ownership before starting the child so /dev/stdin can be reopened
+            # by existing hooks after the UID switch, without a timing race.
+            descriptor = os.memfd_create("bkn-hook-input", os.MFD_CLOEXEC)
+            source = stack.enter_context(os.fdopen(descriptor, "w+b"))
+            source.write(input_data.encode("utf-8"))
+            source.flush()
+            source.seek(0)
+            os.fchown(descriptor, int(identity), int(identity))
+            os.fchmod(descriptor, 0o400)
+        process = stack.enter_context(subprocess.Popen(
+            argv, env=merged, text=True, stdin=source, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, start_new_session=True, **identity_options))
+        try:
+            stdout, stderr = process.communicate(timeout=300)
+        except subprocess.TimeoutExpired:
+            os.killpg(process.pid, signal.SIGKILL)
+            process.communicate()
+            raise ControlError("operation_timeout", "Sample operation timed out; retry the operation.") from None
+        return subprocess.CompletedProcess(argv, process.returncode, stdout, stderr)
 
 
 def deploy(root: Path, sample: str, data_image_ref: str | None = None,

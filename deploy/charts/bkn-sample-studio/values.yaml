@@ -51,3 +51,24 @@ resources:
   limits:
     cpu: 500m
     memory: 256Mi
+
+# One database server for all samples, separate from OpenBKN system data.
+# It is provisioned with the product, never by a sample installation.
+sampleDatabase:
+  image:
+    repository: mariadb
+    tag: "11.4.7"
+    digest: ""
+    pullPolicy: IfNotPresent
+  existingSecret: ""
+  registryDatabase: bkn_sample_runtime
+  persistence:
+    storageClass: ""
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
