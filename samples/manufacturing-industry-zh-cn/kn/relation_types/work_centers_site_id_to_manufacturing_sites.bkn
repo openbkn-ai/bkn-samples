@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: work_centers_site_id_to_manufacturing_sites
+name: work_centers_site_id_to_manufacturing_sites
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: work_centers_site_id_to_manufacturing_sites
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| work_centers | manufacturing_sites | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| site_id | site_id |

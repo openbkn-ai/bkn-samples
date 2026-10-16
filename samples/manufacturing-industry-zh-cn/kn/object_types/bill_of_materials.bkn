@@ -1,0 +1,25 @@
+---
+type: object_type
+id: bill_of_materials
+name: 物料清单
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: 物料清单
+
+制造业端到端样例中的业务对象。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| bom_id | bom_id | string | 稳定业务标识或业务属性。 | bom_id |
+| bom_version_id | bom_version_id | string | 稳定业务标识或业务属性。 | bom_version_id |
+| bom_name | bom_name | string | 稳定业务标识或业务属性。 | bom_name |
+| quantity_basis | quantity_basis | decimal | 稳定业务标识或业务属性。 | quantity_basis |
+
+### Keys
+
+Primary Keys: bom_id
+Display Key: bom_id
+Incremental Key:

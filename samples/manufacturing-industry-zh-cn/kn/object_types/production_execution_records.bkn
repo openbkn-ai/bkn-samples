@@ -1,0 +1,30 @@
+---
+type: object_type
+id: production_execution_records
+name: 生产执行记录
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: 生产执行记录
+
+制造业端到端样例中的业务对象。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| execution_record_id | execution_record_id | string | 稳定业务标识或业务属性。 | execution_record_id |
+| process_step_id | process_step_id | string | 稳定业务标识或业务属性。 | process_step_id |
+| machine_id | machine_id | string | 稳定业务标识或业务属性。 | machine_id |
+| operator_id | operator_id | string | 稳定业务标识或业务属性。 | operator_id |
+| started_date | started_date | date | 稳定业务标识或业务属性。 | started_date |
+| completed_date | completed_date | date | 稳定业务标识或业务属性。 | completed_date |
+| good_quantity | good_quantity | decimal | 稳定业务标识或业务属性。 | good_quantity |
+| scrap_quantity | scrap_quantity | decimal | 稳定业务标识或业务属性。 | scrap_quantity |
+| status | status | string | 稳定业务标识或业务属性。 | status |
+
+### Keys
+
+Primary Keys: execution_record_id
+Display Key: execution_record_id
+Incremental Key:

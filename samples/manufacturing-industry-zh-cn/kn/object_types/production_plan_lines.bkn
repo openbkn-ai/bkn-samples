@@ -1,0 +1,32 @@
+---
+type: object_type
+id: production_plan_lines
+name: 生产计划行
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: 生产计划行
+
+业务对象 in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| production_plan_line_id | production_plan_line_id | string | 业务对象. | production_plan_line_id |
+| production_plan_id | production_plan_id | string | 业务对象。 | production_plan_id |
+| forecast_id | forecast_id | string | 业务对象. | forecast_id |
+| product_id | product_id | string | 业务对象. | product_id |
+| site_id | site_id | string | 业务对象. | site_id |
+| production_order_id | production_order_id | string | 业务对象. | production_order_id |
+| planned_quantity | planned_quantity | decimal | 业务对象. | planned_quantity |
+| planned_start_date | planned_start_date | date | 业务对象. | planned_start_date |
+| planned_completion_date | planned_completion_date | date | 业务对象. | planned_completion_date |
+| scenario_as_of_date | scenario_as_of_date | date | 业务对象. | scenario_as_of_date |
+| status | status | string | 业务对象. | status |
+
+### Keys
+
+Primary Keys: production_plan_line_id
+Display Key: production_plan_line_id
+Incremental Key:

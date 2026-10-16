@@ -1,0 +1,26 @@
+---
+type: object_type
+id: purchase_order_lines
+name: 采购订单行
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: 采购订单行
+
+制造业端到端样例中的业务对象。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| purchase_order_line_id | purchase_order_line_id | string | 稳定业务标识或业务属性。 | purchase_order_line_id |
+| purchase_order_id | purchase_order_id | string | 稳定业务标识或业务属性。 | purchase_order_id |
+| product_id | product_id | string | 稳定业务标识或业务属性。 | product_id |
+| ordered_quantity | ordered_quantity | decimal | 稳定业务标识或业务属性。 | ordered_quantity |
+| unit | unit | string | 稳定业务标识或业务属性。 | unit |
+
+### Keys
+
+Primary Keys: purchase_order_line_id
+Display Key: purchase_order_line_id
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: shifts_site_id_to_manufacturing_sites
+name: shifts_site_id_to_manufacturing_sites
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: shifts_site_id_to_manufacturing_sites
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| shifts | manufacturing_sites | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| site_id | site_id |
