@@ -90,11 +90,17 @@ def validate_verification(proof, entry, sample):
     artifacts = sample["spec"]["artifacts"]
     package = next((a for a in artifacts if a["type"] == "archive"), None)
     image = next((a for a in artifacts if a["type"] == "oci-image"), None)
-    require(package is not None and image is not None,
-            "sample-install.v1 requires an archive and data image")
+    shared = "database.shared" in sample["spec"]["requires"]["capabilities"]
+    require(package is not None and (shared or image is not None),
+            "sample-install.v1 requires an archive and data image, or the shared database capability")
+    if shared:
+        require(image is None and len(sample["spec"]["delivery"]["dataDependencies"]) == 1
+                and sample["spec"]["delivery"]["dataDependencies"][0]["artifactId"] == package["id"],
+                "shared runtime data must come from the sample archive")
+        require(proof.get("databaseRuntime") == "shared-mariadb", "verification runtime differs")
     for key, expected in {"sampleId": entry["sampleId"], "version": entry["version"],
                           "packageDigest": package["digest"],
-                          "dataImageRef": image["locations"][0].removeprefix("oci://") + "@" + image["digest"]}.items():
+                          "dataImageRef": (image["locations"][0].removeprefix("oci://") + "@" + image["digest"]) if image else None}.items():
         require(proof.get(key) == expected, "verification refers to other artifacts")
     require(proof.get("freshInstallation") is True, "fresh installation evidence is required")
     checks = proof.get("checks")

@@ -22,7 +22,7 @@ class GatewayChartTest(unittest.TestCase):
         self.assertEqual(env['BKN_BASE_URL'],GATEWAY)
         self.assertEqual(env['BKN_BACKEND_URL'],'')
         self.assertFalse(any(d['kind']=='ConfigMap' for d in docs))
-        self.assertEqual([d['metadata']['name'] for d in docs if d['kind']=='Service'],['bkn-sample-studio'])
+        self.assertEqual([d['metadata']['name'] for d in docs if d['kind']=='Service'],['bkn-sample-database','bkn-sample-studio'])
     def test_operator_gateway_and_health_addresses_remain_independent(self):
         _,pod=self.render('--set','baseURL=http://custom-internal.example','--set','backendURL=http://backend.example')
         env={e['name']:e.get('value','') for e in pod['containers'][0]['env']}
@@ -35,3 +35,12 @@ class GatewayChartTest(unittest.TestCase):
         self.assertTrue(studio['image'].endswith('@sha256:'+'a'*64))
         self.assertEqual(env['BKN_SAMPLE_EXECUTOR_IMAGE_REF'],studio['image'])
         self.assertEqual(env['BKN_SAMPLE_DATA_IMAGE_REF'],'registry.example/data@sha256:'+'b'*64)
+
+    def test_hook_privilege_and_service_credentials_are_protected(self):
+        docs, pod = self.render()
+        self.assertFalse(pod['automountServiceAccountToken'])
+        studio = pod['containers'][0]
+        self.assertFalse(studio['securityContext']['allowPrivilegeEscalation'])
+        volumes = {v['name']: v for v in pod['volumes']}
+        self.assertEqual(volumes['database-credentials']['secret']['defaultMode'], 0o400)
+        self.assertEqual(volumes['kube-api-access']['projected']['defaultMode'], 0o400)

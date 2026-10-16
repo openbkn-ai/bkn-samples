@@ -78,3 +78,15 @@ helm upgrade bkn-sample-studio \
 ```
 
 Use a published Chart/image pair compatible with the current platform version. This routing-only correction does not require reversioning samples or replacing their data images. The standard product installer performs the same address correction, including when the Chart version has not changed. Use the operator-approved gateway instead for a nonstandard topology; do not disable TLS or SDK version checks.
+
+## Shared sample database patch
+
+The patched Chart provisions one `bkn-sample-database` MariaDB server in the product namespace, separate from system MariaDB. All online and offline sample installs use it; sample installation does not create another database Pod. Existing per-sample databases are kept until their recorded installations are uninstalled.
+
+Configure `sampleDatabase.image` using the same MariaDB distribution included in the product delivery. Its repository/tag or digest, persistence StorageClass/size and resource limits are Chart values. Offline product delivery must provision this server before sample installation. Sample installation never attempts to pull or start a missing runtime.
+
+The Chart creates and preserves the database Secret across Helm upgrades; `sampleDatabase.existingSecret` may supply an existing Secret with key `mariadb-root-password`. Administrative credentials are mounted into the sample service, never stored in installation responses or passed to sample loaders. Loader accounts have privileges only on their exact target and staging databases. The service records database ownership before creating resources and preserves it on failures for cleanup.
+
+### Sample hook credential boundary
+
+The installer retains its administrative identity for database ownership and Kubernetes operations. All four sample-authored hooks execute as distinct temporary non-root UIDs with empty supplementary groups, an allowlisted environment and a private copy of that sample's files. The Pod disables privilege escalation. Database administrator and Kubernetes service-account credentials are root-readable only; sample hooks receive only the current sample's database connection and authorized platform input. Known config/receipt outputs are copied back without following symlinks. A missing Linux privilege-switching runtime fails closed; there is no root execution fallback.

@@ -202,7 +202,9 @@ class OfflineImageTest(unittest.TestCase):
                  patch('installer.studio_http.serve', side_effect=lambda app, *args: apps.append(app)), \
                  patch('installer.task_runner.InstallationRunner', side_effect=make_runner), \
                  patch('installer.studio_api.load_indexes', return_value=(read_version(ROOT), index, index)), \
-                 patch('installer.deploy_database.deploy_database', side_effect=DeployError('offline_image_missing', 'not present')) as deploy, \
+                 patch('installer.runtime.shared_database.configured', return_value=True), \
+                 patch('installer.runtime.shared_database.prepare', side_effect=DeployError('database_not_ready', 'not ready')) as prepare, \
+                 patch('installer.deploy_database.deploy_database', side_effect=AssertionError('sample image provisioning forbidden')) as deploy, \
                  patch('installer.catalog_source.read_url', side_effect=AssertionError('catalog network forbidden')):
                 main()
                 app = apps[0]
@@ -216,8 +218,6 @@ class OfflineImageTest(unittest.TestCase):
                 app.retry('supply-chain', first['id'], 'admin', None)
                 self.assertTrue(runners[0].locks['supply-chain'].acquire(timeout=5))
                 runners[0].locks['supply-chain'].release()
-                self.assertEqual(_read_state(state, 'supply-chain')['error']['code'], 'offline_image_missing')
-                self.assertEqual(deploy.call_count, 2)
-                for call in deploy.call_args_list:
-                    self.assertTrue(call.kwargs['offline'])
-                    self.assertEqual(call.kwargs['data_image_ref'], ref)
+                self.assertEqual(_read_state(state, 'supply-chain')['error']['code'], 'database_not_ready')
+                self.assertEqual(prepare.call_count, 2)
+                deploy.assert_not_called()
