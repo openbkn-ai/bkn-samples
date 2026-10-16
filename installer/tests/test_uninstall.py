@@ -8,7 +8,7 @@ from unittest.mock import Mock
 from installer.control_plane import ownership_tags
 from installer.history import read_installation_history, begin_installation_attempt, record_terminal_installation
 from installer.state_store import write_json
-from installer.studio_api import ApiError, _read_state, _write_installing, _card
+from installer.studio_api import ApiError, _read_state, _write_installing, _card, installation_view
 from installer.uninstall import prepare_uninstall, execute_uninstall
 
 
@@ -83,6 +83,30 @@ class UninstallTest(unittest.TestCase):
         self.assertTrue(complete)
         with self.assertRaises(ApiError):
             prepare_uninstall(self.state, "supply-chain", current["id"], "admin")
+
+    def test_database_read_failure_reports_preflight_and_preserves_all_resources(self):
+        original = self.kubectl
+        for reason, code in (("Forbidden", "database_permission_denied"),
+                             ("Unauthorized", "database_permission_denied"),
+                             (None, "database_resource_check_failed")):
+            with self.subTest(reason=reason):
+                def read(args, body=None):
+                    if args[:2] == ["get", "pvc"]:
+                        stderr = f"Error from server ({reason}): credential-sentinel" if reason else "connection failed: credential-sentinel"
+                        return SimpleNamespace(returncode=1, stdout="", stderr=stderr)
+                    return original(args, body)
+                self.kubectl = read
+                self.start()
+                current = _read_state(self.state, "supply-chain")
+                self.assertEqual(current["error"]["code"], code)
+                self.assertIn("pvc", current["error"]["message"])
+                self.assertNotIn("credential-sentinel", json.dumps(current))
+                view = installation_view(current, "admin")
+                self.assertEqual(view["error"]["stage"], "preflight")
+                self.assertEqual(view["stages"][0]["state"], "failed")
+                self.assertTrue(all(s["state"] == "pending" for s in view["stages"][1:]))
+                self.assertEqual(self.deleted, [])
+                self.assertEqual(len(self.database), 4)
 
     def test_unowned_database_blocks_all_deletion(self):
         self.database[("service", "bkn-sample-supply-chain")]["metadata"]["annotations"] = {}

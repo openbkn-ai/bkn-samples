@@ -8,7 +8,8 @@ from pathlib import Path
 
 from installer.control_plane import ControlError
 from installer.runtime import database_config, install_sample, openbkn_json, retry_sample, run_platform_hook
-from installer.studio_api import ApiError
+from installer.deploy_database import DeployError
+from installer.studio_api import ApiError, installation_view, _write_installing
 
 ROOT = Path(__file__).resolve().parents[2]
 PASSWORD = "secret-password"
@@ -19,6 +20,31 @@ def completed(stdout: str = "", code: int = 0) -> subprocess.CompletedProcess:
 
 
 class RuntimeTest(unittest.TestCase):
+    def test_deploy_error_is_reported_at_database_without_false_success(self):
+        for retry, code in ((retry, code) for retry in (False, True)
+                            for code in ("install_failed", "database_permission_denied", "ownership_conflict")):
+            with self.subTest(retry=retry, code=code), tempfile.TemporaryDirectory() as directory:
+                state = Path(directory)
+                def deploy(_sample):
+                    raise DeployError(code, "Database preflight failed")
+                kwargs = {}
+                if retry:
+                    _write_installing(state, "supply-chain", "0.1.0")
+                    kwargs = {"installation_id": "inst-supply-chain", "accepted": True}
+                with patch("installer.runtime.shared_database.configured", return_value=True), \
+                     patch("installer.runtime.shared_database.prepare", side_effect=DeployError(code, "Database preflight failed")), \
+                     self.assertRaises(ApiError):
+                    (retry_sample if retry else install_sample)(
+                        sample="supply-chain", actor_role="admin", state_dir=state,
+                        root=ROOT, version="0.1.0", deploy=deploy,
+                        kubectl=lambda *_: self.fail("Must not read credentials"),
+                        run=lambda *_: self.fail("Must not execute hooks"), **kwargs)
+                record = json.loads((state / "supply-chain.json").read_text())
+                view = installation_view(record, "admin")
+                self.assertEqual(view["error"]["stage"], "database")
+                self.assertEqual([s["state"] for s in view["stages"]],
+                                 ["failed", "pending", "pending", "pending", "pending"])
+
     def test_hook_keeps_a_structured_failure_without_a_code(self):
         def run(_argv, env):
             Path(env["BKN_SAMPLE_OUTPUT"]).write_text(
