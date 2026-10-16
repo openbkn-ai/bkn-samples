@@ -200,7 +200,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
 
 
 def kubectl_run(argv: list[str], stdin: str | None = None) -> subprocess.CompletedProcess:
-    return subprocess.run(["kubectl", "--request-timeout=20s", *argv], input=stdin, text=True, capture_output=True, check=False, timeout=30)
+    return subprocess.run(["kubectl", *argv], input=stdin, text=True, capture_output=True, check=False, timeout=30)
 
 
 def process_run(argv: list[str], env: dict | None) -> subprocess.CompletedProcess:
