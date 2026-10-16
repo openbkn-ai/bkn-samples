@@ -189,6 +189,8 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             accepted=accepted,
         )
     except (DeployError, ControlError) as exc:
+        if isinstance(exc, DeployError):
+            _write_failed(state_dir, sample, version, exc.code, exc.message)
         code = getattr(exc, "code", "install_failed")
         status = 409 if code in {"already_installed", "use_retry", "ownership_conflict"} else 500
         raise ApiError(status, code, exc.message) from exc

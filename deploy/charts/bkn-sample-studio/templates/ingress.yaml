@@ -5,6 +5,7 @@ metadata:
   name: bkn-sample-studio
   namespace: {{ .Release.Namespace }}
   annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "1024m"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"

@@ -213,8 +213,8 @@ def download_package(package, destination):
         raise
 
 
-def extract_package(archive, sample_dir, package):
-    require(archive.stat().st_size <= MAX_ARCHIVE, "release archive exceeds size limit")
+def extract_package(archive, sample_dir, package, *, max_archive=MAX_ARCHIVE, max_content=MAX_CONTENT, max_file=MAX_FILE):
+    require(archive.stat().st_size <= max_archive, "release archive exceeds size limit")
     with archive.open("rb") as source:
         hasher = hashlib.sha256()
         for chunk in iter(lambda: source.read(1024 * 1024), b""):
@@ -230,9 +230,9 @@ def extract_package(archive, sample_dir, package):
             require(member.isfile() and not member.sparse, "archive may contain only regular files")
             require(path not in names, "duplicate archive member")
             names.add(path)
-            require(0 <= member.size <= MAX_FILE, "archive member exceeds size limit")
+            require(0 <= member.size <= max_file, "archive member exceeds size limit")
             total += member.size
-            require(total <= MAX_CONTENT, "expanded archive exceeds size limit")
+            require(total <= max_content, "expanded archive exceeds size limit")
             target = sample_dir / path
             target.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
             with bundle.extractfile(member) as source, target.open("xb") as output:

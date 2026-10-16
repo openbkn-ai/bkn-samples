@@ -21,7 +21,7 @@ Use semantic versions. Every version gets `releases/<version>/release-notes.en-U
 Build a review package without executing sample code:
 
 ```bash
-python3 tools/publication/build_candidate.py samples/<sample-id> \
+PYTHONPATH=. python3 tools/publication/build_candidate.py samples/<sample-id> \
   --version <version> --output /tmp/sample-candidate
 ```
 
@@ -32,12 +32,13 @@ Add new sample files to the Git index before building; untracked hooks and model
 For a package that can be imported through Studio's **Import offline package** action, add the fixed data image reference:
 
 ```bash
-python3 tools/publication/build_candidate.py samples/<sample-id> \
+PYTHONPATH=. python3 tools/publication/build_candidate.py samples/<sample-id> \
   --version <version> --output /tmp/sample-candidate \
-  --data-image-ref ghcr.io/openbkn-ai/bkn-samples@sha256:<digest>
+  --data-image-ref ghcr.io/openbkn-ai/bkn-samples@sha256:<digest> \
+  --image-layout /tmp/sample-oci
 ```
 
-The archive includes offline metadata bound to that image. The image itself must be reachable or preloaded in the target cluster; the archive does not contain container image layers.
+The archive includes offline metadata bound to that image. For offline installation, supply `--image-layout` together with `--data-image-ref`. The builder emits a separate self-contained `offline-package.tar.gz` with every OCI layer and the node preparation tool; URL-only packages are rejected. Import the bundled image locally on each node before Studio installation. Both install and retry use `Never` and cannot pull from a registry. See [offline installation](offline-installation.md).
 
 ## Release and catalog
 
@@ -72,7 +73,7 @@ Version the sample as a whole; do not independently replace one file in an insta
 
 For each changed category, explain the change and compatibility in the new release notes. Unchanged content can remain identical, but the new package, any changed data image, and verification must all refer to the same sample version. For supply-chain metrics, update `tools/assets/metrics-create.json`, `logic-properties.json` and `metrics-query-examples.json`. The installation hook must create and bind them; verification must query actual values against the locked CSV snapshot. Filters must use properties declared by the published metric. Merely keeping metric files in the archive does not install them. No separate metric or interface plugin protocol is required. Keep sample versions independent from the OpenBKN platform version.
 
-Publishing a new version does not upgrade an installed sample. In-place upgrades, data migrations, and merging user changes remain unsupported. With updated installation hooks and ownership receipts, uninstall the old sample before installing another version. Uninstall clears sample data and user edits while preserving attempt history. Legacy installations without ownership receipts cannot be automatically uninstalled. See [uninstall and reinstall](sample-uninstall.md) for the implementation and validation boundary. Online and offline installation use the same manifest and fixed artifacts; importing a tar.gz does not bundle the separately referenced data image, which must also be available to the target environment.
+Publishing a new version does not upgrade an installed sample. In-place upgrades, data migrations, and merging user changes remain unsupported. With updated installation hooks and ownership receipts, uninstall the old sample before installing another version. Uninstall clears sample data and user edits while preserving attempt history. Legacy installations without ownership receipts cannot be automatically uninstalled. See [uninstall and reinstall](sample-uninstall.md) for the implementation and validation boundary. Online and offline installation use the same manifest and fixed artifacts; the self-contained offline artifact includes the image layers and must pass disconnected acceptance; the lean online archive remains separate.
 
 Each accepted installation or retry receives an `attemptId` and its own start time. Terminal records are archived separately, so retrying the same version preserves the earlier failure. Legacy records remain readable, but previously overwritten records cannot be reconstructed; Studio marks that history as incomplete. Requests rejected during preflight do not create attempts.
 
