@@ -88,7 +88,10 @@ class SharedDatabaseTest(unittest.TestCase):
     def test_content_only_package_imports_without_image_or_registry(self):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary).resolve()
-            candidate = build(ROOT / 'samples/supply_ontology_hand', '0.1.6', output / 'build', shared_database=True)
+            sample_dir = ROOT / 'samples/supply_ontology_hand'
+            version = max((p.parent.name for p in sample_dir.glob('releases/*/release-notes.*.md')),
+                          key=lambda value: tuple(map(int, value.split('.'))))
+            candidate = build(sample_dir, version, output / 'build', shared_database=True)
             runtime = RemoteInstallation(ROOT, output / 'state', '0.2.0', 'arm64', CAPABILITIES,
                                          'registry.example/executor@sha256:' + 'a' * 64)
             packages = OfflinePackages(ROOT, output / 'state', runtime)
@@ -98,7 +101,7 @@ class SharedDatabaseTest(unittest.TestCase):
             packages.prepare(release)
             seen = []
             packages.execute(release, lambda root, version, image, retry: seen.append((version, image)))
-            self.assertEqual(seen, [('0.1.6', None)])
+            self.assertEqual(seen, [(version, None)])
             import tarfile
             with tarfile.open(candidate / 'offline-package.tar.gz') as archive:
                 self.assertFalse(any(member.name.startswith('runtime/') for member in archive))
