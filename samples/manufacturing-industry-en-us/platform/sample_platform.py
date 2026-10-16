@@ -17,8 +17,6 @@ def output(raw,ok,checks,message=''):
     body={'ok':ok,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':{'toolboxes':[],'skills':[]}},'checks':checks,'degrade':[],'message':message}
     Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(body,ensure_ascii=False),encoding='utf-8')
     print(json.dumps(body,ensure_ascii=False))
-def config(raw):
-    db=raw['database']; return {'database':{'engine':'mysql','host':db['host'],'port':int(db['port']),'database':db['name'],'user':db['user'],'password':db['password']},'vega':{'catalog_name':SAMPLE+'-'+raw['version'],'catalog_host':db['host'],'connector_type':'mysql'},'openbkn':{'kn_id':KN}}
 def main():
     raw=payload()
     if os.environ.get('BKN_SAMPLE_PRINT_ONLY')=='1':
@@ -26,7 +24,6 @@ def main():
     if sys.argv[1]=='install':
         subprocess.run(['openbkn','bkn','validate',str(ROOT/'kn')],check=True)
         with tempfile.TemporaryDirectory() as d:
-            p=Path(d)/'config.json'; p.write_text(json.dumps(config(raw)),encoding='utf-8')
             # The standard CLI imports the BKN directory; the installer then binds every object type to its discovered CSV table resource.
             subprocess.run(['openbkn','bkn','push',str(ROOT/'kn')],check=True)
             resources=entries(run('vega','resource','list','--catalog-id',raw['catalog']['id'],'--category','table','--limit','100'))
