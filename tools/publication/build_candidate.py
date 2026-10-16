@@ -13,6 +13,7 @@ import tempfile
 from pathlib import Path
 import yaml
 
+from installer.contract import read_version
 from installer.offline_image import file_sha, validate_layout, MAX_OFFLINE_ARCHIVE
 from installer.remote_bundle import MAX_ARCHIVE
 
@@ -31,6 +32,13 @@ def require(condition, message):
 
 def sha(data):
     return "sha256:" + hashlib.sha256(data).hexdigest()
+
+
+def platform_range():
+    """Candidates require the platform contract used by this source checkout."""
+    version = read_version(ROOT)
+    major, minor, _ = map(int, version.split("."))
+    return f">={version} <{major}.{minor + 1}.0"
 
 
 def digest_of(data):
@@ -150,7 +158,7 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
             **({"databaseRuntime": "shared-mariadb"} if shared_database else {"dataImageRef": data_image_ref}),
             "requires": {"installationProfiles": ["openbkn.ai/sample-install.v1"],
                          "requiredExtensions": [],
-                         "platformVersion": contract["spec"].get("platformVersion", ">=0.2.0 <0.3.0"),
+                         "platformVersion": contract["spec"].get("platformVersion", platform_range()),
                          "architectures": architectures,
                          "capabilities": capabilities},
             "releaseNotes": documents,

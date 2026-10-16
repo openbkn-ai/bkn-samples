@@ -1,3 +1,4 @@
+from installer.contract import read_version
 """Shared runtime ownership and content-only offline delivery regressions."""
 import json
 import subprocess
@@ -117,8 +118,12 @@ class SharedDatabaseTest(unittest.TestCase):
             archive = manifest['spec']['artifacts'][0]
             self.assertEqual(len(manifest['spec']['artifacts']), 1)
             self.assertEqual(archive['digest'], report['package']['digest'])
+            import tarfile
+            with tarfile.open(package) as source:
+                descriptor = json.load(source.extractfile('offline-release.json'))
+            self.assertEqual(manifest['spec']['requires']['platformVersion'], descriptor['requires']['platformVersion'])
             self.assertTrue(archive['locations'][0].endswith('/package.tar.gz'))
-            runtime = RemoteInstallation(ROOT, output / 'state', '0.2.0', 'arm64', CAPABILITIES,
+            runtime = RemoteInstallation(ROOT, output / 'state', read_version(ROOT), 'arm64', CAPABILITIES,
                                          'registry.example/executor@sha256:' + 'a' * 64)
             packages = OfflinePackages(ROOT, output / 'state', runtime)
             imported = packages.import_package(package, 'admin')
@@ -132,7 +137,7 @@ class SharedDatabaseTest(unittest.TestCase):
             version = max((p.parent.name for p in sample_dir.glob('releases/*/release-notes.*.md')),
                           key=lambda value: tuple(map(int, value.split('.'))))
             candidate = build(sample_dir, version, output / 'build', shared_database=True)
-            runtime = RemoteInstallation(ROOT, output / 'state', '0.2.0', 'arm64', CAPABILITIES,
+            runtime = RemoteInstallation(ROOT, output / 'state', read_version(ROOT), 'arm64', CAPABILITIES,
                                          'registry.example/executor@sha256:' + 'a' * 64)
             packages = OfflinePackages(ROOT, output / 'state', runtime)
             imported = packages.import_package(candidate / 'package.tar.gz', 'admin')

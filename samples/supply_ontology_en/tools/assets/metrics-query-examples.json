@@ -1,5 +1,5 @@
 {
-  "comment": "Query body for openbkn bkn metric query --body. Resolve metric_id from metric_name. Each case expands warehouse presets. Avoid exhaustive analysis_dimensions acceptance because the deployed API returns about 20 groups.",
+  "comment": "Standard Object Metrics V1 query bodies; IDs and explicit published versions are resolved by metric name. Calendar comparisons and proportions use arithmetic over verified query results.",
   "kn_id": "supply_ontology_en",
   "warehouse_scope_presets": {
     "production_available": [
@@ -38,10 +38,23 @@
       "metric_name": "Material Count",
       "title": "Purchased Material Count",
       "body": {
-        "condition": {
-          "field": "materialattr",
-          "operation": "==",
-          "value": "Purchased"
+        "filter": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_material",
+              "property_name": "materialattr"
+            }
+          },
+          "comparison_operator": "eq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "Purchased"
+            }
+          ]
         }
       },
       "expected_value": 3149
@@ -58,10 +71,23 @@
       "metric_name": "Supplier Count",
       "title": "Suppliers Managed by Alex Reed",
       "body": {
-        "condition": {
-          "field": "purchaserid_name",
-          "operation": "==",
-          "value": "Alex Reed"
+        "filter": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_supplier",
+              "property_name": "purchaserid_name"
+            }
+          },
+          "comparison_operator": "eq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "Alex Reed"
+            }
+          ]
         }
       },
       "expected_value": 51
@@ -78,10 +104,23 @@
       "metric_name": "Sales Order Count",
       "title": "382-000005 Sales Order Count",
       "body": {
-        "condition": {
-          "field": "product_code",
-          "operation": "==",
-          "value": "382-000005"
+        "filter": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_salesorder",
+              "property_name": "product_code"
+            }
+          },
+          "comparison_operator": "eq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "382-000005"
+            }
+          ]
         }
       },
       "expected_value": 40
@@ -98,21 +137,54 @@
       "metric_name": "Available Stock",
       "title": "382-000005 Finished Goods Stock",
       "body": {
-        "condition": {
-          "operation": "and",
-          "sub_conditions": [
+        "filter": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
             {
-              "field": "material_code",
-              "operation": "==",
-              "value": "382-000005"
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_inventory",
+                  "property_name": "material_code"
+                }
+              },
+              "comparison_operator": "eq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "382-000005"
+                }
+              ]
             },
             {
-              "field": "warehouse",
-              "operation": "in",
-              "value": [
-                "Suzhou Finished Goods",
-                "Urumqi Finished Goods",
-                "Harbin Finished Goods"
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_inventory",
+                  "property_name": "warehouse"
+                }
+              },
+              "comparison_operator": "in",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Suzhou Finished Goods"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Urumqi Finished Goods"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Harbin Finished Goods"
+                }
               ]
             }
           ]
@@ -126,25 +198,74 @@
       "metric_name": "Available Stock",
       "title": "791-000013 Production Stock",
       "body": {
-        "condition": {
-          "operation": "and",
-          "sub_conditions": [
+        "filter": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
             {
-              "field": "material_code",
-              "operation": "==",
-              "value": "791-000013"
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_inventory",
+                  "property_name": "material_code"
+                }
+              },
+              "comparison_operator": "eq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "791-000013"
+                }
+              ]
             },
             {
-              "field": "warehouse",
-              "operation": "in",
-              "value": [
-                "Suzhou Subassemblies",
-                "Suzhou Finished Goods",
-                "Suzhou Electronics",
-                "Suzhou Drone Materials",
-                "Suzhou Assembly",
-                "Urumqi Finished Goods",
-                "Harbin Finished Goods"
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_inventory",
+                  "property_name": "warehouse"
+                }
+              },
+              "comparison_operator": "in",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Suzhou Subassemblies"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Suzhou Finished Goods"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Suzhou Electronics"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Suzhou Drone Materials"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Suzhou Assembly"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Urumqi Finished Goods"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Harbin Finished Goods"
+                }
               ]
             }
           ]
@@ -165,18 +286,45 @@
       "metric_name": "Total Forecast Demand",
       "title": "382-000005 Open Forecast Quantity",
       "body": {
-        "condition": {
-          "operation": "and",
-          "sub_conditions": [
+        "filter": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
             {
-              "field": "material_number",
-              "operation": "==",
-              "value": "382-000005"
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_forecast",
+                  "property_name": "material_number"
+                }
+              },
+              "comparison_operator": "eq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "382-000005"
+                }
+              ]
             },
             {
-              "field": "closestatus_title",
-              "operation": "==",
-              "value": "Open"
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_forecast",
+                  "property_name": "closestatus_title"
+                }
+              },
+              "comparison_operator": "eq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "Open"
+                }
+              ]
             }
           ]
         }
@@ -188,24 +336,50 @@
       "metric_name": "Open_Forecast_Count",
       "title": "Open_Forecast_Count",
       "body": {
-        "condition": {
-          "field": "closestatus_title",
-          "operation": "!=",
-          "value": "Closed"
+        "filter": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_forecast",
+              "property_name": "closestatus_title"
+            }
+          },
+          "comparison_operator": "neq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "Closed"
+            }
+          ]
         }
       },
       "expected_value": 90,
-      "note": "Frozen CSV: 90 open forecasts. Explicitly filter closestatus_title != Closed."
+      "note": "The open-forecast business query explicitly filters the published status dimension."
     },
     {
       "id": "sales_382_signed_qty",
       "metric_name": "Total Signed Quantity",
       "title": "382-000005 Signed Quantity",
       "body": {
-        "condition": {
-          "field": "product_code",
-          "operation": "==",
-          "value": "382-000005"
+        "filter": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_salesorder",
+              "property_name": "product_code"
+            }
+          },
+          "comparison_operator": "eq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "382-000005"
+            }
+          ]
         }
       },
       "expected_value": 1081,
@@ -216,10 +390,23 @@
       "metric_name": "Total Shipped Quantity",
       "title": "382-000005 Shipped Quantity",
       "body": {
-        "condition": {
-          "field": "product_code",
-          "operation": "==",
-          "value": "382-000005"
+        "filter": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_salesorder",
+              "property_name": "product_code"
+            }
+          },
+          "comparison_operator": "eq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "382-000005"
+            }
+          ]
         }
       },
       "expected_value": 1066,
@@ -229,11 +416,7 @@
       "id": "signed_event_total",
       "metric_name": "Signing Events",
       "title": "All-Time Signed Quantity",
-      "body": {
-        "time": {
-          "instant": true
-        }
-      },
+      "body": {},
       "expected_value": 20396
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "comment": "Input for tools/power_layer.py create or openbkn bkn metric create --body-file. The script reads entries; extra fields are ignored. See metrics-query-examples.json for presets and acceptance queries and logic-properties.json for object bindings. Open-forecast queries must repeat the closure filter.",
+  "comment": "Standard Object Metrics V1 drafts. Publish immutable versions before querying. Object-set aggregates are owned by object types, not object-instance logical properties.",
   "kn_id": "supply_ontology_en",
   "warehouse_scope_presets": {
     "production_available": [
@@ -40,329 +40,599 @@
   },
   "entries": [
     {
+      "version": 1,
+      "code": "product_total_count",
       "name": "Product Count",
-      "comment": "count(material_number). Fixture total: 30.",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "count(material_number). Fixture total: 30.",
+      "owner_object_type_id": "supply_ontology_en_product",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_product",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "material_number",
-          "aggr": "count"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_product",
+              "property_name": "material_number"
+            }
+          }
         }
+      },
+      "query_capabilities": {
+        "analysis_dimensions": [],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
       }
     },
     {
+      "version": 1,
+      "code": "material_total_count",
       "name": "Material Count",
-      "comment": "count(material_code). Filter or group by materialattr / group_name. Fixture total: 3497.",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "count(material_code). Filter or group by materialattr / group_name. Fixture total: 3497.",
+      "owner_object_type_id": "supply_ontology_en_material",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_material",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "material_code",
-          "aggr": "count"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_material",
+              "property_name": "material_code"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "materialattr",
-          "display_name": "Material Type"
-        },
-        {
-          "name": "group_name",
-          "display_name": "Stock Category"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_material",
+            "property_name": "materialattr"
+          },
+          {
+            "object_type_id": "supply_ontology_en_material",
+            "property_name": "group_name"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "supplier_total_count",
       "name": "Supplier Count",
-      "comment": "count(supplier_code). Filter by purchaserid_name. Fixture total: 230.",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "count(supplier_code). Filter by purchaserid_name. Fixture total: 230.",
+      "owner_object_type_id": "supply_ontology_en_supplier",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_supplier",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "supplier_code",
-          "aggr": "count"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_supplier",
+              "property_name": "supplier_code"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "purchaserid_name",
-          "display_name": "Buyer"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_supplier",
+            "property_name": "purchaserid_name"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "sales_order_count",
       "name": "Sales Order Count",
-      "comment": "count(sales_order_id). Filter or group by product_code / order_status. Fixture total: 800.",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "transaction",
+      "description": "count(sales_order_id). Filter or group by product_code / order_status. Fixture total: 800.",
+      "owner_object_type_id": "supply_ontology_en_salesorder",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_salesorder",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "sales_order_id",
-          "aggr": "count"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_salesorder",
+              "property_name": "sales_order_id"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "product_code",
-          "display_name": "Product Code"
-        },
-        {
-          "name": "order_status",
-          "display_name": "Order Status"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "product_code"
+          },
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "order_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "warehouse_count",
       "name": "Warehouse Count",
-      "comment": "Distinct warehouse values in stock records: 29. The production_available preset contains 7 warehouses and is a separate measure.",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "Distinct warehouse values in stock records: 29. The production_available preset contains 7 warehouses and is a separate measure.",
+      "owner_object_type_id": "supply_ontology_en_inventory",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_inventory",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "warehouse",
-          "aggr": "count_distinct"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count_distinct",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_inventory",
+              "property_name": "warehouse"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "stock_status",
-          "display_name": "Stock Status"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_inventory",
+            "property_name": "stock_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "available_qty_sum",
       "name": "Available Stock",
-      "comment": "sum(available_inventory_qty). Expand production_available / finished_goods with warehouse in at query time, or leave all unrestricted.",
-      "tags": [
-        "p0",
-        "inventory",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "sum(available_inventory_qty). Expand production_available / finished_goods with warehouse in at query time, or leave all unrestricted.",
+      "owner_object_type_id": "supply_ontology_en_inventory",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_inventory",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "available_inventory_qty",
-          "aggr": "sum"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "decimal",
+          "semantic_type": "measure",
+          "precision": 38,
+          "scale": 6,
+          "rounding_mode": "half_up"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_inventory",
+              "property_name": "available_inventory_qty"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "material_code",
-          "display_name": "Material Code"
-        },
-        {
-          "name": "warehouse",
-          "display_name": "Warehouse"
-        },
-        {
-          "name": "stock_status",
-          "display_name": "Stock Status"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_inventory",
+            "property_name": "material_code"
+          },
+          {
+            "object_type_id": "supply_ontology_en_inventory",
+            "property_name": "warehouse"
+          },
+          {
+            "object_type_id": "supply_ontology_en_inventory",
+            "property_name": "stock_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "forecast_qty_sum",
       "name": "Total Forecast Demand",
-      "comment": "sum(qty). Filter or group by material_number / closestatus_title.",
-      "tags": [
-        "p0",
-        "planning",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "sum(qty). Filter or group by material_number / closestatus_title.",
+      "owner_object_type_id": "supply_ontology_en_forecast",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_forecast",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "qty",
-          "aggr": "sum"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "decimal",
+          "semantic_type": "measure",
+          "precision": 38,
+          "scale": 6,
+          "rounding_mode": "half_up"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_forecast",
+              "property_name": "qty"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "material_number",
-          "display_name": "Product Code"
-        },
-        {
-          "name": "closestatus_title",
-          "display_name": "Closure Status"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_forecast",
+            "property_name": "material_number"
+          },
+          {
+            "object_type_id": "supply_ontology_en_forecast",
+            "property_name": "closestatus_title"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "open_forecast_count",
       "name": "Open_Forecast_Count",
-      "comment": "count(id) with closestatus_title != Closed. Repeat the closure filter at query time because definition-level condition is discarded. Fixture total: 90.",
-      "tags": [
-        "p0",
-        "planning",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "transaction",
+      "description": "Count forecast IDs. Apply the published closestatus_title query dimension explicitly to count open forecasts.",
+      "owner_object_type_id": "supply_ontology_en_forecast",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_forecast",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "id",
-          "aggr": "count"
-        }
-      },
-      "condition": {
-        "field": "closestatus_title",
-        "operation": "!=",
-        "value": "Closed"
-      },
-      "analysis_dimensions": [
-        {
-          "name": "material_number",
-          "display_name": "Product Code"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
         },
-        {
-          "name": "closestatus_title",
-          "display_name": "Closure Status"
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_forecast",
+              "property_name": "id"
+            }
+          }
         }
-      ]
+      },
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_forecast",
+            "property_name": "material_number"
+          },
+          {
+            "object_type_id": "supply_ontology_en_forecast",
+            "property_name": "closestatus_title"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "signed_quantity_sum",
       "name": "Total Signed Quantity",
-      "comment": "sum(signing_quantity), filtered server-side by product_code. Product 382-000005: 40 orders and 1081 sets signed. Snapshot total only.",
-      "tags": [
-        "p0",
-        "sales",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "sum(signing_quantity), filtered server-side by product_code. Product 382-000005: 40 orders and 1081 sets signed. Snapshot total only.",
+      "owner_object_type_id": "supply_ontology_en_salesorder",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_salesorder",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "signing_quantity",
-          "aggr": "sum"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_salesorder",
+              "property_name": "signing_quantity"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "product_code",
-          "display_name": "Product Code"
-        },
-        {
-          "name": "order_status",
-          "display_name": "Order Status"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "product_code"
+          },
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "order_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "shipped_quantity_sum",
       "name": "Total Shipped Quantity",
-      "comment": "sum(shipping_quantity), filtered server-side by product_code. Product 382-000005: 40 orders and 1066 sets shipped. Snapshot total only.",
-      "tags": [
-        "p0",
-        "sales",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "sum(shipping_quantity), filtered server-side by product_code. Product 382-000005: 40 orders and 1066 sets shipped. Snapshot total only.",
+      "owner_object_type_id": "supply_ontology_en_salesorder",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_salesorder",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "shipping_quantity",
-          "aggr": "sum"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "decimal",
+          "semantic_type": "measure",
+          "precision": 38,
+          "scale": 6,
+          "rounding_mode": "half_up"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_salesorder",
+              "property_name": "shipping_quantity"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "product_code",
-          "display_name": "Product Code"
-        },
-        {
-          "name": "order_status",
-          "display_name": "Order Status"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "product_code"
+          },
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "order_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "signed_quantity_by_date",
       "name": "Signing Events",
-      "comment": "Aggregate signing_quantity by sales_order.signing_date as signing events. Fixed window: 2026-03-01 through 2026-06-30. No default rolling window; choose the historical period explicitly.",
-      "tags": [
-        "p0",
-        "sales",
-        "temporal"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "Aggregate signing_quantity by sales_order.signing_date as signing events. Fixed window: 2026-03-01 through 2026-06-30. No default rolling window; choose the historical period explicitly.",
+      "owner_object_type_id": "supply_ontology_en_salesorder",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_en_salesorder",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "signing_quantity",
-          "aggr": "sum"
-        }
-      },
-      "time_dimension": {
-        "property": "signing_date",
-        "default_range_policy": "none"
-      },
-      "analysis_dimensions": [
-        {
-          "name": "order_status",
-          "display_name": "Order Status"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
         },
-        {
-          "name": "product_code",
-          "display_name": "Product Code"
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_en_salesorder",
+              "property_name": "signing_quantity"
+            }
+          }
         }
-      ]
+      },
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "order_status"
+          },
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "product_code"
+          }
+        ],
+        "time_dimensions": [
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "signing_date"
+          }
+        ]
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     }
   ]
 }

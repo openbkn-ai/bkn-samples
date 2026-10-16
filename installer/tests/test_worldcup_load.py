@@ -40,6 +40,20 @@ class _Body:
 
 
 class WorldCupLoadTest(unittest.TestCase):
+    def test_resource_mapping_accepts_discovered_quoted_identifiers(self):
+        import io
+        for sample in ("world-cup", "world-cup-en"):
+            mapper = _load("map_" + sample.replace("-", "_"), f"samples/{sample}/scripts/map_vega_table_resources.py")
+            for template in ("worldcup.wc_{}", "`worldcup`.`wc_{}`", '\"worldcup\".\"wc_{}\"', "wc_{}"):
+                entries = [{"source_identifier": template.format(stem), "id": "resource-" + stem}
+                           for stem in mapper.WORLD_CUP_STEMS]
+                output = io.StringIO()
+                with patch("sys.stdin", io.StringIO(json.dumps({"entries": entries}))), patch("sys.stdout", output):
+                    mapper.main()
+                mapping = json.loads(output.getvalue())
+                self.assertEqual(len(mapping), 27)
+                self.assertEqual(mapping["TEAMS_RES_ID"], "resource-teams")
+
     def test_wide_tables_use_varchar_255(self):
         wide = LOAD.create_table_sql("wc_matches", ["match_id"])
         narrow = LOAD.create_table_sql("wc_teams", ["team_id"])

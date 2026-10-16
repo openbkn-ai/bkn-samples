@@ -207,24 +207,11 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                 if not expected["openbkn.ai/sample-data-image"] or any(annotations.get(k) != v for k, v in expected.items()):
                     raise ApiError(409, "ownership_conflict", "Sample database ownership is missing or differs; nothing will be deleted.")
                 database_resources.append((kind, resource, value["metadata"]["uid"]))
-        # Metrics are owned by the network scope, including user edits in this sample.
-        metrics = []
-        if network_path and _single(api("GET", network_path)) is not None:
-            offset = 0
-            while True:
-                page = api("GET", network_path + f"/metrics?limit=500&offset={offset}")
-                if not isinstance(page, dict) or not isinstance(page.get("entries"), list):
-                    raise ApiError(500, "uninstall_failed", "Cannot enumerate sample metrics.")
-                entries = page["entries"]
-                paths = [_path(network_path + "/metrics/", entry.get("id")) for entry in entries]
-                if set(metrics).intersection(paths) or len(set(paths)) != len(paths):
-                    raise ApiError(500, "uninstall_failed", "Invalid metric pagination.")
-                metrics.extend(paths)
-                if len(entries) < 500:
-                    break
-                offset += len(entries)
+        # The standard network DELETE atomically removes its versioned metrics.
+        # Published metric versions are immutable and cannot be deleted through
+        # the draft API. Ownership is checked above before deleting this scope.
         checkpoint("preflight", "succeeded")
-        for stage, paths in (("knowledge", metrics + ([network_path] if network_path else [])), ("capabilities", execution_paths), ("discover", [catalog_path] if catalog_path else [])):
+        for stage, paths in (("knowledge", [network_path] if network_path else []), ("capabilities", execution_paths), ("discover", [catalog_path] if catalog_path else [])):
             checkpoint(stage, "running")
             for path in paths:
                 resource = _single(api("GET", path))

@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 import yaml
 
+from installer.contract import read_version
 from installer.offline_image import file_sha, validate_layout
 from installer.deploy_database import deploy_database, DeployError
 from installer.offline_bundle import OfflinePackages
@@ -163,7 +164,7 @@ class OfflineImageTest(unittest.TestCase):
             temporary = Path(temporary).resolve()
             ref, _ = image_fixture(temporary / 'oci')
             candidate = build(ROOT / 'samples/supply_ontology_hand', '0.1.2', temporary / 'out', ref, temporary / 'oci')
-            runtime = RemoteInstallation(ROOT, temporary / 'state', '0.2.0', 'arm64',
+            runtime = RemoteInstallation(ROOT, temporary / 'state', read_version(ROOT), 'arm64',
                 ['vega.catalog', 'knowledge-network.import.kn-json', 'execution.function', 'execution.skill'],
                 'ghcr.io/openbkn-ai/executor@sha256:' + 'e' * 64)
             offline = OfflinePackages(ROOT, temporary / 'state', runtime)
@@ -194,7 +195,7 @@ class OfflineImageTest(unittest.TestCase):
                 return runner
             state = temporary / 'state'
             env = {'BKN_SAMPLES_ROOT': str(ROOT), 'BKN_SAMPLE_STATE_DIR': str(state),
-                   'BKN_SAMPLE_PLATFORM_VERSION': '0.2.0', 'BKN_SAMPLE_PLATFORM_CAPABILITIES': '',
+                   'BKN_SAMPLE_PLATFORM_VERSION': read_version(ROOT), 'BKN_SAMPLE_PLATFORM_CAPABILITIES': '',
                    'BKN_SAMPLE_DATA_IMAGE_REF': '',
                    'BKN_SAMPLE_EXECUTOR_IMAGE_REF': 'ghcr.io/openbkn-ai/executor@sha256:' + 'e' * 64}
             index = build_manifest_index(ROOT, 'a' * 40)

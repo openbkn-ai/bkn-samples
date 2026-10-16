@@ -12,6 +12,7 @@ import tempfile
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
+from urllib.error import HTTPError, URLError
 
 from installer.studio_api import ApiError
 
@@ -241,8 +242,19 @@ def authenticate_bearer(fetch, authorization: str | None) -> str:
     """``fetch(path, authorization)`` returns ``(status, json)`` from bkn-safe."""
     if not authorization or not authorization.startswith("Bearer "):
         raise ApiError(401, "forbidden", "sign in to read the sample catalog")
-    me_status, _me = fetch("/api/safe/v1/me", authorization)
-    perm_status, permissions = fetch("/api/safe/v1/me/permissions?scope=type", authorization)
+    try:
+        me_status, _me = fetch("/api/safe/v1/me", authorization)
+        if me_status != 200:
+            raise ApiError(401, "forbidden", "sign in to read the sample catalog")
+        perm_status, permissions = fetch("/api/safe/v1/me/permissions?scope=type", authorization)
+    except HTTPError as error:
+        status = error.code
+        error.close()
+        if status in (401, 403):
+            raise ApiError(401, "forbidden", "sign in to read the sample catalog") from None
+        raise ApiError(503, "authentication_unavailable", "Authentication service is unavailable; try again later.") from None
+    except (URLError, TimeoutError):
+        raise ApiError(503, "authentication_unavailable", "Authentication service is unavailable; try again later.") from None
     if me_status != 200 or perm_status != 200:
         raise ApiError(401, "forbidden", "sign in to read the sample catalog")
     return role_from_safe(me_status, permissions if isinstance(permissions, dict) else None)

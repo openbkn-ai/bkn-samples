@@ -435,7 +435,7 @@ class InstallSupplyTest(unittest.TestCase):
         self.assertIn("register_skills.py", rendered)
         steps = commands(Path("config.yaml"))
         metric_steps = [argv for argv in steps if Path(argv[1]).name == "power_layer.py"]
-        self.assertEqual([argv[2] for argv in metric_steps], ["create", "bind"])
+        self.assertEqual([argv[2] for argv in metric_steps], ["create", "verify-ownership"])
         self.assertLess(steps.index(metric_steps[1]), next(i for i, argv in enumerate(steps)
                        if Path(argv[1]).name == "register_native_function_toolbox.py"))
 

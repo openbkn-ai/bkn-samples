@@ -1,191 +1,123 @@
-"""Independent CSV oracle and full-series regression coverage for issue #23."""
-
+"""Independent CSV oracle for V1 query semantics and complete calendar months."""
 import copy
 import csv
 import json
 from collections import defaultdict
 from decimal import Decimal
+from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from pathlib import Path
 
-from power_layer import calendar_month_growth, metric_series_match, verify_metrics
+from power_layer import metric_series_match, verify_metrics
 
 PACK = Path(__file__).resolve().parents[2]
-ASSETS = PACK / "tools" / "assets"
+ASSETS = PACK / "tools/assets"
+DEFINITIONS = json.loads((ASSETS / "metrics-create.json").read_text())["entries"]
+CASES = {c["id"]: c for c in json.loads((ASSETS / "metrics-analysis-examples.json").read_text())["cases"]}
 
 
-def test_query_windows_preserve_complete_business_months():
-    payload = json.loads((ASSETS / "metrics-analysis-examples.json").read_text())
-    assert payload["business_timezone"] == "Asia/Shanghai"
-    cases = {c["id"]: c for c in payload["cases"]}
-    zone = ZoneInfo(payload["business_timezone"])
-    monthly = cases["signed_monthly"]["body"]["time"]
-    assert datetime.fromtimestamp(monthly["start"] / 1000, zone).isoformat() == "2026-03-01T00:00:00+08:00"
-    assert datetime.fromtimestamp(monthly["end"] / 1000, zone).isoformat() == "2026-06-30T23:59:59.999000+08:00"
-    instant = cases["signed_april_instant"]["body"]
-    assert instant["time"] == {"instant": True}
-    lower, upper = instant["condition"]["sub_conditions"]
-    assert (lower["field"], lower["operation"], upper["field"], upper["operation"]) == ("signing_date", ">=", "signing_date", "<")
-    assert datetime.fromtimestamp(lower["value"] / 1000, zone).isoformat() == "2026-04-01T00:00:00+08:00"
-    assert datetime.fromtimestamp(upper["value"] / 1000, zone).isoformat() == "2026-05-01T00:00:00+08:00"
-    growth = cases["signed_month_growth"]
-    assert "body" not in growth
-    assert growth["calculation"] == "calendar_month_growth"
-    for query in growth["queries"]:
-        lower, upper = query["body"]["condition"]["sub_conditions"]
-        start = datetime.fromtimestamp(lower["value"] / 1000, zone)
-        end = datetime.fromtimestamp(upper["value"] / 1000, zone)
+def metric_for(case):
+    metric = copy.deepcopy(next(m for m in DEFINITIONS if m["name"] == case["metric_name"]))
+    metric["id"] = "metric"
+    metric["lifecycle"]["status"] = "published"
+    return metric
+
+
+def runner(case, totals):
+    metric = metric_for(case)
+    values = iter(totals)
+    def run(args):
+        if args[4] == "list": return json.dumps({"entries": [{"definition": metric}]})
+        assert args[args.index("--metric-version") + 1] == "1"
+        body = json.loads(args[-1])
+        assert "condition" not in body and "instant" not in body.get("time", {})
+        return json.dumps({"model": {"metric_id": "metric", "version": 1}, "status": "ok",
+                           "entries": [{"value": next(values), "status": "ok"}]})
+    return run
+
+
+def test_complete_consecutive_months_use_standard_typed_filter():
+    zone = ZoneInfo("Asia/Shanghai")
+    previous = None
+    for query in CASES["signed_month_growth"]["queries"]:
+        lower, upper = query["body"]["filter"]["children"]
+        assert lower["comparison_operator"] == "gte" and upper["comparison_operator"] == "lt"
+        assert lower["left"]["property_ref"]["property_name"] == "signing_date"
+        start = datetime.fromtimestamp(lower["right"][0]["value"] / 1000, zone)
+        end = datetime.fromtimestamp(upper["right"][0]["value"] / 1000, zone)
         assert start.strftime("%Y-%m") == query["period"]
         assert start.day == end.day == 1
-        assert lower["operation"] == ">=" and upper["operation"] == "<"
+        assert previous is None or start == previous
+        previous = end
 
 
-def test_temporal_definition_and_periods_match_existing_csv():
-    definitions = json.loads((ASSETS / "metrics-create.json").read_text())["entries"]
-    metric = next(m for m in definitions if m["name"] == 'Signing Events')
-    assert metric["time_dimension"] == {"property": "signing_date", "default_range_policy": "none"}
-    network = json.loads((PACK / "kn" / "supply_ontology_en.json").read_text())
-    # Check the actual mapped object property rather than assuming a date-like name.
-    objects = network.get("object_types") or network.get("objectTypes")
-    if objects is None:
-        objects = network["entries"][0]["object_types"]
-    sales = next(o for o in objects if o["id"] == metric["scope_ref"])
-    date = next(p for p in sales["data_properties"] if p["name"] == "signing_date")
-    assert date["type"] == date["mapped_field"]["type"] == "date"
+def test_monthly_and_growth_gold_match_independent_locked_csv():
     monthly = defaultdict(Decimal)
-    with (PACK / "data" / "sales_order.csv").open() as stream:
-        for row in csv.DictReader(stream):
-            monthly[row["signing_date"][:7]] += Decimal(row["signing_quantity"])
-    cases = {c["id"]: c for c in json.loads((ASSETS / "metrics-analysis-examples.json").read_text())["cases"]}
-    expected = cases["signed_monthly"]["expected_series"][0]
+    with (PACK / "data/sales_order.csv").open() as stream:
+        for row in csv.DictReader(stream): monthly[row["signing_date"][:7]] += Decimal(row["signing_quantity"])
+    expected = CASES["signed_monthly"]["expected_series"][0]
     assert expected["periods"] == sorted(monthly)
     assert expected["values"] == [monthly[p] for p in expected["periods"]]
-    growth = cases["signed_month_growth"]["expected_series"][0]
     months = expected["periods"]
-    assert growth["growth_values"] == [monthly[months[i]] - monthly[months[i - 1]] for i in range(1, 4)]
+    assert CASES["signed_month_growth"]["expected_series"][0]["growth_values"] == [monthly[b]-monthly[a] for a,b in zip(months, months[1:])]
 
 
-def test_capability_matrix_covers_every_metric_without_inventing_snapshot_time():
-    metrics = json.loads((ASSETS / "metrics-create.json").read_text())["entries"]
-    capabilities = json.loads((ASSETS / "metrics-capabilities.json").read_text())["metrics"]
-    assert {m["name"] for m in metrics} == {c["metric_name"] for c in capabilities}
-    for capability in capabilities:
-        if not capability["time_property"]:
-            assert "trend" not in capability["supported_modes"]
-            assert "sameperiod" not in capability["supported_modes"]
-            assert not capability["period_filter_supported"]
+def test_temporal_metric_references_actual_date_property():
+    metric = metric_for(CASES["signed_month_growth"])
+    ref = metric["query_capabilities"]["time_dimensions"][0]
+    network = json.loads((PACK / "kn" / (PACK.name + ".json")).read_text())
+    objects = network.get("object_types") or network.get("objectTypes") or network["entries"][0]["object_types"]
+    owner = next(o for o in objects if o["id"] == ref["object_type_id"])
+    date = next(p for p in owner["data_properties"] if p["name"] == ref["property_name"])
+    assert date["type"] == date["mapped_field"]["type"] == "date"
 
 
-def test_series_verification_rejects_wrong_later_bucket_period_and_extra_groups():
-    expected = [{"labels": {"status": "open"}, "periods": ["2026-03", "2026-04"], "values": [6083, 5319]}]
-    actual = [{"labels": {"status": "open"}, "time_strs": ["2026-03-01", "2026-04-01"], "values": [6083, 5319]}]
-    assert metric_series_match(actual, expected)
-    wrong = copy.deepcopy(actual)
-    wrong[0]["values"][1] = 5320
-    assert not metric_series_match(wrong, expected)
-    wrong = copy.deepcopy(actual)
-    wrong[0]["time_strs"][1] = "2026-05-01"
-    assert not metric_series_match(wrong, expected)
-    assert not metric_series_match(actual + actual, expected)
-    assert not metric_series_match(actual, expected + expected)
+def test_calendar_queries_verify_every_month_and_baseline_before_arithmetic():
+    case = CASES["signed_month_growth"]
+    result = verify_metrics("network", [case], run_cmd=runner(case,[6083,5319,4565,4429]), business_timezone="Asia/Shanghai")
+    assert not result["failed"]
+    assert len(result["passed"][0]["queries"]) == 4
+    assert result["passed"][0]["actual"][0]["growth_values"] == [-764,-754,-136]
+    # Equal errors preserve all differences, but must fail source totals.
+    assert verify_metrics("network", [case], run_cmd=runner(case,[6084,5320,4566,4430]), business_timezone="Asia/Shanghai")["failed"]
+    shortened = copy.deepcopy(case)
+    shortened["queries"][2]["body"]["filter"]["children"][1]["right"][0]["value"] -= 86400000
+    assert verify_metrics("network", [shortened], run_cmd=runner(case,[6083,5319,4517,4429]), business_timezone="Asia/Shanghai")["failed"]
 
 
-def test_series_order_does_not_change_grouped_proportion_validation():
-    expected = [{"labels": {"attr": "A"}, "values": [3], "proportions": [75]},
-                {"labels": {"attr": "B"}, "values": [1], "proportions": [25]}]
-    assert metric_series_match(list(reversed(expected)), expected)
-    wrong = copy.deepcopy(expected)
-    wrong[0]["proportions"] = [74]
-    assert not metric_series_match(wrong, expected)
+def test_monthly_series_retains_all_four_periods():
+    case = CASES["signed_monthly"]
+    report = verify_metrics("network", [case], run_cmd=runner(case,[6083,5319,4565,4429]), business_timezone="Asia/Shanghai")
+    assert report["passed"][0]["actual"][0]["time_strs"] == ["2026-03","2026-04","2026-05","2026-06"]
 
 
-def test_month_bucket_is_compared_in_declared_business_timezone():
-    expected = [{"labels": {}, "periods": ["2026-04"], "values": [5319]}]
-    actual = [{"labels": {}, "times": [1774972800000], "values": [5319]}]
-    assert not metric_series_match(actual, expected)
-    assert metric_series_match(actual, expected, "Asia/Shanghai")
-    actual[0]["time_strs"] = ["2026-03-31T16:00:00Z"]
-    assert metric_series_match(actual, expected, "Asia/Shanghai")
-    assert not metric_series_match(actual, expected, "Missing/Timezone")
+def test_series_rejects_later_wrong_bucket_extra_groups_and_bad_timezone():
+    expected=[{"labels":{},"periods":["2026-03","2026-04"],"values":[6083,5319]}]
+    actual=[{"labels":{},"time_strs":["2026-03-01","2026-04-01"],"values":[6083,5319]}]
+    assert metric_series_match(actual,expected)
+    actual[0]["values"][1]=5320
+    assert not metric_series_match(actual,expected)
+    assert not metric_series_match(actual+actual,expected)
+    assert not metric_series_match(actual,expected,"Missing/Zone")
 
 
-def test_metric_verifier_forwards_business_timezone_to_bucket_check():
-    def run(command):
-        if "list" in command:
-            return json.dumps({"entries": [{"id": "metric", "name": "sales"}]})
-        return json.dumps({"datas": [{"labels": {}, "times": [1774972800000], "values": [5319]}]})
-    case = {"id": "april", "metric_name": "sales", "expected_series": [
-        {"labels": {}, "periods": ["2026-04"], "values": [5319]}]}
-    assert verify_metrics("network", [case], run_cmd=run)["failed"]
-    assert verify_metrics("network", [case], run_cmd=run, business_timezone="Asia/Shanghai")["passed"]
-
-
-def test_verify_metrics_checks_series_instead_of_only_the_first_value():
-    def run(command):
-        if "list" in command:
-            return json.dumps({"entries": [{"id": "metric", "name": "sales"}]})
-        return json.dumps({"datas": [{"labels": {}, "time_strs": ["2026-03-01", "2026-04-01"],
-                                      "values": [6083, 5320]}]})
-
-    case = {"id": "monthly", "metric_name": "sales", "expected_series": [
-        {"labels": {}, "periods": ["2026-03", "2026-04"], "values": [6083, 5319]}]}
-    report = verify_metrics("network", [case], run_cmd=run)
-    assert not report["passed"]
-    assert report["failed"][0]["id"] == "monthly"
-
-
-def test_grouped_proportion_gold_uses_independent_csv_denominators():
-    cases = {c["id"]: c for c in json.loads((ASSETS / "metrics-analysis-examples.json").read_text())["cases"]}
-    attrs = defaultdict(int)
-    with (PACK / "data" / "erp_material.csv").open() as stream:
-        for row in csv.DictReader(stream):
-            attrs[row["materialattr"]] += 1
-    for group in cases["material_attr_proportion"]["expected_series"]:
-        count = attrs[group["labels"]["materialattr"]]
+def test_grouped_proportion_gold_has_complete_independent_csv_denominator():
+    counts=defaultdict(int)
+    with (PACK / "data/erp_material.csv").open() as stream:
+        for row in csv.DictReader(stream): counts[row["materialattr"]]+=1
+    for group in CASES["material_attr_proportion"]["expected_series"]:
+        count=counts[next(iter(group["labels"].values()))]
         assert group["values"] == [count]
-        assert group["proportions"] == [count / sum(attrs.values()) * 100]
-    statuses = defaultdict(Decimal)
-    with (PACK / "data" / "sales_order.csv").open() as stream:
-        for row in csv.DictReader(stream):
-            if row["signing_date"].startswith("2026-04"):
-                statuses[row["order_status"]] += Decimal(row["signing_quantity"])
-    for group in cases["signed_month_status_proportion"]["expected_series"]:
-        quantity = statuses[group["labels"]["order_status"]]
-        assert group["values"] == [quantity]
-        assert group["proportions"] == [float(quantity / sum(statuses.values()) * 100)]
+        assert group["proportions"] == [count/sum(counts.values())*100]
 
 
-def test_calendar_month_acceptance_queries_each_complete_month_and_verifies_baseline():
-    case = next(c for c in json.loads((ASSETS / "metrics-analysis-examples.json").read_text())["cases"]
-                if c["id"] == "signed_month_growth")
-    def runner(totals):
-        values = iter(totals)
-        def run(command):
-            if "list" in command:
-                return json.dumps({"entries": [{"id": "metric", "name": case["metric_name"]}]})
-            body = json.loads(command[-1])
-            assert body["time"] == {"instant": True} and "metrics" not in body
-            return json.dumps({"datas": [{"labels": {}, "values": [next(values)]}]})
-        return run
-    good = verify_metrics("network", [case], run_cmd=runner([6083, 5319, 4565, 4429]), business_timezone="Asia/Shanghai")
-    assert len(good["passed"][0]["queries"]) == 4
-    assert good["passed"][0]["actual"][0]["growth_values"] == [-764, -754, -136]
-    # Equal errors in all months preserve differences but must still fail monthly evidence.
-    bad = verify_metrics("network", [case], run_cmd=runner([6084, 5320, 4566, 4430]), business_timezone="Asia/Shanghai")
-    assert bad["failed"]
-    may30 = copy.deepcopy(case)
-    may30["queries"][2]["body"]["condition"]["sub_conditions"][1]["value"] -= 86400000
-    assert verify_metrics("network", [may30], run_cmd=runner([6083, 5319, 4517, 4429]), business_timezone="Asia/Shanghai")["failed"]
-
-
-def test_calendar_month_acceptance_rejects_missing_or_ambiguous_totals():
-    case = next(c for c in json.loads((ASSETS / "metrics-analysis-examples.json").read_text())["cases"]
-                if c["id"] == "signed_month_growth")
-    for datas in [[], [{"values": [None]}], [{"values": [1, 2]}], [{"values": [True]}],
-                  [{"values": [1]}, {"values": [2]}]]:
-        def run(command):
-            if "list" in command:
-                return json.dumps({"entries": [{"id": "metric", "name": case["metric_name"]}]})
-            return json.dumps({"datas": datas})
-        assert verify_metrics("network", [case], run_cmd=run, business_timezone="Asia/Shanghai")["failed"]
+def test_proportion_uses_actual_native_group_values_and_rejects_missing_group():
+    case=CASES["material_attr_proportion"]
+    metric=metric_for(case)
+    entries=[{"dimensions":g["labels"],"value":g["values"][0],"status":"ok"} for g in case["expected_series"]]
+    def run(args):
+        if args[4]=="list":return json.dumps({"entries":[{"definition":metric}]})
+        return json.dumps({"model":{"metric_id":"metric","version":1},"entries":entries,"status":"ok"})
+    assert verify_metrics("network",[case],run_cmd=run)["passed"]
+    entries.pop()
+    assert verify_metrics("network",[case],run_cmd=run)["failed"]

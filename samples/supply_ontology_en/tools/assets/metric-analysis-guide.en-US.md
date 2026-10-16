@@ -1,7 +1,17 @@
-# Metric Analysis
+# Metric queries and acceptance
 
-Discover this sample's metrics on `supply_ontology_en`. Use `metrics-query-examples.json` for explicit filters and `metrics-analysis-examples.json` for supported analysis patterns. Query IDs are resolved at runtime.
+The sample provides 11 standard Object Metrics V1 object-set aggregates. Create drafts, validate them, then publish. Every query pins `metric_id` and `version`. Definitions are in `metrics-create.json`; native V1 queries are in `metrics-query-examples.json`.
 
-Snapshot counts and quantities do not provide historical trends. For signing events, discover the signing-date metric and Monthly Sales Skill. Query complete half-open Asia/Shanghai months separately and compute adjacent changes in the agent. May includes all 31 days. Null or missing data is not zero.
+Object-set aggregates summarize collections and are not object-instance logical properties. `power_layer.py verify-ownership` checks the published version, owner object type and existence of that object type. It does not bind collection totals as instance properties. Function logical properties are unchanged.
 
-Open forecasts require an explicit `closestatus_title != Closed` filter. Warehouse scopes are expanded at query time, not baked into metric definitions. Available stock is already net of reservations. Verify every series and bucket with exact quantities; no tolerance can hide count or boundary errors.
+```sh
+python tools/power_layer.py all --kn-id supply_ontology_en
+```
+
+Open forecast queries explicitly filter the published `closestatus_title` analysis dimension. Inventory warehouse scopes are query inputs. All filters use standard V1 `filter` trees and typed property references.
+
+`metrics-analysis-examples.json` retains complete calendar months and month comparisons: query each complete Asia/Shanghai month using inclusive lower and exclusive upper boundaries, then calculate adjacent-month differences. Proportions are calculated from actual complete grouped results. Acceptance checks every group, month and CSV baseline; missing, partial or empty responses fail. These client calculations are not extra published metrics.
+
+```sh
+python tools/power_layer.py verify --kn-id supply_ontology_en --query-file tools/assets/metrics-analysis-examples.json
+```

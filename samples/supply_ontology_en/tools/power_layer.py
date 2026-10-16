@@ -1,9 +1,8 @@
-"""Step 8: create metrics, bind them as object logic properties, verify snapshots."""
+"""Publish standard Object Metrics V1 and verify immutable queries and ownership."""
 
 from __future__ import annotations
 
 import argparse
-import copy
 import json
 import math
 import sys
@@ -15,7 +14,6 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from bind_kn_resources import (
     _object_type_from_get,
-    _sanitize_ot_for_bind_update,
     load_config,
     parse_cli_json,
     run_cmd as _default_run_cmd,
@@ -24,10 +22,9 @@ from bind_kn_resources import (
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _PAYLOAD_DIR = _SCRIPT_DIR / "assets"
 _DEFAULT_METRICS = _PAYLOAD_DIR / "metrics-create.json"
-_DEFAULT_LP = _PAYLOAD_DIR / "logic-properties.json"
 _DEFAULT_QUERY = _PAYLOAD_DIR / "metrics-query-examples.json"
 _DEFAULT_KN = "supply_ontology_en"
-_UI_FALLBACK_MSG = 'Check OpenBKN authentication and knowledge network ID in README.md'
+_UI_FALLBACK_MSG = "Check OpenBKN authentication and knowledge network ID in README.md"
 
 
 def load_json(path: Path) -> Any:
@@ -60,219 +57,119 @@ def resolve_kn_id(config: dict | None, kn_id: str | None) -> str:
     return _DEFAULT_KN
 
 
-def list_metrics_by_name(
-    kn_id: str,
-    *,
-    run_cmd: Callable[[list[str]], str] | None = None,
-) -> dict[str, dict]:
+def list_metrics_by_name(kn_id: str, *, run_cmd=None) -> dict[str, dict]:
     cmd = run_cmd or _default_run_cmd
-    payload = parse_cli_json(
-        cmd(["openbkn", "--json", "bkn", "metric", "list", kn_id])
-    )
-    entries = []
-    if isinstance(payload, dict):
-        entries = payload.get("entries") or []
-    elif isinstance(payload, list):
-        entries = payload
-    by_name: dict[str, dict] = {}
-    for item in entries or []:
-        if isinstance(item, dict) and item.get("name"):
-            by_name[str(item["name"])] = item
-    return by_name
+    payload = json.loads(cmd(["openbkn", "--json", "bkn", "object-metric", "list", kn_id, "--limit", "500"]))
+    if not isinstance(payload, dict) or not isinstance(payload.get("entries"), list):
+        raise ValueError("Object metric list must contain entries")
+    definitions = [record.get("definition") for record in payload["entries"]]
+    if any(not isinstance(item, dict) or not item.get("name") for item in definitions):
+        raise ValueError("Object metric list contains an invalid definition")
+    names = [item["name"] for item in definitions]
+    if len(names) != len(set(names)):
+        raise ValueError("Object metric names must be unambiguous")
+    return {item["name"]: item for item in definitions}
 
 
-def create_metrics(
-    kn_id: str,
-    entries: list[dict],
-    *,
-    dry_run: bool = False,
-    run_cmd: Callable[[list[str]], str] | None = None,
-) -> dict[str, Any]:
+def metric_command(cmd, action, kn_id, *, definition=None, metric=None):
+    command = ["openbkn", "--json", "bkn", "object-metric", action, kn_id]
+    if metric is not None:
+        command.extend([str(metric["id"]), "--metric-version", str(metric["version"])])
+    if definition is None:
+        return json.loads(cmd(command))
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", encoding="utf-8") as body:
+        json.dump(definition, body, ensure_ascii=False)
+        body.flush()
+        return json.loads(cmd(command + ["--body-file", body.name]))
+
+
+def create_metrics(kn_id: str, entries: list[dict], *, dry_run=False, run_cmd=None) -> dict[str, Any]:
     cmd = run_cmd or _default_run_cmd
     existing = list_metrics_by_name(kn_id, run_cmd=cmd)
-    to_create = [e for e in entries if e["name"] not in existing]
-    report: dict[str, Any] = {
-        "kn_id": kn_id,
-        "dry_run": dry_run,
-        "existing": [
-            {"name": name, "id": existing[name].get("id")} for name in existing
-        ],
-        "created": [],
-        "skipped": [e["name"] for e in entries if e["name"] in existing],
-    }
-    if dry_run:
-        report["would_create"] = [e["name"] for e in to_create]
-        return report
-    if not to_create:
-        return report
-
-    body = {"entries": to_create}
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".json", delete=False, encoding="utf-8"
-    ) as tmp:
-        json.dump(body, tmp, ensure_ascii=False)
-        tmp_path = tmp.name
-    try:
-        raw = cmd(
-            [
-                "openbkn",
-                "--json",
-                "bkn",
-                "metric",
-                "create",
-                kn_id,
-                "--body-file",
-                tmp_path,
-            ]
-        )
-        try:
-            created_payload = json.loads(raw) if raw.strip() else []
-        except json.JSONDecodeError:
-            created_payload = raw
-        report["create_response"] = created_payload
-    finally:
-        Path(tmp_path).unlink(missing_ok=True)
-
-    after = list_metrics_by_name(kn_id, run_cmd=cmd)
-    for entry in to_create:
-        found = after.get(entry["name"])
-        if not found or not found.get("id"):
-            raise RuntimeError(f"metric create did not return {entry['name']}")
-        if found.get("scope_ref") != entry.get("scope_ref"):
-            raise RuntimeError(
-                f"metric {entry['name']} scope_ref mismatch: "
-                f"{found.get('scope_ref')} != {entry.get('scope_ref')}"
-            )
-        report["created"].append({"name": entry["name"], "id": found["id"]})
+    report = {"kn_id": kn_id, "dry_run": dry_run, "created": [], "skipped": []}
+    for definition in entries:
+        name = definition["name"]
+        metric = existing.get(name)
+        if metric is not None:
+            if (metric.get("owner_object_type_id") != definition["owner_object_type_id"]
+                    or metric.get("code") != definition["code"]
+                    or metric.get("version") != definition["version"]):
+                raise RuntimeError(f"Existing object metric does not match sample definition: {name}")
+            # A published immutable version must never silently reuse a different definition.
+            for key in ("metric_type", "calculation_scope", "result_semantics", "specification", "query_capabilities"):
+                if metric.get(key) != definition.get(key):
+                    raise RuntimeError(f"Existing object metric {name} differs at {key}")
+        if dry_run:
+            report.setdefault("would_create", []).append(name)
+            continue
+        if metric is None:
+            record = metric_command(cmd, "create", kn_id, definition=definition)
+            metric = record.get("definition") if isinstance(record, dict) else None
+            if not isinstance(metric, dict) or not metric.get("id") or metric.get("version") != definition["version"]:
+                raise RuntimeError(f"Object metric draft creation failed: {name}")
+        if metric.get("lifecycle", {}).get("status") != "published":
+            validated = metric_command(cmd, "validate-saved", kn_id, metric=metric)
+            candidate = validated.get("definition") if isinstance(validated, dict) else None
+            if not isinstance(candidate, dict) or candidate.get("lifecycle", {}).get("status") != "validated":
+                raise RuntimeError(f"Object metric validation failed: {name}: {validated}")
+            published = metric_command(cmd, "publish", kn_id, metric=metric)
+            metric = published.get("definition") if isinstance(published, dict) else None
+            if not isinstance(metric, dict) or metric.get("lifecycle", {}).get("status") != "published":
+                raise RuntimeError(f"Object metric publication failed: {name}")
+            report["created"].append({"name": name, "id": metric["id"], "version": metric["version"]})
+        else:
+            report["skipped"].append(name)
     return report
 
 
-def strip_system_parameters(lp: dict) -> dict:
-    cleaned = copy.deepcopy(lp)
-    params = [
-        p
-        for p in (cleaned.get("parameters") or [])
-        if isinstance(p, dict) and not p.get("if_system_generate")
-    ]
-    cleaned["parameters"] = params
-    return cleaned
-
-
-def build_logic_property(spec: dict, metric_id: str) -> dict:
-    return {
-        "name": spec["name"],
-        "display_name": spec.get("display_name") or spec["name"],
-        "type": spec.get("type") or "metric",
-        "comment": spec.get("comment") or "",
-        "data_source": {"type": "metric", "id": metric_id},
-        "parameters": copy.deepcopy(spec.get("parameters") or []),
-    }
-
-
-def merge_logic_properties(existing: list | None, incoming: list[dict]) -> list[dict]:
-    by_name: dict[str, dict] = {}
-    for lp in existing or []:
-        if not isinstance(lp, dict) or not lp.get("name"):
-            continue
-        by_name[str(lp["name"])] = strip_system_parameters(lp)
-    for lp in incoming:
-        by_name[str(lp["name"])] = lp
-    return list(by_name.values())
-
-
-def bind_logic_properties(
-    kn_id: str,
-    bindings: list[dict],
-    *,
-    dry_run: bool = False,
-    run_cmd: Callable[[list[str]], str] | None = None,
-) -> dict[str, Any]:
+def verify_metric_ownership(kn_id: str, entries: list[dict], *, run_cmd=None) -> dict[str, Any]:
+    """Object-set aggregates belong to object types; they are not instance properties."""
     cmd = run_cmd or _default_run_cmd
     metrics = list_metrics_by_name(kn_id, run_cmd=cmd)
-    report: dict[str, Any] = {
-        "kn_id": kn_id,
-        "dry_run": dry_run,
-        "bound": [],
-        "missing_metrics": [],
-    }
-
-    for group in bindings:
-        ot_id = group["object_type_id"]
-        incoming: list[dict] = []
-        for spec in group.get("logic_properties") or []:
-            metric_name = spec.get("metric_name") or spec.get("display_name")
-            metric = metrics.get(metric_name)
-            if not metric or not metric.get("id"):
-                report["missing_metrics"].append(
-                    {"object_type_id": ot_id, "metric_name": metric_name}
-                )
-                continue
-            if metric.get("scope_ref") != ot_id:
-                raise RuntimeError(
-                    f"cannot bind {metric_name} onto {ot_id}: "
-                    f"metric.scope_ref={metric.get('scope_ref')}"
-                )
-            incoming.append(build_logic_property(spec, str(metric["id"])))
-            report["bound"].append(
-                {
-                    "object_type_id": ot_id,
-                    "logic_property": spec["name"],
-                    "metric_name": metric_name,
-                    "metric_id": metric["id"],
-                }
-            )
-
-        if dry_run or not incoming:
-            continue
-
-        ot_body = _object_type_from_get(
-            parse_cli_json(
-                cmd(["openbkn", "--json", "bkn", "object-type", "get", kn_id, ot_id])
-            ),
-            ot_id,
-        )
-        data_prop_names = {
-            p.get("name")
-            for p in (ot_body.get("data_properties") or [])
-            if isinstance(p, dict) and p.get("name")
-        }
-        clashes = [lp["name"] for lp in incoming if lp["name"] in data_prop_names]
-        if clashes:
-            raise RuntimeError(
-                f"{ot_id}: logic property name clashes with data property: "
-                + ", ".join(clashes)
-            )
-        update_body = _sanitize_ot_for_bind_update(ot_body)
-        update_body["logic_properties"] = merge_logic_properties(
-            update_body.get("logic_properties"), incoming
-        )
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as tmp:
-            json.dump(update_body, tmp, ensure_ascii=False)
-            tmp_path = tmp.name
-        try:
-            cmd(
-                [
-                    "openbkn",
-                    "--json",
-                    "bkn",
-                    "object-type",
-                    "update",
-                    kn_id,
-                    ot_id,
-                    "--body-file",
-                    tmp_path,
-                ]
-            )
-        finally:
-            Path(tmp_path).unlink(missing_ok=True)
-
-    if report["missing_metrics"]:
-        names = ", ".join(m["metric_name"] for m in report["missing_metrics"])
-        raise RuntimeError(f"metrics not found, create them first: {names}")
+    report = {"kn_id": kn_id, "passed": [], "failed": []}
+    for spec in entries:
+        metric = metrics.get(spec["name"], {})
+        owner = spec["owner_object_type_id"]
+        obj = _object_type_from_get(parse_cli_json(cmd(
+            ["openbkn", "--json", "bkn", "object-type", "get", kn_id, owner])), owner)
+        ok = (metric.get("owner_object_type_id") == owner and obj.get("id") == owner
+              and metric.get("code") == spec["code"] and metric.get("version") == spec["version"]
+              and metric.get("calculation_scope") == "object_set"
+              and metric.get("lifecycle", {}).get("status") == "published")
+        row = {"metric_name": spec["name"], "metric_id": metric.get("id"),
+               "version": metric.get("version"), "owner_object_type_id": owner}
+        if not ok:
+            row["error"] = "Published object metric version or owner object type mismatch"
+        report["passed" if ok else "failed"].append(row)
     return report
+
+
+def query_metric(cmd, kn_id, metric, body):
+    if not metric.get("id") or not isinstance(metric.get("version"), int):
+        raise ValueError("Object metric ID and explicit version are required")
+    if metric.get("lifecycle", {}).get("status") != "published":
+        raise ValueError("Only published object metrics can be queried")
+    payload = json.loads(cmd(["openbkn", "--json", "bkn", "object-metric", "query", kn_id,
+                                 str(metric["id"]), "--metric-version", str(metric["version"]),
+                                 "--body", json.dumps(body, ensure_ascii=False)]))
+    if (not isinstance(payload, dict) or payload.get("status") != "ok"
+            or payload.get("model", {}).get("version") != metric["version"]
+            or payload.get("model", {}).get("metric_id") != metric["id"]):
+        raise ValueError("Object metric query did not return the requested successful immutable version")
+    entries = payload.get("entries")
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("Object metric query returned no entries")
+    series = []
+    for entry in entries:
+        value = entry.get("value")
+        if (entry.get("status") != "ok" or isinstance(value, bool)
+                or not isinstance(value, (int, float)) or not math.isfinite(value)):
+            raise ValueError("Object metric query returned an unavailable or non-numeric value")
+        item = {"labels": entry.get("dimensions") or {}, "values": [value]}
+        if "time" in entry and entry["time"] is not None:
+            item["times"] = [entry["time"]]
+        series.append(item)
+    return series, payload
 
 
 def metric_query_scalar(datas: Any) -> float | int | None:
@@ -338,12 +235,12 @@ def metric_series_match(datas: Any, expected: list[dict], business_timezone: str
     return True
 
 
-def calendar_month_growth(metric_id: str, kn_id: str, case: dict, zone_name: str, cmd) -> tuple[list, list]:
-    """Acceptance orchestration: query full months, then compute adjacent differences."""
+def calendar_month_growth(metric: dict, kn_id: str, case: dict, zone_name: str, cmd) -> tuple[list, list]:
+    """Query complete consecutive calendar months and retain each native V1 response."""
     zone = ZoneInfo(zone_name)
     queries = case.get("queries") or []
     if len(queries) < 2:
-        raise ValueError("calendar month comparison requires a baseline month")
+        raise ValueError("Calendar month comparison requires a baseline month")
     periods, totals, evidence = [], [], []
     previous_end = None
     for query in queries:
@@ -352,165 +249,78 @@ def calendar_month_growth(metric_id: str, kn_id: str, case: dict, zone_name: str
         start = datetime(year, month, 1, tzinfo=zone)
         end = datetime(year + (month == 12), month % 12 + 1, 1, tzinfo=zone)
         if previous_end is not None and start != previous_end:
-            raise ValueError("comparison months must be consecutive")
+            raise ValueError("Comparison months must be consecutive")
         previous_end = end
-        body = query["body"]
-        expected_condition = {"operation": "and", "sub_conditions": [
-            {"field": "signing_date", "operation": ">=", "value": int(start.timestamp() * 1000)},
-            {"field": "signing_date", "operation": "<", "value": int(end.timestamp() * 1000)},
+        owner = metric["owner_object_type_id"]
+        expected = {"node_type": "group", "boolean_operator": "and", "children": [
+            {"node_type": "predicate", "left": {"source": "property", "property_ref": {
+                "object_type_id": owner, "property_name": "signing_date"}},
+             "comparison_operator": op, "right": [{"source": "literal", "value_type": "int64", "value": value}]}
+            for op, value in (("gte", int(start.timestamp() * 1000)), ("lt", int(end.timestamp() * 1000)))
         ]}
-        if body != {"time": {"instant": True}, "condition": expected_condition}:
+        if query["body"] != {"filter": expected}:
             raise ValueError(f"{period}: expected explicit complete calendar month boundaries")
-        payload = json.loads(cmd(["openbkn", "--json", "bkn", "metric", "query", kn_id,
-                                 metric_id, "--body", json.dumps(body, ensure_ascii=False)]))
-        datas = payload.get("datas")
-        if (not isinstance(datas, list) or len(datas) != 1 or not isinstance(datas[0], dict)
-                or datas[0].get("labels") or len(datas[0].get("values") or []) != 1):
+        series, payload = query_metric(cmd, kn_id, metric, query["body"])
+        if len(series) != 1 or series[0]["labels"] or len(series[0]["values"]) != 1:
             raise ValueError(f"{period}: missing or ambiguous monthly total")
-        total = datas[0]["values"][0]
-        if isinstance(total, bool) or not isinstance(total, (int, float)) or not math.isfinite(total):
-            raise ValueError(f"{period}: invalid monthly total")
-        evidence.append({"period": period, "body": body, "response": payload})
+        total = series[0]["values"][0]
+        evidence.append({"period": period, "body": query["body"], "response": payload})
         periods.append(period)
         totals.append(total)
-    actual = [{"labels": {}, "time_strs": periods[1:], "values": totals[1:],
-               "growth_values": [current - prior for prior, current in zip(totals, totals[1:])]}]
-    return actual, evidence
+    if case.get("calculation") == "calendar_month_series":
+        return [{"labels": {}, "time_strs": periods, "values": totals}], evidence
+    return [{"labels": {}, "time_strs": periods[1:], "values": totals[1:],
+             "growth_values": [b-a for a, b in zip(totals, totals[1:])]}], evidence
 
 
-def verify_metrics(
-    kn_id: str,
-    cases: list[dict],
-    *,
-    run_cmd: Callable[[list[str]], str] | None = None,
-    business_timezone: str = "UTC",
-) -> dict[str, Any]:
+def verify_metrics(kn_id: str, cases: list[dict], *, run_cmd=None, business_timezone="UTC") -> dict[str, Any]:
     cmd = run_cmd or _default_run_cmd
     metrics = list_metrics_by_name(kn_id, run_cmd=cmd)
-    report: dict[str, Any] = {"kn_id": kn_id, "passed": [], "failed": []}
-
+    report = {"kn_id": kn_id, "passed": [], "failed": []}
     for case in cases:
-        name = case["metric_name"]
-        metric = metrics.get(name)
-        if not metric or not metric.get("id"):
-            report["failed"].append(
-                {"id": case.get("id"), "metric_name": name, "error": "metric not found"}
-            )
-            continue
-        if case.get("calculation") == "calendar_month_growth":
-            try:
-                actual, evidence = calendar_month_growth(str(metric["id"]), kn_id, case, business_timezone, cmd)
-                expected = case.get("expected_series")
-                monthly_gold = case.get("expected_monthly_totals")
-                totals = [item["response"]["datas"][0]["values"][0] for item in evidence]
-                matched = (isinstance(expected, list) and isinstance(monthly_gold, list)
-                           and len(monthly_gold) == len(totals)
-                           and all(values_close(a, b) for a, b in zip(totals, monthly_gold))
-                           and metric_series_match(actual, expected, business_timezone))
-                row = {"id": case.get("id"), "metric_name": name, "metric_id": metric["id"],
-                       "actual": actual, "expected": expected, "queries": evidence,
-                       "calculation_location": "acceptance client; agent performs arithmetic in live evaluation"}
-                if not matched:
-                    row["error"] = "monthly total or calculated growth mismatch"
-                report["passed" if matched else "failed"].append(row)
-            except (ValueError, TypeError, KeyError, ZoneInfoNotFoundError) as exc:
-                report["failed"].append({"id": case.get("id"), "metric_name": name, "error": str(exc)})
-            continue
-        body = case.get("body") or {}
-        raw = cmd(
-            [
-                "openbkn",
-                "--json",
-                "bkn",
-                "metric",
-                "query",
-                kn_id,
-                str(metric["id"]),
-                "--body",
-                json.dumps(body, ensure_ascii=False),
-            ]
-        )
+        metric = metrics.get(case["metric_name"])
+        row = {"id": case.get("id"), "metric_name": case["metric_name"]}
         try:
-            payload = json.loads(raw)
-        except json.JSONDecodeError:
-            report["failed"].append(
-                {
-                    "id": case.get("id"),
-                    "metric_name": name,
-                    "error": f"invalid query response: {raw[:300]}",
-                }
-            )
-            continue
-        actual = metric_query_scalar(payload.get("datas"))
-        expected = case.get("expected_value")
-        row = {
-            "id": case.get("id"),
-            "metric_name": name,
-            "metric_id": metric["id"],
-            "title": case.get("title"),
-            "actual": actual,
-            "expected": expected,
-        }
-        if "expected_series" in case:
-            row["actual"] = payload.get("datas")
-            row["expected"] = case["expected_series"]
-            matched = metric_series_match(payload.get("datas"), case["expected_series"], business_timezone)
-        else:
-            matched = expected is not None and values_close(actual, expected)
-        if matched:
-            report["passed"].append(row)
-        else:
-            row["error"] = "value mismatch"
-            report["failed"].append(row)
-    return report
-
-
-def verify_logic_properties(
-    kn_id: str,
-    bindings: list[dict],
-    *,
-    run_cmd: Callable[[list[str]], str] | None = None,
-) -> dict[str, Any]:
-    cmd = run_cmd or _default_run_cmd
-    metrics = list_metrics_by_name(kn_id, run_cmd=cmd)
-    report: dict[str, Any] = {"kn_id": kn_id, "passed": [], "failed": []}
-
-    for group in bindings:
-        ot_id = group["object_type_id"]
-        ot = _object_type_from_get(
-            parse_cli_json(
-                cmd(["openbkn", "--json", "bkn", "object-type", "get", kn_id, ot_id])
-            ),
-            ot_id,
-        )
-        existing = {
-            lp.get("name"): lp
-            for lp in (ot.get("logic_properties") or [])
-            if isinstance(lp, dict)
-        }
-        for spec in group.get("logic_properties") or []:
-            lp = existing.get(spec["name"])
-            metric = metrics.get(spec.get("metric_name") or spec.get("display_name"))
-            ds = (lp or {}).get("data_source") or {}
-            ok = (
-                isinstance(lp, dict)
-                and lp.get("type") == "metric"
-                and ds.get("type") == "metric"
-                and metric
-                and ds.get("id") == metric.get("id")
-            )
-            row = {
-                "object_type_id": ot_id,
-                "logic_property": spec["name"],
-                "metric_name": spec.get("metric_name"),
-                "metric_id": (metric or {}).get("id"),
-                "bound_id": ds.get("id"),
-            }
-            if ok:
-                report["passed"].append(row)
+            if metric is None:
+                raise ValueError("Object metric not found")
+            row.update(metric_id=metric["id"], version=metric["version"])
+            if case.get("calculation") in ("calendar_month_growth", "calendar_month_series"):
+                actual, evidence = calendar_month_growth(metric, kn_id, case, business_timezone, cmd)
+                totals = [item["response"]["entries"][0]["value"] for item in evidence]
+                expected_totals = case.get("expected_monthly_totals")
+                if (not isinstance(expected_totals, list) or len(totals) != len(expected_totals)
+                        or not all(values_close(a, b) for a, b in zip(totals, expected_totals))):
+                    raise ValueError("Monthly source totals mismatch")
+                row["queries"] = evidence
+                row["calculation_location"] = "acceptance client arithmetic over native Object Metrics V1 results"
             else:
-                row["error"] = "logic property missing or metric id mismatch"
-                report["failed"].append(row)
+                actual, response = query_metric(cmd, kn_id, metric, case.get("body") or {})
+                row["response"] = response
+                if case.get("calculation") == "proportion":
+                    total = sum(item["values"][0] for item in actual)
+                    if total == 0:
+                        raise ValueError("Proportion denominator is zero")
+                    for item in actual:
+                        item["proportions"] = [item["values"][0] / total * 100]
+                        if case.get("period"):
+                            item["time_strs"] = [case["period"]]
+                    row["calculation_location"] = "acceptance client arithmetic over native grouped values"
+            if "expected_series" in case:
+                expected = case["expected_series"]
+                matched = metric_series_match(actual, expected, business_timezone)
+                row.update(actual=actual, expected=expected)
+            else:
+                expected = case.get("expected_value")
+                value = metric_query_scalar(actual)
+                matched = (len(actual) == 1 and not actual[0]["labels"] and expected is not None
+                           and values_close(value, expected))
+                row.update(actual=value, expected=expected)
+            if not matched:
+                raise ValueError("Object metric value or series mismatch")
+            report["passed"].append(row)
+        except (ValueError, TypeError, KeyError, ZoneInfoNotFoundError) as exc:
+            row["error"] = str(exc)
+            report["failed"].append(row)
     return report
 
 
@@ -522,17 +332,16 @@ def _load_optional_config(path: str | None) -> dict | None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Create metrics, bind logic properties, verify snapshots (step 8)"
+        description="Publish Object Metrics V1 and verify queries and ownership"
     )
     parser.add_argument(
         "command",
-        choices=["create", "bind", "verify", "all"],
-        help="create metrics / bind logic properties / verify / all",
+        choices=["create", "verify-ownership", "verify", "all"],
+        help="publish metrics / verify ownership / verify queries / all",
     )
     parser.add_argument("--config", help="Path to tools/config.yaml (optional)")
     parser.add_argument("--kn-id", help="Knowledge network id (default: config or supply_ontology_en)")
     parser.add_argument("--metrics-file", default=str(_DEFAULT_METRICS))
-    parser.add_argument("--logic-file", default=str(_DEFAULT_LP))
     parser.add_argument("--query-file", default=str(_DEFAULT_QUERY))
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
@@ -548,13 +357,9 @@ def main(argv: list[str] | None = None) -> int:
                 kn_id, entries, dry_run=args.dry_run
             )
 
-        if args.command in ("bind", "all"):
-            lp_payload = load_json(Path(args.logic_file))
-            bindings = lp_payload.get("bindings") if isinstance(lp_payload, dict) else lp_payload
-            if not isinstance(bindings, list):
-                raise ValueError("logic-properties.json must contain bindings[]")
-            reports["bind"] = bind_logic_properties(
-                kn_id, bindings, dry_run=args.dry_run
+        if args.command == "verify-ownership":
+            reports["verify_metric_ownership"] = verify_metric_ownership(
+                kn_id, extract_metric_entries(load_json(Path(args.metrics_file)))
             )
 
         if args.command in ("verify", "all") and not args.dry_run:
@@ -562,23 +367,22 @@ def main(argv: list[str] | None = None) -> int:
             cases = query_payload.get("cases") if isinstance(query_payload, dict) else query_payload
             if not isinstance(cases, list):
                 raise ValueError("metrics-query-examples.json must contain cases[]")
-            lp_payload = load_json(Path(args.logic_file))
-            bindings = lp_payload.get("bindings") if isinstance(lp_payload, dict) else lp_payload
             reports["verify_metrics"] = verify_metrics(
                 kn_id, cases,
                 business_timezone=(query_payload.get("business_timezone", "UTC")
                                    if isinstance(query_payload, dict) else "UTC"),
             )
-            reports["verify_logic_properties"] = verify_logic_properties(kn_id, bindings)
+            reports["verify_metric_ownership"] = verify_metric_ownership(
+                kn_id, extract_metric_entries(load_json(Path(args.metrics_file))))
             failed = (
                 reports["verify_metrics"]["failed"]
-                + reports["verify_logic_properties"]["failed"]
+                + reports["verify_metric_ownership"]["failed"]
             )
             print(json.dumps(reports, ensure_ascii=False, indent=2))
             return 1 if failed else 0
 
         print(json.dumps(reports, ensure_ascii=False, indent=2))
-        return 0
+        return 1 if reports.get("verify_metric_ownership", {}).get("failed") else 0
     except (RuntimeError, json.JSONDecodeError, OSError, ValueError) as exc:
         print(_UI_FALLBACK_MSG, file=sys.stderr)
         print(str(exc), file=sys.stderr)
