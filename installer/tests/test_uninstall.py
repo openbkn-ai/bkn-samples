@@ -3,13 +3,14 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import Mock
+from unittest.mock import Mock, patch, MagicMock
+from urllib.error import HTTPError
 
 from installer.control_plane import ownership_tags
 from installer.history import read_installation_history, begin_installation_attempt, record_terminal_installation
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, _write_installing, _card, installation_view
-from installer.uninstall import prepare_uninstall, execute_uninstall
+from installer.uninstall import prepare_uninstall, execute_uninstall, platform_client
 
 
 class UninstallTest(unittest.TestCase):
@@ -61,6 +62,29 @@ class UninstallTest(unittest.TestCase):
         current = _read_state(self.state, "supply-chain")
         begin_installation_attempt(self.state, current, previous)
         execute_uninstall(self.state, "supply-chain", self.api, self.kubectl)
+
+    def test_delete_conflict_retries_once_then_accepts_empty_success(self):
+        response = MagicMock()
+        response.__enter__.return_value.read.return_value = b''
+        conflict = HTTPError('http://platform/resource', 409, 'Conflict', {}, None)
+        with patch.dict('os.environ', {'BKN_BASE_URL': 'http://platform'}), \
+             patch('installer.uninstall.urlopen', side_effect=[conflict, response]) as request, \
+             patch('installer.uninstall.time.sleep') as sleep:
+            self.assertEqual(platform_client('Bearer test')('DELETE', '/resource'), {})
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(request.call_args.kwargs['timeout'], 30)
+        sleep.assert_called_once_with(1)
+
+    def test_persistent_delete_conflict_and_permission_errors_remain_failures(self):
+        for method, status, attempts in [('DELETE', 409, 2), ('DELETE', 403, 1),
+                                         ('DELETE', 401, 1), ('GET', 409, 1)]:
+            with self.subTest(method=method, status=status), \
+                 patch.dict('os.environ', {'BKN_BASE_URL': 'http://platform'}), \
+                 patch('installer.uninstall.urlopen', side_effect=HTTPError('http://platform/resource', status, 'Rejected', {}, None)) as request, \
+                 patch('installer.uninstall.time.sleep') as sleep, self.assertRaises(ApiError):
+                platform_client('Bearer test')(method, '/resource')
+            self.assertEqual(request.call_count, attempts)
+            self.assertEqual(sleep.call_count, attempts - 1)
 
     def test_uninstall_then_reinstall_preserves_history_and_unrelated_resources(self):
         self.start()
