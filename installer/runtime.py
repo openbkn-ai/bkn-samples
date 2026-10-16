@@ -147,7 +147,7 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
             components=components,
         )
     except DeployError as exc:
-        _write_failed(state_dir, sample, version, exc.code, exc.message)
+        _write_failed(state_dir, sample, version, exc.code, exc.message, stage="database")
         raise ApiError(500, exc.code, exc.message) from exc
     except ControlError as exc:
         status = 403 if exc.code == "forbidden" else 409 if exc.code in {"already_installed", "use_retry", "ownership_conflict"} else 500
@@ -190,7 +190,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
         )
     except (DeployError, ControlError) as exc:
         if isinstance(exc, DeployError):
-            _write_failed(state_dir, sample, version, exc.code, exc.message)
+            _write_failed(state_dir, sample, version, exc.code, exc.message, stage="database")
         code = getattr(exc, "code", "install_failed")
         status = 409 if code in {"already_installed", "use_retry", "ownership_conflict"} else 500
         raise ApiError(status, code, exc.message) from exc

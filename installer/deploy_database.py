@@ -335,6 +335,22 @@ def configured_image_ref() -> str | None:
     return reference
 
 
+def database_read_error(result, kind):
+    """Classify a failed Kubernetes read without exposing command output or credentials."""
+    denied = re.search(r"\((?:Forbidden|Unauthorized)\)", result.stderr or "")
+    if denied:
+        return DeployError(
+            "database_permission_denied",
+            f"The sample service cannot read {kind} resources in {NAMESPACE}. "
+            "Ask an administrator to check the sample-service Kubernetes permissions.",
+        )
+    return DeployError(
+        "database_resource_check_failed",
+        f"Cannot read sample database {kind} resources in {NAMESPACE}. "
+        "Ask an administrator to check Kubernetes API access before retrying.",
+    )
+
+
 def _assert_database_ownership(kubectl, sample, version, image):
     name = _workload_name(sample)
     expected = {"openbkn.ai/sample-id": sample, "openbkn.ai/sample-version": version,
@@ -343,7 +359,7 @@ def _assert_database_ownership(kubectl, sample, version, image):
                            ("pvc", f"data-{name}-0")):
         result = _run(kubectl, ["get", kind, resource, "-n", NAMESPACE, "--ignore-not-found", "-o", "json"])
         if result.returncode != 0:
-            raise DeployError("install_failed", "cannot check existing sample database resources")
+            raise database_read_error(result, kind)
         if not (result.stdout or "").strip():
             continue
         current = json.loads(result.stdout)
