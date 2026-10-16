@@ -1,0 +1,29 @@
+---
+type: object_type
+id: material_issue_transactions
+name: Material Issue Transaction
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Material Issue Transaction
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| material_issue_transaction_id | material_issue_transaction_id | string | Business object. | material_issue_transaction_id |
+| material_requirement_id | material_requirement_id | string | Business object. | material_requirement_id |
+| production_order_id | production_order_id | string | Business object. | production_order_id |
+| goods_receipt_id | goods_receipt_id | string | Business object. | goods_receipt_id |
+| inventory_location_id | inventory_location_id | string | Business object. | inventory_location_id |
+| issued_quantity | issued_quantity | decimal | Business object. | issued_quantity |
+| issue_date | issue_date | date | Business object. | issue_date |
+| status | status | string | Business object. | status |
+
+### Keys
+
+Primary Keys: material_issue_transaction_id
+Display Key: material_issue_transaction_id
+Incremental Key:

@@ -1,0 +1,28 @@
+---
+type: object_type
+id: manufacturing_operations
+name: Manufacturing Operation
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Manufacturing Operation
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| operation_id | operation_id | string | Stable business identifier or business attribute. | operation_id |
+| production_order_id | production_order_id | string | Stable business identifier or business attribute. | production_order_id |
+| routing_operation_id | routing_operation_id | string | Stable business identifier or business attribute. | routing_operation_id |
+| work_center_id | work_center_id | string | Stable business identifier or business attribute. | work_center_id |
+| operation_name | operation_name | string | Stable business identifier or business attribute. | operation_name |
+| sequence_number | sequence_number | integer | Stable business identifier or business attribute. | sequence_number |
+| status | status | string | Stable business identifier or business attribute. | status |
+
+### Keys
+
+Primary Keys: operation_id
+Display Key: operation_id
+Incremental Key:

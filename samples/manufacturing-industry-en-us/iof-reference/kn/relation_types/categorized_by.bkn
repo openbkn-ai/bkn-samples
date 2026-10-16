@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: categorized_by
+name: categorized by
+tags: [iof, core]
+---
+
+## RelationType: categorized by
+
+Source IRI: `https://spec.industrialontologies.org/ontology/construct/categorizedBy`. Source definition: relation between a lower-order classifier by a higher-order classifier such that the latter classifier categorizes the former. This BKN projection stores the target entity ID in `categorized_by_target_id`.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| classifier | classifier | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| categorized_by_target_id | entity_id |

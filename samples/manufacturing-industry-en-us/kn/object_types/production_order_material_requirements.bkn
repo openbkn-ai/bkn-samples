@@ -1,0 +1,29 @@
+---
+type: object_type
+id: production_order_material_requirements
+name: Production Material Requirement
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Production Material Requirement
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| material_requirement_id | material_requirement_id | string | Stable business identifier or business attribute. | material_requirement_id |
+| bom_component_id | bom_component_id | string | Business object. | bom_component_id |
+| production_order_id | production_order_id | string | Stable business identifier or business attribute. | production_order_id |
+| product_id | product_id | string | Stable business identifier or business attribute. | product_id |
+| required_quantity | required_quantity | decimal | Stable business identifier or business attribute. | required_quantity |
+| issued_quantity | issued_quantity | decimal | Stable business identifier or business attribute. | issued_quantity |
+| unit | unit | string | Stable business identifier or business attribute. | unit |
+| status | status | string | Stable business identifier or business attribute. | status |
+
+### Keys
+
+Primary Keys: material_requirement_id
+Display Key: material_requirement_id
+Incremental Key:

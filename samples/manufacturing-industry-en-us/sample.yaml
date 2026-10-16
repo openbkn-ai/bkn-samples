@@ -1,0 +1,49 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1alpha1",
+  "kind": "Sample",
+  "metadata": {
+    "name": "manufacturing-industry-en-us",
+    "aliases": [],
+    "displayName": "Manufacturing Operations (EN)",
+    "summary": "Trace fictional manufacturing demand through plan, production, quality, and shipment."
+  },
+  "spec": {
+    "studio": {
+      "licenseNote": "MIT · Fictional sample data; not for real operational decisions.",
+      "questions": [
+        "Which work orders can be fulfilled?",
+        "Which shipments are blocked by material or quality?",
+        "What evidence supports the shipment decision?"
+      ]
+    },
+    "database": {
+      "engine": "mariadb",
+      "name": "manufacturing_industry_en_us",
+      "expectedTables": 40
+    },
+    "data": {
+      "mode": "embedded"
+    },
+    "platformVersion": ">=0.2.1 <0.3.0",
+    "knowledgeNetwork": {
+      "id": "manufacturing_industry_en_us",
+      "displayName": "Manufacturing Operations (EN)"
+    },
+    "capabilities": {
+      "required": false
+    },
+    "components": {
+      "objects": true,
+      "relations": true,
+      "metrics": false,
+      "functions": false,
+      "skills": false
+    },
+    "hooks": {
+      "dbInit": "db/init.sh",
+      "dbVerify": "db/verify.sh",
+      "platformInstall": "platform/install.sh",
+      "platformVerify": "platform/verify.sh"
+    }
+  }
+}

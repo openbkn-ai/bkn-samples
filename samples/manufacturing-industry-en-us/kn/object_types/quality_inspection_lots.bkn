@@ -1,0 +1,27 @@
+---
+type: object_type
+id: quality_inspection_lots
+name: Quality Inspection Lot
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Quality Inspection Lot
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| inspection_lot_id | inspection_lot_id | string | Stable business identifier or business attribute. | inspection_lot_id |
+| production_order_id | production_order_id | string | Stable business identifier or business attribute. | production_order_id |
+| product_id | product_id | string | Stable business identifier or business attribute. | product_id |
+| inspection_type | inspection_type | string | Stable business identifier or business attribute. | inspection_type |
+| lot_quantity | lot_quantity | decimal | Stable business identifier or business attribute. | lot_quantity |
+| status | status | string | Stable business identifier or business attribute. | status |
+
+### Keys
+
+Primary Keys: inspection_lot_id
+Display Key: inspection_lot_id
+Incremental Key:

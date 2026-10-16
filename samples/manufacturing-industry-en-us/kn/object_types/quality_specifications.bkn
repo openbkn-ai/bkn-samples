@@ -1,0 +1,29 @@
+---
+type: object_type
+id: quality_specifications
+name: Quality Specification
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Quality Specification
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| quality_specification_id | quality_specification_id | string | Business object. | quality_specification_id |
+| product_id | product_id | string | Business object. | product_id |
+| characteristic_name | characteristic_name | string | Business object. | characteristic_name |
+| target_value | target_value | decimal | Business object. | target_value |
+| lower_limit | lower_limit | decimal | Business object. | lower_limit |
+| upper_limit | upper_limit | decimal | Business object. | upper_limit |
+| effective_date | effective_date | date | Business object. | effective_date |
+| status | status | string | Business object. | status |
+
+### Keys
+
+Primary Keys: quality_specification_id
+Display Key: quality_specification_id
+Incremental Key:

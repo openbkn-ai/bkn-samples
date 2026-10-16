@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: generalizes
+name: generalizes
+tags: [iof, core]
+---
+
+## RelationType: generalizes
+
+Source IRI: `https://spec.industrialontologies.org/ontology/construct/generalizes`. Source definition: relation between two classifiers such that everything classified by the latter is also classified by the former. This BKN projection stores the target entity ID in `generalizes_target_id`.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| classifier | classifier | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| generalizes_target_id | entity_id |

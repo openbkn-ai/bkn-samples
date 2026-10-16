@@ -1,0 +1,26 @@
+---
+type: object_type
+id: purchase_orders
+name: Purchase Order
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Purchase Order
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| purchase_order_id | purchase_order_id | string | Stable business identifier or business attribute. | purchase_order_id |
+| supplier_id | supplier_id | string | Stable business identifier or business attribute. | supplier_id |
+| order_date | order_date | date | Stable business identifier or business attribute. | order_date |
+| expected_receipt_date | expected_receipt_date | date | Stable business identifier or business attribute. | expected_receipt_date |
+| status | status | string | Stable business identifier or business attribute. | status |
+
+### Keys
+
+Primary Keys: purchase_order_id
+Display Key: purchase_order_id
+Incremental Key:

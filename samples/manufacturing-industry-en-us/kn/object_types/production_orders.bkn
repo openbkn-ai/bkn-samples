@@ -1,0 +1,30 @@
+---
+type: object_type
+id: production_orders
+name: Production Order
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Production Order
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| production_order_id | production_order_id | string | Stable business identifier or business attribute. | production_order_id |
+| sales_order_line_id | sales_order_line_id | string | Stable business identifier or business attribute. | sales_order_line_id |
+| product_id | product_id | string | Stable business identifier or business attribute. | product_id |
+| bom_version_id | bom_version_id | string | Business object. | bom_version_id |
+| routing_id | routing_id | string | Stable business identifier or business attribute. | routing_id |
+| requested_quantity | requested_quantity | decimal | Stable business identifier or business attribute. | requested_quantity |
+| unit | unit | string | Stable business identifier or business attribute. | unit |
+| due_date | due_date | date | Stable business identifier or business attribute. | due_date |
+| status | status | string | Stable business identifier or business attribute. | status |
+
+### Keys
+
+Primary Keys: production_order_id
+Display Key: production_order_id
+Incremental Key:

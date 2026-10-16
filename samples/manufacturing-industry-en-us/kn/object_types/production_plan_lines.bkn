@@ -1,0 +1,32 @@
+---
+type: object_type
+id: production_plan_lines
+name: Production Plan Line
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Production Plan Line
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| production_plan_line_id | production_plan_line_id | string | Business object. | production_plan_line_id |
+| production_plan_id | production_plan_id | string | Business object. | production_plan_id |
+| forecast_id | forecast_id | string | Business object. | forecast_id |
+| product_id | product_id | string | Business object. | product_id |
+| site_id | site_id | string | Business object. | site_id |
+| production_order_id | production_order_id | string | Business object. | production_order_id |
+| planned_quantity | planned_quantity | decimal | Business object. | planned_quantity |
+| planned_start_date | planned_start_date | date | Business object. | planned_start_date |
+| planned_completion_date | planned_completion_date | date | Business object. | planned_completion_date |
+| scenario_as_of_date | scenario_as_of_date | date | Business object. | scenario_as_of_date |
+| status | status | string | Business object. | status |
+
+### Keys
+
+Primary Keys: production_plan_line_id
+Display Key: production_plan_line_id
+Incremental Key:

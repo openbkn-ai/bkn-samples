@@ -1,0 +1,27 @@
+---
+type: object_type
+id: bom_components
+name: BOM Component
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: BOM Component
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| bom_component_id | bom_component_id | string | Stable business identifier or business attribute. | bom_component_id |
+| bom_id | bom_id | string | Stable business identifier or business attribute. | bom_id |
+| component_product_id | component_product_id | string | Stable business identifier or business attribute. | component_product_id |
+| quantity_per | quantity_per | decimal | Stable business identifier or business attribute. | quantity_per |
+| unit | unit | string | Stable business identifier or business attribute. | unit |
+| scrap_factor | scrap_factor | decimal | Stable business identifier or business attribute. | scrap_factor |
+
+### Keys
+
+Primary Keys: bom_component_id
+Display Key: bom_component_id
+Incremental Key:

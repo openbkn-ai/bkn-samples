@@ -19,7 +19,7 @@ from installer.remote_bundle import MAX_ARCHIVE
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
 NOTE = re.compile(r"release-notes\.([a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*)\.md")
-DIRECTORIES = {"data", "db", "kn", "platform", "skills", "tools", "docs", "scripts"}
+DIRECTORIES = {"data", "db", "kn", "platform", "skills", "tools", "docs", "scripts", "bkn-eval", "iof-reference"}
 FILES = {"sample.yaml", "README.md", "LICENSE", "LICENSE.md", "run.sh", "dataset.lock",
          "vega_sql_execute.openapi.json"}
 
@@ -149,7 +149,8 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
             "apiVersion": "samples.openbkn.ai/offline.v2", "version": version,
             **({"databaseRuntime": "shared-mariadb"} if shared_database else {"dataImageRef": data_image_ref}),
             "requires": {"installationProfiles": ["openbkn.ai/sample-install.v1"],
-                         "requiredExtensions": [], "platformVersion": ">=0.2.0 <0.3.0",
+                         "requiredExtensions": [],
+                         "platformVersion": contract["spec"].get("platformVersion", ">=0.2.0 <0.3.0"),
                          "architectures": architectures,
                          "capabilities": capabilities},
             "releaseNotes": documents,

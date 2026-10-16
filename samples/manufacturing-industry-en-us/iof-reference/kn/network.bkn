@@ -1,0 +1,19 @@
+---
+type: knowledge_network
+id: iof_core_production_planning_reference
+name: IOF Core and Production Planning Complete Reference
+tags: [manufacturing, iof, reference, production_planning]
+version: 202603
+branch: main
+---
+
+# IOF Core and Production Planning Complete Reference
+
+This network is a structural BKN projection of the fixed IOF Core and Production Planning Reference Ontology. It inventories every named class and object property in those source files and retains source IRI, label, and definition. BKN does not execute IOF/BFO OWL axioms, restrictions, equivalence, disjointness, inverse properties, or property chains; see the semantic-differences document.
+
+## Network Overview
+
+- **ObjectTypes** (112): all named classes in the fixed IOF modules
+- **RelationTypes** (7): named object properties whose explicit direct domain and range are each one named class in the fixed modules
+- **Unprojected OWL properties** (78): fully retained in `docs/unprojected-owl-relations.md`; they have an external, anonymous, missing, or non-single endpoint and are not represented as a fabricated BKN relation
+- **ConceptGroups** (2): IOF Core and IOF Production Planning

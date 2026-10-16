@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: enabled_by
+name: enabled by
+tags: [iof, productionplanning]
+---
+
+## RelationType: enabled by
+
+Source IRI: `https://spec.industrialontologies.org/ontology/construct/enabledBy`. Source definition: relation from one capability to another capability such that associated performance of the first capability is made possible by another. This BKN projection stores the target entity ID in `enabled_by_target_id`.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| capability | capability | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| enabled_by_target_id | entity_id |

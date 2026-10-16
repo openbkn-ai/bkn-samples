@@ -1,0 +1,26 @@
+---
+type: object_type
+id: demand_forecasts
+name: Demand Forecast
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Demand Forecast
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| forecast_id | forecast_id | string | Stable business identifier or business attribute. | forecast_id |
+| product_id | product_id | string | Stable business identifier or business attribute. | product_id |
+| forecast_period | forecast_period | date | Stable business identifier or business attribute. | forecast_period |
+| forecast_quantity | forecast_quantity | decimal | Stable business identifier or business attribute. | forecast_quantity |
+| unit | unit | string | Stable business identifier or business attribute. | unit |
+
+### Keys
+
+Primary Keys: forecast_id
+Display Key: forecast_id
+Incremental Key:

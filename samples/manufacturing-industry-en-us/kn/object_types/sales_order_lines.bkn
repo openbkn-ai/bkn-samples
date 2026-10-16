@@ -1,0 +1,26 @@
+---
+type: object_type
+id: sales_order_lines
+name: Sales Order Line
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Sales Order Line
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| sales_order_line_id | sales_order_line_id | string | Stable business identifier or business attribute. | sales_order_line_id |
+| sales_order_id | sales_order_id | string | Stable business identifier or business attribute. | sales_order_id |
+| product_id | product_id | string | Stable business identifier or business attribute. | product_id |
+| ordered_quantity | ordered_quantity | decimal | Stable business identifier or business attribute. | ordered_quantity |
+| unit | unit | string | Stable business identifier or business attribute. | unit |
+
+### Keys
+
+Primary Keys: sales_order_line_id
+Display Key: sales_order_line_id
+Incremental Key:

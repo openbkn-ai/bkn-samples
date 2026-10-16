@@ -1,0 +1,7 @@
+# IOF and BKN Expression Boundaries
+
+1. This reference layer covers every named class and object property in the two fixed source files. It does not copy other IOF modules or imported external ontologies such as BFO, QUDT, and OMG Commons into BKN entries.
+2. OWL subclass, equivalentClass, disjointWith, some/all/min/max cardinality restrictions, property chains, inverse properties, transitive/symmetric properties, and first-order-logic annotations cannot be expressed equivalently or automatically executed by the current BKN format. They remain in the upstream RDF; BKN bodies retain IRI, label, and natural-language definition.
+3. A global OWL ObjectProperty may have no direct domain/range, may use an anonymous union or restriction class, or may point outside the fixed modules. It is retained in [the unprojected OWL property inventory](unprojected-owl-relations.md), but no BKN RelationType is generated because BKN needs concrete endpoints. This avoids inventing a catch-all business object or narrowing the OWL semantics.
+4. To give a BKN direct relation a mappable field, each generated source ObjectType adds `<property>_target_id`. This is a BKN data-projection field, not an IOF DatatypeProperty, and does not alter the IOF model.
+5. `entity_id`, `source_iri`, `source_label`, and `source_definition` are traceability fields for this reference directory. A future business sample may extend them, but they must not be mistaken for data requirements imposed on every IOF entity.

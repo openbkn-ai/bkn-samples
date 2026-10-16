@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: quality_inspection_lots_production_order_id_to_production_orders
+name: quality_inspection_lots_production_order_id_to_production_orders
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: quality_inspection_lots_production_order_id_to_production_orders
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| quality_inspection_lots | production_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| production_order_id | production_order_id |
