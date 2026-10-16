@@ -9,6 +9,9 @@ import re
 import subprocess
 import tempfile
 import signal
+import sys
+
+from installer.hook_process import run_hook
 
 from installer import shared_database
 from pathlib import Path
@@ -100,7 +103,7 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
             shared.chmod(0o700)
             hook_env["BKN_SAMPLE_CONFIG"] = str(shared / "config.yaml")
             hook_env["BKN_SAMPLE_RECEIPT"] = str(shared / "owned-execution.json")
-        completed = run([str(script)], hook_env)
+        completed = run_hook(sample_dir, script, run, hook_env)
         if output.is_file():
             try:
                 result = json.loads(output.read_text(encoding="utf-8"))
@@ -202,12 +205,21 @@ def kubectl_run(argv: list[str], stdin: str | None = None) -> subprocess.Complet
 
 
 def process_run(argv: list[str], env: dict | None) -> subprocess.CompletedProcess:
-    merged = os.environ.copy()
-    if env:
-        merged.update(env)
+    identity = (env or {}).get("_BKN_HOOK_UID")
+    if identity is not None:
+        if sys.platform != "linux" or os.geteuid() != 0:
+            raise ControlError("hook_isolation_unavailable", "Sample hooks require the product's Linux installation runtime.")
+        # Hook environments are an allowlist, never the parent service environment.
+        merged = {key: value for key, value in env.items() if key != "_BKN_HOOK_UID"}
+        identity_options = {"user": int(identity), "group": int(identity), "extra_groups": [], "umask": 0o077}
+    else:
+        merged = os.environ.copy()
+        if env:
+            merged.update(env)
+        identity_options = {}
     # Bound the whole hook process tree, including children spawned by shell scripts.
     with subprocess.Popen(argv, env=merged, text=True, stdout=subprocess.PIPE,
-                          stderr=subprocess.PIPE, start_new_session=True) as process:
+                          stderr=subprocess.PIPE, start_new_session=True, **identity_options) as process:
         try:
             stdout, stderr = process.communicate(timeout=300)
         except subprocess.TimeoutExpired:

@@ -9,6 +9,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from installer.deploy_database import DeployError, _sample
+from installer.hook_process import run_hook
 from installer.state_store import write_json
 from installer.studio_api import _read_state
 
@@ -129,7 +130,7 @@ def prepare(root, sample, version, state_dir, run):
                    "BKN_SAMPLE_ID": sample, "BKN_SAMPLE_VERSION": version,
                    "BKN_SAMPLE_CACHE": str(state_dir / sample / "cache")}
     for hook in ("dbInit", "dbVerify"):
-        result = run([str(directory / document["spec"]["hooks"][hook])], environment)
+        result = run_hook(directory, directory / document["spec"]["hooks"][hook], run, environment)
         if result.returncode:
             # Hook output may contain credentials; retain a safe stage-level message.
             raise DeployError("database_not_ready", "Sample database loading or verification failed; retry the installation.")
