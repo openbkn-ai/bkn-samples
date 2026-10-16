@@ -53,7 +53,7 @@ OpenBKN 首页 → **一键体验**：刷新官方样例目录，展开卡片查
 - 数据：表数、锁定摘要、代表值，以及受影响的查询。
 - 知识网络：对象、关系、当前数据源绑定及真实对象查询。
 - 函数/接口：实际调用变化的函数，核对输入、结果及权限前提。
-- 指标：定义与逻辑属性绑定，实际查询与锁定数据一致。供应链对应 `tools/assets/metrics-create.json`、`logic-properties.json`、`metrics-query-examples.json`。
+- 指标：按 Object Metrics V1 创建、验证并发布指定版本，检查所属对象类，实际查询与锁定数据一致。供应链的对象集聚合指标不绑定为实例逻辑属性；对应 `tools/assets/metrics-create.json`、`logic-properties.json`、`metrics-query-examples.json`。
 - Skill：发布、挂载、内容与引用文件一致，引用函数可用；使用配置好的模型验证变化的场景。安装本身不要求模型，但智能问答要求模型。
 
 包能通过 schema 或 AI 审核，不代表内容已成功导入。只保留资产文件而未注册、绑定或验证，不应记录安装成功。
