@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: bom_components_component_product_id_to_products
+name: bom_components_component_product_id_to_products
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: bom_components_component_product_id_to_products
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| bom_components | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| component_product_id | product_id |

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: specializes
+name: 特化
+tags: [iof, core]
+---
+
+## RelationType: 特化
+
+来源 IRI：`https://spec.industrialontologies.org/ontology/construct/specializes`。来源定义：relation between two classifiers such that everything classified by the former is also classified by the latter。此 BKN 投影使用 `specializes_target_id` 保存目标实体 ID。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| classifier | classifier | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| specializes_target_id | entity_id |

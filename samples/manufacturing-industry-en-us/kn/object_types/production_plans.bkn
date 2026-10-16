@@ -1,0 +1,27 @@
+---
+type: object_type
+id: production_plans
+name: Production Plan
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Production Plan
+
+Versioned production-planning snapshot.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| production_plan_id | production_plan_id | string | Versioned production-planning snapshot. | production_plan_id |
+| plan_version | plan_version | string | Versioned production-planning snapshot. | plan_version |
+| snapshot_date | snapshot_date | date | Versioned production-planning snapshot. | snapshot_date |
+| planning_start_date | planning_start_date | date | Versioned production-planning snapshot. | planning_start_date |
+| planning_end_date | planning_end_date | date | Versioned production-planning snapshot. | planning_end_date |
+| status | status | string | Versioned production-planning snapshot. | status |
+
+### Keys
+
+Primary Keys: production_plan_id
+Display Key: production_plan_id
+Incremental Key:

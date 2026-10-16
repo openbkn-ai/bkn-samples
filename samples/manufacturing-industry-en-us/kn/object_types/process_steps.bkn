@@ -1,0 +1,27 @@
+---
+type: object_type
+id: process_steps
+name: Process Step
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Process Step
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| process_step_id | process_step_id | string | Stable business identifier or business attribute. | process_step_id |
+| operation_id | operation_id | string | Stable business identifier or business attribute. | operation_id |
+| process_step_name | process_step_name | string | Stable business identifier or business attribute. | process_step_name |
+| sequence_number | sequence_number | integer | Stable business identifier or business attribute. | sequence_number |
+| required_capability_id | required_capability_id | string | Stable business identifier or business attribute. | required_capability_id |
+| setup_class | setup_class | string | Stable business identifier or business attribute. | setup_class |
+
+### Keys
+
+Primary Keys: process_step_id
+Display Key: process_step_id
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: goods_receipts_product_id_to_products
+name: goods_receipts_product_id_to_products
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: goods_receipts_product_id_to_products
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| goods_receipts | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| product_id | product_id |

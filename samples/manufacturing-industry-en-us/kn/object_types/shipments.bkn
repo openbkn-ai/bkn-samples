@@ -1,0 +1,28 @@
+---
+type: object_type
+id: shipments
+name: Shipment
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Shipment
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| shipment_id | shipment_id | string | Business object. | shipment_id |
+| sales_order_line_id | sales_order_line_id | string | Business object. | sales_order_line_id |
+| production_order_id | production_order_id | string | Business object. | production_order_id |
+| finished_goods_receipt_id | finished_goods_receipt_id | string | Business object. | finished_goods_receipt_id |
+| shipped_quantity | shipped_quantity | decimal | Business object. | shipped_quantity |
+| shipment_date | shipment_date | date | Business object. | shipment_date |
+| delivery_status | delivery_status | string | Business object. | delivery_status |
+
+### Keys
+
+Primary Keys: shipment_id
+Display Key: shipment_id
+Incremental Key:

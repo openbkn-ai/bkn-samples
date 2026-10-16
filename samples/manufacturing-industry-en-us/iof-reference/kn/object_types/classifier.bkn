@@ -1,0 +1,31 @@
+---
+type: object_type
+id: classifier
+name: classifier
+tags: [iof, core]
+---
+
+## ObjectType: classifier
+
+Source label: classifier. Source IRI: `https://spec.industrialontologies.org/ontology/construct/Classifier`. Source definition: denoter that classifies some entity
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| entity_id | Entity ID | string | Stable identifier for an entity record in this BKN projection. | entity_id |
+| source_iri | Source IRI | string | IOF class IRI. | source_iri |
+| source_label | Source Label | string | Original IOF label. | source_label |
+| source_definition | Source Definition | text | Original IOF natural-language definition. | source_definition |
+| is_synthetic_reference_instance | Is Synthetic Reference Instance | boolean | Marks a record used only for IOF class coverage and relation demonstration. | is_synthetic_reference_instance |
+| reference_instance_note | Reference Instance Note | text | Does not assert this reference record as an operational fact. | reference_instance_note |
+| categorized_by_target_id | categorized by Target ID | string | Target entity ID linked through IOF property `https://spec.industrialontologies.org/ontology/construct/categorizedBy`. | categorized_by_target_id |
+| categorizes_target_id | categorizes Target ID | string | Target entity ID linked through IOF property `https://spec.industrialontologies.org/ontology/construct/categorizes`. | categorizes_target_id |
+| generalizes_target_id | generalizes Target ID | string | Target entity ID linked through IOF property `https://spec.industrialontologies.org/ontology/construct/generalizes`. | generalizes_target_id |
+| specializes_target_id | specializes Target ID | string | Target entity ID linked through IOF property `https://spec.industrialontologies.org/ontology/construct/specializes`. | specializes_target_id |
+
+### Keys
+
+Primary Keys: entity_id
+Display Key: source_label
+Incremental Key:

@@ -1,0 +1,30 @@
+---
+type: object_type
+id: production_execution_records
+name: Production Execution Record
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Production Execution Record
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| execution_record_id | execution_record_id | string | Stable business identifier or business attribute. | execution_record_id |
+| process_step_id | process_step_id | string | Stable business identifier or business attribute. | process_step_id |
+| machine_id | machine_id | string | Stable business identifier or business attribute. | machine_id |
+| operator_id | operator_id | string | Stable business identifier or business attribute. | operator_id |
+| started_date | started_date | date | Stable business identifier or business attribute. | started_date |
+| completed_date | completed_date | date | Stable business identifier or business attribute. | completed_date |
+| good_quantity | good_quantity | decimal | Stable business identifier or business attribute. | good_quantity |
+| scrap_quantity | scrap_quantity | decimal | Stable business identifier or business attribute. | scrap_quantity |
+| status | status | string | Stable business identifier or business attribute. | status |
+
+### Keys
+
+Primary Keys: execution_record_id
+Display Key: execution_record_id
+Incremental Key:

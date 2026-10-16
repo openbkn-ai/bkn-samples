@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: categorized_by
+name: 由…分类
+tags: [iof, core]
+---
+
+## RelationType: 由…分类
+
+来源 IRI：`https://spec.industrialontologies.org/ontology/construct/categorizedBy`。来源定义：relation between a lower-order classifier by a higher-order classifier such that the latter classifier categorizes the former。此 BKN 投影使用 `categorized_by_target_id` 保存目标实体 ID。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| classifier | classifier | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| categorized_by_target_id | entity_id |

@@ -1,0 +1,29 @@
+---
+type: object_type
+id: quality_inspection_results
+name: Quality Inspection Result
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Quality Inspection Result
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| inspection_result_id | inspection_result_id | string | Stable business identifier or business attribute. | inspection_result_id |
+| inspection_lot_id | inspection_lot_id | string | Stable business identifier or business attribute. | inspection_lot_id |
+| characteristic_name | characteristic_name | string | Stable business identifier or business attribute. | characteristic_name |
+| measured_value | measured_value | decimal | Stable business identifier or business attribute. | measured_value |
+| target_value | target_value | decimal | Stable business identifier or business attribute. | target_value |
+| lower_limit | lower_limit | decimal | Stable business identifier or business attribute. | lower_limit |
+| upper_limit | upper_limit | decimal | Stable business identifier or business attribute. | upper_limit |
+| result_status | result_status | string | Stable business identifier or business attribute. | result_status |
+
+### Keys
+
+Primary Keys: inspection_result_id
+Display Key: inspection_result_id
+Incremental Key:

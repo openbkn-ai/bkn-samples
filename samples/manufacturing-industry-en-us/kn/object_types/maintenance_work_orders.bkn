@@ -1,0 +1,26 @@
+---
+type: object_type
+id: maintenance_work_orders
+name: Maintenance Work Order
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Maintenance Work Order
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| maintenance_work_order_id | maintenance_work_order_id | string | Stable business identifier or business attribute. | maintenance_work_order_id |
+| maintenance_plan_id | maintenance_plan_id | string | Stable business identifier or business attribute. | maintenance_plan_id |
+| machine_id | machine_id | string | Stable business identifier or business attribute. | machine_id |
+| planned_date | planned_date | date | Stable business identifier or business attribute. | planned_date |
+| status | status | string | Stable business identifier or business attribute. | status |
+
+### Keys
+
+Primary Keys: maintenance_work_order_id
+Display Key: maintenance_work_order_id
+Incremental Key:

@@ -1,0 +1,28 @@
+---
+type: object_type
+id: goods_receipts
+name: Goods Receipt
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Goods Receipt
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| goods_receipt_id | goods_receipt_id | string | Stable business identifier or business attribute. | goods_receipt_id |
+| purchase_order_line_id | purchase_order_line_id | string | Stable business identifier or business attribute. | purchase_order_line_id |
+| product_id | product_id | string | Stable business identifier or business attribute. | product_id |
+| inventory_location_id | inventory_location_id | string | Stable business identifier or business attribute. | inventory_location_id |
+| received_quantity | received_quantity | decimal | Stable business identifier or business attribute. | received_quantity |
+| received_date | received_date | date | Stable business identifier or business attribute. | received_date |
+| inspection_status | inspection_status | string | Stable business identifier or business attribute. | inspection_status |
+
+### Keys
+
+Primary Keys: goods_receipt_id
+Display Key: goods_receipt_id
+Incremental Key:

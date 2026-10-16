@@ -1,0 +1,26 @@
+---
+type: object_type
+id: sales_orders
+name: Sales Order
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Sales Order
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| sales_order_id | sales_order_id | string | Stable business identifier or business attribute. | sales_order_id |
+| customer_id | customer_id | string | Stable business identifier or business attribute. | customer_id |
+| order_date | order_date | date | Stable business identifier or business attribute. | order_date |
+| requested_delivery_date | requested_delivery_date | date | Stable business identifier or business attribute. | requested_delivery_date |
+| status | status | string | Stable business identifier or business attribute. | status |
+
+### Keys
+
+Primary Keys: sales_order_id
+Display Key: sales_order_id
+Incremental Key:

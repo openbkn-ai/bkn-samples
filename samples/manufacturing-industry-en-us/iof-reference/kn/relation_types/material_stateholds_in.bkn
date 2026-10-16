@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: material_stateholds_in
+name: material state holds in
+tags: [iof, core]
+---
+
+## RelationType: material state holds in
+
+Source IRI: `https://spec.industrialontologies.org/ontology/construct/materialStateholdsIn`. Source definition: relation between two material states that holds when the first material state is one of the states whose condition contributes to the aggregated condition of the second material state, and the first material state at least occurs for the duration of the second material state. This BKN projection stores the target entity ID in `material_stateholds_in_target_id`.
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| material_state | material_state | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| material_stateholds_in_target_id | entity_id |

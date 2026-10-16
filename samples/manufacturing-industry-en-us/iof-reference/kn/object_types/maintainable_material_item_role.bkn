@@ -1,0 +1,27 @@
+---
+type: object_type
+id: maintainable_material_item_role
+name: maintainable material item role
+tags: [iof, core]
+---
+
+## ObjectType: maintainable material item role
+
+Source label: maintainable material item role. Source IRI: `https://spec.industrialontologies.org/ontology/construct/MaintainableMaterialItemRole`. Source definition: role played by an asset (engineered system or material artifact) when there is a maintenance strategy prescribing its maintenance process
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| entity_id | Entity ID | string | Stable identifier for an entity record in this BKN projection. | entity_id |
+| source_iri | Source IRI | string | IOF class IRI. | source_iri |
+| source_label | Source Label | string | Original IOF label. | source_label |
+| source_definition | Source Definition | text | Original IOF natural-language definition. | source_definition |
+| is_synthetic_reference_instance | Is Synthetic Reference Instance | boolean | Marks a record used only for IOF class coverage and relation demonstration. | is_synthetic_reference_instance |
+| reference_instance_note | Reference Instance Note | text | Does not assert this reference record as an operational fact. | reference_instance_note |
+
+### Keys
+
+Primary Keys: entity_id
+Display Key: source_label
+Incremental Key:

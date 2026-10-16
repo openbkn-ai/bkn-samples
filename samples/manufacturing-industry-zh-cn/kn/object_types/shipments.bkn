@@ -1,0 +1,28 @@
+---
+type: object_type
+id: shipments
+name: 发运
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: 发运
+
+业务对象 in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| shipment_id | shipment_id | string | 业务对象. | shipment_id |
+| sales_order_line_id | sales_order_line_id | string | 业务对象. | sales_order_line_id |
+| production_order_id | production_order_id | string | 业务对象. | production_order_id |
+| finished_goods_receipt_id | finished_goods_receipt_id | string | 业务对象. | finished_goods_receipt_id |
+| shipped_quantity | shipped_quantity | decimal | 业务对象. | shipped_quantity |
+| shipment_date | shipment_date | date | 业务对象. | shipment_date |
+| delivery_status | delivery_status | string | 业务对象. | delivery_status |
+
+### Keys
+
+Primary Keys: shipment_id
+Display Key: shipment_id
+Incremental Key:

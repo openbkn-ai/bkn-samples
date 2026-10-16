@@ -8,7 +8,7 @@ Each sample is an independent package with its own database, knowledge network a
 
 ## Try a sample
 
-Use an OpenBKN 0.2.x environment with the standard sample installation service enabled and an account authorized to install samples.
+Use an OpenBKN 0.2.x environment with the standard sample installation service enabled and an account authorized to install samples. The manufacturing offline packages require **OpenBKN 0.2.1 or later**.
 
 1. Open **Studio → One-click onboarding** and select **Refresh samples**.
 2. Choose a published sample, check its version and release notes, and select **Install**.
@@ -26,9 +26,13 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 | [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Online catalog |
 | [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Online catalog |
 | [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Online catalog |
-| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Online catalog |
+| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Source merged; online release pending |
+| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | Offline release only; requires OpenBKN ≥ 0.2.1 |
+| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 仅离线发布；要求 OpenBKN ≥ 0.2.1 |
 
-All five samples are published in the [official catalog](catalog.json). Download their offline packages from [Releases](https://github.com/openbkn-ai/bkn-samples/releases). The catalog determines the available versions; sample package versions are independent of the platform version.
+The [official catalog](catalog.json) determines downloadable versions. Merging sample source does not publish an online package. English World Cup source and local installation acceptance are complete; its official image, release package and catalog registration remain separate release steps.
+
+The two manufacturing samples are intentionally kept out of the official catalog and legacy `020` discovery. Import their fixed offline package only after loading its matching data image into the target cluster; they install independently and can coexist because they use separate databases and knowledge-network IDs.
 
 World Cup data is a locked historical snapshot covering men's editions through 2022 and women's editions through 2019. Detailed coverage varies by table. See each sample's README for its data scope, license and scenario assumptions.
 

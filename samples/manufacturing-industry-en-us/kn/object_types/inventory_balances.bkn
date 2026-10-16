@@ -1,0 +1,29 @@
+---
+type: object_type
+id: inventory_balances
+name: Inventory Balance
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: Inventory Balance
+
+Business object in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| inventory_balance_id | inventory_balance_id | string | Stable business identifier or business attribute. | inventory_balance_id |
+| inventory_location_id | inventory_location_id | string | Stable business identifier or business attribute. | inventory_location_id |
+| product_id | product_id | string | Stable business identifier or business attribute. | product_id |
+| on_hand_quantity | on_hand_quantity | decimal | Stable business identifier or business attribute. | on_hand_quantity |
+| available_quantity | available_quantity | decimal | Business object. | available_quantity |
+| allocated_quantity | allocated_quantity | decimal | Stable business identifier or business attribute. | allocated_quantity |
+| as_of_date | as_of_date | date | Business object. | as_of_date |
+| unit | unit | string | Stable business identifier or business attribute. | unit |
+
+### Keys
+
+Primary Keys: inventory_balance_id
+Display Key: inventory_balance_id
+Incremental Key:
