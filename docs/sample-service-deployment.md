@@ -45,7 +45,7 @@ helm upgrade --install bkn-sample-studio \
 kubectl -n openbkn rollout status deployment/bkn-sample-studio
 ```
 
-Use **Import offline package** on Studio's one-click tab for self-contained `offline-package.tar.gz` files. Administrator authentication is required. Online and offline installation share the installer, fixed version and artifact checks; offline import does not need an online catalog. See [offline installation](offline-installation.md) for node preparation and storage requirements.
+Use **Import offline package** on Studio's one-click tab for self-contained `package.tar.gz` files. Administrator authentication is required. Online and offline installation share the installer, fixed version and artifact checks; offline import does not need an online catalog. See [offline installation](offline-installation.md) for product runtime and storage requirements.
 
 ## Existing deployment and state
 

@@ -121,19 +121,19 @@ class RemoteHttpTest(unittest.TestCase):
                  patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
                  patch("installer.platform_version.read_backend_version", return_value="0.2.0") as health:
                 main()
-                result = apps[0].import_package(candidate / "offline-package.tar.gz", "admin")
+                result = apps[0].import_package(candidate / "package.tar.gz", "admin")
                 self.assertEqual(result["version"], "0.1.2")
                 health.assert_called_with("http://gateway.example")
                 self.assertFalse((state / "supply-chain.json").exists())
                 health.return_value = ""
                 with self.assertRaises(ApiError):
-                    apps[0].import_package(candidate / "offline-package.tar.gz", "admin")
+                    apps[0].import_package(candidate / "package.tar.gz", "admin")
                 self.assertFalse((state / "supply-chain.json").exists())
                 health.return_value = "0.2.0"
                 with patch.dict("os.environ", {"BKN_SAMPLE_PLATFORM_CAPABILITIES": "vega.catalog"}):
                     main()
                     with self.assertRaises(ApiError):
-                        apps[-1].import_package(candidate / "offline-package.tar.gz", "admin")
+                        apps[-1].import_package(candidate / "package.tar.gz", "admin")
 
     def test_http_accepts_fixed_release_before_worker_and_retries_original_after_restart(self):
         fixture = bundle_fixture.RemoteBundleTest("test_fixed_release_extracts_and_matches_existing_runtime_contract")

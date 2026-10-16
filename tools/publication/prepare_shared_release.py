@@ -1,4 +1,4 @@
-"""Prepare online/offline content archives and a candidate release manifest; never publish."""
+"""Prepare one self-contained archive for online/offline installation and a candidate release manifest; never publish."""
 import argparse
 import json
 from datetime import datetime, timezone
@@ -13,13 +13,12 @@ def prepare(sample_dir, version, output):
     baseline = max(previous, key=lambda p: tuple(map(int, p.parent.name.split('.'))))
     require(tuple(map(int, version.split('.'))) > tuple(map(int, baseline.parent.name.split('.'))),
             'use a new version; existing release artifacts are immutable')
-    online = build(sample_dir, version, output / 'online')
-    offline = build(sample_dir, version, output / 'offline', shared_database=True)
+    candidate = build(sample_dir, version, output, shared_database=True)
     manifest = json.loads(baseline.read_text())
     manifest['metadata']['version'] = version
     spec = manifest['spec']
     spec['release']['publishedAt'] = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
-    report = json.loads((online / 'build.json').read_text())
+    report = json.loads((candidate / 'build.json').read_text())
     spec['release']['releaseNotes'] = [{**note, 'path': Path(note['path']).name} for note in report['releaseNotes']]
     if 'database.shared' not in spec['requires']['capabilities']:
         spec['requires']['capabilities'].append('database.shared')
@@ -30,10 +29,10 @@ def prepare(sample_dir, version, output):
     spec['artifacts'] = [archive]
     require(len(spec['delivery']['dataDependencies']) == 1, 'one database dependency is required')
     spec['delivery']['dataDependencies'][0]['artifactId'] = archive['id']
-    (online / 'sample.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
+    (candidate / 'sample.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     return {'sample': manifest['metadata']['sampleId'], 'version': version,
-            'online': str(online / 'package.tar.gz'), 'offline': str(offline / 'offline-package.tar.gz'),
-            'manifest': str(online / 'sample.json'), 'status': 'candidate-not-verified'}
+            'package': str(candidate / 'package.tar.gz'),
+            'manifest': str(candidate / 'sample.json'), 'status': 'candidate-not-verified'}
 
 
 def main():
