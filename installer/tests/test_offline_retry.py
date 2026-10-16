@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from installer.deploy_database import DeployError
@@ -74,7 +75,9 @@ class OfflineRetryTest(unittest.TestCase):
                 def deploy(_sample):
                     raise DeployError(code, "database deployment failed")
 
-                with self.assertRaises(ApiError):
+                with patch("installer.runtime.shared_database.configured", return_value=True), \
+                     patch("installer.runtime.shared_database.prepare", side_effect=DeployError(code, "database operation failed")), \
+                     self.assertRaises(ApiError):
                     install_sample(sample="supply-chain", actor_role="admin", state_dir=state,
                                    root=ROOT, version="0.1.0", deploy=deploy,
                                    kubectl=None, run=None)

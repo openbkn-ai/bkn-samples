@@ -363,7 +363,7 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
            if current.get("version") == version and current.get("offlineRelease") else {}),
         **({"packageDigest": current["packageDigest"]}
            if current.get("version") == version and current.get("packageDigest") else {}),
-        **({key: current[key] for key in ("catalogId", "resources") if key in current}
+        **({key: current[key] for key in ("catalogId", "resources", "databaseRuntime") if key in current}
            if current.get("version") == version else {}),
     }
     write_json(state_dir / f"{sample}.json", record)

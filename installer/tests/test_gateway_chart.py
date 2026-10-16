@@ -22,7 +22,7 @@ class GatewayChartTest(unittest.TestCase):
         self.assertEqual(env['BKN_BASE_URL'],GATEWAY)
         self.assertEqual(env['BKN_BACKEND_URL'],'')
         self.assertFalse(any(d['kind']=='ConfigMap' for d in docs))
-        self.assertEqual([d['metadata']['name'] for d in docs if d['kind']=='Service'],['bkn-sample-studio'])
+        self.assertEqual([d['metadata']['name'] for d in docs if d['kind']=='Service'],['bkn-sample-database','bkn-sample-studio'])
     def test_operator_gateway_and_health_addresses_remain_independent(self):
         _,pod=self.render('--set','baseURL=http://custom-internal.example','--set','backendURL=http://backend.example')
         env={e['name']:e.get('value','') for e in pod['containers'][0]['env']}

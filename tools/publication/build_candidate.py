@@ -63,7 +63,8 @@ def included(relative):
     return (len(parts) == 1 and relative.name in FILES) or parts[0] in DIRECTORIES
 
 
-def build(sample_dir, version, output, data_image_ref=None, image_layout=None):
+def build(sample_dir, version, output, data_image_ref=None, image_layout=None, shared_database=False):
+    require(not shared_database or (data_image_ref is None and image_layout is None), "shared database packages do not use a sample image")
     require(VERSION.fullmatch(version), "version must be MAJOR.MINOR.PATCH")
     sample_dir = safe_path(sample_dir.absolute())
     require(sample_dir.parent == ROOT / "samples", "sample must be a direct child of samples/")
@@ -114,9 +115,10 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None):
 
     require((data_image_ref is None) == (image_layout is None),
             "self-contained offline packages require both --data-image-ref and --image-layout; URL-only packages are no longer supported")
-    if data_image_ref is not None:
-        require(re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[a-f0-9]{64}", data_image_ref),
-                "offline package needs a fixed data image digest")
+    if data_image_ref is not None or shared_database:
+        if not shared_database:
+            require(re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[a-f0-9]{64}", data_image_ref),
+                    "offline package needs a fixed data image digest")
         contract = yaml.safe_load(by_path["sample.yaml"].decode("utf-8"))
         components = contract["spec"]["components"]
         native_format = "bkn-directory" if "kn/network.bkn" in by_path else "kn-json"
@@ -124,23 +126,27 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None):
         capabilities.extend("execution." + component for component, key in
                             (("function", "functions"), ("skill", "skills")) if components[key])
         require(contract["spec"]["data"]["mode"] == "embedded", "offline packages require embedded data")
-        image_layout = safe_path(Path(image_layout).absolute())
-        index = json.loads((image_layout / "index.json").read_text())
-        require(len(index.get("manifests", [])) == 1, "OCI layout must have one root")
-        index["manifests"][0].setdefault("annotations", {})["org.opencontainers.image.ref.name"] = data_image_ref
-        architectures = sorted(validate_layout(image_layout, data_image_ref, [], require_named=False))
-        require(architectures, "offline image contains no supported Linux architecture")
-        snapshots.append(("runtime/prepare_offline.py", 0o755, (ROOT / "installer/offline_image.py").read_bytes()))
-        for path in sorted(image_layout.rglob("*")):
-            safe_path(path)
-            if path.is_file():
-                relative = path.relative_to(image_layout).as_posix()
-                require(relative in {"index.json", "oci-layout"} or re.fullmatch(r"blobs/sha256/[a-f0-9]{64}", relative), "unexpected OCI layout file")
-                snapshots.append(("runtime/oci/" + relative, 0o644,
-                                  json.dumps(index, sort_keys=True).encode() if relative == "index.json" else path))
+        if shared_database:
+            architectures = ["amd64", "arm64"]
+            capabilities.append("database.shared")
+        else:
+            image_layout = safe_path(Path(image_layout).absolute())
+            index = json.loads((image_layout / "index.json").read_text())
+            require(len(index.get("manifests", [])) == 1, "OCI layout must have one root")
+            index["manifests"][0].setdefault("annotations", {})["org.opencontainers.image.ref.name"] = data_image_ref
+            architectures = sorted(validate_layout(image_layout, data_image_ref, [], require_named=False))
+            require(architectures, "offline image contains no supported Linux architecture")
+            snapshots.append(("runtime/prepare_offline.py", 0o755, (ROOT / "installer/offline_image.py").read_bytes()))
+            for path in sorted(image_layout.rglob("*")):
+                safe_path(path)
+                if path.is_file():
+                    relative = path.relative_to(image_layout).as_posix()
+                    require(relative in {"index.json", "oci-layout"} or re.fullmatch(r"blobs/sha256/[a-f0-9]{64}", relative), "unexpected OCI layout file")
+                    snapshots.append(("runtime/oci/" + relative, 0o644,
+                                      json.dumps(index, sort_keys=True).encode() if relative == "index.json" else path))
         descriptor = {
             "apiVersion": "samples.openbkn.ai/offline.v2", "version": version,
-            "dataImageRef": data_image_ref,
+            **({"databaseRuntime": "shared-mariadb"} if shared_database else {"dataImageRef": data_image_ref}),
             "requires": {"installationProfiles": ["openbkn.ai/sample-install.v1"],
                          "requiredExtensions": [], "platformVersion": ">=0.2.0 <0.3.0",
                          "architectures": architectures,
@@ -160,7 +166,7 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None):
     require(not target.exists(), "candidate already exists; use a fresh output directory")
     temporary = Path(tempfile.mkdtemp(prefix=".candidate-", dir=target.parent))
     try:
-        archive = temporary / ("offline-package.tar.gz" if image_layout is not None else "package.tar.gz")
+        archive = temporary / ("offline-package.tar.gz" if image_layout is not None or shared_database else "package.tar.gz")
         with archive.open("wb") as stream:
             with gzip.GzipFile(filename="", mode="wb", fileobj=stream, mtime=0) as compressed:
                 with tarfile.open(fileobj=compressed, mode="w", format=tarfile.USTAR_FORMAT) as tar:
@@ -174,7 +180,7 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None):
                                 tar.addfile(info, source)
                         else:
                             tar.addfile(info, io.BytesIO(data))
-        archive_limit = MAX_OFFLINE_ARCHIVE if image_layout is not None else 128 * 1024 * 1024
+        archive_limit = MAX_OFFLINE_ARCHIVE if image_layout is not None or shared_database else 128 * 1024 * 1024
         require(archive.stat().st_size <= archive_limit, "candidate archive exceeds its delivery size limit")
         report = {
             "status": "candidate-not-verified",
@@ -208,11 +214,12 @@ def main():
     parser.add_argument("sample_dir", type=Path)
     parser.add_argument("--version", required=True)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--shared-database", action="store_true", help="Build a content-only offline package for the product sample database")
     parser.add_argument("--data-image-ref", help="Fixed image digest for a self-contained offline package")
     parser.add_argument("--image-layout", type=Path, help="Complete local OCI layout exported with skopeo copy --all --preserve-digests")
     args = parser.parse_args()
     try:
-        target = build(args.sample_dir, args.version, args.output, args.data_image_ref, args.image_layout)
+        target = build(args.sample_dir, args.version, args.output, args.data_image_ref, args.image_layout, args.shared_database)
     except (ValueError, OSError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Candidate build failed: {error}\n")
     print(f"Candidate created: {target}")
