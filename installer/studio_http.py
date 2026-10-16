@@ -199,8 +199,8 @@ class _Handler(BaseHTTPRequestHandler):
                 raise ApiError(403, "forbidden", "an administrator must import the sample")
             if not self.app.import_package:
                 raise ApiError(404, "import_unavailable", "offline import is unavailable")
-            if self.headers.get("Transfer-Encoding") or not 0 < length <= 128 * 1024 * 1024:
-                raise ApiError(413, "invalid_package", "package must be at most 128 MiB")
+            if self.headers.get("Transfer-Encoding") or not 0 < length <= 1024 * 1024 * 1024:
+                raise ApiError(413, "invalid_package", "package must be at most 1 GiB")
             if self.headers.get("Content-Type", "").split(";")[0] != "application/gzip":
                 raise ApiError(415, "invalid_package", "expected application/gzip")
             self.connection.settimeout(60)
@@ -478,12 +478,12 @@ def main() -> None:
                                      retry_sample(sample=sample, installation_id=_installation_id(_read_state(state_dir, sample)),
                                                   actor_role=role, state_dir=state_dir, root=bundle_root, version=fixed_version,
                                                   deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                                                      data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version), kubectl=kubectl_run,
+                                                      data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version, offline=True), kubectl=kubectl_run,
                                                   run=process_run, authorization=authorization, accepted=True,
                                                   data_image_ref=fixed_image) if retry else install_sample(
                                      sample=sample, actor_role=role, state_dir=state_dir, root=bundle_root,
                                      version=fixed_version, deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                                         data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version), kubectl=kubectl_run,
+                                         data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version, offline=True), kubectl=kubectl_run,
                                      run=process_run, authorization=authorization)))
         if bundled and requested_version == sample_version(bundled) and requested_digest == bundled.get("manifestSha256"):
             return create(sample, role, authorization)
@@ -510,7 +510,7 @@ def main() -> None:
                                      retry_sample(sample=sample, installation_id=_installation_id(_read_state(state_dir, sample)),
                                                   actor_role=role, state_dir=state_dir, root=bundle_root, version=fixed_version,
                                                   deploy=lambda name: deploy_database(bundle_root, name, kubectl_run,
-                                                      data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version), kubectl=kubectl_run,
+                                                      data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version, offline=True), kubectl=kubectl_run,
                                                   run=process_run, authorization=authorization, accepted=True,
                                                   data_image_ref=fixed_image), retry=True))
         if current.get("remoteRelease"):
