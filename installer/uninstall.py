@@ -11,7 +11,7 @@ import yaml
 
 from installer import shared_database
 from installer.control_plane import catalog_name, ownership_tags
-from installer.deploy_database import NAMESPACE, _workload_name
+from installer.deploy_database import NAMESPACE, _workload_name, database_read_error
 from installer.history import read_installation_history, record_terminal_installation
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, timestamp
@@ -27,7 +27,7 @@ urlopen = build_opener(ProxyHandler({}), _NoRedirect()).open
 
 SAMPLE_NAME_RE = re.compile(r"^[a-z0-9-]{1,32}$")
 
-UNINSTALL_STAGES = (("knowledge", "删除知识网络和指标"), ("capabilities", "删除函数和 Skill"),
+UNINSTALL_STAGES = (("preflight", "检查样例资源归属"), ("knowledge", "删除知识网络和指标"), ("capabilities", "删除函数和 Skill"),
                     ("discover", "删除数据源"), ("database", "删除样例库和存储"), ("verify", "验证清理结果"))
 
 
@@ -148,6 +148,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         record["stages"][stage] = state
         write_json(destination, record)
     try:
+        checkpoint("preflight", "running")
         resources = record["resources"]
         network_id = resources["knowledgeNetworkId"]
         network_path = _path("/api/bkn-backend/v1/knowledge-networks/", network_id) if network_id else None
@@ -189,7 +190,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
             for kind, resource in (("statefulset", name), ("service", name), ("secret", name), ("pvc", f"data-{name}-0")):
                 result = kubectl(["get", kind, resource, "-n", NAMESPACE, "--ignore-not-found", "-o", "json"])
                 if result.returncode:
-                    raise ApiError(500, "uninstall_failed", "Cannot check sample database ownership.")
+                    raise database_read_error(result, kind)
                 if not (result.stdout or "").strip():
                     continue
                 value = json.loads(result.stdout)
@@ -215,6 +216,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                 if len(entries) < 500:
                     break
                 offset += len(entries)
+        checkpoint("preflight", "succeeded")
         for stage, paths in (("knowledge", metrics + ([network_path] if network_path else [])), ("capabilities", execution_paths), ("discover", [catalog_path] if catalog_path else [])):
             checkpoint(stage, "running")
             for path in paths:

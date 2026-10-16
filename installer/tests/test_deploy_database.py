@@ -94,6 +94,29 @@ class DeployDatabaseTest(unittest.TestCase):
     def tearDown(self):
         self._digests.stop()
 
+    def test_database_ownership_read_failures_are_classified_before_apply(self):
+        for reason, code in (("Forbidden", "database_permission_denied"),
+                             ("Unauthorized", "database_permission_denied"),
+                             (None, "database_resource_check_failed")):
+            with self.subTest(reason=reason):
+                kubectl = FakeKubectl()
+                original = kubectl.__call__
+                def read(args, stdin=None):
+                    if args[:2] == ["get", "pvc"]:
+                        stderr = f"Error from server ({reason}): credential-sentinel" if reason else "connection failed: credential-sentinel"
+                        return subprocess.CompletedProcess(args, 1, "", stderr)
+                    if "--ignore-not-found" in args:
+                        return FakeKubectl._ok("")
+                    return original(args, stdin)
+                with self.assertRaises(DeployError) as caught:
+                    deploy_database(ROOT, "supply-chain", read, require_ownership=True,
+                                    data_image_ref=f"{GHCR_IMAGE}@{DIGEST}")
+                self.assertEqual(caught.exception.code, code)
+                self.assertIn("pvc", caught.exception.message)
+                self.assertNotIn("credential-sentinel", caught.exception.message)
+                self.assertEqual(kubectl.applied, [])
+                self.assertEqual(kubectl.deleted, [])
+
     def test_missing_storage_class_creates_nothing(self):
         kubectl = FakeKubectl(storage=False)
         with self.assertRaises(DeployError) as caught:
