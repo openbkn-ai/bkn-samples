@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+from contextlib import ExitStack
 import json
 import os
 import re
@@ -217,10 +218,24 @@ def process_run(argv: list[str], env: dict | None) -> subprocess.CompletedProces
         identity_options = {}
     # Bound the whole hook process tree, including children spawned by shell scripts.
     input_data = (env or {}).get("_BKN_HOOK_INPUT")
-    with subprocess.Popen(argv, env=merged, text=True, stdin=subprocess.PIPE if input_data is not None else None, stdout=subprocess.PIPE,
-                          stderr=subprocess.PIPE, start_new_session=True, **identity_options) as process:
+    with ExitStack() as stack:
+        source = None
+        if input_data is not None:
+            # An anonymous memory file avoids credential storage on disk. Assign
+            # ownership before starting the child so /dev/stdin can be reopened
+            # by existing hooks after the UID switch, without a timing race.
+            descriptor = os.memfd_create("bkn-hook-input", os.MFD_CLOEXEC)
+            source = stack.enter_context(os.fdopen(descriptor, "w+b"))
+            source.write(input_data.encode("utf-8"))
+            source.flush()
+            source.seek(0)
+            os.fchown(descriptor, int(identity), int(identity))
+            os.fchmod(descriptor, 0o400)
+        process = stack.enter_context(subprocess.Popen(
+            argv, env=merged, text=True, stdin=source, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, start_new_session=True, **identity_options))
         try:
-            stdout, stderr = process.communicate(input=input_data, timeout=300)
+            stdout, stderr = process.communicate(timeout=300)
         except subprocess.TimeoutExpired:
             os.killpg(process.pid, signal.SIGKILL)
             process.communicate()
