@@ -20,7 +20,7 @@ _ENV = {'PATH', 'LANG', 'LC_ALL', 'TZ', 'BKN_BASE_URL', 'BKN_TOKEN',
 _LIMIT = 2 * 1024 * 1024
 
 
-def run_hook(sample_dir, script, run, environment):
+def run_hook(sample_dir, script, run, environment, *, input_data=None):
     relative = script.relative_to(sample_dir)
     with _lock:
         uid = next(_ids)
@@ -39,6 +39,10 @@ def run_hook(sample_dir, script, run, environment):
                    BKN_SAMPLE_CACHE=str(work / 'cache'), _BKN_HOOK_UID=str(uid))
         for key, name in _FILES.items():
             if key not in environment:
+                continue
+            if key == 'BKN_SAMPLE_INPUT' and input_data is not None:
+                env[key] = '/dev/stdin'
+                env['_BKN_HOOK_INPUT'] = input_data
                 continue
             env[key] = str(work / name)
             source = Path(environment[key])

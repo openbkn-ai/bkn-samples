@@ -86,7 +86,7 @@ class RuntimeTest(unittest.TestCase):
                 if "list" in argv:
                     return completed(json.dumps({"entries": []}))
                 return completed(json.dumps({"id": "cat-1", "name": "bkn-sample-supply-chain"}))
-            payload = json.loads(Path(env["BKN_SAMPLE_INPUT"]).read_text(encoding="utf-8"))
+            payload = json.loads(env["_BKN_HOOK_INPUT"])
             seen["password"] = payload["database"]["password"]
             seen["network"] = payload["knowledgeNetwork"]["id"]
             seen["hook_token"] = env.get("BKN_TOKEN")
