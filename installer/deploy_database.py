@@ -438,11 +438,16 @@ def deploy_database(
     ghcr = f"{GHCR_IMAGE}@{ghcr_digest}" if ghcr_digest and not require_ownership and not offline else None
     switched = image == ghcr
     state = "pending"
-    for _ in range(attempts):
+    for attempt in range(attempts):
         state = _pod_state(kubectl, sample, image)
         if state == "ready":
             break
         if offline and state in {"offline_image_missing", "image_pull_failed"}:
+            # A prior Never-pull failure can remain in Pod status briefly after
+            # the administrator imports the image locally. Let kubelet refresh it.
+            if attempt < min(3, attempts - 1):
+                sleep(poll_seconds)
+                continue
             raise DeployError("offline_image_missing", "Offline image is not present on the node. Import runtime/oci using the package runtime/prepare_offline.py; online pulling is disabled.")
         if state == "sample_data_unavailable":
             if not require_ownership:

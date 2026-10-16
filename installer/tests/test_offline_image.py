@@ -135,6 +135,16 @@ class OfflineImageTest(unittest.TestCase):
         self.assertEqual(caught.exception.code, 'offline_image_missing')
         self.assertFalse(kubectl.patched)
 
+    def test_retry_allows_kubelet_to_refresh_a_stale_missing_image_status(self):
+        image = 'ghcr.io/openbkn-ai/bkn-samples@sha256:' + 'a' * 64
+        kubectl = FakeKubectl(states=['image_pull_failed', 'ready'])
+        waits = []
+        with patch('installer.deploy_database.registry_digests', side_effect=AssertionError('registry forbidden')):
+            deploy_database(ROOT, 'supply-chain', kubectl, data_image_ref=image,
+                            offline=True, attempts=2, sleep=waits.append)
+        self.assertEqual(len(waits), 1)
+        self.assertFalse(kubectl.patched)
+
     def test_offline_deploy_requires_fixed_image(self):
         with patch('installer.deploy_database.configured_image_ref', return_value=None), \
              patch('installer.deploy_database.registry_digests', side_effect=AssertionError('registry forbidden')):
