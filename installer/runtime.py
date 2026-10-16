@@ -8,6 +8,9 @@ import os
 import re
 import subprocess
 import tempfile
+import signal
+
+from installer import shared_database
 from pathlib import Path
 
 from installer.control_plane import ControlError, create_installation, retry_installation
@@ -130,9 +133,9 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
         raise ApiError(403, "forbidden", "an administrator must install the sample")
     cli_env = caller_env(authorization)
     try:
-        deployed = deploy(sample)
-        _record_database_image(state_dir, sample, version, deployed)
-        database = database_config(deployed, kubectl)
+        if not shared_database.configured():
+            raise DeployError("runtime_upgrade_required", "The product sample database is not configured; upgrade the sample service Chart.")
+        database = shared_database.prepare(root, sample, version, state_dir, run)
         expected_tables, knowledge_network, components = sample_contract(root, sample)
         record = create_installation(
             sample=sample,
@@ -168,12 +171,9 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
                        "only a failed installation can be retried")
     cli_env = caller_env(authorization)
     try:
-        expected_image = data_image_ref if data_image_ref is not None else configured_image_ref()
-        if expected_image is not None and current.get("dataImageRef") and current["dataImageRef"] != expected_image:
-            raise ApiError(409, "version_changed", "retry requires the original configured data image")
-        deployed = deploy(sample)
-        _record_database_image(state_dir, sample, version, deployed)
-        database = database_config(deployed, kubectl)
+        if not shared_database.configured():
+            raise DeployError("runtime_upgrade_required", "The product sample database is not configured; upgrade the sample service Chart.")
+        database = shared_database.prepare(root, sample, version, state_dir, run)
         expected_tables, knowledge_network, components = sample_contract(root, sample)
         record = retry_installation(
             sample=sample,
@@ -198,14 +198,23 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
 
 
 def kubectl_run(argv: list[str], stdin: str | None = None) -> subprocess.CompletedProcess:
-    return subprocess.run(["kubectl", *argv], input=stdin, text=True, capture_output=True, check=False)
+    return subprocess.run(["kubectl", "--request-timeout=20s", *argv], input=stdin, text=True, capture_output=True, check=False, timeout=30)
 
 
 def process_run(argv: list[str], env: dict | None) -> subprocess.CompletedProcess:
     merged = os.environ.copy()
     if env:
         merged.update(env)
-    return subprocess.run(argv, env=merged, text=True, capture_output=True, check=False)
+    # Bound the whole hook process tree, including children spawned by shell scripts.
+    with subprocess.Popen(argv, env=merged, text=True, stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE, start_new_session=True) as process:
+        try:
+            stdout, stderr = process.communicate(timeout=300)
+        except subprocess.TimeoutExpired:
+            os.killpg(process.pid, signal.SIGKILL)
+            process.communicate()
+            raise ControlError("operation_timeout", "Sample operation timed out; retry the operation.") from None
+        return subprocess.CompletedProcess(argv, process.returncode, stdout, stderr)
 
 
 def deploy(root: Path, sample: str, data_image_ref: str | None = None,

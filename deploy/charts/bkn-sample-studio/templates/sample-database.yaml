@@ -1,0 +1,77 @@
+{{- $secretName := default "bkn-sample-database" .Values.sampleDatabase.existingSecret }}
+{{- if not .Values.sampleDatabase.existingSecret }}
+{{- $existing := lookup "v1" "Secret" .Release.Namespace $secretName }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $secretName }}
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+data:
+  mariadb-root-password: {{ if $existing }}{{ index $existing.data "mariadb-root-password" | quote }}{{ else }}{{ randAlphaNum 48 | b64enc | quote }}{{ end }}
+---
+{{- end }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: bkn-sample-database
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: bkn-sample-database
+  ports:
+    - name: mysql
+      port: 3306
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bkn-sample-database
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: bkn-sample-database
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bkn-sample-database
+  template:
+    metadata:
+      labels:
+        app: bkn-sample-database
+    spec:
+      containers:
+        - name: mariadb
+          image: "{{ .Values.sampleDatabase.image.repository }}{{ if .Values.sampleDatabase.image.digest }}@{{ .Values.sampleDatabase.image.digest }}{{ else }}:{{ .Values.sampleDatabase.image.tag }}{{ end }}"
+          imagePullPolicy: {{ .Values.sampleDatabase.image.pullPolicy }}
+          env:
+            - name: MARIADB_DATABASE
+              value: {{ .Values.sampleDatabase.registryDatabase | quote }}
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: mariadb-root-password
+          ports:
+            - name: mysql
+              containerPort: 3306
+          readinessProbe:
+            exec:
+              command: ["healthcheck.sh", "--connect", "--innodb_initialized"]
+            periodSeconds: 5
+            timeoutSeconds: 3
+          resources:
+            {{- toYaml .Values.sampleDatabase.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- if .Values.sampleDatabase.persistence.storageClass }}
+        storageClassName: {{ .Values.sampleDatabase.persistence.storageClass | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.sampleDatabase.persistence.size | quote }}

@@ -303,7 +303,7 @@ def main() -> None:
     configured_version = os.environ.get("BKN_SAMPLE_PLATFORM_VERSION", "").strip()
     configured_capabilities = os.environ.get("BKN_SAMPLE_PLATFORM_CAPABILITIES", "").strip()
     remote = RemoteInstallation(root, state_dir, configured_version,
-                                {"aarch64": "arm64", "arm64": "arm64", "x86_64": "amd64"}.get(platform.machine(), platform.machine()),
+                                {"aarch64": "arm64", "arm64": "arm64", "x86_64": "amd64", "AMD64": "amd64"}.get(platform.machine(), platform.machine()),
                                 configured_capabilities.split(",") if configured_capabilities else sorted(CAPABILITIES),
                                 os.environ.get("BKN_SAMPLE_EXECUTOR_IMAGE_REF", ""))
     offline = OfflinePackages(root, state_dir, remote)

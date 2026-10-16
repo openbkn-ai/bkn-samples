@@ -5,15 +5,25 @@ import re
 import time
 from urllib.error import HTTPError
 from urllib.parse import quote
-from urllib.request import Request, urlopen
+from urllib.request import Request, HTTPRedirectHandler, ProxyHandler, build_opener
 
 import yaml
 
+from installer import shared_database
 from installer.control_plane import catalog_name, ownership_tags
 from installer.deploy_database import NAMESPACE, _workload_name
 from installer.history import read_installation_history, record_terminal_installation
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, timestamp
+
+class _NoRedirect(HTTPRedirectHandler):
+    def redirect_request(self, request, response, code, message, headers, new_url):
+        return None
+
+
+# Cleanup only contacts the configured platform endpoint. Do not route through
+# a workstation proxy or follow an internal API redirect to an external site.
+urlopen = build_opener(ProxyHandler({}), _NoRedirect()).open
 
 SAMPLE_NAME_RE = re.compile(r"^[a-z0-9-]{1,32}$")
 
@@ -123,6 +133,17 @@ def prepare_uninstall(state_dir, sample, installation_id, role):
 def execute_uninstall(state_dir, sample, api, kubectl):
     record = _read_state(state_dir, sample)
     destination = state_dir / f"{sample}.json"
+    deadline = time.monotonic() + 300
+    original_api, original_kubectl = api, kubectl
+    def remaining():
+        if time.monotonic() >= deadline:
+            raise ApiError(500, "uninstall_failed", "Uninstall timed out; continue cleanup to resume from the recorded resources.")
+    def api(*args, **kwargs):
+        remaining()
+        return original_api(*args, **kwargs)
+    def kubectl(*args, **kwargs):
+        remaining()
+        return original_kubectl(*args, **kwargs)
     def checkpoint(stage, state):
         record["stages"][stage] = state
         write_json(destination, record)
@@ -162,19 +183,22 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                             for id_ in resources["ownedExecution"]["toolboxes"]]
         name = _workload_name(sample)
         database_resources = []
-        for kind, resource in (("statefulset", name), ("service", name), ("secret", name), ("pvc", f"data-{name}-0")):
-            result = kubectl(["get", kind, resource, "-n", NAMESPACE, "--ignore-not-found", "-o", "json"])
-            if result.returncode:
-                raise ApiError(500, "uninstall_failed", "Cannot check sample database ownership.")
-            if not (result.stdout or "").strip():
-                continue
-            value = json.loads(result.stdout)
-            annotations = value.get("metadata", {}).get("annotations", {})
-            expected = {"openbkn.ai/sample-id": sample, "openbkn.ai/sample-version": record["version"],
-                        "openbkn.ai/sample-data-image": record.get("dataImageRef")}
-            if not expected["openbkn.ai/sample-data-image"] or any(annotations.get(k) != v for k, v in expected.items()):
-                raise ApiError(409, "ownership_conflict", "Sample database ownership is missing or differs; nothing will be deleted.")
-            database_resources.append((kind, resource, value["metadata"]["uid"]))
+        if record.get("databaseRuntime"):
+            shared_database.validate_owner(record)
+        else:
+            for kind, resource in (("statefulset", name), ("service", name), ("secret", name), ("pvc", f"data-{name}-0")):
+                result = kubectl(["get", kind, resource, "-n", NAMESPACE, "--ignore-not-found", "-o", "json"])
+                if result.returncode:
+                    raise ApiError(500, "uninstall_failed", "Cannot check sample database ownership.")
+                if not (result.stdout or "").strip():
+                    continue
+                value = json.loads(result.stdout)
+                annotations = value.get("metadata", {}).get("annotations", {})
+                expected = {"openbkn.ai/sample-id": sample, "openbkn.ai/sample-version": record["version"],
+                            "openbkn.ai/sample-data-image": record.get("dataImageRef")}
+                if not expected["openbkn.ai/sample-data-image"] or any(annotations.get(k) != v for k, v in expected.items()):
+                    raise ApiError(409, "ownership_conflict", "Sample database ownership is missing or differs; nothing will be deleted.")
+                database_resources.append((kind, resource, value["metadata"]["uid"]))
         # Metrics are owned by the network scope, including user edits in this sample.
         metrics = []
         if network_path and _single(api("GET", network_path)) is not None:
@@ -202,10 +226,17 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                         method = "PUT" if "/skills/" in path else "POST"
                         api(method, path + "/status", {"status": "offline"})
                 api("DELETE", path)
-                if _single(api("GET", path)) is not None:
-                    raise ApiError(500, "uninstall_failed", "Resource deletion has not completed; retry the uninstall.")
+                for attempt in range(10):
+                    if _single(api("GET", path)) is None:
+                        break
+                    time.sleep(1)
+                else:
+                    raise ApiError(500, "uninstall_failed", "Resource deletion has not completed; continue the uninstall.")
             checkpoint(stage, "succeeded")
         checkpoint("database", "running")
+        if record.get("databaseRuntime"):
+            remaining()
+            shared_database.remove(record)
         for kind, resource, uid in database_resources:
             # UID preconditions prevent deleting a replacement with the same name.
             group = "/apis/apps/v1" if kind == "statefulset" else "/api/v1"
@@ -229,7 +260,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         checkpoint("verify", "succeeded")
         record.update(status="uninstalled", finishedAt=timestamp())
         record.pop("error", None)
-        for filename in ("owned-execution.json", "config.yaml"):
+        for filename in ("owned-execution.json", "config.yaml", "database-credentials.json"):
             (state_dir / sample / filename).unlink(missing_ok=True)
     except Exception as error:
         record.update(status="uninstall_failed", finishedAt=timestamp(),

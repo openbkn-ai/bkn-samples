@@ -1,47 +1,36 @@
-# Self-contained offline sample installation
+# Offline sample installation
 
-Offline installation must not contact GitHub, GHCR, a mirror, or any other external service. Calls to the already installed OpenBKN APIs and Kubernetes remain necessary. Online catalog installation is a separate path.
+The shared sample database patch for OpenBKN 0.2.0 separates the database server from sample content. Online and offline installations use one product-provisioned sample MariaDB server. Each sample has its own database and account; OpenBKN system databases are separate.
 
-## Package and preparation
+## User flow
 
-Use **offline-package.tar.gz**, format `samples.openbkn.ai/offline.v2`. It contains the sample data, native knowledge network, declared function/metric/Skill assets, release notes, every OCI image manifest/config/layer for its declared architectures, and a Python standard-library preparation tool. A URL or image digest alone is not an offline artifact. URL-only `offline.v1` packages are rejected; previously published bytes are not rewritten.
+1. Install or upgrade OpenBKN with the sample service Chart containing the shared sample database. Product offline delivery must include its runtime images, including MariaDB.
+2. Download the desired version's **offline-package.tar.gz** Release attachment on a connected machine and transfer it to the offline environment.
+3. In Studio → Home → One-click experience, import the package and click **Install**.
 
-The OpenBKN product and its infrastructure must already be installed. This package supplies the additional sample runtime, not a second platform installation.
+No node command, image import, registry connection, or dependency download is required by sample installation. The package includes data, native knowledge network, declared functions/metrics/Skills, installation scripts, release notes, and a complete file digest inventory. Existing OpenBKN services and the sample database must be available inside the environment.
 
-1. Transfer the package into the disconnected environment and extract it.
-2. On **each schedulable Kubernetes node**, use the node's existing containerd CLI and Python 3 to import the bundled image:
+## Installation, retry and uninstall
 
-   ```sh
-   python3 runtime/prepare_offline.py
-   # If the node uses k3s:
-   python3 runtime/prepare_offline.py --ctr 'k3s ctr'
-   # Or specify the existing containerd socket:
-   python3 runtime/prepare_offline.py --address /run/containerd/containerd.sock
-   ```
+The installer executes the manifest's existing `dbInit` and `dbVerify` hooks against the sample's scoped account, then uses the standard platform import and verification flow. Shared runtime packages require embedded data. Missing or damaged content fails locally; it must never fall back to downloading data or a sample image.
 
-   Run with the administrator permissions required by the installed runtime. The tool validates the exact image and every blob, streams a local OCI import into namespace `k8s.io`, and verifies the pinned image name. It never invokes pull, builds an image, contacts a registry, changes permissions, or installs a privileged service. Currently containerd is the supported node preparation path; other runtimes are not claimed.
-3. In Studio → Home → One-click experience → **Import offline package**, select the original `offline-package.tar.gz`, then click **Install**.
+Retry uses the original local package and ownership receipt. Uninstall uses recorded resource IDs and database ownership, independently of the package and official catalog. It removes only the sample's databases, account and platform resources; other samples, the database server and installation history remain. Internal service failures have bounded waits and leave a retryable failure.
 
-Node preparation is an explicit administrator step. Uploading a package to the application does not grant it host container-runtime access. Copy/import the image on every eligible node so rescheduling remains offline.
+Old per-sample database installations retain their original uninstall path. Uninstall them before installing a new shared-runtime version; no automatic migration is performed. Historical Release attachments are immutable. Old image-bearing offline.v2 packages remain inspectable, but the patched installer loads their embedded content into the shared runtime without running the bundled image or node tool. URL-only offline.v1 packages remain unsupported.
 
-## Installation and retry
+## Publisher flow
 
-Both paths use only the imported package and set the sample database's `imagePullPolicy: Never`. Missing local images fail with `offline_image_missing` and instructions to import from the package. Retry preserves the same package/image identity, revalidates its local contents, and never falls back to online installation or another registry. Importing the image locally after a missing-image failure allows the normal retry action to continue.
-
-The upload limit is 1 GiB and expanded contents are bounded at 2 GiB. Image hashes are streamed, not loaded entirely into service memory. The offline cache is bounded at 3 GiB; allow space for temporary extraction and staging as well. Size the existing state volume for the packages you retain (for three maximum-size packages, allow at least 6 GiB free during import). Existing PVCs are not silently resized. The bundled OCI tool also needs local temporary disk space for an uncompressed OCI transport archive.
-
-## Building on the connected publisher machine
+Add release notes for a new version, then prepare both delivery archives and the candidate manifest:
 
 ```sh
-# Resolve and review IMAGE_REF as an immutable registry/repository@sha256 reference.
-skopeo copy --all --preserve-digests "docker://$IMAGE_REF" oci:/tmp/sample-oci:sample
-PYTHONPATH=. python3 tools/publication/build_candidate.py samples/world-cup-en \
-  --version 0.1.0 --output /tmp/offline-candidate \
-  --data-image-ref "$IMAGE_REF" --image-layout /tmp/sample-oci
+PYTHONPATH=. python3 tools/publication/prepare_shared_release.py \
+  samples/world-cup-en --version NEW_VERSION --output /absolute/path/to/candidates
 ```
 
-The builder verifies the complete blob closure and derives supported Linux architectures from the bundled image. It produces `offline-package.tar.gz`. Build the lean online `package.tar.gz` separately without either image flag; its existing catalog URL, digest and size limits remain unchanged. Publish the complete offline asset as an additional release attachment after actual disconnected acceptance. Do not replace existing release assets or alter immutable historical proofs.
+The command produces online `package.tar.gz`, offline `offline-package.tar.gz`, and a candidate `sample.json`. The online manifest declares `database.shared` and points its data dependency to the archive. No sample image is required. Older sample services reject the new required capability rather than attempting an incompatible installation.
+
+These outputs are candidates, not acceptance evidence. Verify the exact package digests, submit release metadata and real verification receipts through PR review, publish new Release attachments, and update the pinned official catalog. Never overwrite existing version assets or fabricate successful verification.
 
 ## Required acceptance
 
-Begin with the sample image absent from the target runtime and block external traffic at the node and application boundaries. Verify that installation fails locally without pulling. Import the image from the same package, retry successfully, verify actual data/network and declared capabilities, uninstall, and reinstall while external traffic stays blocked. Inspect pull policies, task history, old resource absence, and traffic evidence. A warm-cache installation, mocked networking, or an unreachable URL alone does not establish offline acceptance.
+With the product already running, remove all sample-specific image caches and block external access. Import, install, retry, uninstall, and reinstall every sample. Verify actual data, knowledge networks and declared functions/metrics/Skills. Keep another sample installed while uninstalling one and verify that its data and resources remain usable. Delete the offline package and make the official catalog unavailable, then verify uninstall still works. Simulate unavailable internal services and ensure operations finish with a retryable failure instead of remaining in progress indefinitely.

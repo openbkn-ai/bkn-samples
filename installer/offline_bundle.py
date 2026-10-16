@@ -27,12 +27,17 @@ class OfflinePackages:
         descriptor = directory / "offline-release.json"
         require(descriptor.stat().st_size <= 2 * 1024 * 1024, "offline metadata exceeds size limit")
         release = json.loads(descriptor.read_text(), object_pairs_hook=object_pairs)
-        require(release.get("apiVersion") == "samples.openbkn.ai/offline.v2", "requires a self-contained offline.v2 package with bundled image layers")
+        require(release.get("apiVersion") == "samples.openbkn.ai/offline.v2", "requires a self-contained offline.v2 package")
         require(isinstance(release.get("version"), str) and re.fullmatch(r"\d+\.\d+\.\d+", release["version"]),
                 "invalid offline version")
-        require(isinstance(release.get("dataImageRef"), str) and
-                re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[a-f0-9]{64}", release["dataImageRef"]),
-                "offline data image must have a fixed digest")
+        shared = release.get("databaseRuntime") == "shared-mariadb"
+        if shared:
+            require("database.shared" in release["requires"]["capabilities"], "missing shared database capability")
+            require(not release.get("dataImageRef"), "shared runtime packages must not require a sample image")
+        else:
+            require(isinstance(release.get("dataImageRef"), str) and
+                    re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[a-f0-9]{64}", release["dataImageRef"]),
+                    "legacy offline data image must have a fixed digest")
         compatibility(release["requires"], self.runtime.platform_version,
                       self.runtime.architecture, self.runtime.capabilities)
         document = load_sample(directory)
@@ -51,8 +56,9 @@ class OfflinePackages:
         require(actual == set(expected), "offline file inventory differs")
         for path, expected_digest in expected.items():
             require(file_sha(directory / path) == expected_digest, "offline file digest differs")
-        require((directory / "runtime/prepare_offline.py").is_file(), "offline image preparation tool is missing")
-        validate_layout(directory / "runtime/oci", release["dataImageRef"], release["requires"]["architectures"])
+        if not shared:
+            require((directory / "runtime/prepare_offline.py").is_file(), "offline image preparation tool is missing")
+            validate_layout(directory / "runtime/oci", release["dataImageRef"], release["requires"]["architectures"])
         notes = []
         for note in release["releaseNotes"]:
             require(re.fullmatch(r"[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*", note["locale"]), "invalid notes locale")
@@ -65,7 +71,7 @@ class OfflinePackages:
         require(notes and len({n["locale"] for n in notes}) == len(notes), "missing or duplicate notes")
         return {"sample": document["metadata"]["name"], "version": release["version"],
                 "packageDigest": digest, "manifestSha256": sha((directory / "sample.yaml").read_bytes())[7:],
-                "document": document, "dataImageRef": release["dataImageRef"],
+                "document": document, "dataImageRef": release.get("dataImageRef"),
                 "releaseNotes": {"version": release["version"], "defaultLocale": notes[0]["locale"], "documents": notes}}
 
     def import_package(self, archive, role):
@@ -94,7 +100,7 @@ class OfflinePackages:
                 staged.rename(destination)
                 return {"sample": release["sample"], "version": release["version"], "packageDigest": digest}
             except (ValueError, KeyError, TypeError, OSError) as error:
-                raise ApiError(400, "invalid_package", "Offline package is invalid, incomplete, or conflicts with an imported package. Use a self-contained offline.v2 package including OCI image layers.") from error
+                raise ApiError(400, "invalid_package", "Offline package is invalid, incomplete, or conflicts with an imported package. Use a complete offline.v2 package with embedded sample data.") from error
 
     def releases(self):
         return [json.loads(p.read_text()) for p in sorted(self.directory.glob("*/release.json"))]
@@ -161,7 +167,7 @@ class OfflinePackages:
             current = {"id": f"inst-{sample}", "sample": sample, "version": release["version"],
                        "status": "installing", "stages": {}, "startedAt": timestamp(),
                        "manifestSha256": release["manifestSha256"], "packageDigest": release["packageDigest"],
-                       "dataImageRef": release["dataImageRef"], "releaseNotesSnapshot": release["releaseNotes"],
+                       "dataImageRef": release.get("dataImageRef"), "releaseNotesSnapshot": release["releaseNotes"],
                        "offlineRelease": {"packageDigest": release["packageDigest"],
                                           "executorDigest": executor_digest(self.root),
                                           "executorImage": self.runtime.executor_image}}
@@ -176,4 +182,4 @@ class OfflinePackages:
                             max_archive=MAX_OFFLINE_ARCHIVE, max_content=MAX_OFFLINE_CONTENT, max_file=MAX_OFFLINE_FILE)
             require(self.inspect(sample_dir, release["packageDigest"]) == release, "cached offline package changed")
             (root / "VERSION").write_text(release["version"])
-            return install(root, release["version"], release["dataImageRef"], retry)
+            return install(root, release["version"], release.get("dataImageRef"), retry)
