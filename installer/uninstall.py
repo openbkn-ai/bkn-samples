@@ -37,14 +37,21 @@ def platform_client(authorization):
         request = Request(base + path, method=method,
                           data=json.dumps(body).encode() if body is not None else None,
                           headers={"Authorization": authorization, "Content-Type": "application/json"})
-        try:
-            with urlopen(request, timeout=30) as response:
-                raw = response.read()
-                return json.loads(raw) if raw else {}
-        except HTTPError as error:
-            if error.code == 404:
-                return None
-            raise ApiError(500, "uninstall_failed", "Platform resource operation failed; retry the uninstall.") from None
+        for attempt in range(2):
+            try:
+                with urlopen(request, timeout=30) as response:
+                    raw = response.read()
+                    return json.loads(raw) if raw else {}
+            except HTTPError as error:
+                error.close()
+                if error.code == 404:
+                    return None
+                # DELETE is idempotent. Retry a platform conflict only once;
+                # a persistent conflict must remain a visible uninstall failure.
+                if method == "DELETE" and error.code == 409 and attempt == 0:
+                    time.sleep(1)
+                    continue
+                raise ApiError(500, "uninstall_failed", "Platform resource operation failed; retry the uninstall.") from None
     return call
 
 
