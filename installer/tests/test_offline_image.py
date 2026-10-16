@@ -186,7 +186,7 @@ class OfflineImageTest(unittest.TestCase):
             env = {'BKN_SAMPLES_ROOT': str(ROOT), 'BKN_SAMPLE_STATE_DIR': str(state),
                    'BKN_SAMPLE_PLATFORM_VERSION': '0.2.0', 'BKN_SAMPLE_PLATFORM_CAPABILITIES': '',
                    'BKN_SAMPLE_DATA_IMAGE_REF': '',
-                   'BKN_SAMPLE_EXECUTOR_IMAGE_REF': 'ghcr.io/openbkn-ai/executor@sha256:' + 'e' * 64}
+                   'BKN_SAMPLE_EXECUTOR_IMAGE_REF': 'ghcr.io/openbkn-ai/executor:0.2.0'}
             index = build_manifest_index(ROOT, 'a' * 40)
             with patch.dict('os.environ', env), \
                  patch('installer.studio_http.serve', side_effect=lambda app, *args: apps.append(app)), \
