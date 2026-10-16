@@ -27,7 +27,7 @@ PYTHONPATH=. python3 tools/publication/prepare_shared_release.py \
   samples/world-cup-en --version NEW_VERSION --output /absolute/path/to/candidates
 ```
 
-The command produces one self-contained `package.tar.gz` and a candidate `sample.json`. Online installation downloads this archive; offline installation imports the exact same bytes and digest. The online manifest declares `database.shared` and points its data dependency to the archive. No sample image is required. Older sample services reject the new required capability rather than attempting an incompatible installation.
+The command produces one self-contained `package.tar.gz` and a candidate `sample.json`. Online installation downloads this archive; offline installation imports the exact same bytes and digest. The unified archive uses the existing online compressed-size limit of 128 MiB; oversized candidates are rejected during construction. The online manifest declares `database.shared` and points its data dependency to the archive. No sample image is required. Older sample services reject the new required capability rather than attempting an incompatible installation.
 
 These outputs are candidates, not acceptance evidence. Verify the exact package digests, submit release metadata and real verification receipts through PR review, publish new Release attachments, and update the pinned official catalog. Never overwrite existing version assets or fabricate successful verification.
 

@@ -86,6 +86,23 @@ class SharedDatabaseTest(unittest.TestCase):
             db.remove(dict(sample='sample', version='0.1.0', databaseRuntime=receipt))
         self.assertFalse(any(call.args[0].startswith('DROP') for call in self.cursor.execute.call_args_list))
 
+    def test_shared_package_enforces_online_archive_limit(self):
+        from tools.publication import build_candidate
+        from installer.remote_bundle import MAX_ARCHIVE
+        self.assertEqual(build_candidate.MAX_ARCHIVE, MAX_ARCHIVE)
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary).resolve()
+            sample = ROOT / 'samples/order-basics'
+            reference = build(sample, '0.1.3', output / 'reference', shared_database=True)
+            size = (reference / 'package.tar.gz').stat().st_size
+            with patch.object(build_candidate, 'MAX_ARCHIVE', size):
+                accepted = build(sample, '0.1.3', output / 'boundary', shared_database=True)
+                self.assertEqual((accepted / 'package.tar.gz').stat().st_size, size)
+            with patch.object(build_candidate, 'MAX_ARCHIVE', size - 1):
+                with self.assertRaisesRegex(ValueError, 'delivery size limit'):
+                    build(sample, '0.1.3', output / 'oversize', shared_database=True)
+            self.assertFalse((output / 'oversize' / sample.name / '0.1.3').exists())
+
     def test_release_uses_one_self_contained_package(self):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary).resolve()

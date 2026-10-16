@@ -14,6 +14,7 @@ from pathlib import Path
 import yaml
 
 from installer.offline_image import file_sha, validate_layout, MAX_OFFLINE_ARCHIVE
+from installer.remote_bundle import MAX_ARCHIVE
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
@@ -180,7 +181,7 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
                                 tar.addfile(info, source)
                         else:
                             tar.addfile(info, io.BytesIO(data))
-        archive_limit = MAX_OFFLINE_ARCHIVE if image_layout is not None or shared_database else 128 * 1024 * 1024
+        archive_limit = MAX_OFFLINE_ARCHIVE if image_layout is not None else MAX_ARCHIVE
         require(archive.stat().st_size <= archive_limit, "candidate archive exceeds its delivery size limit")
         report = {
             "status": "candidate-not-verified",

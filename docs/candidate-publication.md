@@ -11,7 +11,7 @@ PYTHONPATH=. python3 tools/publication/prepare_shared_release.py \
   samples/world-cup-en --version NEW_VERSION --output /absolute/path/to/candidates
 ```
 
-工具复用此前审核过的发布清单，生成一份完整自包含的 `package.tar.gz` 和候选 `sample.json`。在线安装下载这份包，离线安装上传同一份包，二者使用同一摘要。它不发布制品、不生成成功验收证明，也不更新官方目录。当前交付要求数据内置，已有知识网络格式、内容分组、绑定和体验入口保持原标准。
+工具复用此前审核过的发布清单，生成一份完整自包含的 `package.tar.gz` 和候选 `sample.json`。在线安装下载这份包，离线安装上传同一份包，二者使用同一摘要。统一包遵守在线安装现有的 128 MiB 压缩大小上限，超限在构建阶段拒绝。它不发布制品、不生成成功验收证明，也不更新官方目录。当前交付要求数据内置，已有知识网络格式、内容分组、绑定和体验入口保持原标准。
 
 新清单要求 `database.shared`，数据依赖指向 archive。数据库运行环境由产品提供，不再构建或发布样例专属数据库镜像。旧运行服务因不支持新能力而拒绝该版本；先安装产品补丁。历史包和元数据不改写。
 
