@@ -93,7 +93,7 @@ class SharedDatabaseTest(unittest.TestCase):
                           key=lambda value: tuple(map(int, value.split('.'))))
             candidate = build(sample_dir, version, output / 'build', shared_database=True)
             runtime = RemoteInstallation(ROOT, output / 'state', '0.2.0', 'arm64', CAPABILITIES,
-                                         'registry.example/executor@sha256:' + 'a' * 64)
+                                         'ghcr.io/openbkn-ai/bkn-sample-studio:0.2.0')
             packages = OfflinePackages(ROOT, output / 'state', runtime)
             imported = packages.import_package(candidate / 'offline-package.tar.gz', 'admin')
             release = packages.find(imported['sample'])
