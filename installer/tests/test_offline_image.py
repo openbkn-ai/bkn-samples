@@ -167,7 +167,7 @@ class OfflineImageTest(unittest.TestCase):
                 ['vega.catalog', 'knowledge-network.import.kn-json', 'execution.function', 'execution.skill'],
                 'ghcr.io/openbkn-ai/executor@sha256:' + 'e' * 64)
             offline = OfflinePackages(ROOT, temporary / 'state', runtime)
-            offline.import_package(candidate / 'offline-package.tar.gz', 'admin')
+            offline.import_package(candidate / 'package.tar.gz', 'admin')
             release = offline.find('supply-chain')
             observed = []
             offline.execute(release, lambda root, version, image, retry: observed.append((version, image, retry)))
@@ -208,7 +208,7 @@ class OfflineImageTest(unittest.TestCase):
                  patch('installer.catalog_source.read_url', side_effect=AssertionError('catalog network forbidden')):
                 main()
                 app = apps[0]
-                app.import_package(candidate / 'offline-package.tar.gz', 'admin')
+                app.import_package(candidate / 'package.tar.gz', 'admin')
                 release = OfflinePackages(ROOT, state, None).find('supply-chain')
                 app.create_selected('supply-chain', 'admin', None, '0.1.4', release['manifestSha256'])
                 self.assertTrue(runners[0].locks['supply-chain'].acquire(timeout=5))

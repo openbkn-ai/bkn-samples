@@ -166,7 +166,7 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
     require(not target.exists(), "candidate already exists; use a fresh output directory")
     temporary = Path(tempfile.mkdtemp(prefix=".candidate-", dir=target.parent))
     try:
-        archive = temporary / ("offline-package.tar.gz" if image_layout is not None or shared_database else "package.tar.gz")
+        archive = temporary / "package.tar.gz"
         with archive.open("wb") as stream:
             with gzip.GzipFile(filename="", mode="wb", fileobj=stream, mtime=0) as compressed:
                 with tarfile.open(fileobj=compressed, mode="w", format=tarfile.USTAR_FORMAT) as tar:
