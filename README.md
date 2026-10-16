@@ -28,10 +28,11 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 | [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Online catalog |
 | [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Online catalog |
 | [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | Offline release only; requires OpenBKN ≥ 0.2.1 |
+| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 仅离线发布；要求 OpenBKN ≥ 0.2.1 |
 
 The [official catalog](catalog.json) determines downloadable versions for the published samples.
 
-This manufacturing sample is intentionally kept out of the official catalog and legacy `020` discovery. Import its fixed offline package only after loading the matching data image into the target cluster.
+The two manufacturing samples are intentionally kept out of the official catalog and legacy `020` discovery. Import their fixed offline package only after loading its matching data image into the target cluster; they install independently and can coexist because they use separate databases and knowledge-network IDs.
 
 World Cup data is a locked historical snapshot covering men's editions through 2022 and women's editions through 2019. Detailed coverage varies by table. See each sample's README for its data scope, license and scenario assumptions.
 

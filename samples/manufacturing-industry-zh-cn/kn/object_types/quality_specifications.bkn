@@ -1,0 +1,29 @@
+---
+type: object_type
+id: quality_specifications
+name: 质量规格
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: 质量规格
+
+业务对象 in the end-to-end manufacturing sample.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| quality_specification_id | quality_specification_id | string | 业务对象. | quality_specification_id |
+| product_id | product_id | string | 业务对象. | product_id |
+| characteristic_name | characteristic_name | string | 业务对象. | characteristic_name |
+| target_value | target_value | decimal | 业务对象. | target_value |
+| lower_limit | lower_limit | decimal | 业务对象. | lower_limit |
+| upper_limit | upper_limit | decimal | 业务对象. | upper_limit |
+| effective_date | effective_date | date | 业务对象. | effective_date |
+| status | status | string | 业务对象. | status |
+
+### Keys
+
+Primary Keys: quality_specification_id
+Display Key: quality_specification_id
+Incremental Key:

@@ -1,0 +1,19 @@
+---
+type: knowledge_network
+id: iof_core_production_planning_reference
+name: IOF 核心与生产计划完整参考
+tags: [manufacturing, iof, reference, production_planning]
+version: 202603
+branch: main
+---
+
+# IOF 核心与生产计划完整参考
+
+此网络是固定 IOF Core 与 Production Planning Reference Ontology 的结构性 BKN 投影。它完整编目源文件中的具名类和对象属性，并保留 IRI、标签和定义。BKN 不执行 IOF/BFO 的 OWL 公理、限制、等价、互斥、逆属性或属性链；详见语义差异文档。
+
+## Network Overview
+
+- **ObjectTypes** (112): all named classes in the fixed IOF modules
+- **RelationTypes** (7): named object properties whose explicit direct domain and range are each one named class in the fixed modules
+- **Unprojected OWL properties** (78): fully retained in `docs/unprojected-owl-relations_cn.md`; they have an external, anonymous, missing, or non-single endpoint and are not represented as a fabricated BKN relation
+- **ConceptGroups** (2): IOF Core and IOF Production Planning

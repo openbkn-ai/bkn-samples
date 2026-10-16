@@ -1,0 +1,26 @@
+---
+type: object_type
+id: sales_orders
+name: 销售订单
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: 销售订单
+
+制造业端到端样例中的业务对象。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| sales_order_id | sales_order_id | string | 稳定业务标识或业务属性。 | sales_order_id |
+| customer_id | customer_id | string | 稳定业务标识或业务属性。 | customer_id |
+| order_date | order_date | date | 稳定业务标识或业务属性。 | order_date |
+| requested_delivery_date | requested_delivery_date | date | 稳定业务标识或业务属性。 | requested_delivery_date |
+| status | status | string | 稳定业务标识或业务属性。 | status |
+
+### Keys
+
+Primary Keys: sales_order_id
+Display Key: sales_order_id
+Incremental Key:

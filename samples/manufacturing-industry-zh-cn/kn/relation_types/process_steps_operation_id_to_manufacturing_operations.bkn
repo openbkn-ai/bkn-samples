@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: process_steps_operation_id_to_manufacturing_operations
+name: process_steps_operation_id_to_manufacturing_operations
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: process_steps_operation_id_to_manufacturing_operations
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| process_steps | manufacturing_operations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| operation_id | operation_id |

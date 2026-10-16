@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: generalizes
+name: 泛化
+tags: [iof, core]
+---
+
+## RelationType: 泛化
+
+来源 IRI：`https://spec.industrialontologies.org/ontology/construct/generalizes`。来源定义：relation between two classifiers such that everything classified by the latter is also classified by the former。此 BKN 投影使用 `generalizes_target_id` 保存目标实体 ID。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| classifier | classifier | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| generalizes_target_id | entity_id |

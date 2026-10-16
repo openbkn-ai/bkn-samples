@@ -1,0 +1,26 @@
+---
+type: object_type
+id: demand_forecasts
+name: 需求预测
+tags: [manufacturing, industry_sample]
+---
+
+## ObjectType: 需求预测
+
+制造业端到端样例中的业务对象。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| forecast_id | forecast_id | string | 稳定业务标识或业务属性。 | forecast_id |
+| product_id | product_id | string | 稳定业务标识或业务属性。 | product_id |
+| forecast_period | forecast_period | date | 稳定业务标识或业务属性。 | forecast_period |
+| forecast_quantity | forecast_quantity | decimal | 稳定业务标识或业务属性。 | forecast_quantity |
+| unit | unit | string | 稳定业务标识或业务属性。 | unit |
+
+### Keys
+
+Primary Keys: forecast_id
+Display Key: forecast_id
+Incremental Key:

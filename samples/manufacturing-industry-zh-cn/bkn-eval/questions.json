@@ -1,0 +1,802 @@
+[
+  {
+    "id": "MFG-001",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "What manufacturing site is used by the sample?",
+    "question_zh_cn": "样例使用哪个制造基地？",
+    "expected_answer": "SITE-SZ-01"
+  },
+  {
+    "id": "MFG-002",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which work center performs finish machining?",
+    "question_zh_cn": "哪个工作中心执行精加工？",
+    "expected_answer": "WC-MACH"
+  },
+  {
+    "id": "MFG-003",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "What finished product does WO-1001 produce?",
+    "question_zh_cn": "WO-1001 生产什么成品？",
+    "expected_answer": "PROD-PUMP-HOUSING"
+  },
+  {
+    "id": "MFG-004",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which BOM version is released for the pump housing?",
+    "question_zh_cn": "泵壳产品已发布哪个 BOM 版本？",
+    "expected_answer": "BOMV-PUMP-H100-01"
+  },
+  {
+    "id": "MFG-005",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which routing is frozen on WO-1001?",
+    "question_zh_cn": "WO-1001 固化了哪条工艺路线？",
+    "expected_answer": "ROUTE-PUMP-H100-01"
+  },
+  {
+    "id": "MFG-006",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which customer placed SO-2026-001?",
+    "question_zh_cn": "哪个客户下达了 SO-2026-001？",
+    "expected_answer": "CUST-001"
+  },
+  {
+    "id": "MFG-007",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "What is the forecast period and quantity for the pump housing?",
+    "question_zh_cn": "泵壳产品的预测期间和数量是多少？",
+    "expected_answer": "2026 年 11 月：280 件"
+  },
+  {
+    "id": "MFG-008",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which supplier supplies the aluminum block?",
+    "question_zh_cn": "哪个供应商供应铝块？",
+    "expected_answer": "SUP-001"
+  },
+  {
+    "id": "MFG-009",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which receipt accepted the aluminum block?",
+    "question_zh_cn": "哪条收货记录接收了铝块？",
+    "expected_answer": "GR-001"
+  },
+  {
+    "id": "MFG-010",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "What is the finished-goods on-hand balance?",
+    "question_zh_cn": "成品现存余额是多少？",
+    "expected_answer": "120 件"
+  },
+  {
+    "id": "MFG-011",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which sales-order line drives WO-1001?",
+    "question_zh_cn": "哪条销售订单行驱动 WO-1001？",
+    "expected_answer": "SOL-001"
+  },
+  {
+    "id": "MFG-012",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "How much aluminum is issued to WO-1001?",
+    "question_zh_cn": "WO-1001 已发放多少铝料？",
+    "expected_answer": "122 EA"
+  },
+  {
+    "id": "MFG-013",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "What is the sequence of final inspection?",
+    "question_zh_cn": "最终检验的工序顺序号是多少？",
+    "expected_answer": "20"
+  },
+  {
+    "id": "MFG-014",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which capability is required by STEP-1001-10-A?",
+    "question_zh_cn": "STEP-1001-10-A 需要什么能力？",
+    "expected_answer": "CAP-CNC-MILL"
+  },
+  {
+    "id": "MFG-015",
+    "level": "easy_basic",
+    "category": "business_lookup",
+    "question_en": "Which machine executes final inspection?",
+    "question_zh_cn": "哪台设备执行最终检验？",
+    "expected_answer": "MACH-CMM-01"
+  },
+  {
+    "id": "MFG-016",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: What manufacturing site is used by the sample?",
+    "question_zh_cn": "以下事实支持什么业务判断：样例使用哪个制造基地？",
+    "expected_answer": "SITE-SZ-01"
+  },
+  {
+    "id": "MFG-017",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which work center performs finish machining?",
+    "question_zh_cn": "以下事实支持什么业务判断：哪个工作中心执行精加工？",
+    "expected_answer": "WC-MACH"
+  },
+  {
+    "id": "MFG-018",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: What finished product does WO-1001 produce?",
+    "question_zh_cn": "以下事实支持什么业务判断：WO-1001 生产什么成品？",
+    "expected_answer": "PROD-PUMP-HOUSING"
+  },
+  {
+    "id": "MFG-019",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which BOM version is released for the pump housing?",
+    "question_zh_cn": "以下事实支持什么业务判断：泵壳产品已发布哪个 BOM 版本？",
+    "expected_answer": "BOMV-PUMP-H100-01"
+  },
+  {
+    "id": "MFG-020",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which routing is frozen on WO-1001?",
+    "question_zh_cn": "以下事实支持什么业务判断：WO-1001 固化了哪条工艺路线？",
+    "expected_answer": "ROUTE-PUMP-H100-01"
+  },
+  {
+    "id": "MFG-021",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which customer placed SO-2026-001?",
+    "question_zh_cn": "以下事实支持什么业务判断：哪个客户下达了 SO-2026-001？",
+    "expected_answer": "CUST-001"
+  },
+  {
+    "id": "MFG-022",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: What is the forecast period and quantity for the pump housing?",
+    "question_zh_cn": "以下事实支持什么业务判断：泵壳产品的预测期间和数量是多少？",
+    "expected_answer": "2026 年 11 月：280 件"
+  },
+  {
+    "id": "MFG-023",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which supplier supplies the aluminum block?",
+    "question_zh_cn": "以下事实支持什么业务判断：哪个供应商供应铝块？",
+    "expected_answer": "SUP-001"
+  },
+  {
+    "id": "MFG-024",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which receipt accepted the aluminum block?",
+    "question_zh_cn": "以下事实支持什么业务判断：哪条收货记录接收了铝块？",
+    "expected_answer": "GR-001"
+  },
+  {
+    "id": "MFG-025",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: What is the finished-goods on-hand balance?",
+    "question_zh_cn": "以下事实支持什么业务判断：成品现存余额是多少？",
+    "expected_answer": "120 件"
+  },
+  {
+    "id": "MFG-026",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which sales-order line drives WO-1001?",
+    "question_zh_cn": "以下事实支持什么业务判断：哪条销售订单行驱动 WO-1001？",
+    "expected_answer": "SOL-001"
+  },
+  {
+    "id": "MFG-027",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: How much aluminum is issued to WO-1001?",
+    "question_zh_cn": "以下事实支持什么业务判断：WO-1001 已发放多少铝料？",
+    "expected_answer": "122 EA"
+  },
+  {
+    "id": "MFG-028",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: What is the sequence of final inspection?",
+    "question_zh_cn": "以下事实支持什么业务判断：最终检验的工序顺序号是多少？",
+    "expected_answer": "20"
+  },
+  {
+    "id": "MFG-029",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which capability is required by STEP-1001-10-A?",
+    "question_zh_cn": "以下事实支持什么业务判断：STEP-1001-10-A 需要什么能力？",
+    "expected_answer": "CAP-CNC-MILL"
+  },
+  {
+    "id": "MFG-030",
+    "level": "easy_basic",
+    "category": "business_explanation",
+    "question_en": "What business decision can be supported by this fact: Which machine executes final inspection?",
+    "question_zh_cn": "以下事实支持什么业务判断：哪台设备执行最终检验？",
+    "expected_answer": "MACH-CMM-01"
+  },
+  {
+    "id": "MFG-031",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does bill_of_materials_bom_version_id_to_product_bom_versions connect bill_of_materials to product_bom_versions?",
+    "question_zh_cn": "bill_of_materials_bom_version_id_to_product_bom_versions 如何将 bill_of_materials 关联到 product_bom_versions？",
+    "expected_answer": "bill_of_materials.bom_version_id → product_bom_versions.bom_version_id"
+  },
+  {
+    "id": "MFG-032",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does bom_components_bom_id_to_bill_of_materials connect bom_components to bill_of_materials?",
+    "question_zh_cn": "bom_components_bom_id_to_bill_of_materials 如何将 bom_components 关联到 bill_of_materials？",
+    "expected_answer": "bom_components.bom_id → bill_of_materials.bom_id"
+  },
+  {
+    "id": "MFG-033",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does bom_components_component_product_id_to_products connect bom_components to products?",
+    "question_zh_cn": "bom_components_component_product_id_to_products 如何将 bom_components 关联到 products？",
+    "expected_answer": "bom_components.component_product_id → products.product_id"
+  },
+  {
+    "id": "MFG-034",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does demand_forecasts_product_id_to_products connect demand_forecasts to products?",
+    "question_zh_cn": "demand_forecasts_product_id_to_products 如何将 demand_forecasts 关联到 products？",
+    "expected_answer": "demand_forecasts.product_id → products.product_id"
+  },
+  {
+    "id": "MFG-035",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does finished_goods_receipts_inspection_lot_id_to_quality_inspection_lots connect finished_goods_receipts to quality_inspection_lots?",
+    "question_zh_cn": "finished_goods_receipts_inspection_lot_id_to_quality_inspection_lots 如何将 finished_goods_receipts 关联到 quality_inspection_lots？",
+    "expected_answer": "finished_goods_receipts.inspection_lot_id → quality_inspection_lots.inspection_lot_id"
+  },
+  {
+    "id": "MFG-036",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does finished_goods_receipts_inventory_location_id_to_inventory_locations connect finished_goods_receipts to inventory_locations?",
+    "question_zh_cn": "finished_goods_receipts_inventory_location_id_to_inventory_locations 如何将 finished_goods_receipts 关联到 inventory_locations？",
+    "expected_answer": "finished_goods_receipts.inventory_location_id → inventory_locations.inventory_location_id"
+  },
+  {
+    "id": "MFG-037",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does finished_goods_receipts_production_order_id_to_production_orders connect finished_goods_receipts to production_orders?",
+    "question_zh_cn": "finished_goods_receipts_production_order_id_to_production_orders 如何将 finished_goods_receipts 关联到 production_orders？",
+    "expected_answer": "finished_goods_receipts.production_order_id → production_orders.production_order_id"
+  },
+  {
+    "id": "MFG-038",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does goods_receipts_inventory_location_id_to_inventory_locations connect goods_receipts to inventory_locations?",
+    "question_zh_cn": "goods_receipts_inventory_location_id_to_inventory_locations 如何将 goods_receipts 关联到 inventory_locations？",
+    "expected_answer": "goods_receipts.inventory_location_id → inventory_locations.inventory_location_id"
+  },
+  {
+    "id": "MFG-039",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does goods_receipts_product_id_to_products connect goods_receipts to products?",
+    "question_zh_cn": "goods_receipts_product_id_to_products 如何将 goods_receipts 关联到 products？",
+    "expected_answer": "goods_receipts.product_id → products.product_id"
+  },
+  {
+    "id": "MFG-040",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does goods_receipts_purchase_order_line_id_to_purchase_order_lines connect goods_receipts to purchase_order_lines?",
+    "question_zh_cn": "goods_receipts_purchase_order_line_id_to_purchase_order_lines 如何将 goods_receipts 关联到 purchase_order_lines？",
+    "expected_answer": "goods_receipts.purchase_order_line_id → purchase_order_lines.purchase_order_line_id"
+  },
+  {
+    "id": "MFG-041",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does inventory_balances_inventory_location_id_to_inventory_locations connect inventory_balances to inventory_locations?",
+    "question_zh_cn": "inventory_balances_inventory_location_id_to_inventory_locations 如何将 inventory_balances 关联到 inventory_locations？",
+    "expected_answer": "inventory_balances.inventory_location_id → inventory_locations.inventory_location_id"
+  },
+  {
+    "id": "MFG-042",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does inventory_balances_product_id_to_products connect inventory_balances to products?",
+    "question_zh_cn": "inventory_balances_product_id_to_products 如何将 inventory_balances 关联到 products？",
+    "expected_answer": "inventory_balances.product_id → products.product_id"
+  },
+  {
+    "id": "MFG-043",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does inventory_locations_site_id_to_manufacturing_sites connect inventory_locations to manufacturing_sites?",
+    "question_zh_cn": "inventory_locations_site_id_to_manufacturing_sites 如何将 inventory_locations 关联到 manufacturing_sites？",
+    "expected_answer": "inventory_locations.site_id → manufacturing_sites.site_id"
+  },
+  {
+    "id": "MFG-044",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does machine_capability_assignments_capability_id_to_equipment_capabilities connect machine_capability_assignments to equipment_capabilities?",
+    "question_zh_cn": "machine_capability_assignments_capability_id_to_equipment_capabilities 如何将 machine_capability_assignments 关联到 equipment_capabilities？",
+    "expected_answer": "machine_capability_assignments.capability_id → equipment_capabilities.capability_id"
+  },
+  {
+    "id": "MFG-045",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does machine_capability_assignments_machine_id_to_production_machines connect machine_capability_assignments to production_machines?",
+    "question_zh_cn": "machine_capability_assignments_machine_id_to_production_machines 如何将 machine_capability_assignments 关联到 production_machines？",
+    "expected_answer": "machine_capability_assignments.machine_id → production_machines.machine_id"
+  },
+  {
+    "id": "MFG-046",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does maintenance_plans_machine_id_to_production_machines connect maintenance_plans to production_machines?",
+    "question_zh_cn": "maintenance_plans_machine_id_to_production_machines 如何将 maintenance_plans 关联到 production_machines？",
+    "expected_answer": "maintenance_plans.machine_id → production_machines.machine_id"
+  },
+  {
+    "id": "MFG-047",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does maintenance_work_orders_machine_id_to_production_machines connect maintenance_work_orders to production_machines?",
+    "question_zh_cn": "maintenance_work_orders_machine_id_to_production_machines 如何将 maintenance_work_orders 关联到 production_machines？",
+    "expected_answer": "maintenance_work_orders.machine_id → production_machines.machine_id"
+  },
+  {
+    "id": "MFG-048",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does maintenance_work_orders_maintenance_plan_id_to_maintenance_plans connect maintenance_work_orders to maintenance_plans?",
+    "question_zh_cn": "maintenance_work_orders_maintenance_plan_id_to_maintenance_plans 如何将 maintenance_work_orders 关联到 maintenance_plans？",
+    "expected_answer": "maintenance_work_orders.maintenance_plan_id → maintenance_plans.maintenance_plan_id"
+  },
+  {
+    "id": "MFG-049",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does manufacturing_operations_production_order_id_to_production_orders connect manufacturing_operations to production_orders?",
+    "question_zh_cn": "manufacturing_operations_production_order_id_to_production_orders 如何将 manufacturing_operations 关联到 production_orders？",
+    "expected_answer": "manufacturing_operations.production_order_id → production_orders.production_order_id"
+  },
+  {
+    "id": "MFG-050",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does manufacturing_operations_routing_operation_id_to_routing_operations connect manufacturing_operations to routing_operations?",
+    "question_zh_cn": "manufacturing_operations_routing_operation_id_to_routing_operations 如何将 manufacturing_operations 关联到 routing_operations？",
+    "expected_answer": "manufacturing_operations.routing_operation_id → routing_operations.routing_operation_id"
+  },
+  {
+    "id": "MFG-051",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does manufacturing_operations_work_center_id_to_work_centers connect manufacturing_operations to work_centers?",
+    "question_zh_cn": "manufacturing_operations_work_center_id_to_work_centers 如何将 manufacturing_operations 关联到 work_centers？",
+    "expected_answer": "manufacturing_operations.work_center_id → work_centers.work_center_id"
+  },
+  {
+    "id": "MFG-052",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does material_issue_transactions_goods_receipt_id_to_goods_receipts connect material_issue_transactions to goods_receipts?",
+    "question_zh_cn": "material_issue_transactions_goods_receipt_id_to_goods_receipts 如何将 material_issue_transactions 关联到 goods_receipts？",
+    "expected_answer": "material_issue_transactions.goods_receipt_id → goods_receipts.goods_receipt_id"
+  },
+  {
+    "id": "MFG-053",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does material_issue_transactions_inventory_location_id_to_inventory_locations connect material_issue_transactions to inventory_locations?",
+    "question_zh_cn": "material_issue_transactions_inventory_location_id_to_inventory_locations 如何将 material_issue_transactions 关联到 inventory_locations？",
+    "expected_answer": "material_issue_transactions.inventory_location_id → inventory_locations.inventory_location_id"
+  },
+  {
+    "id": "MFG-054",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does material_issue_transactions_material_requirement_id_to_production_order_material_requirements connect material_issue_transactions to production_order_material_requirements?",
+    "question_zh_cn": "material_issue_transactions_material_requirement_id_to_production_order_material_requirements 如何将 material_issue_transactions 关联到 production_order_material_requirements？",
+    "expected_answer": "material_issue_transactions.material_requirement_id → production_order_material_requirements.material_requirement_id"
+  },
+  {
+    "id": "MFG-055",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does material_issue_transactions_production_order_id_to_production_orders connect material_issue_transactions to production_orders?",
+    "question_zh_cn": "material_issue_transactions_production_order_id_to_production_orders 如何将 material_issue_transactions 关联到 production_orders？",
+    "expected_answer": "material_issue_transactions.production_order_id → production_orders.production_order_id"
+  },
+  {
+    "id": "MFG-056",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does operator_qualifications_capability_id_to_equipment_capabilities connect operator_qualifications to equipment_capabilities?",
+    "question_zh_cn": "operator_qualifications_capability_id_to_equipment_capabilities 如何将 operator_qualifications 关联到 equipment_capabilities？",
+    "expected_answer": "operator_qualifications.capability_id → equipment_capabilities.capability_id"
+  },
+  {
+    "id": "MFG-057",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does operator_qualifications_operator_id_to_operators connect operator_qualifications to operators?",
+    "question_zh_cn": "operator_qualifications_operator_id_to_operators 如何将 operator_qualifications 关联到 operators？",
+    "expected_answer": "operator_qualifications.operator_id → operators.operator_id"
+  },
+  {
+    "id": "MFG-058",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does operator_shift_assignments_operator_id_to_operators connect operator_shift_assignments to operators?",
+    "question_zh_cn": "operator_shift_assignments_operator_id_to_operators 如何将 operator_shift_assignments 关联到 operators？",
+    "expected_answer": "operator_shift_assignments.operator_id → operators.operator_id"
+  },
+  {
+    "id": "MFG-059",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does operator_shift_assignments_shift_id_to_shifts connect operator_shift_assignments to shifts?",
+    "question_zh_cn": "operator_shift_assignments_shift_id_to_shifts 如何将 operator_shift_assignments 关联到 shifts？",
+    "expected_answer": "operator_shift_assignments.shift_id → shifts.shift_id"
+  },
+  {
+    "id": "MFG-060",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does operator_shift_assignments_work_center_id_to_work_centers connect operator_shift_assignments to work_centers?",
+    "question_zh_cn": "operator_shift_assignments_work_center_id_to_work_centers 如何将 operator_shift_assignments 关联到 work_centers？",
+    "expected_answer": "operator_shift_assignments.work_center_id → work_centers.work_center_id"
+  },
+  {
+    "id": "MFG-061",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does operators_home_site_id_to_manufacturing_sites connect operators to manufacturing_sites?",
+    "question_zh_cn": "operators_home_site_id_to_manufacturing_sites 如何将 operators 关联到 manufacturing_sites？",
+    "expected_answer": "operators.home_site_id → manufacturing_sites.site_id"
+  },
+  {
+    "id": "MFG-062",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does process_steps_operation_id_to_manufacturing_operations connect process_steps to manufacturing_operations?",
+    "question_zh_cn": "process_steps_operation_id_to_manufacturing_operations 如何将 process_steps 关联到 manufacturing_operations？",
+    "expected_answer": "process_steps.operation_id → manufacturing_operations.operation_id"
+  },
+  {
+    "id": "MFG-063",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does process_steps_required_capability_id_to_equipment_capabilities connect process_steps to equipment_capabilities?",
+    "question_zh_cn": "process_steps_required_capability_id_to_equipment_capabilities 如何将 process_steps 关联到 equipment_capabilities？",
+    "expected_answer": "process_steps.required_capability_id → equipment_capabilities.capability_id"
+  },
+  {
+    "id": "MFG-064",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does product_bom_versions_product_id_to_products connect product_bom_versions to products?",
+    "question_zh_cn": "product_bom_versions_product_id_to_products 如何将 product_bom_versions 关联到 products？",
+    "expected_answer": "product_bom_versions.product_id → products.product_id"
+  },
+  {
+    "id": "MFG-065",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does production_execution_records_machine_id_to_production_machines connect production_execution_records to production_machines?",
+    "question_zh_cn": "production_execution_records_machine_id_to_production_machines 如何将 production_execution_records 关联到 production_machines？",
+    "expected_answer": "production_execution_records.machine_id → production_machines.machine_id"
+  },
+  {
+    "id": "MFG-066",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does production_execution_records_operator_id_to_operators connect production_execution_records to operators?",
+    "question_zh_cn": "production_execution_records_operator_id_to_operators 如何将 production_execution_records 关联到 operators？",
+    "expected_answer": "production_execution_records.operator_id → operators.operator_id"
+  },
+  {
+    "id": "MFG-067",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does production_execution_records_process_step_id_to_process_steps connect production_execution_records to process_steps?",
+    "question_zh_cn": "production_execution_records_process_step_id_to_process_steps 如何将 production_execution_records 关联到 process_steps？",
+    "expected_answer": "production_execution_records.process_step_id → process_steps.process_step_id"
+  },
+  {
+    "id": "MFG-068",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does production_machines_site_id_to_manufacturing_sites connect production_machines to manufacturing_sites?",
+    "question_zh_cn": "production_machines_site_id_to_manufacturing_sites 如何将 production_machines 关联到 manufacturing_sites？",
+    "expected_answer": "production_machines.site_id → manufacturing_sites.site_id"
+  },
+  {
+    "id": "MFG-069",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does production_machines_work_center_id_to_work_centers connect production_machines to work_centers?",
+    "question_zh_cn": "production_machines_work_center_id_to_work_centers 如何将 production_machines 关联到 work_centers？",
+    "expected_answer": "production_machines.work_center_id → work_centers.work_center_id"
+  },
+  {
+    "id": "MFG-070",
+    "level": "intermediate",
+    "category": "bkn_relation",
+    "question_en": "How does production_order_material_requirements_product_id_to_products connect production_order_material_requirements to products?",
+    "question_zh_cn": "production_order_material_requirements_product_id_to_products 如何将 production_order_material_requirements 关联到 products？",
+    "expected_answer": "production_order_material_requirements.product_id → products.product_id"
+  },
+  {
+    "id": "MFG-071",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[completed-flow variant 1] Trace the completed order from customer demand through production execution and final inspection.",
+    "question_zh_cn": "[completed-flow 变体 1] 从客户需求追溯到生产执行和最终检验，给出已完成订单链路。",
+    "expected_answer": "CUST-001 → SO-2026-001/SOL-001 → WO-1001 → OP-1001-10, OP-1001-20 → EXE-001, EXE-002 → QIL-001/QIR-001"
+  },
+  {
+    "id": "MFG-072",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[capability-fit variant 1] Prove that every executed step used a qualified machine with the required capability.",
+    "question_zh_cn": "[capability-fit 变体 1] 证明每个已执行步骤均使用具备所需能力且合格的设备。",
+    "expected_answer": "STEP-1001-10-A/MACH-CNC-01/CAP-CNC-MILL; STEP-1001-20-A/MACH-CMM-01/CAP-CMM-INSPECT"
+  },
+  {
+    "id": "MFG-073",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[operator-fit variant 1] Prove that the operator was qualified and assigned to the correct work center for both executions.",
+    "question_zh_cn": "[operator-fit 变体 1] 证明操作员对两次执行均具备资质且被安排到正确工作中心。",
+    "expected_answer": "OPR-001 对两项能力均合格，且已安排至 WC-MACH 和 WC-QUAL"
+  },
+  {
+    "id": "MFG-074",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[quality-gate variant 1] Can the work order be considered complete under the sample quality gate?",
+    "question_zh_cn": "[quality-gate 变体 1] 在样例质量门条件下，工单是否可视为完成？",
+    "expected_answer": "是：两道工序均已完成，最终检验批已接受，50.01 位于 [49.95, 50.05] 内"
+  },
+  {
+    "id": "MFG-075",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[material-trace variant 1] Trace the aluminum material from supplier purchase order to the issued work-order requirement.",
+    "question_zh_cn": "[material-trace 变体 1] 从供应商采购订单追溯铝料到工单物料需求。",
+    "expected_answer": "SUP-001 → PO-2026-001/POL-001 → GR-001 → LOC-RAW-01 → MR-001"
+  },
+  {
+    "id": "MFG-076",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[delivery-risk variant 1] Does the completed manufacturing flow show a due-date risk for WO-1001?",
+    "question_zh_cn": "[delivery-risk 变体 1] WO-1001 的已完成制造链路是否显示交期风险？",
+    "expected_answer": "否；执行于 2026-10-26 完成，早于 2026-11-03 的交期"
+  },
+  {
+    "id": "MFG-077",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[maintenance-conflict variant 1] Does planned preventive maintenance conflict with the recorded execution?",
+    "question_zh_cn": "[maintenance-conflict 变体 1] 计划预防维护是否与已记录执行冲突？",
+    "expected_answer": "否；执行日期为 2026-10-26，维护计划日期为 2026-10-30"
+  },
+  {
+    "id": "MFG-078",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[inventory-availability variant 1] After completion, what finished-goods quantity remains available for allocation?",
+    "question_zh_cn": "[inventory-availability 变体 1] 完工后有多少成品可用于分配？",
+    "expected_answer": "120 件；现存为 120 件，已分配为 0"
+  },
+  {
+    "id": "MFG-079",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[version-control variant 1] Which controlled product, BOM, and routing definitions govern the order?",
+    "question_zh_cn": "[version-control 变体 1] 哪个受控产品、BOM 和工艺路线定义约束该工单？",
+    "expected_answer": "PROD-PUMP-HOUSING / BOMV-PUMP-H100-01 / ROUTE-PUMP-H100-01"
+  },
+  {
+    "id": "MFG-080",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[ontology-boundary variant 1] Which layer answers operational questions and which layer preserves the complete IOF class coverage?",
+    "question_zh_cn": "[ontology-boundary 变体 1] 哪一层回答运营问题，哪一层保留完整 IOF 类覆盖？",
+    "expected_answer": "运营层 kn/ 回答业务问题；iof-reference/kn/ 保留 112 个类的完整覆盖"
+  },
+  {
+    "id": "MFG-081",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[material-shortage variant 1] Why is WO-1001-MAT blocked, and what quantity remains uncovered?",
+    "question_zh_cn": "[material-shortage 变体 1] 为什么 WO-1001-MAT 被阻塞，尚未覆盖多少物料？",
+    "expected_answer": "已发料 90 件、需求 122 件，尚有 32 件未覆盖"
+  },
+  {
+    "id": "MFG-082",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[quality-failure variant 1] Why does WO-1001-QFAIL not meet the final-quality gate?",
+    "question_zh_cn": "[quality-failure 变体 1] 为什么 WO-1001-QFAIL 不满足最终质量门？",
+    "expected_answer": "最终检验批已拒绝，孔径 50.09 超过上限 50.05"
+  },
+  {
+    "id": "MFG-083",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[branch-comparison variant 1] Compare the completion outcome of WO-1001, WO-1001-MAT, and WO-1001-QFAIL.",
+    "question_zh_cn": "[branch-comparison 变体 1] 比较 WO-1001、WO-1001-MAT 和 WO-1001-QFAIL 的完成结果。",
+    "expected_answer": "WO-1001 已完成；WO-1001-MAT 因物料保障不足而阻塞；WO-1001-QFAIL 未通过最终质量"
+  },
+  {
+    "id": "MFG-084",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[negative-evidence variant 1] What facts must be shown before concluding that a negative branch is blocked or failed?",
+    "question_zh_cn": "[negative-evidence 变体 1] 判定负向分支被阻塞或失败前，必须展示哪些事实？",
+    "expected_answer": "物料分支需展示需求量和已发放量；质量分支需展示最终检验批状态、实测值和规格限"
+  },
+  {
+    "id": "MFG-085",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[in-production variant 1] Which orders are still in production, and what is their final-quality state?",
+    "question_zh_cn": "[in-production 变体 1] 哪些工单仍处于生产进行中，其最终质量状态如何？",
+    "expected_answer": "WO-1001-B041 至 WO-1001-B046 已下达；其最终检验批均为待处理"
+  },
+  {
+    "id": "MFG-086",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[dataset-scale variant 1] What test data volume is available for the operational sample?",
+    "question_zh_cn": "[dataset-scale 变体 1] 运营样例可用于测试的数据规模是多少？",
+    "expected_answer": "40 张运营表，共 2,700 条记录，每张表至少 50 条"
+  },
+  {
+    "id": "MFG-087",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[branch-distribution variant 1] How are the 50 business branches distributed across normal completion and exceptions?",
+    "question_zh_cn": "[branch-distribution 变体 1] 50 个业务分支如何分布在正常完成与异常情形中？",
+    "expected_answer": "22 个正常完成、11 个物料不足、11 个质量不合格、6 个生产进行中工单"
+  },
+  {
+    "id": "MFG-088",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[planning-horizon variant 1] What planning horizon is represented by demand forecasts and production due dates?",
+    "question_zh_cn": "[planning-horizon 变体 1] 需求预测和生产交期覆盖的计划时间跨度是什么？",
+    "expected_answer": "预测与生产交期覆盖 2026 年 11 月至 2027 年 3 月"
+  },
+  {
+    "id": "MFG-089",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[forecast-to-plan variant 1] Trace WO-1001 from its demand forecast through the production plan.",
+    "question_zh_cn": "[forecast-to-plan 变体 1] 从需求预测追溯 WO-1001 对应的生产计划。",
+    "expected_answer": "FC-2026-11-PUMP → PPL-001 → WO-1001"
+  },
+  {
+    "id": "MFG-090",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[material-issue variant 1] What receipt and inventory location provide the issued material evidence for WO-1001?",
+    "question_zh_cn": "[material-issue 变体 1] WO-1001 的已发料证据关联到哪条收货和哪个库存地点？",
+    "expected_answer": "通过 MIT-001 关联 GR-001 和 LOC-RAW-01"
+  },
+  {
+    "id": "MFG-091",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[quality-specification variant 1] Which reusable quality specification governs the final inspection result for WO-1001?",
+    "question_zh_cn": "[quality-specification 变体 1] 哪个可复用质量规格约束 WO-1001 的最终检验结果？",
+    "expected_answer": "QS-001 约束 QIR-001 的泵壳关键孔径"
+  },
+  {
+    "id": "MFG-092",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[receipt-to-shipment variant 1] What evidence makes WO-1001 eligible for shipment?",
+    "question_zh_cn": "[receipt-to-shipment 变体 1] 哪些事实使 WO-1001 具备发运条件？",
+    "expected_answer": "QIL-001 已接受，FGR-001 已接受且入库 120 件，SHP-001 已完成"
+  },
+  {
+    "id": "MFG-093",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[fulfillment-exceptions variant 1] Why are the material-shortage and quality-failure branches not shipped?",
+    "question_zh_cn": "[fulfillment-exceptions 变体 1] 物料不足和质量不合格分支为什么不能发运？",
+    "expected_answer": "物料不足仍为已阻塞；质量不合格的最终检验和发运均为已拒绝"
+  },
+  {
+    "id": "MFG-094",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[completed-flow variant 2] Trace the completed order from customer demand through production execution and final inspection.",
+    "question_zh_cn": "[completed-flow 变体 2] 从客户需求追溯到生产执行和最终检验，给出已完成订单链路。",
+    "expected_answer": "CUST-001 → SO-2026-001/SOL-001 → WO-1001 → OP-1001-10, OP-1001-20 → EXE-001, EXE-002 → QIL-001/QIR-001"
+  },
+  {
+    "id": "MFG-095",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[capability-fit variant 2] Prove that every executed step used a qualified machine with the required capability.",
+    "question_zh_cn": "[capability-fit 变体 2] 证明每个已执行步骤均使用具备所需能力且合格的设备。",
+    "expected_answer": "STEP-1001-10-A/MACH-CNC-01/CAP-CNC-MILL; STEP-1001-20-A/MACH-CMM-01/CAP-CMM-INSPECT"
+  },
+  {
+    "id": "MFG-096",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[operator-fit variant 2] Prove that the operator was qualified and assigned to the correct work center for both executions.",
+    "question_zh_cn": "[operator-fit 变体 2] 证明操作员对两次执行均具备资质且被安排到正确工作中心。",
+    "expected_answer": "OPR-001 对两项能力均合格，且已安排至 WC-MACH 和 WC-QUAL"
+  },
+  {
+    "id": "MFG-097",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[quality-gate variant 2] Can the work order be considered complete under the sample quality gate?",
+    "question_zh_cn": "[quality-gate 变体 2] 在样例质量门条件下，工单是否可视为完成？",
+    "expected_answer": "是：两道工序均已完成，最终检验批已接受，50.01 位于 [49.95, 50.05] 内"
+  },
+  {
+    "id": "MFG-098",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[material-trace variant 2] Trace the aluminum material from supplier purchase order to the issued work-order requirement.",
+    "question_zh_cn": "[material-trace 变体 2] 从供应商采购订单追溯铝料到工单物料需求。",
+    "expected_answer": "SUP-001 → PO-2026-001/POL-001 → GR-001 → LOC-RAW-01 → MR-001"
+  },
+  {
+    "id": "MFG-099",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[delivery-risk variant 2] Does the completed manufacturing flow show a due-date risk for WO-1001?",
+    "question_zh_cn": "[delivery-risk 变体 2] WO-1001 的已完成制造链路是否显示交期风险？",
+    "expected_answer": "否；执行于 2026-10-26 完成，早于 2026-11-03 的交期"
+  },
+  {
+    "id": "MFG-100",
+    "level": "hard_complex",
+    "category": "cross_domain_analysis",
+    "question_en": "[maintenance-conflict variant 2] Does planned preventive maintenance conflict with the recorded execution?",
+    "question_zh_cn": "[maintenance-conflict 变体 2] 计划预防维护是否与已记录执行冲突？",
+    "expected_answer": "否；执行日期为 2026-10-26，维护计划日期为 2026-10-30"
+  }
+]

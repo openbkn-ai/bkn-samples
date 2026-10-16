@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: bill_of_materials_bom_version_id_to_product_bom_versions
+name: bill_of_materials_bom_version_id_to_product_bom_versions
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: bill_of_materials_bom_version_id_to_product_bom_versions
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| bill_of_materials | product_bom_versions | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| bom_version_id | bom_version_id |
