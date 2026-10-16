@@ -20,6 +20,13 @@ def completed(stdout: str = "", code: int = 0) -> subprocess.CompletedProcess:
 
 
 class RuntimeTest(unittest.TestCase):
+    def test_kubectl_timeout_does_not_override_in_cluster_client_config(self):
+        from installer.runtime import kubectl_run
+        with patch("installer.runtime.subprocess.run", return_value=completed()) as run:
+            kubectl_run(["get", "statefulset", "sample", "-n", "samples"])
+        self.assertEqual(run.call_args.args[0], ["kubectl", "get", "statefulset", "sample", "-n", "samples"])
+        self.assertEqual(run.call_args.kwargs["timeout"], 30)
+
     def test_deploy_error_is_reported_at_database_without_false_success(self):
         for retry, code in ((retry, code) for retry in (False, True)
                             for code in ("install_failed", "database_permission_denied", "ownership_conflict")):
