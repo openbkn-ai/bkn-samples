@@ -39,7 +39,7 @@ persistence:
 
 The published Chart and service image use the same version. Set `image.tag` to that version when overriding it; for SWR, change `image.registry` to `swr.cn-east-3.myhuaweicloud.com/openbkn-ai`. Keep `image.repository` as `bkn-sample-studio` and do not configure an image digest.
 
-Leave `catalogURL` empty to scan official main when the administrator clicks **Refresh samples**. A page GET reads the existing cache; it does not scan GitHub on every request. A new environment has no remote cache. Network failure preserves an existing cache and installed records; a new environment can use the built-in entries or import a compatible offline package, with its data image available to the cluster.
+Leave `catalogURL` empty to scan official main when the administrator clicks **Refresh samples**. A page GET reads the existing cache; it does not scan GitHub on every request. A new environment has no remote cache. Network failure preserves an existing cache and installed records; a new environment can use the built-in entries or import a compatible offline package, using a self-contained offline.v2 package. Prepare the bundled image locally on each eligible node; install and retry never pull it.
 
 ```bash
 helm upgrade --install bkn-sample-studio \
@@ -48,7 +48,7 @@ helm upgrade --install bkn-sample-studio \
 kubectl -n openbkn rollout status deployment/bkn-sample-studio
 ```
 
-Use **Import offline package** on Studio's one-click tab for local `package.tar.gz` files. Administrator authentication is required. Online and offline installation share the installer, fixed version and artifact checks; offline import does not need an online catalog.
+Use **Import offline package** on Studio's one-click tab for self-contained `offline-package.tar.gz` files. Administrator authentication is required. Online and offline installation share the installer, fixed version and artifact checks; offline import does not need an online catalog. See [offline installation](offline-installation.md) for node preparation and storage requirements.
 
 ## Existing deployment and state
 

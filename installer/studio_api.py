@@ -335,6 +335,7 @@ def _write_failed(state_dir: Path, sample: str, version: str, code: str, message
     database_codes = {
         "database_not_ready",
         "image_unavailable",
+        "offline_image_missing",
         "sample_data_unavailable",
         "storage_class_missing",
     }
