@@ -73,12 +73,14 @@ for path in (''' + repr(str(secret)) + ''', '/proc/%s/environ' % os.getppid()):
         blocked.append(False)
     except PermissionError:
         blocked.append(True)
+assert '_BKN_HOOK_INPUT' not in os.environ
+assert json.loads(Path(os.environ['BKN_SAMPLE_INPUT']).read_text()) == {'currentSample': 'scoped'}
 status = Path('/proc/self/status').read_text()
 Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps({'uid': os.geteuid(), 'groups': os.getgroups(), 'blocked': blocked, 'zeroCaps': 'CapEff:\\t0000000000000000' in status, 'noNewPrivileges': 'NoNewPrivs:\\t1' in status}))
 ''')
             script.chmod(0o755)
             output = root / 'output.json'
-            result = run_hook(sample, script, process_run, {'BKN_SAMPLE_OUTPUT': str(output)})
+            result = run_hook(sample, script, process_run, {'BKN_SAMPLE_OUTPUT': str(output), 'BKN_SAMPLE_INPUT': '/dev/stdin'}, input_data=json.dumps({'currentSample': 'scoped'}))
             self.assertEqual(result.returncode, 0, result.stderr)
             proof = json.loads(output.read_text())
             self.assertNotEqual(proof['uid'], 0)
