@@ -26,10 +26,10 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 | [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Online catalog |
 | [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Online catalog |
 | [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Online catalog |
-| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Source merged; online release pending |
+| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Online catalog |
 | [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | Offline release only; requires OpenBKN ≥ 0.2.1 |
 
-The [official catalog](catalog.json) determines downloadable versions. Merging sample source does not publish an online package. English World Cup source and local installation acceptance are complete; its official image, release package and catalog registration remain separate release steps.
+The [official catalog](catalog.json) determines downloadable versions for the published samples.
 
 This manufacturing sample is intentionally kept out of the official catalog and legacy `020` discovery. Import its fixed offline package only after loading the matching data image into the target cluster.
 

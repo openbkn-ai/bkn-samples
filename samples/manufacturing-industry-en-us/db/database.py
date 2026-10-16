@@ -42,6 +42,7 @@ def init(doc):
         for name in sorted(doc['files']):
             with (ROOT/'data'/name).open(encoding='utf-8',newline='') as f:
                 reader=csv.DictReader(f); headers=reader.fieldnames or []
+                require(headers and len(headers)==len(set(headers)), 'CSV headers must be present and unique: '+name)
                 q.execute('CREATE TABLE '+quote(Path(name).stem)+' ('+', '.join(quote(h)+' TEXT' for h in headers)+') CHARACTER SET utf8mb4')
                 values=[[row.get(h,'') for h in headers] for row in reader]
                 q.executemany('INSERT INTO '+quote(Path(name).stem)+' VALUES ('+','.join(['%s']*len(headers))+')',values)
