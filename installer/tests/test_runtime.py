@@ -91,7 +91,7 @@ class RuntimeTest(unittest.TestCase):
             seen["network"] = payload["knowledgeNetwork"]["id"]
             seen["hook_token"] = env.get("BKN_TOKEN")
             seen.setdefault("configs", []).append(env.get("BKN_SAMPLE_CONFIG"))
-            seen["recorded_image"] = json.loads((Path(env["BKN_SAMPLE_CONFIG"]).parents[1] / "supply-chain.json").read_text()).get("dataImageRef")
+            self.assertFalse((Path(env["BKN_SAMPLE_CONFIG"]).parents[1] / "supply-chain.json").exists())
             Path(env["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps({"ok": True, "resources": {}}), encoding="utf-8")
             return completed()
 
@@ -106,7 +106,6 @@ class RuntimeTest(unittest.TestCase):
             run=run,
             authorization="Bearer admin-token",
         )
-        self.assertIsNone(seen["recorded_image"])
         prepare.assert_called_once()
         self.assertEqual(seen["password"], PASSWORD)
         self.assertEqual(seen["network"], "supply_ontology_hand")
@@ -114,7 +113,7 @@ class RuntimeTest(unittest.TestCase):
         self.assertEqual(seen["hook_token"], "admin-token")
         self.assertEqual(len(seen["configs"]), 2)
         self.assertTrue(seen["configs"][0])
-        self.assertEqual(seen["configs"][0], seen["configs"][1])
+        self.assertNotEqual(seen["configs"][0], seen["configs"][1])
         self.assertNotIn(PASSWORD, Path(seen["configs"][0]).read_text(encoding="utf-8") if Path(seen["configs"][0]).is_file() else "")
         self.assertEqual(view["status"], "installed")
         rendered = json.dumps(view)

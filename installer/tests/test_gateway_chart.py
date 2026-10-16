@@ -37,3 +37,12 @@ class GatewayChartTest(unittest.TestCase):
         self.assertEqual(studio['image'],'swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio:0.2.0')
         self.assertEqual(env['BKN_SAMPLE_EXECUTOR_IMAGE_REF'],studio['image'])
         self.assertEqual(env['BKN_SAMPLE_DATA_IMAGE_REF'],'registry.example/data@sha256:'+'b'*64)
+
+    def test_hook_privilege_and_service_credentials_are_protected(self):
+        docs, pod = self.render()
+        self.assertFalse(pod['automountServiceAccountToken'])
+        studio = pod['containers'][0]
+        self.assertFalse(studio['securityContext']['allowPrivilegeEscalation'])
+        volumes = {v['name']: v for v in pod['volumes']}
+        self.assertEqual(volumes['database-credentials']['secret']['defaultMode'], 0o400)
+        self.assertEqual(volumes['kube-api-access']['projected']['defaultMode'], 0o400)
