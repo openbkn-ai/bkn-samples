@@ -14,6 +14,7 @@ from pathlib import Path
 import yaml
 
 from installer.offline_image import file_sha, validate_layout, MAX_OFFLINE_ARCHIVE
+from installer.remote_bundle import MAX_ARCHIVE
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
@@ -166,7 +167,7 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
     require(not target.exists(), "candidate already exists; use a fresh output directory")
     temporary = Path(tempfile.mkdtemp(prefix=".candidate-", dir=target.parent))
     try:
-        archive = temporary / ("offline-package.tar.gz" if image_layout is not None or shared_database else "package.tar.gz")
+        archive = temporary / "package.tar.gz"
         with archive.open("wb") as stream:
             with gzip.GzipFile(filename="", mode="wb", fileobj=stream, mtime=0) as compressed:
                 with tarfile.open(fileobj=compressed, mode="w", format=tarfile.USTAR_FORMAT) as tar:
@@ -180,7 +181,7 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
                                 tar.addfile(info, source)
                         else:
                             tar.addfile(info, io.BytesIO(data))
-        archive_limit = MAX_OFFLINE_ARCHIVE if image_layout is not None or shared_database else 128 * 1024 * 1024
+        archive_limit = MAX_OFFLINE_ARCHIVE if image_layout is not None else MAX_ARCHIVE
         require(archive.stat().st_size <= archive_limit, "candidate archive exceeds its delivery size limit")
         report = {
             "status": "candidate-not-verified",

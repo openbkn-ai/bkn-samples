@@ -5,7 +5,7 @@ The shared sample database patch for OpenBKN 0.2.0 separates the database server
 ## User flow
 
 1. Install or upgrade OpenBKN with the sample service Chart containing the shared sample database. Product offline delivery must include its runtime images, including MariaDB.
-2. Download the desired version's **offline-package.tar.gz** Release attachment on a connected machine and transfer it to the offline environment.
+2. Download the desired version's **package.tar.gz** Release attachment on a connected machine and transfer it to the offline environment.
 3. In Studio → Home → One-click experience, import the package and click **Install**.
 
 No node command, image import, registry connection, or dependency download is required by sample installation. The package includes data, native knowledge network, declared functions/metrics/Skills, installation scripts, release notes, and a complete file digest inventory. Existing OpenBKN services and the sample database must be available inside the environment.
@@ -20,14 +20,14 @@ Old per-sample database installations retain their original uninstall path. Unin
 
 ## Publisher flow
 
-Add release notes for a new version, then prepare both delivery archives and the candidate manifest:
+Add release notes for a new version, then prepare the single delivery archive and candidate manifest:
 
 ```sh
 PYTHONPATH=. python3 tools/publication/prepare_shared_release.py \
   samples/world-cup-en --version NEW_VERSION --output /absolute/path/to/candidates
 ```
 
-The command produces online `package.tar.gz`, offline `offline-package.tar.gz`, and a candidate `sample.json`. The online manifest declares `database.shared` and points its data dependency to the archive. No sample image is required. Older sample services reject the new required capability rather than attempting an incompatible installation.
+The command produces one self-contained `package.tar.gz` and a candidate `sample.json`. Online installation downloads this archive; offline installation imports the exact same bytes and digest. The unified archive uses the existing online compressed-size limit of 128 MiB; oversized candidates are rejected during construction. The online manifest declares `database.shared` and points its data dependency to the archive. No sample image is required. Older sample services reject the new required capability rather than attempting an incompatible installation.
 
 These outputs are candidates, not acceptance evidence. Verify the exact package digests, submit release metadata and real verification receipts through PR review, publish new Release attachments, and update the pinned official catalog. Never overwrite existing version assets or fabricate successful verification.
 

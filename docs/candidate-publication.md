@@ -4,14 +4,14 @@
 
 样例以 `sample.yaml` 声明身份、数据库、组件和现有安装／验证 hooks。数据、知识网络、函数、指标、接口及 Skill 任一变化都发布整个 sample 的新版本。更新锁文件和 `releases/<新版本>/release-notes.*.md`，将交付文件加入 Git 索引，通过英文 PR 审核后从固定提交构建。不要在安装器中添加样例名称分支。
 
-## 2. 构建在线和离线候选
+## 2. 构建统一候选包
 
 ```sh
 PYTHONPATH=. python3 tools/publication/prepare_shared_release.py \
   samples/world-cup-en --version NEW_VERSION --output /absolute/path/to/candidates
 ```
 
-工具复用此前审核过的发布清单，生成在线 `package.tar.gz`、完整离线 `offline-package.tar.gz` 和候选 `sample.json`。它不发布制品、不生成成功验收证明，也不更新官方目录。当前交付要求数据内置，已有知识网络格式、内容分组、绑定和体验入口保持原标准。
+工具复用此前审核过的发布清单，生成一份完整自包含的 `package.tar.gz` 和候选 `sample.json`。在线安装下载这份包，离线安装上传同一份包，二者使用同一摘要。统一包遵守在线安装现有的 128 MiB 压缩大小上限，超限在构建阶段拒绝。它不发布制品、不生成成功验收证明，也不更新官方目录。当前交付要求数据内置，已有知识网络格式、内容分组、绑定和体验入口保持原标准。
 
 新清单要求 `database.shared`，数据依赖指向 archive。数据库运行环境由产品提供，不再构建或发布样例专属数据库镜像。旧运行服务因不支持新能力而拒绝该版本；先安装产品补丁。历史包和元数据不改写。
 
@@ -28,7 +28,7 @@ PYTHONPATH=. python3 tools/publication/prepare_shared_release.py \
 
 ## 4. 发布及更新目录
 
-通过验收后，将两种精确包上传为新版本 Release 附件，并核对上传摘要。提交 `sample.json` 和真实的 `verification.json`；后者绑定 sampleId、version、packageDigest、`databaseRuntime: shared-mariadb`、全新安装结果及 `database`、`knowledge`、`capabilities`、`scenario` 四项检查。未声明的可选能力要说明不适用，不能伪造调用成功。
+通过验收后，将验收过的同一份 `package.tar.gz` 上传为新版本 Release 附件，并核对上传摘要。提交 `sample.json` 和真实的 `verification.json`；后者绑定 sampleId、version、packageDigest、`databaseRuntime: shared-mariadb`、全新安装结果及 `database`、`knowledge`、`capabilities`、`scenario` 四项检查。未声明的可选能力要说明不适用，不能伪造调用成功。
 
 元数据先形成可保留的完整提交 SHA，再通过 PR 更新 `catalog.json` 的固定引用、版本说明和递增 sequence。保留旧条目，不覆盖旧版本资产或证明。发布提交须在主线或保留 tag 中可达。
 

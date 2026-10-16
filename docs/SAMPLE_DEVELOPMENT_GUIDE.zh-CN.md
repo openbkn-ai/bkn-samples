@@ -2,7 +2,7 @@
 
 ## 用户安装
 
-OpenBKN 首页 → **一键体验**：刷新官方样例目录，展开卡片查看版本说明，安装后打开知识网络。管理员通过 **导入离线包** 上传自包含的 `offline-package.tar.gz`；包内包含完整内容，安装和重试无需样例镜像或节点操作。详见 [完整离线安装](offline-installation.md)。
+OpenBKN 首页 → **一键体验**：刷新官方样例目录，展开卡片查看版本说明，安装后打开知识网络。管理员通过 **导入离线包** 上传自包含的 `package.tar.gz`；包内包含完整内容，安装和重试无需样例镜像或节点操作。详见 [完整离线安装](offline-installation.md)。
 
 官方目录从 `openbkn-ai/bkn-samples` 读取，刷新成功后缓存。联网目录不是实时推送；网络失败会提示并使用已有成功缓存。新环境没有之前的目录缓存，也可导入离线包。内置样例与目录缓存是不同来源。
 
@@ -80,4 +80,4 @@ OpenBKN 首页 → **一键体验**：刷新官方样例目录，展开卡片查
 
 包含共享样例数据库能力的 0.2.0 补丁中，所有样例共用产品部署的样例专用 MariaDB，各自使用独立数据库和账号。`sample.yaml` 的 `spec.database` 和已有的 `dbInit`、`dbVerify` 入口继续有效；脚本通过安装器提供的 `MYSQL_HOST`、`MYSQL_PORT`、`MYSQL_DATABASE`、`MYSQL_USER`、`MYSQL_PASSWORD` 连接，不依赖本机 socket、root 账号或镜像首次启动。需要暂存库时使用当前装载脚本的 `<数据库名>_loading` 约定；不能访问其他样例数据库。
 
-离线版本必须使用 `spec.data.mode: embedded`，包含数据、模型和声明的执行资源，不能在安装或重试时下载依赖。参见[离线交付说明](offline-installation.md)，使用 `prepare_shared_release.py` 准备在线、离线包及候选清单。新清单声明 `database.shared` 能力，数据依赖指向 archive，不再指向数据库镜像。新增版本需要实际验收证明，不能复用旧版本的成功证明。
+离线版本必须使用 `spec.data.mode: embedded`，包含数据、模型和声明的执行资源，不能在安装或重试时下载依赖。参见[离线交付说明](offline-installation.md)，使用 `prepare_shared_release.py` 准备同一份完整 `package.tar.gz` 及候选清单，供在线下载和离线上传。新清单声明 `database.shared` 能力，数据依赖指向 archive，不再指向数据库镜像。新增版本需要实际验收证明，不能复用旧版本的成功证明。
