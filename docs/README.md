@@ -11,6 +11,7 @@
 - [中文开发与版本更新指南](SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md)
 - [Sample Development Guide](SAMPLE_DEVELOPMENT_GUIDE.md)
 - [固定包构建与发布](candidate-publication.md)
+- [完整离线安装](offline-installation.md)：自包含包、节点本地镜像导入、禁拉取与断网验收。
 - [卸载与重装](sample-uninstall.md)
 - [服务部署](sample-service-deployment.md)
 - [供应链问题分类与准确率验收方案](supply-sample-optimization-triage.zh-CN.md)：issue 分类、评测基线差异及新版发布门禁。

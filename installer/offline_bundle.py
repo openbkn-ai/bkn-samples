@@ -11,6 +11,8 @@ from installer.catalog_source import object_pairs
 from installer.contract import load_sample, validate_document
 from installer.remote_bundle import compatibility, extract_package, require, safe_path, sha
 from installer.remote_installation import executor_digest
+from installer.offline_image import (file_sha, validate_layout, MAX_OFFLINE_ARCHIVE,
+                                     MAX_OFFLINE_CONTENT, MAX_OFFLINE_FILE)
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _card, _read_state, timestamp
 
@@ -25,7 +27,7 @@ class OfflinePackages:
         descriptor = directory / "offline-release.json"
         require(descriptor.stat().st_size <= 2 * 1024 * 1024, "offline metadata exceeds size limit")
         release = json.loads(descriptor.read_text(), object_pairs_hook=object_pairs)
-        require(release.get("apiVersion") == "samples.openbkn.ai/offline.v1", "unsupported offline format")
+        require(release.get("apiVersion") == "samples.openbkn.ai/offline.v2", "requires a self-contained offline.v2 package with bundled image layers")
         require(isinstance(release.get("version"), str) and re.fullmatch(r"\d+\.\d+\.\d+", release["version"]),
                 "invalid offline version")
         require(isinstance(release.get("dataImageRef"), str) and
@@ -48,7 +50,9 @@ class OfflinePackages:
                   if p.is_file() and p != descriptor}
         require(actual == set(expected), "offline file inventory differs")
         for path, expected_digest in expected.items():
-            require(sha((directory / path).read_bytes()) == expected_digest, "offline file digest differs")
+            require(file_sha(directory / path) == expected_digest, "offline file digest differs")
+        require((directory / "runtime/prepare_offline.py").is_file(), "offline image preparation tool is missing")
+        validate_layout(directory / "runtime/oci", release["dataImageRef"], release["requires"]["architectures"])
         notes = []
         for note in release["releaseNotes"]:
             require(re.fullmatch(r"[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*", note["locale"]), "invalid notes locale")
@@ -70,9 +74,10 @@ class OfflinePackages:
         self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
         with self.lock, tempfile.TemporaryDirectory(dir=self.directory) as temporary:
             try:
-                digest = sha(archive.read_bytes())
+                digest = file_sha(archive)
                 extracted = Path(temporary) / "sample"
-                extract_package(archive, extracted, {"digest": digest})
+                extract_package(archive, extracted, {"digest": digest},
+                                max_archive=MAX_OFFLINE_ARCHIVE, max_content=MAX_OFFLINE_CONTENT, max_file=MAX_OFFLINE_FILE)
                 release = self.inspect(extracted, digest)
                 destination = self.directory / release["sample"]
                 if destination.exists():
@@ -80,7 +85,7 @@ class OfflinePackages:
                     require(existing["packageDigest"] == digest, "sample already imported with another package")
                     return {"sample": release["sample"], "version": release["version"], "packageDigest": digest}
                 used = sum(p.stat().st_size for p in self.directory.glob("*/package.tar.gz"))
-                require(used + archive.stat().st_size <= 1024 * 1024 * 1024, "offline cache exceeds 1 GiB")
+                require(used + archive.stat().st_size <= 3 * MAX_OFFLINE_ARCHIVE, "offline cache exceeds 3 GiB")
                 staged = Path(temporary) / "stored"
                 staged.mkdir(mode=0o700)
                 shutil.copyfile(archive, staged / "package.tar.gz")
@@ -89,7 +94,7 @@ class OfflinePackages:
                 staged.rename(destination)
                 return {"sample": release["sample"], "version": release["version"], "packageDigest": digest}
             except (ValueError, KeyError, TypeError, OSError) as error:
-                raise ApiError(400, "invalid_package", "offline package is invalid or conflicts with an imported package") from error
+                raise ApiError(400, "invalid_package", "Offline package is invalid, incomplete, or conflicts with an imported package. Use a self-contained offline.v2 package including OCI image layers.") from error
 
     def releases(self):
         return [json.loads(p.read_text()) for p in sorted(self.directory.glob("*/release.json"))]
@@ -167,7 +172,8 @@ class OfflinePackages:
             root = Path(temporary)
             sample_dir = root / "samples" / release["sample"]
             extract_package(self.directory / release["sample"] / "package.tar.gz", sample_dir,
-                            {"digest": release["packageDigest"]})
+                            {"digest": release["packageDigest"]},
+                            max_archive=MAX_OFFLINE_ARCHIVE, max_content=MAX_OFFLINE_CONTENT, max_file=MAX_OFFLINE_FILE)
             require(self.inspect(sample_dir, release["packageDigest"]) == release, "cached offline package changed")
             (root / "VERSION").write_text(release["version"])
             return install(root, release["version"], release["dataImageRef"], retry)

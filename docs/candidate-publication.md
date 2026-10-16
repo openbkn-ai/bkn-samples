@@ -1,6 +1,6 @@
 # 候选包构建与正式发布
 
-当前已交付在线官方目录和离线包导入。两种入口使用相同的版本、包摘要、数据镜像与安装流程。样例版本独立于 OpenBKN 平台版本。
+在线使用轻量 `package.tar.gz`；完整离线使用另外构建的 `offline-package.tar.gz`，包含 OCI 镜像层和节点导入工具，见 [完整离线安装](offline-installation.md)。旧 URL-only 包不再作为完整离线包接收。两种入口使用相同的版本、包摘要、数据镜像与安装流程。样例版本独立于 OpenBKN 平台版本。
 
 ## 1. 修改样例并提交 PR
 
@@ -17,20 +17,21 @@ PR 使用英文标题和描述，完成规范检查与 AI 审核后合并。最�
 供应链与世界杯的数据镜像由主线的 `publish-sample-studio.yml` 构建（服务及数据镜像使用同一主线构建版本）；在 Actions 对应源提交的运行中取得数据镜像 tag，再用 `docker buildx imagetools inspect ghcr.io/openbkn-ai/bkn-samples:<build-version>` 读取 digest。不要使用可变 tag 代替 digest。`publish-sample-data.yml` 按 `sample.yaml` 的 `metadata.name` 动态解析样例目录，不使用固定名称白名单。传入 sample ID、版本以及 Dockerfile 的构建上下文：`sample` 表示相对样例目录，`repository` 表示相对仓库根目录。样例目录名可以与 sample ID 不同。修改数据后，必须等待包含该修改的官方数据镜像发布成功。
 
 ```sh
-python3 tools/publication/build_candidate.py samples/<directory> \
+PYTHONPATH=. python3 tools/publication/build_candidate.py samples/<directory> \
   --version <version> --output /absolute/path/outside/bkn-samples \
-  --data-image-ref ghcr.io/openbkn-ai/bkn-samples@sha256:<digest>
+  --data-image-ref ghcr.io/openbkn-ai/bkn-samples@sha256:<digest> \
+  --image-layout /tmp/sample-oci
 ```
 
-生成 `<directory>/<version>/package.tar.gz` 与 `build.json`。构建只打包，不执行样例代码，也不代表安装成功。`build.json` 记录源提交、工作区状态、逐文件摘要和包摘要，属于作者报告，不是实例安装清单。
+上述完整离线构建需先用 `skopeo copy --all --preserve-digests` 导出本地 OCI layout，生成 `<directory>/<version>/offline-package.tar.gz` 与 `build.json`。在线轻量 `package.tar.gz` 不传两个镜像参数，单独构建。构建只打包，不执行样例代码，也不代表安装成功。`build.json` 记录源提交、工作区状态、逐文件摘要和包摘要，属于作者报告，不是实例安装清单。
 
 归档只包含已跟踪、允许交付的文件和当前版本说明，拒绝符号链接及冲突；归档时间和顺序固定。相同输入可复现同一摘要。使用新的输出目录，不覆盖候选或已发布制品。
 
-数据镜像独立于 tar.gz：无外网环境必须预先将固定镜像提供到目标集群。上传 tar.gz 不会提供容器镜像层，也不意味着所有平台依赖都能离线获得。
+完整离线 tar.gz 包含固定镜像的全部层和本地导入工具，安装与重试禁止拉取。已安装 OpenBKN 和 Kubernetes 是前置条件，不将整个产品重复装入每个样例包。
 
 ## 3. 在测试环境验收精确候选
 
-Studio 首页 → 一键体验 → 导入离线包，选择上述 tar.gz，检查版本说明，再安装。对相同包和数据镜像记录全新安装的实际结果：
+Studio 首页 → 一键体验 → 导入离线包，选择包含镜像层的 offline.v2 完整包；先从包内向每个可调度节点导入镜像，再检查版本说明并安装。验收必须断开外网，从样例镜像无缓存开始，覆盖缺失镜像失败、包内本地导入、重试、卸载及重装。对相同包和数据镜像记录全新安装的实际结果：
 
 - 数据库表、锁定数据及代表值；
 - 知识网络对象、关系和真实数据源绑定；

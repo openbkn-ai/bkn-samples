@@ -242,6 +242,8 @@ def _pod_state(kubectl, sample: str, image: str | None = None) -> str:
         return "ready"
     for item in statuses:
         reason = item.get("state", {}).get("waiting", {}).get("reason", "")
+        if reason == "ErrImageNeverPull":
+            return "offline_image_missing"
         if reason in {"ImagePullBackOff", "ErrImagePull"}:
             return "image_pull_failed"
         terminated = item.get("state", {}).get("terminated") or item.get("lastState", {}).get("terminated") or {}
@@ -379,6 +381,7 @@ def deploy_database(
     data_image_ref: str | None = None,
     require_ownership: bool = False,
     sample_release_version: str | None = None,
+    offline: bool = False,
 ) -> dict:
     """Apply the sample database and wait until it is ready. Never creates a Catalog."""
     _sample_dir, document = _sample(root, sample)
@@ -399,6 +402,8 @@ def deploy_database(
     if image is not None and not _IMAGE_REFERENCE.fullmatch(image):
         raise DeployError("image_unavailable", "sample data image requires a fixed registry digest")
     ghcr_digest = None
+    if offline and data_image_ref is None:
+        raise DeployError("offline_image_missing", "offline installation requires the bundled image identity")
     if image is None:
         tag = image_tag(read_version(root))
         lookup = registry_digests if digests is None else digests
@@ -413,6 +418,13 @@ def deploy_database(
     if require_ownership:
         _assert_database_ownership(kubectl, sample, version, image)
     manifest = _manifests(sample, database, version, image, root_password or "unused", user_password or "unused")
+    if offline:
+        documents = list(yaml.safe_load_all(manifest))
+        for document in documents:
+            if document.get("kind") == "StatefulSet":
+                for container in document["spec"]["template"]["spec"]["containers"]:
+                    container["imagePullPolicy"] = "Never"
+        manifest = yaml.safe_dump_all(documents)
     if secret_manifest == "":
         parts = manifest.split("---\n")
         manifest = "---\n".join(part for part in parts if "kind: Secret" not in part)
@@ -423,13 +435,15 @@ def deploy_database(
     # matches the selected artifact. Never fall back to a mutable tag.
     # Owned resources retain one fixed reference in both state and annotations.
     # Configure the alternative registry explicitly rather than switching identity.
-    ghcr = f"{GHCR_IMAGE}@{ghcr_digest}" if ghcr_digest and not require_ownership else None
+    ghcr = f"{GHCR_IMAGE}@{ghcr_digest}" if ghcr_digest and not require_ownership and not offline else None
     switched = image == ghcr
     state = "pending"
     for _ in range(attempts):
         state = _pod_state(kubectl, sample, image)
         if state == "ready":
             break
+        if offline and state in {"offline_image_missing", "image_pull_failed"}:
+            raise DeployError("offline_image_missing", "Offline image is not present on the node. Import runtime/oci using the package runtime/prepare_offline.py; online pulling is disabled.")
         if state == "sample_data_unavailable":
             if not require_ownership:
                 _discard_failed_data(kubectl, sample)
