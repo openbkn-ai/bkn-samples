@@ -91,11 +91,11 @@ class SupplyVerifyTest(unittest.TestCase):
                          cases["open_forecast_count"]["expected_value"])
         definitions = json.loads((VERIFY.SAMPLE_DIR / "tools/assets/metrics-create.json").read_text())
         metric = next(item for item in definitions["entries"] if item["name"] == "未关闭预测单数")
-        self.assertIn("closestatus_title", [item["name"] for item in metric["analysis_dimensions"]])
+        self.assertIn("closestatus_title", [item["property_name"] for item in metric["query_capabilities"]["analysis_dimensions"]])
 
-    def test_metric_queries_and_bindings_must_both_pass(self):
+    def test_metric_queries_and_ownership_must_both_pass(self):
         report = {key: {"passed": [{"id": "metric"}], "failed": []}
-                  for key in ("verify_metrics", "verify_logic_properties")}
+                  for key in ("verify_metrics", "verify_metric_ownership")}
         self.assertTrue(all(item["ok"] for item in VERIFY.metric_checks(report, True)))
         self.assertFalse(any(item["ok"] for item in VERIFY.metric_checks(report, False)))
         report["verify_metrics"]["failed"] = [{"actual": 0}]

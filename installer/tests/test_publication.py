@@ -11,6 +11,18 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class PublicationTest(unittest.TestCase):
+    def test_candidate_platform_floor_follows_source_version(self):
+        from unittest.mock import patch
+        from tools.publication.build_candidate import platform_range
+        from installer.remote_bundle import compatibility
+        with patch('tools.publication.build_candidate.read_version', return_value='0.2.1'):
+            value = platform_range()
+        self.assertEqual(value, '>=0.2.1 <0.3.0')
+        requires = {'installationProfiles': ['openbkn.ai/sample-install.v1'], 'requiredExtensions': [], 'platformVersion': value, 'architectures': ['arm64'], 'capabilities': []}
+        compatibility(requires, '0.2.1', 'arm64', [])
+        with self.assertRaisesRegex(ValueError, 'platform version'):
+            compatibility(requires, '0.2.0', 'arm64', [])
+
     def test_publication_requires_same_receipt_checks_as_installer(self):
         sample = json.loads((ROOT / "samples/order-basics/releases/0.1.0/sample.json").read_text())
         proof = json.loads((ROOT / "samples/order-basics/releases/0.1.0/verification.json").read_text())

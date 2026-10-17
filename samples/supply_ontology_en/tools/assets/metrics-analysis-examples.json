@@ -1,20 +1,11 @@
 {
-  "comment": "Sample business acceptance, separate from the core50: Asia/Shanghai complete months using explicit >= / < conditions; calendar growth is client/agent arithmetic over actual queried values. CSV gold unchanged.",
+  "comment": "Standard Object Metrics V1 query bodies; IDs and explicit published versions are resolved by metric name. Calendar comparisons and proportions use arithmetic over verified query results.",
   "kn_id": "supply_ontology_en",
   "cases": [
     {
       "id": "signed_monthly",
       "metric_name": "Signing Events",
       "title": "Monthly Signed Quantity (Asia/Shanghai)",
-      "body": {
-        "time": {
-          "start": 1772294400000,
-          "end": 1782835199999,
-          "instant": false,
-          "step": "month"
-        },
-        "limit": 100
-      },
       "expected_series": [
         {
           "labels": {},
@@ -31,6 +22,203 @@
             4429
           ]
         }
+      ],
+      "calculation": "calendar_month_series",
+      "queries": [
+        {
+          "period": "2026-03",
+          "body": {
+            "filter": {
+              "node_type": "group",
+              "boolean_operator": "and",
+              "children": [
+                {
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "gte",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1772294400000
+                    }
+                  ]
+                },
+                {
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "lt",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1774972800000
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "period": "2026-04",
+          "body": {
+            "filter": {
+              "node_type": "group",
+              "boolean_operator": "and",
+              "children": [
+                {
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "gte",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1774972800000
+                    }
+                  ]
+                },
+                {
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "lt",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1777564800000
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "period": "2026-05",
+          "body": {
+            "filter": {
+              "node_type": "group",
+              "boolean_operator": "and",
+              "children": [
+                {
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "gte",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1777564800000
+                    }
+                  ]
+                },
+                {
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "lt",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1780243200000
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "period": "2026-06",
+          "body": {
+            "filter": {
+              "node_type": "group",
+              "boolean_operator": "and",
+              "children": [
+                {
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "gte",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1780243200000
+                    }
+                  ]
+                },
+                {
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "lt",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1782835200000
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "expected_monthly_totals": [
+        6083,
+        5319,
+        4565,
+        4429
       ]
     },
     {
@@ -38,21 +226,45 @@
       "metric_name": "Signing Events",
       "title": "April Signed Quantity (Explicit Period)",
       "body": {
-        "time": {
-          "instant": true
-        },
-        "condition": {
-          "operation": "and",
-          "sub_conditions": [
+        "filter": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
             {
-              "field": "signing_date",
-              "operation": ">=",
-              "value": 1774972800000
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_salesorder",
+                  "property_name": "signing_date"
+                }
+              },
+              "comparison_operator": "gte",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "int64",
+                  "value": 1774972800000
+                }
+              ]
             },
             {
-              "field": "signing_date",
-              "operation": "<",
-              "value": 1777564800000
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_salesorder",
+                  "property_name": "signing_date"
+                }
+              },
+              "comparison_operator": "lt",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "int64",
+                  "value": 1777564800000
+                }
+              ]
             }
           ]
         }
@@ -96,21 +308,45 @@
         {
           "period": "2026-03",
           "body": {
-            "time": {
-              "instant": true
-            },
-            "condition": {
-              "operation": "and",
-              "sub_conditions": [
+            "filter": {
+              "node_type": "group",
+              "boolean_operator": "and",
+              "children": [
                 {
-                  "field": "signing_date",
-                  "operation": ">=",
-                  "value": 1772294400000
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "gte",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1772294400000
+                    }
+                  ]
                 },
                 {
-                  "field": "signing_date",
-                  "operation": "<",
-                  "value": 1774972800000
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "lt",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1774972800000
+                    }
+                  ]
                 }
               ]
             }
@@ -119,21 +355,45 @@
         {
           "period": "2026-04",
           "body": {
-            "time": {
-              "instant": true
-            },
-            "condition": {
-              "operation": "and",
-              "sub_conditions": [
+            "filter": {
+              "node_type": "group",
+              "boolean_operator": "and",
+              "children": [
                 {
-                  "field": "signing_date",
-                  "operation": ">=",
-                  "value": 1774972800000
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "gte",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1774972800000
+                    }
+                  ]
                 },
                 {
-                  "field": "signing_date",
-                  "operation": "<",
-                  "value": 1777564800000
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "lt",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1777564800000
+                    }
+                  ]
                 }
               ]
             }
@@ -142,21 +402,45 @@
         {
           "period": "2026-05",
           "body": {
-            "time": {
-              "instant": true
-            },
-            "condition": {
-              "operation": "and",
-              "sub_conditions": [
+            "filter": {
+              "node_type": "group",
+              "boolean_operator": "and",
+              "children": [
                 {
-                  "field": "signing_date",
-                  "operation": ">=",
-                  "value": 1777564800000
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "gte",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1777564800000
+                    }
+                  ]
                 },
                 {
-                  "field": "signing_date",
-                  "operation": "<",
-                  "value": 1780243200000
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "lt",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1780243200000
+                    }
+                  ]
                 }
               ]
             }
@@ -165,21 +449,45 @@
         {
           "period": "2026-06",
           "body": {
-            "time": {
-              "instant": true
-            },
-            "condition": {
-              "operation": "and",
-              "sub_conditions": [
+            "filter": {
+              "node_type": "group",
+              "boolean_operator": "and",
+              "children": [
                 {
-                  "field": "signing_date",
-                  "operation": ">=",
-                  "value": 1780243200000
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "gte",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1780243200000
+                    }
+                  ]
                 },
                 {
-                  "field": "signing_date",
-                  "operation": "<",
-                  "value": 1782835200000
+                  "node_type": "predicate",
+                  "left": {
+                    "source": "property",
+                    "property_ref": {
+                      "object_type_id": "supply_ontology_en_salesorder",
+                      "property_name": "signing_date"
+                    }
+                  },
+                  "comparison_operator": "lt",
+                  "right": [
+                    {
+                      "source": "literal",
+                      "value_type": "int64",
+                      "value": 1782835200000
+                    }
+                  ]
                 }
               ]
             }
@@ -192,21 +500,17 @@
       "metric_name": "Material Count",
       "title": "Material-type proportions as percentages of all 3497 materials.",
       "body": {
-        "time": {
-          "instant": true
-        },
         "analysis_dimensions": [
-          "materialattr"
-        ],
-        "metrics": {
-          "type": "proportion"
-        },
-        "limit": 100
+          {
+            "object_type_id": "supply_ontology_en_material",
+            "property_name": "materialattr"
+          }
+        ]
       },
       "expected_series": [
         {
           "labels": {
-            "materialattr": "Purchased"
+            "supply_ontology_en_material.materialattr": "Purchased"
           },
           "values": [
             3149
@@ -217,7 +521,7 @@
         },
         {
           "labels": {
-            "materialattr": "Subcontracted"
+            "supply_ontology_en_material.materialattr": "Subcontracted"
           },
           "values": [
             114
@@ -228,7 +532,7 @@
         },
         {
           "labels": {
-            "materialattr": "Manufactured"
+            "supply_ontology_en_material.materialattr": "Manufactured"
           },
           "values": [
             233
@@ -239,7 +543,7 @@
         },
         {
           "labels": {
-            "materialattr": "Phantom"
+            "supply_ontology_en_material.materialattr": "Phantom"
           },
           "values": [
             1
@@ -248,31 +552,67 @@
             0.028595939376608523
           ]
         }
-      ]
+      ],
+      "calculation": "proportion"
     },
     {
       "id": "signed_month_status_proportion",
       "metric_name": "Signing Events",
       "title": "April order-status proportions by time bucket; denominator 5319.",
       "body": {
-        "time": {
-          "start": 1774972800000,
-          "end": 1777564799999,
-          "instant": false,
-          "step": "month"
-        },
         "analysis_dimensions": [
-          "order_status"
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "order_status"
+          }
         ],
-        "metrics": {
-          "type": "proportion"
-        },
-        "limit": 100
+        "filter": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_salesorder",
+                  "property_name": "signing_date"
+                }
+              },
+              "comparison_operator": "gte",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "int64",
+                  "value": 1774972800000
+                }
+              ]
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "supply_ontology_en_salesorder",
+                  "property_name": "signing_date"
+                }
+              },
+              "comparison_operator": "lt",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "int64",
+                  "value": 1777564800000
+                }
+              ]
+            }
+          ]
+        }
       },
       "expected_series": [
         {
           "labels": {
-            "order_status": "Confirmed"
+            "supply_ontology_en_salesorder.order_status": "Confirmed"
           },
           "periods": [
             "2026-04"
@@ -286,7 +626,7 @@
         },
         {
           "labels": {
-            "order_status": "In Progress"
+            "supply_ontology_en_salesorder.order_status": "In Progress"
           },
           "periods": [
             "2026-04"
@@ -298,7 +638,9 @@
             0.1692047377326565
           ]
         }
-      ]
+      ],
+      "calculation": "proportion",
+      "period": "2026-04"
     }
   ],
   "business_timezone": "Asia/Shanghai"

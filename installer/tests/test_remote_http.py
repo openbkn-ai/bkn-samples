@@ -119,7 +119,7 @@ class RemoteHttpTest(unittest.TestCase):
             with patch.dict("os.environ", env), \
                  patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
                  patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), build_manifest_index(ROOT, "a" * 40), build_manifest_index(ROOT, "a" * 40))), \
-                 patch("installer.platform_version.read_backend_version", return_value="0.2.0") as health:
+                 patch("installer.platform_version.read_backend_version", return_value=read_version(ROOT)) as health:
                 main()
                 result = apps[0].import_package(candidate / "package.tar.gz", "admin")
                 self.assertEqual(result["version"], "0.1.2")
@@ -129,7 +129,7 @@ class RemoteHttpTest(unittest.TestCase):
                 with self.assertRaises(ApiError):
                     apps[0].import_package(candidate / "package.tar.gz", "admin")
                 self.assertFalse((state / "supply-chain.json").exists())
-                health.return_value = "0.2.0"
+                health.return_value = read_version(ROOT)
                 with patch.dict("os.environ", {"BKN_SAMPLE_PLATFORM_CAPABILITIES": "vega.catalog"}):
                     main()
                     with self.assertRaises(ApiError):

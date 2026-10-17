@@ -1,5 +1,5 @@
 {
-  "comment": "供给 tools/power_layer.py create 或 openbkn bkn metric create --body-file。多余字段会被平台忽略，脚本只取 entries。仓预设与验收 query 见 metrics-query-examples.json；对象逻辑属性见 logic-properties.json。未关闭预测单数的定义 condition 当前会被平台丢弃，查询时必须再带关闭状态。",
+  "comment": "Standard Object Metrics V1 drafts. Publish immutable versions before querying. Object-set aggregates are owned by object types, not object-instance logical properties.",
   "kn_id": "supply_ontology_hand",
   "warehouse_scope_presets": {
     "production_available": [
@@ -40,329 +40,599 @@
   },
   "entries": [
     {
+      "version": 1,
+      "code": "product_total_count",
       "name": "产品总数",
-      "comment": "count(material_number)。样例快照 30。",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "count(material_number)。样例快照 30。",
+      "owner_object_type_id": "supply_ontology_hand_product",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_product",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "material_number",
-          "aggr": "count"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_product",
+              "property_name": "material_number"
+            }
+          }
         }
+      },
+      "query_capabilities": {
+        "analysis_dimensions": [],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
       }
     },
     {
+      "version": 1,
+      "code": "material_total_count",
       "name": "物料总数",
-      "comment": "count(material_code)。可按 materialattr / group_name 过滤或分组。快照 3497。",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "count(material_code)。可按 materialattr / group_name 过滤或分组。快照 3497。",
+      "owner_object_type_id": "supply_ontology_hand_material",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_material",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "material_code",
-          "aggr": "count"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_material",
+              "property_name": "material_code"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "materialattr",
-          "display_name": "物料属性"
-        },
-        {
-          "name": "group_name",
-          "display_name": "存货类别"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_material",
+            "property_name": "materialattr"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_material",
+            "property_name": "group_name"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "supplier_total_count",
       "name": "供应商总数",
-      "comment": "count(supplier_code)。可按 purchaserid_name 过滤。快照 230。",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "count(supplier_code)。可按 purchaserid_name 过滤。快照 230。",
+      "owner_object_type_id": "supply_ontology_hand_supplier",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_supplier",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "supplier_code",
-          "aggr": "count"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_supplier",
+              "property_name": "supplier_code"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "purchaserid_name",
-          "display_name": "采购员"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_supplier",
+            "property_name": "purchaserid_name"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "sales_order_count",
       "name": "销售订单数",
-      "comment": "count(sales_order_id)。可按 product_code / order_status 过滤或分组。快照 800。",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "transaction",
+      "description": "count(sales_order_id)。可按 product_code / order_status 过滤或分组。快照 800。",
+      "owner_object_type_id": "supply_ontology_hand_salesorder",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_salesorder",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "sales_order_id",
-          "aggr": "count"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_salesorder",
+              "property_name": "sales_order_id"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "product_code",
-          "display_name": "产品编码"
-        },
-        {
-          "name": "order_status",
-          "display_name": "订单状态"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "product_code"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "order_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "warehouse_count",
       "name": "仓库数",
-      "comment": "库存记录 warehouse 去重。快照 29。生产可用仓是 7 个预设，不是本指标。",
-      "tags": [
-        "p0",
-        "scale",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "库存记录 warehouse 去重。快照 29。生产可用仓是 7 个预设，不是本指标。",
+      "owner_object_type_id": "supply_ontology_hand_inventory",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_inventory",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "warehouse",
-          "aggr": "count_distinct"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count_distinct",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_inventory",
+              "property_name": "warehouse"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "stock_status",
-          "display_name": "库存状态"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_inventory",
+            "property_name": "stock_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "available_qty_sum",
       "name": "库存可用量",
-      "comment": "sum(available_inventory_qty)。不要在定义里写死仓列表。查询时用 warehouse in 展开 production_available / finished_goods，或 all 不限制。",
-      "tags": [
-        "p0",
-        "inventory",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "sum(available_inventory_qty)。不要在定义里写死仓列表。查询时用 warehouse in 展开 production_available / finished_goods，或 all 不限制。",
+      "owner_object_type_id": "supply_ontology_hand_inventory",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_inventory",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "available_inventory_qty",
-          "aggr": "sum"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "decimal",
+          "semantic_type": "measure",
+          "precision": 38,
+          "scale": 6,
+          "rounding_mode": "half_up"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_inventory",
+              "property_name": "available_inventory_qty"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "material_code",
-          "display_name": "物料编码"
-        },
-        {
-          "name": "warehouse",
-          "display_name": "仓库"
-        },
-        {
-          "name": "stock_status",
-          "display_name": "库存状态"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_inventory",
+            "property_name": "material_code"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_inventory",
+            "property_name": "warehouse"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_inventory",
+            "property_name": "stock_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "forecast_qty_sum",
       "name": "预测需求量合计",
-      "comment": "sum(qty)。可按 material_number / closestatus_title 过滤或分组。",
-      "tags": [
-        "p0",
-        "planning",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "sum(qty)。可按 material_number / closestatus_title 过滤或分组。",
+      "owner_object_type_id": "supply_ontology_hand_forecast",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_forecast",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "qty",
-          "aggr": "sum"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "decimal",
+          "semantic_type": "measure",
+          "precision": 38,
+          "scale": 6,
+          "rounding_mode": "half_up"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_forecast",
+              "property_name": "qty"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "material_number",
-          "display_name": "产品编码"
-        },
-        {
-          "name": "closestatus_title",
-          "display_name": "关闭状态"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_forecast",
+            "property_name": "material_number"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_forecast",
+            "property_name": "closestatus_title"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "open_forecast_count",
       "name": "未关闭预测单数",
-      "comment": "意图：count(id) 且 closestatus_title != 已关闭。定义态 condition 当前会被丢弃；查询时必须再带该过滤。快照 90。",
-      "tags": [
-        "p0",
-        "planning",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "transaction",
+      "description": "Count forecast IDs. Apply the published closestatus_title query dimension explicitly to count open forecasts.",
+      "owner_object_type_id": "supply_ontology_hand_forecast",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_forecast",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "id",
-          "aggr": "count"
-        }
-      },
-      "condition": {
-        "field": "closestatus_title",
-        "operation": "!=",
-        "value": "已关闭"
-      },
-      "analysis_dimensions": [
-        {
-          "name": "material_number",
-          "display_name": "产品编码"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
         },
-        {
-          "name": "closestatus_title",
-          "display_name": "关闭状态"
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "count",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_forecast",
+              "property_name": "id"
+            }
+          }
         }
-      ]
+      },
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_forecast",
+            "property_name": "material_number"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_forecast",
+            "property_name": "closestatus_title"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "signed_quantity_sum",
       "name": "签约数量合计",
-      "comment": "sum(signing_quantity)。按 product_code 服务端过滤；382-000005 的 40 张订单对应 1081 套。快照汇总，不代表历史趋势。",
-      "tags": [
-        "p0",
-        "sales",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "sum(signing_quantity)。按 product_code 服务端过滤；382-000005 的 40 张订单对应 1081 套。快照汇总，不代表历史趋势。",
+      "owner_object_type_id": "supply_ontology_hand_salesorder",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_salesorder",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "signing_quantity",
-          "aggr": "sum"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_salesorder",
+              "property_name": "signing_quantity"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "product_code",
-          "display_name": "产品编码"
-        },
-        {
-          "name": "order_status",
-          "display_name": "订单状态"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "product_code"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "order_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "shipped_quantity_sum",
       "name": "发货数量合计",
-      "comment": "sum(shipping_quantity)。按 product_code 服务端过滤；382-000005 的 40 张订单对应 1066 套。快照汇总，不代表历史趋势。",
-      "tags": [
-        "p0",
-        "sales",
-        "open-caliber"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "sum(shipping_quantity)。按 product_code 服务端过滤；382-000005 的 40 张订单对应 1066 套。快照汇总，不代表历史趋势。",
+      "owner_object_type_id": "supply_ontology_hand_salesorder",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_salesorder",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "shipping_quantity",
-          "aggr": "sum"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
+        },
+        "value": {
+          "physical_type": "decimal",
+          "semantic_type": "measure",
+          "precision": 38,
+          "scale": 6,
+          "rounding_mode": "half_up"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_salesorder",
+              "property_name": "shipping_quantity"
+            }
+          }
         }
       },
-      "analysis_dimensions": [
-        {
-          "name": "product_code",
-          "display_name": "产品编码"
-        },
-        {
-          "name": "order_status",
-          "display_name": "订单状态"
-        }
-      ]
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "product_code"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "order_status"
+          }
+        ],
+        "time_dimensions": []
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     },
     {
+      "version": 1,
+      "code": "signed_quantity_by_date",
       "name": "按签约日期的签约数量",
-      "comment": "按 sales_order.signing_date 汇总签约数量，表示签约事件流量。固定示例窗口 2026-03-01 至 2026-06-30；默认无滚动窗口，趋势需明确选择历史期间。",
-      "tags": [
-        "p0",
-        "sales",
-        "temporal"
-      ],
-      "unit_type": "countUnit",
-      "unit": "piece",
+      "description": "按 sales_order.signing_date 汇总签约数量，表示签约事件流量。固定示例窗口 2026-03-01 至 2026-06-30；默认无滚动窗口，趋势需明确选择历史期间。",
+      "owner_object_type_id": "supply_ontology_hand_salesorder",
       "metric_type": "atomic",
-      "scope_type": "object_type",
-      "scope_ref": "supply_ontology_hand_salesorder",
-      "calculation_formula": {
-        "aggregation": {
-          "property": "signing_quantity",
-          "aggr": "sum"
-        }
-      },
-      "time_dimension": {
-        "property": "signing_date",
-        "default_range_policy": "none"
-      },
-      "analysis_dimensions": [
-        {
-          "name": "order_status",
-          "display_name": "订单状态"
+      "calculation_scope": "object_set",
+      "result_semantics": {
+        "statistical_grain": {
+          "group_by_dimensions": []
         },
-        {
-          "name": "product_code",
-          "display_name": "产品编码"
+        "value": {
+          "physical_type": "int64",
+          "semantic_type": "count"
+        },
+        "no_data_policy": "zero",
+        "partial_data_policy": "reject"
+      },
+      "specification": {
+        "kind": "atomic",
+        "measure": {
+          "aggregation": "sum",
+          "expression": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "supply_ontology_hand_salesorder",
+              "property_name": "signing_quantity"
+            }
+          }
         }
-      ]
+      },
+      "query_capabilities": {
+        "analysis_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "order_status"
+          },
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "product_code"
+          }
+        ],
+        "time_dimensions": [
+          {
+            "object_type_id": "supply_ontology_hand_salesorder",
+            "property_name": "signing_date"
+          }
+        ]
+      },
+      "lifecycle": {
+        "status": "draft",
+        "ontology_version": "1.0",
+        "expression_language_version": "1.0",
+        "function_registry_version": "1.0",
+        "aggregation_registry_version": "1.0",
+        "unit_registry_version": "1.0"
+      }
     }
   ]
 }

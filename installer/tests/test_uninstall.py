@@ -31,19 +31,21 @@ class UninstallTest(unittest.TestCase):
         annotations = {"openbkn.ai/sample-id": "supply-chain", "openbkn.ai/sample-version": "0.1.3", "openbkn.ai/sample-data-image": "image@sha256:abc"}
         self.database = {(kind, name): {"metadata": {"uid": kind, "annotations": annotations}} for kind, name in
                          [("statefulset", "bkn-sample-supply-chain"), ("service", "bkn-sample-supply-chain"), ("secret", "bkn-sample-supply-chain"), ("pvc", "data-bkn-sample-supply-chain-0")]}
-        self.platform["/api/bkn-backend/v1/knowledge-networks/network-owned/metrics/metric-owned"] = {}
+        self.platform["/api/bkn-backend/v1/knowledge-networks/network-owned/object-metrics/metric-owned"] = {"definition": {"status": "published", "version": 1}}
         self.deleted = []
 
     def api(self, method, path):
         if method == "GET" and path.startswith("/api/vega-backend/v1/catalogs?"):
             return {"entries": [value for target, value in self.platform.items()
                                 if target.startswith("/api/vega-backend/v1/catalogs/")]}
-        if method == "GET" and "/metrics?" in path:
-            return {"entries": [{"id": "metric-owned"}]} if path.split("/metrics?")[0] + "/metrics/metric-owned" in self.platform else {"entries": []}
         if method == "GET":
             return self.platform.get(path)
         self.deleted.append(path)
         self.platform.pop(path, None)
+        if method == "DELETE" and path == "/api/bkn-backend/v1/knowledge-networks/network-owned":
+            for target in list(self.platform):
+                if target.startswith(path + "/object-metrics/"):
+                    del self.platform[target]
 
     def kubectl(self, args, body=None):
         if args[0] == "get":
@@ -62,6 +64,21 @@ class UninstallTest(unittest.TestCase):
         current = _read_state(self.state, "supply-chain")
         begin_installation_attempt(self.state, current, previous)
         execute_uninstall(self.state, "supply-chain", self.api, self.kubectl)
+
+    def test_network_delete_cascades_published_metrics_without_legacy_api(self):
+        original = self.api
+        calls = []
+        def checked(method, path):
+            calls.append((method, path))
+            self.assertNotIn("/metrics", path)
+            self.assertNotIn("/object-metrics", path)
+            return original(method, path)
+        self.api = checked
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+        self.assertFalse(any("object-metrics" in path for path in self.platform))
+        self.assertIn(("DELETE", "/api/bkn-backend/v1/knowledge-networks/network-owned"), calls)
+        self.assertIn("/api/agent-operator-integration/v1/skills/other-sample", self.platform)
 
     def test_delete_conflict_retries_once_then_accepts_empty_success(self):
         response = MagicMock()

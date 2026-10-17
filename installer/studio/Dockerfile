@@ -3,8 +3,8 @@ FROM python:3.12-slim AS python-base
 FROM node:22-bookworm-slim AS cli
 # Bootstrap HTTPS apt using the existing Python base's trusted CA bundle.
 COPY --from=python-base /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-# npm still publishes 0.1.5. This platform rejects that CLI, so build the 0.2.0 commit.
-ARG BKN_SDK_REF=703921dbd2affd39c07c65f65e05b4ae0f266187
+# Build the pinned SDK commit matching the main platform contract.
+ARG BKN_SDK_REF=5e27685a59ee7975d1998ec55b9bbc0da003c5be
 RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.list.d/debian.sources \
     && apt-get -o Acquire::Retries=3 update \
     && apt-get -o Acquire::Retries=3 install -y --no-install-recommends ca-certificates git \

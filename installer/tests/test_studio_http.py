@@ -128,6 +128,42 @@ class StudioHttpTest(unittest.TestCase):
         with self.assertRaises(ApiError):
             authenticate_bearer(fetch, None)
 
+    def test_safe_http_failure_becomes_a_bounded_public_error(self):
+        from urllib.error import HTTPError, URLError
+        from unittest.mock import Mock
+        for error, expected in [(HTTPError("http://safe/me", 401, "expired", {}, None), 401),
+                                (HTTPError("http://safe/me", 403, "forbidden", {}, None), 401),
+                                (HTTPError("http://safe/me", 500, "private-detail", {}, None), 503),
+                                (URLError("private-detail"), 503), (TimeoutError(), 503)]:
+            with self.subTest(expected=expected):
+                fetch = Mock(side_effect=error)
+                built, _ = app()
+                built.authenticate = lambda auth: authenticate_bearer(fetch, auth)
+                status, payload = dispatch(built, "GET", "/api/studio/samples", "Bearer expired", b"")
+                self.assertEqual(status, expected)
+                self.assertNotIn("private-detail", json.dumps(payload))
+                self.assertEqual(fetch.call_count, 1)
+
+    def test_expired_safe_token_returns_json_401_over_http(self):
+        from urllib.error import HTTPError
+        from unittest.mock import Mock
+        built, _ = app()
+        fetch = Mock(side_effect=HTTPError("http://safe/me", 401, "expired", {}, None))
+        built.authenticate = lambda auth: authenticate_bearer(fetch, auth)
+        _Handler.app = built
+        server = ThreadingHTTPServer(("127.0.0.1", 0), _Handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        try:
+            connection = HTTPConnection("127.0.0.1", server.server_address[1], timeout=5)
+            connection.request("GET", "/api/studio/samples", headers={"Authorization": "Bearer expired"})
+            response = connection.getresponse()
+            self.assertEqual(response.status, 401)
+            self.assertEqual(json.loads(response.read())["code"], "forbidden")
+            connection.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+
     def test_missing_token_is_rejected_over_http(self):
         built, _calls = app("")
         _Handler.app = built

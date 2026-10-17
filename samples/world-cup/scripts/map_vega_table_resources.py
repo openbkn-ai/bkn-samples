@@ -47,7 +47,10 @@ def _stem_from_sid(sid: str) -> str | None:
     sid = sid.strip()
     if not sid:
         return None
-    tail = sid.rsplit(".", 1)[-1]
+    tail = sid.rsplit(".", 1)[-1].strip()
+    # MySQL discovery returns quoted identifiers, e.g. `worldcup`.`wc_teams`.
+    if len(tail) >= 2 and tail[0] == tail[-1] and tail[0] in ("`", '"'):
+        tail = tail[1:-1]
     if tail.startswith("wc_"):
         return tail[len("wc_") :]
     # Allow bare wc-less table names if discover ever emits them.

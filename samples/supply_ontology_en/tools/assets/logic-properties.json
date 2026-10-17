@@ -1,246 +1,72 @@
 {
-  "comment": "After creating metrics, resolve IDs by metric_name and attach them to the scope object's logic_properties. metric.scope_ref must equal the object type ID. Class-level counts need no instance parameters; stock, forecasts and orders use object properties as filters. Omit instant/start/end/step because the system adds them.",
+  "comment": "These object-set metrics are owned by an object type. They do not define object-instance logical properties. Publication and ownership are verified by power_layer.py verify-ownership.",
   "kn_id": "supply_ontology_en",
-  "bindings": [
+  "metrics": [
     {
-      "object_type_id": "supply_ontology_en_product",
-      "logic_properties": [
-        {
-          "name": "product_total_count",
-          "display_name": "Product Count",
-          "type": "metric",
-          "metric_name": "Product Count",
-          "comment": "Class-level finished product count. Use metric query for values; discover the metric through product logic properties.",
-          "parameters": []
-        }
-      ]
+      "metric_name": "Product Count",
+      "code": "product_total_count",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_product"
     },
     {
-      "object_type_id": "supply_ontology_en_material",
-      "logic_properties": [
-        {
-          "name": "material_total_count",
-          "display_name": "Material Count",
-          "type": "metric",
-          "metric_name": "Material Count",
-          "comment": "Class-level material count; filter by material type or stock category.",
-          "parameters": [
-            {
-              "name": "materialattr",
-              "type": "string",
-              "value_from": "input",
-              "operation": "==",
-              "comment": "Material type: Purchased / Manufactured / Subcontracted / Phantom."
-            },
-            {
-              "name": "group_name",
-              "type": "string",
-              "value_from": "input",
-              "operation": "==",
-              "comment": "Stock Category"
-            }
-          ]
-        }
-      ]
+      "metric_name": "Material Count",
+      "code": "material_total_count",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_material"
     },
     {
-      "object_type_id": "supply_ontology_en_supplier",
-      "logic_properties": [
-        {
-          "name": "supplier_total_count",
-          "display_name": "Supplier Count",
-          "type": "metric",
-          "metric_name": "Supplier Count",
-          "comment": "Class-level supplier count; supports buyer filters.",
-          "parameters": [
-            {
-              "name": "purchaserid_name",
-              "type": "string",
-              "value_from": "input",
-              "operation": "==",
-              "comment": "Buyer Name"
-            }
-          ]
-        }
-      ]
+      "metric_name": "Supplier Count",
+      "code": "supplier_total_count",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_supplier"
     },
     {
-      "object_type_id": "supply_ontology_en_salesorder",
-      "logic_properties": [
-        {
-          "name": "sales_order_count",
-          "display_name": "Sales Order Count",
-          "type": "metric",
-          "metric_name": "Sales Order Count",
-          "comment": "Order count; use product_code for an instance and optionally filter order_status.",
-          "parameters": [
-            {
-              "name": "product_code",
-              "type": "string",
-              "value_from": "property",
-              "value": "product_code",
-              "operation": "=="
-            },
-            {
-              "name": "order_status",
-              "type": "string",
-              "value_from": "input",
-              "operation": "==",
-              "comment": "Order Status"
-            }
-          ]
-        },
-        {
-          "name": "signed_quantity_sum",
-          "display_name": "Total Signed Quantity",
-          "type": "metric",
-          "metric_name": "Total Signed Quantity",
-          "comment": "Aggregate sales quantity; filter by product code.",
-          "parameters": [
-            {
-              "name": "product_code",
-              "type": "string",
-              "value_from": "property",
-              "value": "product_code",
-              "operation": "=="
-            }
-          ]
-        },
-        {
-          "name": "shipped_quantity_sum",
-          "display_name": "Total Shipped Quantity",
-          "type": "metric",
-          "metric_name": "Total Shipped Quantity",
-          "comment": "Aggregate sales quantity; filter by product code.",
-          "parameters": [
-            {
-              "name": "product_code",
-              "type": "string",
-              "value_from": "property",
-              "value": "product_code",
-              "operation": "=="
-            }
-          ]
-        },
-        {
-          "name": "signed_quantity_by_date",
-          "display_name": "Signing Events",
-          "type": "metric",
-          "metric_name": "Signing Events",
-          "comment": "Signing event quantity. Objects default to the product all-time total; use the fixed historical examples for time analysis.",
-          "parameters": [
-            {
-              "name": "product_code",
-              "value_from": "property",
-              "value": "product_code",
-              "type": "string",
-              "operation": "=="
-            }
-          ]
-        }
-      ]
+      "metric_name": "Sales Order Count",
+      "code": "sales_order_count",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_salesorder"
     },
     {
-      "object_type_id": "supply_ontology_en_inventory",
-      "logic_properties": [
-        {
-          "name": "warehouse_count",
-          "display_name": "Warehouse Count",
-          "type": "metric",
-          "metric_name": "Warehouse Count",
-          "comment": "Distinct warehouses in stock records, regardless of the production_available preset.",
-          "parameters": [
-            {
-              "name": "stock_status",
-              "type": "string",
-              "value_from": "input",
-              "operation": "==",
-              "comment": "Stock status, such as Available."
-            }
-          ]
-        },
-        {
-          "name": "available_qty_sum",
-          "display_name": "Available Stock",
-          "type": "metric",
-          "metric_name": "Available Stock",
-          "comment": "sum(available_inventory_qty). Expand warehouse presets with warehouse in at query time; keep them out of the metric definition.",
-          "parameters": [
-            {
-              "name": "material_code",
-              "type": "string",
-              "value_from": "property",
-              "value": "material_code",
-              "operation": "=="
-            },
-            {
-              "name": "warehouse",
-              "type": "string",
-              "value_from": "input",
-              "operation": "in",
-              "comment": "Warehouse list; expand the finished_goods or production_available preset here."
-            },
-            {
-              "name": "stock_status",
-              "type": "string",
-              "value_from": "input",
-              "operation": "==",
-              "comment": "Stock status; often defaults to Available."
-            }
-          ]
-        }
-      ]
+      "metric_name": "Warehouse Count",
+      "code": "warehouse_count",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_inventory"
     },
     {
-      "object_type_id": "supply_ontology_en_forecast",
-      "logic_properties": [
-        {
-          "name": "forecast_qty_sum",
-          "display_name": "Total Forecast Demand",
-          "type": "metric",
-          "metric_name": "Total Forecast Demand",
-          "comment": "sum(qty). Add a closestatus_title filter for open forecasts.",
-          "parameters": [
-            {
-              "name": "material_number",
-              "type": "string",
-              "value_from": "property",
-              "value": "material_number",
-              "operation": "=="
-            },
-            {
-              "name": "closestatus_title",
-              "type": "string",
-              "value_from": "input",
-              "operation": "==",
-              "comment": "Closure status. For open forecasts, use Open or != Closed."
-            }
-          ]
-        },
-        {
-          "name": "open_forecast_count",
-          "display_name": "Open_Forecast_Count",
-          "type": "metric",
-          "metric_name": "Open_Forecast_Count",
-          "comment": "Definition-level condition is discarded by the deployed API. Queries must include closestatus_title != Closed or == Open.",
-          "parameters": [
-            {
-              "name": "material_number",
-              "type": "string",
-              "value_from": "property",
-              "value": "material_number",
-              "operation": "=="
-            },
-            {
-              "name": "closestatus_title",
-              "type": "string",
-              "value_from": "input",
-              "operation": "!=",
-              "comment": "Closure status; query open records with Closed and operation !=."
-            }
-          ]
-        }
-      ]
+      "metric_name": "Available Stock",
+      "code": "available_qty_sum",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_inventory"
+    },
+    {
+      "metric_name": "Total Forecast Demand",
+      "code": "forecast_qty_sum",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_forecast"
+    },
+    {
+      "metric_name": "Open_Forecast_Count",
+      "code": "open_forecast_count",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_forecast"
+    },
+    {
+      "metric_name": "Total Signed Quantity",
+      "code": "signed_quantity_sum",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_salesorder"
+    },
+    {
+      "metric_name": "Total Shipped Quantity",
+      "code": "shipped_quantity_sum",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_salesorder"
+    },
+    {
+      "metric_name": "Signing Events",
+      "code": "signed_quantity_by_date",
+      "version": 1,
+      "owner_object_type_id": "supply_ontology_en_salesorder"
     }
   ]
 }

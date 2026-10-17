@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from tools.publication.build_candidate import build, require
+from tools.publication.build_candidate import build, require, platform_range
 
 
 def prepare(sample_dir, version, output):
@@ -17,6 +17,7 @@ def prepare(sample_dir, version, output):
     manifest = json.loads(baseline.read_text())
     manifest['metadata']['version'] = version
     spec = manifest['spec']
+    spec['requires']['platformVersion'] = platform_range()
     spec['release']['publishedAt'] = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
     report = json.loads((candidate / 'build.json').read_text())
     spec['release']['releaseNotes'] = [{**note, 'path': Path(note['path']).name} for note in report['releaseNotes']]

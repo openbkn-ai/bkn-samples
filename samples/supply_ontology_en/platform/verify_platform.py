@@ -79,7 +79,7 @@ def build_checks(*, data_ok: bool, run_cli, components: dict) -> list[dict]:
 def metric_checks(report: dict, command_ok: bool) -> list[dict]:
     checks = []
     for section, name in (("verify_metrics", "metric-query"),
-                          ("verify_logic_properties", "metric-binding")):
+                          ("verify_metric_ownership", "metric-ownership")):
         result = report.get(section) or {}
         checks.append({"name": name, "ok": bool(command_ok and result.get("passed")
                                                and result.get("failed") == [])})
