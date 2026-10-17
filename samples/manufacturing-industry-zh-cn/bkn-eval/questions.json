@@ -243,320 +243,320 @@
     "id": "MFG-031",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does bill_of_materials_bom_version_id_to_product_bom_versions connect bill_of_materials to product_bom_versions?",
-    "question_zh_cn": "bill_of_materials_bom_version_id_to_product_bom_versions 如何将 bill_of_materials 关联到 product_bom_versions？",
+    "question_en": "How does bom_to_product_bom_version connect bill_of_materials to product_bom_versions?",
+    "question_zh_cn": "bom_to_product_bom_version 如何将 bill_of_materials 关联到 product_bom_versions？",
     "expected_answer": "bill_of_materials.bom_version_id → product_bom_versions.bom_version_id"
   },
   {
     "id": "MFG-032",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does bom_components_bom_id_to_bill_of_materials connect bom_components to bill_of_materials?",
-    "question_zh_cn": "bom_components_bom_id_to_bill_of_materials 如何将 bom_components 关联到 bill_of_materials？",
+    "question_en": "How does bom_component_to_bom connect bom_components to bill_of_materials?",
+    "question_zh_cn": "bom_component_to_bom 如何将 bom_components 关联到 bill_of_materials？",
     "expected_answer": "bom_components.bom_id → bill_of_materials.bom_id"
   },
   {
     "id": "MFG-033",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does bom_components_component_product_id_to_products connect bom_components to products?",
-    "question_zh_cn": "bom_components_component_product_id_to_products 如何将 bom_components 关联到 products？",
+    "question_en": "How does bom_component_to_product connect bom_components to products?",
+    "question_zh_cn": "bom_component_to_product 如何将 bom_components 关联到 products？",
     "expected_answer": "bom_components.component_product_id → products.product_id"
   },
   {
     "id": "MFG-034",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does demand_forecasts_product_id_to_products connect demand_forecasts to products?",
-    "question_zh_cn": "demand_forecasts_product_id_to_products 如何将 demand_forecasts 关联到 products？",
+    "question_en": "How does demand_forecast_to_product connect demand_forecasts to products?",
+    "question_zh_cn": "demand_forecast_to_product 如何将 demand_forecasts 关联到 products？",
     "expected_answer": "demand_forecasts.product_id → products.product_id"
   },
   {
     "id": "MFG-035",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does finished_goods_receipts_inspection_lot_id_to_quality_inspection_lots connect finished_goods_receipts to quality_inspection_lots?",
-    "question_zh_cn": "finished_goods_receipts_inspection_lot_id_to_quality_inspection_lots 如何将 finished_goods_receipts 关联到 quality_inspection_lots？",
+    "question_en": "How does fg_receipt_to_inspection_lot connect finished_goods_receipts to quality_inspection_lots?",
+    "question_zh_cn": "fg_receipt_to_inspection_lot 如何将 finished_goods_receipts 关联到 quality_inspection_lots？",
     "expected_answer": "finished_goods_receipts.inspection_lot_id → quality_inspection_lots.inspection_lot_id"
   },
   {
     "id": "MFG-036",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does finished_goods_receipts_inventory_location_id_to_inventory_locations connect finished_goods_receipts to inventory_locations?",
-    "question_zh_cn": "finished_goods_receipts_inventory_location_id_to_inventory_locations 如何将 finished_goods_receipts 关联到 inventory_locations？",
+    "question_en": "How does fg_receipt_to_inv_location connect finished_goods_receipts to inventory_locations?",
+    "question_zh_cn": "fg_receipt_to_inv_location 如何将 finished_goods_receipts 关联到 inventory_locations？",
     "expected_answer": "finished_goods_receipts.inventory_location_id → inventory_locations.inventory_location_id"
   },
   {
     "id": "MFG-037",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does finished_goods_receipts_production_order_id_to_production_orders connect finished_goods_receipts to production_orders?",
-    "question_zh_cn": "finished_goods_receipts_production_order_id_to_production_orders 如何将 finished_goods_receipts 关联到 production_orders？",
+    "question_en": "How does fg_receipt_to_prod_order connect finished_goods_receipts to production_orders?",
+    "question_zh_cn": "fg_receipt_to_prod_order 如何将 finished_goods_receipts 关联到 production_orders？",
     "expected_answer": "finished_goods_receipts.production_order_id → production_orders.production_order_id"
   },
   {
     "id": "MFG-038",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does goods_receipts_inventory_location_id_to_inventory_locations connect goods_receipts to inventory_locations?",
-    "question_zh_cn": "goods_receipts_inventory_location_id_to_inventory_locations 如何将 goods_receipts 关联到 inventory_locations？",
+    "question_en": "How does goods_receipt_to_inv_location connect goods_receipts to inventory_locations?",
+    "question_zh_cn": "goods_receipt_to_inv_location 如何将 goods_receipts 关联到 inventory_locations？",
     "expected_answer": "goods_receipts.inventory_location_id → inventory_locations.inventory_location_id"
   },
   {
     "id": "MFG-039",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does goods_receipts_product_id_to_products connect goods_receipts to products?",
-    "question_zh_cn": "goods_receipts_product_id_to_products 如何将 goods_receipts 关联到 products？",
+    "question_en": "How does goods_receipt_to_product connect goods_receipts to products?",
+    "question_zh_cn": "goods_receipt_to_product 如何将 goods_receipts 关联到 products？",
     "expected_answer": "goods_receipts.product_id → products.product_id"
   },
   {
     "id": "MFG-040",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does goods_receipts_purchase_order_line_id_to_purchase_order_lines connect goods_receipts to purchase_order_lines?",
-    "question_zh_cn": "goods_receipts_purchase_order_line_id_to_purchase_order_lines 如何将 goods_receipts 关联到 purchase_order_lines？",
+    "question_en": "How does goods_receipt_to_purchase_order_line connect goods_receipts to purchase_order_lines?",
+    "question_zh_cn": "goods_receipt_to_purchase_order_line 如何将 goods_receipts 关联到 purchase_order_lines？",
     "expected_answer": "goods_receipts.purchase_order_line_id → purchase_order_lines.purchase_order_line_id"
   },
   {
     "id": "MFG-041",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does inventory_balances_inventory_location_id_to_inventory_locations connect inventory_balances to inventory_locations?",
-    "question_zh_cn": "inventory_balances_inventory_location_id_to_inventory_locations 如何将 inventory_balances 关联到 inventory_locations？",
+    "question_en": "How does inventory_balance_to_inv_location connect inventory_balances to inventory_locations?",
+    "question_zh_cn": "inventory_balance_to_inv_location 如何将 inventory_balances 关联到 inventory_locations？",
     "expected_answer": "inventory_balances.inventory_location_id → inventory_locations.inventory_location_id"
   },
   {
     "id": "MFG-042",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does inventory_balances_product_id_to_products connect inventory_balances to products?",
-    "question_zh_cn": "inventory_balances_product_id_to_products 如何将 inventory_balances 关联到 products？",
+    "question_en": "How does inventory_balance_to_product connect inventory_balances to products?",
+    "question_zh_cn": "inventory_balance_to_product 如何将 inventory_balances 关联到 products？",
     "expected_answer": "inventory_balances.product_id → products.product_id"
   },
   {
     "id": "MFG-043",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does inventory_locations_site_id_to_manufacturing_sites connect inventory_locations to manufacturing_sites?",
-    "question_zh_cn": "inventory_locations_site_id_to_manufacturing_sites 如何将 inventory_locations 关联到 manufacturing_sites？",
+    "question_en": "How does inv_location_to_mfg_site connect inventory_locations to manufacturing_sites?",
+    "question_zh_cn": "inv_location_to_mfg_site 如何将 inventory_locations 关联到 manufacturing_sites？",
     "expected_answer": "inventory_locations.site_id → manufacturing_sites.site_id"
   },
   {
     "id": "MFG-044",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does machine_capability_assignments_capability_id_to_equipment_capabilities connect machine_capability_assignments to equipment_capabilities?",
-    "question_zh_cn": "machine_capability_assignments_capability_id_to_equipment_capabilities 如何将 machine_capability_assignments 关联到 equipment_capabilities？",
+    "question_en": "How does machine_cap_assign_to_equipment_cap connect machine_capability_assignments to equipment_capabilities?",
+    "question_zh_cn": "machine_cap_assign_to_equipment_cap 如何将 machine_capability_assignments 关联到 equipment_capabilities？",
     "expected_answer": "machine_capability_assignments.capability_id → equipment_capabilities.capability_id"
   },
   {
     "id": "MFG-045",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does machine_capability_assignments_machine_id_to_production_machines connect machine_capability_assignments to production_machines?",
-    "question_zh_cn": "machine_capability_assignments_machine_id_to_production_machines 如何将 machine_capability_assignments 关联到 production_machines？",
+    "question_en": "How does machine_cap_assign_to_prod_machine connect machine_capability_assignments to production_machines?",
+    "question_zh_cn": "machine_cap_assign_to_prod_machine 如何将 machine_capability_assignments 关联到 production_machines？",
     "expected_answer": "machine_capability_assignments.machine_id → production_machines.machine_id"
   },
   {
     "id": "MFG-046",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does maintenance_plans_machine_id_to_production_machines connect maintenance_plans to production_machines?",
-    "question_zh_cn": "maintenance_plans_machine_id_to_production_machines 如何将 maintenance_plans 关联到 production_machines？",
+    "question_en": "How does maintenance_plan_to_prod_machine connect maintenance_plans to production_machines?",
+    "question_zh_cn": "maintenance_plan_to_prod_machine 如何将 maintenance_plans 关联到 production_machines？",
     "expected_answer": "maintenance_plans.machine_id → production_machines.machine_id"
   },
   {
     "id": "MFG-047",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does maintenance_work_orders_machine_id_to_production_machines connect maintenance_work_orders to production_machines?",
-    "question_zh_cn": "maintenance_work_orders_machine_id_to_production_machines 如何将 maintenance_work_orders 关联到 production_machines？",
+    "question_en": "How does maint_work_order_to_prod_machine connect maintenance_work_orders to production_machines?",
+    "question_zh_cn": "maint_work_order_to_prod_machine 如何将 maintenance_work_orders 关联到 production_machines？",
     "expected_answer": "maintenance_work_orders.machine_id → production_machines.machine_id"
   },
   {
     "id": "MFG-048",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does maintenance_work_orders_maintenance_plan_id_to_maintenance_plans connect maintenance_work_orders to maintenance_plans?",
-    "question_zh_cn": "maintenance_work_orders_maintenance_plan_id_to_maintenance_plans 如何将 maintenance_work_orders 关联到 maintenance_plans？",
+    "question_en": "How does maint_work_order_to_maintenance_plan connect maintenance_work_orders to maintenance_plans?",
+    "question_zh_cn": "maint_work_order_to_maintenance_plan 如何将 maintenance_work_orders 关联到 maintenance_plans？",
     "expected_answer": "maintenance_work_orders.maintenance_plan_id → maintenance_plans.maintenance_plan_id"
   },
   {
     "id": "MFG-049",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does manufacturing_operations_production_order_id_to_production_orders connect manufacturing_operations to production_orders?",
-    "question_zh_cn": "manufacturing_operations_production_order_id_to_production_orders 如何将 manufacturing_operations 关联到 production_orders？",
+    "question_en": "How does mfg_operation_to_prod_order connect manufacturing_operations to production_orders?",
+    "question_zh_cn": "mfg_operation_to_prod_order 如何将 manufacturing_operations 关联到 production_orders？",
     "expected_answer": "manufacturing_operations.production_order_id → production_orders.production_order_id"
   },
   {
     "id": "MFG-050",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does manufacturing_operations_routing_operation_id_to_routing_operations connect manufacturing_operations to routing_operations?",
-    "question_zh_cn": "manufacturing_operations_routing_operation_id_to_routing_operations 如何将 manufacturing_operations 关联到 routing_operations？",
+    "question_en": "How does mfg_operation_to_routing_operation connect manufacturing_operations to routing_operations?",
+    "question_zh_cn": "mfg_operation_to_routing_operation 如何将 manufacturing_operations 关联到 routing_operations？",
     "expected_answer": "manufacturing_operations.routing_operation_id → routing_operations.routing_operation_id"
   },
   {
     "id": "MFG-051",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does manufacturing_operations_work_center_id_to_work_centers connect manufacturing_operations to work_centers?",
-    "question_zh_cn": "manufacturing_operations_work_center_id_to_work_centers 如何将 manufacturing_operations 关联到 work_centers？",
+    "question_en": "How does mfg_operation_to_work_center connect manufacturing_operations to work_centers?",
+    "question_zh_cn": "mfg_operation_to_work_center 如何将 manufacturing_operations 关联到 work_centers？",
     "expected_answer": "manufacturing_operations.work_center_id → work_centers.work_center_id"
   },
   {
     "id": "MFG-052",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does material_issue_transactions_goods_receipt_id_to_goods_receipts connect material_issue_transactions to goods_receipts?",
-    "question_zh_cn": "material_issue_transactions_goods_receipt_id_to_goods_receipts 如何将 material_issue_transactions 关联到 goods_receipts？",
+    "question_en": "How does material_issue_to_goods_receipt connect material_issue_transactions to goods_receipts?",
+    "question_zh_cn": "material_issue_to_goods_receipt 如何将 material_issue_transactions 关联到 goods_receipts？",
     "expected_answer": "material_issue_transactions.goods_receipt_id → goods_receipts.goods_receipt_id"
   },
   {
     "id": "MFG-053",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does material_issue_transactions_inventory_location_id_to_inventory_locations connect material_issue_transactions to inventory_locations?",
-    "question_zh_cn": "material_issue_transactions_inventory_location_id_to_inventory_locations 如何将 material_issue_transactions 关联到 inventory_locations？",
+    "question_en": "How does material_issue_to_inv_location connect material_issue_transactions to inventory_locations?",
+    "question_zh_cn": "material_issue_to_inv_location 如何将 material_issue_transactions 关联到 inventory_locations？",
     "expected_answer": "material_issue_transactions.inventory_location_id → inventory_locations.inventory_location_id"
   },
   {
     "id": "MFG-054",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does material_issue_transactions_material_requirement_id_to_production_order_material_requirements connect material_issue_transactions to production_order_material_requirements?",
-    "question_zh_cn": "material_issue_transactions_material_requirement_id_to_production_order_material_requirements 如何将 material_issue_transactions 关联到 production_order_material_requirements？",
+    "question_en": "How does material_issue_to_prod_mat_req connect material_issue_transactions to production_order_material_requirements?",
+    "question_zh_cn": "material_issue_to_prod_mat_req 如何将 material_issue_transactions 关联到 production_order_material_requirements？",
     "expected_answer": "material_issue_transactions.material_requirement_id → production_order_material_requirements.material_requirement_id"
   },
   {
     "id": "MFG-055",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does material_issue_transactions_production_order_id_to_production_orders connect material_issue_transactions to production_orders?",
-    "question_zh_cn": "material_issue_transactions_production_order_id_to_production_orders 如何将 material_issue_transactions 关联到 production_orders？",
+    "question_en": "How does material_issue_to_prod_order connect material_issue_transactions to production_orders?",
+    "question_zh_cn": "material_issue_to_prod_order 如何将 material_issue_transactions 关联到 production_orders？",
     "expected_answer": "material_issue_transactions.production_order_id → production_orders.production_order_id"
   },
   {
     "id": "MFG-056",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does operator_qualifications_capability_id_to_equipment_capabilities connect operator_qualifications to equipment_capabilities?",
-    "question_zh_cn": "operator_qualifications_capability_id_to_equipment_capabilities 如何将 operator_qualifications 关联到 equipment_capabilities？",
+    "question_en": "How does operator_qualification_to_equipment_cap connect operator_qualifications to equipment_capabilities?",
+    "question_zh_cn": "operator_qualification_to_equipment_cap 如何将 operator_qualifications 关联到 equipment_capabilities？",
     "expected_answer": "operator_qualifications.capability_id → equipment_capabilities.capability_id"
   },
   {
     "id": "MFG-057",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does operator_qualifications_operator_id_to_operators connect operator_qualifications to operators?",
-    "question_zh_cn": "operator_qualifications_operator_id_to_operators 如何将 operator_qualifications 关联到 operators？",
+    "question_en": "How does operator_qualification_to_operator connect operator_qualifications to operators?",
+    "question_zh_cn": "operator_qualification_to_operator 如何将 operator_qualifications 关联到 operators？",
     "expected_answer": "operator_qualifications.operator_id → operators.operator_id"
   },
   {
     "id": "MFG-058",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does operator_shift_assignments_operator_id_to_operators connect operator_shift_assignments to operators?",
-    "question_zh_cn": "operator_shift_assignments_operator_id_to_operators 如何将 operator_shift_assignments 关联到 operators？",
+    "question_en": "How does operator_shift_assign_to_operator connect operator_shift_assignments to operators?",
+    "question_zh_cn": "operator_shift_assign_to_operator 如何将 operator_shift_assignments 关联到 operators？",
     "expected_answer": "operator_shift_assignments.operator_id → operators.operator_id"
   },
   {
     "id": "MFG-059",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does operator_shift_assignments_shift_id_to_shifts connect operator_shift_assignments to shifts?",
-    "question_zh_cn": "operator_shift_assignments_shift_id_to_shifts 如何将 operator_shift_assignments 关联到 shifts？",
+    "question_en": "How does operator_shift_assign_to_shift connect operator_shift_assignments to shifts?",
+    "question_zh_cn": "operator_shift_assign_to_shift 如何将 operator_shift_assignments 关联到 shifts？",
     "expected_answer": "operator_shift_assignments.shift_id → shifts.shift_id"
   },
   {
     "id": "MFG-060",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does operator_shift_assignments_work_center_id_to_work_centers connect operator_shift_assignments to work_centers?",
-    "question_zh_cn": "operator_shift_assignments_work_center_id_to_work_centers 如何将 operator_shift_assignments 关联到 work_centers？",
+    "question_en": "How does operator_shift_assign_to_work_center connect operator_shift_assignments to work_centers?",
+    "question_zh_cn": "operator_shift_assign_to_work_center 如何将 operator_shift_assignments 关联到 work_centers？",
     "expected_answer": "operator_shift_assignments.work_center_id → work_centers.work_center_id"
   },
   {
     "id": "MFG-061",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does operators_home_site_id_to_manufacturing_sites connect operators to manufacturing_sites?",
-    "question_zh_cn": "operators_home_site_id_to_manufacturing_sites 如何将 operators 关联到 manufacturing_sites？",
+    "question_en": "How does operator_to_mfg_site connect operators to manufacturing_sites?",
+    "question_zh_cn": "operator_to_mfg_site 如何将 operators 关联到 manufacturing_sites？",
     "expected_answer": "operators.home_site_id → manufacturing_sites.site_id"
   },
   {
     "id": "MFG-062",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does process_steps_operation_id_to_manufacturing_operations connect process_steps to manufacturing_operations?",
-    "question_zh_cn": "process_steps_operation_id_to_manufacturing_operations 如何将 process_steps 关联到 manufacturing_operations？",
+    "question_en": "How does process_step_to_mfg_operation connect process_steps to manufacturing_operations?",
+    "question_zh_cn": "process_step_to_mfg_operation 如何将 process_steps 关联到 manufacturing_operations？",
     "expected_answer": "process_steps.operation_id → manufacturing_operations.operation_id"
   },
   {
     "id": "MFG-063",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does process_steps_required_capability_id_to_equipment_capabilities connect process_steps to equipment_capabilities?",
-    "question_zh_cn": "process_steps_required_capability_id_to_equipment_capabilities 如何将 process_steps 关联到 equipment_capabilities？",
+    "question_en": "How does process_step_to_equipment_cap connect process_steps to equipment_capabilities?",
+    "question_zh_cn": "process_step_to_equipment_cap 如何将 process_steps 关联到 equipment_capabilities？",
     "expected_answer": "process_steps.required_capability_id → equipment_capabilities.capability_id"
   },
   {
     "id": "MFG-064",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does product_bom_versions_product_id_to_products connect product_bom_versions to products?",
-    "question_zh_cn": "product_bom_versions_product_id_to_products 如何将 product_bom_versions 关联到 products？",
+    "question_en": "How does product_bom_version_to_product connect product_bom_versions to products?",
+    "question_zh_cn": "product_bom_version_to_product 如何将 product_bom_versions 关联到 products？",
     "expected_answer": "product_bom_versions.product_id → products.product_id"
   },
   {
     "id": "MFG-065",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does production_execution_records_machine_id_to_production_machines connect production_execution_records to production_machines?",
-    "question_zh_cn": "production_execution_records_machine_id_to_production_machines 如何将 production_execution_records 关联到 production_machines？",
+    "question_en": "How does prod_execution_to_prod_machine connect production_execution_records to production_machines?",
+    "question_zh_cn": "prod_execution_to_prod_machine 如何将 production_execution_records 关联到 production_machines？",
     "expected_answer": "production_execution_records.machine_id → production_machines.machine_id"
   },
   {
     "id": "MFG-066",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does production_execution_records_operator_id_to_operators connect production_execution_records to operators?",
-    "question_zh_cn": "production_execution_records_operator_id_to_operators 如何将 production_execution_records 关联到 operators？",
+    "question_en": "How does prod_execution_to_operator connect production_execution_records to operators?",
+    "question_zh_cn": "prod_execution_to_operator 如何将 production_execution_records 关联到 operators？",
     "expected_answer": "production_execution_records.operator_id → operators.operator_id"
   },
   {
     "id": "MFG-067",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does production_execution_records_process_step_id_to_process_steps connect production_execution_records to process_steps?",
-    "question_zh_cn": "production_execution_records_process_step_id_to_process_steps 如何将 production_execution_records 关联到 process_steps？",
+    "question_en": "How does prod_execution_to_process_step connect production_execution_records to process_steps?",
+    "question_zh_cn": "prod_execution_to_process_step 如何将 production_execution_records 关联到 process_steps？",
     "expected_answer": "production_execution_records.process_step_id → process_steps.process_step_id"
   },
   {
     "id": "MFG-068",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does production_machines_site_id_to_manufacturing_sites connect production_machines to manufacturing_sites?",
-    "question_zh_cn": "production_machines_site_id_to_manufacturing_sites 如何将 production_machines 关联到 manufacturing_sites？",
+    "question_en": "How does prod_machine_to_mfg_site connect production_machines to manufacturing_sites?",
+    "question_zh_cn": "prod_machine_to_mfg_site 如何将 production_machines 关联到 manufacturing_sites？",
     "expected_answer": "production_machines.site_id → manufacturing_sites.site_id"
   },
   {
     "id": "MFG-069",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does production_machines_work_center_id_to_work_centers connect production_machines to work_centers?",
-    "question_zh_cn": "production_machines_work_center_id_to_work_centers 如何将 production_machines 关联到 work_centers？",
+    "question_en": "How does prod_machine_to_work_center connect production_machines to work_centers?",
+    "question_zh_cn": "prod_machine_to_work_center 如何将 production_machines 关联到 work_centers？",
     "expected_answer": "production_machines.work_center_id → work_centers.work_center_id"
   },
   {
     "id": "MFG-070",
     "level": "intermediate",
     "category": "bkn_relation",
-    "question_en": "How does production_order_material_requirements_product_id_to_products connect production_order_material_requirements to products?",
-    "question_zh_cn": "production_order_material_requirements_product_id_to_products 如何将 production_order_material_requirements 关联到 products？",
+    "question_en": "How does prod_mat_req_to_product connect production_order_material_requirements to products?",
+    "question_zh_cn": "prod_mat_req_to_product 如何将 production_order_material_requirements 关联到 products？",
     "expected_answer": "production_order_material_requirements.product_id → products.product_id"
   },
   {

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: operator_qualification_to_equipment_cap
+name: 人员资质关联设备能力
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 人员资质关联设备能力
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| operator_qualifications | equipment_capabilities | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| capability_id | capability_id |

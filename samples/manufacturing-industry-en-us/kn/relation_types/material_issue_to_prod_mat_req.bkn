@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: material_issue_to_prod_mat_req
+name: Material Issue To Prod Mat Req
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Material Issue To Prod Mat Req
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| material_issue_transactions | production_order_material_requirements | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| material_requirement_id | material_requirement_id |

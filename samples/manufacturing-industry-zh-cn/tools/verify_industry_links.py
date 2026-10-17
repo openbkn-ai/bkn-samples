@@ -15,6 +15,11 @@ def num(value): return float(value)
 relation_count = 0
 for path in sorted((ROOT/'kn/relation_types').glob('*.bkn')):
     text = path.read_text(encoding='utf-8')
+    identifier = re.search(r'(?m)^id: ([a-z][a-z0-9_]*)$', text)
+    display_name = re.search(r'(?m)^name: (.+)$', text)
+    assert identifier and display_name, f'Missing relation identifier or name: {path.name}'
+    assert path.stem == identifier.group(1), f'Relation filename and id differ: {path.name}'
+    assert len(identifier.group(1)) <= 40 and len(display_name.group(1)) <= 40, f'Relation API length limit exceeded: {path.name}'
     endpoint = re.search(r'\| ([a-z_]+) \| ([a-z_]+) \| direct \|', text)
     mapping = re.search(r'\| ([a-z_]+) \| ([a-z_]+) \|\s*$', text.split('### Mapping Rules',1)[1], re.M)
     assert endpoint and mapping, f'Invalid relation declaration: {path.name}'

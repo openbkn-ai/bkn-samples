@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: prod_mat_req_to_prod_order
+name: 工单物料需求关联生产工单
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 工单物料需求关联生产工单
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| production_order_material_requirements | production_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| production_order_id | production_order_id |

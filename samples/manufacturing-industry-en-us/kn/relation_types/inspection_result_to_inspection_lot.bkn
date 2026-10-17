@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: inspection_result_to_inspection_lot
+name: Inspection Result To Inspection Lot
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Inspection Result To Inspection Lot
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| quality_inspection_results | quality_inspection_lots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| inspection_lot_id | inspection_lot_id |

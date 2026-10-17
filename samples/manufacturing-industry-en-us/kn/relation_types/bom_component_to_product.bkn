@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: bom_component_to_product
+name: BOM Component To Product
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: BOM Component To Product
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| bom_components | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| component_product_id | product_id |

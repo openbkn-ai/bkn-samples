@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: mfg_operation_to_prod_order
+name: 制造操作关联生产工单
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 制造操作关联生产工单
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| manufacturing_operations | production_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| production_order_id | production_order_id |

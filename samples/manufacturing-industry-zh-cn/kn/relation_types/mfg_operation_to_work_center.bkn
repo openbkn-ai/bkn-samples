@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: mfg_operation_to_work_center
+name: 制造操作关联工作中心
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 制造操作关联工作中心
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| manufacturing_operations | work_centers | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| work_center_id | work_center_id |

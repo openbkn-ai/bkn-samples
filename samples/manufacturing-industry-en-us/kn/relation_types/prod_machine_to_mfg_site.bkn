@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: prod_machine_to_mfg_site
+name: Prod Machine To Mfg Site
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Prod Machine To Mfg Site
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| production_machines | manufacturing_sites | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| site_id | site_id |

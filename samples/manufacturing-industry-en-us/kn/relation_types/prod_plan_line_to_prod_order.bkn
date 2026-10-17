@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: prod_plan_line_to_prod_order
+name: Prod Plan Line To Prod Order
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Prod Plan Line To Prod Order
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| production_plan_lines | production_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| production_order_id | production_order_id |

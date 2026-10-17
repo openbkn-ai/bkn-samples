@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: sales_order_line_to_sales_order
+name: Sales Order Line To Sales Order
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Sales Order Line To Sales Order
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| sales_order_lines | sales_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| sales_order_id | sales_order_id |

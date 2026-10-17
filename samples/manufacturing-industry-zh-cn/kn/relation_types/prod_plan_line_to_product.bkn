@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: prod_plan_line_to_product
+name: 生产计划行关联产品
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 生产计划行关联产品
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| production_plan_lines | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| product_id | product_id |

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: prod_plan_line_to_demand_forecast
+name: Prod Plan Line To Demand Forecast
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Prod Plan Line To Demand Forecast
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| production_plan_lines | demand_forecasts | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| forecast_id | forecast_id |

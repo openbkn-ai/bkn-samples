@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: inventory_balance_to_product
+name: Inventory Balance To Product
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Inventory Balance To Product
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| inventory_balances | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| product_id | product_id |

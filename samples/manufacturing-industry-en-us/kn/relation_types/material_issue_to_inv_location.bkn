@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: material_issue_to_inv_location
+name: Material Issue To Inv Location
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Material Issue To Inv Location
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| material_issue_transactions | inventory_locations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| inventory_location_id | inventory_location_id |
