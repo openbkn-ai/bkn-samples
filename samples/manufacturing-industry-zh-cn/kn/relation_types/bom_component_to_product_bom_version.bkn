@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: bom_component_to_product_bom_version
+name: BOM 组件关联产品 BOM 版本
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: BOM 组件关联产品 BOM 版本
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| bom_components | product_bom_versions | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| bom_version_id | bom_version_id |

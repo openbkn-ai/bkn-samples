@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: fg_receipt_to_inspection_lot
+name: 成品入库关联质量检验批
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 成品入库关联质量检验批
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| finished_goods_receipts | quality_inspection_lots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| inspection_lot_id | inspection_lot_id |

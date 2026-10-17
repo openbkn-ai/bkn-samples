@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Install and verify the resource-backed BKN manufacturing sample."""
-import json, os, subprocess, sys, tempfile
+import json, os, re, subprocess, sys, tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 SAMPLE='manufacturing-industry-zh-cn'; KN='manufacturing_industry_zh_cn'
@@ -8,6 +8,13 @@ def run(*args):
     p=subprocess.run(['openbkn','--json',*args],text=True,capture_output=True)
     if p.returncode: raise RuntimeError(p.stderr or p.stdout)
     return json.loads(p.stdout or '{}')
+def checked(*args):
+    p=subprocess.run(['openbkn',*args],text=True,capture_output=True)
+    if p.returncode:
+        detail=(p.stderr or p.stdout or '').strip().replace('\n',' ')
+        detail=re.sub(r'(?i)(password\s*[:=]\s*)[^\s,]+', r'\1***', detail)
+        raise RuntimeError(f"openbkn {' '.join(args)}: {detail[:1000] or 'command failed'}")
+    return p.stdout
 def payload():
     p=json.loads(Path(os.environ['BKN_SAMPLE_INPUT']).read_text(encoding='utf-8'))
     if p.get('sample')!=SAMPLE: raise RuntimeError('unexpected sample')
@@ -22,10 +29,10 @@ def main():
     if os.environ.get('BKN_SAMPLE_PRINT_ONLY')=='1':
         output(raw,True,[{'name':'offline-install-plan','ok':True}]); return
     if sys.argv[1]=='install':
-        subprocess.run(['openbkn','bkn','validate',str(ROOT/'kn')],check=True)
+        checked('bkn','validate',str(ROOT/'kn'))
         with tempfile.TemporaryDirectory() as d:
             # The standard CLI imports the BKN directory; the installer then binds every object type to its discovered CSV table resource.
-            subprocess.run(['openbkn','bkn','push',str(ROOT/'kn')],check=True)
+            checked('bkn','push',str(ROOT/'kn'))
             resources=entries(run('vega','resource','list','--catalog-id',raw['catalog']['id'],'--category','table','--limit','100'))
             if not isinstance(resources,list): raise RuntimeError('catalog table resources are unavailable')
             for ot in (ROOT/'kn'/'object_types').glob('*.bkn'):

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: process_step_to_equipment_cap
+name: 工艺步骤关联设备能力
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 工艺步骤关联设备能力
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| process_steps | equipment_capabilities | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| required_capability_id | capability_id |

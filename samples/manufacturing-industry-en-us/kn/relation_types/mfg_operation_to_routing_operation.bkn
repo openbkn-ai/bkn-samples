@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: mfg_operation_to_routing_operation
+name: Mfg Operation To Routing Operation
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Mfg Operation To Routing Operation
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| manufacturing_operations | routing_operations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| routing_operation_id | routing_operation_id |

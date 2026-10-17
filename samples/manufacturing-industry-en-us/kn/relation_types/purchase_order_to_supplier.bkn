@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: purchase_order_to_supplier
+name: Purchase Order To Supplier
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Purchase Order To Supplier
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| purchase_orders | suppliers | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| supplier_id | supplier_id |

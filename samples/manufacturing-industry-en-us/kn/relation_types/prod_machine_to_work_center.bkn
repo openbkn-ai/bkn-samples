@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: prod_machine_to_work_center
+name: Prod Machine To Work Center
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Prod Machine To Work Center
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| production_machines | work_centers | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| work_center_id | work_center_id |

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: material_issue_to_prod_order
+name: 物料发放事务关联生产工单
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 物料发放事务关联生产工单
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| material_issue_transactions | production_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| production_order_id | production_order_id |

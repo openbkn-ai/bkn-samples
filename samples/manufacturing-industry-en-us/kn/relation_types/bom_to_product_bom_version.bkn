@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: bom_to_product_bom_version
+name: BOM To Product BOM Version
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: BOM To Product BOM Version
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| bill_of_materials | product_bom_versions | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| bom_version_id | bom_version_id |

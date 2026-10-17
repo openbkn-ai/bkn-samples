@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: shift_to_mfg_site
+name: Shift To Mfg Site
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Shift To Mfg Site
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| shifts | manufacturing_sites | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| site_id | site_id |

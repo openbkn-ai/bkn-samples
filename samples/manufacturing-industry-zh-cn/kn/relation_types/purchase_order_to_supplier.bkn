@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: purchase_order_to_supplier
+name: 采购订单关联供应商
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 采购订单关联供应商
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| purchase_orders | suppliers | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| supplier_id | supplier_id |

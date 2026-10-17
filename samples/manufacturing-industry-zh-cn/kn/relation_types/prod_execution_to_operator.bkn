@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: prod_execution_to_operator
+name: 生产执行记录关联操作员
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: 生产执行记录关联操作员
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| production_execution_records | operators | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| operator_id | operator_id |

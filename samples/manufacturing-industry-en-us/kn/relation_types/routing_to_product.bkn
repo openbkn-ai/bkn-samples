@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: routing_to_product
+name: Routing To Product
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: Routing To Product
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| routings | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| product_id | product_id |
