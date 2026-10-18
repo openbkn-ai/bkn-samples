@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000013",
-    "sequence": 13,
+    "revision": "catalog-000014",
+    "sequence": 14,
     "channel": "stable",
-    "publishedAt": "2026-10-14T01:42:54Z"
+    "publishedAt": "2026-10-18T14:12:00.156860Z"
   },
   "spec": {
     "entries": [
@@ -582,6 +582,92 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3cfc309bee08a76960b72c9d946142f920944a7d/samples/world-cup-en/releases/0.1.0/verification.json",
           "digest": "sha256:1b61b7f4057082aa90a8039cdd170925ef393d734543a4c1d22a398ba34117c6"
+        }
+      },
+      {
+        "sampleId": "financial-fibo-en-us",
+        "version": "0.1.3",
+        "displayName": "Financial Portfolio Operations (EN)",
+        "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
+        "publishedAt": "2026-10-18T14:09:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Financial Portfolio Operations (EN) 0.1.3",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/2be1e229d9bfd3ad16e151ec214035fc67797b36/samples/financial-fibo-en-us/releases/0.1.3/release-notes.en-US.md",
+              "digest": "sha256:70191140f5a606c4e37752f9b2efdc99326e74de335202f0eec00e76182297b8"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/2be1e229d9bfd3ad16e151ec214035fc67797b36/samples/financial-fibo-en-us/releases/0.1.3/sample.json",
+          "digest": "sha256:7ea264f51a12a73a0997712e372cdb15387b093c2285531c8754794bf76d6377"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/2be1e229d9bfd3ad16e151ec214035fc67797b36/samples/financial-fibo-en-us/releases/0.1.3/verification.json",
+          "digest": "sha256:f3267cc5b2ea0f13365fade1c0bbead81a1c91fb5743cd3e83659655ec97a8a9"
+        }
+      },
+      {
+        "sampleId": "financial-fibo-zh-cn",
+        "version": "0.1.4",
+        "displayName": "金融投资组合运营（中文）",
+        "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
+        "publishedAt": "2026-10-18T14:09:20Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "金融投资组合运营（中文） 0.1.4",
+          "documents": [
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/2be1e229d9bfd3ad16e151ec214035fc67797b36/samples/financial-fibo-zh-cn/releases/0.1.4/release-notes.zh-CN.md",
+              "digest": "sha256:38f7bd8409a5436c84374e4e96c39955e0d54f50e2750821ec5774e47e8af126"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/2be1e229d9bfd3ad16e151ec214035fc67797b36/samples/financial-fibo-zh-cn/releases/0.1.4/sample.json",
+          "digest": "sha256:15ce1c688d991241e3b9fae506e962d2b30569e06940e00a9595bd1b476d64ea"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/2be1e229d9bfd3ad16e151ec214035fc67797b36/samples/financial-fibo-zh-cn/releases/0.1.4/verification.json",
+          "digest": "sha256:15060d5e24764363c51e1264b8d99ea4fbef7c8d6fbb0b29ebbb728c4a719158"
         }
       }
     ]

@@ -79,26 +79,36 @@ class RemoteHttpTest(unittest.TestCase):
                 network.assert_not_called()
 
     def test_default_directory_exposes_published_versions_without_a_refresh(self):
-        apps = []
-        with tempfile.TemporaryDirectory() as directory:
-            index = build_manifest_index(ROOT, "a" * 40)
-            index["samples"] = [s for s in index["samples"] if s["name"] in {"supply-chain", "world-cup"}]
-            env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_STATE_DIR": directory,
-                   "BKN_SAMPLE_PLATFORM_VERSION": "0.2.0", "BKN_SAMPLE_PLATFORM_CAPABILITIES": "",
-                   "BKN_SAMPLE_CATALOG_URL": "",
-                   "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64}
-            with patch.dict("os.environ", env), \
-                 patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
-                 patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), index, index)), \
-                 patch("installer.catalog_source.read_url") as network:
-                main()
-                catalog = apps[0].catalog("admin")
-            entries = json.loads((ROOT / "catalog.json").read_text())["spec"]["entries"]
-            expected = {e["sampleId"]: e["version"] for e in sorted(entries, key=lambda e: tuple(map(int, e["version"].split(".")))) if e["releaseStatus"] == "published"}
-            self.assertEqual({c["name"]: c["version"] for c in catalog["samples"]}, expected)
-            self.assertTrue(all(c["installable"] for c in catalog["samples"]))
-            self.assertIsNone(catalog["sourceRefresh"]["lastSuccessfulRefreshAt"])
-            network.assert_not_called()
+        for platform_version in ("0.2.0", read_version(ROOT)):
+            with self.subTest(platform_version=platform_version):
+                apps = []
+                with tempfile.TemporaryDirectory() as directory:
+                    index = build_manifest_index(ROOT, "a" * 40)
+                    index["samples"] = [s for s in index["samples"] if s["name"] in {"supply-chain", "world-cup"}]
+                    env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_STATE_DIR": directory,
+                           "BKN_SAMPLE_PLATFORM_VERSION": platform_version, "BKN_SAMPLE_PLATFORM_CAPABILITIES": "",
+                           "BKN_SAMPLE_CATALOG_URL": "",
+                           "BKN_SAMPLE_EXECUTOR_IMAGE_REF": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:" + "d" * 64}
+                    with patch.dict("os.environ", env), \
+                         patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
+                         patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), index, index)), \
+                         patch("installer.catalog_source.read_url") as network:
+                        main()
+                        catalog = apps[0].catalog("admin")
+                    entries = json.loads((ROOT / "catalog.json").read_text())["spec"]["entries"]
+                    published = {e["sampleId"]: e for e in sorted(entries, key=lambda e: tuple(map(int, e["version"].split(".")))) if e["releaseStatus"] == "published"}
+                    self.assertEqual({c["name"]: c["version"] for c in catalog["samples"]},
+                                     {name: entry["version"] for name, entry in published.items()})
+                    for card in catalog["samples"]:
+                        # Discovery includes releases requiring a newer platform; install must retain the floor.
+                        floor = published[card["name"]]["requires"]["platformVersion"].split()[0].removeprefix(">=")
+                        supports = tuple(map(int, platform_version.split("."))) >= tuple(map(int, floor.split(".")))
+                        self.assertEqual(card["installable"], supports, card["name"])
+                        if not supports:
+                            selected = next(v for v in card["versions"] if v["version"] == card["version"])
+                            self.assertEqual(selected["reason"], "runtime_upgrade_required")
+                    self.assertIsNone(catalog["sourceRefresh"]["lastSuccessfulRefreshAt"])
+                    network.assert_not_called()
 
     def test_offline_import_uses_the_same_automatic_runtime_defaults(self):
         from tools.publication.build_candidate import build
