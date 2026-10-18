@@ -11,7 +11,7 @@
 | 指标、函数和 Skill 发布 | `power_layer.py`、`register_native_function_toolbox.py`、`register_skills.py` |
 | 平台验收 | `smoke_test.py`、`power_layer.py` |
 
-`fn/` 是原生业务函数实现，由注册脚本打包发布。`config.example.yaml` 是开发参考，标准安装 hooks 自动生成运行配置。`verify_sample.py` 校验源码交付契约。
+`fn/` 是原生业务函数实现；每个函数的入口是 `functions/<operation>.py`，由 `function_source.py` 生成单个可读源文件发布，只包含该入口实际用到的计算代码。`config.example.yaml` 是开发参考，标准安装 hooks 自动生成运行配置。`verify_sample.py` 校验源码交付契约。
 
 开发检查可在样例目录执行：
 

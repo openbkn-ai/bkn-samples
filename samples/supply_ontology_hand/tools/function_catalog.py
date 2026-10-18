@@ -119,7 +119,7 @@ def native_tool_description() -> str:
     return (
         "供应链原生函数目录。按业务问题选择具名函数："
         f"{operations}。"
-        "每个函数只接收本业务问题所需参数，并在运行时通过 sandbox_sdk.bkn 读取已绑定的知识网络；"
+        "每个函数只接收本业务问题所需参数，并在运行时通过沙箱预装的 bkn_osdk 读取已绑定的知识网络；"
         "backward_plan 未传 business_date 时默认 2026-08-25。"
     )
 

@@ -55,10 +55,34 @@ class SupplyVerifyTest(unittest.TestCase):
                     ("tool", "list"): {"tools": tools},
                     ("bkn", "capability"): {"entries": bindings},
                     ("skill", "list"): {"data": names},
+                    ("tool", "execute"): {"status_code": 200, "body": {"result": {"leadtime_days": 14}}},
                 }
             ),
         )
         self.assertTrue(all(item["ok"] for item in checks))
+
+    def test_mounted_functions_that_cannot_read_the_network_fail(self):
+        import sys
+        sys.path.insert(0, str(VERIFY.SAMPLE_DIR / "tools"))
+        from function_catalog import FUNCTION_CATALOG
+        calls = []
+        answers = {
+            ("toolbox", "list"): {"data": [{"box_name": VERIFY.BOX_NAME, "box_id": "box-1"}]},
+            ("tool", "list"): {"tools": [{"name": spec["name"], "tool_id": operation, "status": "enabled"}
+                                             for operation, spec in FUNCTION_CATALOG.items()]},
+            ("bkn", "capability"): {"entries": [{"capability_type": "function", "box_id": "box-1", "capability_id": operation}
+                                                 for operation in FUNCTION_CATALOG]},
+            # What the runtime returns when the function's BKN read is refused.
+            ("tool", "execute"): {"status_code": 200, "body": {"result": None, "stderr": "ToolError: conversation_required"}},
+        }
+
+        def run(args):
+            calls.append(args)
+            return answers[tuple(args[:2])]
+
+        self.assertFalse(VERIFY.capability_ready(run))
+        execute = next(args for args in calls if args[:2] == ["tool", "execute"])
+        self.assertEqual(execute[2], "leadtime_days")
 
     def test_published_tools_without_network_bindings_fail(self):
         import sys

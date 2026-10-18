@@ -15,7 +15,7 @@ from typing import Any
 
 from ownership_receipt import require_owned, remember
 from function_catalog import FUNCTION_CATALOG
-from native_function_bundle import build_native_function_code
+from function_source import build_function_code
 
 
 API = "/api/agent-operator-integration/v1"
@@ -66,7 +66,7 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
         "name": spec["name"],
         "description": spec["description"],
         "script_type": "python",
-        "code": build_native_function_code(fixed_operation=operation),
+        "code": build_function_code(operation),
         "inputs": _operation_inputs(operation),
         "outputs": [
             {
@@ -105,9 +105,9 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
         "metadata_type": "function",
         "tool_names": [item["name"] for item in tool_inputs.values()],
         "operations": list(tool_inputs),
-        "entrypoint": "@tool business-parameter entrypoint",
+        "entrypoint": "@tool <operation>_tool, readable source per function",
         "needs_external_service": False,
-        "code_bytes_per_tool": len(next(iter(tool_inputs.values()))["code"].encode("utf-8")),
+        "code_bytes": {operation: len(item["code"].encode("utf-8")) for operation, item in tool_inputs.items()},
     }
     if not apply:
         return preview
