@@ -119,7 +119,7 @@ def native_tool_description() -> str:
     return (
         'Supply EN function catalog. Choose a named function by business question:'
         f"{operations}。"
-        'Each function accepts only scenario-specific parameters and reads its bound knowledge network through sandbox_sdk.bkn at runtime.'
+        'Each function accepts only scenario-specific parameters and reads its bound knowledge network through the preinstalled bkn_osdk at runtime.'
         'backward_plan defaults business_date to 2026-08-25.'
     )
 

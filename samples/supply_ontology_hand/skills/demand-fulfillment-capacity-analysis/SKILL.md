@@ -1,40 +1,79 @@
 ---
 name: demand-fulfillment-capacity-analysis
 description: >
-  Use when analyzing current inventory-based sellable capacity on knowledge
-  network supply_ontology_hand, with finished goods and component inventory.
+  Use when analyzing how many finished units can be sold now (成品仓 + 理论可产)
+  on knowledge network supply_ontology_hand. Not a delivery-date promise.
 ---
 
 # 需求承接 · 产品可售能力（S2）
 
-业务场景导航：只问数值可直接调用 **合计可售**；需要解释成品、再制造能力或与交期的区别时使用本 Skill。
+这是一个**业务场景导航 Skill**。只问一个确定数值时可直接调用函数；当用户还需要解释可售能力含义、库存组成或与交期承诺的区别时使用本 Skill。
 
-理论可产不含成品；合计可售为成品可用量加库存支持的最大再制造量。两个数量都不计在途，也不是某日交付承诺。
+> 三个数必须分开：**理论可产 ≠ 合计可售 ≠ 齐套净需求**。本 Skill 只回答合计可售，结果不是交期承诺。
 
-## 执行步骤
+## Skill Card
 
-1. 解析唯一产品编码，确认替代策略；未给替代策略先问，不输出确定数量。
-2. 两套仓范围默认均为 `all`。明确指定 `finished_goods`、`production_available` 或仓名单时遵守指定范围。
-3. 通过 MCP 调用 **合计可售**；需要解释制造瓶颈再调用 **理论可产** 或 **子料分层库存**。只使用函数实际返回值。
-4. 检查返回采用逐层组件抵扣、共享库存、实际仓范围与库存不含在途口径；不支持该口径时说明无法确认，不能使用旧叶子最小值算法替代。
-5. 回显 `fg_qty`、`theoretical_build_qty`、`total_sellable_qty`、实际仓范围、替代策略与瓶颈，并说明不是交期承诺。某日能否交付转 S1。
+| 字段 | 值 |
+|------|-----|
+| `bkn_scope` | `supply_ontology_hand` |
+| `trigger` | 现在最多能卖多少、可售能力、理论可产+成品库存 |
+| `required_metrics` | 库存可用量（成品仓 `finished_goods` + 生产仓 `production_available`） |
+| `calculation` | **合计可售**（`total_sellable`，返回成品库存、理论可产和合计可售） |
+| `优先指标` | 库存可用量（用于解释成品仓或生产仓事实） |
+| `优先函数` | **合计可售**；必要时配合 **理论可产**、**子料分层库存** |
+| `open_parameters` | `product_query`、`substitute_enabled`、`production_scope?`、`finished_goods_scope?` |
 
-## 统一业务前提
+不要调用：净需求/齐套、供应状态 10 档、共用料争用 / S3。在途 PO 可作对照，**不得**加入合计可售。
 
-- 未指定仓范围时默认 `all`；用户明确指定的仓预设或仓名单必须遵守并回显。全仓表示不限制仓库，不能把空列表解释为零仓库。
-- 使用 `available_inventory_qty`，预留字段仅展示，不再次扣减；同一物料在多个位置或订单之间共享一个物理库存池。
-- 新增客户需求先分配成品，只对剩余数量制造；制造时每层组件先分配现货，只展开该层净缺数量。不把结构叶子缺口直接当成客户需求缺口。
-- 主料和替代料的资格限定到 BOM 位置（产品、父件、组号）；实际候选按自己的单耗计算。不得跨位置传播资格或重复使用库存。后单在剩余池上重新选择候选；不默认混合多种候选凑数。
-- 纯库存数量分析不计在途；只有明确启用现有 PO 且提供物料需要日期/交期时才分析按期供给。净未收量为 `max(0, qty-actqty)`；已关闭或净未收为零的行不参与。按需要日、业务日期及数量分配，逾期未收货 PO 标为待确认，不直接当成可靠到货。
-- 事实不完整、分页未读完、缺失提前期或函数业务口径不匹配时返回无法确认。函数执行成功不等于业务验收通过；不得强行沿用旧数值。
-- 从已发布 MCP 元数据确认函数参数，使用实际调用回执；不读取答案集、CSV、实现源码或直连数据库重建函数。能力未支持条件时说明限制，不猜参数。
+## Agent 执行步骤
 
-## 输入与完成门槛
+1. 解析唯一产品；名称存在歧义时先澄清编码或型号。
+2. 确认替代料策略和仓范围；未确认替代策略时不输出确定数量。
+3. 调用 **合计可售**，直接使用函数返回的成品可用、理论可产和总可售结果。
+4. 需要解释瓶颈或库存分布时，再调用 **理论可产** 或 **子料分层库存**。
+5. 明确说明：合计可售是当前静态能力，不等于某个日期的履约承诺；日期承诺转 S1。
 
-`product_query` 必填并解析为唯一编码；函数以发现的产品参数调用。`substitute_enabled` 必須确认。`finished_goods_scope`、`production_scope` 缺省均为 `all`。报告须保留函数回执、缺失/不支持条件，不凭文档拼出仓名单或固定数量。
+## 业务边界
 
-参考：`references/business-rules.md`、`references/io-contract.md`、`references/report-spec.md`。
+- `total_sellable` 同时返回成品仓可用、理论可产和合计可售，Skill 不在本地重算
+- 理论可产不含成品、不加在途；合计可售包含成品仓可用，但仍不加在途
+- “要 X 套齐不齐”属于齐套净需求；“某日能否交付”属于 S1，不能用可售结果替代
+- 未给出 `substitute_enabled` → 先问再算；未确认返回不能算
 
-## 确定性覆盖题
+## 计算调用
 
-当题目明确只使用当前可用库存、禁用替代和采购时，调用对应函数，直接按叶子净缺是否为零给出是/否及缺口；中间组件净缺须继续展开，不能当作最终缺料。多个需求按题目数组顺序共用库存，结构共用数不等于实际短缺数。指定业务日期、需要日与确认供应池的物料题使用按期覆盖字段，不推测未来新采购。完整条件下应给出确定结论。
+用户输入先解析为唯一产品编码。业务公式由已发布函数执行，函数自行读取 BKN 数据；Agent 不读取 Skill 源码、不重建运行时、不在本地重算函数结果。
+
+## 输入
+
+- `knowledge_network_id`：默认 `supply_ontology_hand`
+- `product_query`：必填；允许产品编码或名称，名称命中多个编码时必须追问；解析后以 `product` 传给函数
+- `substitute_enabled`：未给出则询问「是否启用替代料核算？（是/否）」
+- `finished_goods_scope`：默认 `finished_goods`；`production_scope`：默认 `production_available`
+- 必须回显函数实际返回的两套仓范围；不得凭 Skill 文本伪造仓名单
+
+## 编排
+
+1. `resolve_input` — 解析唯一产品，确认替代料及仓范围
+2. `select_capability` — 简单数量直调函数；需要解释业务边界时使用本 Skill
+3. `analyze` — 调用合计可售，必要时补充理论可产或分层库存
+4. `render_report` — 输出 Markdown 并声明不是交期承诺
+
+## 完成门槛
+
+1. 产品已解析为唯一编码；BOM 非空，或函数明确返回无法计算
+2. `substitute_enabled` 已确认
+3. 成品仓名单与生产仓名单按函数结果回显
+4. 出参含 `fg_qty` / `theoretical_build_qty` / `total_sellable_qty`
+5. 报告阶段不再拉数或重算
+
+## 输出
+
+1. `analysis_result`：见 `references/io-contract.md`
+2. 完整 Markdown：见 `references/report-spec.md`
+
+## 参考
+
+- `references/business-rules.md`
+- `references/io-contract.md`
+- `references/report-spec.md`

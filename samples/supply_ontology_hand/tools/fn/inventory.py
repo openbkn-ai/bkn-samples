@@ -11,7 +11,7 @@ from .warehouse import resolve_warehouse_scope
 def available_qty(
     snap: Snapshot,
     material_code: str,
-    warehouse_scope: str | list[str] | None = "all",
+    warehouse_scope: str | list[str] | None = "production_available",
 ) -> float:
     warehouses = resolve_warehouse_scope(warehouse_scope)
     total = 0.0
@@ -20,9 +20,6 @@ def available_qty(
         wh = (row.get("warehouse") or "").strip()
         if warehouses and wh not in warehouses:
             continue
-        status = row.get("stock_status")
-        if status is not None and str(status).strip() and str(status).strip() != "可用":
-            continue
         total += _f(row.get("available_inventory_qty"), 0.0)
     return total
 
@@ -30,7 +27,7 @@ def available_qty(
 def reserved_qty(
     snap: Snapshot,
     material_code: str,
-    warehouse_scope: str | list[str] | None = "all",
+    warehouse_scope: str | list[str] | None = "production_available",
 ) -> float:
     warehouses = resolve_warehouse_scope(warehouse_scope)
     total = 0.0
@@ -103,7 +100,7 @@ def layered_inventory(
     product: str,
     *,
     depth: int | None = 1,
-    warehouse_scope: str | list[str] | None = "all",
+    warehouse_scope: str | list[str] | None = "production_available",
     include_substitute: bool = False,
 ) -> dict:
     product = (product or "").strip()
@@ -119,14 +116,7 @@ def layered_inventory(
     )
     warehouses = resolve_warehouse_scope(warehouse_scope)
     lines = []
-    bom_lines = list(listing["lines"])
-    while listing["next_offset"] is not None:
-        listing = bom_list(
-            snap, product, depth=depth, include_substitute=include_substitute,
-            report_grain="full", page_size=500, offset=listing["next_offset"],
-        )
-        bom_lines.extend(listing["lines"])
-    for line in bom_lines:
+    for line in listing["lines"]:
         code = line["material_code"]
         lines.append(
             {
@@ -141,7 +131,5 @@ def layered_inventory(
         "warehouse_scope": warehouse_scope if not isinstance(warehouse_scope, list) else "custom",
         "warehouse_filter": warehouses,
         "lines": lines,
-        "line_count": len(lines),
-        "inventory_grain": "material_shared_across_bom_positions",
-        "note": "可用库存不重复扣预留；同料多个 BOM 位置展示同一共享库存，不可跨位置累加",
+        "note": "reserved 仅展示，P0 不扣减",
     }

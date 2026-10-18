@@ -199,14 +199,14 @@ def test_material_substitute_loader_reads_inventory_for_every_candidate():
     ]
 
 
-def test_query_rows_stops_on_short_page_even_if_backend_includes_search_after():
+def test_query_rows_stops_on_short_page_even_if_backend_includes_cursor():
     from managed_execution import _query_rows
 
     calls = []
 
     def query_object_instance(**kwargs):
         calls.append(kwargs)
-        return {"datas": [{"material_code": "MAT-1"}], "search_after": ["stale"]}
+        return {"datas": [{"material_code": "MAT-1"}], "cursor": "stale"}
 
     rows = _query_rows(
         query_object_instance,
@@ -347,11 +347,11 @@ def test_backward_plan_scopes_large_purchase_request_material_scope_to_open_rows
 
 
 def test_generated_native_function_uses_official_sdk_and_business_parameters_only():
-    from native_function_bundle import build_native_function_code
+    from function_source import build_function_code
 
-    source = build_native_function_code(fixed_operation="backward_plan")
+    source = build_function_code("backward_plan")
 
-    assert "from sandbox_sdk import bkn" in source
+    assert "from bkn_osdk.kn import query_object_instance" in source
     assert "@tool" in source
     assert "load_bkn_rows" in source
     assert "def handler" not in source

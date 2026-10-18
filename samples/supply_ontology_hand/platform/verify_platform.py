@@ -44,7 +44,24 @@ def capability_ready(run_cli) -> bool:
     bindings = run_cli(["bkn", "capability", "list", "supply_ontology_hand", "--limit", "100"])
     mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
                if item.get("capability_type") == "function" and item.get("box_id") == box["box_id"]}
-    return {enabled[name] for name in expected} <= mounted
+    if not {enabled[name] for name in expected} <= mounted:
+        return False
+    return function_reads_network(run_cli, box["box_id"], enabled[FUNCTION_CATALOG["leadtime_days"]["name"]])
+
+
+# Material 606-000989 is a purchased part with a 14-day purchase lead time in the locked data.
+PROBE_INPUT = {"material_code": "606-000989"}
+PROBE_LEADTIME_DAYS = 14
+
+
+def function_reads_network(run_cli, box_id: str, tool_id: str) -> bool:
+    """Enabled and mounted does not prove a function can read the network; call one."""
+    try:
+        executed = run_cli(["tool", "execute", tool_id, "--toolbox", box_id, "--body", json.dumps(PROBE_INPUT)])
+    except RuntimeError:
+        return False
+    result = (executed.get("body") or {}).get("result") or {}
+    return result.get("leadtime_days") == PROBE_LEADTIME_DAYS
 
 
 def skills_ready(run_cli) -> bool:

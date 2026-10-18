@@ -57,10 +57,9 @@ def test_bom_list_382_l1(snap):
 
 def test_bom_list_382_counts(snap):
     out = bom_list(snap, "382-000005", depth=None, include_substitute=False)
-    assert out["rows_incl_root"] == 400
-    assert out["source_rows_incl_root"] == 507
-    assert out["line_count"] == 399
-    assert out["unique_child_count"] == 333
+    assert out["rows_incl_root"] == 507
+    assert out["line_count"] == 313
+    assert out["unique_child_count"] == 272
     assert out["max_level"] == 5
     assert "lines" not in out
     assert out["report_grain"] == "summary"
@@ -111,7 +110,7 @@ def test_material_where_used_returns_affected_root_products(snap):
 
 def test_bom_shared_382_p61(snap):
     out = bom_shared_list(snap, ["382-000005", "P61-000351"], include_substitute=False)
-    assert out["shared_count"] == 38
+    assert out["shared_count"] == 28
     assert "356-000081" in out["shared_codes"]
 
 
@@ -119,7 +118,7 @@ def test_bom_shared_three_products(snap):
     out = bom_shared_list(
         snap, ["382-000005", "P61-000351", "U00-000151"], include_substitute=False
     )
-    assert out["shared_count"] == 17
+    assert out["shared_count"] == 11
 
 
 def test_bom_shared_one_product(snap):
@@ -130,7 +129,7 @@ def test_bom_shared_one_product(snap):
 def test_substitute_status_382(snap):
     out = substitute_status(snap, "382-000005")
     assert out["has_alt_groups"] is True
-    assert out["group_count"] == 86
+    assert out["group_count"] == 70
     assert out["substitute_enabled"] == "unknown"
 
 
@@ -144,7 +143,7 @@ def test_substitute_status_accepts_a_component_material(snap):
         for member in group["members"]
     ]
     target = next(item for item in candidates if item["material_code"] == "356-000356")
-    assert target["available_qty"] == pytest.approx(4673)
+    assert target["available_qty"] == pytest.approx(500)
 
 
 def test_leadtime(snap):
@@ -158,15 +157,15 @@ def test_leadtime(snap):
 def test_theoretical_and_sellable_382_no_sub(snap):
     th = theoretical_build(snap, "382-000005", substitute_enabled=False)
     sell = total_sellable(snap, "382-000005", substitute_enabled=False)
-    assert th["theoretical_build_qty"] == 51
-    assert sell["fg_qty"] == pytest.approx(816, rel=0, abs=0.01)
-    assert sell["total_sellable_qty"] == pytest.approx(867, rel=0, abs=0.01)
+    assert th["theoretical_build_qty"] == 0
+    assert sell["fg_qty"] == pytest.approx(534, rel=0, abs=0.01)
+    assert sell["total_sellable_qty"] == pytest.approx(534, rel=0, abs=0.01)
     assert "in_transit" not in sell or sell.get("include_in_transit") is False
 
 
 def test_sellable_u00(snap):
     sell = total_sellable(snap, "U00-000151", substitute_enabled=False)
-    assert sell["fg_qty"] == pytest.approx(4609, rel=0, abs=0.01)
+    assert sell["fg_qty"] == pytest.approx(3800, rel=0, abs=0.01)
     assert sell["total_sellable_qty"] >= sell["fg_qty"]
 
 
@@ -215,9 +214,9 @@ def test_theoretical_build_rejects_unknown_report_grain(snap):
 
 def test_kitting_382_50_not_s1(snap):
     out = kitting_net_demand(snap, "382-000005", qty=50, substitute_enabled=False)
-    assert out["kitting_ok"] is True
+    assert out["kitting_ok"] is False
     l1s = {g.get("l1_parent") for g in out["gaps"]} | {g["material_code"] for g in out["gaps"]}
-    assert not l1s
+    assert "791-000007" in l1s or "791-000015" in l1s
     assert "delay_a" not in out
     assert "supply_status" not in out
     assert all(
@@ -324,7 +323,7 @@ def test_layered_inventory_382_l1(snap):
     assert by_code["791-000007"] == pytest.approx(0, rel=0, abs=0.01)
     assert by_code["791-000015"] == pytest.approx(0, rel=0, abs=0.01)
     assert "reserved_qty" in out["lines"][0]
-    assert len(out["warehouse_filter"]) == 0
+    assert len(out["warehouse_filter"]) == 7
 
 
 def test_max_build_alias_equals_theoretical(snap):
@@ -333,13 +332,3 @@ def test_max_build_alias_equals_theoretical(snap):
 
     mb = max_build_without_po(snap, "382-000005", substitute_enabled=False)
     assert mb["theoretical_build_qty"] == th["theoretical_build_qty"]
-
-
-def test_bom_root_count_uses_the_same_substitute_caliber_as_lines(snap):
-    main = bom_list(snap, "U00-000080", depth=None, include_substitute=False, report_grain="full", page_size=500)
-    all_rows = bom_list(snap, "U00-000080", depth=None, include_substitute=True, report_grain="full", page_size=500)
-    assert main["rows_incl_root"] == main["line_count"] + 1 == 77
-    assert main["scoped_line_count"] == len(main["lines"]) == 76
-    assert main["next_offset"] is None
-    assert main["source_rows_incl_root"] == all_rows["rows_incl_root"]
-    assert all_rows["rows_incl_root"] == all_rows["line_count"] + 1

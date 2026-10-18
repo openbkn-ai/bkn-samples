@@ -18,10 +18,6 @@
 
 ## 最近一次正式评测
 
-本次优化使用独立的[完整交付 CSV 基线](baselines/2026-10-12-current-csv/README.md)，ID 为 `supply-current-csv-2026-10-12-v1`。该基线保留三张未来预测单，核心问题正文不变，M-07/M-08/M-12 金标分别为 56340、90、12 张/20000。0.1.5 本地包卸载重装后的[独立 MCP A/C 验证](baselines/2026-10-12-current-csv/runs/2026-10-12-local-015-ac/README.md)为核心 50/50、100%；时间扩展 4/5，月环比仍失败。该轮无数据库 B 对照、模型精确标识不可获得，不是历史 DeepSeek Harness 的复现或完整 A/B/C 正式 Benchmark。
-
-下面的正式 A/B 表仍属于历史 2026-08-13 POC 快照；新基线结果单独记录，不覆盖旧报告。历史证据及差异原因见[追溯报告](../../../docs/supply-sample-history-forensics.zh-CN.md)。
-
 | 项目 | 结果 |
 | --- | --- |
 | Agent 运行环境 | POC / DeepSeek Harness |
@@ -61,17 +57,3 @@
 ## 使用边界
 
 评测仅读取样例数据，不创建采购订单、不写回业务系统。`.env.example` 仅提供 B 路径所需的连接变量名；实际 `.env` 包含凭据，不应提交、分享或写入报告。
-
-## 完整自然月扩展补验
-
-[calendar-month-question-set-v1.yaml](datasets/calendar-month-question-set-v1.yaml) 是独立4题扩展，不加入核心50题分母；对应金标仅供独立评测者读取。先将精确候选的自然月分析Skill发布并挂载，再由只读题集的第三方Agent通过MCP发现Skill、查询完整月份并计算结果。CLI验收脚本不冒充Agent成绩，SDK sameperiod探查只作可选独立诊断。
-
-0.1.5 修正候选在8081标准卸载重装后的[独立自然月 A/C 补验](baselines/2026-10-12-current-csv/runs/2026-10-12-calendar-month-ac/README.md)为 **4/4，100%**，实际发现并读取发布Skill后完成查询和计算；真实指标扩展5/5、逻辑属性绑定11/11。该批次不覆盖上文旧扩展4/5记录，也未重新运行核心50题。
-
-## 当前确定性业务规则 v3 基线
-
-本轮函数和 Skill 优化使用 [完整 50 题确定性基线](baselines/2026-10-12-business-rules-v2/README.md)。题目明确库存、仓范围、替代策略、日期和已确认资源池，答案由独立子智能体从交付 CSV 全量重算；S-01/S-05/S-08 均给出确定数值及是/否判定。独立 MCP 成绩另行记录，不沿用旧 50/50。
-
-[10月3日函数审查对照](../docs/function-review-followup-2026-10-12.zh-CN.md)记录本轮修复及验收边界。
-
-当前确定性 v3 基线已完成 [8081 独立 MCP 全量验收](baselines/2026-10-12-business-rules-v2/runs/2026-10-12-deterministic-mcp-r2/README.md)：**50/50，100%**；S-01/S-05/S-08 均有确定数值和是/否。239项测试、指标5/5与属性11/11通过，首轮失败证据保留。

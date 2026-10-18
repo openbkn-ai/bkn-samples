@@ -8,11 +8,9 @@
 #   Step 4  Render BKN         : map table Resources → render worldcup-bkn
 #   Step 5  Push BKN           : openbkn bkn validate + push, then build vega resource
 #                                 OpenSearch indexes for 7 entity tables (DO_INDEX=1 default)
-#   Step 6  Upload toolbox     : openbkn toolbox create + tool upload <OpenAPI> + publish
-#                                 (registers vega_sql_execute; idempotent by box_name)
 #
 # The pipeline ends at a Vega catalog BKN (`worldcup_vega_catalog_bkn`) backed by
-# a published, queryable `vega_sql_execute` tool over the 27 wc_* MySQL tables.
+# the standard MCP object-query capabilities (query_object_instance, run_cypher).
 #
 # Prerequisites:
 #   - openbkn CLI logged in (`openbkn auth login`) and node `openbkn` resolvable
@@ -33,9 +31,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BKN_EXTRACT_DIR="$SCRIPT_DIR/kn"
 RENDERED_DIR="$SCRIPT_DIR/.rendered-bkn-vega"
 MAPPING_TMP="$SCRIPT_DIR/.vega-bkn-mapping.json"
-VEGA_OPENAPI_SPEC="$SCRIPT_DIR/vega_sql_execute.openapi.json"
-VEGA_TOOLBOX_NAME="${VEGA_TOOLBOX_NAME:-wc_vega_query}"
-VEGA_TOOLBOX_SVC_URL="${VEGA_TOOLBOX_SVC_URL:-http://vega-backend-svc:13014}"
 DATA_DIR="$SCRIPT_DIR/data"
 
 usage() {
@@ -45,8 +40,8 @@ Usage: ./run.sh [options]
 Options:
   -h, --help          Show this help.
   --dry-run           Print the plan for the selected steps, no API calls.
-  --from N            Start from step N (1..6). Default 1.
-  --only N            Run only step N (1..6).
+  --from N            Start from step N (1..5). Default 1.
+  --only N            Run only step N (1..5).
 
 Steps:
   1  Validate data   — verify 27 embedded CSV files against dataset.lock
@@ -54,7 +49,6 @@ Steps:
   3  Vega scan       — create catalog via API + discover (wait)
   4  Render BKN      — map Resources → render worldcup-bkn
   5  Push BKN        — validate + push (resource-backed KN); build vega indexes for 7 entity tables (DO_INDEX=0 to skip)
-  6  Upload toolbox  — toolbox create + tool upload <OpenAPI> + publish (idempotent; DO_TOOLBOX=0 disables)
 
 Env (see env.sample):
   DB_HOST / DB_PORT / DB_NAME     MySQL coordinates (required for steps 2-3).
@@ -70,9 +64,6 @@ Env (see env.sample):
   DO_INDEX=1                      Build vector indexes on 7 entity tables after push (default). Set =0 to skip.
   EMBEDDING_MODEL_NAME=text-embedding-v4-cn   Model_name registered via mf-model-manager
                                   (resolved to model_id at runtime). Unset / not found → keyword only.
-  DO_TOOLBOX=1                    Step 6: set 0 to skip toolbox import + publish.
-  FORCE_TOOLBOX_REIMPORT=0        Step 6: set 1 to delete the existing same-name toolbox
-                                  and re-import (use after editing the .adp template).
   BKN_BASE_URL                Optional: pin a specific platform; default uses ~/.openbkn.
 EOF
 }
@@ -84,14 +75,14 @@ while [ $# -gt 0 ]; do
     case "$1" in
         -h|--help) usage; exit 0 ;;
         --dry-run) DRY_RUN=1; shift ;;
-        --from) FROM="${2:?--from needs a number 1..6}"; shift 2 ;;
-        --only) ONLY="${2:?--only needs a number 1..6}"; shift 2 ;;
+        --from) FROM="${2:?--from needs a number 1..5}"; shift 2 ;;
+        --only) ONLY="${2:?--only needs a number 1..5}"; shift 2 ;;
         *) echo "Unknown arg: $1" >&2; usage >&2; exit 2 ;;
     esac
 done
 
-case "$FROM" in 1|2|3|4|5|6) ;; *) echo "--from must be 1..6" >&2; exit 2 ;; esac
-if [ -n "$ONLY" ]; then case "$ONLY" in 1|2|3|4|5|6) ;; *) echo "--only must be 1..6" >&2; exit 2 ;; esac; fi
+case "$FROM" in 1|2|3|4|5) ;; *) echo "--from must be 1..5" >&2; exit 2 ;; esac
+if [ -n "$ONLY" ]; then case "$ONLY" in 1|2|3|4|5) ;; *) echo "--only must be 1..5" >&2; exit 2 ;; esac; fi
 
 set -a
 [ -f "$SCRIPT_DIR/.env" ] && source "$SCRIPT_DIR/.env"
@@ -101,7 +92,7 @@ set +a
 # A platform that remembers `-k` (tlsInsecure in ~/.bkn) makes the CLI route
 # every request through undici, which does not recognise the global FormData it
 # builds uploads with: the body degrades to text/plain and `bkn push` /
-# `tool upload` fail with 400 "Content-Type isn't multipart/form-data".
+# model uploads fail with 400 "Content-Type isn't multipart/form-data".
 # NODE_TLS_REJECT_UNAUTHORIZED alone does not help — the stored flag is what
 # picks the code path. So run against an explicit token and an empty config
 # dir, which keeps the CLI on the plain `fetch` path, and let the env var cover
@@ -166,7 +157,7 @@ kn_id_from_rendered() {
 
 # ─── Step 1: Download CSVs ──────────────────────────────────────────────────
 step_1_download() {
-    echo "=== [1/6] Validate embedded CSVs ===" >&2
+    echo "=== [1/5] Validate embedded CSVs ===" >&2
     if [ "$DRY_RUN" = 1 ]; then
         echo "  plan: validate embedded CSVs in $DATA_DIR using dataset.lock" >&2
         return 0
@@ -212,7 +203,7 @@ PY
 }
 
 step_2_import() {
-    echo "=== [2/6] Import to MySQL ===" >&2
+    echo "=== [2/5] Import to MySQL ===" >&2
 
     if [ "${SKIP_IMPORT:-0}" = 1 ]; then
         echo "  skipped (SKIP_IMPORT=1)" >&2
@@ -382,7 +373,7 @@ resolve_catalog_id_by_name() {
 }
 
 step_3_vega_scan() {
-    echo "=== [3/6] Vega scan ===" >&2
+    echo "=== [3/5] Vega scan ===" >&2
     local catalog_id="${VEGA_CATALOG_ID:-}"
 
     if [ "${VEGA_SKIP_CREATE:-0}" = "1" ]; then
@@ -470,7 +461,7 @@ resolve_catalog_id_or_die() {
 }
 
 step_4_render_bkn() {
-    echo "=== [4/6] Render BKN ===" >&2
+    echo "=== [4/5] Render BKN ===" >&2
 
     if [ "$DRY_RUN" = 1 ]; then
         local hint="${VEGA_CATALOG_ID:-${VEGA_CATALOG_NAME:-<unresolved>}}"
@@ -520,7 +511,7 @@ _extract_bkn_archive() {
 
 # ─── Step 5: Push BKN ───────────────────────────────────────────────────────
 step_5_push_bkn() {
-    echo "=== [5/6] Push BKN ===" >&2
+    echo "=== [5/5] Push BKN ===" >&2
 
     if [ "$DRY_RUN" = 1 ]; then
         echo "  plan: openbkn bkn validate $RENDERED_DIR" >&2
@@ -627,7 +618,7 @@ PY
     # index configuration is owned by the resource (index_config + per-field
     # features) and the build task only snapshots it, so a resource with no
     # index_config.build_key_fields is rejected with HTTP 400.
-    # Warn-not-fail: a stalled table stays queryable via vega_sql_execute (step 6).
+    # Index builds are optional; object queries can read the underlying resource.
     local created=0 reused=0 skipped=0
     while IFS=$'\t' read -r tbl rid ft ef; do
         [ -z "$rid" ] && continue
@@ -671,169 +662,6 @@ PY
     echo "  indexes: $created created, $reused reused, $skipped skipped (DO_INDEX=0 to disable)" >&2
 }
 
-# ─── Step 6: Upload toolbox (OpenAPI) ──────────────────────────────────────
-_write_box_id_to_env() {
-    local box_id="$1" tool_id="${2:-}"
-    [ "${SKIP_WRITE_ENV:-0}" = 1 ] && return 0
-    _WC_PATCH_BOX_ID="$box_id" _WC_PATCH_TOOL_ID="$tool_id" ENV_FILE="$SCRIPT_DIR/.env" python3 - <<'PY'
-import os, pathlib, re
-box_id   = os.environ["_WC_PATCH_BOX_ID"]
-tool_id  = os.environ.get("_WC_PATCH_TOOL_ID", "")
-env_file = pathlib.Path(os.environ["ENV_FILE"])
-nl = "\n"
-updates = {"TOOLBOX_BOX_ID": box_id}
-if tool_id: updates["VEGA_TOOL_ID"] = tool_id
-text = env_file.read_text(encoding="utf-8", errors="replace") if env_file.is_file() else ""
-if text and not text.endswith("\n"): text += nl
-out, seen = [], set()
-for line in text.splitlines(keepends=True):
-    matched = False
-    for k, v in updates.items():
-        if re.match(rf"^\s*{re.escape(k)}=", line):
-            if k not in seen:
-                out.append(f"{k}={v}{nl}")
-                seen.add(k)
-            matched = True
-            break
-    if not matched: out.append(line)
-for k, v in updates.items():
-    if k not in seen: out.append(f"{k}={v}{nl}")
-env_file.write_text("".join(out), encoding="utf-8")
-print(f"  .env TOOLBOX_BOX_ID={box_id}" + (f"  VEGA_TOOL_ID={tool_id}" if tool_id else ""), flush=True)
-PY
-}
-
-find_toolbox_id_by_name() {
-    local name="$1" raw
-    raw="$("${KWEAV[@]}" toolbox list --keyword "$name" --limit 50 2>/dev/null || true)"
-    printf '%s' "$raw" | _extract_cli_json | jq -r --arg n "$name" '
-        (.entries // .data // .items // [])
-        | if type == "array" then . else [] end
-        | map(select((.box_name // .name) == $n))
-        | sort_by(.updated_at // .created_at // 0) | reverse
-        | (.[0].box_id // .[0].id // empty)
-    ' 2>/dev/null | head -1
-}
-
-step_6_toolbox() {
-    echo "=== [6/6] Upload toolbox ===" >&2
-    if [ "${DO_TOOLBOX:-1}" != 1 ]; then
-        echo "  skipped (DO_TOOLBOX=0)" >&2
-        return 0
-    fi
-    [ -f "$VEGA_OPENAPI_SPEC" ] || { echo "Error: $VEGA_OPENAPI_SPEC missing" >&2; exit 1; }
-
-    if [ "$DRY_RUN" = 1 ]; then
-        echo "  plan: openbkn toolbox create --name $VEGA_TOOLBOX_NAME (reuse if found)" >&2
-        echo "  plan: openbkn tool upload --toolbox <box-id> $VEGA_OPENAPI_SPEC" >&2
-        echo "  plan: openbkn tool enable + toolbox publish" >&2
-        return 0
-    fi
-
-    # NOTE: this example uses `openbkn tool upload` (OpenAPI parser) instead of
-    # `openbkn toolbox import` (.adp via impex). On platform 0.7.0 the impex path
-    # has a write-path bug (api_spec stored as null); fix is in 0.8.0 commit
-    # e4aac398. The OpenAPI parser path is unaffected.
-
-    local box_id
-    # Prefer the id written back to .env on a previous run: `toolbox list` only
-    # returns boxes the caller has authz policies on, so name lookup can be
-    # blind even when the box exists (create then 400s with ToolBoxNameExists).
-    box_id="${TOOLBOX_BOX_ID:-}"
-    [ -z "$box_id" ] && box_id="$(find_toolbox_id_by_name "$VEGA_TOOLBOX_NAME")"
-
-    if [ -n "${BKN_SAMPLE_RECEIPT:-}" ] && [ -n "$box_id" ]; then
-        python3 "$SCRIPT_DIR/platform/ownership_receipt.py" check toolboxes "$box_id"
-    fi
-
-    if [ "${FORCE_TOOLBOX_REIMPORT:-0}" = 1 ] && [ -n "$box_id" ]; then
-        echo "  FORCE_TOOLBOX_REIMPORT=1 → deleting existing $box_id" >&2
-        "${KWEAV[@]}" toolbox delete "$box_id" -y || {
-            echo "  warn: toolbox delete failed (likely 0.7.0 batch-delete bug); continuing — will reuse." >&2
-        }
-        box_id="$(find_toolbox_id_by_name "$VEGA_TOOLBOX_NAME")"
-    fi
-
-    if [ -z "$box_id" ]; then
-        echo "  Creating toolbox $VEGA_TOOLBOX_NAME → $VEGA_TOOLBOX_SVC_URL" >&2
-        local create_out
-        create_out="$("${KWEAV[@]}" toolbox create \
-            --name "$VEGA_TOOLBOX_NAME" \
-            --service-url "$VEGA_TOOLBOX_SVC_URL" \
-            --description "Vega backend SQL execute (worldcup example)" 2>&1)" || {
-            echo "$create_out" >&2
-            if printf '%s' "$create_out" | grep -q "ToolBoxNameExists"; then
-                echo "Error: toolbox '$VEGA_TOOLBOX_NAME' already exists but is not visible to this user." >&2
-                echo "       Set TOOLBOX_BOX_ID=<box_id> in .env (or VEGA_TOOLBOX_NAME to a new name)." >&2
-            else
-                echo "Error: toolbox create failed." >&2
-            fi
-            exit 1
-        }
-        box_id="$(printf '%s' "$create_out" | _extract_cli_json | jq -r '.box_id // .id // .data.box_id // empty' 2>/dev/null | head -1)"
-        [ -z "$box_id" ] && { echo "Error: could not resolve box_id from create output:" >&2; echo "$create_out" >&2; exit 1; }
-        if [ -n "${BKN_SAMPLE_RECEIPT:-}" ]; then
-            python3 "$SCRIPT_DIR/platform/ownership_receipt.py" remember toolboxes "$box_id"
-        fi
-        echo "  created box_id=$box_id" >&2
-    else
-        echo "  reusing existing toolbox $box_id" >&2
-    fi
-
-    # Find existing vega_sql_execute tool, or upload it. `|| true` so a
-    # pipefail (empty toolbox, missing tools key, jq no-match) doesn't kill
-    # the script — empty tool_id flows into the upload branch below.
-    local tool_id
-    tool_id="$("${KWEAV[@]}" tool list --toolbox "$box_id" 2>/dev/null | _extract_cli_json | \
-        jq -r '.tools[]? | select(.name == "vega_sql_execute") | .tool_id' 2>/dev/null | head -1 || true)"
-
-    if [ -z "$tool_id" ]; then
-        echo "  uploading $VEGA_OPENAPI_SPEC" >&2
-        local upload_out
-        upload_out="$("${KWEAV[@]}" tool upload --toolbox "$box_id" "$VEGA_OPENAPI_SPEC" 2>&1)" || {
-            echo "$upload_out" >&2
-            echo "Error: tool upload failed." >&2
-            exit 1
-        }
-        tool_id="$(printf '%s' "$upload_out" | _extract_cli_json | jq -r '.success_ids[0] // empty' 2>/dev/null | head -1)"
-        [ -z "$tool_id" ] && { echo "Error: could not resolve tool_id from upload output:" >&2; echo "$upload_out" >&2; exit 1; }
-        echo "  uploaded tool_id=$tool_id" >&2
-    else
-        echo "  reusing existing tool_id=$tool_id" >&2
-    fi
-
-    "${KWEAV[@]}" tool enable --toolbox "$box_id" "$tool_id" >/dev/null 2>&1 || true
-
-    local pub_rc=0 pub_out
-    pub_out="$("${KWEAV[@]}" toolbox publish "$box_id" 2>&1)" || pub_rc=$?
-    if [ "$pub_rc" -ne 0 ]; then
-        case "$pub_out" in
-            *ToolBoxStatusInvalid*|*"can not be transition to published"*|*"already"*)
-                echo "  (already published)" >&2
-                ;;
-            *)
-                echo "$pub_out" >&2
-                echo "Error: toolbox publish failed." >&2
-                exit "$pub_rc"
-                ;;
-        esac
-    fi
-
-    _write_box_id_to_env "$box_id" "$tool_id"
-    TOOLBOX_BOX_ID="$box_id"; VEGA_TOOL_ID="$tool_id"
-    export TOOLBOX_BOX_ID VEGA_TOOL_ID
-    echo "  TOOLBOX_BOX_ID=$box_id  VEGA_TOOL_ID=$tool_id" >&2
-
-    local kn_id; kn_id="$(kn_id_from_rendered)"
-    echo "" >&2
-    echo "  Done. Vega catalog BKN '${kn_id:-worldcup_vega_catalog_bkn}' is live with a published" >&2
-    echo "  vega_sql_execute tool (TOOLBOX_BOX_ID=$box_id  VEGA_TOOL_ID=$tool_id) over the 27 wc_* tables." >&2
-    echo "  Query the resources directly, e.g.:" >&2
-    echo "    ${KWEAV[*]} tool execute $tool_id --toolbox $box_id \\" >&2
-    echo "      --body '{\"query\":\"SELECT tournament_name, winner FROM {{<tournaments_resource_id>}} ORDER BY year DESC LIMIT 5\",\"query_format\":\"sql\"}'" >&2
-    echo "  (resource_id comes from: ${KWEAV[*]} vega resource list --catalog-id <catalog> --category table)" >&2
-}
-
 # ─── Driver ─────────────────────────────────────────────────────────────────
 require_jq
 
@@ -851,10 +679,9 @@ run_step() {
         3) step_3_vega_scan ;;
         4) step_4_render_bkn ;;
         5) step_5_push_bkn ;;
-        6) step_6_toolbox ;;
     esac
 }
 
-for n in 1 2 3 4 5 6; do
+for n in 1 2 3 4 5; do
     run_step "$n"
 done

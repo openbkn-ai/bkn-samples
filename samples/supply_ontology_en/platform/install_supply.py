@@ -75,9 +75,11 @@ def capability_summary(payload: dict) -> str:
     components = payload.get("components") or {}
     digest = hashlib.sha256()
     if components.get("functions"):
-        for name in ("function_catalog.py", "native_function_bundle.py"):
-            path = TOOLS / name
-            digest.update(name.encode())
+        # Every file the published Function sources are assembled from.
+        sources = [TOOLS / "function_catalog.py", TOOLS / "function_source.py", TOOLS / "managed_execution.py"]
+        sources += sorted((TOOLS / "fn").glob("*.py")) + sorted((TOOLS / "functions").glob("*.py"))
+        for path in sources:
+            digest.update(path.relative_to(TOOLS).as_posix().encode())
             digest.update(b"\0")
             digest.update(path.read_bytes())
             digest.update(b"\0")

@@ -181,11 +181,6 @@ def _walk(
         index = len(nodes) - 1
         on_path.add(code)
         children = []
-        # 组件现有可用量足以覆盖该节点需求时，不再展开其子件。
-        # 这是按节点净需求展开的基本边界，避免“组件够用仍报叶子缺口”。
-        if available + in_transit >= gross:
-            stack.append((_PATH_EXIT, code))
-            continue
         for row in tree.get(code, []):
             child = (row.get("material_code") or "").strip()
             if not child:
@@ -267,7 +262,7 @@ def backward_plan(
     demand_end: str | None = None,
     demand_qty=None,
     business_date: str | None = None,
-    warehouse_scope: str | list[str] | None = "all",
+    warehouse_scope: str | list[str] | None = "production_available",
     substitute_enabled: bool,
     report_grain: str = "summary",
 ) -> dict:
@@ -292,8 +287,8 @@ def backward_plan(
     )
     today = _parse_day(effective_business_date, "业务日期")
     warehouse_filter = resolve_warehouse_scope(warehouse_scope)
-    finished_goods_filter = warehouse_filter
-    finished_goods_qty = available_qty(snap, code, warehouse_scope)
+    finished_goods_filter = resolve_warehouse_scope("finished_goods")
+    finished_goods_qty = available_qty(snap, code, "finished_goods")
 
     # This function is used for a customer delivery commitment as well as a
     # production-plan diagnosis.  A finished-goods shipment must never be
@@ -314,13 +309,11 @@ def backward_plan(
             "fulfillment_mode": "finished_goods",
             "production_plan_required": False,
             "customer_earliest_available_date": today.isoformat(),
-            "customer_late_days": max(0, (today - due).days),
+            "customer_late_days": 0,
             "substitute_enabled": substitute_enabled,
             "report_grain": report_grain,
-            "can_deliver_on_time": today <= due,
-            "delivery_commitment_status": "confirmed_on_time" if today <= due else "confirmed_late",
-            "uncertain_supply_items": [],
-            "max_delay_days": max(0, (today - due).days),
+            "can_deliver_on_time": True,
+            "max_delay_days": 0,
             "delay_a": [],
             "delay_b": [],
             "nodes": [],
@@ -333,11 +326,10 @@ def backward_plan(
     warnings: list[str] = []
     if substitute_enabled:
         warnings.append("替代料策略已确认为启用：主树仍只用主料 BOM，替代仅供后续判定")
-    production_qty = max(0.0, qty - finished_goods_qty)
     nodes = _walk(
         snap,
         code,
-        demand_qty=production_qty,
+        demand_qty=qty,
         demand_end=due,
         warehouse_scope=warehouse_scope,
         warnings=warnings,
@@ -355,7 +347,7 @@ def backward_plan(
         open_pr = pr_open_qty(snap, item["material_code"])
         supply = item["available_qty"] + item["in_transit_qty"]
         shortage = max(0.0, item["gross_requirement"] - supply)
-        status_result = supply_status(
+        status = supply_status(
             snap,
             item["material_code"],
             due_date=item["_end"],
@@ -363,8 +355,7 @@ def backward_plan(
             warehouse_scope=warehouse_scope,
             today=today,
             child_short=short_below[index],
-        )
-        status = status_result["status"]
+        )["status"]
         delay_class, delay_days, latest_po = _classify_delay(
             item,
             today=today,
@@ -451,22 +442,6 @@ def backward_plan(
             or item["supply_status"] in RISK_STATUSES
             or item["evidence"]["shortage_qty"] > 0
         ]
-    # Unknown receipts are uncertainty; an established missed date is a
-    # negative result, not an unknown result.
-    blocking_statuses = {"unknown", "po_overdue", "child_short"}
-    uncertain_items = [
-        item["material_code"] for item in nodes
-        if item.get("supply_status") in blocking_statuses
-    ]
-    warnings_out = list(warnings)
-    if uncertain_items:
-        warnings_out.append(
-            "存在未知、逾期或关键子件缺口，不能将函数计算结果作为确定交付承诺："
-            + ",".join(uncertain_items)
-        )
-    known_late = (due < today or max_delay_days > 0 or customer_late_days > 0
-                  or any(item.get("supply_status") == "deadline_risk" for item in nodes))
-    can_deliver = False if known_late else (None if uncertain_items else True)
     return {
         "product_code": code,
         "forecast_id": plan_id,
@@ -485,7 +460,7 @@ def backward_plan(
         "customer_late_days": customer_late_days,
         "substitute_enabled": substitute_enabled,
         "report_grain": report_grain,
-        "can_deliver_on_time": can_deliver,
+        "can_deliver_on_time": max_delay_days == 0,
         "max_delay_days": max_delay_days,
         "delay_a": _sorted_delays(delay_a),
         "delay_b": _sorted_delays(delay_b),
@@ -493,7 +468,5 @@ def backward_plan(
         "node_count_total": len(nodes),
         "gaps": gaps,
         "supply_status_summary": summary,
-        "warnings": warnings_out,
-        "delivery_commitment_status": "confirmed_late" if known_late else ("cannot_confirm" if uncertain_items else "confirmed_by_function_caliber"),
-        "uncertain_supply_items": uncertain_items,
+        "warnings": warnings,
     }
