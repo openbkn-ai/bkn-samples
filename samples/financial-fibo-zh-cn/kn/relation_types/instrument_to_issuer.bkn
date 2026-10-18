@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: instrument_to_issuer
+name: 金融工具关联发行方
+tags: [finance, fibo]
+---
+
+## RelationType: 金融工具关联发行方
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| financial_instruments | legal_entities | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| issuer_id | entity_id |

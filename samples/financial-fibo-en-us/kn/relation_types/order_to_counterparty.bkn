@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: order_to_counterparty
+name: Order To Counterparty
+tags: [finance, fibo]
+---
+
+## RelationType: Order To Counterparty
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| trade_orders | legal_entities | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| counterparty_id | entity_id |

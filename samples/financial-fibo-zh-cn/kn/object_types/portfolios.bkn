@@ -1,0 +1,38 @@
+---
+type: object_type
+id: portfolios
+name: 投资组合
+tags: [finance, fibo]
+---
+
+## ObjectType: 投资组合
+
+以美元报告的仅多头受管理组合。主分支用于测试分群，不能替代风险证据判断。
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/Portfolio |
+| source_label | portfolio |
+| source_definition | collection of holdings assembled and maintained as a unit for management purposes to achieve strategic objectives |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| portfolio_id | 组合编号 | string | 该业务记录的稳定唯一标识。 | portfolio_id |
+| name | 名称 | string | 用于业务展示的虚构名称，双语语义一致。 | name |
+| manager_id | 管理人编号 | string | 外键关联 legal_entities，空值仅允许在合同明确声明缺失/不适用时使用。 | manager_id |
+| base_currency | 本位币 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | base_currency |
+| mandate | 投资授权 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | mandate |
+| branch | 业务分支 | string | 仅为测试主分群；共享价格缺陷等证据可同时影响多个分群。 允许取值：交易对手超限, 价格例外, 发行方超限, 待结算, 未来限额变更, 正常结算, 结算失败. | branch |
+
+### Keys
+
+Primary Keys: portfolio_id
+Display Key: name
+Incremental Key:

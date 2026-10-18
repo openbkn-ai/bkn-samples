@@ -1,0 +1,43 @@
+---
+type: object_type
+id: positions
+name: Dated Position
+tags: [finance, fibo]
+---
+
+## ObjectType: Dated Position
+
+Dated trade-basis and settled-basis quantities, remaining weighted-average cost and current-month local realized P&L, with actual/planned distinction.
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/Position |
+| source_label | position |
+| source_definition | financial exposure resulting from owning, borrowing, shorting, or entering into a contract (e.g., derivatives) |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| position_id | Position Id | string | Stable unique identifier of this business record. | position_id |
+| opening_id | Opening Id | string | Foreign key to opening_positions; blank only where contract declares absent/inapplicable evidence. | opening_id |
+| as_of_date | As Of Date | date | Business snapshot date, distinct from quote/fixing date and date of knowledge. | as_of_date |
+| trade_basis_quantity | Trade Basis Quantity | decimal | Opening plus signed eligible fills by the snapshot date; units follow the instrument. | trade_basis_quantity |
+| settled_basis_quantity | Settled Basis Quantity | decimal | Opening plus signed cumulative eligible event transfers; planned transfers cannot enter an actual snapshot. | settled_basis_quantity |
+| unsettled_delta | Unsettled Delta | decimal | Signed trade-basis minus settled-basis quantity; a negative value can represent an unsettled sell. | unsettled_delta |
+| cost_amount | Cost Amount | decimal | Remaining weighted-average cost in instrument currency, booked to 2dp at the snapshot; not original total purchases. | cost_amount |
+| realized_pnl | Realized Pnl | decimal | Current calendar-month realized sale P&L in instrument currency; excludes FX translation P&L, coupons, fees and taxes. | realized_pnl |
+| currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
+| view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+
+### Keys
+
+Primary Keys: position_id
+Display Key: position_id
+Incremental Key:

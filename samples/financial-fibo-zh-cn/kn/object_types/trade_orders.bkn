@@ -1,0 +1,33 @@
+---
+type: object_type
+id: trade_orders
+name: 交易订单
+tags: [finance, fibo]
+---
+
+## ObjectType: 交易订单
+
+标识账户、工具及经纪商的买卖指令，可为已接受或计划状态；本样例每单一次成交。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| order_id | 订单编号 | string | 该业务记录的稳定唯一标识。 | order_id |
+| account_id | 账户编号 | string | 外键关联 accounts，空值仅允许在合同明确声明缺失/不适用时使用。 | account_id |
+| instrument_id | 工具编号 | string | 外键关联 financial_instruments，空值仅允许在合同明确声明缺失/不适用时使用。 | instrument_id |
+| counterparty_id | 交易对手编号 | string | 外键关联 legal_entities，空值仅允许在合同明确声明缺失/不适用时使用。 | counterparty_id |
+| order_date | 订单日期 | date | 该业务事件的日期；使用虚构工作日日历并区分计划与实际。 | order_date |
+| side | 方向 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 允许取值：买入, 卖出. | side |
+| order_quantity | 订单数量 | decimal | 正值业务数量，单位取关联工具的股数或面值单位。 | order_quantity |
+| order_status | 订单状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 | order_status |
+| view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+
+### Keys
+
+Primary Keys: order_id
+Display Key: order_id
+Incremental Key:

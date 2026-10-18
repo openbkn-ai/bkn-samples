@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: assessment_to_counterparty_exposure
+name: 限额评估关联交易对手敞口
+tags: [finance, fibo]
+---
+
+## RelationType: 限额评估关联交易对手敞口
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| limit_assessments | counterparty_exposures | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| counterparty_exposure_id | exposure_id |

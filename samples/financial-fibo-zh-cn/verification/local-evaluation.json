@@ -1,0 +1,683 @@
+{
+  "ok": true,
+  "evidence_binding": {
+    "dataset.lock": "sha256:427a101d645809537ff0c2658bb11c3bef0521c9daba45ec034b83e4abcb6429",
+    "model-contract.json": "sha256:1f0da0f16ec06798a25af0deb9749fe632b80c3c0c47de4122f0f58b8e777a43",
+    "bkn-eval/questions.json": "sha256:42bab499b1cffe99ccb774c38a381059ca8b09abfd8472eac8df9aba49ba9797",
+    "bkn-eval/expected-results.json": "sha256:dc64f031d7712e7cd9ba1e761e7fffece9a7b7f39405fcc84b98c4aefe880705",
+    "tools/verify.py": "sha256:aa3d7a493a277e064e85dc040fa0ee36f7873648d6c1c289899f1fbaa6c7574c",
+    "tools/settlement_views.py": "sha256:48f71c7ac5f7c7d5222acf710ec0c845f54e80a31def2aa7839d28daad49eca0",
+    "tools/decimal_sql.py": "sha256:538c9da78f5be36e846ffa1d2c1903c941708d682c4eb9b88b4b31fa9f157243",
+    "bkn-eval/run.py": "sha256:3155ac61096b6d97a65791c77efb066f027955c6e713b966e1e129ccc695f696",
+    "kn/concept_groups/post_trade.bkn": "sha256:4b1ee6c31b41d9a998939d6ab37b05cb19eaff0c47843d28c2c0c12a6587d433",
+    "kn/concept_groups/reference_data.bkn": "sha256:5c5eda08603b396745acb24fe6c6c700b050f0a787e2f6dbed6d4cd1afc02641",
+    "kn/concept_groups/valuation_controls.bkn": "sha256:b7983f747357f56c482ea17904e1fc3131a8a7d88a60eb8ec0130f3de19b1a79",
+    "kn/network.bkn": "sha256:99f95dd98473367139c46108df28cc5bd7c59481c7691ea7417b2cb214dc902e",
+    "kn/object_types/accounts.bkn": "sha256:f4e85525313a91860ae6a212de8e096f8b40634b647ad6418f9dcdc3b1f5cbdb",
+    "kn/object_types/counterparty_exposures.bkn": "sha256:6962027df073e2cfa9fb51a59aa87f362bdb8a243302531240e63950554c167b",
+    "kn/object_types/exposure_contributions.bkn": "sha256:490f6139391b24341857c5b9e58bcc333b351ff7839b0540ba0917934c900494",
+    "kn/object_types/financial_instruments.bkn": "sha256:8e37e05017ffd671dcc092b61861e2daf470d79537c9b67e3d784bbc6f8be892",
+    "kn/object_types/fx_rates.bkn": "sha256:61ddc9a5e8c8746087c23da4169aa56093ccce7616bb4156b61373c7c6a1b65b",
+    "kn/object_types/issuer_exposures.bkn": "sha256:35c213869fee0f09ea73e21e21f0561f7473c0fff550118684cb08ffc1a47d2e",
+    "kn/object_types/legal_entities.bkn": "sha256:9fc8dc78d268fea329e74f8855f1b931896cfd84ccf1c028113d421257bb61be",
+    "kn/object_types/legal_entity_identifiers.bkn": "sha256:b79d8bebcbbec6af6c16a47f1f9b91e605ffc0cbbceb8ae5fb96920f889a2412",
+    "kn/object_types/limit_assessments.bkn": "sha256:01bfb7505a34db55554af60fa5624b160b822fee7d98083ddf50f9829c2c8993",
+    "kn/object_types/mandate_limits.bkn": "sha256:10ccb858ceb4e8db2f24b96fb53068f3dfaed674c02c9e8c2c7b1e6e1581f7b3",
+    "kn/object_types/market_prices.bkn": "sha256:8e5c847158213ca4e6895e709d8aeeaa46b44089babe4e4150162f0fdd064c5e",
+    "kn/object_types/opening_positions.bkn": "sha256:c7cc215e309a5557fe212e6b0f42f3f86155da233b2399078f5da3d2325c0b7b",
+    "kn/object_types/portfolios.bkn": "sha256:49b31e67c45f625fbc13074c032b4a3f647a860639c595d3d9fe88b77d85785c",
+    "kn/object_types/positions.bkn": "sha256:a23dda33306d625f8e907266695bb0726724af4c0384cda9e48458515bd94dbf",
+    "kn/object_types/securities_transactions.bkn": "sha256:a2d428775798fb79e3bd3210fd1dfa76a0f49074de565925d28cfa1c2b142699",
+    "kn/object_types/security_identifiers.bkn": "sha256:0da9dde64b985b492f4c663b223cd7be284d26e00175dbe40ef21b2257956d84",
+    "kn/object_types/settlement_events.bkn": "sha256:9c1bd48a972b66a48f64a33d7b13b7499cc88fc8da147adf221c52673238b338",
+    "kn/object_types/settlement_instructions.bkn": "sha256:3eda1addb0d79ba0af6614f0cc8bec3c6f557ceff81a6fa480ae88606b1bafde",
+    "kn/object_types/trade_orders.bkn": "sha256:605144482bfb40232676a354882c067567a71def222f1f9aa3cd3193eeaf9ef2",
+    "kn/object_types/valuation_snapshots.bkn": "sha256:f35dd4b44c7b59db81dfd57a872127255d4fa489c000bb3c327d8de0572d2a8f",
+    "kn/relation_types/account_to_portfolio.bkn": "sha256:593094c5fb45c5fd17fbd6d50d440cc8e96cda5a3d043f468c78f2d5b9620be0",
+    "kn/relation_types/assessment_to_counterparty_exposure.bkn": "sha256:46d7ec8383e0c69e619325b2e6e6a4ef878f57351c75f3e9e3a564f42218041a",
+    "kn/relation_types/assessment_to_issuer_exposure.bkn": "sha256:843751fa62d2f9d6c856a869458294518c3526867f5eba299cde67fc2027a373",
+    "kn/relation_types/assessment_to_limit.bkn": "sha256:d8a1298324c24cc1fefd72ac07a34b66d83cd8dd6cba6d37314d1a5b51a5ba10",
+    "kn/relation_types/contribution_to_issuer_exp.bkn": "sha256:3e2c01d4b846d0cf9268f29780135e6a43286ca223ee8f5d27cd29d0305aa605",
+    "kn/relation_types/contribution_to_valuation.bkn": "sha256:83fc781101e51f01fa365d3be5d4d406b969299084aaddf8c13d24fedf448f46",
+    "kn/relation_types/cp_exp_to_counterparty.bkn": "sha256:c870fbe0f751168f9fb8a07a3b003a35efc47e5c27c17c0b138c1832a0aa55ce",
+    "kn/relation_types/cp_exp_to_portfolio.bkn": "sha256:bbd533a721e10e0923014a673280f10f4952f33e52977679acfb0ef7b23eedd2",
+    "kn/relation_types/entity_id_to_entity.bkn": "sha256:3e0fab5c7e0ebd5dd0c6a3ecea3ff25a7659a9dde29e14fd0f6e642e62598731",
+    "kn/relation_types/instrument_to_issuer.bkn": "sha256:49da1d5422d805b57e503f8e10c9ff724f6df19e613aa26f3b42b40fea236c09",
+    "kn/relation_types/issuer_exp_to_issuer.bkn": "sha256:89f0f0eb65cb8f6ec23b6fbf336b5f22282acd4772534d6a9cc61d8ca1e0cccc",
+    "kn/relation_types/issuer_exp_to_portfolio.bkn": "sha256:4fe2fa6432675bfb15b702470771b3dd216639506992ab9d4cde21725b6d1303",
+    "kn/relation_types/limit_to_entity.bkn": "sha256:439345e4b9470b08f688d74e07caa441f06f59215352ad18ab4ffebb64afbfb9",
+    "kn/relation_types/limit_to_portfolio.bkn": "sha256:f9df24be66c26d826c559c25289bcc7529d5d76dadc9d33a0b05e44802a4f5d9",
+    "kn/relation_types/opening_to_account.bkn": "sha256:4133737a3b28bfe64536445451baab22a580512b6db39ee261d8697d660c305c",
+    "kn/relation_types/opening_to_instrument.bkn": "sha256:a70e7a273c4ced527c92ac2e7bc4d5f99283d0e9454e71cc2104f4dbbee0a122",
+    "kn/relation_types/order_to_account.bkn": "sha256:8b319be226532c8e11ddc039f6aba2b3feb4cc5510455cbfc06b4ab3cee71aab",
+    "kn/relation_types/order_to_counterparty.bkn": "sha256:5860cf5062aa220f1f0f1d908b0e53daf6e9cb268755c3cde2174a7727b3ed74",
+    "kn/relation_types/order_to_instrument.bkn": "sha256:b392e2a649d25b905efd4054fe0d25600e27a3efb62d3d30e2a81fd99dfd4e18",
+    "kn/relation_types/portfolio_to_manager.bkn": "sha256:e01a71a9961a842d8a3c7207c2c740e93944b1866918cf0b02025f92fc688edb",
+    "kn/relation_types/position_to_opening.bkn": "sha256:0329132bc897b8c932519bb42577626f2c26f0efcf084dc45b14b337cee5f3d7",
+    "kn/relation_types/price_to_instrument.bkn": "sha256:1804b962846c7c740bf7a540f62d8080adcc21ab9251b84d6662c4cc486ad278",
+    "kn/relation_types/security_id_to_instrument.bkn": "sha256:7701c470432f651cbc8d31c27c1425b91c8e1b3648294cb7a2e3065857590f33",
+    "kn/relation_types/settle_event_to_settle_instr.bkn": "sha256:cae5debfb703dba80756c41b4d869e3eddd6ed20f2691e5d132c0df1bd75a0de",
+    "kn/relation_types/settle_instr_to_trade.bkn": "sha256:940c0a10b3cc3e76dfe988f3f16e8bc9682623589d0399b89f9596d4216e74bc",
+    "kn/relation_types/trade_to_order.bkn": "sha256:242f8ac359ea7792304374c5f6a6cdd78e87bd0b37fc78665cb32e93956bde5f",
+    "kn/relation_types/valuation_to_fx.bkn": "sha256:c726599af5493da243fd80685fc7d0c589ee316c2e35110bc2db594f482481fb",
+    "kn/relation_types/valuation_to_position.bkn": "sha256:b29af6e8a0e2d9fbcc69c365740962f96b333cc7c08fafbf98ed1294bf74dfb0",
+    "kn/relation_types/valuation_to_price.bkn": "sha256:27fba86e236ba708c8f9de890a4ac0ad2355ecac7f3f337a16844628ce7a4102"
+  },
+  "tables_covered": 20,
+  "sample": "financial-fibo-zh-cn",
+  "tables": 20,
+  "records": 78356,
+  "relations": 29,
+  "positions_recomputed": 8000,
+  "valuations_recomputed": 8000,
+  "assessments_recomputed": 5000,
+  "questions_passed": 100,
+  "levels": {
+    "easy_basic": 30,
+    "intermediate": 40,
+    "hard_complex": 30
+  },
+  "results": [
+    {
+      "id": "FIN-001",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.055
+    },
+    {
+      "id": "FIN-002",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.037
+    },
+    {
+      "id": "FIN-003",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.02
+    },
+    {
+      "id": "FIN-004",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.027
+    },
+    {
+      "id": "FIN-005",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.028
+    },
+    {
+      "id": "FIN-006",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.031
+    },
+    {
+      "id": "FIN-007",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 0.044
+    },
+    {
+      "id": "FIN-008",
+      "passed": true,
+      "evidence_rows": 32,
+      "duration_ms": 0.282
+    },
+    {
+      "id": "FIN-009",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.243
+    },
+    {
+      "id": "FIN-010",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 2.869
+    },
+    {
+      "id": "FIN-011",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.033
+    },
+    {
+      "id": "FIN-012",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.023
+    },
+    {
+      "id": "FIN-013",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.018
+    },
+    {
+      "id": "FIN-014",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.029
+    },
+    {
+      "id": "FIN-015",
+      "passed": true,
+      "evidence_rows": 8,
+      "duration_ms": 0.129
+    },
+    {
+      "id": "FIN-016",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.113
+    },
+    {
+      "id": "FIN-017",
+      "passed": true,
+      "evidence_rows": 8,
+      "duration_ms": 0.081
+    },
+    {
+      "id": "FIN-018",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 2.332
+    },
+    {
+      "id": "FIN-019",
+      "passed": true,
+      "evidence_rows": 6,
+      "duration_ms": 32.139
+    },
+    {
+      "id": "FIN-020",
+      "passed": true,
+      "evidence_rows": 15,
+      "duration_ms": 934.207
+    },
+    {
+      "id": "FIN-021",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.083
+    },
+    {
+      "id": "FIN-022",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.036
+    },
+    {
+      "id": "FIN-023",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.023
+    },
+    {
+      "id": "FIN-024",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.22
+    },
+    {
+      "id": "FIN-025",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.135
+    },
+    {
+      "id": "FIN-026",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.069
+    },
+    {
+      "id": "FIN-027",
+      "passed": true,
+      "evidence_rows": 7,
+      "duration_ms": 55.183
+    },
+    {
+      "id": "FIN-028",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 33.161
+    },
+    {
+      "id": "FIN-029",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 34.14
+    },
+    {
+      "id": "FIN-030",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 41.925
+    },
+    {
+      "id": "FIN-031",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.079
+    },
+    {
+      "id": "FIN-032",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.029
+    },
+    {
+      "id": "FIN-033",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.022
+    },
+    {
+      "id": "FIN-034",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.037
+    },
+    {
+      "id": "FIN-035",
+      "passed": true,
+      "evidence_rows": 8,
+      "duration_ms": 0.147
+    },
+    {
+      "id": "FIN-036",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 0.097
+    },
+    {
+      "id": "FIN-037",
+      "passed": true,
+      "evidence_rows": 5,
+      "duration_ms": 0.062
+    },
+    {
+      "id": "FIN-038",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.089
+    },
+    {
+      "id": "FIN-039",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 37.498
+    },
+    {
+      "id": "FIN-040",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.946
+    },
+    {
+      "id": "FIN-041",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.037
+    },
+    {
+      "id": "FIN-042",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.036
+    },
+    {
+      "id": "FIN-043",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.044
+    },
+    {
+      "id": "FIN-044",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.041
+    },
+    {
+      "id": "FIN-045",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.025
+    },
+    {
+      "id": "FIN-046",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.021
+    },
+    {
+      "id": "FIN-047",
+      "passed": true,
+      "evidence_rows": 16,
+      "duration_ms": 0.249
+    },
+    {
+      "id": "FIN-048",
+      "passed": true,
+      "evidence_rows": 3,
+      "duration_ms": 0.491
+    },
+    {
+      "id": "FIN-049",
+      "passed": true,
+      "evidence_rows": 384,
+      "duration_ms": 1.558
+    },
+    {
+      "id": "FIN-050",
+      "passed": true,
+      "evidence_rows": 3,
+      "duration_ms": 47.794
+    },
+    {
+      "id": "FIN-051",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.066
+    },
+    {
+      "id": "FIN-052",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.026
+    },
+    {
+      "id": "FIN-053",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.016
+    },
+    {
+      "id": "FIN-054",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.035
+    },
+    {
+      "id": "FIN-055",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.061
+    },
+    {
+      "id": "FIN-056",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.496
+    },
+    {
+      "id": "FIN-057",
+      "passed": true,
+      "evidence_rows": 6,
+      "duration_ms": 0.185
+    },
+    {
+      "id": "FIN-058",
+      "passed": true,
+      "evidence_rows": 3,
+      "duration_ms": 0.803
+    },
+    {
+      "id": "FIN-059",
+      "passed": true,
+      "evidence_rows": 6,
+      "duration_ms": 0.147
+    },
+    {
+      "id": "FIN-060",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 6.735
+    },
+    {
+      "id": "FIN-061",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.029
+    },
+    {
+      "id": "FIN-062",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.024
+    },
+    {
+      "id": "FIN-063",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.017
+    },
+    {
+      "id": "FIN-064",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.07
+    },
+    {
+      "id": "FIN-065",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.057
+    },
+    {
+      "id": "FIN-066",
+      "passed": true,
+      "evidence_rows": 8,
+      "duration_ms": 0.18
+    },
+    {
+      "id": "FIN-067",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.082
+    },
+    {
+      "id": "FIN-068",
+      "passed": true,
+      "evidence_rows": 4,
+      "duration_ms": 7.421
+    },
+    {
+      "id": "FIN-069",
+      "passed": true,
+      "evidence_rows": 104,
+      "duration_ms": 1.996
+    },
+    {
+      "id": "FIN-070",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.133
+    },
+    {
+      "id": "FIN-071",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.031
+    },
+    {
+      "id": "FIN-072",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.027
+    },
+    {
+      "id": "FIN-073",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.047
+    },
+    {
+      "id": "FIN-074",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 0.033
+    },
+    {
+      "id": "FIN-075",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.04
+    },
+    {
+      "id": "FIN-076",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.061
+    },
+    {
+      "id": "FIN-077",
+      "passed": true,
+      "evidence_rows": 4,
+      "duration_ms": 0.04
+    },
+    {
+      "id": "FIN-078",
+      "passed": true,
+      "evidence_rows": 20,
+      "duration_ms": 1.172
+    },
+    {
+      "id": "FIN-079",
+      "passed": true,
+      "evidence_rows": 104,
+      "duration_ms": 0.738
+    },
+    {
+      "id": "FIN-080",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 256.798
+    },
+    {
+      "id": "FIN-081",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.071
+    },
+    {
+      "id": "FIN-082",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.027
+    },
+    {
+      "id": "FIN-083",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.031
+    },
+    {
+      "id": "FIN-084",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 0.062
+    },
+    {
+      "id": "FIN-085",
+      "passed": true,
+      "evidence_rows": 7,
+      "duration_ms": 37.266
+    },
+    {
+      "id": "FIN-086",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.099
+    },
+    {
+      "id": "FIN-087",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 0.084
+    },
+    {
+      "id": "FIN-088",
+      "passed": true,
+      "evidence_rows": 4,
+      "duration_ms": 56.272
+    },
+    {
+      "id": "FIN-089",
+      "passed": true,
+      "evidence_rows": 12,
+      "duration_ms": 0.7
+    },
+    {
+      "id": "FIN-090",
+      "passed": true,
+      "evidence_rows": 7,
+      "duration_ms": 0.329
+    },
+    {
+      "id": "FIN-091",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.031
+    },
+    {
+      "id": "FIN-092",
+      "passed": true,
+      "evidence_rows": 5,
+      "duration_ms": 2.485
+    },
+    {
+      "id": "FIN-093",
+      "passed": true,
+      "evidence_rows": 1,
+      "duration_ms": 0.041
+    },
+    {
+      "id": "FIN-094",
+      "passed": true,
+      "evidence_rows": 4,
+      "duration_ms": 0.064
+    },
+    {
+      "id": "FIN-095",
+      "passed": true,
+      "evidence_rows": 4,
+      "duration_ms": 0.049
+    },
+    {
+      "id": "FIN-096",
+      "passed": true,
+      "evidence_rows": 8,
+      "duration_ms": 0.118
+    },
+    {
+      "id": "FIN-097",
+      "passed": true,
+      "evidence_rows": 32,
+      "duration_ms": 0.187
+    },
+    {
+      "id": "FIN-098",
+      "passed": true,
+      "evidence_rows": 4,
+      "duration_ms": 0.598
+    },
+    {
+      "id": "FIN-099",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 0.165
+    },
+    {
+      "id": "FIN-100",
+      "passed": true,
+      "evidence_rows": 2,
+      "duration_ms": 2.93
+    }
+  ],
+  "boundary": "Local deterministic verification; platform import and independent agent evaluation not performed."
+}

@@ -1,0 +1,33 @@
+---
+type: object_type
+id: limit_assessments
+name: 限额评估
+tags: [finance, fibo]
+---
+
+## ObjectType: 限额评估
+
+当时已知且有效的限额，与同日实际或计划观察值比较。严格大于才超限，等于在限额内，观察不全则无法判定。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| assessment_id | 评估编号 | string | 该业务记录的稳定唯一标识。 | assessment_id |
+| limit_id | 限额编号 | string | 外键关联 mandate_limits，空值仅允许在合同明确声明缺失/不适用时使用。 | limit_id |
+| issuer_exposure_id | 发行方敞口编号 | string | 外键关联 issuer_exposures，空值仅允许在合同明确声明缺失/不适用时使用。 | issuer_exposure_id |
+| counterparty_exposure_id | 交易对手敞口编号 | string | 外键关联 counterparty_exposures，空值仅允许在合同明确声明缺失/不适用时使用。 | counterparty_exposure_id |
+| as_of_date | 截至日期 | date | 业务快照日期，区别于报价/定盘日期和已知日期。 | as_of_date |
+| observed_value | 观察值 | decimal | 与限额同日同口径的观察值；为空表示不能可靠判断，不等于零。 | observed_value |
+| assessment_status | 评估状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：无法判定, 超限, 限额内. | assessment_status |
+| excess_value | 超限值 | decimal | max(0,观察值−阈值)，按口径使用比例或美元；未知保持为空。 | excess_value |
+| view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+
+### Keys
+
+Primary Keys: assessment_id
+Display Key: assessment_id
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: limit_to_portfolio
+name: Limit To Portfolio
+tags: [finance, fibo]
+---
+
+## RelationType: Limit To Portfolio
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| mandate_limits | portfolios | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| portfolio_id | portfolio_id |

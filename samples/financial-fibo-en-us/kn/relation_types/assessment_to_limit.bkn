@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: assessment_to_limit
+name: Assessment To Limit
+tags: [finance, fibo]
+---
+
+## RelationType: Assessment To Limit
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| limit_assessments | mandate_limits | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| limit_id | limit_id |

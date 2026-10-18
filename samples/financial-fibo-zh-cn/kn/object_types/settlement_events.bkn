@@ -1,0 +1,32 @@
+---
+type: object_type
+id: settlement_events
+name: 结算事件
+tags: [finance, fibo]
+---
+
+## ObjectType: 结算事件
+
+增量确认、转移、失败或恢复事件。按指令累计有效转移量，最后有效事件决定状态；计划行仅表示预测转移。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| event_id | 事件编号 | string | 该业务记录的稳定唯一标识。 | event_id |
+| instruction_id | 指令编号 | string | 外键关联 settlement_instructions，空值仅允许在合同明确声明缺失/不适用时使用。 | instruction_id |
+| event_date | 事件日期 | date | 该业务事件的日期；使用虚构工作日日历并区分计划与实际。 | event_date |
+| event_status | 事件状态 | string | 本事件之后的状态，不代表整段指令历史。计划视图中已结算表示预期完成，不是已观测完成。 允许取值：已结算, 待结算, 结算失败, 部分结算. | event_status |
+| settled_quantity | 本次结算数量 | decimal | 本事件增量转移量而非累计值。待结算/失败事件为零；计算剩余量前需累计有效事件。 | settled_quantity |
+| failure_reason | 失败原因 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 | failure_reason |
+| view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+| event_sequence | 指令内事件顺序 | integer | 指令内正整数唯一顺序，与事件日期共同排序，不使用时点。 | event_sequence |
+
+### Keys
+
+Primary Keys: event_id
+Display Key: event_id
+Incremental Key:

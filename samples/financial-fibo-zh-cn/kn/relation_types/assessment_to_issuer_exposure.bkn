@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: assessment_to_issuer_exposure
+name: 限额评估关联发行方敞口
+tags: [finance, fibo]
+---
+
+## RelationType: 限额评估关联发行方敞口
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| limit_assessments | issuer_exposures | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| issuer_exposure_id | exposure_id |

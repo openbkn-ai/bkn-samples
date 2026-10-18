@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: settle_instr_to_trade
+name: Settle Instr To Trade
+tags: [finance, fibo]
+---
+
+## RelationType: Settle Instr To Trade
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| settlement_instructions | securities_transactions | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| trade_id | trade_id |

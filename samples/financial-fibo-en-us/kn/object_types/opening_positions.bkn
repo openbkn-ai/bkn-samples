@@ -1,0 +1,30 @@
+---
+type: object_type
+id: opening_positions
+name: Opening Position
+tags: [finance, fibo]
+---
+
+## ObjectType: Opening Position
+
+Opening inventory and local unit cost before the first transaction month. It is a stock balance, not a trade.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| opening_id | Opening Id | string | Stable unique identifier of this business record. | opening_id |
+| account_id | Account Id | string | Foreign key to accounts; blank only where contract declares absent/inapplicable evidence. | account_id |
+| instrument_id | Instrument Id | string | Foreign key to financial_instruments; blank only where contract declares absent/inapplicable evidence. | instrument_id |
+| opening_date | Opening Date | date | Date of opening ledger balance before the first sample trade; not an execution date. | opening_date |
+| quantity | Quantity | decimal | Positive business quantity in the linked instrument’s share or face units. | quantity |
+| cost_unit_price | Cost Unit Price | decimal | Local-currency quote in the linked instrument basis; apply price_multiplier. | cost_unit_price |
+| currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
+
+### Keys
+
+Primary Keys: opening_id
+Display Key: opening_id
+Incremental Key:

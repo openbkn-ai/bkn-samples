@@ -1,0 +1,589 @@
+{
+  "object_types": {
+    "legal_entities": {
+      "primary_key": "entity_id",
+      "display_key": "name",
+      "fields": {
+        "entity_id": "string",
+        "name": "string",
+        "entity_role": "string",
+        "country": "string",
+        "sector": "string",
+        "is_synthetic": "boolean"
+      }
+    },
+    "legal_entity_identifiers": {
+      "primary_key": "identifier_id",
+      "display_key": "synthetic_code",
+      "fields": {
+        "identifier_id": "string",
+        "entity_id": "string",
+        "synthetic_code": "string",
+        "scheme": "string",
+        "is_synthetic": "boolean"
+      }
+    },
+    "financial_instruments": {
+      "primary_key": "instrument_id",
+      "display_key": "name",
+      "fields": {
+        "instrument_id": "string",
+        "name": "string",
+        "issuer_id": "string",
+        "asset_class": "string",
+        "currency": "string",
+        "unit": "string",
+        "price_basis": "string",
+        "price_multiplier": "decimal",
+        "maturity_date": "date",
+        "is_synthetic": "boolean"
+      }
+    },
+    "security_identifiers": {
+      "primary_key": "identifier_id",
+      "display_key": "synthetic_code",
+      "fields": {
+        "identifier_id": "string",
+        "instrument_id": "string",
+        "synthetic_code": "string",
+        "scheme": "string",
+        "is_synthetic": "boolean"
+      }
+    },
+    "portfolios": {
+      "primary_key": "portfolio_id",
+      "display_key": "name",
+      "fields": {
+        "portfolio_id": "string",
+        "name": "string",
+        "manager_id": "string",
+        "base_currency": "string",
+        "mandate": "string",
+        "branch": "string"
+      }
+    },
+    "accounts": {
+      "primary_key": "account_id",
+      "display_key": "name",
+      "fields": {
+        "account_id": "string",
+        "name": "string",
+        "portfolio_id": "string",
+        "currency": "string"
+      }
+    },
+    "opening_positions": {
+      "primary_key": "opening_id",
+      "display_key": "opening_id",
+      "fields": {
+        "opening_id": "string",
+        "account_id": "string",
+        "instrument_id": "string",
+        "opening_date": "date",
+        "quantity": "decimal",
+        "cost_unit_price": "decimal",
+        "currency": "string"
+      }
+    },
+    "trade_orders": {
+      "primary_key": "order_id",
+      "display_key": "order_id",
+      "fields": {
+        "order_id": "string",
+        "account_id": "string",
+        "instrument_id": "string",
+        "counterparty_id": "string",
+        "order_date": "date",
+        "side": "string",
+        "order_quantity": "decimal",
+        "order_status": "string",
+        "view_kind": "string",
+        "known_date": "date"
+      }
+    },
+    "securities_transactions": {
+      "primary_key": "trade_id",
+      "display_key": "trade_id",
+      "fields": {
+        "trade_id": "string",
+        "order_id": "string",
+        "trade_date": "date",
+        "trade_quantity": "decimal",
+        "execution_price": "decimal",
+        "gross_amount": "decimal",
+        "currency": "string",
+        "trade_status": "string",
+        "known_date": "date"
+      }
+    },
+    "settlement_instructions": {
+      "primary_key": "instruction_id",
+      "display_key": "instruction_id",
+      "fields": {
+        "instruction_id": "string",
+        "trade_id": "string",
+        "due_date": "date",
+        "required_quantity": "decimal",
+        "currency": "string"
+      }
+    },
+    "settlement_events": {
+      "primary_key": "event_id",
+      "display_key": "event_id",
+      "fields": {
+        "event_id": "string",
+        "instruction_id": "string",
+        "event_date": "date",
+        "event_status": "string",
+        "settled_quantity": "decimal",
+        "failure_reason": "string",
+        "view_kind": "string",
+        "known_date": "date",
+        "event_sequence": "integer"
+      }
+    },
+    "positions": {
+      "primary_key": "position_id",
+      "display_key": "position_id",
+      "fields": {
+        "position_id": "string",
+        "opening_id": "string",
+        "as_of_date": "date",
+        "trade_basis_quantity": "decimal",
+        "settled_basis_quantity": "decimal",
+        "unsettled_delta": "decimal",
+        "cost_amount": "decimal",
+        "realized_pnl": "decimal",
+        "currency": "string",
+        "view_kind": "string",
+        "known_date": "date"
+      }
+    },
+    "market_prices": {
+      "primary_key": "price_id",
+      "display_key": "price_id",
+      "fields": {
+        "price_id": "string",
+        "instrument_id": "string",
+        "as_of_date": "date",
+        "price_date": "date",
+        "published_date": "date",
+        "price": "decimal",
+        "currency": "string",
+        "approval": "string",
+        "pricing_source": "string",
+        "view_kind": "string",
+        "known_date": "date"
+      }
+    },
+    "fx_rates": {
+      "primary_key": "fx_id",
+      "display_key": "fx_id",
+      "fields": {
+        "fx_id": "string",
+        "as_of_date": "date",
+        "from_currency": "string",
+        "to_currency": "string",
+        "rate": "decimal",
+        "published_date": "date",
+        "view_kind": "string",
+        "known_date": "date"
+      }
+    },
+    "valuation_snapshots": {
+      "primary_key": "valuation_id",
+      "display_key": "valuation_id",
+      "fields": {
+        "valuation_id": "string",
+        "position_id": "string",
+        "price_id": "string",
+        "fx_id": "string",
+        "as_of_date": "date",
+        "valuation_status": "string",
+        "reason": "string",
+        "market_value_local": "decimal",
+        "market_value_base": "decimal",
+        "cost_value_base": "decimal",
+        "unrealized_pnl_base": "decimal",
+        "currency": "string",
+        "valuation_method": "string",
+        "view_kind": "string",
+        "known_date": "date"
+      }
+    },
+    "issuer_exposures": {
+      "primary_key": "exposure_id",
+      "display_key": "exposure_id",
+      "fields": {
+        "exposure_id": "string",
+        "portfolio_id": "string",
+        "issuer_id": "string",
+        "as_of_date": "date",
+        "exposure_status": "string",
+        "exposure_amount": "decimal",
+        "denominator_amount": "decimal",
+        "ratio": "decimal",
+        "currency": "string",
+        "view_kind": "string",
+        "known_date": "date"
+      }
+    },
+    "exposure_contributions": {
+      "primary_key": "contribution_id",
+      "display_key": "contribution_id",
+      "fields": {
+        "contribution_id": "string",
+        "exposure_id": "string",
+        "valuation_id": "string",
+        "contribution_amount": "decimal",
+        "currency": "string"
+      }
+    },
+    "counterparty_exposures": {
+      "primary_key": "exposure_id",
+      "display_key": "exposure_id",
+      "fields": {
+        "exposure_id": "string",
+        "portfolio_id": "string",
+        "counterparty_id": "string",
+        "as_of_date": "date",
+        "unsettled_receivable": "decimal",
+        "currency": "string",
+        "view_kind": "string",
+        "known_date": "date"
+      }
+    },
+    "mandate_limits": {
+      "primary_key": "limit_id",
+      "display_key": "limit_id",
+      "fields": {
+        "limit_id": "string",
+        "portfolio_id": "string",
+        "entity_id": "string",
+        "measure": "string",
+        "threshold": "decimal",
+        "currency": "string",
+        "effective_from_date": "date",
+        "effective_to_date": "date",
+        "approval": "string",
+        "decision_date": "date"
+      }
+    },
+    "limit_assessments": {
+      "primary_key": "assessment_id",
+      "display_key": "assessment_id",
+      "fields": {
+        "assessment_id": "string",
+        "limit_id": "string",
+        "issuer_exposure_id": "string",
+        "counterparty_exposure_id": "string",
+        "as_of_date": "date",
+        "observed_value": "decimal",
+        "assessment_status": "string",
+        "excess_value": "decimal",
+        "view_kind": "string",
+        "known_date": "date"
+      }
+    }
+  },
+  "relations": [
+    {
+      "id": "entity_id_to_entity",
+      "source": "legal_entity_identifiers",
+      "source_property": "entity_id",
+      "target": "legal_entities",
+      "target_property": "entity_id",
+      "nullable": false
+    },
+    {
+      "id": "instrument_to_issuer",
+      "source": "financial_instruments",
+      "source_property": "issuer_id",
+      "target": "legal_entities",
+      "target_property": "entity_id",
+      "nullable": false
+    },
+    {
+      "id": "security_id_to_instrument",
+      "source": "security_identifiers",
+      "source_property": "instrument_id",
+      "target": "financial_instruments",
+      "target_property": "instrument_id",
+      "nullable": false
+    },
+    {
+      "id": "portfolio_to_manager",
+      "source": "portfolios",
+      "source_property": "manager_id",
+      "target": "legal_entities",
+      "target_property": "entity_id",
+      "nullable": false
+    },
+    {
+      "id": "account_to_portfolio",
+      "source": "accounts",
+      "source_property": "portfolio_id",
+      "target": "portfolios",
+      "target_property": "portfolio_id",
+      "nullable": false
+    },
+    {
+      "id": "opening_to_account",
+      "source": "opening_positions",
+      "source_property": "account_id",
+      "target": "accounts",
+      "target_property": "account_id",
+      "nullable": false
+    },
+    {
+      "id": "opening_to_instrument",
+      "source": "opening_positions",
+      "source_property": "instrument_id",
+      "target": "financial_instruments",
+      "target_property": "instrument_id",
+      "nullable": false
+    },
+    {
+      "id": "order_to_account",
+      "source": "trade_orders",
+      "source_property": "account_id",
+      "target": "accounts",
+      "target_property": "account_id",
+      "nullable": false
+    },
+    {
+      "id": "order_to_instrument",
+      "source": "trade_orders",
+      "source_property": "instrument_id",
+      "target": "financial_instruments",
+      "target_property": "instrument_id",
+      "nullable": false
+    },
+    {
+      "id": "order_to_counterparty",
+      "source": "trade_orders",
+      "source_property": "counterparty_id",
+      "target": "legal_entities",
+      "target_property": "entity_id",
+      "nullable": false
+    },
+    {
+      "id": "trade_to_order",
+      "source": "securities_transactions",
+      "source_property": "order_id",
+      "target": "trade_orders",
+      "target_property": "order_id",
+      "nullable": false
+    },
+    {
+      "id": "settle_instr_to_trade",
+      "source": "settlement_instructions",
+      "source_property": "trade_id",
+      "target": "securities_transactions",
+      "target_property": "trade_id",
+      "nullable": false
+    },
+    {
+      "id": "settle_event_to_settle_instr",
+      "source": "settlement_events",
+      "source_property": "instruction_id",
+      "target": "settlement_instructions",
+      "target_property": "instruction_id",
+      "nullable": false
+    },
+    {
+      "id": "position_to_opening",
+      "source": "positions",
+      "source_property": "opening_id",
+      "target": "opening_positions",
+      "target_property": "opening_id",
+      "nullable": false
+    },
+    {
+      "id": "price_to_instrument",
+      "source": "market_prices",
+      "source_property": "instrument_id",
+      "target": "financial_instruments",
+      "target_property": "instrument_id",
+      "nullable": false
+    },
+    {
+      "id": "valuation_to_position",
+      "source": "valuation_snapshots",
+      "source_property": "position_id",
+      "target": "positions",
+      "target_property": "position_id",
+      "nullable": false
+    },
+    {
+      "id": "valuation_to_price",
+      "source": "valuation_snapshots",
+      "source_property": "price_id",
+      "target": "market_prices",
+      "target_property": "price_id",
+      "nullable": true
+    },
+    {
+      "id": "valuation_to_fx",
+      "source": "valuation_snapshots",
+      "source_property": "fx_id",
+      "target": "fx_rates",
+      "target_property": "fx_id",
+      "nullable": false
+    },
+    {
+      "id": "issuer_exp_to_portfolio",
+      "source": "issuer_exposures",
+      "source_property": "portfolio_id",
+      "target": "portfolios",
+      "target_property": "portfolio_id",
+      "nullable": false
+    },
+    {
+      "id": "issuer_exp_to_issuer",
+      "source": "issuer_exposures",
+      "source_property": "issuer_id",
+      "target": "legal_entities",
+      "target_property": "entity_id",
+      "nullable": false
+    },
+    {
+      "id": "contribution_to_issuer_exp",
+      "source": "exposure_contributions",
+      "source_property": "exposure_id",
+      "target": "issuer_exposures",
+      "target_property": "exposure_id",
+      "nullable": false
+    },
+    {
+      "id": "contribution_to_valuation",
+      "source": "exposure_contributions",
+      "source_property": "valuation_id",
+      "target": "valuation_snapshots",
+      "target_property": "valuation_id",
+      "nullable": false
+    },
+    {
+      "id": "cp_exp_to_portfolio",
+      "source": "counterparty_exposures",
+      "source_property": "portfolio_id",
+      "target": "portfolios",
+      "target_property": "portfolio_id",
+      "nullable": false
+    },
+    {
+      "id": "cp_exp_to_counterparty",
+      "source": "counterparty_exposures",
+      "source_property": "counterparty_id",
+      "target": "legal_entities",
+      "target_property": "entity_id",
+      "nullable": false
+    },
+    {
+      "id": "limit_to_portfolio",
+      "source": "mandate_limits",
+      "source_property": "portfolio_id",
+      "target": "portfolios",
+      "target_property": "portfolio_id",
+      "nullable": false
+    },
+    {
+      "id": "limit_to_entity",
+      "source": "mandate_limits",
+      "source_property": "entity_id",
+      "target": "legal_entities",
+      "target_property": "entity_id",
+      "nullable": false
+    },
+    {
+      "id": "assessment_to_limit",
+      "source": "limit_assessments",
+      "source_property": "limit_id",
+      "target": "mandate_limits",
+      "target_property": "limit_id",
+      "nullable": false
+    },
+    {
+      "id": "assessment_to_issuer_exposure",
+      "source": "limit_assessments",
+      "source_property": "issuer_exposure_id",
+      "target": "issuer_exposures",
+      "target_property": "exposure_id",
+      "nullable": true
+    },
+    {
+      "id": "assessment_to_counterparty_exposure",
+      "source": "limit_assessments",
+      "source_property": "counterparty_exposure_id",
+      "target": "counterparty_exposures",
+      "target_property": "exposure_id",
+      "nullable": true
+    }
+  ],
+  "current_as_of": "2027-02-28",
+  "planning_end": "2027-03-31",
+  "numeric_rounding": "ROUND_HALF_UP; money 2dp; ratio and FX 6dp",
+  "source_revision": "2d73435a4419b66b7c9f44cb9763e35fe8ac7890",
+  "localized_values": {
+    "issuer": "发行方",
+    "broker": "经纪商",
+    "manager": "资产管理人",
+    "equity": "股票",
+    "bond": "债券",
+    "share": "股",
+    "face_unit": "面值单位",
+    "buy": "买入",
+    "sell": "卖出",
+    "executed": "已成交",
+    "planned": "计划",
+    "actual": "实际",
+    "approved": "已批准",
+    "unapproved": "未批准",
+    "settled": "已结算",
+    "pending": "待结算",
+    "partial": "部分结算",
+    "failed": "结算失败",
+    "complete": "完整",
+    "blocked": "受阻",
+    "current": "有效",
+    "stale": "价格陈旧",
+    "missing": "价格缺失",
+    "price_unapproved": "价格未批准",
+    "within": "限额内",
+    "breach": "超限",
+    "unknown": "无法判定",
+    "issuer_ratio": "发行方集中度",
+    "receivable_amount": "未结算应收金额",
+    "normal": "正常结算",
+    "pending_settlement": "待结算",
+    "failed_settlement": "结算失败",
+    "price_exception": "价格例外",
+    "issuer_breach": "发行方超限",
+    "counterparty_breach": "交易对手超限",
+    "future_limit": "未来限额变更",
+    "none": "无",
+    "insufficient_securities": "证券不足",
+    "cash_mismatch": "金额不匹配",
+    "awaiting_confirmation": "等待确认",
+    "awaiting_balance": "等待剩余结算",
+    "forecast_only": "仅计划预测",
+    "equity_mark": "股票市值法",
+    "bond_dirty": "债券全价法",
+    "synthetic": "虚构",
+    "local_security_code": "本地合成证券编码",
+    "synthetic_entity_code": "本地合成实体编码",
+    "long_only": "仅多头",
+    "dirty_per_100": "每百元面值全价",
+    "per_share": "每股价格",
+    "overdue": "已逾期",
+    "not_due": "未到期",
+    "accepted": "已接受",
+    "cancelled": "已取消",
+    "day_close": "日终收盘",
+    "demo_pricing": "模拟价格源"
+  },
+  "portfolios": 200,
+  "positions_per_portfolio": 8,
+  "limits_per_snapshot": 5,
+  "calendar": "Fictional Monday-Friday; no jurisdiction holidays; sample T+2 business days"
+}

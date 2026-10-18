@@ -1,0 +1,34 @@
+---
+type: object_type
+id: issuer_exposures
+name: Issuer Exposure
+tags: [finance, fibo]
+---
+
+## ObjectType: Issuer Exposure
+
+Portfolio/issuer/date market-value share of complete portfolio securities assets; cash, NAV and regulatory capital are outside the denominator. Any unpriced position blocks all issuer shares.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| exposure_id | Exposure Id | string | Stable unique identifier of this business record. | exposure_id |
+| portfolio_id | Portfolio Id | string | Foreign key to portfolios; blank only where contract declares absent/inapplicable evidence. | portfolio_id |
+| issuer_id | Issuer Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | issuer_id |
+| as_of_date | As Of Date | date | Business snapshot date, distinct from quote/fixing date and date of knowledge. | as_of_date |
+| exposure_status | Exposure Status | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: blocked, complete. | exposure_status |
+| exposure_amount | Exposure Amount | decimal | Issuer numerator: sum of contributing position USD values; unavailable when portfolio pricing is incomplete. | exposure_amount |
+| denominator_amount | Denominator Amount | decimal | All securities-position USD values in this portfolio/date; any blocked position makes this blank. Cash is excluded. | denominator_amount |
+| ratio | Ratio | decimal | Issuer numerator divided by complete securities-asset denominator, 0–1 ratio, 6dp; not percent points or NAV share. | ratio |
+| currency | Currency | string | Base currency USD; amounts are expressed in dollars. | currency |
+| view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+
+### Keys
+
+Primary Keys: exposure_id
+Display Key: exposure_id
+Incremental Key:

@@ -1,0 +1,29 @@
+---
+type: object_type
+id: legal_entities
+name: 法律实体
+tags: [finance, fibo]
+---
+
+## ObjectType: 法律实体
+
+虚构发行方、经纪商或资产管理人及其业务角色，标识为本地合成编码，不是监管 LEI。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| entity_id | 实体编号 | string | 该业务记录的稳定唯一标识。 | entity_id |
+| name | 名称 | string | 用于业务展示的虚构名称，双语语义一致。 | name |
+| entity_role | 实体角色 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | entity_role |
+| country | 国家或地区 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | country |
+| sector | 行业 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | sector |
+| is_synthetic | 是否合成 | boolean | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | is_synthetic |
+
+### Keys
+
+Primary Keys: entity_id
+Display Key: name
+Incremental Key:

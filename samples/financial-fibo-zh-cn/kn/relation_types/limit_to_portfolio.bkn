@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: limit_to_portfolio
+name: 授权限额关联组合
+tags: [finance, fibo]
+---
+
+## RelationType: 授权限额关联组合
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| mandate_limits | portfolios | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| portfolio_id | portfolio_id |

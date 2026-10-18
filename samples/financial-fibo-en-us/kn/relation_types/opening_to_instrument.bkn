@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: opening_to_instrument
+name: Opening To Instrument
+tags: [finance, fibo]
+---
+
+## RelationType: Opening To Instrument
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| opening_positions | financial_instruments | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| instrument_id | instrument_id |

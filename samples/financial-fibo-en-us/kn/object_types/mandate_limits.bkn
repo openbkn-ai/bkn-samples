@@ -1,0 +1,33 @@
+---
+type: object_type
+id: mandate_limits
+name: Mandate Limit
+tags: [finance, fibo]
+---
+
+## ObjectType: Mandate Limit
+
+Approved dated portfolio/entity control: issuer securities-asset ratio or USD unsettled-receivable cap, with knowledge and effective dates kept separate.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| limit_id | Limit Id | string | Stable unique identifier of this business record. | limit_id |
+| portfolio_id | Portfolio Id | string | Foreign key to portfolios; blank only where contract declares absent/inapplicable evidence. | portfolio_id |
+| entity_id | Entity Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | entity_id |
+| measure | Measure | string | issuer_ratio uses a 0–1 securities-asset share; receivable_amount uses a USD amount. Allowed values: issuer_ratio, receivable_amount. | measure |
+| threshold | Threshold | decimal | Limit in its declared measure: 0–1 ratio or USD amount; strictly greater breaches, equality does not. | threshold |
+| currency | Currency | string | USD for amount limits; blank for dimensionless ratios. | currency |
+| effective_from_date | Effective From Date | date | Inclusive first valid business date of this limit version. | effective_from_date |
+| effective_to_date | Effective To Date | date | Inclusive last valid business date of this limit version. | effective_to_date |
+| approval | Approval | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: approved. | approval |
+| decision_date | Decision Date | date | Date the limit was approved and known, distinct from its effective interval. | decision_date |
+
+### Keys
+
+Primary Keys: limit_id
+Display Key: limit_id
+Incremental Key:

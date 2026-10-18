@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: valuation_to_price
+name: Valuation To Price
+tags: [finance, fibo]
+---
+
+## RelationType: Valuation To Price
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| valuation_snapshots | market_prices | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| price_id | price_id |

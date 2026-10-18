@@ -1,0 +1,38 @@
+---
+type: object_type
+id: portfolios
+name: Investment Portfolio
+tags: [finance, fibo]
+---
+
+## ObjectType: Investment Portfolio
+
+Long-only managed portfolio in USD reporting currency. Primary branch labels are test segmentation, not a substitute for risk evidence.
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/Portfolio |
+| source_label | portfolio |
+| source_definition | collection of holdings assembled and maintained as a unit for management purposes to achieve strategic objectives |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| portfolio_id | Portfolio Id | string | Stable unique identifier of this business record. | portfolio_id |
+| name | Name | string | Human-readable fictional business name with equivalent bilingual meaning. | name |
+| manager_id | Manager Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | manager_id |
+| base_currency | Base Currency | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | base_currency |
+| mandate | Mandate | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | mandate |
+| branch | Branch | string | Primary test segmentation only; shared-price defects or other evidence can affect several segments simultaneously. Allowed values: counterparty_breach, failed_settlement, future_limit, issuer_breach, normal, pending_settlement, price_exception. | branch |
+
+### Keys
+
+Primary Keys: portfolio_id
+Display Key: name
+Incremental Key:

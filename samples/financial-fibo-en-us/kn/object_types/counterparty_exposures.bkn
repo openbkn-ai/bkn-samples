@@ -1,0 +1,31 @@
+---
+type: object_type
+id: counterparty_exposures
+name: Unsettled Receivable
+tags: [finance, fibo]
+---
+
+## ObjectType: Unsettled Receivable
+
+Non-netted unsettled sell receivable at contractual price translated to USD. Buy payables, PFE, EAD and replacement-cost risk are excluded.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| exposure_id | Exposure Id | string | Stable unique identifier of this business record. | exposure_id |
+| portfolio_id | Portfolio Id | string | Foreign key to portfolios; blank only where contract declares absent/inapplicable evidence. | portfolio_id |
+| counterparty_id | Counterparty Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | counterparty_id |
+| as_of_date | As Of Date | date | Business snapshot date, distinct from quote/fixing date and date of knowledge. | as_of_date |
+| unsettled_receivable | Unsettled Receivable | decimal | Sum of open sell quantity × execution quote × factor × as-of FX; USD 2dp, non-netted, no buy payables. | unsettled_receivable |
+| currency | Currency | string | Base currency USD; amounts are expressed in dollars. | currency |
+| view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+
+### Keys
+
+Primary Keys: exposure_id
+Display Key: exposure_id
+Incremental Key:

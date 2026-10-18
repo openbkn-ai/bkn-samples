@@ -1,0 +1,29 @@
+---
+type: object_type
+id: legal_entities
+name: Legal Entity
+tags: [finance, fibo]
+---
+
+## ObjectType: Legal Entity
+
+Fictional issuer, broker or investment manager in a declared business role. Identifiers are local synthetic codes, not regulatory LEIs.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| entity_id | Entity Id | string | Stable unique identifier of this business record. | entity_id |
+| name | Name | string | Human-readable fictional business name with equivalent bilingual meaning. | name |
+| entity_role | Entity Role | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | entity_role |
+| country | Country | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | country |
+| sector | Sector | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | sector |
+| is_synthetic | Is Synthetic | boolean | Named business attribute constrained by model-contract.json types and controlled vocabulary. | is_synthetic |
+
+### Keys
+
+Primary Keys: entity_id
+Display Key: name
+Incremental Key:

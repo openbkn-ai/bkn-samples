@@ -1,0 +1,1510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf:RDF [
+	<!ENTITY cmns-av "https://www.omg.org/spec/Commons/AnnotationVocabulary/">
+	<!ENTITY cmns-bauth "https://www.omg.org/spec/Commons/BusinessAuthorizations/">
+	<!ENTITY cmns-cls "https://www.omg.org/spec/Commons/Classifiers/">
+	<!ENTITY cmns-col "https://www.omg.org/spec/Commons/Collections/">
+	<!ENTITY cmns-cxtdsg "https://www.omg.org/spec/Commons/ContextualDesignators/">
+	<!ENTITY cmns-dsg "https://www.omg.org/spec/Commons/Designators/">
+	<!ENTITY cmns-dt "https://www.omg.org/spec/Commons/DatesAndTimes/">
+	<!ENTITY cmns-id "https://www.omg.org/spec/Commons/Identifiers/">
+	<!ENTITY cmns-org "https://www.omg.org/spec/Commons/Organizations/">
+	<!ENTITY cmns-pts "https://www.omg.org/spec/Commons/PartiesAndSituations/">
+	<!ENTITY cmns-qtu "https://www.omg.org/spec/Commons/QuantitiesAndUnits/">
+	<!ENTITY cmns-rga "https://www.omg.org/spec/Commons/RegulatoryAgencies/">
+	<!ENTITY cmns-rlcmp "https://www.omg.org/spec/Commons/RolesAndCompositions/">
+	<!ENTITY cmns-txt "https://www.omg.org/spec/Commons/TextDatatype/">
+	<!ENTITY dct "http://purl.org/dc/terms/">
+	<!ENTITY fibo-be-fct-fct "https://spec.edmcouncil.org/fibo/ontology/BE/FunctionalEntities/FunctionalEntities/">
+	<!ENTITY fibo-be-fct-pub "https://spec.edmcouncil.org/fibo/ontology/BE/FunctionalEntities/Publishers/">
+	<!ENTITY fibo-be-le-lei "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/">
+	<!ENTITY fibo-be-oac-opty "https://spec.edmcouncil.org/fibo/ontology/BE/OwnershipAndControl/OwnershipParties/">
+	<!ENTITY fibo-fbc-pas-fpas "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/">
+	<!ENTITY fibo-fnd-acc-cur "https://spec.edmcouncil.org/fibo/ontology/FND/Accounting/CurrencyAmount/">
+	<!ENTITY fibo-fnd-agr-ctr "https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/">
+	<!ENTITY fibo-fnd-arr-lif "https://spec.edmcouncil.org/fibo/ontology/FND/Arrangements/Lifecycles/">
+	<!ENTITY fibo-fnd-dt-fd "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/FinancialDates/">
+	<!ENTITY fibo-fnd-gao-obj "https://spec.edmcouncil.org/fibo/ontology/FND/GoalsAndObjectives/Objectives/">
+	<!ENTITY fibo-fnd-law-lcap "https://spec.edmcouncil.org/fibo/ontology/FND/Law/LegalCapacity/">
+	<!ENTITY fibo-fnd-oac-own "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/">
+	<!ENTITY fibo-fnd-pas-pas "https://spec.edmcouncil.org/fibo/ontology/FND/ProductsAndServices/ProductsAndServices/">
+	<!ENTITY fibo-fnd-rel-rel "https://spec.edmcouncil.org/fibo/ontology/FND/Relations/Relations/">
+	<!ENTITY fibo-fnd-utl-alx "https://spec.edmcouncil.org/fibo/ontology/FND/Utilities/Analytics/">
+	<!ENTITY fibo-fnd-utl-av "https://spec.edmcouncil.org/fibo/ontology/FND/Utilities/AnnotationVocabulary/">
+	<!ENTITY owl "http://www.w3.org/2002/07/owl#">
+	<!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#">
+	<!ENTITY skos "http://www.w3.org/2004/02/skos/core#">
+	<!ENTITY xsd "http://www.w3.org/2001/XMLSchema#">
+]>
+<rdf:RDF xml:base="https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/"
+	xmlns:cmns-av="https://www.omg.org/spec/Commons/AnnotationVocabulary/"
+	xmlns:cmns-bauth="https://www.omg.org/spec/Commons/BusinessAuthorizations/"
+	xmlns:cmns-cls="https://www.omg.org/spec/Commons/Classifiers/"
+	xmlns:cmns-col="https://www.omg.org/spec/Commons/Collections/"
+	xmlns:cmns-cxtdsg="https://www.omg.org/spec/Commons/ContextualDesignators/"
+	xmlns:cmns-dsg="https://www.omg.org/spec/Commons/Designators/"
+	xmlns:cmns-dt="https://www.omg.org/spec/Commons/DatesAndTimes/"
+	xmlns:cmns-id="https://www.omg.org/spec/Commons/Identifiers/"
+	xmlns:cmns-org="https://www.omg.org/spec/Commons/Organizations/"
+	xmlns:cmns-pts="https://www.omg.org/spec/Commons/PartiesAndSituations/"
+	xmlns:cmns-qtu="https://www.omg.org/spec/Commons/QuantitiesAndUnits/"
+	xmlns:cmns-rga="https://www.omg.org/spec/Commons/RegulatoryAgencies/"
+	xmlns:cmns-rlcmp="https://www.omg.org/spec/Commons/RolesAndCompositions/"
+	xmlns:cmns-txt="https://www.omg.org/spec/Commons/TextDatatype/"
+	xmlns:dct="http://purl.org/dc/terms/"
+	xmlns:fibo-be-fct-fct="https://spec.edmcouncil.org/fibo/ontology/BE/FunctionalEntities/FunctionalEntities/"
+	xmlns:fibo-be-fct-pub="https://spec.edmcouncil.org/fibo/ontology/BE/FunctionalEntities/Publishers/"
+	xmlns:fibo-be-le-lei="https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/"
+	xmlns:fibo-be-oac-opty="https://spec.edmcouncil.org/fibo/ontology/BE/OwnershipAndControl/OwnershipParties/"
+	xmlns:fibo-fbc-pas-fpas="https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/"
+	xmlns:fibo-fnd-acc-cur="https://spec.edmcouncil.org/fibo/ontology/FND/Accounting/CurrencyAmount/"
+	xmlns:fibo-fnd-agr-ctr="https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/"
+	xmlns:fibo-fnd-arr-lif="https://spec.edmcouncil.org/fibo/ontology/FND/Arrangements/Lifecycles/"
+	xmlns:fibo-fnd-dt-fd="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/FinancialDates/"
+	xmlns:fibo-fnd-gao-obj="https://spec.edmcouncil.org/fibo/ontology/FND/GoalsAndObjectives/Objectives/"
+	xmlns:fibo-fnd-law-lcap="https://spec.edmcouncil.org/fibo/ontology/FND/Law/LegalCapacity/"
+	xmlns:fibo-fnd-oac-own="https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/"
+	xmlns:fibo-fnd-pas-pas="https://spec.edmcouncil.org/fibo/ontology/FND/ProductsAndServices/ProductsAndServices/"
+	xmlns:fibo-fnd-rel-rel="https://spec.edmcouncil.org/fibo/ontology/FND/Relations/Relations/"
+	xmlns:fibo-fnd-utl-alx="https://spec.edmcouncil.org/fibo/ontology/FND/Utilities/Analytics/"
+	xmlns:fibo-fnd-utl-av="https://spec.edmcouncil.org/fibo/ontology/FND/Utilities/AnnotationVocabulary/"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+	
+	<owl:Ontology rdf:about="https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/">
+		<rdfs:label>Financial Products and Services Ontology</rdfs:label>
+		<dct:abstract>This ontology defines concepts that extend the Foundations (FND) Products and Services concepts specifically for the financial industry, including financial product, financial service, and financial service provider.</dct:abstract>
+		<dct:license>Copyright (c) 2015-2026 EDM Association dba EDM Council, Inc.
+Copyright (c) 2015-2025 Object Management Group, Inc.
+		
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &apos;Software&apos;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &apos;AS IS&apos;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+		
+		See https://opensource.org/licenses/MIT.</dct:license>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/BE/FunctionalEntities/FunctionalEntities/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/BE/FunctionalEntities/Publishers/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/BE/OwnershipAndControl/OwnershipParties/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/Accounting/CurrencyAmount/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/Arrangements/Lifecycles/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/FinancialDates/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/GoalsAndObjectives/Objectives/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/Law/LegalCapacity/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/ProductsAndServices/ProductsAndServices/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/Relations/Relations/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/Utilities/Analytics/"/>
+		<owl:imports rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/Utilities/AnnotationVocabulary/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/AnnotationVocabulary/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/BusinessAuthorizations/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/Classifiers/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/Collections/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/ContextualDesignators/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/DatesAndTimes/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/Designators/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/Identifiers/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/Organizations/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/PartiesAndSituations/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/QuantitiesAndUnits/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/RegulatoryAgencies/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/RolesAndCompositions/"/>
+		<owl:imports rdf:resource="https://www.omg.org/spec/Commons/TextDatatype/"/>
+		<owl:versionIRI rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FBC/20260701/ProductsAndServices/FinancialProductsAndServices/"/>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20150801/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to reflect issue resolutions detailed in the FIBO FBC 1.0 FTF report.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20160801/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified by the FIBO 2.0 RFC, including, but not limited to, the addition of lifecycle events, concepts related to trade settlement, and the definition of a unique transaction identifier (UTI).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20180801/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified as a part of organizational hierarchy simplification and to correct a logical inconsistency with respect to the representation of baskets.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20190601/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to replace hasDefinition with isDefinedIn to clarify intent.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20190701/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to eliminate deprecated elements.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20190901/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to add the notion of a weighted basket, whose consituents are weighted.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20191101/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to eliminate duplication with concepts in LCC and eliminated a redundant superclass on FinancialServiceProvider.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20200401/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to replace the property &apos;characterizes&apos; with &apos;describes&apos; with respect to restrictions on catalogs, and to correct the label on terminated trade.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20200701/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to eliminate references to external dictionary sites that no longer resolve, eliminate circular and ambiguous definitions, and revise definitions that referenced &apos;face value&apos; improperly.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20210301/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to rename ownership related properties for consistent alignment with the ownership situational pattern, add a definition for trading strategy, and loosen the constraint on offeree for offering to be optional.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20210601/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to add a property to describe the criteria for including something in a basket, if that criteria is known, and to point to a party that is responsible for determining that criteria.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20210901/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to fix spelling errors.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20211201/ProductsAndServices/FinancialProductsAndServices/ version of this ontology was modified to revise the definition of a unique transaction identifier to align with ISO 23897 and to address text formatting issues.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20220801/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to use the Commons Ontology Library (Commons) Annotation Vocabulary rather than the OMG&apos;s Specification Metadata vocabulary.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20230101/ProductsAndServices/FinancialProductsAndServices.rdf version of this ontology was modified to use the Commons Ontology Library (Commons) rather than the OMG&apos;s Languages, Countries and Codes (LCC) and to eliminate redundancies in FIBO as appropriate.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20230301/ProductsAndServices/FinancialProductsAndServices.rdf version of this ontology was revised to augment the representation of institutions based on their definitions in the law, and to clarify and extend definitions related to non-bank financial institutions.</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20230401/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to eliminate deprecations that are more than 6 months old and to replace content that is now available in the OMG Commons Ontology Library (Commons) v1.1 (FND-380).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20231201/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to replace additional content that is now available in the OMG Commons Ontology Library (Commons) v1.1 (FND-380).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20240101/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to add the concept of a contract lifecycle, as distinct from a product or trade lifecycle (FBC-317).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20240201/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to eliminate a redundant restriction (GitHub-2028).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20240901/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to eliminate certain constructs that are redundant and will never be materialized to reduce the number of nodes required for various contract-related constructs (FND-391).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20240901/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to reconcile shareholding with equity position (BE-254), and to replace additional content that is now available in the OMG Commons Ontology Library (Commons) v1.2 (FND-389).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20250501/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to replace hasConstituent with hasMember for better semantic consistency (FND-396).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20250701/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to leverage new constructs from the Commons 1.3 Business Authorizations ontology (FND-401).</skos:changeNote>
+		<skos:changeNote>The https://spec.edmcouncil.org/fibo/ontology/FBC/20251201/ProductsAndServices/FinancialProductsAndServices.rdf version of the ontology was modified to make the concept of a holding more generally applicable and available in the ownership ontology and refine the definition of position (SEC-219).</skos:changeNote>
+		<fibo-fnd-utl-av:hasMaturityLevel rdf:resource="&fibo-fnd-utl-av;Release"/>
+		<cmns-av:copyright>Copyright (c) 2015-2025 Object Management Group, Inc.</cmns-av:copyright>
+		<cmns-av:copyright>Copyright (c) 2015-2026 EDM Association dba EDM Council, Inc.</cmns-av:copyright>
+	</owl:Ontology>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;AgencyAgreement">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-agr-ctr;WrittenContract"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-agr-ctr;hasContractParty"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;RegisteredAgent"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>agency agreement</rdfs:label>
+		<rdfs:seeAlso rdf:resource="http://www.sos.state.tx.us/corp/registeredagents.shtml"/>
+		<skos:definition>agreement that designates a party as a registered agent to represent and act on behalf of another party in some, typically legal, financial, or medical capacity</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;AgentForServiceOfProcess">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;RegisteredAgent"/>
+		<rdfs:label>agent for service of process</rdfs:label>
+		<rdfs:seeAlso rdf:resource="http://www.law.cornell.edu/wex/agent_for_service_of_process"/>
+		<rdfs:seeAlso rdf:resource="http://www.sos.state.tx.us/corp/registeredagents.shtml"/>
+		<skos:definition>registered agent (person or organization) designated by a business entity, such as a corporation, to receive legal correspondence on behalf of the business entity in the jurisdiction in which the agent&apos;s address is located</skos:definition>
+		<cmns-av:explanatoryNote>The person may be an officer of the corporation or a third party, such as the corporation&apos;s attorney, or a company providing such agency services.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:NamedIndividual rdf:about="&fibo-fbc-pas-fpas;AmendedTrade">
+		<rdf:type rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+		<rdfs:label>amended trade</rdfs:label>
+		<skos:definition>stage in the lifecycle of a trade indicating that a change or addition has been made to the terms of the trade, leaving the original terms largely intact</skos:definition>
+	</owl:NamedIndividual>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Basket">
+		<rdfs:subClassOf rdf:resource="&cmns-col;Collection"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;hasSelectingParty"/>
+				<owl:onClass rdf:resource="&cmns-pts;Party"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;hasSelectionCriteria"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+				<owl:onDataRange rdf:resource="&xsd;string"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;hasMember"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;BasketConstituent"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>basket</rdfs:label>
+		<skos:definition>collection of goods, services, or other things (e.g., financial contracts) that can be purchased and sold in some marketplace</skos:definition>
+		<cmns-av:explanatoryNote>A basket may be associated with a specific market sector, and may be delineated for the purposes of statistical analysis, such as for calculating CPI. According to the US Bureau of Labor Statistics (BLS), with respect to the CPI, a market basket is a package of goods and services that consumers purchase for day-to-day living. The weight of each item is based on the amount of expenditure reported by a sample of households.</cmns-av:explanatoryNote>
+		<cmns-av:explanatoryNote>From a securities perspective, a basket is a collection of products or securities that are designated to mimic the performance of a market. For investors, the market basket is the principal idea behind index funds, which are essentially a broad sample of stocks, bonds or other securities in the market; this provides investors with a benchmark against which to compare their investment returns.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;BasketConstituent">
+		<rdfs:subClassOf rdf:resource="&cmns-col;Constituent"/>
+		<rdfs:label>basket constituent</rdfs:label>
+		<owl:equivalentClass>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;isConstituentOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Basket"/>
+			</owl:Restriction>
+		</owl:equivalentClass>
+		<skos:definition>component of a basket</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Broker">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-agr-ctr;ContractThirdParty"/>
+		<rdfs:subClassOf>
+			<owl:Class>
+				<owl:unionOf rdf:parseType="Collection">
+					<rdf:Description rdf:about="&fibo-fbc-pas-fpas;LicensedAgent">
+					</rdf:Description>
+					<rdf:Description rdf:about="&fibo-fbc-pas-fpas;ThirdPartyAgent">
+					</rdf:Description>
+				</owl:unionOf>
+			</owl:Class>
+		</rdfs:subClassOf>
+		<rdfs:label>broker</rdfs:label>
+		<skos:definition>any party that acts as an intermediary between a buyer and a seller, usually charging a commission</skos:definition>
+		<cmns-av:adaptedFrom>17 CFR 45.1, Definitions - see the definition of agent</cmns-av:adaptedFrom>
+		<cmns-av:explanatoryNote>A broker that specializes in stocks, bonds, commodities, or certain derivatives must be registered with the exchange in which the securities are traded.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;BrokerDealer">
+		<rdfs:subClassOf rdf:resource="&fibo-be-fct-fct;FunctionalEntity"/>
+		<rdfs:subClassOf>
+			<owl:Class>
+				<owl:unionOf rdf:parseType="Collection">
+					<rdf:Description rdf:about="&fibo-fbc-pas-fpas;Broker">
+					</rdf:Description>
+					<rdf:Description rdf:about="&fibo-fbc-pas-fpas;Dealer">
+					</rdf:Description>
+				</owl:unionOf>
+			</owl:Class>
+		</rdfs:subClassOf>
+		<rdfs:label>broker-dealer</rdfs:label>
+		<skos:definition>any party in the business of buying and selling securities, operating as both a broker and a dealer, depending on the transaction</skos:definition>
+		<cmns-av:adaptedFrom>Office of Financial Research (OFR) Annual Report, 2012, Glossary</cmns-av:adaptedFrom>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Catalog">
+		<rdfs:subClassOf rdf:resource="&fibo-be-fct-pub;Publication"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-id;isIdentifiedBy"/>
+				<owl:allValuesFrom rdf:resource="&cmns-id;Identifier"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dsg;describes"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-pas-pas;Product"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>catalog</rdfs:label>
+		<skos:definition>publication including a list of products available for sale with their descriptions and possibly prices</skos:definition>
+	</owl:Class>
+	
+	<owl:NamedIndividual rdf:about="&fibo-fbc-pas-fpas;ClearedTrade">
+		<rdf:type rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+		<rdfs:label>cleared trade</rdfs:label>
+		<skos:definition>stage in the lifecycle of a trade indicating that a third-party clearing house, acting as an intermediary, has reconciled the orders involved in the trade</skos:definition>
+		<cmns-av:explanatoryNote>Clearing validates the availability of funds, records the transfer, and in the case of securities ensures the delivery of the security to the buyer.</cmns-av:explanatoryNote>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&fibo-fbc-pas-fpas;ClosedTrade">
+		<rdf:type rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+		<rdfs:label>closed trade</rdfs:label>
+		<skos:definition>stage in the lifecycle of a trade indicating that the trade has been finalized, and that there is no longer a corresponding open position on the books of the trader, eliminating any exposure</skos:definition>
+	</owl:NamedIndividual>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ContractLifecycle">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;Lifecycle"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;hasStage"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isLifecycleOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-agr-ctr;Contract"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dsg;defines"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>contract lifecycle</rdfs:label>
+		<skos:definition>lifecycle of an agreement, including, but not limited to a credit agreement, financial instrument, or other formal contract, from initial stages through retirement</skos:definition>
+		<cmns-av:explanatoryNote>Certain business agreements, such as partnership agreements,may involve planning, drafting/review/revision, execution and management, renewal, and possibly sunsetting phases. Financial contracts, such as loans and other instruments have specific stages and events during the execution and management phase, i.e. from the effective date of the contract through maturity and redemption.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ContractLifecycleEvent">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleEvent"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleEvent"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;classifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleEventOccurrence"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cxtdsg;appliesTo"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>contract lifecycle event</rdfs:label>
+		<skos:definition>kind of event that occurs during one or more stages of the lifecycle of an agreement</skos:definition>
+		<skos:example>a call notification or coupon payment as a part of a bond lifecycle</skos:example>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ContractLifecycleEventOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleEventOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleEvent"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;isClassifiedBy"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleEvent"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cxtdsg;appliesTo"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleStageOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>contract lifecycle event occurrence</rdfs:label>
+		<skos:definition>actual occurrence of an event during a specific stage of a specific contract lifecycle</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ContractLifecycleOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycle"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;hasStage"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleStageOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>contract lifecycle occurrence</rdfs:label>
+		<skos:definition>realization of the lifecycle of a specific contract</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ContractLifecycleStage">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleStage"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleStage"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isStageOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycle"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;classifies"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-agr-ctr;Contract"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;comprises"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleEvent"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dsg;isDefinedIn"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycle"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>contract lifecycle stage</rdfs:label>
+		<skos:definition>phase in the lifecycle of an agreement</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ContractLifecycleStageOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleStageOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleStage"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isStageOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;comprises"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleEventOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>contract lifecycle stage occurrence</rdfs:label>
+		<skos:definition>realization, from start to finish of a phase in an occurrence of a specific contract lifecycle</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Dealer">
+		<rdfs:subClassOf rdf:resource="&cmns-org;ServiceProvider"/>
+		<rdfs:subClassOf>
+			<owl:Class>
+				<owl:unionOf rdf:parseType="Collection">
+					<rdf:Description rdf:about="&fibo-fnd-pas-pas;Buyer">
+					</rdf:Description>
+					<rdf:Description rdf:about="&fibo-fnd-pas-pas;Seller">
+					</rdf:Description>
+				</owl:unionOf>
+			</owl:Class>
+		</rdfs:subClassOf>
+		<rdfs:label>dealer</rdfs:label>
+		<skos:definition>any party that purchases goods or services for resale and acts on their own behalf in a transaction</skos:definition>
+		<cmns-av:explanatoryNote>A dealer is a counterparty or principal in the transaction with the customer.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Exposure">
+		<rdfs:subClassOf rdf:resource="&cmns-pts;Undergoer"/>
+		<rdfs:label>exposure</rdfs:label>
+		<skos:definition>means by which an individual or organization is unprotected and open to damage, danger, risk of suffering a loss, or uncertainty</skos:definition>
+		<skos:example>Examples include financial exposure, credit exposure, legal exposure, credit rating exposure, reputational exposure, and so forth.</skos:example>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ExposureBearer">
+		<rdfs:subClassOf rdf:resource="&cmns-pts;Actor"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;isExposedPartyIn"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ExposureSituation"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;isExposedTo"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Exposure"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>exposure bearer</rdfs:label>
+		<skos:definition>party subject to influence or risk arising from a specific contract, instrument, or arrangement</skos:definition>
+		<skos:note>Note that the name given to the party at risk is dependent on the jurisdiction and nature of the risk. Different regulations use differing terminology for this party, and exposure bearer is considered more general that some synonyms.</skos:note>
+		<cmns-av:synonym>exposed party</cmns-av:synonym>
+		<cmns-av:synonym>risk bearer</cmns-av:synonym>
+		<cmns-av:synonym>risk-bearing party</cmns-av:synonym>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ExposureSituation">
+		<rdfs:subClassOf rdf:resource="&cmns-pts;Situation"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;hasExposedParty"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ExposureBearer"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;hasExposureTo"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Exposure"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label xml:lang="en">exposure situation</rdfs:label>
+		<skos:definition>state of affairs in which some party is subject to influence or risk arising from a specific contract, instrument, or arrangement</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;FinancialExposure">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;Exposure"/>
+		<rdfs:label>financial exposure</rdfs:label>
+		<skos:definition>the extent to which an individual or organization is open to risk of suffering a loss in a transaction, or with respect to some investment or set of investments, e.g., some holding; the amount one stands to lose in that transaction or investment</skos:definition>
+		<skos:example>Examples in banking include the total amount of unsecured loans, the amount of loans advanced to a single borrower, group, industry, or country, and the probability of loss from devaluation, revaluation, or foreign exchange fluctuations.</skos:example>
+		<skos:note>Financial exposure may be related to a holding, involving ownership, or may involve rights or obligations related to borrowing or derivatives.</skos:note>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;FinancialIntermediationService">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;FinancialService"/>
+		<rdfs:label>financial intermediation service</rdfs:label>
+		<skos:definition>any financial service in which a third party (the intermediary) matches lenders and investors with entrepreneurs and other borrowers in need of capital</skos:definition>
+		<fibo-fnd-utl-av:definitionOrigin>Office of Financial Research (OFR) Annual Report, 2012, Glossary</fibo-fnd-utl-av:definitionOrigin>
+		<cmns-av:explanatoryNote>Often investors and borrowers do not have precisely matching needs, and the intermediary&apos;s capital is put at risk to transform the credit risk and maturity of the liabilities to meet the needs of investors.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;FinancialProduct">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-pas-pas;Product"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-org;isProvidedBy"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;FinancialServiceProvider"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>financial product</rdfs:label>
+		<skos:definition>product provided to consumers and businesses by financial institutions such as banks, insurance companies, brokerage firms, consumer finance companies, and investment companies</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;FinancialProductCatalog">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;Catalog"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dsg;describes"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;FinancialProduct"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>financial product catalog</rdfs:label>
+		<skos:definition>catalog of financial products and/or services available for sale with their description and other product details</skos:definition>
+		<cmns-av:adaptedFrom>Nordea Bank</cmns-av:adaptedFrom>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;FinancialService">
+		<rdfs:subClassOf rdf:resource="&cmns-org;Service"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-org;isProvidedBy"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;FinancialServiceProvider"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>financial service</rdfs:label>
+		<skos:definition>service provided to consumers and businesses by financial institutions such as banks, insurance companies, brokerage firms, consumer finance companies, and investment companies</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;FinancialServiceProvider">
+		<rdfs:subClassOf rdf:resource="&fibo-be-fct-fct;FunctionalBusinessEntity"/>
+		<rdfs:subClassOf rdf:resource="&cmns-org;ServiceProvider"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-rlcmp;isPlayedBy"/>
+				<owl:onClass rdf:resource="&cmns-org;LegalEntity"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-org;provides"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;FinancialService"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>financial service provider</rdfs:label>
+		<skos:definition>functional entity either licensed to provide financial services to consumers and/or businesses or established by law to provide financial services, such as a central bank</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Holding">
+		<owl:deprecated rdf:datatype="&xsd;boolean">true</owl:deprecated>
+		<owl:equivalentClass rdf:resource="&fibo-fnd-oac-own;Holding"/>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;LegalAgent">
+		<rdfs:subClassOf rdf:resource="&cmns-pts;AgentRole"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-rlcmp;isPlayedBy"/>
+				<owl:someValuesFrom>
+					<owl:Restriction>
+						<owl:onProperty rdf:resource="&fibo-fnd-law-lcap;hasCapacity"/>
+						<owl:someValuesFrom rdf:resource="&fibo-fnd-law-lcap;DelegatedLegalAuthority"/>
+					</owl:Restriction>
+				</owl:someValuesFrom>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>legal agent</rdfs:label>
+		<skos:definition>any party that has been legally empowered to act on behalf of another party</skos:definition>
+		<cmns-av:adaptedFrom>17 CFR 45.1, Definitions - see the definition of agent</cmns-av:adaptedFrom>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;LicensedAgent">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;LegalAgent"/>
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-law-lcap;Licensee"/>
+		<rdfs:subClassOf rdf:resource="&cmns-bauth;ResponsibleParty"/>
+		<rdfs:label>licensed agent</rdfs:label>
+		<skos:definition>any individual who is licensed to perform a legally binding function, and who has been legally empowered to act on behalf of another party</skos:definition>
+		<skos:example>Insurance agents, realtors, financial advisors, certain attorneys, and brokers are examples of legal agents.</skos:example>
+		<cmns-av:adaptedFrom>17 CFR 45.1, Definitions - see the definition of agent</cmns-av:adaptedFrom>
+	</owl:Class>
+	
+	<owl:NamedIndividual rdf:about="&fibo-fbc-pas-fpas;MaturedTrade">
+		<rdf:type rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+		<rdfs:label>matured trade</rdfs:label>
+		<skos:definition>stage in the lifecycle of a trade indicating that the trade, and related instrument(s) has ended (expired)</skos:definition>
+	</owl:NamedIndividual>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Offeree">
+		<rdfs:subClassOf rdf:resource="&cmns-pts;PartyRole"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-rlcmp;isPlayedBy"/>
+				<owl:someValuesFrom>
+					<owl:Restriction>
+						<owl:onProperty rdf:resource="&cmns-pts;isAPartyTo"/>
+						<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Offering"/>
+					</owl:Restriction>
+				</owl:someValuesFrom>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>offeree</rdfs:label>
+		<skos:definition>party that receives an offer from something from someone (i.e., an offerer) based on the terms of the offering</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Offering">
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-pts;hasPartyRole"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;Offeree"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;isIssuedBy"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Offeror"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cxtdsg;appliesTo"/>
+				<owl:someValuesFrom rdf:resource="&owl;Thing"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-pts;hasPartyRole"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Offeror"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>offering</rdfs:label>
+		<skos:definition>expression of interest in providing something to someone that is contingent upon acceptance, forbearance, or some other consideration, as might be desired by an offeree(s)</skos:definition>
+		<cmns-av:explanatoryNote>The making of an offer is the first of three steps in the traditional process of forming a valid contract: an offer, an acceptance of the offer, and an exchange of consideration. (Consideration is the act of doing something or promising to do something that a person is not legally required to do, or the forbearance or the promise to forbear from doing something that he or she has the legal right to do.)</cmns-av:explanatoryNote>
+		<cmns-av:usageNote>An offering may or may not be considered a &apos;state of affairs&apos; or situation, depending on the circumstances. In some cases such as a prospectus or other offering in the context of financial services, an offering may also be classified as a situation. Users may choose to model an individual offering as both an offering and situation, depending on the circumstances, in other words.</cmns-av:usageNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Offeror">
+		<rdfs:subClassOf rdf:resource="&cmns-pts;PartyRole"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;issues"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Offering"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-rlcmp;isPlayedBy"/>
+				<owl:someValuesFrom>
+					<owl:Restriction>
+						<owl:onProperty rdf:resource="&cmns-pts;isAPartyTo"/>
+						<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Offering"/>
+					</owl:Restriction>
+				</owl:someValuesFrom>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>offeror</rdfs:label>
+		<skos:definition>party that proposes to make something available to someone (i.e., an offeree) based on the terms of the offering</skos:definition>
+	</owl:Class>
+	
+	<owl:NamedIndividual rdf:about="&fibo-fbc-pas-fpas;OpenTrade">
+		<rdf:type rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+		<rdfs:label>open trade</rdfs:label>
+		<skos:definition>stage in the lifecycle of a trade indicating that the trade has been established and there is an associated open position on the books of the trader as a consequence</skos:definition>
+	</owl:NamedIndividual>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Position">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;FinancialExposure"/>
+		<rdfs:label>position</rdfs:label>
+		<skos:definition>financial exposure resulting from owning, borrowing, shorting, or entering into a contract (e.g., derivatives)</skos:definition>
+		<cmns-av:explanatoryNote>A position can be long or short, and it can be in any asset class, such as stocks, bonds, futures, or options. A position can be open (current) or closed (past), but in general use, unless a position is specifically referred to as closed, the assumption is that it references an open position.</cmns-av:explanatoryNote>
+		<cmns-av:explanatoryNote>Regulators use &apos;position&apos; when speaking about exposure with respect to 
+- CFTC futures/options positions
+- Basel risk-weighted exposures
+- Short-selling regulations (net short position)
+- Derivatives reporting (swap positions)
+
+A position may exist without a holding (e.g., short sale, swap exposure). A holding always implies a long position, but a position does not always imply a holding.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ProductLifecycle">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;Lifecycle"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;hasStage"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isLifecycleOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-pas-pas;Product"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dsg;defines"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>product lifecycle</rdfs:label>
+		<skos:definition>lifecycle specific to a product or product family</skos:definition>
+		<skos:example>The product life cycle describes the period of time over which an item is developed, brought to market and eventually removed from the market. The cycle is broken into four stages: introduction, growth, maturity and decline. The idea of the product life cycle is used in marketing to decide when it is appropriate to advertise, reduce prices, explore new markets or create new packaging.</skos:example>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ProductLifecycleEvent">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleEvent"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleEvent"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;classifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleEventOccurrence"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cxtdsg;appliesTo"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>product lifecycle event</rdfs:label>
+		<skos:definition>kind of event that occurs during one or more stages of a product lifecycle</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ProductLifecycleEventOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleEventOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleEvent"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cxtdsg;appliesTo"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleStageOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>product lifecycle event occurrence</rdfs:label>
+		<skos:definition>actual occurrence of an event that happens during a specific stage of a specific product lifecycle</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ProductLifecycleOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycle"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;hasStage"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleStageOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>product lifecycle occurrence</rdfs:label>
+		<skos:definition>realization of the lifecycle of a specific product</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ProductLifecycleStage">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleStage"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleStage"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isStageOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycle"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;classifies"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-pas-pas;Product"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;comprises"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleEvent"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dsg;isDefinedIn"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycle"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>product lifecycle stage</rdfs:label>
+		<skos:definition>phase in a product lifecycle</skos:definition>
+		<skos:example>research and development phase of a product lifecycle or the introduction phase in a marketing lifecycle, growth stage in an economic lifecycle for a product</skos:example>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ProductLifecycleStageOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleStageOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleStage"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isStageOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;comprises"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycleEventOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>product lifecycle stage occurrence</rdfs:label>
+		<skos:definition>realization of a specific stage in the lifecycle of a given product</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;RegisteredAgent">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;LegalAgent"/>
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-agr-ctr;ContractParty"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-rlcmp;isPlayedBy"/>
+				<owl:someValuesFrom>
+					<owl:Class>
+						<owl:intersectionOf rdf:parseType="Collection">
+							<owl:Restriction>
+								<owl:onProperty rdf:resource="&cmns-pts;isAPartyTo"/>
+								<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;AgencyAgreement"/>
+							</owl:Restriction>
+							<owl:Restriction>
+								<owl:onProperty rdf:resource="&cmns-rga;isRecognizedIn"/>
+								<owl:someValuesFrom rdf:resource="&cmns-rga;Jurisdiction"/>
+							</owl:Restriction>
+						</owl:intersectionOf>
+					</owl:Class>
+				</owl:someValuesFrom>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>registered agent</rdfs:label>
+		<rdfs:seeAlso rdf:resource="http://www.sos.state.tx.us/corp/registeredagents.shtml"/>
+		<rdfs:seeAlso rdf:resource="https://thelawdictionary.org/agent/"/>
+		<skos:definition>legal agent designated by some party to represent them and act on their behalf under a formal agency agreement</skos:definition>
+		<cmns-av:explanatoryNote>Agency capacity, as specified in an agency agreement, may include power of attorney, the ability to act as an agent in certain kinds of transactions such as real estate, tax, audit or other financial or legal transactions, as a fiduciary, including as a trustee or legal guardian, for service of process, and so forth.</cmns-av:explanatoryNote>
+		<cmns-av:synonym>resident agent</cmns-av:synonym>
+		<cmns-av:synonym>statutory agent</cmns-av:synonym>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;RegulatedCommodity">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-pas-pas;Commodity"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-rga;isRegulatedBy"/>
+				<owl:allValuesFrom rdf:resource="&cmns-rga;RegulatoryAgency"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-rga;isGovernedBy"/>
+				<owl:someValuesFrom rdf:resource="&cmns-rga;Jurisdiction"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>regulated commodity</rdfs:label>
+		<skos:definition>commodity under the jurisdiction of the regulatory agency, such as the Commodities Futures Trading Commission (CFTF) in the United States, which includes any commodity traded in an organized contracts market</skos:definition>
+		<cmns-av:explanatoryNote>The CFTC polices matters of information and disclosure, fair trading practices, registration of firms and individuals, protection of customer funds, record keeping, and maintenance of orderly options and futures markets in the United States.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;SettlementTerms">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-agr-ctr;ContractualCommitment"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;hasSettlementDate"/>
+				<owl:allValuesFrom rdf:resource="&cmns-dt;Date"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>settlement terms</rdfs:label>
+		<skos:definition>contract terms that define the commitment to and mechanism for settling one or more sides of a transaction</skos:definition>
+		<cmns-av:explanatoryNote>In general, settlement involves arrangement of disposition of property, typically for legal reasons. With respect to financial transactions, it involves completion of a trade, either between brokers or agents, or between a broker and client. This may include settlement in cash, either for the entire transaction or for the cash leg of a transaction, either now or at some specified time in the future.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:NamedIndividual rdf:about="&fibo-fbc-pas-fpas;TerminatedTrade">
+		<rdf:type rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+		<rdfs:label>terminated trade</rdfs:label>
+		<skos:definition>stage in the trade lifecycle in which the trade has been terminated early, i.e., prior to maturity</skos:definition>
+		<cmns-av:explanatoryNote>Early termination may be triggered by a position sell or early termination provision, such as auto call/cancel, knock-out, etc.</cmns-av:explanatoryNote>
+	</owl:NamedIndividual>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;ThirdPartyAgent">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;LegalAgent"/>
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-law-lcap;Licensee"/>
+		<rdfs:subClassOf rdf:resource="&cmns-org;ServiceProvider"/>
+		<rdfs:label>third-party agent</rdfs:label>
+		<skos:definition>any service provider that is licensed to perform a legally binding function and has been legally empowered to act on behalf of another party</skos:definition>
+		<cmns-av:adaptedFrom>17 CFR 45.1, Definitions - see the definition of agent</cmns-av:adaptedFrom>
+		<cmns-av:usageNote>Note that third-party agent is defined as a service provider (organization) acting in an agency capacity, such as a law firm, accountancy, or investment bank. This is distinct from the concept of an individual (licensed agent), for example one who works for a broker-dealer, that is a registered agent licensed to sell securities.</cmns-av:usageNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Trade">
+		<rdfs:subClassOf rdf:resource="&cmns-pts;Situation"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;Trade"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-id;isIdentifiedBy"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeIdentifier"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;isCharacterizedBy"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycle"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;isFacilitatedBy"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;Trader"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;isEmbodiedIn"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-agr-ctr;Contract"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-pas-pas;hasBuyer"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-pas-pas;Buyer"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-pas-pas;hasSeller"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-pas-pas;Seller"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;involves"/>
+				<owl:someValuesFrom>
+					<owl:Class>
+						<owl:unionOf rdf:parseType="Collection">
+							<rdf:Description rdf:about="&fibo-fnd-pas-pas;Good">
+							</rdf:Description>
+							<rdf:Description rdf:about="&cmns-org;Service">
+							</rdf:Description>
+							<rdf:Description rdf:about="&fibo-fnd-agr-ctr;Contract">
+							</rdf:Description>
+						</owl:unionOf>
+					</owl:Class>
+				</owl:someValuesFrom>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trade</rdfs:label>
+		<skos:definition>situation that realizes an agreement between parties participating in a voluntary action of buying and selling goods and services</skos:definition>
+		<cmns-av:adaptedFrom>Deutsche Bank Presentation on the Lifecycle of a Trade, available at http://www.slideshare.net/ahaline/23512555-tradelifecycle</cmns-av:adaptedFrom>
+		<cmns-av:explanatoryNote>The advent of money as a medium of exchange has allowed trade to be conducted in a manner that is much simpler and effective compared to earlier forms of trade, such as bartering. In financial markets, trading also can mean performing a transaction that involves the selling and purchasing of a security.</cmns-av:explanatoryNote>
+		<cmns-av:explanatoryNote>The seller must deliver the commodity sold to the buyer; the buyer must pay the agreed purchase price, which could be in the form of other goods or services, on the agreed date.</cmns-av:explanatoryNote>
+		<cmns-av:explanatoryNote>Trading activities typically include (a) regularly underwriting or dealing in securities; interest rate, foreign exchange rate, commodity, equity, and credit derivative contracts; other financial instruments; and other assets for resale, (b) acquiring or taking positions in such items principally for the purpose of selling in the near term or otherwise with the intent to resell in order to profit from short-term price movements, and (c) acquiring or taking positions in such items as an accommodation to customers or for other trading purposes. (Source: Instructions for Preparation of Consolidated Reports of Condition and Income (FFIEC 031 and 041), Schedule RC-D - Trading Assets and Liabilities, 2013.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;TradeIdentifier">
+		<rdfs:subClassOf rdf:resource="&cmns-id;Identifier"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-id;identifies"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Trade"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trade identifier</rdfs:label>
+		<skos:definition>sequence of characters identifying a trade within some context</skos:definition>
+		<skos:note>Note that a given trade may consist of multiple transactions, and thus there may be multiple identifiers for such transactions associated with a specific trade.</skos:note>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;TradeLifecycle">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;Lifecycle"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;hasStage"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isLifecycleOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Trade"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dsg;defines"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trade lifecycle</rdfs:label>
+		<skos:definition>lifecycle that defines the evolution of a trade, from initiation through settlement</skos:definition>
+		<skos:example>The trade life cycle covers the period of time over which a trade is initiated, typically as a part of a broader deal, is consumated, processed and executed, is settled or closed for other reasons, and is reported. Parts of a trade lifecycle may include or overlap with the lifecycle of one or more contracts.</skos:example>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;TradeLifecycleEvent">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleEvent"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleEvent"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;classifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleEventOccurrence"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cxtdsg;appliesTo"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trade lifecycle event</rdfs:label>
+		<skos:definition>kind of event that occurs during one or more stages of the lifecycle of a trade</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;TradeLifecycleEventOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleEventOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleEventOccurrence"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleEvent"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cxtdsg;appliesTo"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStageOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trade lifecycle event occurrence</rdfs:label>
+		<skos:definition>realization of an event that happens during a specific stage of a specific trade lifecycle</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;TradeLifecycleOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycle"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;hasStage"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStageOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trade lifecycle occurrence</rdfs:label>
+		<skos:definition>realization of the lifecycle for a specific trade</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;TradeLifecycleStage">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleStage"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isStageOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycle"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;classifies"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Trade"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;comprises"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleEvent"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dsg;isDefinedIn"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycle"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trade lifecycle stage</rdfs:label>
+		<skos:definition>phase in the lifecycle of a trade</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;TradeLifecycleStageOccurrence">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-arr-lif;LifecycleStageOccurrence"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-dt;succeeds"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStageOccurrence"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;exemplifies"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleStage"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;isStageOf"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;comprises"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;TradeLifecycleEventOccurrence"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trade lifecycle stage occurrence</rdfs:label>
+		<skos:definition>realization of a phase in the lifecycle of a specific trade</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;Trader">
+		<rdfs:subClassOf rdf:resource="&cmns-org;ServiceProvider"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;facilitates"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;Trade"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-rlcmp;isPlayedBy"/>
+				<owl:someValuesFrom>
+					<owl:Restriction>
+						<owl:onProperty rdf:resource="&fibo-fnd-law-lcap;hasCapacity"/>
+						<owl:someValuesFrom rdf:resource="&fibo-fnd-law-lcap;ContractualCapability"/>
+					</owl:Restriction>
+				</owl:someValuesFrom>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>trader</rdfs:label>
+		<skos:definition>party that engages in the transfer of financial assets in any financial market on behalf of a client or the financial services provider</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;TradingStrategy">
+		<rdfs:subClassOf rdf:resource="&fibo-fnd-gao-obj;Strategy"/>
+		<rdfs:label>trading strategy</rdfs:label>
+		<skos:definition>approach used for buying and selling in the securities markets</skos:definition>
+		<cmns-av:explanatoryNote>A trading strategy is a plan whose aim is to make a profit or hedge against risk, based on rules and other criteria used when making trading decisions. A trading strategy may be simple or complex, and involve considerations such as investment style (e.g., value vs. growth), market cap, technical indicators, fundamental analysis, industry sector, level of portfolio diversification, time horizon or holding period, risk tolerance, leverage, tax considerations, and so on.</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;UniqueTransactionIdentifier">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;TradeIdentifier"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fbc-pas-fpas;hasGeneratingEntity"/>
+				<owl:someValuesFrom rdf:resource="&cmns-org;LegalEntity"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>unique transaction identifier</rdfs:label>
+		<skos:definition>sequence of characters identifying a financial transaction uniquely whenever useful and agreed by the parties or community involved in the transaction</skos:definition>
+		<cmns-av:abbreviation>UTI</cmns-av:abbreviation>
+		<cmns-av:adaptedFrom>Harmonization of the Unique Transaction Identifier - Technical Guidance, 20 Feb 2017, described in https://www.bis.org/cpmi/publ/d158.pdf</cmns-av:adaptedFrom>
+		<cmns-av:adaptedFrom>ISO 23897:2020, Financial services - Unique transaction identifier (UTI)</cmns-av:adaptedFrom>
+		<cmns-av:explanatoryNote>In particular, a UTI will help to ensure the consistent aggregation of OTC derivatives and other securities transactions by minimising the likelihood that the same transaction will be counted more than once (for instance, because it is reported by more than one counterparty to a transaction, or to more than one trade repository (TR)).</cmns-av:explanatoryNote>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;WeightedBasket">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;Basket"/>
+		<rdfs:subClassOf rdf:resource="&cmns-col;StructuredCollection"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-col;hasMember"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fbc-pas-fpas;WeightedBasketConstituent"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-qtu;hasExpression"/>
+				<owl:someValuesFrom rdf:resource="&fibo-fnd-utl-alx;WeightingFunction"/>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>weighted basket</rdfs:label>
+		<skos:definition>basket whose constituents have some relative importance with respect to one another</skos:definition>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fbc-pas-fpas;WeightedBasketConstituent">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;BasketConstituent"/>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-utl-alx;hasWeight"/>
+				<owl:onDataRange rdf:resource="&xsd;decimal"/>
+				<owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:label>weighted basket constituent</rdfs:label>
+		<skos:definition>component of a basket whose relative importance with respect to other basket constituents is known</skos:definition>
+	</owl:Class>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;exposesIn">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;undergoes"/>
+		<rdfs:label>exposes in</rdfs:label>
+		<rdfs:domain rdf:resource="&fibo-fbc-pas-fpas;Exposure"/>
+		<rdfs:range rdf:resource="&fibo-fbc-pas-fpas;ExposureSituation"/>
+		<skos:definition>indicates the state of affairs in which exposure occurs</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;facilitates">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;playsActivePartyIn"/>
+		<rdfs:label>facilitates</rdfs:label>
+		<skos:definition>acts as an enabler in a situation in which an event, a task, a conversation or something else occurs</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasExposedParty">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;hasActor"/>
+		<rdfs:label>has exposed party</rdfs:label>
+		<rdfs:domain rdf:resource="&fibo-fbc-pas-fpas;ExposureSituation"/>
+		<rdfs:range rdf:resource="&fibo-fbc-pas-fpas;ExposureBearer"/>
+		<owl:inverseOf rdf:resource="&fibo-fbc-pas-fpas;isExposedPartyIn"/>
+		<skos:definition>indicates the party subject to influence or risk in</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasExposureTo">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;hasUndergoer"/>
+		<rdfs:label>has exposure to</rdfs:label>
+		<rdfs:domain rdf:resource="&fibo-fbc-pas-fpas;ExposureSituation"/>
+		<rdfs:range rdf:resource="&fibo-fbc-pas-fpas;Exposure"/>
+		<owl:inverseOf rdf:resource="&fibo-fbc-pas-fpas;exposesIn"/>
+		<skos:definition>involves influence or risk from</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasGeneratingEntity">
+		<rdfs:subPropertyOf rdf:resource="&fibo-fnd-rel-rel;generates"/>
+		<rdfs:label>has generating entity</rdfs:label>
+		<rdfs:range rdf:resource="&cmns-org;LegalEntity"/>
+		<skos:definition>specifies a legal entity that generates something</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasGeneratingEntityIdentifier">
+		<rdfs:label>has generating entity identifier</rdfs:label>
+		<rdfs:domain rdf:resource="&fibo-fbc-pas-fpas;UniqueTransactionIdentifier"/>
+		<owl:propertyChainAxiom rdf:parseType="Collection">
+			<rdf:Description rdf:about="&fibo-fbc-pas-fpas;hasGeneratingEntity">
+			</rdf:Description>
+			<rdf:Description rdf:about="&cmns-id;isIdentifiedBy">
+			</rdf:Description>
+		</owl:propertyChainAxiom>
+		<skos:definition>specifies an identifier for the entity that generated a unique transaction identifier</skos:definition>
+		<cmns-av:explanatoryNote>Note that the range of is identified by must be that entity&apos;s LEI in the context of a UTI.</cmns-av:explanatoryNote>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasLegalAgent">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;hasPartyRole"/>
+		<rdfs:label>has registered agent</rdfs:label>
+		<rdfs:range rdf:resource="&fibo-fbc-pas-fpas;LegalAgent"/>
+		<skos:definition>identifies a party as one that has the legal, medical or financial capacity to act on behalf of someone else under specific circumstances</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:DatatypeProperty rdf:about="&fibo-fbc-pas-fpas;hasNominalNumberOfUnits">
+		<rdfs:subPropertyOf rdf:resource="&fibo-fnd-acc-cur;hasAmount"/>
+		<rdfs:label>has nominal number of units</rdfs:label>
+		<rdfs:range rdf:resource="&xsd;integer"/>
+		<skos:definition>indicates the base number of units of something associated with some offering</skos:definition>
+	</owl:DatatypeProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasOffering">
+		<rdfs:label>has offering</rdfs:label>
+		<rdfs:range rdf:resource="&fibo-fbc-pas-fpas;Offering"/>
+		<owl:inverseOf rdf:resource="&fibo-fbc-pas-fpas;isOfferingOf"/>
+		<skos:definition>relates something to a voluntary but conditional promise submitted by a buyer or seller (offeror) to another (offeree) for acceptance, and which becomes legally enforceable if accepted by the offeree</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasOfferingAmount">
+		<rdfs:subPropertyOf rdf:resource="&fibo-fnd-acc-cur;hasNotionalAmount"/>
+		<rdfs:label>has offering amount</rdfs:label>
+		<rdfs:range rdf:resource="&fibo-fnd-acc-cur;MonetaryAmount"/>
+		<skos:definition>indicates the notional monetary amount, determined based on reference data, market rates or some other agreed method associated with some offering</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasOfferingPrice">
+		<rdfs:subPropertyOf rdf:resource="&fibo-fnd-acc-cur;hasPrice"/>
+		<rdfs:label>has offering price</rdfs:label>
+		<rdfs:range rdf:resource="&fibo-fnd-acc-cur;MonetaryPrice"/>
+		<skos:definition>indicates the price associated with an offering, which may be an explicit or calculated price</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:DatatypeProperty rdf:about="&fibo-fbc-pas-fpas;hasOfferingUnits">
+		<rdfs:subPropertyOf rdf:resource="&fibo-fnd-acc-cur;hasAmount"/>
+		<rdfs:label>has offering units</rdfs:label>
+		<rdfs:range rdf:resource="&xsd;integer"/>
+		<skos:definition>indicates the actual number of units of something, including any premium on the number of units, associated with some offering</skos:definition>
+	</owl:DatatypeProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasSelectingParty">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;hasParty"/>
+		<rdfs:label>has selecting party</rdfs:label>
+		<rdfs:range rdf:resource="&cmns-pts;Party"/>
+		<skos:definition>indicates the person(s) or organization(s) responsible for determining the contents of a basket</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:DatatypeProperty rdf:about="&fibo-fbc-pas-fpas;hasSelectionCriteria">
+		<rdfs:subPropertyOf rdf:resource="&cmns-txt;hasTextValue"/>
+		<rdfs:label>has selection criteria</rdfs:label>
+		<rdfs:domain rdf:resource="&cmns-col;Collection"/>
+		<skos:definition>describes the methodology or program used to determine the membership of a collection</skos:definition>
+	</owl:DatatypeProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasSettlementDate">
+		<rdfs:subPropertyOf rdf:resource="&cmns-dt;hasEndDate"/>
+		<rdfs:label>has settlement date</rdfs:label>
+		<rdfs:range rdf:resource="&fibo-fnd-dt-fd;CalculatedDate"/>
+		<skos:definition>indicates the date by which an executed order or transaction must be settled</skos:definition>
+		<cmns-av:explanatoryNote>Settlement might involve either a buyer paying in cash or a seller delivering the relevant instrument(s) and receiving the proceeds as specified by the terms of a given transaction.</cmns-av:explanatoryNote>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;hasTradeDate">
+		<rdfs:subPropertyOf rdf:resource="&cmns-dt;hasDate"/>
+		<rdfs:label>has trade date</rdfs:label>
+		<rdfs:range rdf:resource="&cmns-dt;Date"/>
+		<skos:definition>indicates the date on which a security or other instrument-specific trade actually takes place</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;isEmbodiedIn">
+		<rdfs:label>is embodied in</rdfs:label>
+		<owl:inverseOf rdf:resource="&fibo-fnd-rel-rel;embodies"/>
+		<skos:definition>identifies the representation or tangible form of something in some context</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;isExposedPartyIn">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;actsIn"/>
+		<rdfs:label>is exposed party in</rdfs:label>
+		<rdfs:domain rdf:resource="&fibo-fbc-pas-fpas;ExposureBearer"/>
+		<rdfs:range rdf:resource="&fibo-fbc-pas-fpas;ExposureSituation"/>
+		<skos:definition>indicates the state of affairs in which the party bears the risk</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;isExposedTo">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;actsOn"/>
+		<rdfs:label>is exposed to</rdfs:label>
+		<rdfs:domain rdf:resource="&fibo-fbc-pas-fpas;ExposureBearer"/>
+		<rdfs:range rdf:resource="&fibo-fbc-pas-fpas;Exposure"/>
+		<owl:inverseOf rdf:resource="&fibo-fbc-pas-fpas;isExposureOf"/>
+		<skos:definition>is subject to influence or risk from</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;isExposureOf">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;isAffectedBy"/>
+		<rdfs:label>is exposure of</rdfs:label>
+		<rdfs:domain rdf:resource="&fibo-fbc-pas-fpas;Exposure"/>
+		<rdfs:range rdf:resource="&fibo-fbc-pas-fpas;ExposureBearer"/>
+		<skos:definition>is the influence or risk borne by</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;isFacilitatedBy">
+		<rdfs:subPropertyOf rdf:resource="&cmns-pts;hasActiveParty"/>
+		<rdfs:label>is facilitated by</rdfs:label>
+		<owl:inverseOf rdf:resource="&fibo-fbc-pas-fpas;facilitates"/>
+		<skos:definition>identifies someone or something that expedites some event, transaction, conversation or something else in some context</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;isOfferingOf">
+		<rdfs:label>is offering of</rdfs:label>
+		<rdfs:domain rdf:resource="&fibo-fbc-pas-fpas;Offering"/>
+		<skos:definition>relates an offering to one or things that are the subject of the offer</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&fibo-fbc-pas-fpas;relatesTo">
+		<rdfs:label>relates to</rdfs:label>
+		<skos:definition>has a logical or causal connection with</skos:definition>
+	</owl:ObjectProperty>
+	
+	<owl:Class rdf:about="&fibo-fnd-agr-ctr;BreachOfContract">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleEvent"/>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fnd-agr-ctr;BreachOfCovenant">
+		<rdfs:subClassOf rdf:resource="&fibo-fbc-pas-fpas;ContractLifecycleEvent"/>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fnd-oac-own;Portfolio">
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-rel-rel;isHeldBy"/>
+				<owl:allValuesFrom>
+					<owl:Class>
+						<owl:unionOf rdf:parseType="Collection">
+							<rdf:Description rdf:about="&fibo-be-oac-opty;Investor">
+							</rdf:Description>
+							<rdf:Description rdf:about="&fibo-fbc-pas-fpas;FinancialServiceProvider">
+							</rdf:Description>
+						</owl:unionOf>
+					</owl:Class>
+				</owl:allValuesFrom>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-org;isManagedBy"/>
+				<owl:someValuesFrom>
+					<owl:Class>
+						<owl:unionOf rdf:parseType="Collection">
+							<rdf:Description rdf:about="&fibo-be-oac-opty;Investor">
+							</rdf:Description>
+							<rdf:Description rdf:about="&fibo-fbc-pas-fpas;FinancialServiceProvider">
+							</rdf:Description>
+						</owl:unionOf>
+					</owl:Class>
+				</owl:someValuesFrom>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+	</owl:Class>
+	
+	<owl:Class rdf:about="&fibo-fnd-pas-pas;Product">
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&cmns-cls;isCharacterizedBy"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;Catalog"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+		<rdfs:subClassOf>
+			<owl:Restriction>
+				<owl:onProperty rdf:resource="&fibo-fnd-arr-lif;hasLifecycle"/>
+				<owl:onClass rdf:resource="&fibo-fbc-pas-fpas;ProductLifecycle"/>
+				<owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:minQualifiedCardinality>
+			</owl:Restriction>
+		</rdfs:subClassOf>
+	</owl:Class>
+	
+	<owl:ObjectProperty rdf:about="&cmns-dt;precedes">
+		<rdfs:subPropertyOf rdf:resource="&fibo-fbc-pas-fpas;relatesTo"/>
+	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:about="&cmns-dt;succeeds">
+		<rdfs:subPropertyOf rdf:resource="&fibo-fbc-pas-fpas;relatesTo"/>
+	</owl:ObjectProperty>
+
+</rdf:RDF>

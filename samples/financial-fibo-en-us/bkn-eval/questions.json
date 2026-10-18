@@ -1,0 +1,1910 @@
+[
+  {
+    "id": "FIN-001",
+    "scenario_id": "S01",
+    "level": "easy_basic",
+    "question": "Who issues INS-001, and what is the issuer name?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "legal_entities"
+    ],
+    "required_relations": [
+      "instrument_to_issuer"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT i.instrument_id,i.name,i.issuer_id,e.name AS issuer_name FROM financial_instruments i JOIN legal_entities e ON i.issuer_id=e.entity_id WHERE i.instrument_id='INS-001'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-002",
+    "scenario_id": "S01",
+    "level": "easy_basic",
+    "question": "What asset class and price basis does INS-002 use?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT instrument_id,asset_class,price_basis,price_multiplier,currency FROM financial_instruments WHERE instrument_id='INS-002'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-003",
+    "scenario_id": "S01",
+    "level": "easy_basic",
+    "question": "What is PF-049’s name and base currency?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "portfolios"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT portfolio_id,name,base_currency FROM portfolios WHERE portfolio_id='PF-049'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-004",
+    "scenario_id": "S01",
+    "level": "intermediate",
+    "question": "Trace the synthetic security code of INS-015 to its issuer.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "security_identifiers"
+    ],
+    "required_relations": [
+      "security_id_to_instrument"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT s.synthetic_code,s.scheme,i.name,i.issuer_id FROM security_identifiers s JOIN financial_instruments i USING(instrument_id) WHERE i.instrument_id='INS-015'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-005",
+    "scenario_id": "S01",
+    "level": "intermediate",
+    "question": "What synthetic identifier belongs to issuer ISS-023?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "legal_entities",
+      "legal_entity_identifiers"
+    ],
+    "required_relations": [
+      "entity_id_to_entity"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT e.entity_id,e.name,x.synthetic_code,x.scheme,x.is_synthetic FROM legal_entities e JOIN legal_entity_identifiers x USING(entity_id) WHERE e.entity_id='ISS-023'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-006",
+    "scenario_id": "S01",
+    "level": "intermediate",
+    "question": "Which account and manager are associated with PF-010?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "legal_entities",
+      "portfolios"
+    ],
+    "required_relations": [
+      "portfolio_to_manager",
+      "account_to_portfolio"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.account_id,p.portfolio_id,p.manager_id,e.name FROM accounts a JOIN portfolios p USING(portfolio_id) JOIN legal_entities e ON p.manager_id=e.entity_id WHERE p.portfolio_id='PF-010'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-007",
+    "scenario_id": "S01",
+    "level": "intermediate",
+    "question": "Which two instruments share issuer ISS-008, and how do their pricing units differ?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT instrument_id,name,asset_class,unit,price_basis,price_multiplier FROM financial_instruments WHERE issuer_id='ISS-008' ORDER BY instrument_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-008",
+    "scenario_id": "S01",
+    "level": "hard_complex",
+    "question": "Which portfolios share issuer ISS-008 at the current snapshot, and through which instruments?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "financial_instruments",
+      "opening_positions",
+      "positions"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "opening_to_instrument",
+      "position_to_opening"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT DISTINCT a.portfolio_id,i.instrument_id,i.asset_class FROM positions p JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) JOIN financial_instruments i USING(instrument_id) WHERE p.as_of_date='2027-02-28' AND i.issuer_id='ISS-008' ORDER BY a.portfolio_id,i.instrument_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-009",
+    "scenario_id": "S01",
+    "level": "hard_complex",
+    "question": "Does each instrument resolve to one security code, an issuer-role entity, and one synthetic entity identifier? Audit the complete identity path.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "legal_entities",
+      "legal_entity_identifiers",
+      "security_identifiers"
+    ],
+    "required_relations": [
+      "entity_id_to_entity",
+      "instrument_to_issuer",
+      "security_id_to_instrument"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT COUNT(*) AS instruments_checked,SUM(CASE WHEN security_codes<>1 OR entity_codes<>1 OR issuer_role IS NULL OR issuer_role<>'issuer' THEN 1 ELSE 0 END) AS identity_exceptions FROM (SELECT i.instrument_id,COUNT(DISTINCT s.identifier_id) AS security_codes,COUNT(DISTINCT x.identifier_id) AS entity_codes,e.entity_role AS issuer_role FROM financial_instruments i LEFT JOIN security_identifiers s USING(instrument_id) LEFT JOIN legal_entities e ON e.entity_id=i.issuer_id LEFT JOIN legal_entity_identifiers x ON x.entity_id=e.entity_id GROUP BY i.instrument_id)",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-010",
+    "scenario_id": "S01",
+    "level": "hard_complex",
+    "question": "Audit the current position-to-portfolio-to-manager and position-to-instrument-to-issuer paths; report distinct roles and any incorrect role assignments.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "financial_instruments",
+      "legal_entities",
+      "opening_positions",
+      "portfolios",
+      "positions"
+    ],
+    "required_relations": [
+      "instrument_to_issuer",
+      "portfolio_to_manager",
+      "account_to_portfolio",
+      "opening_to_account",
+      "opening_to_instrument",
+      "position_to_opening"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT COUNT(DISTINCT p.position_id) AS positions,COUNT(DISTINCT issuer.entity_id) AS issuers,COUNT(DISTINCT manager.entity_id) AS managers,SUM(CASE WHEN issuer.entity_role<>'issuer' OR manager.entity_role<>'manager' THEN 1 ELSE 0 END) AS role_errors FROM positions p JOIN opening_positions op USING(opening_id) JOIN accounts a USING(account_id) JOIN portfolios f USING(portfolio_id) JOIN legal_entities manager ON manager.entity_id=f.manager_id JOIN financial_instruments i USING(instrument_id) JOIN legal_entities issuer ON issuer.entity_id=i.issuer_id WHERE p.as_of_date='2027-02-28'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-011",
+    "scenario_id": "S02",
+    "level": "easy_basic",
+    "question": "What side, quantity and currency were executed in TR-001-1-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "trade_to_order"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT t.trade_id,o.side,t.trade_quantity,t.currency FROM securities_transactions t JOIN trade_orders o USING(order_id) WHERE t.trade_id='TR-001-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-012",
+    "scenario_id": "S02",
+    "level": "easy_basic",
+    "question": "What is the execution price and gross amount of TR-001-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "securities_transactions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT trade_id,execution_price,gross_amount,currency FROM securities_transactions WHERE trade_id='TR-001-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-013",
+    "scenario_id": "S02",
+    "level": "easy_basic",
+    "question": "Which order created TR-019-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "securities_transactions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT trade_id,order_id,trade_date FROM securities_transactions WHERE trade_id='TR-019-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-014",
+    "scenario_id": "S02",
+    "level": "intermediate",
+    "question": "Trace TR-030-4-4 to account, portfolio and counterparty.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_account",
+      "trade_to_order"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT t.trade_id,a.portfolio_id,a.account_id,o.counterparty_id FROM securities_transactions t JOIN trade_orders o USING(order_id) JOIN accounts a USING(account_id) WHERE t.trade_id='TR-030-4-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-015",
+    "scenario_id": "S02",
+    "level": "intermediate",
+    "question": "List all actual trades executed for PF-041 in February 2027, with instrument, side, quantity, amount and currency.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_account",
+      "trade_to_order"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT t.trade_id,o.instrument_id,o.side,t.trade_quantity,t.gross_amount,t.currency FROM securities_transactions t JOIN trade_orders o USING(order_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id='PF-041' AND t.trade_date BETWEEN '2027-02-01' AND '2027-02-28' AND t.trade_status='executed' ORDER BY t.trade_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-016",
+    "scenario_id": "S02",
+    "level": "intermediate",
+    "question": "Explain the bond quote conversion for TR-010-2-4.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_instrument",
+      "trade_to_order"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT t.trade_id,t.trade_quantity,t.execution_price,i.price_multiplier,DROUND(DMUL(t.trade_quantity,t.execution_price,i.price_multiplier),2) AS reconstructed_gross,t.gross_amount FROM securities_transactions t JOIN trade_orders o USING(order_id) JOIN financial_instruments i USING(instrument_id) WHERE t.trade_id='TR-010-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-017",
+    "scenario_id": "S02",
+    "level": "intermediate",
+    "question": "Are March trades for PF-049 actual or planned, and when were they known?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_account",
+      "trade_to_order"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT t.trade_id,t.trade_date,t.trade_status,t.known_date FROM securities_transactions t JOIN trade_orders o USING(order_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id='PF-049' AND t.trade_date>'2027-02-28' ORDER BY t.trade_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-018",
+    "scenario_id": "S02",
+    "level": "hard_complex",
+    "question": "Reconcile order and executed quantities for all actual trades.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "trade_to_order"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT COUNT(*) AS actual_trades,SUM(CASE WHEN o.order_quantity<>t.trade_quantity THEN 1 ELSE 0 END) AS quantity_mismatches FROM securities_transactions t JOIN trade_orders o USING(order_id) WHERE t.trade_status='executed'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-019",
+    "scenario_id": "S02",
+    "level": "hard_complex",
+    "question": "For actual buys and sells, select the latest actual USD fixing with as_of_date, published_date and known_date no later than each trade date. Group by currency and side; report trade count, the sum of booked gross_amount (local currency, already rounded per trade to 2dp), and USD total. Translate that booked gross_amount at the eligible rate, then round only the grouped USD sum; do not replace booked amounts with unrounded quantity-price products.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates",
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "trade_to_order"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT t.currency,o.side,COUNT(*) AS trades,COUNT(DISTINCT f.fx_id) AS fixing_records,ROUND(SUM(t.gross_amount),2) AS local_gross,DROUND(DSUM_PRODUCT(t.gross_amount,f.rate),2) AS usd_gross,MAX(CAST(julianday(t.trade_date)-julianday(f.published_date) AS INTEGER)) AS maximum_fixing_age FROM securities_transactions t JOIN trade_orders o USING(order_id) JOIN fx_rates f ON f.from_currency=t.currency AND f.as_of_date=(SELECT MAX(x.as_of_date) FROM fx_rates x WHERE x.from_currency=t.currency AND x.as_of_date<=t.trade_date AND x.published_date<=t.trade_date AND x.known_date<=t.trade_date AND x.view_kind='actual') WHERE t.trade_status='executed' GROUP BY t.currency,o.side ORDER BY t.currency,o.side",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-020",
+    "scenario_id": "S02",
+    "level": "hard_complex",
+    "question": "For each trade-month cohort, currency and actual/planned view, reconcile trade count, signed booked contractual amount (sell +gross_amount, buy -gross_amount) and the remaining sell notional in that same local currency. For the latter accumulate eligible settlement transfers to that month end, then sum open sell quantity times execution quote times multiplier, rounding the local group total to 2dp. Do not translate this report to USD or carry other trade-month cohorts into a group.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_instrument",
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [
+      "settlement_month_end"
+    ],
+    "evidence_sql": "SELECT SUBSTR(t.trade_date,1,7) AS month,t.trade_status,t.currency,COUNT(*) AS trades,ROUND(SUM(CASE WHEN o.side='sell' THEN t.gross_amount ELSE -t.gross_amount END),2) AS signed_contractual_amount,ROUND(SUM(CASE WHEN o.side='sell' THEN (t.trade_quantity-e.settled_quantity)*t.execution_price*i.price_multiplier ELSE 0 END),2) AS open_sell_receivable_local FROM securities_transactions t JOIN trade_orders o USING(order_id) JOIN financial_instruments i USING(instrument_id) JOIN settlement_instructions si USING(trade_id) JOIN settlement_month_end e USING(instruction_id) GROUP BY month,t.trade_status,t.currency ORDER BY month,t.trade_status,t.currency",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-021",
+    "scenario_id": "S03",
+    "level": "easy_basic",
+    "question": "What is the settlement due date for TR-019-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "settlement_instructions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT trade_id,instruction_id,due_date,required_quantity FROM settlement_instructions WHERE trade_id='TR-019-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-022",
+    "scenario_id": "S03",
+    "level": "easy_basic",
+    "question": "What is the failure reason of SE-030-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "settlement_events"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT event_id,event_date,event_status,failure_reason,settled_quantity FROM settlement_events WHERE event_id='SE-030-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-023",
+    "scenario_id": "S03",
+    "level": "easy_basic",
+    "question": "What amount of quantity was settled in SE-020-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "settlement_events"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT event_id,event_status,settled_quantity FROM settlement_events WHERE event_id='SE-020-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-024",
+    "scenario_id": "S03",
+    "level": "intermediate",
+    "question": "Is SI-019-2-4 overdue on 2027-02-28? Explain using due date and state.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "settlement_events",
+      "settlement_instructions"
+    ],
+    "required_relations": [
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT s.instruction_id,s.due_date,e.event_status,CASE WHEN s.due_date<'2027-02-28' AND e.settled_quantity<s.required_quantity THEN 1 ELSE 0 END AS overdue FROM settlement_instructions s JOIN settlement_state e USING(instruction_id) WHERE s.instruction_id='SI-019-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-025",
+    "scenario_id": "S03",
+    "level": "intermediate",
+    "question": "How much remains unsettled on partial instruction SI-020-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "settlement_events",
+      "settlement_instructions"
+    ],
+    "required_relations": [
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT s.instruction_id,s.required_quantity,e.settled_quantity,s.required_quantity-e.settled_quantity AS remaining_quantity,s.due_date FROM settlement_instructions s JOIN settlement_state e USING(instruction_id) WHERE s.instruction_id='SI-020-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-026",
+    "scenario_id": "S03",
+    "level": "intermediate",
+    "question": "Which broker and instrument are implicated by SE-029-4-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "legal_entities",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_counterparty",
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT e.event_id,e.failure_reason,o.counterparty_id,broker.name AS counterparty_name,o.instrument_id,t.trade_id FROM settlement_events e JOIN settlement_instructions s USING(instruction_id) JOIN securities_transactions t USING(trade_id) JOIN trade_orders o USING(order_id) JOIN legal_entities broker ON broker.entity_id=o.counterparty_id WHERE e.event_id='SE-029-4-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-027",
+    "scenario_id": "S03",
+    "level": "intermediate",
+    "question": "For February 2027 actual trades of PF-001, PF-019, PF-020 and PF-029, compare settled, pending, partial and failed instruction counts and remaining quantities as of 2027-02-28. Accumulate actual event transfers known by that date.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_account",
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT a.portfolio_id,e.event_status,COUNT(*) AS instructions,SUM(s.required_quantity-e.settled_quantity) AS remaining_quantity FROM settlement_state e JOIN settlement_instructions s USING(instruction_id) JOIN securities_transactions t USING(trade_id) JOIN trade_orders o USING(order_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id IN ('PF-001','PF-019','PF-020','PF-029') AND t.trade_date BETWEEN '2027-02-01' AND '2027-02-28' GROUP BY a.portfolio_id,e.event_status ORDER BY a.portfolio_id,e.event_status",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-028",
+    "scenario_id": "S03",
+    "level": "hard_complex",
+    "question": "Count February overdue unsettled instructions separately from unsettled instructions not yet due.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions"
+    ],
+    "required_relations": [
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT CASE WHEN s.due_date<'2027-02-28' THEN 'overdue' ELSE 'not_due' END AS due_state,COUNT(*) AS instructions FROM settlement_instructions s JOIN settlement_state e USING(instruction_id) JOIN securities_transactions t USING(trade_id) WHERE t.trade_date BETWEEN '2027-02-01' AND '2027-02-28' AND e.settled_quantity<s.required_quantity GROUP BY due_state ORDER BY due_state",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-029",
+    "scenario_id": "S03",
+    "level": "hard_complex",
+    "question": "How many failed February instructions arise from each failure reason and side?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT e.failure_reason,o.side,COUNT(*) AS instructions FROM settlement_state e JOIN settlement_instructions s USING(instruction_id) JOIN securities_transactions t USING(trade_id) JOIN trade_orders o USING(order_id) WHERE e.event_status='failed' AND t.trade_date BETWEEN '2027-02-01' AND '2027-02-28' GROUP BY e.failure_reason,o.side ORDER BY e.failure_reason,o.side",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-030",
+    "scenario_id": "S03",
+    "level": "hard_complex",
+    "question": "Reconcile required, settled and remaining quantities by instrument unit for actual trades.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_instrument",
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT i.unit,SUM(s.required_quantity) AS required_quantity,SUM(e.settled_quantity) AS settled_quantity,SUM(s.required_quantity-e.settled_quantity) AS remaining_quantity FROM settlement_instructions s JOIN settlement_state e USING(instruction_id) JOIN securities_transactions t USING(trade_id) JOIN trade_orders o USING(order_id) JOIN financial_instruments i USING(instrument_id) WHERE t.trade_status='executed' GROUP BY i.unit ORDER BY i.unit",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-031",
+    "scenario_id": "S04",
+    "level": "easy_basic",
+    "question": "What are the two quantity bases of POS-019-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "positions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT position_id,trade_basis_quantity,settled_basis_quantity,unsettled_delta FROM positions WHERE position_id='POS-019-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-032",
+    "scenario_id": "S04",
+    "level": "easy_basic",
+    "question": "What quantity opened OP-001-1?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "opening_positions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT opening_id,opening_date,quantity,cost_unit_price FROM opening_positions WHERE opening_id='OP-001-1'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-033",
+    "scenario_id": "S04",
+    "level": "easy_basic",
+    "question": "Which date and view does POS-050-4-5 represent?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "positions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT position_id,as_of_date,view_kind,known_date FROM positions WHERE position_id='POS-050-4-5'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-034",
+    "scenario_id": "S04",
+    "level": "intermediate",
+    "question": "Trace POS-030-4-4 to instrument and portfolio.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT p.position_id,a.portfolio_id,o.instrument_id FROM positions p JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE p.position_id='POS-030-4-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-035",
+    "scenario_id": "S04",
+    "level": "intermediate",
+    "question": "Do the quantity bases reconcile for PF-020 at the current date?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT p.position_id,p.trade_basis_quantity,p.settled_basis_quantity,p.unsettled_delta,ROUND(p.trade_basis_quantity-p.settled_basis_quantity-p.unsettled_delta,6) AS reconciliation_error FROM positions p JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id='PF-020' AND p.as_of_date='2027-02-28' ORDER BY p.position_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-036",
+    "scenario_id": "S04",
+    "level": "intermediate",
+    "question": "Compare the current sell-side unsettled deltas of positions POS-001-2-4 and POS-029-2-4; explain the sign and distinguish these positions from portfolio totals.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.portfolio_id,p.position_id,p.unsettled_delta FROM positions p JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id IN ('PF-001','PF-029') AND p.as_of_date='2027-02-28' AND p.position_id LIKE '%-2-4' ORDER BY a.portfolio_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-037",
+    "scenario_id": "S04",
+    "level": "intermediate",
+    "question": "Show the five snapshots of opening position OP-049-1 and their view kinds.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "positions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT position_id,as_of_date,view_kind,trade_basis_quantity,settled_basis_quantity FROM positions WHERE opening_id='OP-049-1' ORDER BY as_of_date",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-038",
+    "scenario_id": "S04",
+    "level": "hard_complex",
+    "question": "Reconstruct POS-020-2-4 trade-date quantity from opening plus signed actual trades.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "opening_positions",
+      "positions",
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "trade_to_order",
+      "position_to_opening"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT p.position_id,p.trade_basis_quantity,o.quantity+SUM(CASE WHEN z.side='buy' THEN t.trade_quantity ELSE -t.trade_quantity END) AS reconstructed FROM positions p JOIN opening_positions o USING(opening_id) JOIN trade_orders z ON z.account_id=o.account_id AND z.instrument_id=o.instrument_id JOIN securities_transactions t ON t.order_id=z.order_id WHERE p.position_id='POS-020-2-4' AND t.trade_date<=p.as_of_date AND t.trade_status='executed' GROUP BY p.position_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-039",
+    "scenario_id": "S04",
+    "level": "hard_complex",
+    "question": "Reconstruct POS-029-4-4 settled quantity from opening and settlement events.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "opening_positions",
+      "positions",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr",
+      "position_to_opening"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT p.position_id,p.settled_basis_quantity,o.quantity+SUM(CASE WHEN z.side='buy' THEN e.settled_quantity ELSE -e.settled_quantity END) AS reconstructed FROM positions p JOIN opening_positions o USING(opening_id) JOIN trade_orders z ON z.account_id=o.account_id AND z.instrument_id=o.instrument_id JOIN securities_transactions t USING(order_id) JOIN settlement_instructions s USING(trade_id) JOIN settlement_state e USING(instruction_id) WHERE p.position_id='POS-029-4-4' AND e.event_date<=p.as_of_date AND t.trade_status='executed' GROUP BY p.position_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-040",
+    "scenario_id": "S04",
+    "level": "hard_complex",
+    "question": "Across the full actual position-snapshot history from November 2026 through February 2027, count dated position records, quantity reconciliation failures and records with nonzero unsettled delta. Include all historical actual snapshots, not only the current snapshot; exclude March plans.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "positions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT COUNT(*) AS actual_positions,SUM(CASE WHEN ABS(trade_basis_quantity-settled_basis_quantity-unsettled_delta)>0.000001 THEN 1 ELSE 0 END) AS reconciliation_failures,SUM(CASE WHEN unsettled_delta<>0 THEN 1 ELSE 0 END) AS open_unsettled_positions FROM positions WHERE view_kind='actual'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-041",
+    "scenario_id": "S05",
+    "level": "easy_basic",
+    "question": "What is PX-001-4’s date, source and approval?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "market_prices"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT price_id,price_date,pricing_source,approval FROM market_prices WHERE price_id='PX-001-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-042",
+    "scenario_id": "S05",
+    "level": "easy_basic",
+    "question": "Why is VAL-035-1-4 blocked?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "valuation_snapshots"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT valuation_id,valuation_status,reason,price_id,market_value_base FROM valuation_snapshots WHERE valuation_id='VAL-035-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-043",
+    "scenario_id": "S05",
+    "level": "easy_basic",
+    "question": "Is the February price for INS-073 present?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "market_prices"
+    ],
+    "required_relations": [
+      "price_to_instrument"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT i.instrument_id,COUNT(p.price_id) AS price_count FROM financial_instruments i LEFT JOIN market_prices p ON p.instrument_id=i.instrument_id AND p.price_id='PX-073-4' WHERE i.instrument_id='INS-073' GROUP BY i.instrument_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-044",
+    "scenario_id": "S05",
+    "level": "intermediate",
+    "question": "How old is the price used by VAL-035-1-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "market_prices",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "valuation_to_price"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.valuation_id,v.as_of_date,p.price_date,CAST(julianday(v.as_of_date)-julianday(p.price_date) AS INTEGER) AS age_days,v.reason FROM valuation_snapshots v JOIN market_prices p USING(price_id) WHERE v.valuation_id='VAL-035-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-045",
+    "scenario_id": "S05",
+    "level": "intermediate",
+    "question": "Which approval explains the exception of VAL-036-1-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "market_prices",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "valuation_to_price"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.valuation_id,v.reason,p.price_id,p.approval FROM valuation_snapshots v JOIN market_prices p USING(price_id) WHERE v.valuation_id='VAL-036-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-046",
+    "scenario_id": "S05",
+    "level": "intermediate",
+    "question": "Does missing price VAL-037-1-4 fabricate a zero market value?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "valuation_snapshots"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT valuation_id,price_id,market_value_base,valuation_status,reason FROM valuation_snapshots WHERE valuation_id='VAL-037-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-047",
+    "scenario_id": "S05",
+    "level": "intermediate",
+    "question": "Which portfolios share the defective February price for INS-069?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening",
+      "valuation_to_position"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.portfolio_id,v.valuation_id,v.reason FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE o.instrument_id='INS-069' AND v.as_of_date='2027-02-28' ORDER BY a.portfolio_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-048",
+    "scenario_id": "S05",
+    "level": "hard_complex",
+    "question": "Count all February valuation exceptions by reason and affected portfolios.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening",
+      "valuation_to_position"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.reason,COUNT(*) AS valuations,COUNT(DISTINCT a.portfolio_id) AS portfolios FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE v.as_of_date='2027-02-28' AND v.valuation_status='blocked' GROUP BY v.reason ORDER BY v.reason",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-049",
+    "scenario_id": "S05",
+    "level": "hard_complex",
+    "question": "Which February issuer assessments must remain unknown because portfolio prices are incomplete?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments",
+      "mandate_limits"
+    ],
+    "required_relations": [
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT l.portfolio_id,a.assessment_id,a.assessment_status,a.observed_value FROM limit_assessments a JOIN mandate_limits l USING(limit_id) WHERE a.as_of_date='2027-02-28' AND a.assessment_status='unknown' ORDER BY l.portfolio_id,a.assessment_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-050",
+    "scenario_id": "S05",
+    "level": "hard_complex",
+    "question": "Did all February price-blocked valuations also have failed settlements? Test the proposition with state evidence.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "opening_positions",
+      "positions",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr",
+      "position_to_opening",
+      "valuation_to_position"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT v.reason,e.event_status,COUNT(*) AS valuations FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN trade_orders z ON z.account_id=o.account_id AND z.instrument_id=o.instrument_id JOIN securities_transactions t USING(order_id) JOIN settlement_instructions s USING(trade_id) JOIN settlement_state e USING(instruction_id) WHERE v.as_of_date='2027-02-28' AND v.valuation_status='blocked' AND t.trade_date BETWEEN '2027-02-01' AND '2027-02-28' GROUP BY v.reason,e.event_status ORDER BY v.reason,e.event_status",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-051",
+    "scenario_id": "S06",
+    "level": "easy_basic",
+    "question": "What USD conversion rate is FX-CNY-2027-02-28?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT fx_id,from_currency,to_currency,rate,as_of_date FROM fx_rates WHERE fx_id='FX-CNY-2027-02-28'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-052",
+    "scenario_id": "S06",
+    "level": "easy_basic",
+    "question": "What source and target currencies does FX-EUR-2027-01-31 use?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT fx_id,from_currency,to_currency,rate FROM fx_rates WHERE fx_id='FX-EUR-2027-01-31'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-053",
+    "scenario_id": "S06",
+    "level": "easy_basic",
+    "question": "What is the self-currency USD conversion rate on 2027-02-28?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT fx_id,rate FROM fx_rates WHERE fx_id='FX-USD-2027-02-28'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-054",
+    "scenario_id": "S06",
+    "level": "intermediate",
+    "question": "Trace VAL-001-1-4 to its exact dated FX record.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.valuation_id,f.fx_id,f.as_of_date,f.rate,f.from_currency,f.to_currency FROM valuation_snapshots v JOIN fx_rates f USING(fx_id) WHERE v.valuation_id='VAL-001-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-055",
+    "scenario_id": "S06",
+    "level": "intermediate",
+    "question": "Reconstruct USD value for VAL-003-1-4 using EUR market value and rate.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.valuation_id,v.market_value_local,f.rate,DROUND(DMUL(v.market_value_local,f.rate),2) AS reconstructed_base,v.market_value_base FROM valuation_snapshots v JOIN fx_rates f USING(fx_id) WHERE v.valuation_id='VAL-003-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-056",
+    "scenario_id": "S06",
+    "level": "intermediate",
+    "question": "Do the FX dates and valuation dates match for all February valuations?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT COUNT(*) AS valuations,SUM(CASE WHEN v.as_of_date<>f.as_of_date THEN 1 ELSE 0 END) AS date_mismatches FROM valuation_snapshots v JOIN fx_rates f USING(fx_id) WHERE v.as_of_date='2027-02-28'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-057",
+    "scenario_id": "S06",
+    "level": "intermediate",
+    "question": "Which local currencies feed USD valuations for PF-001 and PF-003?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "fx_rates",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening",
+      "valuation_to_position",
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT DISTINCT a.portfolio_id,f.from_currency,f.to_currency,f.rate FROM valuation_snapshots v JOIN fx_rates f USING(fx_id) JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id IN ('PF-001','PF-003') AND v.as_of_date='2027-02-28' ORDER BY a.portfolio_id,f.from_currency",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-058",
+    "scenario_id": "S06",
+    "level": "hard_complex",
+    "question": "Aggregate complete February values by source currency with separate local and USD totals.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT f.from_currency,COUNT(*) AS valuations,ROUND(SUM(v.market_value_local),2) AS local_total,ROUND(SUM(v.market_value_base),2) AS usd_total FROM valuation_snapshots v JOIN fx_rates f USING(fx_id) WHERE v.as_of_date='2027-02-28' AND v.valuation_status='complete' GROUP BY f.from_currency ORDER BY f.from_currency",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-059",
+    "scenario_id": "S06",
+    "level": "hard_complex",
+    "question": "Compare PF-003 January and February USD values and FX rates without calling the difference trading profit.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "fx_rates",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening",
+      "valuation_to_position",
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.as_of_date,f.from_currency,f.rate,ROUND(SUM(v.market_value_base),2) AS usd_value FROM valuation_snapshots v JOIN fx_rates f USING(fx_id) JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id='PF-003' AND v.as_of_date IN ('2027-01-31','2027-02-28') GROUP BY v.as_of_date,f.from_currency,f.rate ORDER BY v.as_of_date,f.from_currency",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-060",
+    "scenario_id": "S06",
+    "level": "hard_complex",
+    "question": "Across the full complete actual valuation-snapshot history from November 2026 through February 2027, count valuations and audit whether FX source currency matches each instrument and target currency is USD. Include every actual valuation date, not only the current snapshot.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "fx_rates",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_instrument",
+      "position_to_opening",
+      "valuation_to_position",
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT COUNT(*) AS valuations,SUM(CASE WHEN i.currency<>f.from_currency OR f.to_currency<>'USD' THEN 1 ELSE 0 END) AS currency_mismatches FROM valuation_snapshots v JOIN fx_rates f USING(fx_id) JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN financial_instruments i USING(instrument_id) WHERE v.view_kind='actual' AND v.valuation_status='complete'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-061",
+    "scenario_id": "S07",
+    "level": "easy_basic",
+    "question": "What method is used by VAL-001-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "valuation_snapshots"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT valuation_id,valuation_method,valuation_status FROM valuation_snapshots WHERE valuation_id='VAL-001-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-062",
+    "scenario_id": "S07",
+    "level": "easy_basic",
+    "question": "What USD market value and cost belong to VAL-002-1-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "valuation_snapshots"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT valuation_id,market_value_base,cost_value_base,currency FROM valuation_snapshots WHERE valuation_id='VAL-002-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-063",
+    "scenario_id": "S07",
+    "level": "easy_basic",
+    "question": "What unrealized USD P&L belongs to VAL-004-2-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "valuation_snapshots"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT valuation_id,unrealized_pnl_base,currency FROM valuation_snapshots WHERE valuation_id='VAL-004-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-064",
+    "scenario_id": "S07",
+    "level": "intermediate",
+    "question": "Explain the complete equity valuation equation for VAL-001-1-4.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "fx_rates",
+      "market_prices",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_instrument",
+      "position_to_opening",
+      "price_to_instrument",
+      "valuation_to_position",
+      "valuation_to_price",
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.valuation_id,p.trade_basis_quantity,x.price,i.price_multiplier,f.rate,v.market_value_base FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN financial_instruments i USING(instrument_id) JOIN market_prices x USING(price_id) JOIN fx_rates f USING(fx_id) WHERE v.valuation_id='VAL-001-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-065",
+    "scenario_id": "S07",
+    "level": "intermediate",
+    "question": "Explain the full-price-per-100 bond valuation equation for VAL-003-2-4.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "financial_instruments",
+      "fx_rates",
+      "market_prices",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_instrument",
+      "position_to_opening",
+      "price_to_instrument",
+      "valuation_to_position",
+      "valuation_to_price",
+      "valuation_to_fx"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.valuation_id,p.trade_basis_quantity,i.price_basis,x.price,i.price_multiplier,f.rate,v.market_value_base FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN financial_instruments i USING(instrument_id) JOIN market_prices x USING(price_id) JOIN fx_rates f USING(fx_id) WHERE v.valuation_id='VAL-003-2-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-066",
+    "scenario_id": "S07",
+    "level": "intermediate",
+    "question": "Reconcile unrealized P&L of PF-001 from USD market value minus translated cost.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening",
+      "valuation_to_position"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT v.valuation_id,v.market_value_base,v.cost_value_base,v.unrealized_pnl_base,DROUND(DSUB(v.market_value_base,v.cost_value_base),2) AS reconstructed_pnl FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id='PF-001' AND v.as_of_date='2027-02-28' ORDER BY v.valuation_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-067",
+    "scenario_id": "S07",
+    "level": "intermediate",
+    "question": "Why is a partial sum for PF-037 not an accepted portfolio value? Show total and complete position counts.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening",
+      "valuation_to_position"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.portfolio_id,COUNT(*) AS positions,SUM(CASE WHEN v.valuation_status='complete' THEN 1 ELSE 0 END) AS complete_valuations,ROUND(SUM(v.market_value_base),2) AS partial_usd_value FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE a.portfolio_id='PF-037' AND v.as_of_date='2027-02-28' GROUP BY a.portfolio_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-068",
+    "scenario_id": "S07",
+    "level": "hard_complex",
+    "question": "By actual valuation date, reconcile fully accepted versus incomplete portfolio counts and total accepted portfolio value, excluding partial totals.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening",
+      "valuation_to_position"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT as_of_date,COUNT(*) AS portfolios,SUM(CASE WHEN complete_count=8 THEN 1 ELSE 0 END) AS accepted_portfolios,SUM(CASE WHEN complete_count<8 THEN 1 ELSE 0 END) AS incomplete_portfolios,ROUND(SUM(CASE WHEN complete_count=8 THEN value ELSE 0 END),2) AS accepted_usd_value FROM (SELECT v.as_of_date,a.portfolio_id,SUM(CASE WHEN v.valuation_status='complete' THEN 1 ELSE 0 END) AS complete_count,SUM(v.market_value_base) AS value FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions op USING(opening_id) JOIN accounts a USING(account_id) WHERE v.view_kind='actual' GROUP BY v.as_of_date,a.portfolio_id) GROUP BY as_of_date ORDER BY as_of_date",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-069",
+    "scenario_id": "S07",
+    "level": "hard_complex",
+    "question": "List each accepted February portfolio and its USD total value, accepting only portfolios whose eight positions all have complete valuation; return the complete portfolio-level list, not just a grand total.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "opening_positions",
+      "positions",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "opening_to_account",
+      "position_to_opening",
+      "valuation_to_position"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.portfolio_id,ROUND(SUM(v.market_value_base),2) AS accepted_usd_value FROM valuation_snapshots v JOIN positions p USING(position_id) JOIN opening_positions o USING(opening_id) JOIN accounts a USING(account_id) WHERE v.as_of_date='2027-02-28' GROUP BY a.portfolio_id HAVING COUNT(*)=8 AND SUM(CASE WHEN v.valuation_status='complete' THEN 1 ELSE 0 END)=8 ORDER BY a.portfolio_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-070",
+    "scenario_id": "S07",
+    "level": "hard_complex",
+    "question": "Reconstruct the January sale P&L for OP-001-1 from opening cost plus November and December purchases; compare with its recorded realized P&L.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "opening_positions",
+      "positions",
+      "securities_transactions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "trade_to_order",
+      "position_to_opening"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT op.opening_id,jan.position_id,op.quantity AS opening_quantity,ROUND(SUM(prior.gross_amount),2) AS prior_buy_cost,SUM(prior.trade_quantity) AS prior_buy_quantity,sale.trade_quantity AS sold_quantity,ROUND(sale.trade_quantity*(sale.execution_price-(op.quantity*op.cost_unit_price+SUM(prior.gross_amount))/(op.quantity+SUM(prior.trade_quantity))),2) AS reconstructed_realized_pnl,jan.realized_pnl FROM opening_positions op JOIN positions jan USING(opening_id) JOIN trade_orders z ON z.account_id=op.account_id AND z.instrument_id=op.instrument_id JOIN securities_transactions prior ON prior.order_id=z.order_id JOIN securities_transactions sale ON sale.trade_id='TR-001-1-3' WHERE op.opening_id='OP-001-1' AND jan.as_of_date='2027-01-31' AND z.side='buy' AND prior.trade_date<sale.trade_date GROUP BY op.opening_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-071",
+    "scenario_id": "S08",
+    "level": "easy_basic",
+    "question": "What is the current concentration limit LIM-041-I1?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "mandate_limits"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT limit_id,entity_id,measure,threshold,effective_from_date,effective_to_date FROM mandate_limits WHERE limit_id='LIM-041-I1'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-072",
+    "scenario_id": "S08",
+    "level": "easy_basic",
+    "question": "What is the result of LA-LIM-041-I1-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT assessment_id,observed_value,assessment_status,excess_value FROM limit_assessments WHERE assessment_id='LA-LIM-041-I1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-073",
+    "scenario_id": "S08",
+    "level": "easy_basic",
+    "question": "What is the February denominator for IE-001-1-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "issuer_exposures",
+      "legal_entities",
+      "portfolios"
+    ],
+    "required_relations": [
+      "portfolio_to_manager",
+      "issuer_exp_to_portfolio",
+      "issuer_exp_to_issuer"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT e.exposure_id,e.exposure_amount,e.denominator_amount,e.ratio,e.currency,p.name AS portfolio_name,i.name AS issuer_name FROM issuer_exposures e JOIN portfolios p USING(portfolio_id) JOIN legal_entities i ON i.entity_id=e.issuer_id WHERE e.exposure_id='IE-001-1-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-074",
+    "scenario_id": "S08",
+    "level": "intermediate",
+    "question": "Which valuations contribute to IE-041-1-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "exposure_contributions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT c.contribution_id,c.valuation_id,c.contribution_amount FROM exposure_contributions c WHERE c.exposure_id='IE-041-1-4' ORDER BY c.valuation_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-075",
+    "scenario_id": "S08",
+    "level": "intermediate",
+    "question": "Reconcile IE-041-1-4 exposure from its two position contributions.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "exposure_contributions",
+      "issuer_exposures"
+    ],
+    "required_relations": [
+      "contribution_to_issuer_exp"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT e.exposure_id,e.exposure_amount,ROUND(SUM(c.contribution_amount),2) AS contribution_total,e.ratio,e.denominator_amount FROM issuer_exposures e JOIN exposure_contributions c USING(exposure_id) WHERE e.exposure_id='IE-041-1-4' GROUP BY e.exposure_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-076",
+    "scenario_id": "S08",
+    "level": "intermediate",
+    "question": "Trace PF-043’s current issuer breaches to issuer names and thresholds.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "legal_entities",
+      "limit_assessments",
+      "mandate_limits"
+    ],
+    "required_relations": [
+      "limit_to_entity",
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT l.portfolio_id,e.name,a.assessment_id,a.observed_value,l.threshold,a.assessment_status FROM limit_assessments a JOIN mandate_limits l USING(limit_id) JOIN legal_entities e ON l.entity_id=e.entity_id WHERE l.portfolio_id='PF-043' AND a.as_of_date='2027-02-28' AND l.measure='issuer_ratio' AND a.assessment_status='breach' ORDER BY a.assessment_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-077",
+    "scenario_id": "S08",
+    "level": "intermediate",
+    "question": "Does PF-035 have a complete denominator for issuer concentration?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "issuer_exposures"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT exposure_id,exposure_status,denominator_amount,ratio FROM issuer_exposures WHERE portfolio_id='PF-035' AND as_of_date='2027-02-28' ORDER BY exposure_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-078",
+    "scenario_id": "S08",
+    "level": "hard_complex",
+    "question": "List all current issuer breaches with the source issuer and excess in ratio points.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments",
+      "mandate_limits"
+    ],
+    "required_relations": [
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT l.portfolio_id,l.entity_id,a.observed_value,l.threshold,a.excess_value FROM limit_assessments a JOIN mandate_limits l USING(limit_id) WHERE a.as_of_date='2027-02-28' AND l.measure='issuer_ratio' AND a.assessment_status='breach' ORDER BY l.portfolio_id,l.entity_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-079",
+    "scenario_id": "S08",
+    "level": "hard_complex",
+    "question": "For every complete portfolio at 2027-02-28, report issuer count and the sum of all issuer shares; do they sum to one?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "issuer_exposures"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT portfolio_id,ROUND(SUM(ratio),6) AS sum_ratio,COUNT(*) AS issuers FROM issuer_exposures WHERE as_of_date='2027-02-28' AND exposure_status='complete' GROUP BY portfolio_id ORDER BY portfolio_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-080",
+    "scenario_id": "S08",
+    "level": "hard_complex",
+    "question": "For current PF-041 issuer breaches, trace contributing valuations to opening balances, related current-month trades and settlement outcomes; do not attribute the whole stock exposure to those trades.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "exposure_contributions",
+      "issuer_exposures",
+      "limit_assessments",
+      "opening_positions",
+      "positions",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders",
+      "valuation_snapshots"
+    ],
+    "required_relations": [
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr",
+      "position_to_opening",
+      "valuation_to_position",
+      "contribution_to_issuer_exp",
+      "contribution_to_valuation",
+      "assessment_to_issuer_exposure"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT a.assessment_id,e.exposure_id,e.issuer_id,c.valuation_id,p.position_id,op.instrument_id,op.quantity AS opening_quantity,p.trade_basis_quantity,t.trade_id,z.side,t.trade_quantity,si.instruction_id,si.due_date,se.event_status,se.settled_quantity,si.required_quantity-se.settled_quantity AS remaining_quantity,se.failure_reason FROM limit_assessments a JOIN issuer_exposures e ON a.issuer_exposure_id=e.exposure_id JOIN exposure_contributions c USING(exposure_id) JOIN valuation_snapshots v USING(valuation_id) JOIN positions p USING(position_id) JOIN opening_positions op USING(opening_id) JOIN trade_orders z ON z.account_id=op.account_id AND z.instrument_id=op.instrument_id JOIN securities_transactions t USING(order_id) JOIN settlement_instructions si USING(trade_id) JOIN settlement_state se USING(instruction_id) WHERE e.portfolio_id='PF-041' AND a.as_of_date='2027-02-28' AND a.assessment_status='breach' AND t.trade_date BETWEEN '2027-02-01' AND '2027-02-28' ORDER BY a.assessment_id,op.instrument_id,t.trade_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-081",
+    "scenario_id": "S09",
+    "level": "easy_basic",
+    "question": "What is CE-046-4’s unsettled USD receivable?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "counterparty_exposures"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT exposure_id,unsettled_receivable,currency,as_of_date FROM counterparty_exposures WHERE exposure_id='CE-046-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-082",
+    "scenario_id": "S09",
+    "level": "easy_basic",
+    "question": "What is the receivable threshold for PF-046?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "mandate_limits"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT limit_id,threshold,currency,measure FROM mandate_limits WHERE limit_id='LIM-046-C'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-083",
+    "scenario_id": "S09",
+    "level": "easy_basic",
+    "question": "Which counterparty is recorded on CE-047-4?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "counterparty_exposures",
+      "legal_entities"
+    ],
+    "required_relations": [
+      "cp_exp_to_counterparty"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT c.exposure_id,c.counterparty_id,e.name AS counterparty_name FROM counterparty_exposures c JOIN legal_entities e ON e.entity_id=c.counterparty_id WHERE c.exposure_id='CE-047-4'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-084",
+    "scenario_id": "S09",
+    "level": "intermediate",
+    "question": "Compare PF-001’s settled receivable with PF-019’s pending receivable.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "counterparty_exposures"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT portfolio_id,unsettled_receivable,currency FROM counterparty_exposures WHERE portfolio_id IN ('PF-001','PF-019') AND as_of_date='2027-02-28' ORDER BY portfolio_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-085",
+    "scenario_id": "S09",
+    "level": "intermediate",
+    "question": "Which February sell trades create PF-046’s receivable?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "financial_instruments",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_account",
+      "order_to_instrument",
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT t.trade_id,o.side,i.currency,t.trade_quantity-e.settled_quantity AS open_quantity,t.execution_price,i.price_multiplier,e.failure_reason FROM securities_transactions t JOIN trade_orders o USING(order_id) JOIN accounts a USING(account_id) JOIN financial_instruments i USING(instrument_id) JOIN settlement_instructions s USING(trade_id) JOIN settlement_state e USING(instruction_id) WHERE a.portfolio_id='PF-046' AND t.trade_date BETWEEN '2027-02-01' AND '2027-02-28' AND o.side='sell' ORDER BY t.trade_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-086",
+    "scenario_id": "S09",
+    "level": "intermediate",
+    "question": "What assessment and excess amount explain PF-048’s current counterparty breach?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments",
+      "mandate_limits"
+    ],
+    "required_relations": [
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.assessment_id,a.counterparty_exposure_id,a.observed_value,l.threshold,a.excess_value,a.assessment_status FROM limit_assessments a JOIN mandate_limits l USING(limit_id) WHERE l.portfolio_id='PF-048' AND l.measure='receivable_amount' AND a.as_of_date='2027-02-28'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-087",
+    "scenario_id": "S09",
+    "level": "intermediate",
+    "question": "Are PF-029 and PF-046 both settlement failures but different limit outcomes?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments",
+      "mandate_limits"
+    ],
+    "required_relations": [
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT l.portfolio_id,a.observed_value,l.threshold,a.assessment_status FROM limit_assessments a JOIN mandate_limits l USING(limit_id) WHERE l.portfolio_id IN ('PF-029','PF-046') AND l.measure='receivable_amount' AND a.as_of_date='2027-02-28' ORDER BY l.portfolio_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-088",
+    "scenario_id": "S09",
+    "level": "hard_complex",
+    "question": "Trace PF-046’s current receivable breach to each open sell instruction, cumulative settlement state and USD contribution; reconcile the total against the assessed limit.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "accounts",
+      "counterparty_exposures",
+      "financial_instruments",
+      "fx_rates",
+      "limit_assessments",
+      "mandate_limits",
+      "securities_transactions",
+      "settlement_events",
+      "settlement_instructions",
+      "trade_orders"
+    ],
+    "required_relations": [
+      "order_to_account",
+      "order_to_instrument",
+      "trade_to_order",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr",
+      "assessment_to_limit",
+      "assessment_to_counterparty_exposure"
+    ],
+    "evidence_views": [
+      "settlement_state"
+    ],
+    "evidence_sql": "SELECT a.portfolio_id,c.counterparty_id,la.assessment_id,la.assessment_status,l.threshold,t.trade_id,s.instruction_id,s.due_date,e.event_status,e.failure_reason,t.trade_quantity,e.settled_quantity,t.trade_quantity-e.settled_quantity AS open_quantity,DROUND(DMUL(DSUB(t.trade_quantity,e.settled_quantity),t.execution_price,i.price_multiplier,f.rate),2) AS trade_contribution,ROUND(SUM((t.trade_quantity-e.settled_quantity)*t.execution_price*i.price_multiplier*f.rate) OVER (),2) AS reconstructed_receivable,c.unsettled_receivable FROM securities_transactions t JOIN trade_orders o USING(order_id) JOIN accounts a USING(account_id) JOIN financial_instruments i USING(instrument_id) JOIN settlement_instructions s USING(trade_id) JOIN settlement_state e USING(instruction_id) JOIN fx_rates f ON f.from_currency=i.currency AND f.as_of_date='2027-02-28' JOIN counterparty_exposures c ON c.portfolio_id=a.portfolio_id AND c.as_of_date='2027-02-28' JOIN limit_assessments la ON la.counterparty_exposure_id=c.exposure_id JOIN mandate_limits l USING(limit_id) WHERE a.portfolio_id='PF-046' AND t.trade_date<='2027-02-28' AND o.side='sell' AND t.trade_quantity>e.settled_quantity ORDER BY t.trade_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-089",
+    "scenario_id": "S09",
+    "level": "hard_complex",
+    "question": "Which current counterparty receivable limits breach, and what is total excess USD?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments",
+      "mandate_limits"
+    ],
+    "required_relations": [
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT l.portfolio_id,l.limit_id,a.assessment_id,a.observed_value,l.threshold,a.excess_value,COUNT(*) OVER () AS breached_limits,ROUND(SUM(a.excess_value) OVER (),2) AS excess_usd FROM limit_assessments a JOIN mandate_limits l USING(limit_id) WHERE a.as_of_date='2027-02-28' AND l.measure='receivable_amount' AND a.assessment_status='breach' ORDER BY l.portfolio_id,l.limit_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-090",
+    "scenario_id": "S09",
+    "level": "hard_complex",
+    "question": "Compare all seven business branches by current receivable and breached receivable limits.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "counterparty_exposures",
+      "limit_assessments",
+      "portfolios"
+    ],
+    "required_relations": [
+      "cp_exp_to_portfolio",
+      "assessment_to_counterparty_exposure"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT p.branch,COUNT(*) AS portfolios,ROUND(SUM(c.unsettled_receivable),2) AS usd_receivable,SUM(CASE WHEN a.assessment_status='breach' THEN 1 ELSE 0 END) AS breached_limits FROM portfolios p JOIN counterparty_exposures c USING(portfolio_id) JOIN limit_assessments a ON a.counterparty_exposure_id=c.exposure_id WHERE c.as_of_date='2027-02-28' GROUP BY p.branch ORDER BY p.branch",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-091",
+    "scenario_id": "S10",
+    "level": "easy_basic",
+    "question": "When does the next version of PF-049 issuer limit LIM-049-I1 become effective?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "mandate_limits"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT limit_id,effective_from_date,threshold,decision_date FROM mandate_limits WHERE limit_id='LIM-049-I1-NEXT'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-092",
+    "scenario_id": "S10",
+    "level": "easy_basic",
+    "question": "What current and planning dates exist for positions?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "positions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT as_of_date,view_kind,COUNT(*) AS positions FROM positions GROUP BY as_of_date,view_kind ORDER BY as_of_date",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-093",
+    "scenario_id": "S10",
+    "level": "easy_basic",
+    "question": "Is VAL-049-1-5 a current fact or a forecast?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "valuation_snapshots"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT valuation_id,as_of_date,view_kind,known_date FROM valuation_snapshots WHERE valuation_id='VAL-049-1-5'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-094",
+    "scenario_id": "S10",
+    "level": "intermediate",
+    "question": "Which issuer limits apply to PF-049 on 2027-02-28?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "mandate_limits"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT limit_id,entity_id,threshold,effective_from_date,effective_to_date FROM mandate_limits WHERE portfolio_id='PF-049' AND measure='issuer_ratio' AND effective_from_date<='2027-02-28' AND effective_to_date>='2027-02-28' AND decision_date<='2027-02-28' ORDER BY limit_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-095",
+    "scenario_id": "S10",
+    "level": "intermediate",
+    "question": "Which issuer limits apply to PF-049’s March planning snapshot?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "mandate_limits"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT limit_id,entity_id,threshold,effective_from_date,effective_to_date FROM mandate_limits WHERE portfolio_id='PF-049' AND measure='issuer_ratio' AND effective_from_date<='2027-03-31' AND effective_to_date>='2027-03-31' AND decision_date<='2027-02-28' ORDER BY limit_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-096",
+    "scenario_id": "S10",
+    "level": "intermediate",
+    "question": "Compare PF-050’s February actual and March planned issuer assessments.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments",
+      "mandate_limits"
+    ],
+    "required_relations": [
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.as_of_date,a.view_kind,l.limit_id,l.threshold,a.observed_value,a.assessment_status FROM limit_assessments a JOIN mandate_limits l USING(limit_id) WHERE l.portfolio_id='PF-050' AND l.measure='issuer_ratio' AND a.as_of_date IN ('2027-02-28','2027-03-31') ORDER BY a.as_of_date,l.limit_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-097",
+    "scenario_id": "S10",
+    "level": "intermediate",
+    "question": "Were all future mandate changes known by the February as-of date?",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "mandate_limits"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT limit_id,decision_date,effective_from_date FROM mandate_limits WHERE limit_id LIKE '%-NEXT' ORDER BY limit_id",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-098",
+    "scenario_id": "S10",
+    "level": "hard_complex",
+    "question": "Audit whether any actual position, price, FX or trade is dated after 2027-02-28.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "fx_rates",
+      "market_prices",
+      "positions",
+      "securities_transactions"
+    ],
+    "required_relations": [],
+    "evidence_views": [],
+    "evidence_sql": "SELECT 'positions' AS source,COUNT(*) AS future_actual_rows FROM positions WHERE view_kind='actual' AND as_of_date>'2027-02-28' UNION ALL SELECT 'prices',COUNT(*) FROM market_prices WHERE view_kind='actual' AND price_date>'2027-02-28' UNION ALL SELECT 'fx',COUNT(*) FROM fx_rates WHERE view_kind='actual' AND as_of_date>'2027-02-28' UNION ALL SELECT 'trades',COUNT(*) FROM securities_transactions WHERE trade_status='executed' AND trade_date>'2027-02-28'",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-099",
+    "scenario_id": "S10",
+    "level": "hard_complex",
+    "question": "For all portfolios in the future_limit business branch, compare current and March planned issuer assessment counts by status.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments",
+      "mandate_limits",
+      "portfolios"
+    ],
+    "required_relations": [
+      "limit_to_portfolio",
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.as_of_date,a.view_kind,a.assessment_status,COUNT(*) AS assessments FROM limit_assessments a JOIN mandate_limits l USING(limit_id) JOIN portfolios p USING(portfolio_id) WHERE p.branch='future_limit' AND l.measure='issuer_ratio' AND a.as_of_date IN ('2027-02-28','2027-03-31') GROUP BY a.as_of_date,a.view_kind,a.assessment_status ORDER BY a.as_of_date,a.assessment_status",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  },
+  {
+    "id": "FIN-100",
+    "scenario_id": "S10",
+    "level": "hard_complex",
+    "question": "Check every assessment uses a known approved limit valid on its own date; report breaches of this rule by view.",
+    "as_of_date": "2027-02-28",
+    "evidence_tables": [
+      "limit_assessments",
+      "mandate_limits"
+    ],
+    "required_relations": [
+      "assessment_to_limit"
+    ],
+    "evidence_views": [],
+    "evidence_sql": "SELECT a.view_kind,COUNT(*) AS assessments,SUM(CASE WHEN a.as_of_date<l.effective_from_date OR a.as_of_date>l.effective_to_date OR l.decision_date>a.known_date OR l.approval<>'approved' THEN 1 ELSE 0 END) AS invalid_limit_uses FROM limit_assessments a JOIN mandate_limits l USING(limit_id) GROUP BY a.view_kind ORDER BY a.view_kind",
+    "answer_format": "ordered_rows",
+    "numeric_tolerance": 1e-06
+  }
+]

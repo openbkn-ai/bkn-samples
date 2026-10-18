@@ -1,0 +1,31 @@
+---
+type: object_type
+id: counterparty_exposures
+name: 未结算应收金额
+tags: [finance, fibo]
+---
+
+## ObjectType: 未结算应收金额
+
+按合约价格折算美元的非净额未结算卖出应收，不含买入应付、PFE、EAD 或替代成本风险。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| exposure_id | 敞口编号 | string | 该业务记录的稳定唯一标识。 | exposure_id |
+| portfolio_id | 组合编号 | string | 外键关联 portfolios，空值仅允许在合同明确声明缺失/不适用时使用。 | portfolio_id |
+| counterparty_id | 交易对手编号 | string | 外键关联 legal_entities，空值仅允许在合同明确声明缺失/不适用时使用。 | counterparty_id |
+| as_of_date | 截至日期 | date | 业务快照日期，区别于报价/定盘日期和已知日期。 | as_of_date |
+| unsettled_receivable | 未结算应收金额 | decimal | 未结算卖出数量×成交报价×因子×截至日汇率之和，美元两位小数，非净额，不含买入应付。 | unsettled_receivable |
+| currency | 币种 | string | 本位币 USD，金额以美元表达。 | currency |
+| view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+
+### Keys
+
+Primary Keys: exposure_id
+Display Key: exposure_id
+Incremental Key:

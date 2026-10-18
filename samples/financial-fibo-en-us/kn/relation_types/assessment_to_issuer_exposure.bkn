@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: assessment_to_issuer_exposure
+name: Assessment To Issuer Exposure
+tags: [finance, fibo]
+---
+
+## RelationType: Assessment To Issuer Exposure
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| limit_assessments | issuer_exposures | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| issuer_exposure_id | exposure_id |

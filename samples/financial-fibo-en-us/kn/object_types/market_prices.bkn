@@ -1,0 +1,43 @@
+---
+type: object_type
+id: market_prices
+name: Market Price
+tags: [finance, fibo]
+---
+
+## ObjectType: Market Price
+
+Synthetic sourced last-price quote assigned to a snapshot. Prior weekday quote dates preserve market-date meaning at weekend month ends.
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/MarketPrice |
+| source_label | market price |
+| source_definition | last reported price at which a security was sold |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| price_id | Price Id | string | Stable unique identifier of this business record. | price_id |
+| instrument_id | Instrument Id | string | Foreign key to financial_instruments; blank only where contract declares absent/inapplicable evidence. | instrument_id |
+| as_of_date | As Of Date | date | Business snapshot date, distinct from quote/fixing date and date of knowledge. | as_of_date |
+| price_date | Price Date | date | Date of the underlying reported quote; previous weekday at weekend snapshot; age limit is three calendar days. | price_date |
+| published_date | Published Date | date | Business publication/fixing date; actual data must have been published before consumption. | published_date |
+| price | Price | decimal | Local-currency quote in the linked instrument basis; apply price_multiplier. | price |
+| currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
+| approval | Approval | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: approved, unapproved. | approval |
+| pricing_source | Pricing Source | string | Declared synthetic demo_pricing provider, not a live exchange or approved production feed. | pricing_source |
+| view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+
+### Keys
+
+Primary Keys: price_id
+Display Key: price_id
+Incremental Key:

@@ -1,0 +1,43 @@
+---
+type: object_type
+id: market_prices
+name: 市场价格
+tags: [finance, fibo]
+---
+
+## ObjectType: 市场价格
+
+分配到估值快照的合成来源最新成交价。月末为周末时使用此前工作日报价，保留价格日期语义。
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/MarketPrice |
+| source_label | market price |
+| source_definition | last reported price at which a security was sold |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| price_id | 价格编号 | string | 该业务记录的稳定唯一标识。 | price_id |
+| instrument_id | 工具编号 | string | 外键关联 financial_instruments，空值仅允许在合同明确声明缺失/不适用时使用。 | instrument_id |
+| as_of_date | 截至日期 | date | 业务快照日期，区别于报价/定盘日期和已知日期。 | as_of_date |
+| price_date | 价格日期 | date | 底层报价日期；周末快照取此前工作日，日龄上限为三日历日。 | price_date |
+| published_date | 发布日期 | date | 业务发布或定盘日期，实际数据必须先发布后使用。 | published_date |
+| price | 价格 | decimal | 按关联工具报价口径表达的本币价格，须配合 price_multiplier 使用。 | price |
+| currency | 币种 | string | 工具计价币种，须与对应成交、结算指令、开仓及持仓一致。 | currency |
+| approval | 批准状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：已批准, 未批准. | approval |
+| pricing_source | 价格来源 | string | 已声明的合成模拟价格源，不是真实交易所或生产行情接口。 | pricing_source |
+| view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+
+### Keys
+
+Primary Keys: price_id
+Display Key: price_id
+Incremental Key:
