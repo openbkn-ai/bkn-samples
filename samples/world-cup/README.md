@@ -66,7 +66,7 @@ The current model omits ten CSV display fields each from matches and team appear
 
 ## Development and publication
 
-[sample.yaml](sample.yaml) declares the installed components and hooks. Installation hooks call `run.sh` internally; users install through one-click onboarding or offline package import. Historical SQL tool registration is not the query path described here.
+[sample.yaml](sample.yaml) declares the installed components and hooks. Installation hooks call `run.sh` internally; users install through one-click onboarding or offline package import. The sample publishes no custom tools: agents query through the standard `query_object_instance` and `run_cypher` MCP tools.
 
 Follow the [Sample Development Guide](../../docs/SAMPLE_DEVELOPMENT_GUIDE.md) to build a fixed candidate, validate installation and business scenarios, and publish a new immutable version when changing data or models.
 

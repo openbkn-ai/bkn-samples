@@ -442,7 +442,8 @@ class UninstallTest(unittest.TestCase):
         document = load_sample(root / "samples/world-cup")
         spec = document["spec"]
         sample, version = document["metadata"]["name"], "0.1.2"
-        self.assertTrue(spec["components"]["functions"])
+        # Cover the publishing branch: only a hook that has not started may skip the receipt.
+        components = {**spec["components"], "functions": True}
         initial = {"id": "inst-world-cup", "attemptId": "initial", "sample": sample, "version": version,
                    "status": "installing", "dataImageRef": "image@sha256:abc", "historyComplete": True,
                    "offlineRelease": {"packageDigest": "fixed"}}
@@ -456,7 +457,7 @@ class UninstallTest(unittest.TestCase):
             create_installation(sample=sample, version=version, actor_role="admin", state_dir=self.state,
                 database={"host": "db", "port": 3306, "name": spec["database"]["name"], "user": "sample", "password": "test"},
                 openbkn=openbkn, hook_runner=hook, expected_tables=spec["database"]["expectedTables"],
-                knowledge_network=spec["knowledgeNetwork"], components=spec["components"])
+                knowledge_network=spec["knowledgeNetwork"], components=components)
         self.assertEqual(caught.exception.code, "ownership_conflict")
         hook.assert_not_called()
         failed = _read_state(self.state, sample)

@@ -50,3 +50,11 @@ def test_grading_preserves_identity_and_requires_ordered_complete_results():
     assert module.row_differences(expected, expected[:1], 0.0005)
     report = module.grade([])
     assert report['correct'] == 0 and report['total'] == 50
+
+
+def test_sample_publishes_no_custom_query_tool():
+    manifest = yaml.safe_load((SAMPLE / 'sample.yaml').read_text())
+    assert manifest['spec']['components']['functions'] is False
+    assert manifest['spec']['capabilities']['required'] is False
+    assert not list(SAMPLE.rglob('*.openapi.json'))
+    assert 'vega-backend/in/' not in (SAMPLE / 'run.sh').read_text()

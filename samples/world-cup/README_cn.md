@@ -66,7 +66,7 @@ python3 samples/world-cup/bkn-eval/scripts/grade_answers.py /absolute/path/answe
 
 ## 开发与发布
 
-安装组件及 hooks 以 [sample.yaml](sample.yaml) 为准。安装 hooks 在内部调用 `run.sh`；用户使用一键体验或离线包导入，无需手工执行脚本。其中的历史 SQL 工具注册不是本页体验和评测的调用入口。
+安装组件及 hooks 以 [sample.yaml](sample.yaml) 为准。安装 hooks 在内部调用 `run.sh`；用户使用一键体验或离线包导入，无需手工执行脚本。样例不发布自定义工具，Agent 通过标准 MCP 工具 `query_object_instance` 和 `run_cypher` 查询。
 
 修改数据或模型后，按[样例开发指南](../../docs/SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md)构建固定候选、完成实际安装与业务验收，再发布新版本。不要覆盖已经发布的制品。
 
