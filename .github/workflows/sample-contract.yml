@@ -34,6 +34,8 @@ jobs:
           fi
       - name: Validate sample contracts
         run: python -m unittest discover -s installer/tests -v
+      - name: Validate bilingual FIBO financial semantics and frozen answers
+        run: python tools/financial_fibo/test_financial_fibo.py
       - name: Build and check the manifest index
         run: |
           python installer/build_manifest_index.py --revision "${{ github.sha }}" --output /tmp/manifest-index.json

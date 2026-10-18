@@ -1,0 +1,229 @@
+[
+  {
+    "id": "S01",
+    "title": "主数据身份",
+    "scenario_relations": [
+      "security_id_to_instrument",
+      "instrument_to_issuer",
+      "entity_id_to_entity",
+      "portfolio_to_manager",
+      "account_to_portfolio"
+    ],
+    "question_ids": [
+      "FIN-001",
+      "FIN-002",
+      "FIN-003",
+      "FIN-004",
+      "FIN-005",
+      "FIN-006",
+      "FIN-007",
+      "FIN-008",
+      "FIN-009",
+      "FIN-010"
+    ]
+  },
+  {
+    "id": "S02",
+    "title": "订单与成交",
+    "scenario_relations": [
+      "order_to_account",
+      "order_to_instrument",
+      "order_to_counterparty",
+      "trade_to_order"
+    ],
+    "question_ids": [
+      "FIN-011",
+      "FIN-012",
+      "FIN-013",
+      "FIN-014",
+      "FIN-015",
+      "FIN-016",
+      "FIN-017",
+      "FIN-018",
+      "FIN-019",
+      "FIN-020"
+    ]
+  },
+  {
+    "id": "S03",
+    "title": "结算调查",
+    "scenario_relations": [
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr",
+      "trade_to_order"
+    ],
+    "question_ids": [
+      "FIN-021",
+      "FIN-022",
+      "FIN-023",
+      "FIN-024",
+      "FIN-025",
+      "FIN-026",
+      "FIN-027",
+      "FIN-028",
+      "FIN-029",
+      "FIN-030"
+    ]
+  },
+  {
+    "id": "S04",
+    "title": "持仓勾稽",
+    "scenario_relations": [
+      "position_to_opening",
+      "opening_to_account",
+      "opening_to_instrument",
+      "trade_to_order",
+      "settle_event_to_settle_instr",
+      "settle_instr_to_trade"
+    ],
+    "question_ids": [
+      "FIN-031",
+      "FIN-032",
+      "FIN-033",
+      "FIN-034",
+      "FIN-035",
+      "FIN-036",
+      "FIN-037",
+      "FIN-038",
+      "FIN-039",
+      "FIN-040"
+    ]
+  },
+  {
+    "id": "S05",
+    "title": "价格质量",
+    "scenario_relations": [
+      "valuation_to_price",
+      "price_to_instrument",
+      "valuation_to_position"
+    ],
+    "question_ids": [
+      "FIN-041",
+      "FIN-042",
+      "FIN-043",
+      "FIN-044",
+      "FIN-045",
+      "FIN-046",
+      "FIN-047",
+      "FIN-048",
+      "FIN-049",
+      "FIN-050"
+    ]
+  },
+  {
+    "id": "S06",
+    "title": "币种转换",
+    "scenario_relations": [
+      "valuation_to_fx",
+      "valuation_to_position",
+      "position_to_opening",
+      "opening_to_instrument"
+    ],
+    "question_ids": [
+      "FIN-051",
+      "FIN-052",
+      "FIN-053",
+      "FIN-054",
+      "FIN-055",
+      "FIN-056",
+      "FIN-057",
+      "FIN-058",
+      "FIN-059",
+      "FIN-060"
+    ]
+  },
+  {
+    "id": "S07",
+    "title": "估值与损益",
+    "scenario_relations": [
+      "valuation_to_position",
+      "valuation_to_price",
+      "valuation_to_fx",
+      "position_to_opening",
+      "opening_to_instrument"
+    ],
+    "question_ids": [
+      "FIN-061",
+      "FIN-062",
+      "FIN-063",
+      "FIN-064",
+      "FIN-065",
+      "FIN-066",
+      "FIN-067",
+      "FIN-068",
+      "FIN-069",
+      "FIN-070"
+    ]
+  },
+  {
+    "id": "S08",
+    "title": "发行方集中度",
+    "scenario_relations": [
+      "contribution_to_issuer_exp",
+      "contribution_to_valuation",
+      "issuer_exp_to_portfolio",
+      "issuer_exp_to_issuer",
+      "assessment_to_limit",
+      "assessment_to_issuer_exposure"
+    ],
+    "question_ids": [
+      "FIN-071",
+      "FIN-072",
+      "FIN-073",
+      "FIN-074",
+      "FIN-075",
+      "FIN-076",
+      "FIN-077",
+      "FIN-078",
+      "FIN-079",
+      "FIN-080"
+    ]
+  },
+  {
+    "id": "S09",
+    "title": "未结算应收",
+    "scenario_relations": [
+      "cp_exp_to_portfolio",
+      "cp_exp_to_counterparty",
+      "assessment_to_counterparty_exposure",
+      "settle_instr_to_trade",
+      "settle_event_to_settle_instr",
+      "trade_to_order",
+      "order_to_counterparty"
+    ],
+    "question_ids": [
+      "FIN-081",
+      "FIN-082",
+      "FIN-083",
+      "FIN-084",
+      "FIN-085",
+      "FIN-086",
+      "FIN-087",
+      "FIN-088",
+      "FIN-089",
+      "FIN-090"
+    ]
+  },
+  {
+    "id": "S10",
+    "title": "日期与未来授权",
+    "scenario_relations": [
+      "assessment_to_limit",
+      "limit_to_portfolio",
+      "limit_to_entity",
+      "assessment_to_issuer_exposure"
+    ],
+    "question_ids": [
+      "FIN-091",
+      "FIN-092",
+      "FIN-093",
+      "FIN-094",
+      "FIN-095",
+      "FIN-096",
+      "FIN-097",
+      "FIN-098",
+      "FIN-099",
+      "FIN-100"
+    ]
+  }
+]

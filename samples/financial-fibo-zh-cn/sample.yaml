@@ -1,0 +1,50 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1alpha1",
+  "kind": "Sample",
+  "metadata": {
+    "name": "financial-fibo-zh-cn",
+    "aliases": [],
+    "displayName": "金融投资组合运营（中文）",
+    "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
+    "version": "0.1.4"
+  },
+  "spec": {
+    "studio": {
+      "licenseNote": "MIT · Synthetic demonstration data / 虚构演示数据",
+      "questions": [
+        "INS-001 的发行方编号和名称是什么？",
+        "INS-002 使用什么资产类别与报价口径？",
+        "PF-049 的名称和本位币是什么？"
+      ]
+    },
+    "database": {
+      "engine": "mariadb",
+      "name": "financial_fibo_zh_cn",
+      "expectedTables": 20
+    },
+    "data": {
+      "mode": "embedded"
+    },
+    "platformVersion": ">=0.2.1 <0.3.0",
+    "knowledgeNetwork": {
+      "id": "financial_fibo_zh_cn",
+      "displayName": "金融投资组合运营（中文）"
+    },
+    "capabilities": {
+      "required": false
+    },
+    "components": {
+      "objects": true,
+      "relations": true,
+      "metrics": false,
+      "functions": false,
+      "skills": false
+    },
+    "hooks": {
+      "dbInit": "db/init.sh",
+      "dbVerify": "db/verify.sh",
+      "platformInstall": "platform/install.sh",
+      "platformVerify": "platform/verify.sh"
+    }
+  }
+}

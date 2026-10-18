@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: account_to_portfolio
+name: 投资账户关联组合
+tags: [finance, fibo]
+---
+
+## RelationType: 投资账户关联组合
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| accounts | portfolios | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| portfolio_id | portfolio_id |

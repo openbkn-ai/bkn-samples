@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: portfolio_to_manager
+name: 投资组合关联管理人
+tags: [finance, fibo]
+---
+
+## RelationType: 投资组合关联管理人
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| portfolios | legal_entities | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| manager_id | entity_id |

@@ -1,0 +1,31 @@
+---
+type: object_type
+id: fx_rates
+name: FX Rate
+tags: [finance, fibo]
+---
+
+## ObjectType: FX Rate
+
+Dated synthetic USD-per-source-unit conversion curve; prior published weekday fixing is carried to a weekend snapshot, never described as a weekend transaction.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| fx_id | Fx Id | string | Stable unique identifier of this business record. | fx_id |
+| as_of_date | As Of Date | date | Business snapshot date, distinct from quote/fixing date and date of knowledge. | as_of_date |
+| from_currency | From Currency | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | from_currency |
+| to_currency | To Currency | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | to_currency |
+| rate | Rate | decimal | USD per one source-currency unit; multiply local amount by this value. USD/USD must be 1. | rate |
+| published_date | Published Date | date | Business publication/fixing date; actual data must have been published before consumption. | published_date |
+| view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+
+### Keys
+
+Primary Keys: fx_id
+Display Key: fx_id
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: cp_exp_to_portfolio
+name: Cp Exp To Portfolio
+tags: [finance, fibo]
+---
+
+## RelationType: Cp Exp To Portfolio
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| counterparty_exposures | portfolios | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| portfolio_id | portfolio_id |

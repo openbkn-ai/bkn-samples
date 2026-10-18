@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: entity_id_to_entity
+name: Entity Id To Entity
+tags: [finance, fibo]
+---
+
+## RelationType: Entity Id To Entity
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| legal_entity_identifiers | legal_entities | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| entity_id | entity_id |

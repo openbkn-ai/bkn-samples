@@ -1,0 +1,38 @@
+---
+type: object_type
+id: valuation_snapshots
+name: Position Valuation
+tags: [finance, fibo]
+---
+
+## ObjectType: Position Valuation
+
+Evidence-bearing valuation from trade-basis quantity, approved current price and dated FX. Missing, stale or unapproved prices block the value instead of producing zero.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| valuation_id | Valuation Id | string | Stable unique identifier of this business record. | valuation_id |
+| position_id | Position Id | string | Foreign key to positions; blank only where contract declares absent/inapplicable evidence. | position_id |
+| price_id | Price Id | string | Foreign key to market_prices; blank only where contract declares absent/inapplicable evidence. | price_id |
+| fx_id | Fx Id | string | Foreign key to fx_rates; blank only where contract declares absent/inapplicable evidence. | fx_id |
+| as_of_date | As Of Date | date | Business snapshot date, distinct from quote/fixing date and date of knowledge. | as_of_date |
+| valuation_status | Valuation Status | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: blocked, complete. | valuation_status |
+| reason | Reason | string | Explicit controlled state/reason; absence never implies completion or acceptance. | reason |
+| market_value_local | Market Value Local | decimal | Trade-basis quantity × price × factor, rounded 2dp in instrument currency; blank if price unusable. | market_value_local |
+| market_value_base | Market Value Base | decimal | Rounded local value × same-snapshot FX, rounded 2dp USD; blank is unknown, not zero. | market_value_base |
+| cost_value_base | Cost Value Base | decimal | Remaining booked local cost translated at current snapshot FX, 2dp USD; not historical FX cost. | cost_value_base |
+| unrealized_pnl_base | Unrealized Pnl Base | decimal | USD market value minus USD cost translated at current FX, not total investment return or official NAV P&L. | unrealized_pnl_base |
+| currency | Currency | string | Base currency USD; amounts are expressed in dollars. | currency |
+| valuation_method | Valuation Method | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | valuation_method |
+| view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+
+### Keys
+
+Primary Keys: valuation_id
+Display Key: valuation_id
+Incremental Key:

@@ -1,0 +1,28 @@
+---
+type: object_type
+id: exposure_contributions
+name: Exposure Contribution
+tags: [finance, fibo]
+---
+
+## ObjectType: Exposure Contribution
+
+Bridge retaining each distinct position valuation contributing to an issuer numerator, including an explicit blank value when blocked.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| contribution_id | Contribution Id | string | Stable unique identifier of this business record. | contribution_id |
+| exposure_id | Exposure Id | string | Foreign key to issuer_exposures; blank only where contract declares absent/inapplicable evidence. | exposure_id |
+| valuation_id | Valuation Id | string | Foreign key to valuation_snapshots; blank only where contract declares absent/inapplicable evidence. | valuation_id |
+| contribution_amount | Contribution Amount | decimal | USD value copied from one contributing valuation; blank preserves unavailable evidence. | contribution_amount |
+| currency | Currency | string | Base currency USD; amounts are expressed in dollars. | currency |
+
+### Keys
+
+Primary Keys: contribution_id
+Display Key: contribution_id
+Incremental Key:

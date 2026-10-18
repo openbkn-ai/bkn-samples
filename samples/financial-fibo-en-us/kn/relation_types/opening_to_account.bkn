@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: opening_to_account
+name: Opening To Account
+tags: [finance, fibo]
+---
+
+## RelationType: Opening To Account
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| opening_positions | accounts | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| account_id | account_id |

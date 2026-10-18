@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: limit_to_entity
+name: Limit To Entity
+tags: [finance, fibo]
+---
+
+## RelationType: Limit To Entity
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| mandate_limits | legal_entities | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| entity_id | entity_id |

@@ -1,0 +1,50 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1alpha1",
+  "kind": "Sample",
+  "metadata": {
+    "name": "financial-fibo-en-us",
+    "aliases": [],
+    "displayName": "Financial Portfolio Operations (EN)",
+    "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
+    "version": "0.1.3"
+  },
+  "spec": {
+    "studio": {
+      "licenseNote": "MIT · Synthetic demonstration data / 虚构演示数据",
+      "questions": [
+        "Who issues INS-001, and what is the issuer name?",
+        "What asset class and price basis does INS-002 use?",
+        "What is PF-049’s name and base currency?"
+      ]
+    },
+    "database": {
+      "engine": "mariadb",
+      "name": "financial_fibo_en_us",
+      "expectedTables": 20
+    },
+    "data": {
+      "mode": "embedded"
+    },
+    "platformVersion": ">=0.2.1 <0.3.0",
+    "knowledgeNetwork": {
+      "id": "financial_fibo_en_us",
+      "displayName": "Financial Portfolio Operations (EN)"
+    },
+    "capabilities": {
+      "required": false
+    },
+    "components": {
+      "objects": true,
+      "relations": true,
+      "metrics": false,
+      "functions": false,
+      "skills": false
+    },
+    "hooks": {
+      "dbInit": "db/init.sh",
+      "dbVerify": "db/verify.sh",
+      "platformInstall": "platform/install.sh",
+      "platformVerify": "platform/verify.sh"
+    }
+  }
+}

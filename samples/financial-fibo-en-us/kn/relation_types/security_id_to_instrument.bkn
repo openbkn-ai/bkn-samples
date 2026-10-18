@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: security_id_to_instrument
+name: Security Id To Instrument
+tags: [finance, fibo]
+---
+
+## RelationType: Security Id To Instrument
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| security_identifiers | financial_instruments | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| instrument_id | instrument_id |

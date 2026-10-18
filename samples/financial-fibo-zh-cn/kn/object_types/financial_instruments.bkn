@@ -1,0 +1,42 @@
+---
+type: object_type
+id: financial_instruments
+name: 金融工具
+tags: [finance, fibo]
+---
+
+## ObjectType: 金融工具
+
+虚构股票或债券主数据。同一发行方可发行两类资产；币种、面值或股数单位、报价因子决定估值口径。
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/FinancialInstrument |
+| source_label | financial instrument |
+| source_definition | written contract that gives rise to both a financial asset of one entity and a financial liability of another entity |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| instrument_id | 工具编号 | string | 该业务记录的稳定唯一标识。 | instrument_id |
+| name | 名称 | string | 用于业务展示的虚构名称，双语语义一致。 | name |
+| issuer_id | 发行方编号 | string | 外键关联 legal_entities，空值仅允许在合同明确声明缺失/不适用时使用。 | issuer_id |
+| asset_class | 资产类别 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | asset_class |
+| currency | 币种 | string | 工具计价币种，须与对应成交、结算指令、开仓及持仓一致。 | currency |
+| unit | 数量单位 | string | 股票为股数，债券为币种面值单位，不是债券手数。 | unit |
+| price_basis | 价格口径 | string | 股票按每股、债券按每百元面值全价，必须与类别及乘数一致。 | price_basis |
+| price_multiplier | 价格乘数 | decimal | 每股股票报价为 1；每百元面值债券全价为 0.01。 | price_multiplier |
+| maturity_date | 到期日期 | date | 该业务事件的日期；使用虚构工作日日历并区分计划与实际。 | maturity_date |
+| is_synthetic | 是否合成 | boolean | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | is_synthetic |
+
+### Keys
+
+Primary Keys: instrument_id
+Display Key: name
+Incremental Key:

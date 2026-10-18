@@ -1,0 +1,31 @@
+---
+type: knowledge_network
+id: financial_fibo_en_us
+name: Financial Portfolio Operations
+tags: [finance, fibo]
+version: 0.1.0
+branch: main
+---
+
+# Financial Portfolio Operations
+
+Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.
+
+Business analysis contract (applies to every question, not precomputed answers):
+- Current means the observation-date snapshot, not the sum of historical snapshots. All-actual history is a different explicitly requested scope. Select actual/planned and known_date consistently; forecast facts cannot enter actual results.
+- Day-only dates may be transported as ISO midnight strings. Normalize to YYYY-MM-DD/date before local comparison. Decimal fields may arrive as strings; use Decimal(str(value)). Controlled values are localized: use the allowed values in property descriptions, never assume English statuses in a Chinese network.
+- A settlement event is incremental. At cutoff, keep event_date and known_date <= cutoff, sum transfers per instruction, and take the last event ordered by (event_date,event_sequence) for state. Do not add an acknowledgement again or count history rows as instructions. Monthly contractual/receivable analysis uses each trade month's last day, knowledge <= min(observation date, month end); only future months permit planned events known at observation.
+- Trade translation selects the actual USD fixing with latest as_of_date among rows whose as_of_date, published_date and known_date are <= the trade date. Translate unrounded amounts and round the grouped sum half-up to 2dp. Valuation instead follows its explicit fx_id for the snapshot. Never mix those two FX selection rules.
+- Booked contract consideration gross_amount = ROUND_HALF_UP(quantity * execution_price * price_multiplier, 2) in local currency. Actual contractual-amount reports must sum this recorded amount, not reverse its per-trade booking rounding. Unrounded FX translation means gross_amount * rate before rounding the group sum. Monthly cohort open-sell notionals are instead quantity-based local amounts unless USD is explicitly requested. Equity factor is 1; per-100-face dirty bond factor is 0.01. Snapshot local market value is rounded to 2dp before FX; base value then rounds to 2dp. Current-snapshot market value is not cash, NAV or total return.
+- Portfolio quantity reconciles when trade_basis - settled_basis - unsettled_delta = 0. A nonzero unsettled delta is not a reconciliation failure. Buy/sell directions and instrument units matter; never add shares and face units as a business quantity.
+- A portfolio value requires every position priced completely. Missing values remain null. Issuer shares use all complete securities assets as denominator, and all its issuer exposures must sum to one. Do not assume two issuers after joining instrument pairs.
+- Receivable is nonnetted open sell quantity * execution quote * multiplier * as-of USD rate. Accumulate unrounded contributions then round the total; displayed rounded lines may have a rounding residual. Use explicit limit validity/approval/known dates; unknown is not within-limit, equality does not breach.
+- Follow relation source -> target as declared in mapping rules. Cypher supports joins/grouping/aggregates but not WITH, CASE, date functions or arbitrary SQL. Use run_code for cumulative/latest-event logic, conditional aggregation or Decimal arithmetic. Tool results are query_object_instance.datas or run_cypher.entries; use documented pagination and explicit limits.
+- Answer the requested measure and scope only. If a question requests recorded value comparison, do not introduce unrelated accounting audits. Batch needed schema/data discovery and calculation in one run_code workflow when useful. Print a compact result, not an entire raw data dump. For full lists provide every requested row, preferably compact columns/data or grouped identifiers, with counts to prove completeness; do not duplicate the list in prose.
+
+
+## Network Overview
+
+- **ObjectTypes** (20)
+- **RelationTypes** (29)
+- **ConceptGroups** (3)

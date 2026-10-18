@@ -1,0 +1,32 @@
+---
+type: object_type
+id: settlement_events
+name: Settlement Event
+tags: [finance, fibo]
+---
+
+## ObjectType: Settlement Event
+
+Incremental acknowledgement, transfer, failure or recovery event. Sum eligible transfers per instruction; use the last eligible event for state. Planned rows describe projected transfers only.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| event_id | Event Id | string | Stable unique identifier of this business record. | event_id |
+| instruction_id | Instruction Id | string | Foreign key to settlement_instructions; blank only where contract declares absent/inapplicable evidence. | instruction_id |
+| event_date | Event Date | date | Date of this business event under the fictional weekday calendar; distinguish planned and actual. | event_date |
+| event_status | Event Status | string | State after this event, not the whole instruction history. In planned view, settled means expected settlement, not observed completion. Allowed values: failed, partial, pending, settled. | event_status |
+| settled_quantity | Settled Quantity | decimal | Incremental transfer in this event, not cumulative. Pending/failed events transfer zero; sum eligible events before calculating remaining quantity. | settled_quantity |
+| failure_reason | Failure Reason | string | Explicit controlled state/reason; absence never implies completion or acceptance. | failure_reason |
+| view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+| event_sequence | Event Sequence | integer | Positive unique order within an instruction, used with event_date to order date-only events; not a timestamp. | event_sequence |
+
+### Keys
+
+Primary Keys: event_id
+Display Key: event_id
+Incremental Key:

@@ -1,0 +1,33 @@
+---
+type: object_type
+id: limit_assessments
+name: Limit Assessment
+tags: [finance, fibo]
+---
+
+## ObjectType: Limit Assessment
+
+Known, valid limit compared with a same-date actual or planned observation. Strictly above breaches; equality is within; incomplete observations remain unknown.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| assessment_id | Assessment Id | string | Stable unique identifier of this business record. | assessment_id |
+| limit_id | Limit Id | string | Foreign key to mandate_limits; blank only where contract declares absent/inapplicable evidence. | limit_id |
+| issuer_exposure_id | Issuer Exposure Id | string | Foreign key to issuer_exposures; blank only where contract declares absent/inapplicable evidence. | issuer_exposure_id |
+| counterparty_exposure_id | Counterparty Exposure Id | string | Foreign key to counterparty_exposures; blank only where contract declares absent/inapplicable evidence. | counterparty_exposure_id |
+| as_of_date | As Of Date | date | Business snapshot date, distinct from quote/fixing date and date of knowledge. | as_of_date |
+| observed_value | Observed Value | decimal | Same-date observation in the limit measure; blank means no defensible decision, not zero. | observed_value |
+| assessment_status | Assessment Status | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: breach, unknown, within. | assessment_status |
+| excess_value | Excess Value | decimal | max(0, observation − threshold), in ratio units or USD according to measure; unknown stays blank. | excess_value |
+| view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+
+### Keys
+
+Primary Keys: assessment_id
+Display Key: assessment_id
+Incremental Key:

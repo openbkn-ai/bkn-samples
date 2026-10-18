@@ -1,0 +1,31 @@
+---
+type: object_type
+id: fx_rates
+name: 汇率
+tags: [finance, fibo]
+---
+
+## ObjectType: 汇率
+
+带日期的合成美元兑源币种单位转换曲线；周末快照沿用此前已发布工作日定盘，不表述为周末成交。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| fx_id | 汇率编号 | string | 该业务记录的稳定唯一标识。 | fx_id |
+| as_of_date | 截至日期 | date | 业务快照日期，区别于报价/定盘日期和已知日期。 | as_of_date |
+| from_currency | 源币种 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | from_currency |
+| to_currency | 目标币种 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | to_currency |
+| rate | 汇率 | decimal | 每单位源币种兑美元，交易币种金额乘该值；USD/USD 必须为 1。 | rate |
+| published_date | 发布日期 | date | 业务发布或定盘日期，实际数据必须先发布后使用。 | published_date |
+| view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+
+### Keys
+
+Primary Keys: fx_id
+Display Key: fx_id
+Incremental Key:

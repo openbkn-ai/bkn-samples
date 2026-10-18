@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: price_to_instrument
+name: Price To Instrument
+tags: [finance, fibo]
+---
+
+## RelationType: Price To Instrument
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| market_prices | financial_instruments | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| instrument_id | instrument_id |

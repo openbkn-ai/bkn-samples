@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: contribution_to_valuation
+name: Contribution To Valuation
+tags: [finance, fibo]
+---
+
+## RelationType: Contribution To Valuation
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| exposure_contributions | valuation_snapshots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| valuation_id | valuation_id |

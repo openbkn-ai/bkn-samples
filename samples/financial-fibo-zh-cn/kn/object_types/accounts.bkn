@@ -1,0 +1,27 @@
+---
+type: object_type
+id: accounts
+name: 投资账户
+tags: [finance, fibo]
+---
+
+## ObjectType: 投资账户
+
+归属单个组合的多币种证券托管账户；币种字段指报告币种，不限制持仓工具的计价币种。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| account_id | 账户编号 | string | 该业务记录的稳定唯一标识。 | account_id |
+| name | 名称 | string | 用于业务展示的虚构名称，双语语义一致。 | name |
+| portfolio_id | 组合编号 | string | 外键关联 portfolios，空值仅允许在合同明确声明缺失/不适用时使用。 | portfolio_id |
+| currency | 币种 | string | 账户报告币种，不限制工具交易币种。 | currency |
+
+### Keys
+
+Primary Keys: account_id
+Display Key: name
+Incremental Key:

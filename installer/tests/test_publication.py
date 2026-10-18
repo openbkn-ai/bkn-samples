@@ -11,6 +11,13 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class PublicationTest(unittest.TestCase):
+    def test_financial_offline_package_keeps_required_provenance_and_contract(self):
+        from tools.publication.build_candidate import included
+        for name in ('model-contract.json', 'fibo-reference/source-lock.json', 'fibo-reference/sources/fixture.rdf'):
+            self.assertTrue(included(Path(name)), name)
+        for name in ('verification/local-evaluation.json', '.env', 'platform/password.key'):
+            self.assertFalse(included(Path(name)), name)
+
     def test_candidate_platform_floor_follows_source_version(self):
         from unittest.mock import patch
         from tools.publication.build_candidate import platform_range

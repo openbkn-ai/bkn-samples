@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: price_to_instrument
+name: 市场价格关联工具
+tags: [finance, fibo]
+---
+
+## RelationType: 市场价格关联工具
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| market_prices | financial_instruments | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| instrument_id | instrument_id |

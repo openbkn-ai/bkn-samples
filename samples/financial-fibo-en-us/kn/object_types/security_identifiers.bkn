@@ -1,0 +1,37 @@
+---
+type: object_type
+id: security_identifiers
+name: Security Identifier
+tags: [finance, fibo]
+---
+
+## ObjectType: Security Identifier
+
+Local DEMO-SEC security identifier with a named synthetic scheme; not a real ISIN.
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/SecuritiesIdentification/SecurityIdentifier |
+| source_label | security identifier |
+| source_definition | any publicly available identifier that is used to identify a security |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| identifier_id | Identifier Id | string | Stable unique identifier of this business record. | identifier_id |
+| instrument_id | Instrument Id | string | Foreign key to financial_instruments; blank only where contract declares absent/inapplicable evidence. | instrument_id |
+| synthetic_code | Synthetic Code | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | synthetic_code |
+| scheme | Scheme | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | scheme |
+| is_synthetic | Is Synthetic | boolean | Named business attribute constrained by model-contract.json types and controlled vocabulary. | is_synthetic |
+
+### Keys
+
+Primary Keys: identifier_id
+Display Key: synthetic_code
+Incremental Key:

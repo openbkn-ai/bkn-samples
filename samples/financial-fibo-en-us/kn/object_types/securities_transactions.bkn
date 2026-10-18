@@ -1,0 +1,41 @@
+---
+type: object_type
+id: securities_transactions
+name: Executed Trade
+tags: [finance, fibo]
+---
+
+## ObjectType: Executed Trade
+
+Actual or explicitly planned fill of an order. Contractual amount uses quote factor; it is neither settled cash nor regulatory risk exposure.
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/SecuritiesTransaction |
+| source_label | securities transaction |
+| source_definition | transaction between two or more parties involving the exchange of commonly defined financial products |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| trade_id | Trade Id | string | Stable unique identifier of this business record. | trade_id |
+| order_id | Order Id | string | Foreign key to trade_orders; blank only where contract declares absent/inapplicable evidence. | order_id |
+| trade_date | Trade Date | date | Date of this business event under the fictional weekday calendar; distinguish planned and actual. | trade_date |
+| trade_quantity | Trade Quantity | decimal | Positive business quantity in the linked instrument’s share or face units. | trade_quantity |
+| execution_price | Execution Price | decimal | Local-currency quote in the linked instrument basis; apply price_multiplier. | execution_price |
+| gross_amount | Gross Amount | decimal | Booked positive contractual consideration = quantity × execution quote × price factor rounded half-up per trade to 2dp in instrument currency. Actual contractual totals and trade-date FX translation must use this recorded gross_amount, not an unrounded reconstruction. | gross_amount |
+| currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
+| trade_status | Trade Status | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: executed, planned. | trade_status |
+| known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
+
+### Keys
+
+Primary Keys: trade_id
+Display Key: trade_id
+Incremental Key:

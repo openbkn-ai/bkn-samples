@@ -1,0 +1,28 @@
+---
+type: object_type
+id: settlement_instructions
+name: Settlement Instruction
+tags: [finance, fibo]
+---
+
+## ObjectType: Settlement Instruction
+
+Required transfer quantity and contractual due date for a fill under the fictional weekday T+2 convention.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| instruction_id | Instruction Id | string | Stable unique identifier of this business record. | instruction_id |
+| trade_id | Trade Id | string | Foreign key to securities_transactions; blank only where contract declares absent/inapplicable evidence. | trade_id |
+| due_date | Due Date | date | Contractual date under this sample’s fictional T+2 weekday convention; not a legal market-specific settlement rule. | due_date |
+| required_quantity | Required Quantity | decimal | Positive business quantity in the linked instrument’s share or face units. | required_quantity |
+| currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
+
+### Keys
+
+Primary Keys: instruction_id
+Display Key: instruction_id
+Incremental Key:

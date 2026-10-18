@@ -13,7 +13,7 @@ This sample provides an auditable, fictitious post-trade control flow from instr
 | Portfolio manager | Is a portfolio’s exposure within the approved mandate and which position drives an exception? | Position-level exposure with the instrument, issuer, valuation date, and applicable limit. |
 | Middle-office owner | Which trades remain unsettled or failed, and what positions are affected? | Trade-to-settlement evidence with an explicit status and affected position. |
 | Fund accountant | Can a valuation be traced to a dated market price and currency? | Price provenance, valuation date, quantity, and calculated market value. |
-| Risk and compliance owner | Is issuer/counterparty exposure concentrated beyond the stated limit? | Aggregated exposure, limit basis, breach state, and contributing records. |
+| Risk and compliance owner | Do issuer concentration or unsettled counterparty sell receivables exceed their respective limits? | Aggregated exposure, limit basis, breach state, and contributing records. |
 | Data and ontology owner | Are financial terms consistent across the source systems? | FIBO-anchored concepts with local operational extensions documented explicitly. |
 
 ## P0 decisions and scenarios
@@ -23,19 +23,19 @@ The sample must answer the following business decisions with supporting records,
 1. Determine whether a trade is settled, pending, or failed as of a business date and identify the affected portfolio position.
 2. Explain a position’s market value from quantity, instrument, price, price source, currency, and valuation date.
 3. Identify positions with stale, missing, or unapproved prices and distinguish a price-data exception from a trading exception.
-4. Aggregate issuer and counterparty exposure by portfolio and compare it with the applicable mandate limit.
+4. Aggregate issuer exposure and unsettled counterparty sell receivables by portfolio and compare each with its applicable mandate limit.
 5. Trace an exposure breach to the positions and trades that created it, including a settlement exception where present.
 6. Compare a future dated portfolio plan or limit effective date through March 2027 without presenting a future fact as current knowledge.
 
 ## Business scope
 
-The initial vertical uses publicly tradable equity and debt instruments, fictional legal entities with synthetic LEI-shaped identifiers, and fictional market prices. The connected domains are:
+The initial vertical uses publicly tradable equity and debt instruments, fictional legal entities with clearly synthetic local entity identifiers, and fictional market prices. The connected domains are:
 
 - **Reference data:** instruments, identifiers, issuers, legal entities, currencies, portfolios, accounts, counterparties, mandate limits, and pricing sources.
 - **Post-trade operations:** orders, executed trades, settlement instructions, settlement events, and settlement status.
-- **Position and valuation:** positions, dated market prices, valuation snapshots, foreign-exchange rates, issuer exposure, counterparty exposure, and limit assessments.
+- **Position and valuation:** positions, dated market prices, valuation snapshots, foreign-exchange rates, issuer exposure, unsettled counterparty sell receivables, and limit assessments.
 
-Business dates use date-only fields. The dataset spans November 2026 through March 2027. A stated as-of date governs every position, price, exposure, and limit conclusion. Planned future limits and forecast scenarios are labelled as such and are never silently substituted for actual settled facts.
+Business dates use date-only fields. The dataset spans November 2026 through March 2027. The observation date is 2027-02-28; November through February views are actual, while March is a future plan known on that date. A stated as-of date governs every position, price, exposure, and limit conclusion. Planned future limits and forecast scenarios are labelled as such and are never silently substituted for actual settled facts.
 
 ## Success criteria
 

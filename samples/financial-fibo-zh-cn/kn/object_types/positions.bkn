@@ -1,0 +1,43 @@
+---
+type: object_type
+id: positions
+name: 日期持仓
+tags: [finance, fibo]
+---
+
+## ObjectType: 日期持仓
+
+有日期的交易日和结算日数量、剩余加权平均成本及当月本币已实现损益，区分实际与计划。
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/Position |
+| source_label | position |
+| source_definition | financial exposure resulting from owning, borrowing, shorting, or entering into a contract (e.g., derivatives) |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| position_id | 持仓编号 | string | 该业务记录的稳定唯一标识。 | position_id |
+| opening_id | 期初记录编号 | string | 外键关联 opening_positions，空值仅允许在合同明确声明缺失/不适用时使用。 | opening_id |
+| as_of_date | 截至日期 | date | 业务快照日期，区别于报价/定盘日期和已知日期。 | as_of_date |
+| trade_basis_quantity | 交易日口径数量 | decimal | 截至快照日的期初加有符号有效成交，单位随工具。 | trade_basis_quantity |
+| settled_basis_quantity | 结算日口径数量 | decimal | 期初加有符号有效事件累计转移量；计划转移不得进入实际快照。 | settled_basis_quantity |
+| unsettled_delta | 未结算数量变动 | decimal | 有符号的交易日数量减结算日数量；负值可代表未结算卖出。 | unsettled_delta |
+| cost_amount | 交易币种成本 | decimal | 快照时工具本币剩余加权平均成本，入账两位小数，不是累计买入总额。 | cost_amount |
+| realized_pnl | 当期已实现损益 | decimal | 当前日历月工具本币已实现卖出损益，不含汇兑损益、票息、税费。 | realized_pnl |
+| currency | 币种 | string | 工具计价币种，须与对应成交、结算指令、开仓及持仓一致。 | currency |
+| view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+
+### Keys
+
+Primary Keys: position_id
+Display Key: position_id
+Incremental Key:

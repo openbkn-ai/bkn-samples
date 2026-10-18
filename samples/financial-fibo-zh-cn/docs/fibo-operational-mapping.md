@@ -1,38 +1,22 @@
-# FIBO 到运营模型映射
+# FIBO 来源与运营语义映射
 
-## 来源与许可
+来源为 [FIBO 官方仓库](https://github.com/edmcouncil/fibo)，固定修订 `2d73435a4419b66b7c9f44cb9763e35fe8ac7890` (MIT).
 
-本样例术语来源于 [EDM Council FIBO](https://github.com/edmcouncil/fibo)，固定修订为 `2d73435a4419b66b7c9f44cb9763e35fe8ac7890`。FIBO 仓库采用 MIT 许可。每个直接语义锚点都会保留来源 IRI、来源标签、来源定义、来源仓库、修订和许可引用；本样例不将自己表述为 FIBO 的修改版标准，也不将合成记录表述为 FIBO 参考数据。
+六份原始 RDF、原始许可和摘要均随包保留。来源文件中共识别出 **171 个具名类、71 个具名对象/数据属性**；这些包含复用和废弃声明，只构成来源清单，不能据此声称已实现这些类或 OWL 推理。选用锚点均验证为非废弃且有定义。完整 OWL 导入闭包及 FIBO 全域不在本场景覆盖声明内。
 
-## 映射规则
+| ObjectType | 来源 IRI | 映射说明 |
+|---|---|---|
+| `financial_instruments` | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/FinancialInstrument | 运营子集；原始英文定义与 IRI 保存在对应 BKN 的 Semantic Provenance。 |
+| `security_identifiers` | https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/SecuritiesIdentification/SecurityIdentifier | 运营子集；原始英文定义与 IRI 保存在对应 BKN 的 Semantic Provenance。 |
+| `portfolios` | https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/Portfolio | 运营子集；原始英文定义与 IRI 保存在对应 BKN 的 Semantic Provenance。 |
+| `positions` | https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/Position | 运营子集；原始英文定义与 IRI 保存在对应 BKN 的 Semantic Provenance。 |
+| `securities_transactions` | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/SecuritiesTransaction | 运营子集；原始英文定义与 IRI 保存在对应 BKN 的 Semantic Provenance。 |
+| `market_prices` | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/MarketPrice | 运营子集；原始英文定义与 IRI 保存在对应 BKN 的 Semantic Provenance。 |
 
-- **直接映射：**运营对象代表相同业务概念，并保留 FIBO IRI 作为来源。
-- **收窄映射：**采用 FIBO 概念，但增加回答 P0 决策所需的运营角色、日期、状态或本地业务键。
-- **扩展：**样例所需但不声称是 FIBO 类的运营记录；必须具有明确本地定义和语义锚点。
-- OWL 限制、匿名类、反向属性和推理关系只作为文档保留。BKN 仅导入具名 ObjectType 和在数据集中具有明确端点的直接 RelationType。
+## 明确的运营扩展
 
-## 初始概念清单
+`legal_entities` 是虚构实体登记表，`legal_entity_identifiers` 使用 `DEMO-ENTITY-*` 本地编码；它们不声称是 FIBO LEIRegisteredEntity 或 ISO 17442 LegalEntityIdentifier 实例。订单、账户、期初持仓、结算指令/事件、汇率观测、估值快照、敞口构成、未结算应收、授权限额及评估是本场景运营扩展。
 
-| BKN 运营 ObjectType | FIBO 锚点 | 映射状态 | 运营解释 |
-|---|---|---|---|
-| `financial_instruments` | [FinancialInstrument](https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/FinancialInstrument) | 直接 | 带有本地产品属性的可交易工具主数据。 |
-| `equity_instruments` | [EquityInstrument](https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/EquityInstrument) | 直接 | 金融工具的股票子类。 |
-| `debt_instruments` | [DebtInstrument](https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/DebtInstrument) | 直接 | 金融工具的债券子类。 |
-| `security_identifiers` | [SecurityIdentifier](https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/SecuritiesIdentification/SecurityIdentifier) | 直接 | 含标识体系和编码的本地标识记录。 |
-| `legal_entities` | [LEIRegisteredEntity](https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/LEIRegisteredEntity) | 收窄 | 使用 LEI 形态合成值的虚构法律实体，不使用真实 LEI。 |
-| `legal_entity_identifiers` | [LegalEntityIdentifier](https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/LegalEntityIdentifier) | 直接 | 关联到法律实体的标识记录。 |
-| `portfolios` | [Portfolio](https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/Portfolio) | 收窄 | 含本地账户和授权引用的受管理投资组合。 |
-| `positions` | [Position](https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/Position) | 直接 | 截至某日的多头或空头金融敞口。 |
-| `securities_transactions` | [SecuritiesTransactionContract](https://spec.edmcouncil.org/fibo/ontology/FND/TransactionsExt/SecuritiesTransactions/SecuritiesTransactionContract) | 收窄 | 包含成交日和预期结算日的买入或卖出交易。 |
-| `settlement_processes` | [SettlementProcess](https://spec.edmcouncil.org/fibo/ontology/FND/TransactionsExt/SecuritiesTransactions/SettlementProcess) | 收窄 | 已成交交易的结算指令和结果。 |
-| `market_prices` | [MarketPrice](https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/MarketPrice) | 直接 | 有日期和来源的工具市场价格。 |
-| `valuation_methods` | [ValuationMethod](https://spec.edmcouncil.org/fibo/ontology/FND/Arrangements/Assessments/ValuationMethod) | 直接 | 估值快照使用的方法。 |
-| `valuation_snapshots` | 无直接类 | 扩展 | 将持仓与价格、汇率、方法和截至日期关联的可审计计算快照。 |
-| `mandate_limits` | 无直接类 | 扩展 | 含口径、阈值、币种、生效期间和批准状态的组合业务控制。 |
-| `limit_assessments` | 无直接类 | 扩展 | 对授权限额的带日期评估，包含违规状态和构成敞口。 |
-| `issuer_exposures` | `Position` 与发行方关系 | 扩展 | 从持仓估值汇总得出的单一发行方敞口。 |
-| `counterparty_exposures` | `SecuritiesTransactionCounterparty` | 扩展 | 按交易对手汇总的已结算或未结算交易敞口。 |
+股票和债券通过 `financial_instruments.asset_class` 分类，其报价单位和乘数明确记录；没有额外建立没有独立业务数据的子类表。组合不是法律实体，持仓不是发行方，交易对手作为法律实体的经纪商角色，而非用机构名称推断风险。
 
-## 必需的 BKN 关系
-
-初始运营图必须提供以下直接关系：`instrument → issuer`、`instrument → identifier`、`legal entity → LEI`、`portfolio → manager`、`position → portfolio`、`position → instrument`、`trade → portfolio`、`trade → instrument`、`trade → counterparty`、`settlement → trade`、`market price → instrument`、`valuation → position`、`valuation → market price`、`valuation → valuation method`、`issuer exposure → issuer`、`issuer exposure → portfolio`、`limit assessment → mandate limit` 与 `limit assessment → exposure`。每一关系必须使用具名外键映射，并在发布前以锁定数据验证。
+不把匿名限制、外部端点或没有业务映射的 OWL 属性转成兜底关系。29 条关系全部有实际外键，指向可验证的样例记录。

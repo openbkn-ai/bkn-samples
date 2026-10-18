@@ -1,0 +1,33 @@
+---
+type: object_type
+id: mandate_limits
+name: 授权限额
+tags: [finance, fibo]
+---
+
+## ObjectType: 授权限额
+
+已批准且带日期的组合/实体控制：发行方证券资产比例或美元未结算应收上限，批准已知日与生效日分开。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| limit_id | 限额编号 | string | 该业务记录的稳定唯一标识。 | limit_id |
+| portfolio_id | 组合编号 | string | 外键关联 portfolios，空值仅允许在合同明确声明缺失/不适用时使用。 | portfolio_id |
+| entity_id | 实体编号 | string | 外键关联 legal_entities，空值仅允许在合同明确声明缺失/不适用时使用。 | entity_id |
+| measure | 衡量口径 | string | issuer_ratio 为 0–1 证券资产比例；receivable_amount 为美元金额。 允许取值：发行方集中度, 未结算应收金额. | measure |
+| threshold | 阈值 | decimal | 依衡量口径为 0–1 比例或美元金额；严格大于才超限，等于不超限。 | threshold |
+| currency | 币种 | string | 金额限额为 USD；比例限额无币种，保持为空。 | currency |
+| effective_from_date | 生效起日 | date | 该限额版本有效区间的起日，含当日。 | effective_from_date |
+| effective_to_date | 生效止日 | date | 该限额版本有效区间的止日，含当日。 | effective_to_date |
+| approval | 批准状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：已批准. | approval |
+| decision_date | 决策日期 | date | 限额获批准且已知的日期，区别于其生效区间。 | decision_date |
+
+### Keys
+
+Primary Keys: limit_id
+Display Key: limit_id
+Incremental Key:

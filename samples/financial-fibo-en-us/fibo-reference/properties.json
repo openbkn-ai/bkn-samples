@@ -1,0 +1,712 @@
+[
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/hasLegalAddress",
+    "label": "has legal address",
+    "definition": "indicates the legal address for the entity, in the jurisdiction in which the entity is established, used for registration purposes with respect to obtaining an LEI",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/hasLegalForm",
+    "label": "has legal form",
+    "definition": "indicates the nature of the entity as defined from a legal or regulatory perspective in a given jurisdiction",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/isConsolidatedBy",
+    "label": "is consolidated by",
+    "definition": "indicates the entity considered the 'end node' or consolidating entity (parent) from an ISO 17442 perspective",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/isConsolidationOf",
+    "label": "is consolidation of",
+    "definition": "indicates the entity considered the 'start node' or consolidated entity from an ISO 17442 perspective",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/isDirectlyConsolidatedBy",
+    "label": "is directly consolidated by",
+    "definition": "indicates that the entity considered the 'end node' or consolidating entity (parent) fully consolidates the accounting of the 'start node' (child) per the accounting rules specified, and is the closest consolidating entity to that child in any applicable ownership hierarchy",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/isInternationalBranchOf",
+    "label": "is an international branch of",
+    "definition": "indicates that the entity considered the 'start node' or consolidated entity (child) is an international subsidiary of the 'end node' (parent) in the jurisdiction of the child",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/isUltimatelyConsolidatedBy",
+    "label": "is ultimately consolidated by",
+    "definition": "indicates that the entity considered the 'end node' or consolidating entity (parent) fully consolidates the accounting of the 'start node' (child) per the accounting rules specified, and is the most distant consolidating entity to that child in any applicable ownership hierarchy",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/hasLegalFormAbbreviation",
+    "label": "has legal form abbreviation",
+    "definition": "the precise abbreviation for the entity legal form as defined in the jurisdiction in which it is registered, for example LLC, LLP, Ltd, PLC, Corp.",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/hasOwnershipPercentage",
+    "label": "has ownership percentage",
+    "definition": "the percentage ownership interest in the owned entity owned by owning entity, if known",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/hasTransliteratedLegalFormAbbreviation",
+    "label": "has transliterated legal form abbreviation",
+    "definition": "a transliterated (i.e., in Latin or Romanized ASCII) representation of the abbreviation for the entity legal form",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/hasTransliteratedName",
+    "label": "has transliterated name",
+    "definition": "a transliterated (i.e., in Latin or Romanized ASCII) representation of a name for the entity",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/isQuantifiedBy",
+    "label": "is quantified by",
+    "definition": "indicates that something is limited to or conditional due to some rate or other statistical value",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "BE/LegalEntities/LEIEntities.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasBuyingCurrency",
+    "label": "has buying currency",
+    "definition": "indicates the currency purchased with respect to a currency or related instrument",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasCalculationAgent",
+    "label": "has calculation agent",
+    "definition": "indicates a party (role) responsible for determining the value of an instrument",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasCommodityValueAsOfExecutionDate",
+    "label": "has commodity value as of execution date",
+    "definition": "indicates the per unit value of a given commodity as of the date that the contract is executed",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasNominalValue",
+    "label": "has nominal value",
+    "definition": "indicates the face value of a contract",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasPrincipalExecutiveOfficeAddress",
+    "label": "has principal executive office address",
+    "definition": "relates an organization, specifically the issuer of a financial instrument, to its principal executive address, as required for issuance of that instrument",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasRedemptionProvision",
+    "label": "has redemption terms",
+    "definition": "indicates the specific terms related to redemption as specified in the instrument or a related contract document",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasSellingCurrency",
+    "label": "has selling currency",
+    "definition": "indicates the currency sold with respect to a currency or related instrument",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasShareholder",
+    "label": "has shareholder",
+    "definition": "indicates a party that holds shares in the issuer",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasUnderlier",
+    "label": "has underlier",
+    "definition": "relates a derivative to something on which the contract is based",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/hasValueExpressedIn",
+    "label": "has value expressed in",
+    "definition": "relates something, such as an instrument or index, to the currency its value is typically expressed in",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/holdsSharesIn",
+    "label": "holds shares in",
+    "definition": "specifies the issuer in which a shareholder holds an equity position",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/isDenominatedIn",
+    "label": "is denominated in",
+    "definition": "indicates the currency in which the financial instrument was issued",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/isLegallyRecordedIn",
+    "label": "is legally recorded in",
+    "definition": "jurisdiction (country, county, state, province, city) in which the financial instrument is legally recorded for regulatory and/or tax purposes",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/isNegotiable",
+    "label": "is negotiable",
+    "definition": "specifies whether a particular financial instrument is or is not transferable",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/FinancialInstruments.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasClosingPriceDeterminationMethod",
+    "label": "has closing price determination method",
+    "definition": "indicates a strategy by which the official closing price is determined",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasPriceDeterminationMethod",
+    "label": "has price determination method",
+    "definition": "indicates a strategy by which a given price is determined",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasPricingSource",
+    "label": "has pricing source",
+    "definition": "indicates the origin of a given quote or price for a financial instrument",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasRateOfReturn",
+    "label": "has rate of return",
+    "definition": "indicates the retrospective rate of return for a given financial instrument over some period of time",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasTradingDateTime",
+    "label": "has trading date time",
+    "definition": "indicates the specific date and time associated with a given price",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasBookDepth",
+    "label": "has book depth",
+    "definition": "indicates depth of the order book to which the price refers",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasLotSize",
+    "label": "has lot size",
+    "definition": "magnitude of an item (i.e., total quantity)",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasNumberOfDaysAccrued",
+    "label": "has number of days accrued",
+    "definition": "indicates the number of days for which interest has accrued and has not yet been received",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasQuoteLotSize",
+    "label": "has quote lot size",
+    "definition": "magnitude of something to which the quote price refers",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasRoundLotSize",
+    "label": "has round lot size",
+    "definition": "standard number of securities traded on an exchange",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/hasTradingVolume",
+    "label": "has trading volume",
+    "definition": "indicates the number of shares/units traded on a given trading day",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/FinancialInstruments/InstrumentPricing.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/exposesIn",
+    "label": "exposes in",
+    "definition": "indicates the state of affairs in which exposure occurs",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/facilitates",
+    "label": "facilitates",
+    "definition": "acts as an enabler in a situation in which an event, a task, a conversation or something else occurs",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasExposedParty",
+    "label": "has exposed party",
+    "definition": "indicates the party subject to influence or risk in",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasExposureTo",
+    "label": "has exposure to",
+    "definition": "involves influence or risk from",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasGeneratingEntity",
+    "label": "has generating entity",
+    "definition": "specifies a legal entity that generates something",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasGeneratingEntityIdentifier",
+    "label": "has generating entity identifier",
+    "definition": "specifies an identifier for the entity that generated a unique transaction identifier",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasLegalAgent",
+    "label": "has registered agent",
+    "definition": "identifies a party as one that has the legal, medical or financial capacity to act on behalf of someone else under specific circumstances",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasOffering",
+    "label": "has offering",
+    "definition": "relates something to a voluntary but conditional promise submitted by a buyer or seller (offeror) to another (offeree) for acceptance, and which becomes legally enforceable if accepted by the offeree",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasOfferingAmount",
+    "label": "has offering amount",
+    "definition": "indicates the notional monetary amount, determined based on reference data, market rates or some other agreed method associated with some offering",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasOfferingPrice",
+    "label": "has offering price",
+    "definition": "indicates the price associated with an offering, which may be an explicit or calculated price",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasSelectingParty",
+    "label": "has selecting party",
+    "definition": "indicates the person(s) or organization(s) responsible for determining the contents of a basket",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasSettlementDate",
+    "label": "has settlement date",
+    "definition": "indicates the date by which an executed order or transaction must be settled",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasTradeDate",
+    "label": "has trade date",
+    "definition": "indicates the date on which a security or other instrument-specific trade actually takes place",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/isEmbodiedIn",
+    "label": "is embodied in",
+    "definition": "identifies the representation or tangible form of something in some context",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/isExposedPartyIn",
+    "label": "is exposed party in",
+    "definition": "indicates the state of affairs in which the party bears the risk",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/isExposedTo",
+    "label": "is exposed to",
+    "definition": "is subject to influence or risk from",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/isExposureOf",
+    "label": "is exposure of",
+    "definition": "is the influence or risk borne by",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/isFacilitatedBy",
+    "label": "is facilitated by",
+    "definition": "identifies someone or something that expedites some event, transaction, conversation or something else in some context",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/isOfferingOf",
+    "label": "is offering of",
+    "definition": "relates an offering to one or things that are the subject of the offer",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/relatesTo",
+    "label": "relates to",
+    "definition": "has a logical or causal connection with",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://www.omg.org/spec/Commons/DatesAndTimes/precedes",
+    "label": "",
+    "definition": "",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://www.omg.org/spec/Commons/DatesAndTimes/succeeds",
+    "label": "",
+    "definition": "",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasNominalNumberOfUnits",
+    "label": "has nominal number of units",
+    "definition": "indicates the base number of units of something associated with some offering",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasOfferingUnits",
+    "label": "has offering units",
+    "definition": "indicates the actual number of units of something, including any premium on the number of units, associated with some offering",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/hasSelectionCriteria",
+    "label": "has selection criteria",
+    "definition": "describes the methodology or program used to determine the membership of a collection",
+    "kind": "DatatypeProperty",
+    "source_files": [
+      "FBC/ProductsAndServices/FinancialProductsAndServices.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/hasAcquisitionPrice",
+    "label": "has acquisition price",
+    "definition": "has a value as of the date of acquisition, expressed as an amount of money, other financial assets, or goods",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/hasOwnedAsset",
+    "label": "has owned asset",
+    "definition": "indicates the asset in an ownership situation",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/hasOwningParty",
+    "label": "has owning party",
+    "definition": "identifies the actor that holds title to the asset in an ownership situation",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/isAssetOf",
+    "label": "is asset of",
+    "definition": "identifies the owner of an asset",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/isOwnedAsset",
+    "label": "is owned asset",
+    "definition": "indicates the context of ownership in which something is an asset",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/isOwnedBy",
+    "label": "is owned by",
+    "definition": "indicates something that someone owns",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/isOwningParty",
+    "label": "is owning party",
+    "definition": "indicates the context of ownership in which the party plays the role of owner",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/owns",
+    "label": "owns",
+    "definition": "indicates something that a party holds title to and may possess",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  },
+  {
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/ownsAsset",
+    "label": "owns asset",
+    "definition": "identifies an asset that an owner owns",
+    "kind": "ObjectProperty",
+    "source_files": [
+      "FND/OwnershipAndControl/Ownership.rdf"
+    ],
+    "deprecated": false
+  }
+]

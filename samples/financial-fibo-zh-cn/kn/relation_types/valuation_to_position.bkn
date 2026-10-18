@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: valuation_to_position
+name: 持仓估值关联持仓
+tags: [finance, fibo]
+---
+
+## RelationType: 持仓估值关联持仓
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| valuation_snapshots | positions | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| position_id | position_id |

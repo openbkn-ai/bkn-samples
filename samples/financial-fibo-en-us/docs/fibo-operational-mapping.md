@@ -1,38 +1,22 @@
-# FIBO-to-operational mapping
+# FIBO source and operational semantic mapping
 
-## Source and license
+Source: [official FIBO repository](https://github.com/edmcouncil/fibo), pinned revision `2d73435a4419b66b7c9f44cb9763e35fe8ac7890` (MIT).
 
-This sample derives terminology from [EDM Council FIBO](https://github.com/edmcouncil/fibo), revision `2d73435a4419b66b7c9f44cb9763e35fe8ac7890`. FIBO’s repository is MIT licensed. The sample will retain the source IRI, source label, source definition, source repository, revision, and license reference for every direct semantic anchor. It will not redistribute FIBO as a modified standard or claim that its synthetic records are FIBO reference data.
+Six original RDFs, their license and file digests are retained. Their inventories contain **171 named classes and 71 named object/data properties**, including reused and deprecated declarations. These are source inventories, not implementation or inference coverage claims. Selected anchors are checked as nondeprecated and defined. Full OWL import closure and all FIBO domains are outside the declared scenario.
 
-## Mapping rules
+| ObjectType | Source IRI | Interpretation |
+|---|---|---|
+| `financial_instruments` | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/FinancialInstrument | Operational subset; the original definition and IRI are retained in the BKN Semantic Provenance section. |
+| `security_identifiers` | https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/SecuritiesIdentification/SecurityIdentifier | Operational subset; the original definition and IRI are retained in the BKN Semantic Provenance section. |
+| `portfolios` | https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/Portfolio | Operational subset; the original definition and IRI are retained in the BKN Semantic Provenance section. |
+| `positions` | https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/Position | Operational subset; the original definition and IRI are retained in the BKN Semantic Provenance section. |
+| `securities_transactions` | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/SecuritiesTransaction | Operational subset; the original definition and IRI are retained in the BKN Semantic Provenance section. |
+| `market_prices` | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/MarketPrice | Operational subset; the original definition and IRI are retained in the BKN Semantic Provenance section. |
 
-- A direct mapping means the operational object represents the same business concept and preserves the FIBO IRI as provenance.
-- A narrowed mapping uses a FIBO concept but adds a specific operational role, date, state, or local business key required to answer a P0 decision.
-- An extension is a sample operational record not asserted to be a FIBO class. It has an explicit definition and relationship to its anchor.
-- OWL restrictions, anonymous classes, inverses, and inferred relationships are retained as documentation only. BKN imports direct named ObjectTypes and RelationTypes with concrete dataset endpoints.
+## Explicit operational extensions
 
-## Initial concept inventory
+`legal_entities` is a fictional entity registry; `legal_entity_identifiers` uses local `DEMO-ENTITY-*` codes. They do not assert FIBO LEIRegisteredEntity membership or ISO 17442 LegalEntityIdentifier status. Orders, accounts, opening positions, settlement instructions/events, dated FX, valuation snapshots, contribution records, unsettled receivables, limits and assessments are scenario operational extensions.
 
-| BKN operational ObjectType | FIBO anchor | Mapping status | Operational interpretation |
-|---|---|---|---|
-| `financial_instruments` | [FinancialInstrument](https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/FinancialInstrument) | Direct | Tradable instrument master with local product attributes. |
-| `equity_instruments` | [EquityInstrument](https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/EquityInstrument) | Direct | Equity subtype of a financial instrument. |
-| `debt_instruments` | [DebtInstrument](https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/DebtInstrument) | Direct | Debt subtype of a financial instrument. |
-| `security_identifiers` | [SecurityIdentifier](https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/SecuritiesIdentification/SecurityIdentifier) | Direct | Local identifier record, including scheme and code. |
-| `legal_entities` | [LEIRegisteredEntity](https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/LEIRegisteredEntity) | Narrowed | Synthetic legal entities with LEI-shaped values, never real LEIs. |
-| `legal_entity_identifiers` | [LegalEntityIdentifier](https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/LegalEntityIdentifier) | Direct | Identifier record associated with a legal entity. |
-| `portfolios` | [Portfolio](https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/Portfolio) | Narrowed | Managed investment portfolio with local account and mandate references. |
-| `positions` | [Position](https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/Position) | Direct | Dated long or short financial exposure. |
-| `securities_transactions` | [SecuritiesTransactionContract](https://spec.edmcouncil.org/fibo/ontology/FND/TransactionsExt/SecuritiesTransactions/SecuritiesTransactionContract) | Narrowed | Executed buy or sell with execution and intended settlement date. |
-| `settlement_processes` | [SettlementProcess](https://spec.edmcouncil.org/fibo/ontology/FND/TransactionsExt/SecuritiesTransactions/SettlementProcess) | Narrowed | Settlement instruction and outcome for an executed transaction. |
-| `market_prices` | [MarketPrice](https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/InstrumentPricing/MarketPrice) | Direct | Dated, sourced market price for an instrument. |
-| `valuation_methods` | [ValuationMethod](https://spec.edmcouncil.org/fibo/ontology/FND/Arrangements/Assessments/ValuationMethod) | Direct | Method used by a valuation snapshot. |
-| `valuation_snapshots` | No direct class | Extension | Auditable calculation snapshot joining a position to price, FX, method, and as-of date. |
-| `mandate_limits` | No direct class | Extension | Portfolio-specific business control with a measure, threshold, currency, effective period, and approved status. |
-| `limit_assessments` | No direct class | Extension | Dated evaluation of a mandate limit, including breach and contributing exposure. |
-| `issuer_exposures` | `Position` and issuer relation | Extension | Aggregated exposure to one issuer from position valuations. |
-| `counterparty_exposures` | `SecuritiesTransactionCounterparty` | Extension | Aggregated unsettled or settled trade exposure by counterparty. |
+Equity/debt are classifications on `financial_instruments.asset_class` with explicit quote basis and multiplier; no empty subtype tables are added. A portfolio is not a legal entity, a position is not an issuer, and a counterparty is an entity in a broker role.
 
-## Required BKN relationships
-
-The initial operational graph must provide direct relationships for `instrument → issuer`, `instrument → identifier`, `legal entity → LEI`, `portfolio → manager`, `position → portfolio`, `position → instrument`, `trade → portfolio`, `trade → instrument`, `trade → counterparty`, `settlement → trade`, `market price → instrument`, `valuation → position`, `valuation → market price`, `valuation → valuation method`, `issuer exposure → issuer`, `issuer exposure → portfolio`, `limit assessment → mandate limit`, and `limit assessment → exposure`. Each relationship will use a named foreign-key mapping and will be verified against the locked data before release.
+Anonymous restrictions, external endpoints and properties without concrete business mappings do not become catch-all relations. All 29 relations have actual foreign keys and verifiable records.

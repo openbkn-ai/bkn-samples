@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: opening_to_account
+name: 期初持仓关联账户
+tags: [finance, fibo]
+---
+
+## RelationType: 期初持仓关联账户
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| opening_positions | accounts | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| account_id | account_id |

@@ -1,0 +1,42 @@
+---
+type: object_type
+id: financial_instruments
+name: Financial Instrument
+tags: [finance, fibo]
+---
+
+## ObjectType: Financial Instrument
+
+Fictional equity or debt master. An issuer can issue both asset classes; currency, face/share units and quote factor govern valuation.
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/FinancialInstrument |
+| source_label | financial instrument |
+| source_definition | written contract that gives rise to both a financial asset of one entity and a financial liability of another entity |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| instrument_id | Instrument Id | string | Stable unique identifier of this business record. | instrument_id |
+| name | Name | string | Human-readable fictional business name with equivalent bilingual meaning. | name |
+| issuer_id | Issuer Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | issuer_id |
+| asset_class | Asset Class | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | asset_class |
+| currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
+| unit | Unit | string | Share count for equity, currency face units for bonds; not bond contract lots. | unit |
+| price_basis | Price Basis | string | Per share for equity, dirty price per 100 face for debt; must agree with asset class and multiplier. | price_basis |
+| price_multiplier | Price Multiplier | decimal | 1 for a per-share equity quote; 0.01 for dirty bond price per 100 face units. | price_multiplier |
+| maturity_date | Maturity Date | date | Date of this business event under the fictional weekday calendar; distinguish planned and actual. | maturity_date |
+| is_synthetic | Is Synthetic | boolean | Named business attribute constrained by model-contract.json types and controlled vocabulary. | is_synthetic |
+
+### Keys
+
+Primary Keys: instrument_id
+Display Key: name
+Incremental Key:

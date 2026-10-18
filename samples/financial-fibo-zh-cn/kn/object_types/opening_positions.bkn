@@ -1,0 +1,30 @@
+---
+type: object_type
+id: opening_positions
+name: 期初持仓
+tags: [finance, fibo]
+---
+
+## ObjectType: 期初持仓
+
+首个交易月之前的期初数量与本币单位成本，是存量余额而非成交交易。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| opening_id | 期初记录编号 | string | 该业务记录的稳定唯一标识。 | opening_id |
+| account_id | 账户编号 | string | 外键关联 accounts，空值仅允许在合同明确声明缺失/不适用时使用。 | account_id |
+| instrument_id | 工具编号 | string | 外键关联 financial_instruments，空值仅允许在合同明确声明缺失/不适用时使用。 | instrument_id |
+| opening_date | 期初日期 | date | 首笔样例交易前的期初账面余额日，不是成交日期。 | opening_date |
+| quantity | 数量 | decimal | 正值业务数量，单位取关联工具的股数或面值单位。 | quantity |
+| cost_unit_price | 单位成本 | decimal | 按关联工具报价口径表达的本币价格，须配合 price_multiplier 使用。 | cost_unit_price |
+| currency | 币种 | string | 工具计价币种，须与对应成交、结算指令、开仓及持仓一致。 | currency |
+
+### Keys
+
+Primary Keys: opening_id
+Display Key: opening_id
+Incremental Key:

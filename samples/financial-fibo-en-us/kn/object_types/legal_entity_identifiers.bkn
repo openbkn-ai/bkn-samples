@@ -1,0 +1,28 @@
+---
+type: object_type
+id: legal_entity_identifiers
+name: Entity Identifier
+tags: [finance, fibo]
+---
+
+## ObjectType: Entity Identifier
+
+Local DEMO-ENTITY identifier linking one synthetic registry record to its entity; not an ISO 17442 registration.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| identifier_id | Identifier Id | string | Stable unique identifier of this business record. | identifier_id |
+| entity_id | Entity Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | entity_id |
+| synthetic_code | Synthetic Code | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | synthetic_code |
+| scheme | Scheme | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | scheme |
+| is_synthetic | Is Synthetic | boolean | Named business attribute constrained by model-contract.json types and controlled vocabulary. | is_synthetic |
+
+### Keys
+
+Primary Keys: identifier_id
+Display Key: synthetic_code
+Incremental Key:

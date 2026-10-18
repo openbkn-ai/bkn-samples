@@ -1,0 +1,27 @@
+---
+type: object_type
+id: accounts
+name: Investment Account
+tags: [finance, fibo]
+---
+
+## ObjectType: Investment Account
+
+Multi-currency securities custody account belonging to one portfolio; currency denotes reporting currency, not a restriction on instrument denomination.
+
+Local operational extension; no FIBO equivalence asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| account_id | Account Id | string | Stable unique identifier of this business record. | account_id |
+| name | Name | string | Human-readable fictional business name with equivalent bilingual meaning. | name |
+| portfolio_id | Portfolio Id | string | Foreign key to portfolios; blank only where contract declares absent/inapplicable evidence. | portfolio_id |
+| currency | Currency | string | Account reporting currency; does not constrain instrument denomination. | currency |
+
+### Keys
+
+Primary Keys: account_id
+Display Key: name
+Incremental Key:

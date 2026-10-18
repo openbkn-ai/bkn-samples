@@ -1,0 +1,41 @@
+---
+type: object_type
+id: securities_transactions
+name: 证券成交
+tags: [finance, fibo]
+---
+
+## ObjectType: 证券成交
+
+订单的实际或明确计划成交。合约金额按报价因子计算，不等于已结算现金或监管风险敞口。
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/SecuritiesTransaction |
+| source_label | securities transaction |
+| source_definition | transaction between two or more parties involving the exchange of commonly defined financial products |
+| source_revision | 2d73435a4419b66b7c9f44cb9763e35fe8ac7890 |
+| source_license | MIT |
+| source_repository | https://github.com/edmcouncil/fibo |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| trade_id | 成交编号 | string | 该业务记录的稳定唯一标识。 | trade_id |
+| order_id | 订单编号 | string | 外键关联 trade_orders，空值仅允许在合同明确声明缺失/不适用时使用。 | order_id |
+| trade_date | 成交日期 | date | 该业务事件的日期；使用虚构工作日日历并区分计划与实际。 | trade_date |
+| trade_quantity | 成交数量 | decimal | 正值业务数量，单位取关联工具的股数或面值单位。 | trade_quantity |
+| execution_price | 成交价格 | decimal | 按关联工具报价口径表达的本币价格，须配合 price_multiplier 使用。 | execution_price |
+| gross_amount | 成交总额 | decimal | 已入账正值合约对价=成交数量×成交报价×价格因子，逐笔按四舍五入保留本币两位小数。实际合约金额合计及成交日汇率折算使用该记录的 gross_amount，不能用未舍入重算值替代。 | gross_amount |
+| currency | 币种 | string | 工具计价币种，须与对应成交、结算指令、开仓及持仓一致。 | currency |
+| trade_status | 成交状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：已成交, 计划. | trade_status |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+
+### Keys
+
+Primary Keys: trade_id
+Display Key: trade_id
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: cp_exp_to_portfolio
+name: 未结算应收金额关联组合
+tags: [finance, fibo]
+---
+
+## RelationType: 未结算应收金额关联组合
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| counterparty_exposures | portfolios | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| portfolio_id | portfolio_id |

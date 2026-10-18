@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: trade_to_order
+name: 证券成交关联订单
+tags: [finance, fibo]
+---
+
+## RelationType: 证券成交关联订单
+
+通过外键连接业务记录。空外键表示该证据不适用或缺失，不创建关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| securities_transactions | trade_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| order_id | order_id |

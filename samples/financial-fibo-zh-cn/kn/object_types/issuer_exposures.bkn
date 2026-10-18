@@ -1,0 +1,34 @@
+---
+type: object_type
+id: issuer_exposures
+name: 发行方敞口
+tags: [finance, fibo]
+---
+
+## ObjectType: 发行方敞口
+
+组合/发行方/日期的完整证券资产市值占比；分母不包含现金、净值或监管资本。任一持仓缺价阻断所有发行方占比。
+
+本地运营扩展，非 FIBO 等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| exposure_id | 敞口编号 | string | 该业务记录的稳定唯一标识。 | exposure_id |
+| portfolio_id | 组合编号 | string | 外键关联 portfolios，空值仅允许在合同明确声明缺失/不适用时使用。 | portfolio_id |
+| issuer_id | 发行方编号 | string | 外键关联 legal_entities，空值仅允许在合同明确声明缺失/不适用时使用。 | issuer_id |
+| as_of_date | 截至日期 | date | 业务快照日期，区别于报价/定盘日期和已知日期。 | as_of_date |
+| exposure_status | 敞口状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：受阻, 完整. | exposure_status |
+| exposure_amount | 敞口金额 | decimal | 发行方分子为构成持仓美元市值之和；组合价格不完整则不可用。 | exposure_amount |
+| denominator_amount | 分母金额 | decimal | 该组合同日全部证券持仓美元市值；任一受阻则为空，不含现金。 | denominator_amount |
+| ratio | 集中度 | decimal | 发行方分子除完整证券资产分母，0–1 比例、六位小数；不是百分数数值或净值占比。 | ratio |
+| currency | 币种 | string | 本位币 USD，金额以美元表达。 | currency |
+| view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
+| known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
+
+### Keys
+
+Primary Keys: exposure_id
+Display Key: exposure_id
+Incremental Key:

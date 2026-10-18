@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: order_to_account
+name: Order To Account
+tags: [finance, fibo]
+---
+
+## RelationType: Order To Account
+
+Foreign-key business association. Empty keys represent absent or inapplicable evidence and create no relationship.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| trade_orders | accounts | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| account_id | account_id |
