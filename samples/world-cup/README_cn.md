@@ -63,7 +63,7 @@
 
 ## 开发与发布
 
-安装组件及 hooks 以 [sample.yaml](sample.yaml) 为准。安装 hooks 在内部调用 `run.sh`；用户使用一键体验或离线包导入，无需手工执行脚本。样例不发布自定义工具，Agent 通过标准 MCP 工具 `query_object_instance` 和 `run_cypher` 查询。
+安装组件及 hooks 以 [sample.yaml](sample.yaml) 为准。安装 hooks 在内部调用 `run.sh`；用户使用一键体验或离线包导入，无需手工执行脚本。样例发布三个原生函数（射手榜、球员生涯、赛事概况，见 [tools/README.md](tools/README.md)）；Agent 也可以直接通过标准 MCP 工具 `query_object_instance` 和 `run_cypher` 查询。
 
 修改数据或模型后，按[样例开发指南](../../docs/SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md)构建固定候选、完成实际安装与业务验收，再发布新版本。不要覆盖已经发布的制品。
 

@@ -40,8 +40,50 @@ def model_ready(run_cli) -> bool:
     return True
 
 
-def build_checks(*, data_ok: bool, model_ok: bool) -> list[dict]:
-    return [{"name": name, "ok": data_ok} for name in DATA_CHECKS] + [{"name": "model-imported", "ok": model_ok}]
+# The WC-2022 top scorer in the locked data: Kylian Mbappé, 8 non-own goals.
+PROBE_INPUT = {"tournament_id": "WC-2022", "top": 1}
+PROBE_TOP = {"player_id": "P-64077", "goals": 8}
+
+
+def _entries(payload, *keys):
+    for key in keys:
+        if isinstance(payload.get(key), list):
+            return payload[key]
+    return []
+
+
+def functions_ready(run_cli) -> bool:
+    """Enabled and mounted is not enough: call one function and check its locked answer."""
+    sys.path.insert(0, str(SAMPLE_DIR / "tools"))
+    from register_functions import BOX_NAME, FUNCTIONS
+
+    listing = run_cli(["toolbox", "list", "--keyword", BOX_NAME, "--limit", "100"])
+    box = next((item for item in _entries(listing, "data", "entries") if item.get("box_name") == BOX_NAME), None)
+    if not box:
+        return False
+    tools = {item.get("name"): item.get("tool_id") for item in _entries(run_cli(["tool", "list", "--toolbox", box["box_id"], "--all"]), "tools")
+             if item.get("status") == "enabled"}
+    expected = [spec["name"] for spec in FUNCTIONS.values()]
+    if not all(tools.get(name) for name in expected):
+        return False
+    mounted = {item.get("capability_id") for item in _entries(run_cli(["bkn", "capability", "list", KN_ID, "--limit", "100"]), "entries")
+               if item.get("capability_type") == "function"}
+    if not {tools[name] for name in expected} <= mounted:
+        return False
+    try:
+        executed = run_cli(["tool", "execute", tools[FUNCTIONS["top_scorers"]["name"]], "--toolbox", box["box_id"],
+                            "--body", json.dumps(PROBE_INPUT)])
+    except RuntimeError:
+        return False
+    rows = ((executed.get("body") or {}).get("result") or {}).get("rows") or []
+    return bool(rows) and {k: rows[0].get(k) for k in PROBE_TOP} == PROBE_TOP
+
+
+def build_checks(*, data_ok: bool, model_ok: bool, functions_ok: bool | None = None) -> list[dict]:
+    checks = [{"name": name, "ok": data_ok} for name in DATA_CHECKS] + [{"name": "model-imported", "ok": model_ok}]
+    if functions_ok is not None:
+        checks.append({"name": "capability-callable", "ok": functions_ok})
+    return checks
 
 
 def _openbkn(args: list[str]) -> dict | list:
@@ -63,13 +105,15 @@ def main() -> int:
     if os.environ.get("BKN_SAMPLE_PRINT_ONLY") == "1":
         data_ok = True
         model_ok = True
+        functions_ok = True if raw.get("components", {}).get("functions") else None
     else:
         sys.path.insert(0, str(SAMPLE_DIR))
         from db.verify_worldcup import main as verify_database
 
         data_ok = verify_database() == 0
         model_ok = model_ready(_openbkn)
-    checks = build_checks(data_ok=data_ok, model_ok=model_ok)
+        functions_ok = functions_ready(_openbkn) if raw.get("components", {}).get("functions") else None
+    checks = build_checks(data_ok=data_ok, model_ok=model_ok, functions_ok=functions_ok)
     passed = all(item["ok"] for item in checks)
     degrade = []
     if os.environ.get("BKN_SAMPLE_EMBEDDING", "1") == "0" or not os.environ.get("EMBEDDING_MODEL_NAME", "").strip():

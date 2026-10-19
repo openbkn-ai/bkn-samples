@@ -4,7 +4,7 @@ metadata:
   name: world-cup
   aliases: []
   displayName: 世界杯
-  summary: 用公开的世界杯数据体验对象查询、多表关联和跨届分析。
+  summary: 用公开的世界杯数据体验对象查询、多表关联、跨届分析和原生函数。
 spec:
   studio:
     licenseNote: CC-BY-SA 4.0 · Joshua C. Fjelstul
@@ -21,12 +21,12 @@ spec:
     id: worldcup_vega_catalog_bkn
     displayName: 世界杯
   capabilities:
-    required: false
+    required: true
   components:
     objects: true
     relations: true
     metrics: false
-    functions: false
+    functions: true
     skills: false
   hooks:
     dbInit: db/init.sh
