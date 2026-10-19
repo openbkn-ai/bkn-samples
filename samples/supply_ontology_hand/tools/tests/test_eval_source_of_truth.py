@@ -3,7 +3,6 @@ from pathlib import Path
 import yaml
 
 from function_catalog import FUNCTION_CATALOG
-from register_skills import local_skills
 
 
 PACKAGE = Path(__file__).resolve().parents[2]
@@ -43,16 +42,8 @@ def test_bkn_eval_covers_every_published_function_by_its_actual_name():
     assert published <= used
 
 
-def test_bkn_eval_covers_every_registered_skill():
+def test_bkn_eval_routes_through_no_agent_skill():
     answers = yaml.safe_load(
         (EVAL_DATASETS / "sample-answer-set-v1.yaml").read_text(encoding="utf-8")
     )
-    used = {
-        name
-        for answer in answers["answers"]
-        for name in answer["basis"].get("skills", [])
-    }
-    registered = {name for name, _ in local_skills()}
-
-    assert used <= registered
-    assert registered <= used
+    assert not any(answer["basis"].get("skills") for answer in answers["answers"])

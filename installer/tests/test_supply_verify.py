@@ -22,39 +22,34 @@ class SupplyVerifyTest(unittest.TestCase):
     def test_data_smoke_does_not_mark_capabilities_ready(self):
         checks = VERIFY.build_checks(
             data_ok=True,
-            components={"functions": True, "skills": True},
+            components={"functions": True, "skills": False},
             run_cli=_cli(
                 {
                     ("toolbox", "list"): {"data": []},
-                    ("skill", "list"): {"data": []},
                 }
             ),
         )
         by_name = {item["name"]: item["ok"] for item in checks}
         self.assertTrue(by_name["tables-discovered"])
         self.assertFalse(by_name["capability-callable"])
-        self.assertFalse(by_name["skill-discoverable"])
+        self.assertNotIn("skill-discoverable", by_name)
 
-    def test_enabled_tool_and_published_skills_pass(self):
+    def test_enabled_tool_that_reads_the_network_passes(self):
         import sys
 
         sys.path.insert(0, str(VERIFY.SAMPLE_DIR / "tools"))
-        from register_skills import local_skills
         from function_catalog import FUNCTION_CATALOG
 
-        names = [{"name": name, "skill_id": name, "status": "published"} for name, _path in local_skills()]
         tools = [{"name": spec["name"], "tool_id": operation, "status": "enabled"} for operation, spec in FUNCTION_CATALOG.items()]
         bindings = [{"capability_type": "function", "box_id": "box-1", "capability_id": operation} for operation in FUNCTION_CATALOG]
-        bindings += [{"capability_type": "skill", "capability_id": item["skill_id"]} for item in names]
         checks = VERIFY.build_checks(
             data_ok=True,
-            components={"functions": True, "skills": True},
+            components={"functions": True, "skills": False},
             run_cli=_cli(
                 {
                     ("toolbox", "list"): {"data": [{"box_name": VERIFY.BOX_NAME, "box_id": "box-1"}]},
                     ("tool", "list"): {"tools": tools},
                     ("bkn", "capability"): {"entries": bindings},
-                    ("skill", "list"): {"data": names},
                     ("tool", "execute"): {"status_code": 200, "body": {"result": {"leadtime_days": 14}}},
                 }
             ),
@@ -88,17 +83,13 @@ class SupplyVerifyTest(unittest.TestCase):
         import sys
         sys.path.insert(0, str(VERIFY.SAMPLE_DIR / "tools"))
         from function_catalog import FUNCTION_CATALOG
-        from register_skills import local_skills
         run = _cli({
             ("toolbox", "list"): {"data": [{"box_name": VERIFY.BOX_NAME, "box_id": "box-1"}]},
             ("tool", "list"): {"tools": [{"name": spec["name"], "tool_id": operation, "status": "enabled"}
                                              for operation, spec in FUNCTION_CATALOG.items()]},
-            ("skill", "list"): {"data": [{"name": name, "skill_id": name, "status": "published"}
-                                            for name, _path in local_skills()]},
             ("bkn", "capability"): {"entries": []},
         })
         self.assertFalse(VERIFY.capability_ready(run))
-        self.assertFalse(VERIFY.skills_ready(run))
 
     def test_forecast_metric_expectations_match_locked_csv(self):
         import csv

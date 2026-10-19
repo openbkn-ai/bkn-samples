@@ -64,32 +64,10 @@ def function_reads_network(run_cli, box_id: str, tool_id: str) -> bool:
     return result.get("leadtime_days") == PROBE_LEADTIME_DAYS
 
 
-def skills_ready(run_cli) -> bool:
-    sys.path.insert(0, str(SAMPLE_DIR / "tools"))
-    from register_skills import local_skills
-
-    expected = {name for name, _path in local_skills()}
-    listing = run_cli(["skill", "list", "--all"])
-    found = {}
-    for item in _entries(listing, "data", "entries", "skills"):
-        if item.get("status") not in (None, "published"):
-            continue
-        if item.get("name"):
-            found[str(item["name"])] = item.get("skill_id") or item.get("id")
-    if not expected <= found.keys() or not all(found[name] for name in expected):
-        return False
-    bindings = run_cli(["bkn", "capability", "list", "supply_ontology_hand", "--limit", "100"])
-    mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
-               if item.get("capability_type") == "skill"}
-    return {found[name] for name in expected} <= mounted
-
-
 def build_checks(*, data_ok: bool, run_cli, components: dict) -> list[dict]:
     checks = [{"name": name, "ok": data_ok} for name in DATA_CHECKS]
     if components.get("functions"):
         checks.append({"name": "capability-callable", "ok": capability_ready(run_cli)})
-    if components.get("skills"):
-        checks.append({"name": "skill-discoverable", "ok": skills_ready(run_cli)})
     return checks
 
 

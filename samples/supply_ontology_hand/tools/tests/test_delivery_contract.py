@@ -17,7 +17,6 @@ REQUIRED_FILES = (
     "tools/bind_kn_resources.py",
     "tools/load_sample_data.py",
     "tools/register_native_function_toolbox.py",
-    "tools/register_skills.py",
 )
 
 

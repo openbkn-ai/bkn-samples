@@ -1,6 +1,6 @@
 # Supply Chain EN
 
-An independent English sample for OpenBKN. Explore orders, forecasts, BOMs, stock and procurement using concise fictional English names. This sample has its own database, knowledge network, metrics, functions and Skills.
+An independent English sample for OpenBKN. Explore orders, forecasts, BOMs, stock and procurement using concise fictional English names. This sample has its own database, knowledge network, metrics and functions.
 
 Import its standard offline package through one-click onboarding. For manual development, follow [the import guide](docs/import-guide.en-US.md). Finish Step 7 with the core 50-question BKN-Eval; the four calendar-month checks are separate.
 

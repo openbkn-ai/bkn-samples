@@ -8,7 +8,7 @@
 | --- | --- |
 | 数据加载 | `load_sample_data.py`（由 `db/load_supply.py` 调用） |
 | 知识网络导入与资源绑定 | `import_kn.py`、`setup_catalog.py`、`bind_kn_resources.py` |
-| 指标、函数和 Skill 发布 | `power_layer.py`、`register_native_function_toolbox.py`、`register_skills.py` |
+| 指标和函数发布 | `power_layer.py`、`register_native_function_toolbox.py` |
 | 平台验收 | `smoke_test.py`、`power_layer.py` |
 
 `fn/` 是原生业务函数实现；每个函数的入口是 `functions/<operation>.py`，由 `function_source.py` 生成单个可读源文件发布，只包含该入口实际用到的计算代码。`config.example.yaml` 是开发参考，标准安装 hooks 自动生成运行配置。`verify_sample.py` 校验源码交付契约。

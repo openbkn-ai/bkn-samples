@@ -66,7 +66,6 @@ def commands(config_path: Path) -> list[list[str]]:
         [python, str(TOOLS / "power_layer.py"), "create", "--kn-id", KN_ID],
         [python, str(TOOLS / "power_layer.py"), "bind", "--kn-id", KN_ID],
         [python, str(TOOLS / "register_native_function_toolbox.py"), "--apply", "--kn-id", KN_ID],
-        [python, str(TOOLS / "register_skills.py"), "--apply", "--kn-id", KN_ID],
     ]
 
 

@@ -17,10 +17,6 @@ def test_pack_layout_exists():
     assert (TOOLS / "function_source.py").is_file()
     assert (TOOLS / "functions" / "backward_plan.py").is_file()
     assert (TOOLS / "register_native_function_toolbox.py").is_file()
-    skills = PACK / "skills"
-    assert (skills / "production-schedule-backward-planning" / "SKILL.md").is_file()
-    assert (skills / "demand-fulfillment-capacity-analysis" / "SKILL.md").is_file()
-    assert (skills / "demand-fulfillment-requirement-coverage-analysis" / "SKILL.md").is_file()
     docs = PACK / "docs"
     assert (docs / "openbkn-hand-import-guide_cn.md").is_file()
     assert (docs / "faq.md").is_file()

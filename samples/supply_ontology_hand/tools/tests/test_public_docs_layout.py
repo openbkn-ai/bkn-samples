@@ -13,6 +13,7 @@ def test_public_docs_have_one_short_entry_path():
 
     assert public_markdown == {
         "faq.md",
+        "backward-plan-business-rules.md",
         "openbkn-hand-import-guide_cn.md",
     }
     assert not (DOCS / "payloads").exists()

@@ -15,7 +15,6 @@ def test_tools_only_expose_supported_import_and_capability_entries():
         "smoke_test.py",
         "power_layer.py",
         "register_native_function_toolbox.py",
-        "register_skills.py",
         "function_source.py",
         "managed_execution.py",
         "function_catalog.py",
@@ -46,6 +45,7 @@ def test_tools_only_expose_supported_import_and_capability_entries():
         "start_function_service.py",
         "toolbox_resolution.py",
         "native_function_bundle.py",
+        "register_skills.py",
     }
     assert not ({path.name for path in TOOLS.iterdir()} & retired_entries)
     assert not any(

@@ -1,6 +1,6 @@
 # FAQ
 
-**What does this sample include?** Orders, forecasts, BOMs, inventory and procurement data, with a dedicated database, knowledge network, metrics, functions and Skills.
+**What does this sample include?** Orders, forecasts, BOMs, inventory and procurement data, with a dedicated database, knowledge network, metrics and functions.
 
 **Are the names real?** No. People and companies are fictional. Geographic names and technical models are retained where relevant.
 
