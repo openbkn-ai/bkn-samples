@@ -4,7 +4,6 @@ import yaml
 import json
 
 from function_catalog import FUNCTION_CATALOG
-from register_skills import local_skills
 
 
 PACKAGE = Path(__file__).resolve().parents[2]
@@ -44,25 +43,11 @@ def test_bkn_eval_covers_every_published_function_by_its_actual_name():
     assert published <= used
 
 
-def test_bkn_eval_covers_every_registered_skill():
+def test_bkn_eval_routes_through_no_agent_skill():
     answers = yaml.safe_load(
         (EVAL_DATASETS / "sample-answer-set-v1.yaml").read_text(encoding="utf-8")
     )
-    used = {
-        name
-        for answer in answers["answers"]
-        for name in answer["basis"].get("skills", [])
-    }
-    registered = {name for name, _ in local_skills()}
-    calendar_questions = yaml.safe_load(
-        (EVAL_DATASETS / "calendar-month-question-set-v1.yaml").read_text(encoding="utf-8")
-    )
-    extension_skills = set(calendar_questions["required_skills"])
-
-    assert used <= registered
-    assert extension_skills <= registered
-    assert registered <= used | extension_skills
-
+    assert not any(answer["basis"].get("skills") for answer in answers["answers"])
 
 def test_frozen_baseline_metric_basis_resolves_to_delivered_definitions():
     answers = yaml.safe_load((EVAL_DATASETS / "sample-answer-set-v1.yaml").read_text())

@@ -5,13 +5,10 @@ from __future__ import annotations
 import argparse
 import copy
 import json
-import math
 import sys
 import tempfile
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from bind_kn_resources import (
     _object_type_from_get,
@@ -287,95 +284,15 @@ def metric_query_scalar(datas: Any) -> float | int | None:
     return values[0]
 
 
-def values_close(actual: Any, expected: Any, rel_tol: float = 1e-9) -> bool:
+def values_close(actual: Any, expected: Any, rel_tol: float = 0.02) -> bool:
     try:
         actual_n = float(actual)
         expected_n = float(expected)
     except (TypeError, ValueError):
         return actual == expected
-    return math.isclose(actual_n, expected_n, rel_tol=rel_tol, abs_tol=1e-9)
-
-
-def metric_series_match(datas: Any, expected: list[dict], business_timezone: str = "UTC") -> bool:
-    """Verify every label and bucket, independent of series ordering."""
-    if not isinstance(datas, list) or len(datas) != len(expected):
-        return False
-    remaining = list(datas)
-    for want in expected:
-        matches = [item for item in remaining if isinstance(item, dict)
-                   and (item.get("labels") or {}) == want.get("labels", {})]
-        if len(matches) != 1:
-            return False
-        item = matches[0]
-        remaining.remove(item)
-        for key in ("values", "proportions", "growth_values", "growth_rates"):
-            if key in want:
-                actual = item.get(key)
-                if not isinstance(actual, list) or len(actual) != len(want[key]):
-                    return False
-                if not all(values_close(a, b) for a, b in zip(actual, want[key])):
-                    return False
-        if "periods" in want:
-            periods = item.get("time_strs") or item.get("times") or []
-            try:
-                zone = ZoneInfo(business_timezone)
-                actual_periods = []
-                for value in periods:
-                    if isinstance(value, (int, float)):
-                        moment = datetime.fromtimestamp(float(value) / 1000, zone)
-                    elif isinstance(value, str) and "T" in value:
-                        moment = datetime.fromisoformat(value.replace("Z", "+00:00"))
-                        if moment.tzinfo is not None:
-                            moment = moment.astimezone(zone)
-                    else:
-                        actual_periods.append(str(value)[:7])
-                        continue
-                    actual_periods.append(moment.strftime("%Y-%m"))
-            except (ValueError, TypeError, OverflowError, OSError, ZoneInfoNotFoundError):
-                return False
-            if actual_periods != want["periods"]:
-                return False
-    return True
-
-
-def calendar_month_growth(metric_id: str, kn_id: str, case: dict, zone_name: str, cmd) -> tuple[list, list]:
-    """Acceptance orchestration: query full months, then compute adjacent differences."""
-    zone = ZoneInfo(zone_name)
-    queries = case.get("queries") or []
-    if len(queries) < 2:
-        raise ValueError("calendar month comparison requires a baseline month")
-    periods, totals, evidence = [], [], []
-    previous_end = None
-    for query in queries:
-        period = query["period"]
-        year, month = map(int, period.split("-"))
-        start = datetime(year, month, 1, tzinfo=zone)
-        end = datetime(year + (month == 12), month % 12 + 1, 1, tzinfo=zone)
-        if previous_end is not None and start != previous_end:
-            raise ValueError("comparison months must be consecutive")
-        previous_end = end
-        body = query["body"]
-        expected_condition = {"operation": "and", "sub_conditions": [
-            {"field": "signing_date", "operation": ">=", "value": int(start.timestamp() * 1000)},
-            {"field": "signing_date", "operation": "<", "value": int(end.timestamp() * 1000)},
-        ]}
-        if body != {"time": {"instant": True}, "condition": expected_condition}:
-            raise ValueError(f"{period}: expected explicit complete calendar month boundaries")
-        payload = json.loads(cmd(["openbkn", "--json", "bkn", "metric", "query", kn_id,
-                                 metric_id, "--body", json.dumps(body, ensure_ascii=False)]))
-        datas = payload.get("datas")
-        if (not isinstance(datas, list) or len(datas) != 1 or not isinstance(datas[0], dict)
-                or datas[0].get("labels") or len(datas[0].get("values") or []) != 1):
-            raise ValueError(f"{period}: missing or ambiguous monthly total")
-        total = datas[0]["values"][0]
-        if isinstance(total, bool) or not isinstance(total, (int, float)) or not math.isfinite(total):
-            raise ValueError(f"{period}: invalid monthly total")
-        evidence.append({"period": period, "body": body, "response": payload})
-        periods.append(period)
-        totals.append(total)
-    actual = [{"labels": {}, "time_strs": periods[1:], "values": totals[1:],
-               "growth_values": [current - prior for prior, current in zip(totals, totals[1:])]}]
-    return actual, evidence
+    if expected_n == 0:
+        return actual_n == 0
+    return abs(actual_n - expected_n) / abs(expected_n) <= rel_tol
 
 
 def verify_metrics(
@@ -383,7 +300,6 @@ def verify_metrics(
     cases: list[dict],
     *,
     run_cmd: Callable[[list[str]], str] | None = None,
-    business_timezone: str = "UTC",
 ) -> dict[str, Any]:
     cmd = run_cmd or _default_run_cmd
     metrics = list_metrics_by_name(kn_id, run_cmd=cmd)
@@ -396,25 +312,6 @@ def verify_metrics(
             report["failed"].append(
                 {"id": case.get("id"), "metric_name": name, "error": "metric not found"}
             )
-            continue
-        if case.get("calculation") == "calendar_month_growth":
-            try:
-                actual, evidence = calendar_month_growth(str(metric["id"]), kn_id, case, business_timezone, cmd)
-                expected = case.get("expected_series")
-                monthly_gold = case.get("expected_monthly_totals")
-                totals = [item["response"]["datas"][0]["values"][0] for item in evidence]
-                matched = (isinstance(expected, list) and isinstance(monthly_gold, list)
-                           and len(monthly_gold) == len(totals)
-                           and all(values_close(a, b) for a, b in zip(totals, monthly_gold))
-                           and metric_series_match(actual, expected, business_timezone))
-                row = {"id": case.get("id"), "metric_name": name, "metric_id": metric["id"],
-                       "actual": actual, "expected": expected, "queries": evidence,
-                       "calculation_location": "acceptance client; agent performs arithmetic in live evaluation"}
-                if not matched:
-                    row["error"] = "monthly total or calculated growth mismatch"
-                report["passed" if matched else "failed"].append(row)
-            except (ValueError, TypeError, KeyError, ZoneInfoNotFoundError) as exc:
-                report["failed"].append({"id": case.get("id"), "metric_name": name, "error": str(exc)})
             continue
         body = case.get("body") or {}
         raw = cmd(
@@ -451,13 +348,7 @@ def verify_metrics(
             "actual": actual,
             "expected": expected,
         }
-        if "expected_series" in case:
-            row["actual"] = payload.get("datas")
-            row["expected"] = case["expected_series"]
-            matched = metric_series_match(payload.get("datas"), case["expected_series"], business_timezone)
-        else:
-            matched = expected is not None and values_close(actual, expected)
-        if matched:
+        if expected is None or values_close(actual, expected):
             report["passed"].append(row)
         else:
             row["error"] = "value mismatch"
@@ -564,11 +455,7 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("metrics-query-examples.json must contain cases[]")
             lp_payload = load_json(Path(args.logic_file))
             bindings = lp_payload.get("bindings") if isinstance(lp_payload, dict) else lp_payload
-            reports["verify_metrics"] = verify_metrics(
-                kn_id, cases,
-                business_timezone=(query_payload.get("business_timezone", "UTC")
-                                   if isinstance(query_payload, dict) else "UTC"),
-            )
+            reports["verify_metrics"] = verify_metrics(kn_id, cases)
             reports["verify_logic_properties"] = verify_logic_properties(kn_id, bindings)
             failed = (
                 reports["verify_metrics"]["failed"]

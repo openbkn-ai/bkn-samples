@@ -1,4 +1,4 @@
-'S1 backward planning pure function. Business rules: skills/production-schedule-backward-planning/references/business-rules.md. Accepts a request-level Snapshot only, without remote queries or runtime CSV. Reuses existing date, supply-status and incoming-supply functions.'
+'S1 backward planning pure function. Business rules: docs/backward-plan-business-rules.md. Accepts a request-level Snapshot only, without remote queries or runtime CSV. Reuses existing date, supply-status and incoming-supply functions.'
 
 from __future__ import annotations
 

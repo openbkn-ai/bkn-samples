@@ -1,167 +1,73 @@
-# World Cup database → Vega Catalog → BKN → Vega-SQL tool
+# World Cup
 
-> Load the public [Fjelstul World Cup Database](https://github.com/jfjelstul/worldcup) into MySQL `wc_*` tables, then run a single script **`./run.sh`** that scans the source through **Vega**, pushes a checked-in **BKN** (`worldcup_vega_catalog_bkn`), builds search indexes, and registers a published **`vega_sql_execute`** tool you can query directly against the 27 tables.
+Explore a Chinese-language ontology over public World Cup history through object queries, joins, rankings and cross-tournament analysis. Install through standard one-click onboarding, then let an external agent read facts through MCP and perform the analysis.
 
-[中文版](./README_cn.md)
+[中文文档](README_cn.md)
 
-## The path
+## Data and model
 
-```
-                       ┌─ 1) Check CSVs      verify the 27 pinned CSVs bundled in data/
-                       │
-                       ├─ 2) Import MySQL    local mysql client loads CSVs → wc_* tables
-                       │                     (pre-creates wc_matches / wc_team_appearances
-                       │                      with VARCHAR(255) to dodge MySQL Error 1118)
-                       │
-                       ├─ 3) Vega scan       vega catalog create + asynchronous discover
-                       │
-   ./run.sh  ─────────►├─ 4) Render BKN      map vega Resources → render the bundled BKN directory
-                       │
-                       ├─ 5) Push BKN +      bkn validate + push (idempotent),
-                       │   build indexes     then build vega resource OpenSearch datasets
-                       │                     (7 entity tables get vector embedding)
-                       │
-                       └─ 6) Upload toolbox  openbkn toolbox create + tool upload <OpenAPI>
-                                             (registers + publishes `vega_sql_execute`
-                                              so you can run raw SQL against the wc_* tables)
-```
+The locked snapshot contains **27 CSV tables and 81,200 rows**: 22 men's editions through 2022 and eight women's editions through 2019. Detail coverage varies by table. Names and historical identities retain their source spelling.
 
-The pipeline ends here: a Vega catalog **BKN** (`worldcup_vega_catalog_bkn`) backed by a published, queryable **`vega_sql_execute`** tool over the 27 `wc_*` MySQL tables.
+- Sample ID: `world-cup`
+- Knowledge network: `worldcup_vega_catalog_bkn`
+- Database: `worldcup`
+- Model: 27 object types, 29 relationships and four concept groups
+- [Model overview](bkn-network-structure.html)
 
-Checked-in assets in this directory:
-- **`data/`** — the 27 CSVs from the locked upstream commit, verified by `dataset.lock` before loading.
-- **`kn/`** — the OpenBKN BKN directory (27 object types, 29 `rel_*` edges); each OT ends with **`resource | {{*_RES_ID}}`** placeholders. `network.bkn` pins id `worldcup_vega_catalog_bkn` and is validated before publication.
-- **`vega_sql_execute.openapi.json`** — OpenAPI 3.0 spec for the SQL-execute tool. Step 6 uploads it via `openbkn tool upload` (the OpenAPI parser path; sidesteps the 0.7.0 `openbkn toolbox import` bug that stored `api_spec` as null).
-- **`bkn-network-structure.html`** — single-file visual overview of the BKN: the 4 concept groups, all 27 OTs (dashed = no FK in minimal mode), the matches/tournaments hubs, and the full 29-row relation table. Open in any browser; no build step.
+## One-click onboarding
+
+1. Open **Studio → One-click onboarding** and refresh the sample catalog.
+2. Select World Cup, check its version and release notes, and select **Install**.
+3. Wait for installation and verification to complete, then open the knowledge network.
+4. Connect an external agent through MCP to inspect object definitions, retrieve complete instance pages and perform joins and calculations.
+5. Use **Uninstall** to remove the sample. Reinstall after cleanup completes; installation history is retained.
+
+If the catalog is unreachable, download this sample’s `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases) and use **Import offline package**, then install it. Its referenced data image must also be reachable or preloaded in the target cluster. See the [development and publication guide](../../docs/SAMPLE_DEVELOPMENT_GUIDE.md). The [official catalog](../../catalog.json) determines installable versions; new source-controlled evaluation material does not replace an existing release package.
+
+## Questions to try
+
+- Which awards did Lionel Messi receive in WC-2014 and WC-2022?
+- Which players were in Argentina's WC-2022 squad, and how many appearances and goals did each record?
+- Which players share a top-five scorer rank at WC-2022?
+- How do Argentina's WC-2022 match goals and shootout records reconcile?
+- How many matches, squad entries, goals and player appearances are recorded for WC-1999?
+
+## Chinese scenario evaluation
+
+The suite provides **50 Chinese questions, reference answers, recalculation and grading scripts**:
+
+| Category | Questions |
+| --- | ---: |
+| Basic queries and statistics | 10 |
+| Multi-table joins | 12 |
+| Rankings and cross-tournament comparisons | 14 |
+| Combined analysis | 14 |
+
+- [Evaluation guide and business semantics](https://github.com/openbkn-ai/bkn-samples/blob/main/samples/world-cup/bkn-eval/README.md)
+- [Question set](https://github.com/openbkn-ai/bkn-samples/blob/main/samples/world-cup/bkn-eval/datasets/question-set-v1.yaml)
+- [Reference answers](https://github.com/openbkn-ai/bkn-samples/blob/main/samples/world-cup/bkn-eval/gold/answer-set-v1.yaml)
+
+An independent external agent answers through MCP without seeing the reference answers. Check its required fields, ordering and business values after completion. Evaluation uses standard object queries rather than a runtime SQL endpoint, an internal Vega query interface or the platform-internal agent.
+
+The evaluation scripts are maintained on `main`; follow the linked evaluation guide from a main-branch source checkout.
+
+
+Evaluation suites and tests remain in source control and are excluded from runtime packages by the current packaging rules. Execution records and temporary calculation files remain local.
+
+## Query semantics
+
+Count matches from `matches` or distinct `match_id`. A team appearance represents one team in one match, so each match has two team records. Exclude own goals from individual scoring; include them for the credited team. Shootout kicks are separate from match-score goals. Booking flags may overlap and must be counted as requested.
+
+The current model omits ten CSV display fields each from matches and team appearances. Resolve labels and stages through declared team, referee-appearance, goal or manager-appearance objects. Convert numeric text before capacity comparisons, row-key ordering or calculations, and retrieve every required page.
+
+## Development and publication
+
+[sample.yaml](sample.yaml) declares the installed components and hooks. Installation hooks call `run.sh` internally; users install through one-click onboarding or offline package import. The sample publishes three native functions (top scorers, player career, tournament summary; see [tools/README.md](tools/README.md)); agents can also query directly through the standard `query_object_instance` and `run_cypher` MCP tools.
+
+Follow the [Sample Development Guide](../../docs/SAMPLE_DEVELOPMENT_GUIDE.md) to build a fixed candidate, validate installation and business scenarios, and publish a new immutable version when changing data or models.
 
 ## Data source and license
 
-CSVs come from Joshua C. Fjelstul’s **The Fjelstul World Cup Database** ([repo](https://github.com/jfjelstul/worldcup)).
-- **© 2023 Joshua C. Fjelstul, Ph.D.**
-- Licensed under **CC-BY-SA 4.0** — [legal text](https://creativecommons.org/licenses/by-sa/4.0/legalcode)
+Data: [Fjelstul World Cup Database](https://github.com/jfjelstul/worldcup), commit `35a8667f518b07469182ae16d35574dd0e7a00fb`. [dataset.lock](dataset.lock) records checksums for all 27 CSV files.
 
-Keep attribution and the share-alike notice on derived data. **Pin a revision** via `WORLDCUP_REF` in `.env` (default `master`, which may move).
-
-## First-time setup checklist
-
-`run.sh` only automates the 6 steps above. On a fresh machine + fresh cluster you still need these one-shot platform tasks:
-
-1. **Install the BKN Foundry platform** (k8s + bkn-backend + ontology-query + vega-backend + mf-model-* + opensearch + minio + mariadb). Use `deploy/onboard.sh` from the BKN Foundry repo root — see [deploy/README.md](https://github.com/openbkn-ai/bkn-foundry/blob/main/deploy/README.md). Recommended `0.8.0+` (fixes the `_score` resource-path bug and the toolbox-import write bug).
-2. **Authenticate the CLI**: `openbkn auth login https://<your-platform-url>` (writes `~/.bkn/`).
-3. **Register an embedding model** (the vector index needs it; the full-text index builds without it):
-   ```bash
-   openbkn model small add --body-file <emb.json>
-   ```
-   `EMBEDDING_MODEL_NAME` in `.env` (default `text-embedding-v4-cn`) is passed to the build
-   by **name** — Vega resolves embedding models by name and rejects a raw model id.
-4. **Wire BKN to the embedding model** (only needed for KN-level semantic search; this example doesn't rely on it):
-   ```bash
-   sudo bash deploy/onboard.sh --enable-bkn-search \
-     --bkn-embedding-name=text-embedding-v4-cn
-   ```
-5. **Stage MySQL** — create the `worldcup` database and a user that is reachable from the openbkn platform (k8s pod network). Fill `DB_HOST / DB_PORT / DB_NAME / DB_USER / DB_PASS` in `.env`.
-
-Once those are done, `./run.sh` is fully turnkey and idempotent.
-
-## Prerequisites (per-shell)
-
-```bash
-npm install -g @openbkn/bkn-sdk
-openbkn auth login https://<your-platform-url>
-# Use the Node SDK `openbkn` (avoid a broken /usr/local/bin/openbkn stub).
-# MySQL must be reachable from the platform AND from Vega connectors.
-# curl + jq + python3 + (optional) `mysql` CLI for the wide-table pre-create
-```
-
-## Quick start
-
-```bash
-cd samples/world-cup
-cp env.sample .env
-vim .env   # at minimum: DB_*
-
-# Single command runs all 6 steps end-to-end; every step is idempotent on rerun.
-./run.sh
-```
-
-`./run.sh --help` lists every flag. Common variants:
-
-| Command | Effect |
-|---------|--------|
-| `./run.sh` | Run steps 1→6 |
-| `./run.sh --dry-run` | Plan only, no API calls |
-| `./run.sh --from 3` | Rerun from Vega scan onward (CSVs already in MySQL) |
-| `./run.sh --only 5` | Only run step 5 (BKN push + index build) |
-| `./run.sh --only 6` | Only run toolbox create + tool upload + publish |
-
-## The registered `vega_sql_execute` tool
-
-Step 6 publishes one OpenAPI-described tool, `vega_sql_execute`, that runs raw MySQL SQL against the Vega resources behind the `worldcup_vega_catalog_bkn` BKN:
-
-| Tool | Source toolbox | Use when |
-|---|---|---|
-| **`vega_sql_execute`** | uploaded by step 6 from `vega_sql_execute.openapi.json` | Raw MySQL SQL — `SELECT`, `WHERE`, `ORDER BY`, `GROUP BY`, multi-table `JOIN`, `COUNT(*)`. Reference resources by `{{<resource_id>}}` placeholder; `resource_id` comes from `openbkn vega resource list`. |
-
-The platform built-in `search_schema` / `query_object_instance` / `query_instance_subgraph` tools also remain available against the same KN for schema exploration and equality/range lookups over the OpenSearch datasets built in step 5.
-
-## Example queries
-
-Once `./run.sh` finishes, run the published `vega_sql_execute` tool. Resolve a table's `resource_id` first, then reference it as `{{<resource_id>}}` in the SQL:
-
-```bash
-# list table resources to grab a resource_id
-openbkn vega resource list --catalog-id <catalog_id> --category table
-
-# run SQL through the published tool (TOOLBOX_BOX_ID / VEGA_TOOL_ID are echoed by step 6)
-openbkn tool execute <VEGA_TOOL_ID> --toolbox <TOOLBOX_BOX_ID> \
-  --body '{"query":"<your SQL with {{<resource_id>}} placeholders>","query_format":"sql"}'
-```
-
-### Q1 · Messi's World Cup awards
-**SQL**: `SELECT tournament_name, award_name FROM {{<award_winners_resource_id>}} WHERE family_name='Messi' AND given_name='Lionel'` → returns:
-- 2014 FIFA Men's World Cup — **Golden Ball**
-- 2022 FIFA Men's World Cup — **Golden Ball** + **Silver Boot**
-
-### Q2 · Sun Wen's per-tournament goals + all-time rank
-**SQL**: `SELECT tournament_name, COUNT(*) FROM {{<goals_resource_id>}} WHERE family_name='Sun' AND given_name='Wen' GROUP BY tournament_name` (+ a second SQL for the ranking) → returns:
-
-| Tournament | Goals |
-|---|---|
-| 1991 Women's WC | 1 |
-| 1995 Women's WC | 2 |
-| **1999 Women's WC** | **7** (also won Golden Ball + Golden Boot) |
-| 2003 Women's WC | 1 |
-| **Total** | **11** (tied 5th on all-time women's WC scorers) |
-
-### Q3 · Last three men's World Cup winners
-**SQL**: `SELECT year, host_country, winner FROM {{<tournaments_resource_id>}} WHERE tournament_name LIKE '%Men%' ORDER BY CAST(year AS UNSIGNED) DESC LIMIT 3` → returns:
-- 2022 Qatar → Argentina
-- 2018 Russia → France
-- 2014 Brazil → Germany
-
-Every number comes straight from the 27 `wc_*` tables you imported in step 2 — exact, no approximation.
-
-## The 27 datasets (grouped)
-
-1. **Core entities** — `tournaments`, `confederations`, `teams`, `players`, `managers`, `referees`, `stadiums`, `matches`, `awards`
-2. **Tournament mappings** — `qualified_teams`, `squads`, `manager_appointments`, `referee_appointments`
-3. **Match appearances** — `team_appearances`, `player_appearances`, `manager_appearances`, `referee_appearances`
-4. **In-match events** — `goals`, `penalty_kicks`, `bookings`, `substitutions`
-5. **Standings / awards** — `host_countries`, `tournament_stages`, `groups`, `group_standings`, `tournament_standings`, `award_winners`
-
-## Troubleshooting
-
-| Symptom | What to try |
-|---------|--------------|
-| Step 1 download fails | Check network; verify `WORLDCUP_REF` points at a revision with `data-csv/`. |
-| `openbkn auth` 401 | `openbkn auth login`; confirm business domain via `openbkn config show`. |
-| `import-csv` → MySQL **Error 1118** | Step 2 pre-creates `wc_matches` / `wc_team_appearances` with VARCHAR(255) via the local `mysql` CLI. Without that client installed you must pre-create them manually or relax column types. |
-| Vega `discover` fails | Set `VEGA_CATALOG_ID` then `./run.sh --from 4`. |
-| Fewer than 27 Resources | `databases` in connector config incomplete, or discover didn't finish — adjust `VEGA_MYSQL_DATABASES` and rerun step 3. |
-| Step 5 `⊘ build_failed` for a table | The API error is printed underneath the line. Most common cause: a field named in the index plan is absent from that resource's schema. The table stays queryable via `vega_sql_execute`. |
-| Step 5 `embedding model … not registered` | Either register one (see setup checklist) or set `DO_INDEX=0` / `EMBEDDING_MODEL_NAME=` (empty) — the script then builds full-text-only indexes. |
-| `tool upload` / `toolbox publish` fails in step 6 | Confirm the CLI is logged in and `vega_sql_execute.openapi.json` is present; set `FORCE_TOOLBOX_REIMPORT=1` to delete + re-import a stale same-name toolbox. |
-
-## Cleanup
-
-`./run.sh` does **not** auto-delete the datasource, MySQL tables, Vega catalog, KN, or toolbox. Remove them explicitly via the `openbkn` CLI when no longer needed.
+© 2023 Joshua C. Fjelstul, Ph.D. Data is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Preserve attribution and share-alike requirements when sharing data or adaptations.

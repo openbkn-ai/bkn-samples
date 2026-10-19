@@ -8,14 +8,14 @@ from .snapshot import Snapshot, _f, _i
 
 def is_main_row(row: dict) -> bool:
     priority = _i(row.get("alt_priority"), 0)
-    # ERP labels the entire replacement group with alt_method=替代,
-    # including its priority-zero primary row.
-    return priority == 0
+    method = (row.get("alt_method") or "").strip()
+    return priority == 0 and method != "替代"
 
 
 def is_substitute_row(row: dict) -> bool:
+    method = (row.get("alt_method") or "").strip()
     priority = _i(row.get("alt_priority"), 0)
-    return priority > 0
+    return method == "替代" or priority > 0
 
 
 def product_bom_rows(snap: Snapshot, product: str) -> list[dict]:
@@ -105,8 +105,7 @@ def bom_list(
         ),
         "max_level": max(levels) if levels else 0,
         "l1_main_count": len(l1_main),
-        "rows_incl_root": len(filter_bom_rows(rows, include_substitute=include_substitute, depth=None, include_root=True)),
-        "source_rows_incl_root": len(rows),
+        "rows_incl_root": len(rows),
         "caliber": "main_only" if not include_substitute else "include_substitute",
         "report_grain": report_grain,
         "l1_lines": [_line_payload(r) for r in l1_main],
@@ -208,9 +207,9 @@ def bom_shared_list(
     include_substitute: bool = False,
     depth: int | None = None,
 ) -> dict:
-    codes = list(dict.fromkeys((p or "").strip() for p in (products or []) if (p or "").strip()))
+    codes = [(p or "").strip() for p in (products or []) if (p or "").strip()]
     if len(codes) < 2:
-        raise CannotCompute("产品 BOM 共用清单至少需要 2 个不同产品")
+        raise CannotCompute("产品 BOM 共用清单至少需要 2 个产品")
     sets: list[set[str]] = []
     per_product: dict[str, dict[str, list[dict]]] = {}
     for product in codes:

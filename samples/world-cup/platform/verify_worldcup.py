@@ -5,15 +5,12 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
 
-import yaml
-
 DATA_CHECKS = ("tables-discovered", "cross-table-query")
-BOX_NAME = "wc_vega_query"
-TOOL_NAME = "vega_sql_execute"
 KN_ID = "worldcup_vega_catalog_bkn"
 SAMPLE_DIR = Path(__file__).resolve().parents[1]
 
@@ -32,39 +29,69 @@ def apply_database_env(raw: dict) -> None:
     os.environ.setdefault("BKN_SAMPLE_VERSION", str(raw.get("version") or ""))
 
 
-def _entries(payload: dict, *keys: str) -> list:
+def model_ready(run_cli) -> bool:
+    for directory, command in (("object_types", "object-type"), ("relation_types", "relation-type"), ("concept_groups", "concept-group")):
+        expected = {re.search(r"^id: (.+)$", path.read_text(), re.M).group(1)
+                    for path in (SAMPLE_DIR / "kn" / directory).glob("*.bkn")}
+        result = run_cli(["bkn", command, "list", KN_ID])
+        entries = result if isinstance(result, list) else result.get("entries", [])
+        if {entry.get("id") for entry in entries} != expected:
+            return False
+    return True
+
+
+# The WC-2022 top scorer in the locked data: Kylian Mbappé, 8 non-own goals.
+PROBE_INPUT = {"tournament_id": "WC-2022", "top": 1}
+PROBE_TOP = {"player_id": "P-64077", "goals": 8}
+
+
+def _entries(payload, *keys):
     for key in keys:
-        inner = payload.get(key)
-        if isinstance(inner, list):
-            return inner
+        if isinstance(payload.get(key), list):
+            return payload[key]
     return []
 
 
-def tool_ready(run_cli) -> bool:
+def functions_ready(run_cli) -> bool:
+    """Enabled and mounted is not enough: call one function and check its locked answer."""
+    sys.path.insert(0, str(SAMPLE_DIR / "tools"))
+    from register_functions import BOX_NAME, FUNCTIONS
+
     listing = run_cli(["toolbox", "list", "--keyword", BOX_NAME, "--limit", "100"])
     box = next((item for item in _entries(listing, "data", "entries") if item.get("box_name") == BOX_NAME), None)
-    if not box or not box.get("box_id"):
+    if not box:
         return False
-    tools = run_cli(["tool", "list", "--toolbox", box["box_id"], "--all"])
-    return any(
-        item.get("name") == TOOL_NAME and item.get("status") == "enabled"
-        for item in _entries(tools, "tools", "data", "entries")
-    )
+    tools = {item.get("name"): item.get("tool_id") for item in _entries(run_cli(["tool", "list", "--toolbox", box["box_id"], "--all"]), "tools")
+             if item.get("status") == "enabled"}
+    expected = [spec["name"] for spec in FUNCTIONS.values()]
+    if not all(tools.get(name) for name in expected):
+        return False
+    mounted = {item.get("capability_id") for item in _entries(run_cli(["bkn", "capability", "list", KN_ID, "--limit", "100"]), "entries")
+               if item.get("capability_type") == "function"}
+    if not {tools[name] for name in expected} <= mounted:
+        return False
+    try:
+        executed = run_cli(["tool", "execute", tools[FUNCTIONS["top_scorers"]["name"]], "--toolbox", box["box_id"],
+                            "--body", json.dumps(PROBE_INPUT)])
+    except RuntimeError:
+        return False
+    rows = ((executed.get("body") or {}).get("result") or {}).get("rows") or []
+    return bool(rows) and {k: rows[0].get(k) for k in PROBE_TOP} == PROBE_TOP
 
 
-def build_checks(*, data_ok: bool, tool_ok: bool | None) -> list[dict]:
-    checks = [{"name": name, "ok": data_ok} for name in DATA_CHECKS]
-    if tool_ok is not None:
-        checks.append({"name": "capability-callable", "ok": tool_ok})
+def build_checks(*, data_ok: bool, model_ok: bool, functions_ok: bool | None = None) -> list[dict]:
+    checks = [{"name": name, "ok": data_ok} for name in DATA_CHECKS] + [{"name": "model-imported", "ok": model_ok}]
+    if functions_ok is not None:
+        checks.append({"name": "capability-callable", "ok": functions_ok})
     return checks
 
 
-def _openbkn(args: list[str]) -> dict:
+def _openbkn(args: list[str]) -> dict | list:
     completed = subprocess.run(["openbkn", "--json", *args], check=False, capture_output=True, text=True)
     if completed.returncode:
         raise RuntimeError("openbkn command failed")
     payload = json.loads(completed.stdout or "{}")
-    if not isinstance(payload, dict):
+    if not isinstance(payload, (dict, list)):
         raise RuntimeError("openbkn command failed")
     return payload
 
@@ -77,15 +104,16 @@ def main() -> int:
     apply_database_env(raw)
     if os.environ.get("BKN_SAMPLE_PRINT_ONLY") == "1":
         data_ok = True
-        tool_ok = True
+        model_ok = True
+        functions_ok = True if raw.get("components", {}).get("functions") else None
     else:
         sys.path.insert(0, str(SAMPLE_DIR))
         from db.verify_worldcup import main as verify_database
 
         data_ok = verify_database() == 0
-        document = yaml.safe_load((SAMPLE_DIR / "sample.yaml").read_text(encoding="utf-8"))
-        tool_ok = tool_ready(_openbkn) if document["spec"]["components"].get("functions") else None
-    checks = build_checks(data_ok=data_ok, tool_ok=tool_ok)
+        model_ok = model_ready(_openbkn)
+        functions_ok = functions_ready(_openbkn) if raw.get("components", {}).get("functions") else None
+    checks = build_checks(data_ok=data_ok, model_ok=model_ok, functions_ok=functions_ok)
     passed = all(item["ok"] for item in checks)
     degrade = []
     if os.environ.get("BKN_SAMPLE_EMBEDDING", "1") == "0" or not os.environ.get("EMBEDDING_MODEL_NAME", "").strip():

@@ -3,7 +3,8 @@ from __future__ import annotations
 from collections import defaultdict
 
 from .errors import CannotCompute
-from .allocation import finite_quantity, net_requirements
+from .inventory import available_qty, in_transit_qty
+from .kitting import kitting_net_demand
 from .warehouse import resolve_warehouse_scope
 
 
@@ -11,11 +12,11 @@ def shared_contention(
     snap,
     demands: list[dict],
     *,
-    warehouse_scope: str | list[str] | None = "all",
+    warehouse_scope: str | list[str] | None = "production_available",
     substitute_enabled: bool | None = False,
     report_grain: str = "summary",
 ) -> dict:
-    """Deduct a common available-inventory pool in demand list order; no PO."""
+    """Deduct shared available+in-transit in demand list order."""
     if not demands or len(demands) < 2:
         raise CannotCompute("共用料争用至少需要 2 条需求")
     if substitute_enabled is None:
@@ -31,36 +32,61 @@ def shared_contention(
             raise CannotCompute("需求缺少产品编码")
         if qty is None:
             raise CannotCompute(f"{product} 缺少数量，不能算争用（数量未定请改用产品 BOM 共用清单）")
-        normalized.append({"product_code": product, "qty": finite_quantity(qty, "需求数量")})
+        normalized.append({"product_code": product, "qty": float(qty)})
 
     warehouses = resolve_warehouse_scope(warehouse_scope)
-    pool = {}
-    allocations = []
-    occurrences = defaultdict(set)
-    for index, dem in enumerate(normalized):
-        net = net_requirements(snap, dem["product_code"], dem["qty"], scope=warehouse_scope,
-                               substitute_enabled=bool(substitute_enabled),
-                               include_finished_goods=True, pool=pool)
-        rows = []
-        if net["finished_goods_qty"] > 0:
-            rows.append({"material_code": dem["product_code"], "gross_requirement": dem["qty"],
-                         "allocated": net["finished_goods_allocated_qty"], "shortage": 0.0,
-                         "is_leaf": False, "role": "finished_goods"})
-        for line in net["lines"]:
-            rows.append({"material_code": line["material_code"],
-                         "gross_requirement": line["gross_requirement"],
-                         "allocated": line["allocated_qty"],
-                         "shortage": line["net_requirement"] if line["is_leaf"] else 0.0,
-                         "component_net_requirement": line["net_requirement"],
-                         "is_leaf": line["is_leaf"], "source": line["source"]})
-        for row in rows:
-            occurrences[row["material_code"]].add(index)
-        allocations.append({"product_code": dem["product_code"], "demand_qty": dem["qty"],
-                            "satisfied": net["feasible"], "lines": rows})
-    for allocation in allocations:
-        for row in allocation["lines"]:
-            row["shared"] = len(occurrences[row["material_code"]]) > 1
+    per_demand = []
+    pool: dict[str, float] = defaultdict(float)
+    seen_materials: dict[str, int] = defaultdict(int)
+    for dem in normalized:
+        kit = kitting_net_demand(
+            snap,
+            dem["product_code"],
+            dem["qty"],
+            warehouse_scope=warehouse_scope,
+            substitute_enabled=substitute_enabled,
+            report_grain="full",
+        )
+        per_demand.append(kit)
+        for line in kit["lines"]:
+            code = line["material_code"]
+            seen_materials[code] += 1
+            if code not in pool:
+                pool[code] = available_qty(snap, code, warehouse_scope) + in_transit_qty(
+                    snap, code
+                )
+
     remaining = dict(pool)
+    allocations = []
+    for kit in per_demand:
+        rows = []
+        ok = True
+        for line in kit["lines"]:
+            code = line["material_code"]
+            need = float(line["gross_requirement"])
+            have = remaining.get(code, 0.0)
+            take = min(have, need)
+            remaining[code] = have - take
+            short = max(0.0, need - take)
+            if short > 0:
+                ok = False
+            rows.append(
+                {
+                    "material_code": code,
+                    "gross_requirement": need,
+                    "allocated": take,
+                    "shortage": short,
+                    "shared": seen_materials[code] > 1,
+                }
+            )
+        allocations.append(
+            {
+                "product_code": kit["product_code"],
+                "demand_qty": kit["demand_qty"],
+                "satisfied": ok,
+                "lines": rows,
+            }
+        )
     shared_shortages = {
         row["material_code"]
         for allocation in allocations
@@ -100,7 +126,6 @@ def shared_contention(
         "warehouse_filter": warehouses,
         "substitute_enabled": bool(substitute_enabled),
         "deduction_order": [d["product_code"] for d in normalized],
-        "include_in_transit": False,
     }
     if report_grain == "full":
         result["allocations"] = allocations

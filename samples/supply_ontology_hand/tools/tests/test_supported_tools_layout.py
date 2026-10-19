@@ -8,7 +8,6 @@ def test_tools_only_expose_supported_import_and_capability_entries():
     required = {
         "README.md",
         "config.example.yaml",
-        "preflight.py",
         "load_sample_data.py",
         "import_kn.py",
         "setup_catalog.py",
@@ -16,8 +15,7 @@ def test_tools_only_expose_supported_import_and_capability_entries():
         "smoke_test.py",
         "power_layer.py",
         "register_native_function_toolbox.py",
-        "register_skills.py",
-        "native_function_bundle.py",
+        "function_source.py",
         "managed_execution.py",
         "function_catalog.py",
     }
@@ -46,6 +44,8 @@ def test_tools_only_expose_supported_import_and_capability_entries():
         "skill_orchestration.py",
         "start_function_service.py",
         "toolbox_resolution.py",
+        "native_function_bundle.py",
+        "register_skills.py",
     }
     assert not ({path.name for path in TOOLS.iterdir()} & retired_entries)
     assert not any(

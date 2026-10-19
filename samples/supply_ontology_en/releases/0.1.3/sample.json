@@ -1,0 +1,176 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "supply-chain-en",
+    "version": "0.1.3",
+    "displayName": "Supply Chain (EN)",
+    "summary": "Assess demand coverage using sample orders, stock, BOMs and supply.",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "Fictional historical data for demonstration only."
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-19T06:02:15Z",
+      "defaultLocale": "en-US",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:e304f0ffce50514d384608acb356f1841d32c5fbe78d1f856aa0ce6c5026f0e4"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:bdf56918e00f39b9f2c6cbad8f7202a973e8f9e3f30a60b3621e258ded47bc79"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "arm64",
+        "amd64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.kn-json",
+        "execution.function"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.0 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:ebb042c36c4cec585653301ca850e97eb5bc35061944f952b36bde5100584ce4",
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.3/package.tar.gz"
+        ]
+      },
+      {
+        "id": "database-image",
+        "type": "oci-image",
+        "digest": "sha256:08b7233ab1d0c1976e0a49c968e4fc31867a2a15b5c40725d2817036dbd3e306",
+        "locations": [
+          "oci://ghcr.io/openbkn-ai/bkn-samples"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "questions": [
+          "Can current stock and work in progress cover this demand?",
+          "Which alternatives can cover material shortages?"
+        ],
+        "contentId": "supply-network"
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "kn-json",
+          "entrypoint": "supply_ontology_en.json",
+          "contentId": "supply-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "supply-functions"
+        }
+      ],
+      "skillPackages": []
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "supply-data",
+          "artifactId": "database-image",
+          "engine": "mariadb",
+          "databaseName": "supply_demo_en",
+          "expectedTables": 12
+        }
+      ],
+      "bindings": [
+        {
+          "objectTypeId": "supply_ontology_en_material",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_material",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_product",
+          "dataDependencyId": "supply-data",
+          "tableName": "hd_product_view",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_bom",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_material_bom",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_inventory",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_real_time_inventory",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_supplier",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_supplier",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_forecast",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_mds_forecast",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_mrp",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_mrp_plan_order",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_pr",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_purchase_request",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_po",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_purchase_order",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_mps",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_production_work_order",
+          "contentId": "supply-network"
+        },
+        {
+          "objectTypeId": "supply_ontology_en_salesorder",
+          "dataDependencyId": "supply-data",
+          "tableName": "sales_order",
+          "contentId": "supply-network"
+        }
+      ]
+    }
+  }
+}

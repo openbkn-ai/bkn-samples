@@ -44,35 +44,30 @@ def capability_ready(run_cli) -> bool:
     bindings = run_cli(["bkn", "capability", "list", "supply_ontology_en", "--limit", "100"])
     mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
                if item.get("capability_type") == "function" and item.get("box_id") == box["box_id"]}
-    return {enabled[name] for name in expected} <= mounted
-
-
-def skills_ready(run_cli) -> bool:
-    sys.path.insert(0, str(SAMPLE_DIR / "tools"))
-    from register_skills import local_skills
-
-    expected = {name for name, _path in local_skills()}
-    listing = run_cli(["skill", "list", "--all"])
-    found = {}
-    for item in _entries(listing, "data", "entries", "skills"):
-        if item.get("status") not in (None, "published"):
-            continue
-        if item.get("name"):
-            found[str(item["name"])] = item.get("skill_id") or item.get("id")
-    if not expected <= found.keys() or not all(found[name] for name in expected):
+    if not {enabled[name] for name in expected} <= mounted:
         return False
-    bindings = run_cli(["bkn", "capability", "list", "supply_ontology_en", "--limit", "100"])
-    mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
-               if item.get("capability_type") == "skill"}
-    return {found[name] for name in expected} <= mounted
+    return function_reads_network(run_cli, box["box_id"], enabled[FUNCTION_CATALOG["leadtime_days"]["name"]])
+
+
+# Material 606-000989 is a purchased part with a 14-day purchase lead time in the locked data.
+PROBE_INPUT = {"material_code": "606-000989"}
+PROBE_LEADTIME_DAYS = 14
+
+
+def function_reads_network(run_cli, box_id: str, tool_id: str) -> bool:
+    """Enabled and mounted does not prove a function can read the network; call one."""
+    try:
+        executed = run_cli(["tool", "execute", tool_id, "--toolbox", box_id, "--body", json.dumps(PROBE_INPUT)])
+    except RuntimeError:
+        return False
+    result = (executed.get("body") or {}).get("result") or {}
+    return result.get("leadtime_days") == PROBE_LEADTIME_DAYS
 
 
 def build_checks(*, data_ok: bool, run_cli, components: dict) -> list[dict]:
     checks = [{"name": name, "ok": data_ok} for name in DATA_CHECKS]
     if components.get("functions"):
         checks.append({"name": "capability-callable", "ok": capability_ready(run_cli)})
-    if components.get("skills"):
-        checks.append({"name": "skill-discoverable", "ok": skills_ready(run_cli)})
     return checks
 
 

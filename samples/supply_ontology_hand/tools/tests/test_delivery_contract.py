@@ -16,9 +16,7 @@ REQUIRED_FILES = (
     "tools/import_kn.py",
     "tools/bind_kn_resources.py",
     "tools/load_sample_data.py",
-    "tools/preflight.py",
     "tools/register_native_function_toolbox.py",
-    "tools/register_skills.py",
 )
 
 
@@ -49,11 +47,11 @@ def test_released_sample_has_no_legacy_dataset_or_local_eval_paths():
     assert not (sample / "eval").exists()
 
 
-def test_readme_explains_how_to_get_the_release_tag():
-    readme = (
-        REPO_ROOT / "samples" / "supply_ontology_hand" / "README.md"
-    ).read_text(encoding="utf-8")
-
-    assert "supply-ontology-hand-v0.1.4" in readme
-    assert "git clone --branch" in readme
-    assert "git fetch origin --tags --force" in readme
+def test_readme_uses_standard_installation_entries():
+    readme = (Path(__file__).resolve().parents[2] / "README.md").read_text(encoding="utf-8")
+    assert "https://github.com/openbkn-ai/bkn-samples/releases" in readme
+    assert "package.tar.gz" in readme
+    assert "git clone --branch" not in readme
+    assert "git fetch origin --tags --force" not in readme
+    assert not (Path(__file__).resolve().parents[1] / "preflight.py").exists()
+    assert "一键体验" in readme and "导入离线包" in readme

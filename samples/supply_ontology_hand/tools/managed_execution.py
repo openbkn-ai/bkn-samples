@@ -1,7 +1,7 @@
 """BKN fact requirements for calculations executed inside native Functions.
 
 The caller supplies business parameters only. The native Function uses this
-plan to query the knowledge network through ``sandbox_sdk.bkn``,
+plan to query the knowledge network through the preinstalled ``bkn_osdk``,
 keeps rows in its sandbox, and then invokes the tested pure calculation module.
 It deliberately has no
 ``resolved_context`` or caller-managed snapshot contract.
@@ -10,20 +10,17 @@ It deliberately has no
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
 from collections.abc import Callable, Mapping
 from typing import Any
 
 from fn.contracts import OPERATION_CONTRACTS
-from fn.leadtime import leadtime_details
-from fn.bom import is_main_row
 from fn import (
-    CannotCompute,
     backward_plan,
     bom_list,
     bom_shared_list,
     kitting_net_demand,
     layered_inventory,
+    leadtime_days,
     max_build_without_po,
     material_where_used,
     open_forecast_count,
@@ -94,10 +91,10 @@ def load_bkn_rows(
     query_object_instance: Callable[..., Mapping[str, Any]],
     parameters: Mapping[str, Any] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Load the facts an operation needs through ``sandbox_sdk.bkn``.
+    """Load the facts an operation needs through ``bkn_osdk``.
 
     The Function owns its reads: callers provide business parameters only.
-    The injected callable is normally ``bkn.query_object_instance``; keeping it
+    The injected callable is normally ``bkn_osdk.kn.query_object_instance``; keeping it
     explicit makes the query shape independently testable without credentials.
     """
     params = dict(parameters or {})
@@ -107,18 +104,8 @@ def load_bkn_rows(
     material_codes = set(product_codes)
     for requirement in managed_query_plan(operation).requirements:
         dataset = requirement.dataset
-        if dataset == "forecast" and operation == "backward_plan" and params.get("forecast_id"):
-            forecast_id = str(params["forecast_id"]).strip()
-            collected = _load_forecast_by_id(query_object_instance, forecast_id)
-            forecast_product = str(collected[0].get("material_number") or "").strip()
-            if not forecast_product:
-                raise CannotCompute(f"预测单 {forecast_id} 缺少产品编码")
-            if product_codes and product_codes != {forecast_product}:
-                raise CannotCompute(f"预测单 {forecast_id} 的产品为 {forecast_product}，与请求产品不一致")
-            product_codes = {forecast_product}
-            material_codes.update(product_codes)
-        elif dataset == "bom" and operation == "material_where_used":
-            collected = _load_bom_ancestor_rows(
+        if dataset == "bom" and operation == "material_where_used":
+            collected = _load_bom_rows_by_material(
                 query_object_instance,
                 str(params.get("material_code") or "").strip(),
             )
@@ -141,7 +128,7 @@ def load_bkn_rows(
             # under its root product.  One root-key query is both exact and
             # bounded; recursive parent ``IN`` queries become slow for a wide
             # level even when the finished BOM itself is modest (for example
-            # product 382-000005 has 399 primary lines).
+            # product 382-000005 has 313 primary lines).
             collected = _load_root_bom_rows(
                 query_object_instance,
                 product_codes,
@@ -188,19 +175,6 @@ def load_bkn_rows(
             )
             material_codes.update(product_codes)
     return rows_by_dataset
-
-
-def _load_forecast_by_id(query_object_instance, forecast_id: str) -> list[dict[str, Any]]:
-    """Prefer the exact business ID; only fall back for legacy numeric keys."""
-    rows = _query_rows(query_object_instance, _OBJECT_TYPES["forecast"], _equal_condition("id", forecast_id))
-    canonical = _canonical_document_id(forecast_id)
-    if not rows and canonical != forecast_id:
-        rows = _query_rows(query_object_instance, _OBJECT_TYPES["forecast"], _equal_condition("id", canonical))
-    if not rows:
-        raise CannotCompute(f"预测单不存在：{forecast_id}")
-    if len(rows) != 1:
-        raise CannotCompute(f"预测单 ID 匹配不唯一：{forecast_id}")
-    return rows
 
 
 def _validate_operation_parameters(operation: str, params: Mapping[str, Any]) -> None:
@@ -282,7 +256,7 @@ def _query_rows(
     """Read one bounded, server-filtered object collection."""
     collected: list[dict[str, Any]] = []
     offset = 0
-    search_after: list[Any] | None = None
+    cursor: str | None = None
     while len(collected) < max_rows:
         query: dict[str, Any] = {
             "kn_id": KN_ID,
@@ -291,8 +265,8 @@ def _query_rows(
         }
         if condition:
             query["condition"] = dict(condition)
-        if search_after:
-            query["search_after"] = search_after
+        if cursor:
+            query["cursor"] = cursor
         else:
             query["offset"] = offset
         page = dict(query_object_instance(**query) or {})
@@ -301,13 +275,13 @@ def _query_rows(
             break
         collected.extend(page_rows)
         # A short page is complete regardless of a stale / advisory
-        # ``search_after`` value returned by the backing resource.  Checking
+        # ``cursor`` value returned by the backing resource.  Checking
         # this before cursor continuation prevents repeated reads of the same
         # short page and preserves the Interaction operation budget.
         if len(page_rows) < query["limit"]:
             break
-        search_after = page.get("search_after") or None
-        if search_after:
+        cursor = page.get("cursor") or None
+        if cursor:
             continue
         offset += len(page_rows)
     if len(collected) >= max_rows:
@@ -339,30 +313,6 @@ def _load_bom_rows_by_material(
         _OBJECT_TYPES["bom"],
         _equal_condition("material_code", material_code),
     )
-
-
-def _load_bom_ancestor_rows(query_object_instance, material_code: str) -> list[dict[str, Any]]:
-    """Acquire parent links as well as direct hits for non-expanded BOMs."""
-    pending = [material_code]
-    seen = set()
-    rows = []
-    identities = set()
-    while pending:
-        child = pending.pop(0)
-        if not child or child in seen:
-            continue
-        seen.add(child)
-        for row in _load_bom_rows_by_material(query_object_instance, child):
-            identity = tuple(sorted((key, repr(value)) for key, value in row.items()))
-            if identity not in identities:
-                identities.add(identity)
-                rows.append(row)
-                if len(rows) > _MAX_ROWS_PER_DATASET:
-                    raise CannotCompute("物料反查结果超过安全上限，请缩小范围")
-            parent = str(row.get("parent_material_code") or "").strip()
-            if parent and parent not in seen:
-                pending.append(parent)
-    return rows
 
 
 def _load_bom_rows_for_material_substitutes(
@@ -401,19 +351,16 @@ def _load_bom_rows_for_material_substitutes(
 
 
 def _is_main_bom_row(row: Mapping[str, Any]) -> bool:
-    """Use the same primary rule for inventory acquisition and calculation.
-
-    ERP marks the whole replacement group alt_method=替代, including its
-    priority-zero main. Excluding those mains here silently removes their
-    component and raw-material inventory while retaining their BOM demand.
-    """
-    return is_main_row(dict(row))
+    """Mirror the calculation layer's primary-BOM rule during tree expansion."""
+    try:
+        priority = int(row.get("alt_priority") or 0)
+    except (TypeError, ValueError):
+        priority = 0
+    return priority == 0 and str(row.get("alt_method") or "").strip() != "替代"
 
 
 def _include_substitute_branch(operation: str, params: Mapping[str, Any]) -> bool:
     """Only traverse alternate BOM branches when that operation explicitly needs them."""
-    if operation == "substitute_status":
-        return True
     if operation in {"bom_list", "bom_shared_list", "layered_inventory"}:
         return bool(params.get("include_substitute"))
     return bool(params.get("substitute_enabled"))
@@ -447,7 +394,7 @@ def _dataset_conditions(
     if dataset == "forecast":
         forecast_id = str(params.get("forecast_id") or "").strip()
         if forecast_id:
-            return (_equal_condition("id", forecast_id),)
+            return (_equal_condition("id", _canonical_document_id(forecast_id)),)
         product_code = str(params.get("product_code") or params.get("product") or "").strip()
         if product_code:
             return (_equal_condition("material_number", product_code),)
@@ -481,7 +428,9 @@ def _scoped_dataset_condition(
     """Add only filters that are semantically required by the operation."""
     conditions: list[dict[str, Any]] = [material_condition]
     if dataset == "inventory" and operation in {"kitting_net_demand", "backward_plan"}:
-        warehouses = resolve_warehouse_scope(params.get("warehouse_scope", "all"))
+        warehouses = resolve_warehouse_scope(params.get("warehouse_scope", "production_available"))
+        # The "all" preset resolves to no warehouse list, meaning no warehouse filter;
+        # the query service rejects an `in` condition with an empty value list.
         if warehouses:
             conditions.append(_in_condition("warehouse", warehouses))
         conditions.append(_equal_condition("stock_status", "可用"))
@@ -511,7 +460,7 @@ def _and_condition(conditions: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _canonical_document_id(value: str) -> str:
-    """Legacy fallback only; exact business IDs must be queried first."""
+    """Match CSV IDs that Vega has inferred as numbers while preserving non-numeric keys."""
     return str(int(value)) if value.isdigit() else value
 
 
@@ -539,6 +488,152 @@ def _ordered_datasets(datasets: frozenset[str]) -> tuple[str, ...]:
     return tuple(dataset for dataset in order if dataset in datasets)
 
 
+def run_bom_list(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    product = params.get("product")
+    return bom_list(
+        snapshot,
+        product,
+        depth=params.get("depth", 1),
+        include_substitute=params.get("include_substitute", False),
+        report_grain=params.get("report_grain", "summary"),
+        page_size=params.get("page_size", 100),
+        offset=params.get("offset", 0),
+    )
+
+
+def run_bom_shared_list(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    return bom_shared_list(snapshot, params.get("products") or [], depth=params.get("depth"), include_substitute=params.get("include_substitute", False))
+
+
+def run_material_where_used(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    return material_where_used(
+        snapshot,
+        params.get("material_code"),
+        report_grain=params.get("report_grain", "summary"),
+        include_substitute=params.get("include_substitute", True),
+    )
+
+
+def run_layered_inventory(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    product = params.get("product")
+    scope = params.get("warehouse_scope", "production_available")
+    return layered_inventory(snapshot, product, depth=params.get("depth", 1), warehouse_scope=scope, include_substitute=params.get("include_substitute", False))
+
+
+def run_substitute_status(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    product = params.get("product")
+    scope = params.get("warehouse_scope", "production_available")
+    substitute = params.get("substitute_enabled")
+    return substitute_status(
+        snapshot,
+        product,
+        material_code=params.get("material_code"),
+        warehouse_scope=scope,
+        substitute_enabled=substitute,
+    )
+
+
+def run_theoretical_build(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    product = params.get("product")
+    scope = params.get("warehouse_scope", "production_available")
+    substitute = params.get("substitute_enabled")
+    return theoretical_build(
+        snapshot,
+        product,
+        warehouse_scope=scope,
+        substitute_enabled=substitute,
+        report_grain=params.get("report_grain", "summary"),
+    )
+
+
+def run_total_sellable(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    product = params.get("product")
+    substitute = params.get("substitute_enabled")
+    return total_sellable(snapshot, product, production_scope=params.get("production_scope", "production_available"), finished_goods_scope=params.get("finished_goods_scope", "finished_goods"), substitute_enabled=substitute)
+
+
+def run_kitting_net_demand(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    product = params.get("product")
+    scope = params.get("warehouse_scope", "production_available")
+    substitute = params.get("substitute_enabled")
+    return kitting_net_demand(
+        snapshot,
+        product,
+        params.get("qty"),
+        warehouse_scope=scope,
+        substitute_enabled=substitute,
+        report_grain=params.get("report_grain", "summary"),
+    )
+
+
+def run_shared_contention(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    scope = params.get("warehouse_scope", "production_available")
+    substitute = params.get("substitute_enabled")
+    return shared_contention(
+        snapshot,
+        params.get("demands") or [],
+        warehouse_scope=scope,
+        substitute_enabled=substitute,
+        report_grain=params.get("report_grain", "summary"),
+    )
+
+
+def run_max_build_without_po(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    product = params.get("product")
+    scope = params.get("warehouse_scope", "production_available")
+    substitute = params.get("substitute_enabled")
+    return max_build_without_po(
+        snapshot,
+        product,
+        warehouse_scope=scope,
+        substitute_enabled=substitute,
+        report_grain=params.get("report_grain", "summary"),
+    )
+
+
+def run_leadtime_days(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    material_code = params.get("material_code")
+    return {"material_code": material_code, "leadtime_days": leadtime_days(snapshot, material_code)}
+
+
+def run_supply_status(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    scope = params.get("warehouse_scope", "production_available")
+    return supply_status(snapshot, params.get("material_code"), due_date=params.get("due_date"), gross_requirement=params.get("gross_requirement", 0), warehouse_scope=scope, child_short=params.get("child_short", False))
+
+
+def run_open_forecast_count(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    return open_forecast_count(
+        rows.get("forecast") or [],
+        product_code=params.get("product_code"),
+        report_grain=params.get("report_grain", "summary"),
+    )
+
+
+def run_backward_plan(snapshot, rows: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, Any]:
+    product = params.get("product")
+    scope = params.get("warehouse_scope", "production_available")
+    substitute = params.get("substitute_enabled")
+    return backward_plan(snapshot, product, forecast_id=params.get("forecast_id"), demand_end=params.get("demand_end"), demand_qty=params.get("demand_qty"), business_date=params.get("business_date"), warehouse_scope=scope, substitute_enabled=substitute, report_grain=params.get("report_grain", "summary"))
+
+
+RUNNERS = {
+    "bom_list": run_bom_list,
+    "bom_shared_list": run_bom_shared_list,
+    "material_where_used": run_material_where_used,
+    "layered_inventory": run_layered_inventory,
+    "substitute_status": run_substitute_status,
+    "theoretical_build": run_theoretical_build,
+    "total_sellable": run_total_sellable,
+    "kitting_net_demand": run_kitting_net_demand,
+    "shared_contention": run_shared_contention,
+    "max_build_without_po": run_max_build_without_po,
+    "leadtime_days": run_leadtime_days,
+    "supply_status": run_supply_status,
+    "open_forecast_count": run_open_forecast_count,
+    "backward_plan": run_backward_plan,
+}
+
+
 def execute_from_bkn_rows(
     operation: str, rows: Mapping[str, Any], parameters: Mapping[str, Any]
 ) -> dict[str, Any]:
@@ -549,90 +644,11 @@ def execute_from_bkn_rows(
     """
     if operation not in OPERATION_CONTRACTS:
         raise KeyError(f"unknown operation: {operation}")
-    params = dict(parameters)
-    snapshot = build_snapshot(dict(rows))
-    product = params.get("product")
-    scope = params.get("warehouse_scope", "all")
-    substitute = params.get("substitute_enabled")
-    if operation == "bom_list":
-        return bom_list(
-            snapshot,
-            product,
-            depth=params.get("depth", 1),
-            include_substitute=params.get("include_substitute", False),
-            report_grain=params.get("report_grain", "summary"),
-            page_size=params.get("page_size", 100),
-            offset=params.get("offset", 0),
-        )
-    if operation == "bom_shared_list":
-        return bom_shared_list(snapshot, params.get("products") or [], depth=params.get("depth"), include_substitute=params.get("include_substitute", False))
-    if operation == "material_where_used":
-        return material_where_used(
-            snapshot,
-            params.get("material_code"),
-            report_grain=params.get("report_grain", "summary"),
-            include_substitute=params.get("include_substitute", True),
-        )
-    if operation == "layered_inventory":
-        return layered_inventory(snapshot, product, depth=params.get("depth", 1), warehouse_scope=scope, include_substitute=params.get("include_substitute", False))
-    if operation == "substitute_status":
-        return substitute_status(
-            snapshot,
-            product,
-            material_code=params.get("material_code"),
-            warehouse_scope=scope,
-            substitute_enabled=substitute,
-        )
-    if operation == "theoretical_build":
-        return theoretical_build(
-            snapshot,
-            product,
-            warehouse_scope=scope,
-            substitute_enabled=substitute,
-            report_grain=params.get("report_grain", "summary"),
-        )
-    if operation == "total_sellable":
-        return total_sellable(snapshot, product, production_scope=params.get("production_scope", "all"), finished_goods_scope=params.get("finished_goods_scope", "all"), substitute_enabled=substitute)
-    if operation == "kitting_net_demand":
-        return kitting_net_demand(
-            snapshot,
-            product,
-            params.get("qty"),
-            warehouse_scope=scope,
-            substitute_enabled=substitute,
-            report_grain=params.get("report_grain", "summary"),
-        )
-    if operation == "shared_contention":
-        return shared_contention(
-            snapshot,
-            params.get("demands") or [],
-            warehouse_scope=scope,
-            substitute_enabled=substitute,
-            report_grain=params.get("report_grain", "summary"),
-        )
-    if operation == "max_build_without_po":
-        return max_build_without_po(
-            snapshot,
-            product,
-            warehouse_scope=scope,
-            substitute_enabled=substitute,
-            report_grain=params.get("report_grain", "summary"),
-        )
-    if operation == "leadtime_days":
-        material_code = params.get("material_code")
-        return {**leadtime_details(snapshot, material_code), "object_type_id": _OBJECT_TYPES["material"]}
-    if operation == "supply_status":
-        return supply_status(snapshot, params.get("material_code"), due_date=params.get("due_date"), gross_requirement=params.get("gross_requirement", 0), warehouse_scope=scope, child_short=params.get("child_short", False), today=date.fromisoformat(params.get("business_date", "2026-08-25")))
-    if operation == "open_forecast_count":
-        return open_forecast_count(
-            rows.get("forecast") or [],
-            product_code=params.get("product_code"),
-            report_grain=params.get("report_grain", "summary"),
-        )
-    return backward_plan(snapshot, product, forecast_id=params.get("forecast_id"), demand_end=params.get("demand_end"), demand_qty=params.get("demand_qty"), business_date=params.get("business_date"), warehouse_scope=scope, substitute_enabled=substitute, report_grain=params.get("report_grain", "summary"))
+    return RUNNERS[operation](build_snapshot(dict(rows)), rows, dict(parameters))
 
 
 __all__ = [
+    "RUNNERS",
     "ManagedQueryPlan",
     "QueryRequirement",
     "execute_from_bkn_rows",

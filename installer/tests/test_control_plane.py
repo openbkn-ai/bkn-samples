@@ -346,7 +346,7 @@ class InstallSupplyTest(unittest.TestCase):
         rendered = json.dumps(commands(Path("config.yaml")))
         self.assertNotIn("kubectl", rendered)
         self.assertIn("import_kn.py", rendered)
-        self.assertIn("register_skills.py", rendered)
+        self.assertNotIn("register_skills.py", rendered)
         steps = commands(Path("config.yaml"))
         metric_steps = [argv for argv in steps if Path(argv[1]).name == "power_layer.py"]
         self.assertEqual([argv[2] for argv in metric_steps], ["create", "bind"])

@@ -46,8 +46,6 @@ def test_backward_plan_loader_uses_business_filters_instead_of_scanning_all_tabl
 
     def query_object_instance(**kwargs):
         calls.append(kwargs)
-        if kwargs["ot_id"] == "supply_ontology_hand_forecast":
-            return {"datas": [{"id": "0000023181", "material_number": "U00-000080"}]}
         return {"datas": []}
 
     load_bkn_rows(
@@ -58,7 +56,7 @@ def test_backward_plan_loader_uses_business_filters_instead_of_scanning_all_tabl
 
     by_type = {call["ot_id"]: call for call in calls}
     assert by_type["supply_ontology_hand_forecast"]["condition"] == {
-        "field": "id", "operation": "==", "value": "0000023181", "value_from": "const"
+        "field": "id", "operation": "==", "value": "23181", "value_from": "const"
     }
     assert by_type["supply_ontology_hand_bom"]["condition"] == {
         "field": "bom_material_code", "operation": "==", "value": "U00-000080", "value_from": "const"
@@ -80,6 +78,7 @@ def test_backward_plan_loader_uses_business_filters_instead_of_scanning_all_tabl
         "operation": "and",
         "sub_conditions": [
             {"field": "material_code", "operation": "in", "value": ["U00-000080"], "value_from": "const"},
+            {"field": "warehouse", "operation": "in", "value": ["苏州半成品仓", "苏州成品仓", "苏州电子原料仓", "苏州无人机原料仓", "苏州装配原料仓", "乌鲁木齐成品仓", "哈尔滨成品仓"], "value_from": "const"},
             {"field": "stock_status", "operation": "==", "value": "可用", "value_from": "const"},
         ],
     }
@@ -199,14 +198,14 @@ def test_material_substitute_loader_reads_inventory_for_every_candidate():
     ]
 
 
-def test_query_rows_stops_on_short_page_even_if_backend_includes_search_after():
+def test_query_rows_stops_on_short_page_even_if_backend_includes_cursor():
     from managed_execution import _query_rows
 
     calls = []
 
     def query_object_instance(**kwargs):
         calls.append(kwargs)
-        return {"datas": [{"material_code": "MAT-1"}], "search_after": ["stale"]}
+        return {"datas": [{"material_code": "MAT-1"}], "cursor": "stale"}
 
     rows = _query_rows(
         query_object_instance,
@@ -295,6 +294,7 @@ def test_kitting_loader_scopes_inventory_and_purchase_orders_before_loading_rows
         "operation": "and",
         "sub_conditions": [
             {"field": "material_code", "operation": "in", "value": ["FG-382", "RM-001", "RM-002"], "value_from": "const"},
+            {"field": "warehouse", "operation": "in", "value": ["苏州半成品仓", "苏州成品仓", "苏州电子原料仓", "苏州无人机原料仓", "苏州装配原料仓", "乌鲁木齐成品仓", "哈尔滨成品仓"], "value_from": "const"},
             {"field": "stock_status", "operation": "==", "value": "可用", "value_from": "const"},
         ],
     }
@@ -315,8 +315,6 @@ def test_backward_plan_scopes_large_purchase_request_material_scope_to_open_rows
 
     def query_object_instance(**kwargs):
         calls.append(kwargs)
-        if kwargs["ot_id"] == "supply_ontology_hand_forecast":
-            return {"datas": [{"id": "0000023181", "material_number": "FG-382"}]}
         if kwargs["ot_id"] == "supply_ontology_hand_bom":
             return {
                 "datas": [
@@ -347,11 +345,11 @@ def test_backward_plan_scopes_large_purchase_request_material_scope_to_open_rows
 
 
 def test_generated_native_function_uses_official_sdk_and_business_parameters_only():
-    from native_function_bundle import build_native_function_code
+    from function_source import build_function_code
 
-    source = build_native_function_code(fixed_operation="backward_plan")
+    source = build_function_code("backward_plan")
 
-    assert "from sandbox_sdk import bkn" in source
+    assert "from bkn_osdk.kn import query_object_instance" in source
     assert "@tool" in source
     assert "load_bkn_rows" in source
     assert "def handler" not in source
@@ -375,17 +373,29 @@ def test_native_tool_schemas_never_expose_bkn_context_or_credentials():
         assert not ({item["name"] for item in payload["inputs"]} & forbidden)
 
 
-def test_kitting_loader_honors_explicit_production_warehouse_preset():
+def test_all_warehouses_adds_no_empty_warehouse_condition():
     from managed_execution import load_bkn_rows
-    from fn.warehouse import PRODUCTION_AVAILABLE
+
     calls = []
+
     def query_object_instance(**kwargs):
         calls.append(kwargs)
-        if kwargs["ot_id"] == "supply_ontology_hand_bom":
-            return {"datas": [{"bom_material_code": "P", "material_code": "L", "parent_material_code": "P", "bom_level": 1, "alt_priority": 0}]}
         return {"datas": []}
-    load_bkn_rows("kitting_net_demand", query_object_instance,
-                  {"product": "P", "substitute_enabled": False, "warehouse_scope": "production_available"})
-    inventory = next(c for c in calls if c["ot_id"] == "supply_ontology_hand_inventory")
-    assert {"field": "warehouse", "operation": "in", "value": PRODUCTION_AVAILABLE,
-            "value_from": "const"} in inventory["condition"]["sub_conditions"]
+
+    try:
+        load_bkn_rows("kitting_net_demand", query_object_instance,
+                      {"product": "382-000005", "qty": 1, "warehouse_scope": "all", "substitute_enabled": False})
+    except Exception:
+        pass
+
+    def conditions(node):
+        if not node:
+            return []
+        if node.get("operation") == "and":
+            return [item for child in node["sub_conditions"] for item in conditions(child)]
+        return [node]
+
+    for call in calls:
+        for condition in conditions(call.get("condition")):
+            assert not (condition["operation"] == "in" and not condition["value"]), condition
+

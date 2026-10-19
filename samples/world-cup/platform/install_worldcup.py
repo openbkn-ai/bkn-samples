@@ -42,13 +42,15 @@ def degrade_notes() -> list[dict]:
 
 
 def capability_summary(payload: dict) -> str:
-    """Hash the platform script that publishes this sample's functions."""
+    """Hash the files the published functions are made from."""
     components = payload.get("components") or {}
     digest = hashlib.sha256()
     if components.get("functions"):
-        script = SAMPLE_DIR / "run.sh"
-        digest.update(b"run.sh\0")
-        digest.update(script.read_bytes())
+        sources = [SAMPLE_DIR / "tools/register_functions.py", *sorted((SAMPLE_DIR / "tools/functions").glob("*.py"))]
+        for path in sources:
+            digest.update(path.relative_to(SAMPLE_DIR).as_posix().encode() + b"\0")
+            digest.update(path.read_bytes())
+            digest.update(b"\0")
     return digest.hexdigest()
 
 
@@ -151,6 +153,14 @@ def main() -> int:
     if result.returncode != 0:
         write_output(payload, False, "run.sh failed")
         return result.returncode
+    if (payload.get("components") or {}).get("functions"):
+        published = subprocess.run(
+            [sys.executable, str(SAMPLE_DIR / "tools/register_functions.py"), "--apply", "--kn-id", KN_ID],
+            cwd=SAMPLE_DIR, env=command_env(payload), check=False,
+        )
+        if published.returncode != 0:
+            write_output(payload, False, "function registration failed")
+            return published.returncode
     write_output(payload, True)
     return 0
 

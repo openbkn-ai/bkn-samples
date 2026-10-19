@@ -18,7 +18,6 @@ REQUIRED_FILES = (
     "tools/load_sample_data.py",
     "tools/preflight.py",
     "tools/register_native_function_toolbox.py",
-    "tools/register_skills.py",
 )
 
 
