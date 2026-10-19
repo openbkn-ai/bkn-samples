@@ -371,3 +371,31 @@ def test_native_tool_schemas_never_expose_bkn_context_or_credentials():
     }
     for payload in _tool_inputs().values():
         assert not ({item["name"] for item in payload["inputs"]} & forbidden)
+
+
+def test_all_warehouses_adds_no_empty_warehouse_condition():
+    from managed_execution import load_bkn_rows
+
+    calls = []
+
+    def query_object_instance(**kwargs):
+        calls.append(kwargs)
+        return {"datas": []}
+
+    try:
+        load_bkn_rows("kitting_net_demand", query_object_instance,
+                      {"product": "382-000005", "qty": 1, "warehouse_scope": "all", "substitute_enabled": False})
+    except Exception:
+        pass
+
+    def conditions(node):
+        if not node:
+            return []
+        if node.get("operation") == "and":
+            return [item for child in node["sub_conditions"] for item in conditions(child)]
+        return [node]
+
+    for call in calls:
+        for condition in conditions(call.get("condition")):
+            assert not (condition["operation"] == "in" and not condition["value"]), condition
+

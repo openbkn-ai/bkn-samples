@@ -429,12 +429,11 @@ def _scoped_dataset_condition(
     conditions: list[dict[str, Any]] = [material_condition]
     if dataset == "inventory" and operation in {"kitting_net_demand", "backward_plan"}:
         warehouses = resolve_warehouse_scope(params.get("warehouse_scope", "production_available"))
-        conditions.extend(
-            [
-                _in_condition("warehouse", warehouses),
-                _equal_condition("stock_status", "可用"),
-            ]
-        )
+        # The "all" preset resolves to no warehouse list, meaning no warehouse filter;
+        # the query service rejects an `in` condition with an empty value list.
+        if warehouses:
+            conditions.append(_in_condition("warehouse", warehouses))
+        conditions.append(_equal_condition("stock_status", "可用"))
     if dataset in {"purchase_order", "purchase_request"} and operation in {"kitting_net_demand", "backward_plan"}:
         conditions.append(_not_equal_condition("rowclosestatus_title", "已关闭"))
     if dataset == "mrp" and operation == "backward_plan":
