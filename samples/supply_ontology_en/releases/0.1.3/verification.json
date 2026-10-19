@@ -1,0 +1,79 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.3",
+  "packageDigest": "sha256:ebb042c36c4cec585653301ca850e97eb5bc35061944f952b36bde5100584ce4",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:08b7233ab1d0c1976e0a49c968e4fc31867a2a15b5c40725d2817036dbd3e306",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:82bac19f05f744fc964d8e23f1c144e05510e8b685f1abc212af813413693142",
+  "freshInstallation": true,
+  "installation": {
+    "source": "studio-offline-import",
+    "offlinePackageDigest": "sha256:a3276224459977397aa35e9ee0735db7196d4cd2171e85ece34210d7c209a2db",
+    "startedAt": "2026-10-19T03:00:43.146589Z",
+    "finishedAt": "2026-10-19T03:02:41.796441Z",
+    "freshAfterUninstall": true,
+    "stages": [
+      {
+        "id": "database",
+        "name": "准备样例库",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "name": "扫描数据资源",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "name": "导入并绑定知识网络",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "name": "发布能力",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "name": "冒烟验收",
+        "state": "succeeded"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "Studio database stage loaded and verified the embedded tables against dataset.lock."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Installed model and bound resources passed the platform verification hook (object query and model import checks)."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "14 native functions mounted; all 96 answer-set function cases called through MCP execute_tool: 62 byte-identical to the offline reference and the remaining 25 equal after normalising echoed source-row formatting and row order; 9 invalid-input cases fail on both sides."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "The 36 function-based answer-set questions, with full-grain and alternate-policy variants (96 cases), returned the same business results on the installed package as the offline reference built from the locked CSV snapshot."
+    }
+  ],
+  "architectureTested": "amd64",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.3/acceptance.json",
+  "evidenceDigest": "sha256:44ef7f1335df40f0f7ceca749476285600419f697977ce4bf4db790bff40b820",
+  "lifecycle": {
+    "installUninstallReinstallPassed": true,
+    "recordedResourcesAbsentAfterUninstall": true,
+    "historyRetained": true
+  },
+  "limits": [
+    "Accepted on OpenBKN v0.2.0 amd64 (14.103.77.23) with Trace capture disabled; arm64 runtime acceptance is not claimed.",
+    "Installed from the offline package, which differs from the published package only by offline-release.json; every shared file has the same digest.",
+    "The 0.2.0 sample service fails the first uninstall attempt for samples with metrics and succeeds on retry (fixed on main by #175); first-attempt uninstall success is not claimed.",
+    "A new blind agent evaluation of the full question set was not run; scenario evidence covers the function-based questions listed above.",
+    "Online discovery and remote installation remain to be checked after the catalog PR merges."
+  ]
+}

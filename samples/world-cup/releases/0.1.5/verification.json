@@ -1,0 +1,79 @@
+{
+  "sampleId": "world-cup",
+  "version": "0.1.5",
+  "packageDigest": "sha256:41fbbfe63bba5f636675f3f25b024620cef94cf331471de7937fbf8f2036d83d",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:805317bc1ac93e58f4149e35a7a0a75057330d8888ca54526a354996f313fcd1",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:82bac19f05f744fc964d8e23f1c144e05510e8b685f1abc212af813413693142",
+  "freshInstallation": true,
+  "installation": {
+    "source": "studio-offline-import",
+    "offlinePackageDigest": "sha256:ec6e795b177e9af8f28ef593d813b7fdb24121bf28efe548252a4a9db66515e3",
+    "startedAt": "2026-10-19T03:38:06.353259Z",
+    "finishedAt": "2026-10-19T03:38:57.084723Z",
+    "freshAfterUninstall": true,
+    "stages": [
+      {
+        "id": "database",
+        "name": "准备样例库",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "name": "扫描数据资源",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "name": "导入并绑定知识网络",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "name": "发布能力",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "name": "冒烟验收",
+        "state": "succeeded"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "Studio database stage loaded and verified the embedded tables against dataset.lock."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Installed model and bound resources passed the platform verification hook (object query and model import checks)."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Three native functions mounted and called through MCP execute_tool; 8/8 frozen-answer checks passed (R-01, R-02, R-03, A-10, R-09, J-01, R-08, A-14)."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Eight frozen World Cup answers (R-01, R-02, R-03, A-10, R-09, J-01, R-08, A-14) matched through the installed functions over MCP."
+    }
+  ],
+  "architectureTested": "amd64",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-v0.1.5/acceptance.json",
+  "evidenceDigest": "sha256:4e17398bbbef44a1efcf88cf0f5e2bde8fd866c5bd5efefdd0fa371f85d482fa",
+  "lifecycle": {
+    "installUninstallReinstallPassed": true,
+    "recordedResourcesAbsentAfterUninstall": true,
+    "historyRetained": true
+  },
+  "limits": [
+    "Accepted on OpenBKN v0.2.0 amd64 (14.103.77.23) with Trace capture disabled; arm64 runtime acceptance is not claimed.",
+    "Installed from the offline package, which differs from the published package only by offline-release.json; every shared file has the same digest.",
+    "The 0.2.0 sample service fails the first uninstall attempt for samples with metrics and succeeds on retry (fixed on main by #175); first-attempt uninstall success is not claimed.",
+    "A new blind agent evaluation of the full question set was not run; scenario evidence covers the function-based questions listed above.",
+    "Online discovery and remote installation remain to be checked after the catalog PR merges."
+  ]
+}
