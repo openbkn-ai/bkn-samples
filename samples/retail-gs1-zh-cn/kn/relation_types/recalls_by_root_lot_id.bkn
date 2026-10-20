@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: recalls_by_root_lot_id
+name: 商品召回关联商品批次
+tags: [retail, gs1]
+---
+
+## RelationType: 商品召回关联商品批次
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| recalls | lots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| root_lot_id | lot_id |

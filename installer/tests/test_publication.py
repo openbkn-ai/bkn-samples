@@ -15,7 +15,9 @@ class PublicationTest(unittest.TestCase):
         from tools.publication.build_candidate import included
         for name in ('model-contract.json', 'fibo-reference/source-lock.json', 'fibo-reference/sources/fixture.rdf'):
             self.assertTrue(included(Path(name)), name)
-        for name in ('verification/local-evaluation.json', '.env', 'platform/password.key'):
+        for name in ('verification/local-evaluation.json', '.env', 'platform/password.key',
+                     'bkn-eval/expected-results.json', 'bkn-eval/questions.json',
+                     'tools/bkn-eval/answers.md'):
             self.assertFalse(included(Path(name)), name)
 
     def test_candidate_platform_floor_follows_source_version(self):

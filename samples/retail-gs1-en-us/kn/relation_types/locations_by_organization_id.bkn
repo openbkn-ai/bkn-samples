@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: locations_by_organization_id
+name: locations by organization id
+tags: [retail, gs1]
+---
+
+## RelationType: locations by organization id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| locations | organizations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| organization_id | organization_id |

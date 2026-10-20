@@ -1,0 +1,30 @@
+---
+type: object_type
+id: orders
+name: 客户订单
+tags: [retail, gs1]
+---
+
+## ObjectType: 客户订单
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| order_id | 订单编号 | string | 稳定唯一的源记录编号。 | order_id |
+| customer_id | 客户编号 | string | 外键关联organizations，空值不产生关系。 | customer_id |
+| location_id | 地点编号 | string | 外键关联locations，空值不产生关系。 | location_id |
+| order_date | 订单日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | order_date |
+| due_date | 交期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | due_date |
+| known_date | 可知日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | known_date |
+| priority | 优先级 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | priority |
+| status | 业务状态 | string | 虚构业务值，双语表达同一业务事实。 允许取值：已关闭, 进行中. | status |
+| status_code | 状态代码 | string | 稳定机器代码；业务展示值另列。 允许取值：closed, open. | status_code |
+
+### Keys
+
+Primary Keys: order_id
+Display Key: order_id
+Incremental Key:

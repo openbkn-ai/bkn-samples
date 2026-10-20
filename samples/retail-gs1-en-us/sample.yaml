@@ -1,0 +1,50 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1alpha1",
+  "kind": "Sample",
+  "metadata": {
+    "name": "retail-gs1-en-us",
+    "aliases": [],
+    "displayName": "Food Supply and Recall",
+    "summary": "Synthetic food distribution, fulfillment and recall operations.",
+    "version": "0.1.0"
+  },
+  "spec": {
+    "studio": {
+      "licenseNote": "MIT synthetic assets; GS1 WebVoc Apache-2.0 semantic references",
+      "questions": [
+        "Which lots are quarantined?",
+        "Where did affected lots go?",
+        "What are March 2027 replenishment gaps?"
+      ]
+    },
+    "database": {
+      "engine": "mariadb",
+      "name": "retail_gs1_en_us",
+      "expectedTables": 15
+    },
+    "data": {
+      "mode": "embedded"
+    },
+    "platformVersion": ">=0.2.1 <0.3.0",
+    "knowledgeNetwork": {
+      "id": "retail_gs1_en_us",
+      "displayName": "Food Supply and Recall"
+    },
+    "capabilities": {
+      "required": true
+    },
+    "components": {
+      "objects": true,
+      "relations": true,
+      "metrics": true,
+      "functions": true,
+      "skills": true
+    },
+    "hooks": {
+      "dbInit": "db/init.sh",
+      "dbVerify": "db/verify.sh",
+      "platformInstall": "platform/install.sh",
+      "platformVerify": "platform/verify.sh"
+    }
+  }
+}

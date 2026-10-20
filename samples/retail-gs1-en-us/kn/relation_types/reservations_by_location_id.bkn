@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: reservations_by_location_id
+name: reservations by location id
+tags: [retail, gs1]
+---
+
+## RelationType: reservations by location id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| reservations | locations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| location_id | location_id |

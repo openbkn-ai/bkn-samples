@@ -1,0 +1,33 @@
+---
+type: object_type
+id: inventory_snapshots
+name: 已记录库存
+tags: [retail, gs1]
+---
+
+## ObjectType: 已记录库存
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| snapshot_id | 快照编号 | string | 稳定唯一的源记录编号。 | snapshot_id |
+| product_id | 商品编号 | string | 外键关联products，空值不产生关系。 | product_id |
+| lot_id | 批次编号 | string | 外键关联lots，空值不产生关系。 | lot_id |
+| location_id | 地点编号 | string | 外键关联locations，空值不产生关系。 | location_id |
+| as_of_date | 业务截至日 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | as_of_date |
+| knowledge_date | 知识截止日 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | knowledge_date |
+| unit | 计量单位 | string | 虚构业务值，双语表达同一业务事实。 允许取值：件. | unit |
+| on_hand | 在库量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | on_hand |
+| in_transit | 在途量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | in_transit |
+| quarantined | 已隔离量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | quarantined |
+| reserved | 预留量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | reserved |
+| available | 可用量 | decimal | 已记录带日期快照，非实时重算；未知保持为空。 | available |
+
+### Keys
+
+Primary Keys: snapshot_id
+Display Key: snapshot_id
+Incremental Key:

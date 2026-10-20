@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: products_by_supplier_id
+name: products by supplier id
+tags: [retail, gs1]
+---
+
+## RelationType: products by supplier id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| products | organizations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| supplier_id | organization_id |

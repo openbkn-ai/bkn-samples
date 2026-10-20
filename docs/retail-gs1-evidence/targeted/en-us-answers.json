@@ -1,0 +1,201 @@
+[
+  {
+    "id": "Q018",
+    "status": "answered",
+    "submission": {
+      "rows": [
+        {
+          "lot_id": "LOT-008-B",
+          "location_id": "STORE-008",
+          "on_hand": "26.000000",
+          "returned": "3.000000",
+          "quarantined": "3.000000",
+          "available": "0.000000"
+        },
+        {
+          "lot_id": "LOT-008-C",
+          "location_id": "STORE-008",
+          "on_hand": "26.000000",
+          "returned": "3.000000",
+          "quarantined": "5.000000",
+          "available": "21.000000"
+        }
+      ]
+    },
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "original_trace_sha256": "0b6b2a02684f8e9aaba85a49990968763ffbdd2a2a7fff021c96769291539175"
+  },
+  {
+    "id": "Q027",
+    "status": "answered",
+    "submission": {
+      "rows": [
+        {
+          "event_id": "EV-00131",
+          "event_type_code": "receive",
+          "source_location_id": null,
+          "destination_location_id": "WH-007",
+          "event_date": "2027-02-02",
+          "event_sequence": "10.000000",
+          "quantity": "157.000000",
+          "unit": "ea"
+        },
+        {
+          "event_id": "EV-00146",
+          "event_type_code": "consume",
+          "source_location_id": "WH-007",
+          "destination_location_id": null,
+          "event_date": "2027-02-21",
+          "event_sequence": "15.000000",
+          "quantity": "20.000000",
+          "unit": "ea"
+        },
+        {
+          "event_id": "EV-00132",
+          "event_type_code": "dispatch",
+          "source_location_id": "WH-007",
+          "destination_location_id": "STORE-007",
+          "event_date": "2027-02-22",
+          "event_sequence": "20.000000",
+          "quantity": "40.000000",
+          "unit": "ea"
+        },
+        {
+          "event_id": "EV-00133",
+          "event_type_code": "arrive",
+          "source_location_id": null,
+          "destination_location_id": "STORE-007",
+          "event_date": "2027-02-23",
+          "event_sequence": "30.000000",
+          "quantity": "40.000000",
+          "unit": "ea"
+        },
+        {
+          "event_id": "EV-00134",
+          "event_type_code": "sale",
+          "source_location_id": "STORE-007",
+          "destination_location_id": null,
+          "event_date": "2027-02-24",
+          "event_sequence": "40.000000",
+          "quantity": "16.000000",
+          "unit": "ea"
+        },
+        {
+          "event_id": "EV-00135",
+          "event_type_code": "return",
+          "source_location_id": null,
+          "destination_location_id": "STORE-007",
+          "event_date": "2027-02-25",
+          "event_sequence": "50.000000",
+          "quantity": "3.000000",
+          "unit": "ea"
+        }
+      ]
+    },
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "original_trace_sha256": "f5d8014ba73a89cd6f031a5477b1cb87f995482e867b82bed821865f7f57cb61"
+  },
+  {
+    "id": "Q033",
+    "status": "answered",
+    "submission": {
+      "rows": [
+        {
+          "lot_id": "LOT-003-B",
+          "location_id": "STORE-003",
+          "quarantined": "3.000000"
+        },
+        {
+          "lot_id": "LOT-003-B",
+          "location_id": "WH-003",
+          "quarantined": "20.000000"
+        },
+        {
+          "lot_id": "LOT-003-C",
+          "location_id": "STORE-003",
+          "quarantined": "5.000000"
+        }
+      ]
+    },
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "original_trace_sha256": "613465838d34eea601340d27b3d1fbace60c25a168bb7afb96e3bcc862a4b83d"
+  },
+  {
+    "id": "Q094",
+    "status": "answered",
+    "submission": {
+      "rows": [
+        {
+          "lot_id": "LOT-042-A",
+          "location_id": "STORE-017",
+          "on_hand": "25.000000",
+          "sold": "15.000000",
+          "returned": "0.000000",
+          "available": "0.000000"
+        },
+        {
+          "lot_id": "LOT-042-A",
+          "location_id": "WH-017",
+          "on_hand": "80.000000",
+          "sold": "0.000000",
+          "returned": "0.000000",
+          "available": "0.000000"
+        },
+        {
+          "lot_id": "LOT-042-B",
+          "location_id": "STORE-017",
+          "on_hand": "28.000000",
+          "sold": "12.000000",
+          "returned": "3.000000",
+          "available": "0.000000"
+        },
+        {
+          "lot_id": "LOT-042-B",
+          "location_id": "WH-017",
+          "on_hand": "96.000000",
+          "sold": "0.000000",
+          "returned": "0.000000",
+          "available": "0.000000"
+        },
+        {
+          "lot_id": "LOT-042-C",
+          "location_id": "STORE-017",
+          "on_hand": "28.000000",
+          "sold": "12.000000",
+          "returned": "3.000000",
+          "available": "23.000000"
+        },
+        {
+          "lot_id": "LOT-042-C",
+          "location_id": "WH-017",
+          "on_hand": "149.000000",
+          "sold": "0.000000",
+          "returned": "0.000000",
+          "available": "119.000000"
+        },
+        {
+          "lot_id": "LOT-042-D",
+          "location_id": "STORE-017",
+          "on_hand": "25.000000",
+          "sold": "15.000000",
+          "returned": "0.000000",
+          "available": "0.000000"
+        },
+        {
+          "lot_id": "LOT-042-D",
+          "location_id": "WH-017",
+          "on_hand": "62.000000",
+          "sold": "0.000000",
+          "returned": "0.000000",
+          "available": "0.000000"
+        }
+      ]
+    },
+    "execution_status": "completed",
+    "evidence_status": "complete",
+    "original_trace_sha256": "a1dd207b3f36bcb851c2ada0a18de3e2d55c54696d676fbd07cef6e88f863c8b"
+  }
+]

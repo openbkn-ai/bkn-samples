@@ -1,0 +1,31 @@
+---
+type: object_type
+id: holds
+name: 库存隔离
+tags: [retail, gs1]
+---
+
+## ObjectType: 库存隔离
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| hold_id | 隔离编号 | string | 稳定唯一的源记录编号。 | hold_id |
+| lot_id | 批次编号 | string | 外键关联lots，空值不产生关系。 | lot_id |
+| location_id | 地点编号 | string | 外键关联locations，空值不产生关系。 | location_id |
+| quantity | 数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | quantity |
+| return_overlap_quantity | 退货重叠数量 | decimal | 与退货隔离重叠的隔离数量，按业务契约避免重复扣减。 | return_overlap_quantity |
+| effective_from | 生效起日 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | effective_from |
+| effective_to | 生效止日 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | effective_to |
+| known_date | 可知日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | known_date |
+| reason | 原因 | string | 虚构业务值，双语表达同一业务事实。 | reason |
+| recall_id | 召回编号 | string | 外键关联recalls，空值不产生关系。 | recall_id |
+
+### Keys
+
+Primary Keys: hold_id
+Display Key: hold_id
+Incremental Key:

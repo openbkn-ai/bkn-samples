@@ -1,0 +1,37 @@
+---
+type: object_type
+id: products
+name: Food Product
+tags: [retail, gs1]
+---
+
+## ObjectType: Food Product
+
+Conceptual GS1 alignment with local IDs; no equivalentClass or full conformance claim.
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://ref.gs1.org/voc/FoodBeverageTobaccoProduct |
+| source_revision | f8f407bf717233c871dca2f62f4e45b0940e8cad |
+| source_license | Apache-2.0 |
+| source_repository | https://github.com/gs1/WebVoc |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| product_id | Product id | string | Stable unique source-row identifier. | product_id |
+| name | Name | string | Synthetic business value with equivalent bilingual meaning. | name |
+| category | Category | string | Synthetic business value with equivalent bilingual meaning. | category |
+| unit | Unit | string | Synthetic business value with equivalent bilingual meaning. Allowed values: ea. | unit |
+| pack_multiplier | Pack multiplier | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | pack_multiplier |
+| supplier_id | Supplier id | string | Foreign key to organizations; blank creates no edge. | supplier_id |
+| min_shelf_days | Min shelf days | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | min_shelf_days |
+
+### Keys
+
+Primary Keys: product_id
+Display Key: name
+Incremental Key:

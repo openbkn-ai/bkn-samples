@@ -1,0 +1,27 @@
+---
+type: object_type
+id: order_lines
+name: 订单明细
+tags: [retail, gs1]
+---
+
+## ObjectType: 订单明细
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| line_id | 明细编号 | string | 稳定唯一的源记录编号。 | line_id |
+| order_id | 订单编号 | string | 外键关联orders，空值不产生关系。 | order_id |
+| product_id | 商品编号 | string | 外键关联products，空值不产生关系。 | product_id |
+| quantity | 数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | quantity |
+| unit | 计量单位 | string | 虚构业务值，双语表达同一业务事实。 允许取值：件. | unit |
+| min_shelf_days | 最小剩余保质期天数 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | min_shelf_days |
+
+### Keys
+
+Primary Keys: line_id
+Display Key: line_id
+Incremental Key:

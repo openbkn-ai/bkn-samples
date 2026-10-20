@@ -1,0 +1,33 @@
+{
+  "revision": "post-formal-contract-errata-1",
+  "formal_validation_status": "TARGETED_RETEST_ONLY_FULL_REVISED_BANK_NOT_RERUN",
+  "original_formal_scores_fixed": {
+    "en-us": {
+      "passed": 96,
+      "denominator": 100
+    },
+    "zh-cn": {
+      "passed": 95,
+      "denominator": 100
+    }
+  },
+  "original_freeze_sha256": "4e5bede7ce019c9268a66a92f7f1325ea5437bb521ee7e14f25b400e484eaab7",
+  "original_archive": "original/",
+  "business_value_change": "No quantity or fact changes. Absent optional source values represented as null; required event ordering preserved. Reference rows otherwise identical as multisets.",
+  "changes": [
+    "Explicit positive-return filter for Q018",
+    "Explicit positive-quarantine filter for Q033",
+    "Generic nullable-source normalization and contract-declared ordered rows for event journeys",
+    "Bilingual Q028 requests full upstream/downstream undirected connected component including sibling branches",
+    "Connected-component provenance includes all visible component edges",
+    "quantity schema uses decimal_exact"
+  ],
+  "revision_files": {
+    "coverage.json": "e1acfc22c62ed66e6c11fa240744d9942f6f117ab3243a66b34eca3fa76bf96f",
+    "expected-results.json": "09895f51d9a82d07cdac1184fd4679f2d91fd122eae30ed7431a580be04159e2",
+    "oracle-recipes.json": "cd2e64d8ec377c83c3b49f2864fe51bbe92e61c5e022311c6a3ae1af391a0ca8",
+    "questions.json": "1dba93fe78fe6d538ed27bfda369f678686d4259d701d2701fcac5adfb897a73",
+    "response-contracts.json": "2baa49c5bb303849bcffb6e38bf2167638d5c4a25b392104f8d07ae2064028b6"
+  },
+  "targeted_retest_record": "../verification/targeted-retest-20261020.json"
+}

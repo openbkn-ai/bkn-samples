@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: inspections_by_location_id
+name: inspections by location id
+tags: [retail, gs1]
+---
+
+## RelationType: inspections by location id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| inspections | locations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| location_id | location_id |

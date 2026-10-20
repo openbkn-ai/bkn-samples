@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: recall_snapshots_by_product_id
+name: recall snapshots by product id
+tags: [retail, gs1]
+---
+
+## RelationType: recall snapshots by product id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| recall_snapshots | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| product_id | product_id |

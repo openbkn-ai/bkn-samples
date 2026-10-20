@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-20",
+  "formal_rounds": 1,
+  "original_frozen_bank_score": {
+    "passed": 95,
+    "total": 100,
+    "accuracy_percent": 95,
+    "terminal_states": {
+      "answered": 100
+    },
+    "groups": {
+      "difficulty": {
+        "basic": {
+          "passed": 29,
+          "total": 30
+        },
+        "medium": {
+          "passed": 37,
+          "total": 40
+        },
+        "complex": {
+          "passed": 29,
+          "total": 30
+        }
+      },
+      "scenario_id": {
+        "S01": {
+          "passed": 10,
+          "total": 10
+        },
+        "S02": {
+          "passed": 9,
+          "total": 10
+        },
+        "S03": {
+          "passed": 8,
+          "total": 10
+        },
+        "S04": {
+          "passed": 9,
+          "total": 10
+        },
+        "S05": {
+          "passed": 10,
+          "total": 10
+        },
+        "S06": {
+          "passed": 10,
+          "total": 10
+        },
+        "S07": {
+          "passed": 10,
+          "total": 10
+        },
+        "S08": {
+          "passed": 10,
+          "total": 10
+        },
+        "S09": {
+          "passed": 10,
+          "total": 10
+        },
+        "S10": {
+          "passed": 9,
+          "total": 10
+        }
+      }
+    },
+    "failures": [
+      {
+        "id": "Q018",
+        "scenario_id": "S02",
+        "difficulty": "medium",
+        "passed": false,
+        "reason": "row_count",
+        "actual_count": 8,
+        "expected_count": 2
+      },
+      {
+        "id": "Q027",
+        "scenario_id": "S03",
+        "difficulty": "medium",
+        "passed": false,
+        "reason": "business_value_mismatch",
+        "row_count": 6
+      },
+      {
+        "id": "Q028",
+        "scenario_id": "S03",
+        "difficulty": "complex",
+        "passed": false,
+        "reason": "row_count",
+        "actual_count": 2,
+        "expected_count": 3
+      },
+      {
+        "id": "Q033",
+        "scenario_id": "S04",
+        "difficulty": "basic",
+        "passed": false,
+        "reason": "row_count",
+        "actual_count": 8,
+        "expected_count": 3
+      },
+      {
+        "id": "Q094",
+        "scenario_id": "S10",
+        "difficulty": "medium",
+        "passed": false,
+        "reason": "business_value_mismatch",
+        "row_count": 8
+      }
+    ],
+    "evidence_note": "Business grading and raw tool/lifecycle evidence are separate; inspect original runs for execution errors."
+  },
+  "execution_at_finish": {
+    "completed": 100
+  },
+  "evidence_at_finish": {
+    "complete": 21,
+    "assembling": 79
+  },
+  "original_installed_package": {
+    "sha256": "b3775e27cf34f010de191b57248b8964584392efaed2511fcc2d46a2b2385064",
+    "bytes": 84217,
+    "imported_digest_matches": true
+  },
+  "local_fix_package": {
+    "sha256": "34391f05c2c07587f1df1f5edd97e2d5853a1927332862d8d226a102160f6edd",
+    "status": "offline-checked-not-installed-not-formally-evaluated"
+  },
+  "offline_metadata_regression_checks": 104,
+  "acceptance_passed": false,
+  "target_percent": 100,
+  "limitations": "Original frozen score preserved. Revised source and bank have not had another formal Q&A. Snapshot evidence assembling is asynchronous, not proof of closure.",
+  "evidence_directory": "../../../docs/retail-gs1-evidence/first-pass",
+  "full_report": "../../../docs/retail-gs1-acceptance.zh-CN.md",
+  "record_scope": "historical-first-full-pass; current installation and bounded retest recorded separately"
+}

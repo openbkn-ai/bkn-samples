@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: reservations_by_line_id
+name: 库存预留关联订单明细
+tags: [retail, gs1]
+---
+
+## RelationType: 库存预留关联订单明细
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| reservations | order_lines | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| line_id | line_id |

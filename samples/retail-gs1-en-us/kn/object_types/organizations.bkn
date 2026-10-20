@@ -1,0 +1,34 @@
+---
+type: object_type
+id: organizations
+name: Organization
+tags: [retail, gs1]
+---
+
+## ObjectType: Organization
+
+Conceptual GS1 alignment with local IDs; no equivalentClass or full conformance claim.
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://ref.gs1.org/voc/Organization |
+| source_revision | f8f407bf717233c871dca2f62f4e45b0940e8cad |
+| source_license | Apache-2.0 |
+| source_repository | https://github.com/gs1/WebVoc |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| organization_id | Organization id | string | Stable unique source-row identifier. | organization_id |
+| name | Name | string | Synthetic business value with equivalent bilingual meaning. | name |
+| role | Role | string | Synthetic business value with equivalent bilingual meaning. Allowed values: Retailer, Supplier. | role |
+| role_code | Role code | string | Stable machine code; localized display value is separate. Allowed values: retailer, supplier. | role_code |
+
+### Keys
+
+Primary Keys: organization_id
+Display Key: name
+Incremental Key:

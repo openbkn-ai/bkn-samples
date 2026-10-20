@@ -1,0 +1,33 @@
+---
+type: object_type
+id: inventory_snapshots
+name: Recorded Inventory
+tags: [retail, gs1]
+---
+
+## ObjectType: Recorded Inventory
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| snapshot_id | Snapshot id | string | Stable unique source-row identifier. | snapshot_id |
+| product_id | Product id | string | Foreign key to products; blank creates no edge. | product_id |
+| lot_id | Lot id | string | Foreign key to lots; blank creates no edge. | lot_id |
+| location_id | Location id | string | Foreign key to locations; blank creates no edge. | location_id |
+| as_of_date | As of date | date | Day-only date governed by business and knowledge cutoff contract. | as_of_date |
+| knowledge_date | Knowledge date | date | Day-only date governed by business and knowledge cutoff contract. | knowledge_date |
+| unit | Unit | string | Synthetic business value with equivalent bilingual meaning. Allowed values: ea. | unit |
+| on_hand | On hand | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | on_hand |
+| in_transit | In transit | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | in_transit |
+| quarantined | Quarantined | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | quarantined |
+| reserved | Reserved | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | reserved |
+| available | Available | decimal | Recorded dated snapshot, not live reconstruction; unknown remains null. | available |
+
+### Keys
+
+Primary Keys: snapshot_id
+Display Key: snapshot_id
+Incremental Key:

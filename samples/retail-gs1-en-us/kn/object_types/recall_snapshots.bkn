@@ -1,0 +1,30 @@
+---
+type: object_type
+id: recall_snapshots
+name: Recorded Recall Control
+tags: [retail, gs1]
+---
+
+## ObjectType: Recorded Recall Control
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| snapshot_id | Snapshot id | string | Stable unique source-row identifier. | snapshot_id |
+| recall_id | Recall id | string | Foreign key to recalls; blank creates no edge. | recall_id |
+| product_id | Product id | string | Foreign key to products; blank creates no edge. | product_id |
+| as_of_date | As of date | date | Day-only date governed by business and knowledge cutoff contract. | as_of_date |
+| knowledge_date | Knowledge date | date | Day-only date governed by business and knowledge cutoff contract. | knowledge_date |
+| unit | Unit | string | Synthetic business value with equivalent bilingual meaning. Allowed values: ea. | unit |
+| controlled_quantity | Controlled quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | controlled_quantity |
+| controllable_quantity | Controllable quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | controllable_quantity |
+| coverage_ratio | Coverage ratio | decimal | Recorded dated snapshot, not live reconstruction; unknown remains null. | coverage_ratio |
+
+### Keys
+
+Primary Keys: snapshot_id
+Display Key: snapshot_id
+Incremental Key:

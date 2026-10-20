@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: order_lines_by_order_id
+name: 订单明细关联客户订单
+tags: [retail, gs1]
+---
+
+## RelationType: 订单明细关联客户订单
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| order_lines | orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| order_id | order_id |

@@ -1,0 +1,31 @@
+---
+type: object_type
+id: holds
+name: Stock Hold
+tags: [retail, gs1]
+---
+
+## ObjectType: Stock Hold
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| hold_id | Hold id | string | Stable unique source-row identifier. | hold_id |
+| lot_id | Lot id | string | Foreign key to lots; blank creates no edge. | lot_id |
+| location_id | Location id | string | Foreign key to locations; blank creates no edge. | location_id |
+| quantity | Quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | quantity |
+| return_overlap_quantity | Return overlap quantity | decimal | Hold quantity overlapping returned-stock quarantine; apply the business overlap contract. | return_overlap_quantity |
+| effective_from | Effective from | date | Day-only date governed by business and knowledge cutoff contract. | effective_from |
+| effective_to | Effective to | date | Day-only date governed by business and knowledge cutoff contract. | effective_to |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoff contract. | known_date |
+| reason | Reason | string | Synthetic business value with equivalent bilingual meaning. | reason |
+| recall_id | Recall id | string | Foreign key to recalls; blank creates no edge. | recall_id |
+
+### Keys
+
+Primary Keys: hold_id
+Display Key: hold_id
+Incremental Key:

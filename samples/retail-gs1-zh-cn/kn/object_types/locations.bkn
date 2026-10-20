@@ -1,0 +1,35 @@
+---
+type: object_type
+id: locations
+name: 业务地点
+tags: [retail, gs1]
+---
+
+## ObjectType: 业务地点
+
+参考GS1概念；本地标识，不声称标准等价类或完整一致性。
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://ref.gs1.org/voc/Place |
+| source_revision | f8f407bf717233c871dca2f62f4e45b0940e8cad |
+| source_license | Apache-2.0 |
+| source_repository | https://github.com/gs1/WebVoc |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| location_id | 地点编号 | string | 稳定唯一的源记录编号。 | location_id |
+| name | 名称 | string | 虚构业务值，双语表达同一业务事实。 | name |
+| location_type | 地点类型 | string | 虚构业务值，双语表达同一业务事实。 允许取值：仓库, 门店. | location_type |
+| location_type_code | 地点类型代码 | string | 稳定机器代码；业务展示值另列。 允许取值：store, warehouse. | location_type_code |
+| organization_id | 组织编号 | string | 外键关联organizations，空值不产生关系。 | organization_id |
+
+### Keys
+
+Primary Keys: location_id
+Display Key: name
+Incremental Key:

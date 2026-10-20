@@ -1,0 +1,27 @@
+---
+type: object_type
+id: lots
+name: Product Lot
+tags: [retail, gs1]
+---
+
+## ObjectType: Product Lot
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| lot_id | Lot id | string | Stable unique source-row identifier. | lot_id |
+| product_id | Product id | string | Foreign key to products; blank creates no edge. | product_id |
+| supplier_id | Supplier id | string | Foreign key to organizations; blank creates no edge. | supplier_id |
+| produced_date | Produced date | date | Day-only date governed by business and knowledge cutoff contract. | produced_date |
+| expiry_date | Expiry date | date | Day-only date governed by business and knowledge cutoff contract. | expiry_date |
+| supplier_lot | Supplier lot | string | Synthetic business value with equivalent bilingual meaning. | supplier_lot |
+
+### Keys
+
+Primary Keys: lot_id
+Display Key: lot_id
+Incremental Key:

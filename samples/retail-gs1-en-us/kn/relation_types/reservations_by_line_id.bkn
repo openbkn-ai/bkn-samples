@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: reservations_by_line_id
+name: reservations by line id
+tags: [retail, gs1]
+---
+
+## RelationType: reservations by line id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| reservations | order_lines | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| line_id | line_id |

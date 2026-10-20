@@ -1,0 +1,31 @@
+---
+type: object_type
+id: lot_links
+name: Lot Transformation
+tags: [retail, gs1]
+---
+
+## ObjectType: Lot Transformation
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| link_id | Link id | string | Stable unique source-row identifier. | link_id |
+| parent_lot_id | Parent lot id | string | Foreign key to lots; blank creates no edge. | parent_lot_id |
+| child_lot_id | Child lot id | string | Foreign key to lots; blank creates no edge. | child_lot_id |
+| link_type | Link type | string | Synthetic business value with equivalent bilingual meaning. Allowed values: Lot split, Product transformation. | link_type |
+| link_type_code | Link type code | string | Stable machine code; localized display value is separate. Allowed values: split, transform. | link_type_code |
+| parent_quantity | Parent quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | parent_quantity |
+| child_quantity | Child quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | child_quantity |
+| unit | Unit | string | Synthetic business value with equivalent bilingual meaning. Allowed values: ea. | unit |
+| effective_date | Effective date | date | Day-only date governed by business and knowledge cutoff contract. | effective_date |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoff contract. | known_date |
+
+### Keys
+
+Primary Keys: link_id
+Display Key: link_id
+Incremental Key:
