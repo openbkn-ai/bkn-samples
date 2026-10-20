@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: holds_by_location_id
+name: holds by location id
+tags: [retail, gs1]
+---
+
+## RelationType: holds by location id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| holds | locations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| location_id | location_id |

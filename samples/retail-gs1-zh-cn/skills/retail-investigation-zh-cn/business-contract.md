@@ -1,0 +1,51 @@
+# 食品流通公开计算契约
+
+此文档定义通用业务口径，不包含题号或参考答案。数量使用精确Decimal，函数数量和比例输出为六位小数字符串。商品基准单位ea（中文展示件）；case/箱按products.pack_multiplier换算一次。所有编号均虚构。业务日、知识截止日均含当日；只有known_date或recorded_date不晚于knowledge_date的源事实可见。
+
+## 源数据与事件
+
+movements.movement_id是物理源行主键，event_id是业务事件身份。相同event_id且业务payload相同的副本只计一次，比较时忽略movement_id和recorded_date。冲突payload使受影响余额无法判定，保留issues和证据。event_type_code为receive、dispatch、arrive、sale、return、consume、produce、adjust、reversal，类型化代码不翻译，展示字段另列。
+
+receive/produce增加目标地点库存；sale/consume减少来源库存；return增加目标库存且进入物理隔离；adjust按带符号数量调整目标库存。dispatch减少来源库存，按transfer_id增加目标地点在途；arrive增加目标库存并减少同transfer_id的在途。reversal数量为0，用reversal_of指向被撤销的event_id；撤销可见后取消对应事件效应，不能再当作一笔货量。
+
+实际库存只使用event_date不晚于as_of_date、view_code=actual的事件。未来计划不算已发生库存。同一批次、同一天不同业务事件不得共用event_sequence；排序以显式序号为准，不从编号猜测。
+
+质检按批次选择as_of_date和knowledge_date范围内最新的inspection_date、inspection_id，结果passed/failed/pending。缺失质检按pending处理并阻止销售。质检作用于整个批次，location_id只表示检测发生地点。
+
+holds在effective_from<=asof<=effective_to且known_date<=knowledge时有效。各行隔离声明原则上互不重叠，只有return_overlap_quantity显式说明与退货隔离重叠的数量；重叠不得超过该hold.quantity，总重叠不得超过退回量。物理隔离为min(非负在库量，max(退回量+有效隔离量合计−明确重叠量合计，质检非passed时的全部在库量))。因此独立质量隔离不能被误认为退货重叠，也不能将相同退货货量扣减两次。本数据集退回货不再调拨，退货批次释放/重新分类不在动作范围。
+
+缺失调拨出库却出现到货、超量到货、冲突副本、无效重叠、退货超过销售、负库存、缺主数据、同日序号冲突均报告issues；无法信任数量的余额为null，不静默补零。确切污染范围由源记录指向的批次/地点决定，不把独立地点的正确余额自动抹去。
+
+## 库存、效期和召回限制
+
+reservations按生效区间和知识截止日有效，关联order_lines。预留最多占用扣除物理隔离、到期和召回限制后的可售量。available=在库−物理隔离−召回阻断−有效可用预留；过期库存available=0，未知为null。归还库存已经包含在在库及物理隔离中，不能再加一次。
+
+库存行字段：product_id、lot_id、location_id、unit、expiry_date、inspection_status_code、on_hand、in_transit、quarantined、recall_blocked、reserved、available、sold、returned、expired、near_expiry、quality_status。每个已观察批次/地点一行，含来源零余额和仅在途的目标地点。near_expiry指到期日距离asof为0至14日；expired指expiry_date<asof；到期日当天是否可履约仍要满足剩余效期要求。quality_status为known或unknown。
+
+lot_links的方向是parent_lot_id→child_lot_id，effective_date<=asof且known_date<=knowledge才可见。split声明同商品同单位的守恒拆分；transform仅建立转换溯源联系，跨商品的消耗和产出数量不得直接相等核算。召回扩展沿下游关系传递，出现环报告不完整。召回announced_date<=asof、known_date<=knowledge、status_code=open时有效，并阻断所有受影响后代批次尚未物理隔离的库存。
+
+## 函数范围
+
+execute(operation,tables,contract,scope)。inventory_asof及fulfillment_plan要求product_ids为1至50个商品编号，可用location_ids和lot_ids缩小输出；源加载仍要覆盖相关完整路径。as_of_date、knowledge_date必填；view_kind为actual或planned。库存始终是实际事件重建，view_kind只标示分析意图，预测只在fulfillment_plan中使用。
+
+recall_assessment要求recall_id；构建召回后代集合时不以product_ids截断，避免跨产品转换漏掉召回。所有结果返回scope、rows、issues、evidence、completeness（complete或partial）、schema_version=1和capability。None/null表示未知。
+
+inventory_asof支持trace_lot_id；trace_rows沿可见批次联系同时查上游和下游，返回parent_lot_id、child_lot_id、link_id、link_type_code。库存rows仍按商品/地点过滤，而trace返回根批次关联连通分量，不把库存输出过滤误当追溯截断。
+
+## 共享库存分配与未来补货
+
+fulfillment_plan.mode为orders（默认）或replenishment。订单需在asof前创建、在知识截止日前已知、status_code=open；过期未完成的开放订单仍包含。order_ids只筛选需求，不能释放其他订单的有效预留。排序为priority升序，再按due_date、order_id、line_id。只在订单地点和商品内分配，质检passed且expiry_date>=max(asof,due_date)+line.min_shelf_days。FEFO按expiry_date和lot_id稳定排序，不做商品替代。
+
+分配前保留其他明细的预留，处理当前明细时恢复其自身可用预留后分配，处理完成释放未使用的自身预留。被可用库存封顶的预留按reservation_id只分配一次，不得给多个明细重复恢复同一份库存。订单之间共享扣减。未选中明细的预留保持占用。
+
+每个订单明细返回line_id、order_id、product_id、location_id、unit、requested_quantity、allocated_quantity、shortage_quantity、allocation_status_code（full/partial/shortage/unknown）、allocations（lot_id、quantity列表）。shortage=0是有业务意义的零；无法判定时分配和缺口为null。
+
+补货规划horizon_date默认2027-03-31且不早于asof。需求来自已知的planned预测，满足asof<demand_date<=horizon。计划供给仅包括截止日已知、到货日不晚于需求日、商品地点匹配且质检passed、满足商品最小剩余效期、未被召回阻断的planned receive/produce事件。期初使用当前available；按需求日期推进，先处理该日合格供给并剔除过期库存，再按FEFO消耗需求。每行返回forecast_id、product_id、location_id、demand_date、unit、demand_quantity、eligible_supply_quantity、allocated_quantity、shortage_quantity、recommended_quantity；eligible_supply_quantity是当日新增/过期处理后、消费前余额；建议数量等于缺口，不假设MOQ。未知余额不能编造建议。
+
+## 召回核算与指标
+
+recall_assessment按受影响商品/地点分行，商品和单位分组，字段包括recall_id、product_id、location_id、unit、affected_lot_ids、on_hand、in_transit、sold、returned、controlled_quantity、pending_control_quantity、controllable_quantity、coverage_ratio。controlled_quantity为物理隔离量；controllable_quantity=在库+在途；pending_control_quantity=可控制量−已控制量。仅完整正分母时coverage_ratio按已控制/可控制四舍五入六位，否则null。sold为累计销售减退货，returned单列但已经计入在库和隔离，不再加入分母。
+
+affected_order_ids只包含受影响批次已履约销售所关联订单，以及开放订单中预留了受影响批次的订单；不能将同地点任意订单或任意事件的订单一并算成受影响。缺失/非法流转使相关数量和覆盖率无法判定，保留证据及issues。召回公告不可见、已关闭或根批次缺失时返回明确问题，不能制造100%控制率。
+
+inventory_snapshots及recall_snapshots是记录快照，只能在相同业务日、知识截止日、商品/地点或召回及单位下与函数重算核对。两个原子指标使用inventory_snapshots.available与recall_snapshots.coverage_ratio，不代表实时函数替代品，不可跨期相加。

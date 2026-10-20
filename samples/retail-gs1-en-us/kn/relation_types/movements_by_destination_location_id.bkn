@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: movements_by_destination_location_id
+name: movements by destination location id
+tags: [retail, gs1]
+---
+
+## RelationType: movements by destination location id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| movements | locations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| destination_location_id | location_id |

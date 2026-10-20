@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: holds_by_lot_id
+name: holds by lot id
+tags: [retail, gs1]
+---
+
+## RelationType: holds by lot id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| holds | lots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| lot_id | lot_id |

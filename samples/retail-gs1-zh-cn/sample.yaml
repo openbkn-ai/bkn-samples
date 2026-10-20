@@ -1,0 +1,50 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1alpha1",
+  "kind": "Sample",
+  "metadata": {
+    "name": "retail-gs1-zh-cn",
+    "aliases": [],
+    "displayName": "食品供应链追溯与召回",
+    "summary": "虚构食品流通、履约和召回闭环。",
+    "version": "0.1.0"
+  },
+  "spec": {
+    "studio": {
+      "licenseNote": "MIT synthetic assets; GS1 WebVoc Apache-2.0 semantic references",
+      "questions": [
+        "哪些批次当前被隔离？",
+        "问题批次流向哪些门店？",
+        "2027年3月补货缺口是多少？"
+      ]
+    },
+    "database": {
+      "engine": "mariadb",
+      "name": "retail_gs1_zh_cn",
+      "expectedTables": 15
+    },
+    "data": {
+      "mode": "embedded"
+    },
+    "platformVersion": ">=0.2.1 <0.3.0",
+    "knowledgeNetwork": {
+      "id": "retail_gs1_zh_cn",
+      "displayName": "食品供应链追溯与召回"
+    },
+    "capabilities": {
+      "required": true
+    },
+    "components": {
+      "objects": true,
+      "relations": true,
+      "metrics": true,
+      "functions": true,
+      "skills": true
+    },
+    "hooks": {
+      "dbInit": "db/init.sh",
+      "dbVerify": "db/verify.sh",
+      "platformInstall": "platform/install.sh",
+      "platformVerify": "platform/verify.sh"
+    }
+  }
+}

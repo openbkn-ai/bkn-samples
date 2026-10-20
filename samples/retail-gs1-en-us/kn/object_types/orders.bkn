@@ -1,0 +1,30 @@
+---
+type: object_type
+id: orders
+name: Customer Order
+tags: [retail, gs1]
+---
+
+## ObjectType: Customer Order
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| order_id | Order id | string | Stable unique source-row identifier. | order_id |
+| customer_id | Customer id | string | Foreign key to organizations; blank creates no edge. | customer_id |
+| location_id | Location id | string | Foreign key to locations; blank creates no edge. | location_id |
+| order_date | Order date | date | Day-only date governed by business and knowledge cutoff contract. | order_date |
+| due_date | Due date | date | Day-only date governed by business and knowledge cutoff contract. | due_date |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoff contract. | known_date |
+| priority | Priority | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | priority |
+| status | Status | string | Synthetic business value with equivalent bilingual meaning. Allowed values: Closed, Open. | status |
+| status_code | Status code | string | Stable machine code; localized display value is separate. Allowed values: closed, open. | status_code |
+
+### Keys
+
+Primary Keys: order_id
+Display Key: order_id
+Incremental Key:

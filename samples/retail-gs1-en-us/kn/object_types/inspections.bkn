@@ -1,0 +1,29 @@
+---
+type: object_type
+id: inspections
+name: Quality Inspection
+tags: [retail, gs1]
+---
+
+## ObjectType: Quality Inspection
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| inspection_id | Inspection id | string | Stable unique source-row identifier. | inspection_id |
+| lot_id | Lot id | string | Foreign key to lots; blank creates no edge. | lot_id |
+| location_id | Location id | string | Foreign key to locations; blank creates no edge. | location_id |
+| inspection_date | Inspection date | date | Day-only date governed by business and knowledge cutoff contract. | inspection_date |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoff contract. | known_date |
+| result | Result | string | Synthetic business value with equivalent bilingual meaning. Allowed values: Failed, Passed, Pending. | result |
+| result_code | Result code | string | Stable machine code; localized display value is separate. Allowed values: failed, passed, pending. | result_code |
+| reason | Reason | string | Synthetic business value with equivalent bilingual meaning. | reason |
+
+### Keys
+
+Primary Keys: inspection_id
+Display Key: inspection_id
+Incremental Key:

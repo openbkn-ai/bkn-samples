@@ -1,0 +1,30 @@
+---
+type: object_type
+id: recall_snapshots
+name: 已记录召回控制
+tags: [retail, gs1]
+---
+
+## ObjectType: 已记录召回控制
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| snapshot_id | 快照编号 | string | 稳定唯一的源记录编号。 | snapshot_id |
+| recall_id | 召回编号 | string | 外键关联recalls，空值不产生关系。 | recall_id |
+| product_id | 商品编号 | string | 外键关联products，空值不产生关系。 | product_id |
+| as_of_date | 业务截至日 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | as_of_date |
+| knowledge_date | 知识截止日 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | knowledge_date |
+| unit | 计量单位 | string | 虚构业务值，双语表达同一业务事实。 允许取值：件. | unit |
+| controlled_quantity | 已控制数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | controlled_quantity |
+| controllable_quantity | 可控制数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | controllable_quantity |
+| coverage_ratio | 处置覆盖率 | decimal | 已记录带日期快照，非实时重算；未知保持为空。 | coverage_ratio |
+
+### Keys
+
+Primary Keys: snapshot_id
+Display Key: snapshot_id
+Incremental Key:

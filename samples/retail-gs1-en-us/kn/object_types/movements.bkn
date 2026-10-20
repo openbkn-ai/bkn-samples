@@ -1,0 +1,38 @@
+---
+type: object_type
+id: movements
+name: Supply Event
+tags: [retail, gs1]
+---
+
+## ObjectType: Supply Event
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| movement_id | Movement id | string | Stable unique source-row identifier. | movement_id |
+| event_id | Event id | string | Identical business duplicates count once; conflicts invalidate affected balances. | event_id |
+| lot_id | Lot id | string | Foreign key to lots; blank creates no edge. | lot_id |
+| event_type | Event type | string | Synthetic business value with equivalent bilingual meaning. Allowed values: Arriving, Customer return, Error declaration, Receiving, Retail sale, Shipping, Transformation input, Transformation output. | event_type |
+| event_type_code | Event type code | string | Stable machine code; localized display value is separate. Allowed values: arrive, consume, dispatch, produce, receive, return, reversal, sale. | event_type_code |
+| source_location_id | Source location id | string | Foreign key to locations; blank creates no edge. | source_location_id |
+| destination_location_id | Destination location id | string | Foreign key to locations; blank creates no edge. | destination_location_id |
+| transfer_id | Transfer id | string | Synthetic business value with equivalent bilingual meaning. | transfer_id |
+| order_id | Order id | string | Foreign key to orders; blank creates no edge. | order_id |
+| quantity | Quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | quantity |
+| unit | Unit | string | Synthetic business value with equivalent bilingual meaning. Allowed values: ea. | unit |
+| event_date | Event date | date | Day-only date governed by business and knowledge cutoff contract. | event_date |
+| event_sequence | Event sequence | decimal | Explicit same-day order; identifiers do not establish chronology. | event_sequence |
+| recorded_date | Recorded date | date | Day-only date governed by business and knowledge cutoff contract. | recorded_date |
+| view_kind | View kind | string | Synthetic business value with equivalent bilingual meaning. Allowed values: Actual, Planned. | view_kind |
+| view_code | View code | string | Stable machine code; localized display value is separate. Allowed values: actual, planned. | view_code |
+| reversal_of | Reversal of | string | Synthetic business value with equivalent bilingual meaning. | reversal_of |
+
+### Keys
+
+Primary Keys: movement_id
+Display Key: movement_id
+Incremental Key:

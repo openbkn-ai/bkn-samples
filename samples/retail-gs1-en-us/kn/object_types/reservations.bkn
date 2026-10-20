@@ -1,0 +1,29 @@
+---
+type: object_type
+id: reservations
+name: Stock Reservation
+tags: [retail, gs1]
+---
+
+## ObjectType: Stock Reservation
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| reservation_id | Reservation id | string | Stable unique source-row identifier. | reservation_id |
+| line_id | Line id | string | Foreign key to order_lines; blank creates no edge. | line_id |
+| lot_id | Lot id | string | Foreign key to lots; blank creates no edge. | lot_id |
+| location_id | Location id | string | Foreign key to locations; blank creates no edge. | location_id |
+| quantity | Quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | quantity |
+| effective_from | Effective from | date | Day-only date governed by business and knowledge cutoff contract. | effective_from |
+| effective_to | Effective to | date | Day-only date governed by business and knowledge cutoff contract. | effective_to |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoff contract. | known_date |
+
+### Keys
+
+Primary Keys: reservation_id
+Display Key: reservation_id
+Incremental Key:

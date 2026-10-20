@@ -1,0 +1,6942 @@
+[
+  {
+    "id": "Q001",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-001 的名称、基准单位及包装倍率是什么？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, name, unit, pack_multiplier。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "name",
+              "unit",
+              "pack_multiplier"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pack_multiplier": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q002",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-002 由谁供货？返回供应商标识、名称及角色代码。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, organization_id, name, role_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "organization_id",
+              "name",
+              "role_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "organization_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "role_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q003",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "WH-001 仓库属于哪个组织，地点类型是什么？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：location_id, name, location_type_code, organization_id, organization_name。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "location_id",
+              "name",
+              "location_type_code",
+              "organization_id",
+              "organization_name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_type_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "organization_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "organization_name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q004",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "STORE-002 由哪个组织运营？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：location_id, name, organization_id, organization_name。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "location_id",
+              "name",
+              "organization_id",
+              "organization_name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "organization_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "organization_name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q005",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "LOT-003-A 的商品、生产日期和到期日期是什么？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, product_id, produced_date, expiry_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "product_id",
+              "produced_date",
+              "expiry_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "produced_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q006",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-004 声明的最小剩余保质期是多少天？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, min_shelf_days, unit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "min_shelf_days",
+              "unit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "min_shelf_days": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q007",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "将 PRD-001、PRD-002、PRD-003 各三箱换算成基准数量，按商品分别返回。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, unit, base_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "unit",
+              "base_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "base_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q008",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出 PRD-005 的全部批次、供应商名称及到期日期。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, product_id, supplier_name, expiry_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "product_id",
+              "supplier_name",
+              "expiry_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "supplier_name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q009",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "统计每个供应商角色组织负责的商品数，保留零商品供应商，不把地点当作供应商。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：organization_id, name, product_count。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "organization_id",
+              "name",
+              "product_count"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "organization_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_count": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q010",
+    "scenario_id": "S01",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "审计全部批次→商品→供应商路径，仅列出缺失供应商或角色错误的记录。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, product_id, supplier_id, product_supplier_id, role_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "product_id",
+              "supplier_id",
+              "product_supplier_id",
+              "role_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "supplier_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_supplier_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "role_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q011",
+    "scenario_id": "S02",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出 LOT-001-A 的实际收货事件。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：movement_id, event_id, event_date, destination_location_id, quantity, unit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "movement_id",
+              "event_id",
+              "event_date",
+              "destination_location_id",
+              "quantity",
+              "unit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "movement_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "destination_location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "quantity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q012",
+    "scenario_id": "S02",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出观察日已知的 LOT-002-A 检验记录。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：inspection_id, lot_id, inspection_date, result_code, reason。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "inspection_id",
+              "lot_id",
+              "inspection_date",
+              "result_code",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "inspection_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "inspection_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "result_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q013",
+    "scenario_id": "S02",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "按批次列出 WH-003 的 PRD-003 在库数量与当前检验代码。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, inspection_status_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "inspection_status_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "inspection_status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q014",
+    "scenario_id": "S02",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出观察日 PRD-004 各批次仍有效的实物隔离记录。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：hold_id, lot_id, location_id, quantity, reason。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "hold_id",
+              "lot_id",
+              "location_id",
+              "quantity",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "hold_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "quantity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q015",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-011 哪些批次检验失败或待检？各地点实物隔离量是多少？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, inspection_status_code, on_hand, quarantined, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "inspection_status_code",
+              "on_hand",
+              "quarantined",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "inspection_status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q016",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "勾稽 PRD-006 的在库、实物隔离及可用数量，保留可用量为零的地点。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, quarantined, recall_blocked, reserved, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "quarantined",
+              "recall_blocked",
+              "reserved",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recall_blocked": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "reserved": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q017",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "找出 LOT-007-A 最新可见检验及受检地点，不能使用未来才可知的结果。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：inspection_id, lot_id, location_id, inspection_date, known_date, result_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "inspection_id",
+              "lot_id",
+              "location_id",
+              "inspection_date",
+              "known_date",
+              "result_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "inspection_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "inspection_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "known_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "result_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q018",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出 PRD-008 退货量、在库量及实物隔离量，退货已计入在库不能再加一次。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, returned, quarantined, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "returned",
+              "quarantined",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "returned": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q019",
+    "scenario_id": "S02",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-009 分开列示检验状态、实物隔离、召回阻断和预留，解释为何不能承诺全部已收货库存。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, inspection_status_code, on_hand, quarantined, recall_blocked, reserved, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "inspection_status_code",
+              "on_hand",
+              "quarantined",
+              "recall_blocked",
+              "reserved",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "inspection_status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recall_blocked": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "reserved": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q020",
+    "scenario_id": "S02",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-010 在同一2月28日业务日期下，比较2月20日与2月28日可知的库存，返回两个知识日期及完整数量拆分。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：knowledge_date, lot_id, location_id, on_hand, quarantined, recall_blocked, reserved, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "knowledge_date",
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "quarantined",
+              "recall_blocked",
+              "reserved",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "knowledge_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recall_blocked": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "reserved": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q021",
+    "scenario_id": "S03",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出观察日可见的 LOT-001-B 直接下游关联。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：link_id, parent_lot_id, child_lot_id, link_type_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "link_id",
+              "parent_lot_id",
+              "child_lot_id",
+              "link_type_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "link_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "child_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "link_type_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q022",
+    "scenario_id": "S03",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出观察日可见的 LOT-002-D 直接上游批次。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：link_id, parent_lot_id, child_lot_id, link_type_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "link_id",
+              "parent_lot_id",
+              "child_lot_id",
+              "link_type_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "link_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "child_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "link_type_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q023",
+    "scenario_id": "S03",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出 PRD-003 的已声明批次转换及输入输出数量，逐关联返回。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：link_id, parent_lot_id, child_lot_id, link_type_code, parent_quantity, child_quantity, unit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "link_id",
+              "parent_lot_id",
+              "child_lot_id",
+              "link_type_code",
+              "parent_quantity",
+              "child_quantity",
+              "unit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "link_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "child_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "link_type_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "child_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q024",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "追踪 LOT-004-D 完整的上下游连通批次链，每条可见关联只返回一次。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：link_id, parent_lot_id, child_lot_id, link_type_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "link_id",
+              "parent_lot_id",
+              "child_lot_id",
+              "link_type_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "link_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "child_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "link_type_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q025",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出 LOT-005-B 可达的所有下游批次（含根批次）、商品标识及到期日。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, product_id, expiry_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "product_id",
+              "expiry_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q026",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "检查 LOT-006-B 连通批次链，仅列出同商品拆分中声明输入输出数量不一致的关联。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：link_id, parent_lot_id, child_lot_id, parent_quantity, child_quantity, unit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "link_id",
+              "parent_lot_id",
+              "child_lot_id",
+              "parent_quantity",
+              "child_quantity",
+              "unit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "link_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "child_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "child_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q027",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "按业务日期和事件序号列出 LOT-007-B 的可见实际流转，保留调拨两端。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：event_id, event_type_code, source_location_id, destination_location_id, event_date, event_sequence, quantity, unit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "event_id",
+              "event_type_code",
+              "source_location_id",
+              "destination_location_id",
+              "event_date",
+              "event_sequence",
+              "quantity",
+              "unit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_type_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "source_location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "destination_location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_sequence": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quantity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q028",
+    "scenario_id": "S03",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 LOT-047-D 追踪全部相连上游分支，保留不同商品，不能把输入单位直接视作输出单位。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：link_id, parent_lot_id, child_lot_id, link_type_code, parent_quantity, child_quantity, unit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "link_id",
+              "parent_lot_id",
+              "child_lot_id",
+              "link_type_code",
+              "parent_quantity",
+              "child_quantity",
+              "unit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "link_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "child_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "link_type_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "child_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q029",
+    "scenario_id": "S03",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-012 列出全部受影响下游批次及商品供应商，间接下游只计一次。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, product_id, supplier_id, expiry_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "product_id",
+              "supplier_id",
+              "expiry_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "supplier_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q030",
+    "scenario_id": "S03",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "固定业务日2月28日，比较 LOT-041-B 在2月20日及2月28日知识截止下的可见连通关联。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：knowledge_date, link_id, parent_lot_id, child_lot_id, link_type_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "knowledge_date",
+              "link_id",
+              "parent_lot_id",
+              "child_lot_id",
+              "link_type_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "knowledge_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "link_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parent_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "child_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "link_type_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q031",
+    "scenario_id": "S04",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出2月28日 PRD-001 按批次地点拆分的库存。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, in_transit, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q032",
+    "scenario_id": "S04",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-005 哪些批次仍在途，目的地点在哪里？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, in_transit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "in_transit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q033",
+    "scenario_id": "S04",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "按批次地点列出 PRD-003 的实物隔离数量。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, quarantined。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "quarantined"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q034",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-004 查询已记录可用库存指标，并与相同日期的原子事实重算勾稽；按批次地点返回记录值、重算值及差异。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：snapshot_id, lot_id, location_id, recorded_available, reconstructed_available, difference。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "snapshot_id",
+              "lot_id",
+              "location_id",
+              "recorded_available",
+              "reconstructed_available",
+              "difference"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "snapshot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "recorded_available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "reconstructed_available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "difference": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q035",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "仅列出 PRD-005 已在库但不可用的货，给出全部阻断数量分类。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, quarantined, recall_blocked, reserved, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "quarantined",
+              "recall_blocked",
+              "reserved",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recall_blocked": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "reserved": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q036",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "比较 PRD-006 在2月20日和2月28日的库存，分别使用当日已知信息。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：as_of_date, lot_id, location_id, on_hand, in_transit, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "as_of_date",
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "as_of_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q037",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 WH-007 与 STORE-007 的 PRD-007，列出累计净售出、退货、在库及在途量，不能重复计算调拨两端。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, in_transit, sold, returned。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "sold",
+              "returned"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "sold": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "returned": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q038",
+    "scenario_id": "S04",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-045 到货缺少发运记录的情况，列出数量及可信状态，未知必须保留为空。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, in_transit, available, quality_status。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "available",
+              "quality_status"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quality_status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q039",
+    "scenario_id": "S04",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "找出 PRD-046 不可信的库存行，保留空数量，不能把源负库存改成零。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, in_transit, available, quality_status。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "available",
+              "quality_status"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quality_status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q040",
+    "scenario_id": "S04",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-008 和 PRD-009 分商品汇总库存，不得跳过受阻行；若任一行未知，该商品合计为空。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, unit, on_hand, in_transit, quarantined, recall_blocked, reserved, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "unit",
+              "on_hand",
+              "in_transit",
+              "quarantined",
+              "recall_blocked",
+              "reserved",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recall_blocked": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "reserved": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q041",
+    "scenario_id": "S05",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "2月28日 PRD-010 哪些批次已过期？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, expiry_date, on_hand, expired, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "expiry_date",
+              "on_hand",
+              "expired",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "expired": {
+                "type": "boolean"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q042",
+    "scenario_id": "S05",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-011 哪些批次在观察日起14天内到期（含当天）？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, expiry_date, on_hand, near_expiry, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "expiry_date",
+              "on_hand",
+              "near_expiry",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "near_expiry": {
+                "type": "boolean"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q043",
+    "scenario_id": "S05",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-012 的剩余保质期要求及各批次到期日是什么？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, min_shelf_days, lot_id, expiry_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "min_shelf_days",
+              "lot_id",
+              "expiry_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "min_shelf_days": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q044",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "按FEFO顺序列出 WH-013 的 PRD-013 可用批次，先扣除隔离和预留。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, expiry_date, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "expiry_date",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q045",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-014 哪些近效期在库货物还因其他原因不可用？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, expiry_date, on_hand, quarantined, recall_blocked, reserved, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "expiry_date",
+              "on_hand",
+              "quarantined",
+              "recall_blocked",
+              "reserved",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quarantined": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recall_blocked": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "reserved": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q046",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "as_of_date": "2027-03-10",
+    "knowledge_date": "2027-02-28",
+    "question": "截至3月10日、知识截止2月28日，报告 PRD-015 考虑过期后的实际库存，不能计入计划收货。 默认业务日期 2027-03-10、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, expiry_date, on_hand, expired, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "expiry_date",
+              "on_hand",
+              "expired",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "expired": {
+                "type": "boolean"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q047",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-016，列出能满足3月5日发货且仍有7天保质期的批次，只保留正可用量并按FEFO排序。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, expiry_date, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "expiry_date",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q048",
+    "scenario_id": "S05",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-017 未结订单，按各行真实交期和保质期要求共享分配库存。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, order_id, requested_quantity, allocated_quantity, shortage_quantity, allocations, allocation_status_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "order_id",
+              "requested_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "allocations",
+              "allocation_status_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "order_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "requested_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocations": {
+                "type": "array"
+              },
+              "allocation_status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q049",
+    "scenario_id": "S05",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-018 规划3月需求，考虑库存到期并排除保质期不达标的计划收货。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：forecast_id, location_id, demand_date, demand_quantity, eligible_supply_quantity, allocated_quantity, shortage_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "forecast_id",
+              "location_id",
+              "demand_date",
+              "demand_quantity",
+              "eligible_supply_quantity",
+              "allocated_quantity",
+              "shortage_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "eligible_supply_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q050",
+    "scenario_id": "S05",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-049 与 PRD-050，分商品地点列出近效期可用货量，不混单位，不能将有效召回货算为可用，并区分已关闭召回。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, lot_id, location_id, unit, expiry_date, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "lot_id",
+              "location_id",
+              "unit",
+              "expiry_date",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q051",
+    "scenario_id": "S06",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出未结 ORD-001-A 的订单行、需求量与保质期要求。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, order_id, product_id, quantity, unit, min_shelf_days, due_date, priority。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "order_id",
+              "product_id",
+              "quantity",
+              "unit",
+              "min_shelf_days",
+              "due_date",
+              "priority"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "order_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "quantity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "min_shelf_days": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "due_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "priority": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q052",
+    "scenario_id": "S06",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出观察日 ORD-002-A 的有效预留。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：reservation_id, line_id, lot_id, location_id, quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "reservation_id",
+              "line_id",
+              "lot_id",
+              "location_id",
+              "quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "reservation_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "quantity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q053",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "ORD-003-A 能否足量履约？考虑自身及其他订单预留、效期和质量约束。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, requested_quantity, allocated_quantity, shortage_quantity, allocation_status_code, allocations。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "requested_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "allocation_status_code",
+              "allocations"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "requested_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocation_status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "allocations": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q054",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "共享分配 PRD-004 的两个竞争订单，给出准确批次分配。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, order_id, allocated_quantity, shortage_quantity, allocations。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "order_id",
+              "allocated_quantity",
+              "shortage_quantity",
+              "allocations"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "order_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocations": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q055",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "PRD-005 未结订单行在FEFO分配后哪些仍有缺口？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, order_id, requested_quantity, allocated_quantity, shortage_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "order_id",
+              "requested_quantity",
+              "allocated_quantity",
+              "shortage_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "order_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "requested_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q056",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "分配 PRD-049 未结积压订单，必须包含逾期 ORD-049-A；不能静默忽略逾期订单，保质期基准使用观察日和交期中较晚者。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, order_id, allocated_quantity, shortage_quantity, allocations, allocation_status_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "order_id",
+              "allocated_quantity",
+              "shortage_quantity",
+              "allocations",
+              "allocation_status_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "order_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocations": {
+                "type": "array"
+              },
+              "allocation_status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q057",
+    "scenario_id": "S06",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-007 全部竞争订单联合分配，并勾稽总需求、分配与缺口，库存不能用两次。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, requested_quantity, allocated_quantity, shortage_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "requested_quantity",
+              "allocated_quantity",
+              "shortage_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "requested_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q058",
+    "scenario_id": "S06",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "若只调查 ORD-008-B，应保留被排除订单的预留占用，并只释放一次B自身预留后分配。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, requested_quantity, allocated_quantity, shortage_quantity, allocations。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "requested_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "allocations"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "requested_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocations": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q059",
+    "scenario_id": "S06",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-043，报告冲突源事件造成的分配不确定性，不能承诺零库存或编造货量。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, requested_quantity, allocated_quantity, shortage_quantity, allocation_status_code, allocations。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "requested_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "allocation_status_code",
+              "allocations"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "requested_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocation_status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "allocations": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q060",
+    "scenario_id": "S06",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-009 与 PRD-010 分商品、同商品跨订单共享分配，满足召回、质量、交期和FEFO约束。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, line_id, order_id, requested_quantity, allocated_quantity, shortage_quantity, allocations, allocation_status_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "line_id",
+              "order_id",
+              "requested_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "allocations",
+              "allocation_status_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "order_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "requested_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocations": {
+                "type": "array"
+              },
+              "allocation_status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q061",
+    "scenario_id": "S07",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出2月28日前已知的 PRD-001 三月计划需求。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：forecast_id, product_id, location_id, demand_date, quantity, unit, known_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "forecast_id",
+              "product_id",
+              "location_id",
+              "demand_date",
+              "quantity",
+              "unit",
+              "known_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "quantity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "known_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q062",
+    "scenario_id": "S07",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出2月28日已知且截至3月31日的 PRD-002 计划入库。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：event_id, lot_id, destination_location_id, event_date, quantity, unit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "event_id",
+              "lot_id",
+              "destination_location_id",
+              "event_date",
+              "quantity",
+              "unit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "destination_location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "quantity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q063",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "规划 PRD-003 三月补货，逐预测列示合格供给、分配、缺口及建议量。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：forecast_id, product_id, location_id, demand_date, demand_quantity, eligible_supply_quantity, allocated_quantity, shortage_quantity, recommended_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "forecast_id",
+              "product_id",
+              "location_id",
+              "demand_date",
+              "demand_quantity",
+              "eligible_supply_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "recommended_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "eligible_supply_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recommended_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q064",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "计入合格计划收货后，PRD-004 哪些三月预测仍短缺？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：forecast_id, demand_date, demand_quantity, allocated_quantity, shortage_quantity, recommended_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "forecast_id",
+              "demand_date",
+              "demand_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "recommended_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recommended_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q065",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "仅规划 PRD-005 到3月15日，排除更晚需求，以及需求日尚未合格的收货。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：forecast_id, demand_date, eligible_supply_quantity, allocated_quantity, shortage_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "forecast_id",
+              "demand_date",
+              "eligible_supply_quantity",
+              "allocated_quantity",
+              "shortage_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "eligible_supply_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q066",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "分商品汇总 PRD-006 三月需求和补货缺口，任一预测分配未知时合计保持为空。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, demand_quantity, allocated_quantity, shortage_quantity, recommended_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "demand_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "recommended_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recommended_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q067",
+    "scenario_id": "S07",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-007，按顺序在三月各次预测间共享库存，逐批考虑效期，并先处理当日供给再分配当日需求。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：forecast_id, demand_date, demand_quantity, eligible_supply_quantity, allocated_quantity, shortage_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "forecast_id",
+              "demand_date",
+              "demand_quantity",
+              "eligible_supply_quantity",
+              "allocated_quantity",
+              "shortage_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "eligible_supply_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q068",
+    "scenario_id": "S07",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-008 和 PRD-009，分商品地点报告三月计划，考虑召回及检验不合格排除。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, forecast_id, demand_date, eligible_supply_quantity, allocated_quantity, shortage_quantity, recommended_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "forecast_id",
+              "demand_date",
+              "eligible_supply_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "recommended_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "eligible_supply_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recommended_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q069",
+    "scenario_id": "S07",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-03-05",
+    "question": "对 PRD-007 固定业务日2月28日，比较知识截止2月28日及3月5日的三月计划，展示稍后可知的计划供给如何改变缺口。 默认业务日期 2027-02-28、知识截止 2027-03-05；除非题目明确比较日期，均按此范围。返回完整 rows，字段：knowledge_date, forecast_id, demand_date, eligible_supply_quantity, allocated_quantity, shortage_quantity, recommended_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "knowledge_date",
+              "forecast_id",
+              "demand_date",
+              "eligible_supply_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "recommended_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "knowledge_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "eligible_supply_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recommended_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q070",
+    "scenario_id": "S07",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-045，期初库存不可信时三月建议应保持未知，不能静默以零期初量规划。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：forecast_id, demand_date, demand_quantity, eligible_supply_quantity, allocated_quantity, shortage_quantity, recommended_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "forecast_id",
+              "demand_date",
+              "demand_quantity",
+              "eligible_supply_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "recommended_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "forecast_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "demand_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "eligible_supply_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recommended_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q071",
+    "scenario_id": "S08",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "REC-001 的根批次、公告日期、原因和状态是什么？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：recall_id, root_lot_id, announced_date, reason, status_code。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "recall_id",
+              "root_lot_id",
+              "announced_date",
+              "reason",
+              "status_code"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "recall_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "root_lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "announced_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q072",
+    "scenario_id": "S08",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出 REC-002 含下游的受影响批次及各批次商品。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, product_id, expiry_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "product_id",
+              "expiry_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expiry_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q073",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-003，分商品地点列出受影响在库和在途数量。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：recall_id, product_id, location_id, affected_lot_ids, on_hand, in_transit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "recall_id",
+              "product_id",
+              "location_id",
+              "affected_lot_ids",
+              "on_hand",
+              "in_transit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "recall_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affected_lot_ids": {
+                "type": "array"
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q074",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-004，按地点分别列出受影响净售出量和退货量。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, sold, returned。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "sold",
+              "returned"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "sold": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "returned": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q075",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "REC-005 哪些目的地点仍有受影响在途货？ 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, affected_lot_ids, in_transit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "affected_lot_ids",
+              "in_transit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affected_lot_ids": {
+                "type": "array"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q076",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出 REC-006 影响的订单标识，包含已售订单及受影响批次的未结预留订单。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, affected_order_ids。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "affected_order_ids"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affected_order_ids": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q077",
+    "scenario_id": "S08",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-007 勾稽实物在库、在途、净售出与退货，退货不能重复加总。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, on_hand, in_transit, sold, returned, controllable_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "sold",
+              "returned",
+              "controllable_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "sold": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "returned": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controllable_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q078",
+    "scenario_id": "S08",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-048 沿全部下游转换追踪，不同商品分行，列出受影响批次和订单标识。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, unit, affected_lot_ids, affected_order_ids, on_hand, in_transit。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "unit",
+              "affected_lot_ids",
+              "affected_order_ids",
+              "on_hand",
+              "in_transit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affected_lot_ids": {
+                "type": "array"
+              },
+              "affected_order_ids": {
+                "type": "array"
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q079",
+    "scenario_id": "S08",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-043，列出受影响批次及控制覆盖率；不能因不属于下游的同商品兄弟批次有冲突事件，就把受影响范围也判为未知。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, affected_lot_ids, on_hand, in_transit, controllable_quantity, coverage_ratio。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "affected_lot_ids",
+              "on_hand",
+              "in_transit",
+              "controllable_quantity",
+              "coverage_ratio"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affected_lot_ids": {
+                "type": "array"
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controllable_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "coverage_ratio": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q080",
+    "scenario_id": "S08",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-20",
+    "question": "截至2月28日仅使用2月20日可知信息评估 REC-010，不能假定稍后召回公告当时已知。 默认业务日期 2027-02-28、知识截止 2027-02-20；除非题目明确比较日期，均按此范围。返回完整 rows，字段：recall_id, product_id, location_id, on_hand, in_transit, sold, returned。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "recall_id",
+              "product_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "sold",
+              "returned"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "recall_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "sold": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "returned": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q081",
+    "scenario_id": "S09",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-011，分商品地点列出已实物控制数量。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, controlled_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "controlled_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "controlled_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q082",
+    "scenario_id": "S09",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-012，列出各地点尚待控制的数量缺口。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, pending_control_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "pending_control_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pending_control_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q083",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-013，以在库加在途为分母计算控制覆盖率，排除尚未退回的已售货物。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, controlled_quantity, controllable_quantity, coverage_ratio。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "controlled_quantity",
+              "controllable_quantity",
+              "coverage_ratio"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "controlled_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controllable_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "coverage_ratio": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q084",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "REC-014 哪些地点仍需控制行动？计入在途量，不能因已发召回就视为在途已受控。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, on_hand, in_transit, controlled_quantity, pending_control_quantity。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "controlled_quantity",
+              "pending_control_quantity"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controlled_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "pending_control_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q085",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "REC-050 已关闭。是否仍应产生有效召回评估？仅返回有效评估行，不能编造新的未结召回。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, controllable_quantity, controlled_quantity, coverage_ratio。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "controllable_quantity",
+              "controlled_quantity",
+              "coverage_ratio"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "controllable_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controlled_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "coverage_ratio": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q086",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-016，列示退货如何计入在库及实物控制，覆盖率分母不能再加一次退货。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, returned, on_hand, in_transit, controlled_quantity, controllable_quantity, coverage_ratio。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "returned",
+              "on_hand",
+              "in_transit",
+              "controlled_quantity",
+              "controllable_quantity",
+              "coverage_ratio"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "returned": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controlled_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controllable_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "coverage_ratio": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q087",
+    "scenario_id": "S09",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-017 查询已记录控制覆盖率指标，再跨地点独立汇总实物控制量和可控制量；比较商品级记录与重算比例，不能平均地点百分比。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：snapshot_id, product_id, unit, controlled_quantity, controllable_quantity, recorded_ratio, reconstructed_ratio, difference。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "snapshot_id",
+              "product_id",
+              "unit",
+              "controlled_quantity",
+              "controllable_quantity",
+              "recorded_ratio",
+              "reconstructed_ratio",
+              "difference"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "snapshot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "controlled_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controllable_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "recorded_ratio": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "reconstructed_ratio": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "difference": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q088",
+    "scenario_id": "S09",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "考虑有效召回限制后，对 PRD-018 未结订单联合分配，列示缺口及来源批次。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：line_id, order_id, requested_quantity, allocated_quantity, shortage_quantity, allocations。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "line_id",
+              "order_id",
+              "requested_quantity",
+              "allocated_quantity",
+              "shortage_quantity",
+              "allocations"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "line_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "order_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "requested_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocated_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "shortage_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "allocations": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q089",
+    "scenario_id": "S09",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-045，调拨来源不完整时控制缺口和比例保持未知，不能把未知货量判为已完全控制。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, on_hand, in_transit, controlled_quantity, controllable_quantity, pending_control_quantity, coverage_ratio。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "controlled_quantity",
+              "controllable_quantity",
+              "pending_control_quantity",
+              "coverage_ratio"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controlled_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "controllable_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "pending_control_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "coverage_ratio": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q090",
+    "scenario_id": "S09",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 REC-020，分地点列出已控制货、在途敞口、净售出和待控制缺口，并保留影响订单便于处置。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, location_id, affected_order_ids, controlled_quantity, in_transit, sold, pending_control_quantity, coverage_ratio。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "location_id",
+              "affected_order_ids",
+              "controlled_quantity",
+              "in_transit",
+              "sold",
+              "pending_control_quantity",
+              "coverage_ratio"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affected_order_ids": {
+                "type": "array"
+              },
+              "controlled_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "sold": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "pending_control_quantity": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "coverage_ratio": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q091",
+    "scenario_id": "S10",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出完全重复的语义事件标识及其物理行数，不能视作不同业务事件。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：event_id, physical_row_count, payload_variant_count。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "event_id",
+              "physical_row_count",
+              "payload_variant_count"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "physical_row_count": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "payload_variant_count": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q092",
+    "scenario_id": "S10",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出可见撤销事件及其目标事件标识。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：event_id, reversal_of, event_date, recorded_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "event_id",
+              "reversal_of",
+              "event_date",
+              "recorded_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "reversal_of": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "recorded_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q093",
+    "scenario_id": "S10",
+    "difficulty": "basic",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-03-05",
+    "question": "列出业务日期不晚于2月28日、但2月28日后且3月5日前才记录的实际事件。 默认业务日期 2027-02-28、知识截止 2027-03-05；除非题目明确比较日期，均按此范围。返回完整 rows，字段：event_id, lot_id, event_date, recorded_date。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "event_id",
+              "lot_id",
+              "event_date",
+              "recorded_date"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "recorded_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q094",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-042，事件去重后重建库存，按批次地点返回实际数量。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, sold, returned, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "sold",
+              "returned",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "sold": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "returned": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q095",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-044，撤销目标事件后重建库存，不能把撤销当作新的数量流转相加。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, sold, returned, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "sold",
+              "returned",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "sold": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "returned": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q096",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-03-05",
+    "question": "对 PRD-041 固定2月28日业务日期，比较知识截止2月28日和3月5日的库存以识别迟报影响。 默认业务日期 2027-02-28、知识截止 2027-03-05；除非题目明确比较日期，均按此范围。返回完整 rows，字段：knowledge_date, lot_id, location_id, on_hand, sold, available。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "knowledge_date",
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "sold",
+              "available"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "knowledge_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "sold": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q097",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "列出冲突语义事件及业务载荷变体数，不能和完全相同的重复混淆。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：event_id, physical_row_count, payload_variant_count。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "event_id",
+              "physical_row_count",
+              "payload_variant_count"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "physical_row_count": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "payload_variant_count": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q098",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对 PRD-043，仅列出因事件载荷冲突而不可信的库存行，数量字段保留为空。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：lot_id, location_id, on_hand, available, quality_status。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "available",
+              "quality_status"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quality_status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q099",
+    "scenario_id": "S10",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "对比 PRD-045 的调拨来源缺失与 PRD-046 的源负库存，列出全部受影响批次地点及未知数量，不得漏掉任一商品。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：product_id, lot_id, location_id, on_hand, in_transit, available, quality_status。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "product_id",
+              "lot_id",
+              "location_id",
+              "on_hand",
+              "in_transit",
+              "available",
+              "quality_status"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lot_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "on_hand": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "in_transit": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "available": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ],
+                "x-comparison": "decimal_exact"
+              },
+              "quality_status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "Q100",
+    "scenario_id": "S10",
+    "difficulty": "complex",
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28",
+    "question": "审计全部源表的外键缺失、单位不合法和同日事件序号冲突，返回缺陷类型与记录标识；语义事件重复不能误判成物理主键重复。 默认业务日期 2027-02-28、知识截止 2027-02-28；除非题目明确比较日期，均按此范围。返回完整 rows，字段：defect_type, table, record_id, field。数量与比例用十进制字符串；未知用 null，不能用0替代。",
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "defect_type",
+              "table",
+              "record_id",
+              "field"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "defect_type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "table": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "record_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "field": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]

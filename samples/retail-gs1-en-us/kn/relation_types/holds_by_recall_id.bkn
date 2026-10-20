@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: holds_by_recall_id
+name: holds by recall id
+tags: [retail, gs1]
+---
+
+## RelationType: holds by recall id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| holds | recalls | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| recall_id | recall_id |

@@ -1,0 +1,29 @@
+---
+type: object_type
+id: reservations
+name: 库存预留
+tags: [retail, gs1]
+---
+
+## ObjectType: 库存预留
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| reservation_id | 预留编号 | string | 稳定唯一的源记录编号。 | reservation_id |
+| line_id | 明细编号 | string | 外键关联order_lines，空值不产生关系。 | line_id |
+| lot_id | 批次编号 | string | 外键关联lots，空值不产生关系。 | lot_id |
+| location_id | 地点编号 | string | 外键关联locations，空值不产生关系。 | location_id |
+| quantity | 数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | quantity |
+| effective_from | 生效起日 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | effective_from |
+| effective_to | 生效止日 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | effective_to |
+| known_date | 可知日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | known_date |
+
+### Keys
+
+Primary Keys: reservation_id
+Display Key: reservation_id
+Incremental Key:

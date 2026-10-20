@@ -1,0 +1,392 @@
+{
+  "version": "0.1.0",
+  "default_as_of_date": "2027-02-28",
+  "languages": [
+    "en-us",
+    "zh-cn"
+  ],
+  "object_types": {
+    "organizations": {
+      "primary_key": "organization_id",
+      "name_en": "Organization",
+      "name_zh": "组织",
+      "fields": {
+        "organization_id": "string",
+        "name": "string",
+        "role": "string",
+        "role_code": "string"
+      },
+      "foreign_keys": {}
+    },
+    "locations": {
+      "primary_key": "location_id",
+      "name_en": "Business Location",
+      "name_zh": "业务地点",
+      "fields": {
+        "location_id": "string",
+        "name": "string",
+        "location_type": "string",
+        "location_type_code": "string",
+        "organization_id": "string"
+      },
+      "foreign_keys": {
+        "organization_id": [
+          "organizations",
+          "organization_id"
+        ]
+      }
+    },
+    "products": {
+      "primary_key": "product_id",
+      "name_en": "Food Product",
+      "name_zh": "食品商品",
+      "fields": {
+        "product_id": "string",
+        "name": "string",
+        "category": "string",
+        "unit": "string",
+        "pack_multiplier": "decimal",
+        "supplier_id": "string",
+        "min_shelf_days": "decimal"
+      },
+      "foreign_keys": {
+        "supplier_id": [
+          "organizations",
+          "organization_id"
+        ]
+      }
+    },
+    "lots": {
+      "primary_key": "lot_id",
+      "name_en": "Product Lot",
+      "name_zh": "商品批次",
+      "fields": {
+        "lot_id": "string",
+        "product_id": "string",
+        "supplier_id": "string",
+        "produced_date": "date",
+        "expiry_date": "date",
+        "supplier_lot": "string"
+      },
+      "foreign_keys": {
+        "product_id": [
+          "products",
+          "product_id"
+        ],
+        "supplier_id": [
+          "organizations",
+          "organization_id"
+        ]
+      }
+    },
+    "movements": {
+      "primary_key": "movement_id",
+      "name_en": "Supply Event",
+      "name_zh": "供应链事件",
+      "fields": {
+        "movement_id": "string",
+        "event_id": "string",
+        "lot_id": "string",
+        "event_type": "string",
+        "event_type_code": "string",
+        "source_location_id": "string",
+        "destination_location_id": "string",
+        "transfer_id": "string",
+        "order_id": "string",
+        "quantity": "decimal",
+        "unit": "string",
+        "event_date": "date",
+        "event_sequence": "decimal",
+        "recorded_date": "date",
+        "view_kind": "string",
+        "view_code": "string",
+        "reversal_of": "string"
+      },
+      "foreign_keys": {
+        "lot_id": [
+          "lots",
+          "lot_id"
+        ],
+        "source_location_id": [
+          "locations",
+          "location_id"
+        ],
+        "destination_location_id": [
+          "locations",
+          "location_id"
+        ],
+        "order_id": [
+          "orders",
+          "order_id"
+        ]
+      }
+    },
+    "inspections": {
+      "primary_key": "inspection_id",
+      "name_en": "Quality Inspection",
+      "name_zh": "质量检验",
+      "fields": {
+        "inspection_id": "string",
+        "lot_id": "string",
+        "location_id": "string",
+        "inspection_date": "date",
+        "known_date": "date",
+        "result": "string",
+        "result_code": "string",
+        "reason": "string"
+      },
+      "foreign_keys": {
+        "lot_id": [
+          "lots",
+          "lot_id"
+        ],
+        "location_id": [
+          "locations",
+          "location_id"
+        ]
+      }
+    },
+    "holds": {
+      "primary_key": "hold_id",
+      "name_en": "Stock Hold",
+      "name_zh": "库存隔离",
+      "fields": {
+        "hold_id": "string",
+        "lot_id": "string",
+        "location_id": "string",
+        "quantity": "decimal",
+        "return_overlap_quantity": "decimal",
+        "effective_from": "date",
+        "effective_to": "date",
+        "known_date": "date",
+        "reason": "string",
+        "recall_id": "string"
+      },
+      "foreign_keys": {
+        "lot_id": [
+          "lots",
+          "lot_id"
+        ],
+        "location_id": [
+          "locations",
+          "location_id"
+        ],
+        "recall_id": [
+          "recalls",
+          "recall_id"
+        ]
+      }
+    },
+    "orders": {
+      "primary_key": "order_id",
+      "name_en": "Customer Order",
+      "name_zh": "客户订单",
+      "fields": {
+        "order_id": "string",
+        "customer_id": "string",
+        "location_id": "string",
+        "order_date": "date",
+        "due_date": "date",
+        "known_date": "date",
+        "priority": "decimal",
+        "status": "string",
+        "status_code": "string"
+      },
+      "foreign_keys": {
+        "customer_id": [
+          "organizations",
+          "organization_id"
+        ],
+        "location_id": [
+          "locations",
+          "location_id"
+        ]
+      }
+    },
+    "order_lines": {
+      "primary_key": "line_id",
+      "name_en": "Order Line",
+      "name_zh": "订单明细",
+      "fields": {
+        "line_id": "string",
+        "order_id": "string",
+        "product_id": "string",
+        "quantity": "decimal",
+        "unit": "string",
+        "min_shelf_days": "decimal"
+      },
+      "foreign_keys": {
+        "order_id": [
+          "orders",
+          "order_id"
+        ],
+        "product_id": [
+          "products",
+          "product_id"
+        ]
+      }
+    },
+    "reservations": {
+      "primary_key": "reservation_id",
+      "name_en": "Stock Reservation",
+      "name_zh": "库存预留",
+      "fields": {
+        "reservation_id": "string",
+        "line_id": "string",
+        "lot_id": "string",
+        "location_id": "string",
+        "quantity": "decimal",
+        "effective_from": "date",
+        "effective_to": "date",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "line_id": [
+          "order_lines",
+          "line_id"
+        ],
+        "lot_id": [
+          "lots",
+          "lot_id"
+        ],
+        "location_id": [
+          "locations",
+          "location_id"
+        ]
+      }
+    },
+    "demand_forecasts": {
+      "primary_key": "forecast_id",
+      "name_en": "Demand Forecast",
+      "name_zh": "需求预测",
+      "fields": {
+        "forecast_id": "string",
+        "product_id": "string",
+        "location_id": "string",
+        "demand_date": "date",
+        "quantity": "decimal",
+        "unit": "string",
+        "known_date": "date",
+        "view_kind": "string",
+        "view_code": "string"
+      },
+      "foreign_keys": {
+        "product_id": [
+          "products",
+          "product_id"
+        ],
+        "location_id": [
+          "locations",
+          "location_id"
+        ]
+      }
+    },
+    "recalls": {
+      "primary_key": "recall_id",
+      "name_en": "Product Recall",
+      "name_zh": "商品召回",
+      "fields": {
+        "recall_id": "string",
+        "root_lot_id": "string",
+        "announced_date": "date",
+        "known_date": "date",
+        "reason": "string",
+        "status": "string",
+        "status_code": "string"
+      },
+      "foreign_keys": {
+        "root_lot_id": [
+          "lots",
+          "lot_id"
+        ]
+      }
+    },
+    "lot_links": {
+      "primary_key": "link_id",
+      "name_en": "Lot Transformation",
+      "name_zh": "批次转换",
+      "fields": {
+        "link_id": "string",
+        "parent_lot_id": "string",
+        "child_lot_id": "string",
+        "link_type": "string",
+        "link_type_code": "string",
+        "parent_quantity": "decimal",
+        "child_quantity": "decimal",
+        "unit": "string",
+        "effective_date": "date",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "parent_lot_id": [
+          "lots",
+          "lot_id"
+        ],
+        "child_lot_id": [
+          "lots",
+          "lot_id"
+        ]
+      }
+    },
+    "inventory_snapshots": {
+      "primary_key": "snapshot_id",
+      "name_en": "Recorded Inventory",
+      "name_zh": "已记录库存",
+      "fields": {
+        "snapshot_id": "string",
+        "product_id": "string",
+        "lot_id": "string",
+        "location_id": "string",
+        "as_of_date": "date",
+        "knowledge_date": "date",
+        "unit": "string",
+        "on_hand": "decimal",
+        "in_transit": "decimal",
+        "quarantined": "decimal",
+        "reserved": "decimal",
+        "available": "decimal"
+      },
+      "foreign_keys": {
+        "product_id": [
+          "products",
+          "product_id"
+        ],
+        "lot_id": [
+          "lots",
+          "lot_id"
+        ],
+        "location_id": [
+          "locations",
+          "location_id"
+        ]
+      }
+    },
+    "recall_snapshots": {
+      "primary_key": "snapshot_id",
+      "name_en": "Recorded Recall Control",
+      "name_zh": "已记录召回控制",
+      "fields": {
+        "snapshot_id": "string",
+        "recall_id": "string",
+        "product_id": "string",
+        "as_of_date": "date",
+        "knowledge_date": "date",
+        "unit": "string",
+        "controlled_quantity": "decimal",
+        "controllable_quantity": "decimal",
+        "coverage_ratio": "decimal"
+      },
+      "foreign_keys": {
+        "recall_id": [
+          "recalls",
+          "recall_id"
+        ],
+        "product_id": [
+          "products",
+          "product_id"
+        ]
+      }
+    }
+  },
+  "language": "en-us"
+}

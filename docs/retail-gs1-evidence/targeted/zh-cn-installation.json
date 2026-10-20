@@ -1,0 +1,46 @@
+{
+  "sample": "retail-gs1-zh-cn",
+  "kn_id": "retail_gs1_zh_cn",
+  "status": "installed",
+  "package_sha256": "34391f05c2c07587f1df1f5edd97e2d5853a1927332862d8d226a102160f6edd",
+  "manifestSha256": "e39080456ec756bba4545d76b6891cc1d8711625fc60a3c18fec9f719500acaf",
+  "install_stages": {
+    "database": "succeeded",
+    "discover": "succeeded",
+    "knowledge": "succeeded",
+    "capabilities": "succeeded",
+    "verify": "succeeded"
+  },
+  "function_definition_checks": [
+    {
+      "operation": "inventory_asof",
+      "tool_id": "01a15ab3-7454-792a-b035-d4a281a9a569",
+      "status": "enabled",
+      "code_sha256": "91586ab5e4c2c4c26505843f165ee4c87333b2eaf9d6f3b19a62624c2dea9cd5",
+      "embedded_engine_sha256": "5bd7444716ecad9341fb9af9a64f47348bff175b182f7cbc72a4798f101fa125",
+      "event_payload_repair_present": true,
+      "code_bytes": 23421,
+      "executed": false
+    },
+    {
+      "operation": "fulfillment_plan",
+      "tool_id": "01a15ab3-769b-7c02-a651-f3598f782aa0",
+      "status": "enabled",
+      "code_sha256": "cc20f6d0d713c52a1bc2995d8690083ec4d0e8ca740233d8bf05d3ef11ff6f8b",
+      "embedded_engine_sha256": "5bd7444716ecad9341fb9af9a64f47348bff175b182f7cbc72a4798f101fa125",
+      "event_payload_repair_present": true,
+      "code_bytes": 23423,
+      "executed": false
+    },
+    {
+      "operation": "recall_assessment",
+      "tool_id": "01a15ab3-78ce-7f15-8482-5c0a97d2ffae",
+      "status": "enabled",
+      "code_sha256": "628e5a6fe5eb57b45b36d2620301e14e6acf68e52681e40461d15a19b5f5c45c",
+      "embedded_engine_sha256": "5bd7444716ecad9341fb9af9a64f47348bff175b182f7cbc72a4798f101fa125",
+      "event_payload_repair_present": true,
+      "code_bytes": 23424,
+      "executed": false
+    }
+  ]
+}

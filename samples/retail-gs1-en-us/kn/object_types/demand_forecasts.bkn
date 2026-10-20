@@ -1,0 +1,30 @@
+---
+type: object_type
+id: demand_forecasts
+name: Demand Forecast
+tags: [retail, gs1]
+---
+
+## ObjectType: Demand Forecast
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| forecast_id | Forecast id | string | Stable unique source-row identifier. | forecast_id |
+| product_id | Product id | string | Foreign key to products; blank creates no edge. | product_id |
+| location_id | Location id | string | Foreign key to locations; blank creates no edge. | location_id |
+| demand_date | Demand date | date | Day-only date governed by business and knowledge cutoff contract. | demand_date |
+| quantity | Quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | quantity |
+| unit | Unit | string | Synthetic business value with equivalent bilingual meaning. Allowed values: ea. | unit |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoff contract. | known_date |
+| view_kind | View kind | string | Synthetic business value with equivalent bilingual meaning. Allowed values: Planned. | view_kind |
+| view_code | View code | string | Stable machine code; localized display value is separate. Allowed values: planned. | view_code |
+
+### Keys
+
+Primary Keys: forecast_id
+Display Key: forecast_id
+Incremental Key:

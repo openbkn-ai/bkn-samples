@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: orders_by_customer_id
+name: orders by customer id
+tags: [retail, gs1]
+---
+
+## RelationType: orders by customer id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| orders | organizations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| customer_id | organization_id |

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: movements_by_destination_location_id
+name: 供应链事件关联业务地点
+tags: [retail, gs1]
+---
+
+## RelationType: 供应链事件关联业务地点
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| movements | locations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| destination_location_id | location_id |
