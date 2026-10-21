@@ -21,13 +21,13 @@ tags: [finance, fibo]
 | fx_id | 汇率编号 | string | 外键关联 fx_rates，空值仅允许在合同明确声明缺失/不适用时使用。 | fx_id |
 | as_of_date | 截至日期 | date | 业务快照日期，区别于报价/定盘日期和已知日期。 | as_of_date |
 | valuation_status | 估值状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：受阻, 完整. | valuation_status |
-| reason | 原因 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 | reason |
+| reason | 原因 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：价格未批准, 价格缺失, 价格陈旧, 无. | reason |
 | market_value_local | 交易币种市值 | decimal | 交易日数量×价格×因子，工具本币两位小数；价格不可用则为空。 | market_value_local |
 | market_value_base | 本位币市值 | decimal | 已舍入本币市值×同快照汇率，舍入美元两位小数；空值为未知，不是零。 | market_value_base |
 | cost_value_base | 本位币成本 | decimal | 剩余本币入账成本按当前快照汇率折算为美元两位小数，不是历史汇率成本。 | cost_value_base |
 | unrealized_pnl_base | 本位币未实现损益 | decimal | 美元市值减当前汇率折算成本，不是总投资收益或官方净值损益。 | unrealized_pnl_base |
 | currency | 币种 | string | 本位币 USD，金额以美元表达。 | currency |
-| valuation_method | 估值方法 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | valuation_method |
+| valuation_method | 估值方法 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 允许取值：债券全价法, 股票市值法. | valuation_method |
 | view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
 | known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
 

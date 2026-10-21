@@ -1,0 +1,29 @@
+---
+type: object_type
+id: inspections
+name: 质量检验
+tags: [retail, gs1]
+---
+
+## ObjectType: 质量检验
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| inspection_id | 检验编号 | string | 稳定唯一的源记录编号。 | inspection_id |
+| lot_id | 批次编号 | string | 外键关联lots，空值不产生关系。 | lot_id |
+| location_id | 地点编号 | string | 外键关联locations，空值不产生关系。 | location_id |
+| inspection_date | 检验日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | inspection_date |
+| known_date | 可知日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | known_date |
+| result | 检验结论 | string | 虚构业务值，双语表达同一业务事实。 允许取值：不合格, 合格, 待检. | result |
+| result_code | 检验代码 | string | 稳定机器代码；业务展示值另列。 允许取值：failed, passed, pending. | result_code |
+| reason | 原因 | string | 虚构业务值，双语表达同一业务事实。 | reason |
+
+### Keys
+
+Primary Keys: inspection_id
+Display Key: inspection_id
+Incremental Key:

@@ -38,13 +38,15 @@
   "FIN-004": {
     "rows": [
       {
+        "instrument_id": "INS-015",
         "synthetic_code": "DEMO-SEC-00015",
         "scheme": "local_security_code",
-        "name": "Harbor Technology Ordinary Share",
-        "issuer_id": "ISS-008"
+        "instrument_name": "Harbor Technology Ordinary Share",
+        "issuer_id": "ISS-008",
+        "issuer_name": "Harbor Technology Holdings"
       }
     ],
-    "explanation": "Evidence returns 1 row(s). First result: synthetic_code=DEMO-SEC-00015; scheme=local_security_code; name=Harbor Technology Ordinary Share; issuer_id=ISS-008. Identity is established by declared keys and business roles; synthetic codes are not valid regulatory identifiers.",
+    "explanation": "Evidence returns 1 row(s). First result: instrument_id=INS-015; synthetic_code=DEMO-SEC-00015; scheme=local_security_code; instrument_name=Harbor Technology Ordinary Share; issuer_id=ISS-008; issuer_name=Harbor Technology Holdings. Identity is established by declared keys and business roles; synthetic codes are not valid regulatory identifiers.",
     "evidence_rule": "Return all rows from the specified records, joins, dates and measure. Null amounts are unknown and must not be replaced by zero."
   },
   "FIN-005": {
@@ -66,10 +68,10 @@
         "account_id": "ACC-010",
         "portfolio_id": "PF-010",
         "manager_id": "MGR-010",
-        "name": "Juniper Technology Asset Management"
+        "manager_name": "Juniper Technology Asset Management"
       }
     ],
-    "explanation": "Evidence returns 1 row(s). First result: account_id=ACC-010; portfolio_id=PF-010; manager_id=MGR-010; name=Juniper Technology Asset Management. Identity is established by declared keys and business roles; synthetic codes are not valid regulatory identifiers.",
+    "explanation": "Evidence returns 1 row(s). First result: account_id=ACC-010; portfolio_id=PF-010; manager_id=MGR-010; manager_name=Juniper Technology Asset Management. Identity is established by declared keys and business roles; synthetic codes are not valid regulatory identifiers.",
     "evidence_rule": "Return all rows from the specified records, joins, dates and measure. Null amounts are unknown and must not be replaced by zero."
   },
   "FIN-007": {
@@ -1075,10 +1077,10 @@
         "as_of_date": "2027-02-28",
         "price_date": "2027-02-18",
         "age_days": 10,
-        "reason": "stale"
+        "valuation_reason": "stale"
       }
     ],
-    "explanation": "Evidence returns 1 row(s). First result: valuation_id=VAL-035-1-4; as_of_date=2027-02-28; price_date=2027-02-18; age_days=10; reason=stale. An unusable price blocks valuation. Missing values stay unknown and contaminate the entire portfolio denominator; a branch label cannot override this evidence.",
+    "explanation": "Evidence returns 1 row(s). First result: valuation_id=VAL-035-1-4; as_of_date=2027-02-28; price_date=2027-02-18; age_days=10; valuation_reason=stale. An unusable price blocks valuation. Missing values stay unknown and contaminate the entire portfolio denominator; a branch label cannot override this evidence.",
     "evidence_rule": "Return all rows from the specified records, joins, dates and measure. Null amounts are unknown and must not be replaced by zero."
   },
   "FIN-045": {

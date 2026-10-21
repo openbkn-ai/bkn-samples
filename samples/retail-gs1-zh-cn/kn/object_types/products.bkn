@@ -1,0 +1,37 @@
+---
+type: object_type
+id: products
+name: 食品商品
+tags: [retail, gs1]
+---
+
+## ObjectType: 食品商品
+
+参考GS1概念；本地标识，不声称标准等价类或完整一致性。
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://ref.gs1.org/voc/FoodBeverageTobaccoProduct |
+| source_revision | f8f407bf717233c871dca2f62f4e45b0940e8cad |
+| source_license | Apache-2.0 |
+| source_repository | https://github.com/gs1/WebVoc |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| product_id | 商品编号 | string | 稳定唯一的源记录编号。 | product_id |
+| name | 名称 | string | 虚构业务值，双语表达同一业务事实。 | name |
+| category | 品类 | string | 虚构业务值，双语表达同一业务事实。 | category |
+| unit | 计量单位 | string | 虚构业务值，双语表达同一业务事实。 允许取值：件. | unit |
+| pack_multiplier | 包装倍率 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | pack_multiplier |
+| supplier_id | 供应商编号 | string | 外键关联organizations，空值不产生关系。 | supplier_id |
+| min_shelf_days | 最小剩余保质期天数 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | min_shelf_days |
+
+### Keys
+
+Primary Keys: product_id
+Display Key: name
+Incremental Key:

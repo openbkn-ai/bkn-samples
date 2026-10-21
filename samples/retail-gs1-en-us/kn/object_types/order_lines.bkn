@@ -1,0 +1,27 @@
+---
+type: object_type
+id: order_lines
+name: Order Line
+tags: [retail, gs1]
+---
+
+## ObjectType: Order Line
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| line_id | Line id | string | Stable unique source-row identifier. | line_id |
+| order_id | Order id | string | Foreign key to orders; blank creates no edge. | order_id |
+| product_id | Product id | string | Foreign key to products; blank creates no edge. | product_id |
+| quantity | Quantity | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | quantity |
+| unit | Unit | string | Synthetic business value with equivalent bilingual meaning. Allowed values: ea. | unit |
+| min_shelf_days | Min shelf days | decimal | Exact Decimal value; units/rules follow business contract; unknown is not zero. | min_shelf_days |
+
+### Keys
+
+Primary Keys: line_id
+Display Key: line_id
+Incremental Key:

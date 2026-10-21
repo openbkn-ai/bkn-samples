@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: inventory_snapshots_by_location_id
+name: inventory snapshots by location id
+tags: [retail, gs1]
+---
+
+## RelationType: inventory snapshots by location id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| inventory_snapshots | locations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| location_id | location_id |

@@ -1,0 +1,236 @@
+{
+  "standard": "GS1 Web Vocabulary v1.16",
+  "source_commit": "f8f407bf717233c871dca2f62f4e45b0940e8cad",
+  "license": "Apache-2.0",
+  "conceptual_mappings": {
+    "organizations": "https://ref.gs1.org/voc/Organization",
+    "locations": "https://ref.gs1.org/voc/Place",
+    "products": "https://ref.gs1.org/voc/FoodBeverageTobaccoProduct"
+  },
+  "local_extensions": [
+    "lots",
+    "movements",
+    "inspections",
+    "holds",
+    "orders",
+    "order_lines",
+    "reservations",
+    "demand_forecasts",
+    "recalls",
+    "lot_links",
+    "inventory_snapshots",
+    "recall_snapshots"
+  ],
+  "relations": [
+    {
+      "id": "locations_by_organization_id",
+      "source": "locations",
+      "target": "organizations",
+      "source_property": "organization_id",
+      "target_property": "organization_id"
+    },
+    {
+      "id": "products_by_supplier_id",
+      "source": "products",
+      "target": "organizations",
+      "source_property": "supplier_id",
+      "target_property": "organization_id"
+    },
+    {
+      "id": "lots_by_product_id",
+      "source": "lots",
+      "target": "products",
+      "source_property": "product_id",
+      "target_property": "product_id"
+    },
+    {
+      "id": "lots_by_supplier_id",
+      "source": "lots",
+      "target": "organizations",
+      "source_property": "supplier_id",
+      "target_property": "organization_id"
+    },
+    {
+      "id": "movements_by_lot_id",
+      "source": "movements",
+      "target": "lots",
+      "source_property": "lot_id",
+      "target_property": "lot_id"
+    },
+    {
+      "id": "movements_by_source_location_id",
+      "source": "movements",
+      "target": "locations",
+      "source_property": "source_location_id",
+      "target_property": "location_id"
+    },
+    {
+      "id": "movements_by_destination_location_id",
+      "source": "movements",
+      "target": "locations",
+      "source_property": "destination_location_id",
+      "target_property": "location_id"
+    },
+    {
+      "id": "movements_by_order_id",
+      "source": "movements",
+      "target": "orders",
+      "source_property": "order_id",
+      "target_property": "order_id"
+    },
+    {
+      "id": "inspections_by_lot_id",
+      "source": "inspections",
+      "target": "lots",
+      "source_property": "lot_id",
+      "target_property": "lot_id"
+    },
+    {
+      "id": "inspections_by_location_id",
+      "source": "inspections",
+      "target": "locations",
+      "source_property": "location_id",
+      "target_property": "location_id"
+    },
+    {
+      "id": "holds_by_lot_id",
+      "source": "holds",
+      "target": "lots",
+      "source_property": "lot_id",
+      "target_property": "lot_id"
+    },
+    {
+      "id": "holds_by_location_id",
+      "source": "holds",
+      "target": "locations",
+      "source_property": "location_id",
+      "target_property": "location_id"
+    },
+    {
+      "id": "holds_by_recall_id",
+      "source": "holds",
+      "target": "recalls",
+      "source_property": "recall_id",
+      "target_property": "recall_id"
+    },
+    {
+      "id": "orders_by_customer_id",
+      "source": "orders",
+      "target": "organizations",
+      "source_property": "customer_id",
+      "target_property": "organization_id"
+    },
+    {
+      "id": "orders_by_location_id",
+      "source": "orders",
+      "target": "locations",
+      "source_property": "location_id",
+      "target_property": "location_id"
+    },
+    {
+      "id": "order_lines_by_order_id",
+      "source": "order_lines",
+      "target": "orders",
+      "source_property": "order_id",
+      "target_property": "order_id"
+    },
+    {
+      "id": "order_lines_by_product_id",
+      "source": "order_lines",
+      "target": "products",
+      "source_property": "product_id",
+      "target_property": "product_id"
+    },
+    {
+      "id": "reservations_by_line_id",
+      "source": "reservations",
+      "target": "order_lines",
+      "source_property": "line_id",
+      "target_property": "line_id"
+    },
+    {
+      "id": "reservations_by_lot_id",
+      "source": "reservations",
+      "target": "lots",
+      "source_property": "lot_id",
+      "target_property": "lot_id"
+    },
+    {
+      "id": "reservations_by_location_id",
+      "source": "reservations",
+      "target": "locations",
+      "source_property": "location_id",
+      "target_property": "location_id"
+    },
+    {
+      "id": "demand_forecasts_by_product_id",
+      "source": "demand_forecasts",
+      "target": "products",
+      "source_property": "product_id",
+      "target_property": "product_id"
+    },
+    {
+      "id": "demand_forecasts_by_location_id",
+      "source": "demand_forecasts",
+      "target": "locations",
+      "source_property": "location_id",
+      "target_property": "location_id"
+    },
+    {
+      "id": "recalls_by_root_lot_id",
+      "source": "recalls",
+      "target": "lots",
+      "source_property": "root_lot_id",
+      "target_property": "lot_id"
+    },
+    {
+      "id": "lot_links_by_parent_lot_id",
+      "source": "lot_links",
+      "target": "lots",
+      "source_property": "parent_lot_id",
+      "target_property": "lot_id"
+    },
+    {
+      "id": "lot_links_by_child_lot_id",
+      "source": "lot_links",
+      "target": "lots",
+      "source_property": "child_lot_id",
+      "target_property": "lot_id"
+    },
+    {
+      "id": "inventory_snapshots_by_product_id",
+      "source": "inventory_snapshots",
+      "target": "products",
+      "source_property": "product_id",
+      "target_property": "product_id"
+    },
+    {
+      "id": "inventory_snapshots_by_lot_id",
+      "source": "inventory_snapshots",
+      "target": "lots",
+      "source_property": "lot_id",
+      "target_property": "lot_id"
+    },
+    {
+      "id": "inventory_snapshots_by_location_id",
+      "source": "inventory_snapshots",
+      "target": "locations",
+      "source_property": "location_id",
+      "target_property": "location_id"
+    },
+    {
+      "id": "recall_snapshots_by_recall_id",
+      "source": "recall_snapshots",
+      "target": "recalls",
+      "source_property": "recall_id",
+      "target_property": "recall_id"
+    },
+    {
+      "id": "recall_snapshots_by_product_id",
+      "source": "recall_snapshots",
+      "target": "products",
+      "source_property": "product_id",
+      "target_property": "product_id"
+    }
+  ]
+}

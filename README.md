@@ -8,7 +8,7 @@ Each sample is an independent package with its own database, knowledge network a
 
 ## Try a sample
 
-Use an OpenBKN 0.2.x environment with the standard sample installation service enabled and an account authorized to install samples. The manufacturing and both financial FIBO samples require **OpenBKN 0.2.1 or later**; their current manifest compatibility range is `>=0.2.1 <0.3.0`.
+Use an OpenBKN 0.2.x environment with the standard sample installation service enabled and an account authorized to install samples. The manufacturing, financial FIBO and retail GS1 samples require **OpenBKN 0.2.1 or later**; their current manifest compatibility range is `>=0.2.1 <0.3.0`.
 
 1. Open **Studio → One-click onboarding** and select **Refresh samples**.
 2. Choose a published sample, check its version and release notes, and select **Install**.
@@ -29,16 +29,20 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 | [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Online catalog |
 | [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | Offline release only; requires OpenBKN ≥ 0.2.1 |
 | [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 仅离线发布；要求 OpenBKN ≥ 0.2.1 |
-| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | English | Securities trading, settlement, positions, valuation, issuer concentration and receivable limits; 20 tables, 78,356 records and 100 evaluation questions | Released 0.1.3; requires OpenBKN ≥ 0.2.1 |
-| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | Chinese | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 已发布 0.1.4；要求 OpenBKN ≥ 0.2.1 |
+| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | English | Securities trading, settlement, positions, valuation, issuer concentration and receivable limits; 20 tables, 78,356 records and 100 evaluation questions | Unpublished 0.2.4 source candidate; requires OpenBKN ≥ 0.2.1 |
+| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | Chinese | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 未发布0.2.4源码候选；要求 OpenBKN ≥ 0.2.1 |
+| [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | English | Receipt inspection, lot traceability, inventory, shared-stock fulfillment, March 2027 replenishment and recall; 15 tables, 2,911 records and 100 questions | Published assets 0.1.0; catalog PR pending; requires OpenBKN ≥ 0.2.1 |
+| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | Chinese | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | 固定制品0.1.0已发布，目录PR待审核；要求OpenBKN ≥ 0.2.1 |
 
 The [official catalog](catalog.json) determines downloadable versions for the published samples.
 
 The two manufacturing samples are intentionally kept out of the official catalog and legacy `020` discovery. Import their fixed offline package only after loading its matching data image into the target cluster; they install independently and can coexist because they use separate databases and knowledge-network IDs.
 
-The FIBO samples are independently installable English and Chinese packages with separate databases and knowledge-network IDs. They use selected MIT-licensed [FIBO sources](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890) as semantic references and fictional operational data, rather than claiming full-FIBO coverage. Both completed local installation and 100 actual model questions; see the [acceptance summary and limits](docs/financial-fibo-repair-acceptance.zh-CN.md). Fixed [English 0.1.3](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.1.3) and [Chinese 0.1.4](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.1.4) Releases include the package, acceptance evidence and checksums. Use the official catalog for online discovery, or download the same package for offline import.
+The FIBO samples use selected MIT-licensed [FIBO sources](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890) as semantic references and fictional data, rather than claiming full-FIBO coverage. Existing English 0.1.3 and Chinese 0.1.4 assets are historical releases without the later metrics/functions/Skill. Their official catalog registration remains on hold. This PR contributes the unpublished 0.2.4 source, with 3 functions, 2 recorded-snapshot metrics and 1 Skill per language. The candidate scored 96/100 financial fields per language in one full pass; four specified historical tool paths passed after platform fixes, with complete evidence. These are different package versions, and the four-path replay does not revise the original full-bank scores. See the [current PR readiness and validation limits](docs/financial-fibo-183-readiness.zh-CN.md).
 
 World Cup data is a locked historical snapshot covering men's editions through 2022 and women's editions through 2019. Detailed coverage varies by table. See each sample's README for its data scope, license and scenario assumptions.
+
+The GS1 samples are two independently installable packages with fictional, aligned bilingual data, three functions, two dated snapshot metrics and one investigation Skill per language. They reference the Apache-2.0 [GS1 Web Vocabulary](https://github.com/gs1/WebVoc), with explicit local operational extensions. On local port 8081, the original single full pass scored **English 96/100 and Chinese 95/100**. After an event-deduplication repair and question-contract corrections, only the prior nonpassing cases were retested: **English 4/4 and Chinese 5/5**, all execution and evidence states complete. The revised full banks were not rerun; this is not a full-bank 100% claim. See the [acceptance report](docs/retail-gs1-acceptance.en-US.md). Source PR #186 is merged. Immutable [English 0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0) and [Chinese 0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.0) assets are published; the follow-up catalog PR remains unmerged. Offline import requires OpenBKN 0.2.1 or later; no legacy 020 bundled index was changed.
 
 ## Scenario evaluation
 
@@ -49,6 +53,7 @@ Samples with an evaluation suite keep questions, reference answers and baseline 
 - [World Cup evaluation](samples/world-cup/bkn-eval/README.md): 50 Chinese questions with explicit output fields, ordering, frozen answers and grading scripts.
 - [English World Cup evaluation](samples/world-cup-en/bkn-eval/README.md): 10 basic queries/statistics, 12 multi-table joins, 14 rankings/cross-tournament comparisons and 14 combined analyses.
 - [English FIBO evaluation](samples/financial-fibo-en-us/bkn-eval/README.md) and [Chinese FIBO evaluation](samples/financial-fibo-zh-cn/bkn-eval/README.md): 100 questions per sample across 10 scenarios, with 30 easy/basic, 40 intermediate and 30 hard/complex questions; frozen full answers and financial regression controls.
+- [English GS1 retail evaluation](samples/retail-gs1-en-us/bkn-eval/README.md) and [Chinese GS1 retail evaluation](samples/retail-gs1-zh-cn/bkn-eval/README.md): 100 questions each, PRD-mapped across 10 scenarios with 30 basic, 40 medium and 30 complex questions; original scores and the bounded nine-case retest are reported separately.
 
 An independent external agent answers the questions through MCP. Reference answers are withheld during evaluation, then used to check business values, result fields and ordering. Record the tested data baseline, package and actual results for each evaluation.
 

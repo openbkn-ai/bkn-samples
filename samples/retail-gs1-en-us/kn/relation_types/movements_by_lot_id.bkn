@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: movements_by_lot_id
+name: movements by lot id
+tags: [retail, gs1]
+---
+
+## RelationType: movements by lot id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| movements | lots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| lot_id | lot_id |

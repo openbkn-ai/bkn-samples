@@ -17,7 +17,7 @@ tags: [finance, fibo]
 |---|---|---|---|---|
 | entity_id | 实体编号 | string | 该业务记录的稳定唯一标识。 | entity_id |
 | name | 名称 | string | 用于业务展示的虚构名称，双语语义一致。 | name |
-| entity_role | 实体角色 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | entity_role |
+| entity_role | 实体角色 | string | 明确声明的发行方、经纪商或管理人角色；资产管理使用声明的管理人取值，不另造角色代码。 允许取值：发行方, 经纪商, 资产管理人. | entity_role |
 | country | 国家或地区 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | country |
 | sector | 行业 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | sector |
 | is_synthetic | 是否合成 | boolean | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | is_synthetic |

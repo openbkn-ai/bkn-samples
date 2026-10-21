@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: orders_by_customer_id
+name: 客户订单关联组织
+tags: [retail, gs1]
+---
+
+## RelationType: 客户订单关联组织
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| orders | organizations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| customer_id | organization_id |

@@ -1,0 +1,182 @@
+{
+  "legal_entities": [
+    {
+      "entity_id": "SYN-I1",
+      "name": "Synthetic issuer 1",
+      "entity_role": "issuer",
+      "country": "ZZ",
+      "sector": "Synthetic",
+      "is_synthetic": "true"
+    },
+    {
+      "entity_id": "SYN-I2",
+      "name": "Synthetic issuer 2",
+      "entity_role": "issuer",
+      "country": "ZZ",
+      "sector": "Synthetic",
+      "is_synthetic": "true"
+    },
+    {
+      "entity_id": "SYN-CP",
+      "name": "Synthetic counterparty",
+      "entity_role": "broker",
+      "country": "ZZ",
+      "sector": "Synthetic",
+      "is_synthetic": "true"
+    }
+  ],
+  "legal_entity_identifiers": [],
+  "financial_instruments": [
+    {
+      "instrument_id": "SYN-S1",
+      "name": "Synthetic equity 1",
+      "issuer_id": "SYN-I1",
+      "asset_class": "equity",
+      "currency": "USD",
+      "unit": "share",
+      "price_basis": "per_share",
+      "price_multiplier": "1",
+      "maturity_date": "",
+      "is_synthetic": "true"
+    },
+    {
+      "instrument_id": "SYN-S2",
+      "name": "Synthetic equity 2",
+      "issuer_id": "SYN-I2",
+      "asset_class": "equity",
+      "currency": "USD",
+      "unit": "share",
+      "price_basis": "per_share",
+      "price_multiplier": "1",
+      "maturity_date": "",
+      "is_synthetic": "true"
+    }
+  ],
+  "security_identifiers": [],
+  "portfolios": [
+    {
+      "portfolio_id": "SYN-P",
+      "name": "Synthetic portfolio",
+      "manager_id": "SYN-M",
+      "base_currency": "USD",
+      "mandate": "Synthetic",
+      "branch": "Synthetic"
+    }
+  ],
+  "accounts": [
+    {
+      "account_id": "SYN-A",
+      "name": "Synthetic account",
+      "portfolio_id": "SYN-P",
+      "currency": "USD"
+    }
+  ],
+  "opening_positions": [
+    {
+      "opening_id": "SYN-O1",
+      "account_id": "SYN-A",
+      "instrument_id": "SYN-S1",
+      "opening_date": "2045-01-01",
+      "quantity": "10",
+      "cost_unit_price": "2",
+      "currency": "USD"
+    }
+  ],
+  "trade_orders": [
+    {
+      "order_id": "SYN-ORDER",
+      "account_id": "SYN-A",
+      "instrument_id": "SYN-S2",
+      "counterparty_id": "SYN-CP",
+      "order_date": "2045-01-15",
+      "side": "buy",
+      "order_quantity": "1",
+      "order_status": "executed",
+      "view_kind": "actual",
+      "known_date": "2045-01-15"
+    }
+  ],
+  "securities_transactions": [
+    {
+      "trade_id": "SYN-TRADE",
+      "order_id": "SYN-ORDER",
+      "trade_date": "2045-01-15",
+      "trade_quantity": "1",
+      "execution_price": "5",
+      "gross_amount": "5.00",
+      "currency": "USD",
+      "trade_status": "executed",
+      "known_date": "2045-01-15"
+    }
+  ],
+  "settlement_instructions": [
+    {
+      "instruction_id": "SYN-INSTR",
+      "trade_id": "SYN-TRADE",
+      "due_date": "2045-01-15",
+      "required_quantity": "1",
+      "currency": "USD"
+    }
+  ],
+  "settlement_events": [
+    {
+      "event_id": "SYN-EVENT",
+      "instruction_id": "SYN-INSTR",
+      "event_date": "2045-01-15",
+      "event_status": "settled",
+      "settled_quantity": "1",
+      "failure_reason": "none",
+      "view_kind": "actual",
+      "known_date": "2045-01-15",
+      "event_sequence": "1"
+    }
+  ],
+  "positions": [],
+  "market_prices": [
+    {
+      "price_id": "SYN-PRICE1",
+      "instrument_id": "SYN-S1",
+      "as_of_date": "2045-01-31",
+      "price_date": "2045-01-31",
+      "published_date": "2045-01-31",
+      "price": "5",
+      "currency": "USD",
+      "approval": "approved",
+      "pricing_source": "synthetic",
+      "view_kind": "actual",
+      "known_date": "2045-01-31"
+    }
+  ],
+  "fx_rates": [],
+  "valuation_snapshots": [],
+  "issuer_exposures": [],
+  "exposure_contributions": [],
+  "counterparty_exposures": [],
+  "mandate_limits": [
+    {
+      "limit_id": "SYN-L1",
+      "portfolio_id": "SYN-P",
+      "entity_id": "SYN-I1",
+      "measure": "issuer_ratio",
+      "threshold": "0.6",
+      "currency": "",
+      "effective_from_date": "2045-01-01",
+      "effective_to_date": "2045-12-31",
+      "approval": "approved",
+      "decision_date": "2045-01-01"
+    },
+    {
+      "limit_id": "SYN-L2",
+      "portfolio_id": "SYN-P",
+      "entity_id": "SYN-I2",
+      "measure": "issuer_ratio",
+      "threshold": "0.6",
+      "currency": "",
+      "effective_from_date": "2045-01-01",
+      "effective_to_date": "2045-12-31",
+      "approval": "approved",
+      "decision_date": "2045-01-01"
+    }
+  ],
+  "limit_assessments": []
+}

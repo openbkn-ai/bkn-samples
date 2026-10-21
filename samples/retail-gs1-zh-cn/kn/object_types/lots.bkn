@@ -1,0 +1,27 @@
+---
+type: object_type
+id: lots
+name: 商品批次
+tags: [retail, gs1]
+---
+
+## ObjectType: 商品批次
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| lot_id | 批次编号 | string | 稳定唯一的源记录编号。 | lot_id |
+| product_id | 商品编号 | string | 外键关联products，空值不产生关系。 | product_id |
+| supplier_id | 供应商编号 | string | 外键关联organizations，空值不产生关系。 | supplier_id |
+| produced_date | 生产日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | produced_date |
+| expiry_date | 到期日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | expiry_date |
+| supplier_lot | 供应商批号 | string | 虚构业务值，双语表达同一业务事实。 | supplier_lot |
+
+### Keys
+
+Primary Keys: lot_id
+Display Key: lot_id
+Incremental Key:

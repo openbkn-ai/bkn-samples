@@ -1,0 +1,28 @@
+---
+type: object_type
+id: recalls
+name: 商品召回
+tags: [retail, gs1]
+---
+
+## ObjectType: 商品召回
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| recall_id | 召回编号 | string | 稳定唯一的源记录编号。 | recall_id |
+| root_lot_id | 召回根批次编号 | string | 外键关联lots，空值不产生关系。 | root_lot_id |
+| announced_date | 公告日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | announced_date |
+| known_date | 可知日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | known_date |
+| reason | 原因 | string | 虚构业务值，双语表达同一业务事实。 | reason |
+| status | 业务状态 | string | 虚构业务值，双语表达同一业务事实。 允许取值：已关闭, 进行中. | status |
+| status_code | 状态代码 | string | 稳定机器代码；业务展示值另列。 允许取值：closed, open. | status_code |
+
+### Keys
+
+Primary Keys: recall_id
+Display Key: recall_id
+Incremental Key:

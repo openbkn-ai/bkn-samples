@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: inventory_snapshots_by_product_id
+name: 已记录库存关联食品商品
+tags: [retail, gs1]
+---
+
+## RelationType: 已记录库存关联食品商品
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| inventory_snapshots | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| product_id | product_id |

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: lots_by_supplier_id
+name: 商品批次关联组织
+tags: [retail, gs1]
+---
+
+## RelationType: 商品批次关联组织
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| lots | organizations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| supplier_id | organization_id |

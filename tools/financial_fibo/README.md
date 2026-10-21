@@ -22,3 +22,8 @@ python3 samples/financial-fibo-zh-cn/bkn-eval/run.py
 ```
 
 Shared-database loading, native BKN resource binding and local 8081 installation have been implemented. Actual agent/MCP results are recorded separately in local acceptance reports; these candidates are not published.
+
+
+Capability runtime lives in each sample tools/post_trade.py (identical core), managed_execution.py and register_capabilities.py; it uses the official SDK, not fixture files. Run `python3 tools/financial_fibo/test_capabilities.py` for independent snapshot reconciliation and adverse controls. `build_capability_questions.py` is authoring-only and produces implementation-derived public development references; never call it during evaluation. Independent heldout cases and gold are not shipped.
+
+`test_known_fields.py` adds independently authored synthetic counterexamples for USD identity conversion and same-day cost ambiguity, including proved-zero exposures, negative controls and bilingual known-field/evidence preservation. Run it together with the snapshot suite; fixture files are test-only and are not installed.

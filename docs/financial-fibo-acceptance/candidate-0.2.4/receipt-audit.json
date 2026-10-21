@@ -1,0 +1,56 @@
+{
+  "findings": [
+    {
+      "language": "en-us",
+      "id": "FIN-019",
+      "record_status_unchanged": "failed",
+      "financial_fields_pass_unchanged": false,
+      "finish_raw_isError": true,
+      "receipt_metadata": [
+        {
+          "code": "terminal_conflict",
+          "current_status": "abandoned",
+          "message": "另一个终态转换已先完成"
+        }
+      ],
+      "normal_completed_capture_proven": false
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-018",
+      "record_status_unchanged": "failed",
+      "financial_fields_pass_unchanged": false,
+      "finish_raw_isError": true,
+      "receipt_metadata": [
+        {
+          "code": "terminal_conflict",
+          "current_status": "active",
+          "message": "交互租约已过期"
+        }
+      ],
+      "normal_completed_capture_proven": false
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-071",
+      "record_status_unchanged": "answered",
+      "financial_fields_pass_unchanged": true,
+      "finish_raw_isError": false,
+      "receipt_metadata": [
+        {
+          "code": "trace_core_unavailable",
+          "stage": "answer_artifact",
+          "trace_available": false,
+          "trace_recorded": false
+        }
+      ],
+      "normal_completed_capture_proven": false
+    }
+  ],
+  "financial_pass_and_completed_complete_receipt": {
+    "en-us": 96,
+    "zh-cn": 95
+  },
+  "original_scores_and_records_modified": false,
+  "scope": "Post-completion lifecycle metadata audit only; no calls, new questions, retries or score changes. Original scorer misses lowercase trace_core_unavailable in its code counter; this addendum preserves that gap explicitly."
+}

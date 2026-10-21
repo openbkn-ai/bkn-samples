@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: lot_links_by_parent_lot_id
+name: 批次转换关联商品批次
+tags: [retail, gs1]
+---
+
+## RelationType: 批次转换关联商品批次
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| lot_links | lots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| parent_lot_id | lot_id |

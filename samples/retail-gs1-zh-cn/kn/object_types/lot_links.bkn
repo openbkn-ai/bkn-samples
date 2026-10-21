@@ -1,0 +1,31 @@
+---
+type: object_type
+id: lot_links
+name: 批次转换
+tags: [retail, gs1]
+---
+
+## ObjectType: 批次转换
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| link_id | 转换编号 | string | 稳定唯一的源记录编号。 | link_id |
+| parent_lot_id | 上游批次编号 | string | 外键关联lots，空值不产生关系。 | parent_lot_id |
+| child_lot_id | 下游批次编号 | string | 外键关联lots，空值不产生关系。 | child_lot_id |
+| link_type | 转换类型 | string | 虚构业务值，双语表达同一业务事实。 允许取值：商品转换, 批次拆分. | link_type |
+| link_type_code | 转换类型代码 | string | 稳定机器代码；业务展示值另列。 允许取值：split, transform. | link_type_code |
+| parent_quantity | 消耗数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | parent_quantity |
+| child_quantity | 产出数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | child_quantity |
+| unit | 计量单位 | string | 虚构业务值，双语表达同一业务事实。 允许取值：件. | unit |
+| effective_date | 生效日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | effective_date |
+| known_date | 可知日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | known_date |
+
+### Keys
+
+Primary Keys: link_id
+Display Key: link_id
+Incremental Key:

@@ -1,0 +1,6142 @@
+{
+  "Q001": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "name",
+            "unit",
+            "pack_multiplier"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "pack_multiplier": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q002": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "organization_id",
+            "name",
+            "role_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "organization_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "role_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q003": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "location_id",
+            "name",
+            "location_type_code",
+            "organization_id",
+            "organization_name"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_type_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "organization_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "organization_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q004": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "location_id",
+            "name",
+            "organization_id",
+            "organization_name"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "organization_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "organization_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q005": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "product_id",
+            "produced_date",
+            "expiry_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "produced_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q006": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "min_shelf_days",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "min_shelf_days": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q007": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "unit",
+            "base_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "base_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q008": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "product_id",
+            "supplier_name",
+            "expiry_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "supplier_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q009": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "organization_id",
+            "name",
+            "product_count"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "organization_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_count": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q010": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "product_id",
+            "supplier_id",
+            "product_supplier_id",
+            "role_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "supplier_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_supplier_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "role_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q011": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "movement_id",
+            "event_id",
+            "event_date",
+            "destination_location_id",
+            "quantity",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "movement_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "destination_location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quantity": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q012": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "inspection_id",
+            "lot_id",
+            "inspection_date",
+            "result_code",
+            "reason"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "inspection_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "inspection_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "result_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q013": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "inspection_status_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "inspection_status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q014": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "hold_id",
+            "lot_id",
+            "location_id",
+            "quantity",
+            "reason"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "hold_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quantity": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q015": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "inspection_status_code",
+            "on_hand",
+            "quarantined",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "inspection_status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q016": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "quarantined",
+            "recall_blocked",
+            "reserved",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recall_blocked": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "reserved": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q017": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "inspection_id",
+            "lot_id",
+            "location_id",
+            "inspection_date",
+            "known_date",
+            "result_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "inspection_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "inspection_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "known_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "result_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q018": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "returned",
+            "quarantined",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "returned": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q019": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "inspection_status_code",
+            "on_hand",
+            "quarantined",
+            "recall_blocked",
+            "reserved",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "inspection_status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recall_blocked": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "reserved": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q020": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "knowledge_date",
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "quarantined",
+            "recall_blocked",
+            "reserved",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "knowledge_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recall_blocked": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "reserved": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q021": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "link_id",
+            "parent_lot_id",
+            "child_lot_id",
+            "link_type_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "link_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "child_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "link_type_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q022": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "link_id",
+            "parent_lot_id",
+            "child_lot_id",
+            "link_type_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "link_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "child_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "link_type_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q023": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "link_id",
+            "parent_lot_id",
+            "child_lot_id",
+            "link_type_code",
+            "parent_quantity",
+            "child_quantity",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "link_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "child_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "link_type_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "child_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q024": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "link_id",
+            "parent_lot_id",
+            "child_lot_id",
+            "link_type_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "link_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "child_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "link_type_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q025": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "product_id",
+            "expiry_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q026": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "link_id",
+            "parent_lot_id",
+            "child_lot_id",
+            "parent_quantity",
+            "child_quantity",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "link_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "child_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "child_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q027": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "event_id",
+            "event_type_code",
+            "source_location_id",
+            "destination_location_id",
+            "event_date",
+            "event_sequence",
+            "quantity",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_type_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source_location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "destination_location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_sequence": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quantity": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q028": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "link_id",
+            "parent_lot_id",
+            "child_lot_id",
+            "link_type_code",
+            "parent_quantity",
+            "child_quantity",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "link_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "child_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "link_type_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "child_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q029": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "product_id",
+            "supplier_id",
+            "expiry_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "supplier_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q030": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "knowledge_date",
+            "link_id",
+            "parent_lot_id",
+            "child_lot_id",
+            "link_type_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "knowledge_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "link_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "child_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "link_type_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q031": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q032": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "in_transit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q033": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "quarantined"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q034": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "snapshot_id",
+            "lot_id",
+            "location_id",
+            "recorded_available",
+            "reconstructed_available",
+            "difference"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "snapshot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "recorded_available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "reconstructed_available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "difference": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q035": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "quarantined",
+            "recall_blocked",
+            "reserved",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recall_blocked": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "reserved": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q036": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "as_of_date",
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "as_of_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q037": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "sold",
+            "returned"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "sold": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "returned": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q038": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "available",
+            "quality_status"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quality_status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q039": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "available",
+            "quality_status"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quality_status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q040": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "unit",
+            "on_hand",
+            "in_transit",
+            "quarantined",
+            "recall_blocked",
+            "reserved",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recall_blocked": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "reserved": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q041": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "expiry_date",
+            "on_hand",
+            "expired",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "expired": {
+              "type": "boolean"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q042": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "expiry_date",
+            "on_hand",
+            "near_expiry",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "near_expiry": {
+              "type": "boolean"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q043": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "min_shelf_days",
+            "lot_id",
+            "expiry_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "min_shelf_days": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q044": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "expiry_date",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q045": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "expiry_date",
+            "on_hand",
+            "quarantined",
+            "recall_blocked",
+            "reserved",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quarantined": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recall_blocked": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "reserved": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q046": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "expiry_date",
+            "on_hand",
+            "expired",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "expired": {
+              "type": "boolean"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q047": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "expiry_date",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q048": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "order_id",
+            "requested_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "allocations",
+            "allocation_status_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "requested_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocations": {
+              "type": "array"
+            },
+            "allocation_status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q049": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "forecast_id",
+            "location_id",
+            "demand_date",
+            "demand_quantity",
+            "eligible_supply_quantity",
+            "allocated_quantity",
+            "shortage_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "eligible_supply_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q050": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "lot_id",
+            "location_id",
+            "unit",
+            "expiry_date",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q051": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "order_id",
+            "product_id",
+            "quantity",
+            "unit",
+            "min_shelf_days",
+            "due_date",
+            "priority"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quantity": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "min_shelf_days": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "due_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "priority": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q052": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "reservation_id",
+            "line_id",
+            "lot_id",
+            "location_id",
+            "quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "reservation_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quantity": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q053": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "requested_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "allocation_status_code",
+            "allocations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "requested_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocation_status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "allocations": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q054": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "order_id",
+            "allocated_quantity",
+            "shortage_quantity",
+            "allocations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocations": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q055": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "order_id",
+            "requested_quantity",
+            "allocated_quantity",
+            "shortage_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "requested_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q056": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "order_id",
+            "allocated_quantity",
+            "shortage_quantity",
+            "allocations",
+            "allocation_status_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocations": {
+              "type": "array"
+            },
+            "allocation_status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q057": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "requested_quantity",
+            "allocated_quantity",
+            "shortage_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "requested_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q058": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "requested_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "allocations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "requested_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocations": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q059": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "requested_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "allocation_status_code",
+            "allocations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "requested_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocation_status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "allocations": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q060": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "line_id",
+            "order_id",
+            "requested_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "allocations",
+            "allocation_status_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "requested_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocations": {
+              "type": "array"
+            },
+            "allocation_status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q061": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "forecast_id",
+            "product_id",
+            "location_id",
+            "demand_date",
+            "quantity",
+            "unit",
+            "known_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quantity": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "known_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q062": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "event_id",
+            "lot_id",
+            "destination_location_id",
+            "event_date",
+            "quantity",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "destination_location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quantity": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q063": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "forecast_id",
+            "product_id",
+            "location_id",
+            "demand_date",
+            "demand_quantity",
+            "eligible_supply_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "recommended_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "eligible_supply_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recommended_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q064": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "forecast_id",
+            "demand_date",
+            "demand_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "recommended_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recommended_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q065": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "forecast_id",
+            "demand_date",
+            "eligible_supply_quantity",
+            "allocated_quantity",
+            "shortage_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "eligible_supply_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q066": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "demand_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "recommended_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recommended_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q067": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "forecast_id",
+            "demand_date",
+            "demand_quantity",
+            "eligible_supply_quantity",
+            "allocated_quantity",
+            "shortage_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "eligible_supply_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q068": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "forecast_id",
+            "demand_date",
+            "eligible_supply_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "recommended_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "eligible_supply_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recommended_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q069": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "knowledge_date",
+            "forecast_id",
+            "demand_date",
+            "eligible_supply_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "recommended_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "knowledge_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "eligible_supply_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recommended_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q070": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "forecast_id",
+            "demand_date",
+            "demand_quantity",
+            "eligible_supply_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "recommended_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "forecast_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "demand_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "eligible_supply_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recommended_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q071": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "recall_id",
+            "root_lot_id",
+            "announced_date",
+            "reason",
+            "status_code"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "recall_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "root_lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "announced_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status_code": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q072": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "product_id",
+            "expiry_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expiry_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q073": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "recall_id",
+            "product_id",
+            "location_id",
+            "affected_lot_ids",
+            "on_hand",
+            "in_transit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "recall_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "affected_lot_ids": {
+              "type": "array"
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q074": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "sold",
+            "returned"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "sold": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "returned": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q075": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "affected_lot_ids",
+            "in_transit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "affected_lot_ids": {
+              "type": "array"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q076": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "affected_order_ids"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "affected_order_ids": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q077": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "sold",
+            "returned",
+            "controllable_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "sold": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "returned": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controllable_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q078": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "unit",
+            "affected_lot_ids",
+            "affected_order_ids",
+            "on_hand",
+            "in_transit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "affected_lot_ids": {
+              "type": "array"
+            },
+            "affected_order_ids": {
+              "type": "array"
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q079": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "affected_lot_ids",
+            "on_hand",
+            "in_transit",
+            "controllable_quantity",
+            "coverage_ratio"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "affected_lot_ids": {
+              "type": "array"
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controllable_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "coverage_ratio": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q080": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "recall_id",
+            "product_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "sold",
+            "returned"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "recall_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "sold": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "returned": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q081": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "controlled_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "controlled_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q082": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "pending_control_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "pending_control_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q083": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "controlled_quantity",
+            "controllable_quantity",
+            "coverage_ratio"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "controlled_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controllable_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "coverage_ratio": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q084": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "controlled_quantity",
+            "pending_control_quantity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controlled_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "pending_control_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q085": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "controllable_quantity",
+            "controlled_quantity",
+            "coverage_ratio"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "controllable_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controlled_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "coverage_ratio": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q086": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "returned",
+            "on_hand",
+            "in_transit",
+            "controlled_quantity",
+            "controllable_quantity",
+            "coverage_ratio"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "returned": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controlled_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controllable_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "coverage_ratio": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q087": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "snapshot_id",
+            "product_id",
+            "unit",
+            "controlled_quantity",
+            "controllable_quantity",
+            "recorded_ratio",
+            "reconstructed_ratio",
+            "difference"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "snapshot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "controlled_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controllable_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "recorded_ratio": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "reconstructed_ratio": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "difference": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q088": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "line_id",
+            "order_id",
+            "requested_quantity",
+            "allocated_quantity",
+            "shortage_quantity",
+            "allocations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "line_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "requested_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocated_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "shortage_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "allocations": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q089": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "controlled_quantity",
+            "controllable_quantity",
+            "pending_control_quantity",
+            "coverage_ratio"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controlled_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "controllable_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "pending_control_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "coverage_ratio": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q090": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "location_id",
+            "affected_order_ids",
+            "controlled_quantity",
+            "in_transit",
+            "sold",
+            "pending_control_quantity",
+            "coverage_ratio"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "affected_order_ids": {
+              "type": "array"
+            },
+            "controlled_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "sold": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "pending_control_quantity": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "coverage_ratio": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q091": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "event_id",
+            "physical_row_count",
+            "payload_variant_count"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "physical_row_count": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "payload_variant_count": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q092": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "event_id",
+            "reversal_of",
+            "event_date",
+            "recorded_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reversal_of": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "recorded_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q093": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "event_id",
+            "lot_id",
+            "event_date",
+            "recorded_date"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "recorded_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q094": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "sold",
+            "returned",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "sold": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "returned": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q095": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "sold",
+            "returned",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "sold": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "returned": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q096": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "knowledge_date",
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "sold",
+            "available"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "knowledge_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "sold": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q097": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "event_id",
+            "physical_row_count",
+            "payload_variant_count"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "physical_row_count": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "payload_variant_count": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q098": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "available",
+            "quality_status"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quality_status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q099": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "product_id",
+            "lot_id",
+            "location_id",
+            "on_hand",
+            "in_transit",
+            "available",
+            "quality_status"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "product_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lot_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "on_hand": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "in_transit": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "available": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "x-comparison": "decimal_exact"
+            },
+            "quality_status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Q100": {
+    "type": "object",
+    "required": [
+      "rows"
+    ],
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "defect_type",
+            "table",
+            "record_id",
+            "field"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "defect_type": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "table": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "record_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "field": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

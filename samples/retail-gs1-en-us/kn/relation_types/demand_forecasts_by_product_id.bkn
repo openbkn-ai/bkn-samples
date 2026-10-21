@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: demand_forecasts_by_product_id
+name: demand forecasts by product id
+tags: [retail, gs1]
+---
+
+## RelationType: demand forecasts by product id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| demand_forecasts | products | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| product_id | product_id |

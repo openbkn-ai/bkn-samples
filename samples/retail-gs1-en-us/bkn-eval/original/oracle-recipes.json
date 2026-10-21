@@ -1,0 +1,2978 @@
+{
+  "Q001": {
+    "id": "Q001",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT product_id,name,unit,pack_multiplier FROM products WHERE product_id='PRD-001'"
+    },
+    "fields": [
+      "product_id",
+      "name",
+      "unit",
+      "pack_multiplier"
+    ],
+    "tables": [
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q002": {
+    "id": "Q002",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT p.product_id,o.organization_id,o.name,o.role_code FROM products p JOIN organizations o ON p.supplier_id=o.organization_id WHERE p.product_id='PRD-002'"
+    },
+    "fields": [
+      "product_id",
+      "organization_id",
+      "name",
+      "role_code"
+    ],
+    "tables": [
+      "products",
+      "organizations"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q003": {
+    "id": "Q003",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT l.location_id,l.name,l.location_type_code,o.organization_id,o.name AS organization_name FROM locations l JOIN organizations o USING(organization_id) WHERE location_id='WH-001'"
+    },
+    "fields": [
+      "location_id",
+      "name",
+      "location_type_code",
+      "organization_id",
+      "organization_name"
+    ],
+    "tables": [
+      "locations",
+      "organizations"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q004": {
+    "id": "Q004",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT l.location_id,l.name,o.organization_id,o.name AS organization_name FROM locations l JOIN organizations o USING(organization_id) WHERE location_id='STORE-002'"
+    },
+    "fields": [
+      "location_id",
+      "name",
+      "organization_id",
+      "organization_name"
+    ],
+    "tables": [
+      "locations",
+      "organizations"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q005": {
+    "id": "Q005",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT lot_id,product_id,produced_date,expiry_date FROM lots WHERE lot_id='LOT-003-A'"
+    },
+    "fields": [
+      "lot_id",
+      "product_id",
+      "produced_date",
+      "expiry_date"
+    ],
+    "tables": [
+      "lots"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q006": {
+    "id": "Q006",
+    "scenario_id": "S01",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT product_id,min_shelf_days,unit FROM products WHERE product_id='PRD-004'"
+    },
+    "fields": [
+      "product_id",
+      "min_shelf_days",
+      "unit"
+    ],
+    "tables": [
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q007": {
+    "id": "Q007",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT product_id,unit,3*CAST(pack_multiplier AS NUMERIC) AS base_quantity FROM products WHERE product_id IN ('PRD-001','PRD-002','PRD-003')"
+    },
+    "fields": [
+      "product_id",
+      "unit",
+      "base_quantity"
+    ],
+    "tables": [
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q008": {
+    "id": "Q008",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT l.lot_id,l.product_id,o.name AS supplier_name,l.expiry_date FROM lots l JOIN organizations o ON l.supplier_id=o.organization_id WHERE l.product_id='PRD-005'"
+    },
+    "fields": [
+      "lot_id",
+      "product_id",
+      "supplier_name",
+      "expiry_date"
+    ],
+    "tables": [
+      "lots",
+      "organizations"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q009": {
+    "id": "Q009",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT o.organization_id,o.name,COUNT(p.product_id) AS product_count FROM organizations o LEFT JOIN products p ON p.supplier_id=o.organization_id WHERE o.role_code='supplier' GROUP BY o.organization_id,o.name"
+    },
+    "fields": [
+      "organization_id",
+      "name",
+      "product_count"
+    ],
+    "tables": [
+      "organizations",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q010": {
+    "id": "Q010",
+    "scenario_id": "S01",
+    "difficulty": "complex",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT l.lot_id,l.product_id,l.supplier_id,p.supplier_id AS product_supplier_id,o.role_code FROM lots l LEFT JOIN products p USING(product_id) LEFT JOIN organizations o ON l.supplier_id=o.organization_id WHERE p.product_id IS NULL OR o.organization_id IS NULL OR o.role_code!='supplier'"
+    },
+    "fields": [
+      "lot_id",
+      "product_id",
+      "supplier_id",
+      "product_supplier_id",
+      "role_code"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "organizations"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q011": {
+    "id": "Q011",
+    "scenario_id": "S02",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT movement_id,event_id,event_date,destination_location_id,quantity,unit FROM movements WHERE lot_id='LOT-001-A' AND event_type_code='receive' AND view_code='actual' AND event_date<='2027-02-28' AND recorded_date<='2027-02-28'"
+    },
+    "fields": [
+      "movement_id",
+      "event_id",
+      "event_date",
+      "destination_location_id",
+      "quantity",
+      "unit"
+    ],
+    "tables": [
+      "movements"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q012": {
+    "id": "Q012",
+    "scenario_id": "S02",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT inspection_id,lot_id,inspection_date,result_code,reason FROM inspections WHERE lot_id='LOT-002-A' AND known_date<='2027-02-28' AND inspection_date<='2027-02-28'"
+    },
+    "fields": [
+      "inspection_id",
+      "lot_id",
+      "inspection_date",
+      "result_code",
+      "reason"
+    ],
+    "tables": [
+      "inspections"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q013": {
+    "id": "Q013",
+    "scenario_id": "S02",
+    "difficulty": "basic",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-003"
+      ],
+      "locations": [
+        "WH-003"
+      ],
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "inspection_status_code"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q014": {
+    "id": "Q014",
+    "scenario_id": "S02",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT h.hold_id,h.lot_id,h.location_id,h.quantity,h.reason FROM holds h JOIN lots l USING(lot_id) WHERE l.product_id='PRD-004' AND h.effective_from<='2027-02-28' AND h.effective_to>='2027-02-28' AND h.known_date<='2027-02-28'"
+    },
+    "fields": [
+      "hold_id",
+      "lot_id",
+      "location_id",
+      "quantity",
+      "reason"
+    ],
+    "tables": [
+      "holds",
+      "lots"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q015": {
+    "id": "Q015",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-011"
+      ],
+      "locations": null,
+      "condition": "not_passed",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "inspection_status_code",
+      "on_hand",
+      "quarantined",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q016": {
+    "id": "Q016",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-006"
+      ],
+      "locations": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "quarantined",
+      "recall_blocked",
+      "reserved",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q017": {
+    "id": "Q017",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT inspection_id,lot_id,location_id,inspection_date,known_date,result_code FROM inspections WHERE lot_id='LOT-007-A' AND inspection_date<='2027-02-28' AND known_date<='2027-02-28' ORDER BY inspection_date DESC,inspection_id DESC LIMIT 1"
+    },
+    "fields": [
+      "inspection_id",
+      "lot_id",
+      "location_id",
+      "inspection_date",
+      "known_date",
+      "result_code"
+    ],
+    "tables": [
+      "inspections"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q018": {
+    "id": "Q018",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-008"
+      ],
+      "locations": null,
+      "condition": "returned",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "returned",
+      "quarantined",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q019": {
+    "id": "Q019",
+    "scenario_id": "S02",
+    "difficulty": "complex",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-009"
+      ],
+      "locations": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "inspection_status_code",
+      "on_hand",
+      "quarantined",
+      "recall_blocked",
+      "reserved",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q020": {
+    "id": "Q020",
+    "scenario_id": "S02",
+    "difficulty": "complex",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-010"
+      ],
+      "locations": null,
+      "condition": "knowledge_compare",
+      "summary": false
+    },
+    "fields": [
+      "knowledge_date",
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "quarantined",
+      "recall_blocked",
+      "reserved",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q021": {
+    "id": "Q021",
+    "scenario_id": "S03",
+    "difficulty": "basic",
+    "kind": "links",
+    "params": {
+      "root": "LOT-001-B",
+      "mode": "children"
+    },
+    "fields": [
+      "link_id",
+      "parent_lot_id",
+      "child_lot_id",
+      "link_type_code"
+    ],
+    "tables": [
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q022": {
+    "id": "Q022",
+    "scenario_id": "S03",
+    "difficulty": "basic",
+    "kind": "links",
+    "params": {
+      "root": "LOT-002-D",
+      "mode": "parents"
+    },
+    "fields": [
+      "link_id",
+      "parent_lot_id",
+      "child_lot_id",
+      "link_type_code"
+    ],
+    "tables": [
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q023": {
+    "id": "Q023",
+    "scenario_id": "S03",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT x.link_id,x.parent_lot_id,x.child_lot_id,x.link_type_code,x.parent_quantity,x.child_quantity,x.unit FROM lot_links x JOIN lots l ON x.parent_lot_id=l.lot_id WHERE l.product_id='PRD-003' AND x.effective_date<='2027-02-28' AND x.known_date<='2027-02-28'"
+    },
+    "fields": [
+      "link_id",
+      "parent_lot_id",
+      "child_lot_id",
+      "link_type_code",
+      "parent_quantity",
+      "child_quantity",
+      "unit"
+    ],
+    "tables": [
+      "lot_links",
+      "lots"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q024": {
+    "id": "Q024",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "kind": "links",
+    "params": {
+      "root": "LOT-004-D",
+      "mode": "connected"
+    },
+    "fields": [
+      "link_id",
+      "parent_lot_id",
+      "child_lot_id",
+      "link_type_code"
+    ],
+    "tables": [
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q025": {
+    "id": "Q025",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "kind": "closure",
+    "params": {
+      "root": "LOT-005-B"
+    },
+    "fields": [
+      "lot_id",
+      "product_id",
+      "expiry_date"
+    ],
+    "tables": [
+      "lot_links",
+      "lots"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q026": {
+    "id": "Q026",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "kind": "links",
+    "params": {
+      "root": "LOT-006-B",
+      "mode": "split_mismatch"
+    },
+    "fields": [
+      "link_id",
+      "parent_lot_id",
+      "child_lot_id",
+      "parent_quantity",
+      "child_quantity",
+      "unit"
+    ],
+    "tables": [
+      "lot_links",
+      "lots"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q027": {
+    "id": "Q027",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT event_id,event_type_code,source_location_id,destination_location_id,event_date,event_sequence,quantity,unit FROM movements WHERE lot_id='LOT-007-B' AND event_date<='2027-02-28' AND recorded_date<='2027-02-28' AND view_code='actual' ORDER BY event_date,CAST(event_sequence AS NUMERIC),event_id"
+    },
+    "fields": [
+      "event_id",
+      "event_type_code",
+      "source_location_id",
+      "destination_location_id",
+      "event_date",
+      "event_sequence",
+      "quantity",
+      "unit"
+    ],
+    "tables": [
+      "movements"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q028": {
+    "id": "Q028",
+    "scenario_id": "S03",
+    "difficulty": "complex",
+    "kind": "links",
+    "params": {
+      "root": "LOT-047-D",
+      "mode": "connected"
+    },
+    "fields": [
+      "link_id",
+      "parent_lot_id",
+      "child_lot_id",
+      "link_type_code",
+      "parent_quantity",
+      "child_quantity",
+      "unit"
+    ],
+    "tables": [
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q029": {
+    "id": "Q029",
+    "scenario_id": "S03",
+    "difficulty": "complex",
+    "kind": "closure",
+    "params": {
+      "root": "LOT-012-B",
+      "supplier": true
+    },
+    "fields": [
+      "lot_id",
+      "product_id",
+      "supplier_id",
+      "expiry_date"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q030": {
+    "id": "Q030",
+    "scenario_id": "S03",
+    "difficulty": "complex",
+    "kind": "links",
+    "params": {
+      "root": "LOT-041-B",
+      "mode": "knowledge_compare"
+    },
+    "fields": [
+      "knowledge_date",
+      "link_id",
+      "parent_lot_id",
+      "child_lot_id",
+      "link_type_code"
+    ],
+    "tables": [
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q031": {
+    "id": "Q031",
+    "scenario_id": "S04",
+    "difficulty": "basic",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-001"
+      ],
+      "locations": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q032": {
+    "id": "Q032",
+    "scenario_id": "S04",
+    "difficulty": "basic",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-005"
+      ],
+      "locations": null,
+      "condition": "transit",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "in_transit"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q033": {
+    "id": "Q033",
+    "scenario_id": "S04",
+    "difficulty": "basic",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-003"
+      ],
+      "locations": null,
+      "condition": "quarantined",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "quarantined"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q034": {
+    "id": "Q034",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "kind": "inventory_metric",
+    "params": {
+      "products": [
+        "PRD-004"
+      ]
+    },
+    "fields": [
+      "snapshot_id",
+      "lot_id",
+      "location_id",
+      "recorded_available",
+      "reconstructed_available",
+      "difference"
+    ],
+    "tables": [
+      "inventory_snapshots",
+      "products",
+      "lots",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q035": {
+    "id": "Q035",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-005"
+      ],
+      "locations": null,
+      "condition": "unavailable",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "quarantined",
+      "recall_blocked",
+      "reserved",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q036": {
+    "id": "Q036",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-006"
+      ],
+      "locations": null,
+      "condition": "business_compare",
+      "summary": false
+    },
+    "fields": [
+      "as_of_date",
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q037": {
+    "id": "Q037",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-007"
+      ],
+      "locations": [
+        "WH-007",
+        "STORE-007"
+      ],
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "sold",
+      "returned"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q038": {
+    "id": "Q038",
+    "scenario_id": "S04",
+    "difficulty": "complex",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-045"
+      ],
+      "locations": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "available",
+      "quality_status"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q039": {
+    "id": "Q039",
+    "scenario_id": "S04",
+    "difficulty": "complex",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-046"
+      ],
+      "locations": null,
+      "condition": "unknown",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "available",
+      "quality_status"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q040": {
+    "id": "Q040",
+    "scenario_id": "S04",
+    "difficulty": "complex",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-008",
+        "PRD-009"
+      ],
+      "locations": null,
+      "condition": null,
+      "summary": true
+    },
+    "fields": [
+      "product_id",
+      "unit",
+      "on_hand",
+      "in_transit",
+      "quarantined",
+      "recall_blocked",
+      "reserved",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q041": {
+    "id": "Q041",
+    "scenario_id": "S05",
+    "difficulty": "basic",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-010"
+      ],
+      "locations": null,
+      "condition": "expired",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "expiry_date",
+      "on_hand",
+      "expired",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q042": {
+    "id": "Q042",
+    "scenario_id": "S05",
+    "difficulty": "basic",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-011"
+      ],
+      "locations": null,
+      "condition": "near_expiry",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "expiry_date",
+      "on_hand",
+      "near_expiry",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q043": {
+    "id": "Q043",
+    "scenario_id": "S05",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT p.product_id,p.min_shelf_days,l.lot_id,l.expiry_date FROM products p JOIN lots l USING(product_id) WHERE p.product_id='PRD-012'"
+    },
+    "fields": [
+      "product_id",
+      "min_shelf_days",
+      "lot_id",
+      "expiry_date"
+    ],
+    "tables": [
+      "products",
+      "lots"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q044": {
+    "id": "Q044",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-013"
+      ],
+      "locations": [
+        "WH-013"
+      ],
+      "condition": "fefo",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "expiry_date",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q045": {
+    "id": "Q045",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-014"
+      ],
+      "locations": null,
+      "condition": "near_blocked",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "expiry_date",
+      "on_hand",
+      "quarantined",
+      "recall_blocked",
+      "reserved",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q046": {
+    "id": "Q046",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-015"
+      ],
+      "locations": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "expiry_date",
+      "on_hand",
+      "expired",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-03-10",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q047": {
+    "id": "Q047",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-016"
+      ],
+      "locations": null,
+      "condition": "shelf_2027-03-12",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "expiry_date",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q048": {
+    "id": "Q048",
+    "scenario_id": "S05",
+    "difficulty": "complex",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-017"
+      ],
+      "orders": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "line_id",
+      "order_id",
+      "requested_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "allocations",
+      "allocation_status_code"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q049": {
+    "id": "Q049",
+    "scenario_id": "S05",
+    "difficulty": "complex",
+    "kind": "plan",
+    "params": {
+      "products": [
+        "PRD-018"
+      ],
+      "condition": null,
+      "summary": false,
+      "horizon": "2027-03-31"
+    },
+    "fields": [
+      "forecast_id",
+      "location_id",
+      "demand_date",
+      "demand_quantity",
+      "eligible_supply_quantity",
+      "allocated_quantity",
+      "shortage_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q050": {
+    "id": "Q050",
+    "scenario_id": "S05",
+    "difficulty": "complex",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-049",
+        "PRD-050"
+      ],
+      "locations": null,
+      "condition": "near_available",
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "lot_id",
+      "location_id",
+      "unit",
+      "expiry_date",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q051": {
+    "id": "Q051",
+    "scenario_id": "S06",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT l.line_id,l.order_id,l.product_id,l.quantity,l.unit,l.min_shelf_days,o.due_date,o.priority FROM order_lines l JOIN orders o USING(order_id) WHERE o.order_id='ORD-001-A' AND o.status_code='open'"
+    },
+    "fields": [
+      "line_id",
+      "order_id",
+      "product_id",
+      "quantity",
+      "unit",
+      "min_shelf_days",
+      "due_date",
+      "priority"
+    ],
+    "tables": [
+      "orders",
+      "order_lines"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q052": {
+    "id": "Q052",
+    "scenario_id": "S06",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT r.reservation_id,r.line_id,r.lot_id,r.location_id,r.quantity FROM reservations r JOIN order_lines l USING(line_id) WHERE l.order_id='ORD-002-A' AND r.effective_from<='2027-02-28' AND r.effective_to>='2027-02-28' AND r.known_date<='2027-02-28'"
+    },
+    "fields": [
+      "reservation_id",
+      "line_id",
+      "lot_id",
+      "location_id",
+      "quantity"
+    ],
+    "tables": [
+      "reservations",
+      "order_lines"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q053": {
+    "id": "Q053",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-003"
+      ],
+      "orders": [
+        "ORD-003-A"
+      ],
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "line_id",
+      "requested_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "allocation_status_code",
+      "allocations"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q054": {
+    "id": "Q054",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-004"
+      ],
+      "orders": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "line_id",
+      "order_id",
+      "allocated_quantity",
+      "shortage_quantity",
+      "allocations"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q055": {
+    "id": "Q055",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-005"
+      ],
+      "orders": null,
+      "condition": "shortage",
+      "summary": false
+    },
+    "fields": [
+      "line_id",
+      "order_id",
+      "requested_quantity",
+      "allocated_quantity",
+      "shortage_quantity"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q056": {
+    "id": "Q056",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-049"
+      ],
+      "orders": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "line_id",
+      "order_id",
+      "allocated_quantity",
+      "shortage_quantity",
+      "allocations",
+      "allocation_status_code"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q057": {
+    "id": "Q057",
+    "scenario_id": "S06",
+    "difficulty": "complex",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-007"
+      ],
+      "orders": null,
+      "condition": null,
+      "summary": true
+    },
+    "fields": [
+      "product_id",
+      "requested_quantity",
+      "allocated_quantity",
+      "shortage_quantity"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q058": {
+    "id": "Q058",
+    "scenario_id": "S06",
+    "difficulty": "complex",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-008"
+      ],
+      "orders": [
+        "ORD-008-B"
+      ],
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "line_id",
+      "requested_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "allocations"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q059": {
+    "id": "Q059",
+    "scenario_id": "S06",
+    "difficulty": "complex",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-043"
+      ],
+      "orders": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "line_id",
+      "requested_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "allocation_status_code",
+      "allocations"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q060": {
+    "id": "Q060",
+    "scenario_id": "S06",
+    "difficulty": "complex",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-009",
+        "PRD-010"
+      ],
+      "orders": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "line_id",
+      "order_id",
+      "requested_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "allocations",
+      "allocation_status_code"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q061": {
+    "id": "Q061",
+    "scenario_id": "S07",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT forecast_id,product_id,location_id,demand_date,quantity,unit,known_date FROM demand_forecasts WHERE product_id='PRD-001' AND demand_date>'2027-02-28' AND demand_date<='2027-03-31' AND known_date<='2027-02-28' AND view_code='planned'"
+    },
+    "fields": [
+      "forecast_id",
+      "product_id",
+      "location_id",
+      "demand_date",
+      "quantity",
+      "unit",
+      "known_date"
+    ],
+    "tables": [
+      "demand_forecasts"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q062": {
+    "id": "Q062",
+    "scenario_id": "S07",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT m.event_id,m.lot_id,m.destination_location_id,m.event_date,m.quantity,m.unit FROM movements m JOIN lots l USING(lot_id) WHERE l.product_id='PRD-002' AND m.view_code='planned' AND m.event_type_code IN ('receive','produce') AND m.recorded_date<='2027-02-28' AND m.event_date>'2027-02-28' AND m.event_date<='2027-03-31'"
+    },
+    "fields": [
+      "event_id",
+      "lot_id",
+      "destination_location_id",
+      "event_date",
+      "quantity",
+      "unit"
+    ],
+    "tables": [
+      "movements",
+      "lots"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q063": {
+    "id": "Q063",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "kind": "plan",
+    "params": {
+      "products": [
+        "PRD-003"
+      ],
+      "condition": null,
+      "summary": false,
+      "horizon": "2027-03-31"
+    },
+    "fields": [
+      "forecast_id",
+      "product_id",
+      "location_id",
+      "demand_date",
+      "demand_quantity",
+      "eligible_supply_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "recommended_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q064": {
+    "id": "Q064",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "kind": "plan",
+    "params": {
+      "products": [
+        "PRD-004"
+      ],
+      "condition": "shortage",
+      "summary": false,
+      "horizon": "2027-03-31"
+    },
+    "fields": [
+      "forecast_id",
+      "demand_date",
+      "demand_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "recommended_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q065": {
+    "id": "Q065",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "kind": "plan",
+    "params": {
+      "products": [
+        "PRD-005"
+      ],
+      "condition": null,
+      "summary": false,
+      "horizon": "2027-03-15"
+    },
+    "fields": [
+      "forecast_id",
+      "demand_date",
+      "eligible_supply_quantity",
+      "allocated_quantity",
+      "shortage_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q066": {
+    "id": "Q066",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "kind": "plan",
+    "params": {
+      "products": [
+        "PRD-006"
+      ],
+      "condition": null,
+      "summary": true,
+      "horizon": "2027-03-31"
+    },
+    "fields": [
+      "product_id",
+      "demand_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "recommended_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q067": {
+    "id": "Q067",
+    "scenario_id": "S07",
+    "difficulty": "complex",
+    "kind": "plan",
+    "params": {
+      "products": [
+        "PRD-007"
+      ],
+      "condition": null,
+      "summary": false,
+      "horizon": "2027-03-31"
+    },
+    "fields": [
+      "forecast_id",
+      "demand_date",
+      "demand_quantity",
+      "eligible_supply_quantity",
+      "allocated_quantity",
+      "shortage_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q068": {
+    "id": "Q068",
+    "scenario_id": "S07",
+    "difficulty": "complex",
+    "kind": "plan",
+    "params": {
+      "products": [
+        "PRD-008",
+        "PRD-009"
+      ],
+      "condition": null,
+      "summary": false,
+      "horizon": "2027-03-31"
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "forecast_id",
+      "demand_date",
+      "eligible_supply_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "recommended_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q069": {
+    "id": "Q069",
+    "scenario_id": "S07",
+    "difficulty": "complex",
+    "kind": "plan_compare",
+    "params": {
+      "products": [
+        "PRD-007"
+      ],
+      "cutoffs": [
+        "2027-02-28",
+        "2027-03-05"
+      ]
+    },
+    "fields": [
+      "knowledge_date",
+      "forecast_id",
+      "demand_date",
+      "eligible_supply_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "recommended_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "products",
+      "lots",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-03-05"
+  },
+  "Q070": {
+    "id": "Q070",
+    "scenario_id": "S07",
+    "difficulty": "complex",
+    "kind": "plan",
+    "params": {
+      "products": [
+        "PRD-045"
+      ],
+      "condition": null,
+      "summary": false,
+      "horizon": "2027-03-31"
+    },
+    "fields": [
+      "forecast_id",
+      "demand_date",
+      "demand_quantity",
+      "eligible_supply_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "recommended_quantity"
+    ],
+    "tables": [
+      "demand_forecasts",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q071": {
+    "id": "Q071",
+    "scenario_id": "S08",
+    "difficulty": "basic",
+    "kind": "sql",
+    "params": {
+      "sql": "SELECT recall_id,root_lot_id,announced_date,reason,status_code FROM recalls WHERE recall_id='REC-001'"
+    },
+    "fields": [
+      "recall_id",
+      "root_lot_id",
+      "announced_date",
+      "reason",
+      "status_code"
+    ],
+    "tables": [
+      "recalls"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q072": {
+    "id": "Q072",
+    "scenario_id": "S08",
+    "difficulty": "basic",
+    "kind": "closure",
+    "params": {
+      "root": "LOT-002-B"
+    },
+    "fields": [
+      "lot_id",
+      "product_id",
+      "expiry_date"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "lots"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q073": {
+    "id": "Q073",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-003",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "recall_id",
+      "product_id",
+      "location_id",
+      "affected_lot_ids",
+      "on_hand",
+      "in_transit"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q074": {
+    "id": "Q074",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-004",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "sold",
+      "returned"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q075": {
+    "id": "Q075",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-005",
+      "condition": "transit",
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "affected_lot_ids",
+      "in_transit"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q076": {
+    "id": "Q076",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-006",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "affected_order_ids"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q077": {
+    "id": "Q077",
+    "scenario_id": "S08",
+    "difficulty": "complex",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-007",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "sold",
+      "returned",
+      "controllable_quantity"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q078": {
+    "id": "Q078",
+    "scenario_id": "S08",
+    "difficulty": "complex",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-048",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "unit",
+      "affected_lot_ids",
+      "affected_order_ids",
+      "on_hand",
+      "in_transit"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q079": {
+    "id": "Q079",
+    "scenario_id": "S08",
+    "difficulty": "complex",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-043",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "affected_lot_ids",
+      "on_hand",
+      "in_transit",
+      "controllable_quantity",
+      "coverage_ratio"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q080": {
+    "id": "Q080",
+    "scenario_id": "S08",
+    "difficulty": "complex",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-010",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "recall_id",
+      "product_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "sold",
+      "returned"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-20"
+  },
+  "Q081": {
+    "id": "Q081",
+    "scenario_id": "S09",
+    "difficulty": "basic",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-011",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "controlled_quantity"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q082": {
+    "id": "Q082",
+    "scenario_id": "S09",
+    "difficulty": "basic",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-012",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "pending_control_quantity"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q083": {
+    "id": "Q083",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-013",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "controlled_quantity",
+      "controllable_quantity",
+      "coverage_ratio"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q084": {
+    "id": "Q084",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-014",
+      "condition": "pending_control",
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "controlled_quantity",
+      "pending_control_quantity"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q085": {
+    "id": "Q085",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-050",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "controllable_quantity",
+      "controlled_quantity",
+      "coverage_ratio"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q086": {
+    "id": "Q086",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-016",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "returned",
+      "on_hand",
+      "in_transit",
+      "controlled_quantity",
+      "controllable_quantity",
+      "coverage_ratio"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q087": {
+    "id": "Q087",
+    "scenario_id": "S09",
+    "difficulty": "complex",
+    "kind": "recall_metric",
+    "params": {
+      "recall_id": "REC-017"
+    },
+    "fields": [
+      "snapshot_id",
+      "product_id",
+      "unit",
+      "controlled_quantity",
+      "controllable_quantity",
+      "recorded_ratio",
+      "reconstructed_ratio",
+      "difference"
+    ],
+    "tables": [
+      "recall_snapshots",
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "orders",
+      "order_lines",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q088": {
+    "id": "Q088",
+    "scenario_id": "S09",
+    "difficulty": "complex",
+    "kind": "allocation",
+    "params": {
+      "products": [
+        "PRD-018"
+      ],
+      "orders": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "line_id",
+      "order_id",
+      "requested_quantity",
+      "allocated_quantity",
+      "shortage_quantity",
+      "allocations"
+    ],
+    "tables": [
+      "orders",
+      "order_lines",
+      "reservations",
+      "movements",
+      "lots",
+      "products",
+      "inspections",
+      "holds",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q089": {
+    "id": "Q089",
+    "scenario_id": "S09",
+    "difficulty": "complex",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-045",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "controlled_quantity",
+      "controllable_quantity",
+      "pending_control_quantity",
+      "coverage_ratio"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q090": {
+    "id": "Q090",
+    "scenario_id": "S09",
+    "difficulty": "complex",
+    "kind": "recall",
+    "params": {
+      "recall_id": "REC-020",
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "location_id",
+      "affected_order_ids",
+      "controlled_quantity",
+      "in_transit",
+      "sold",
+      "pending_control_quantity",
+      "coverage_ratio"
+    ],
+    "tables": [
+      "recalls",
+      "lot_links",
+      "movements",
+      "holds",
+      "inspections",
+      "reservations",
+      "order_lines",
+      "orders",
+      "lots",
+      "products"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q091": {
+    "id": "Q091",
+    "scenario_id": "S10",
+    "difficulty": "basic",
+    "kind": "event_audit",
+    "params": {
+      "mode": "duplicates"
+    },
+    "fields": [
+      "event_id",
+      "physical_row_count",
+      "payload_variant_count"
+    ],
+    "tables": [
+      "movements"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q092": {
+    "id": "Q092",
+    "scenario_id": "S10",
+    "difficulty": "basic",
+    "kind": "event_audit",
+    "params": {
+      "mode": "reversals"
+    },
+    "fields": [
+      "event_id",
+      "reversal_of",
+      "event_date",
+      "recorded_date"
+    ],
+    "tables": [
+      "movements"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q093": {
+    "id": "Q093",
+    "scenario_id": "S10",
+    "difficulty": "basic",
+    "kind": "event_audit",
+    "params": {
+      "mode": "late"
+    },
+    "fields": [
+      "event_id",
+      "lot_id",
+      "event_date",
+      "recorded_date"
+    ],
+    "tables": [
+      "movements"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-03-05"
+  },
+  "Q094": {
+    "id": "Q094",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-042"
+      ],
+      "locations": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "sold",
+      "returned",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q095": {
+    "id": "Q095",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-044"
+      ],
+      "locations": null,
+      "condition": null,
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "sold",
+      "returned",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q096": {
+    "id": "Q096",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-041"
+      ],
+      "locations": null,
+      "condition": "late_compare",
+      "summary": false
+    },
+    "fields": [
+      "knowledge_date",
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "sold",
+      "available"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-03-05"
+  },
+  "Q097": {
+    "id": "Q097",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "kind": "event_audit",
+    "params": {
+      "mode": "conflicts"
+    },
+    "fields": [
+      "event_id",
+      "physical_row_count",
+      "payload_variant_count"
+    ],
+    "tables": [
+      "movements"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q098": {
+    "id": "Q098",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-043"
+      ],
+      "locations": null,
+      "condition": "unknown",
+      "summary": false
+    },
+    "fields": [
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "available",
+      "quality_status"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q099": {
+    "id": "Q099",
+    "scenario_id": "S10",
+    "difficulty": "complex",
+    "kind": "inventory",
+    "params": {
+      "products": [
+        "PRD-045",
+        "PRD-046"
+      ],
+      "locations": null,
+      "condition": "unknown",
+      "summary": false
+    },
+    "fields": [
+      "product_id",
+      "lot_id",
+      "location_id",
+      "on_hand",
+      "in_transit",
+      "available",
+      "quality_status"
+    ],
+    "tables": [
+      "lots",
+      "products",
+      "movements",
+      "inspections",
+      "holds",
+      "reservations",
+      "recalls",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  },
+  "Q100": {
+    "id": "Q100",
+    "scenario_id": "S10",
+    "difficulty": "complex",
+    "kind": "integrity",
+    "params": {},
+    "fields": [
+      "defect_type",
+      "table",
+      "record_id",
+      "field"
+    ],
+    "tables": [
+      "organizations",
+      "locations",
+      "products",
+      "lots",
+      "movements",
+      "orders",
+      "order_lines",
+      "lot_links"
+    ],
+    "as_of_date": "2027-02-28",
+    "knowledge_date": "2027-02-28"
+  }
+}

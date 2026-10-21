@@ -1,0 +1,30 @@
+---
+type: object_type
+id: demand_forecasts
+name: 需求预测
+tags: [retail, gs1]
+---
+
+## ObjectType: 需求预测
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| forecast_id | 预测编号 | string | 稳定唯一的源记录编号。 | forecast_id |
+| product_id | 商品编号 | string | 外键关联products，空值不产生关系。 | product_id |
+| location_id | 地点编号 | string | 外键关联locations，空值不产生关系。 | location_id |
+| demand_date | 需求日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | demand_date |
+| quantity | 数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | quantity |
+| unit | 计量单位 | string | 虚构业务值，双语表达同一业务事实。 允许取值：件. | unit |
+| known_date | 可知日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | known_date |
+| view_kind | 视图类型 | string | 虚构业务值，双语表达同一业务事实。 允许取值：计划. | view_kind |
+| view_code | 视图代码 | string | 稳定机器代码；业务展示值另列。 允许取值：planned. | view_code |
+
+### Keys
+
+Primary Keys: forecast_id
+Display Key: forecast_id
+Incremental Key:

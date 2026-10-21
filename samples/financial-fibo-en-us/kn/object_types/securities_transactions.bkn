@@ -31,7 +31,7 @@ Actual or explicitly planned fill of an order. Contractual amount uses quote fac
 | execution_price | Execution Price | decimal | Local-currency quote in the linked instrument basis; apply price_multiplier. | execution_price |
 | gross_amount | Gross Amount | decimal | Booked positive contractual consideration = quantity × execution quote × price factor rounded half-up per trade to 2dp in instrument currency. Actual contractual totals and trade-date FX translation must use this recorded gross_amount, not an unrounded reconstruction. | gross_amount |
 | currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
-| trade_status | Trade Status | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: executed, planned. | trade_status |
+| trade_status | Trade Status | string | Operational fill state executed/planned; actual/planned instead describes view_kind. These fields are not interchangeable. Allowed values: executed, planned. | trade_status |
 | known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
 
 ### Keys

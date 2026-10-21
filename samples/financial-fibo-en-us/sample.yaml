@@ -6,7 +6,7 @@
     "aliases": [],
     "displayName": "Financial Portfolio Operations (EN)",
     "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
-    "version": "0.1.3"
+    "version": "0.2.4"
   },
   "spec": {
     "studio": {
@@ -31,14 +31,14 @@
       "displayName": "Financial Portfolio Operations (EN)"
     },
     "capabilities": {
-      "required": false
+      "required": true
     },
     "components": {
       "objects": true,
       "relations": true,
-      "metrics": false,
-      "functions": false,
-      "skills": false
+      "metrics": true,
+      "functions": true,
+      "skills": true
     },
     "hooks": {
       "dbInit": "db/init.sh",

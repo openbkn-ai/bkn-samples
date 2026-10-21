@@ -20,8 +20,8 @@ tags: [finance, fibo]
 | issuer_id | 发行方编号 | string | 外键关联 legal_entities，空值仅允许在合同明确声明缺失/不适用时使用。 | issuer_id |
 | as_of_date | 截至日期 | date | 业务快照日期，区别于报价/定盘日期和已知日期。 | as_of_date |
 | exposure_status | 敞口状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：受阻, 完整. | exposure_status |
-| exposure_amount | 敞口金额 | decimal | 发行方分子为构成持仓美元市值之和；组合价格不完整则不可用。 | exposure_amount |
-| denominator_amount | 分母金额 | decimal | 该组合同日全部证券持仓美元市值；任一受阻则为空，不含现金。 | denominator_amount |
+| exposure_amount | 敞口金额 | decimal | 已记录发行方分子可能因快照全局控制留空。重算按发行方自身构成的完整性保留金额，其他发行方阻断组合分母不应抹去该金额；已证明零值保留零，覆盖缺失不能补零。 | exposure_amount |
+| denominator_amount | 分母金额 | decimal | 该组合同日全部证券持仓美元市值，不含现金；任一构成未知则总额未知，已证明零总额保持零，但不能据此定义发行方比例。 | denominator_amount |
 | ratio | 集中度 | decimal | 发行方分子除完整证券资产分母，0–1 比例、六位小数；不是百分数数值或净值占比。 | ratio |
 | currency | 币种 | string | 本位币 USD，金额以美元表达。 | currency |
 | view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |

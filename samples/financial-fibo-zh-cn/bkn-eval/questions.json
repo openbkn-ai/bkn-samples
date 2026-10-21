@@ -51,17 +51,19 @@
     "id": "FIN-004",
     "scenario_id": "S01",
     "level": "intermediate",
-    "question": "将 INS-015 的合成证券编码追溯到发行方。",
+    "question": "追溯 INS-015 经合成证券编码到发行方的完整身份链，返回工具编号、合成编码、标识体系、工具名称、发行方编号和发行方名称。",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "financial_instruments",
+      "legal_entities",
       "security_identifiers"
     ],
     "required_relations": [
+      "instrument_to_issuer",
       "security_id_to_instrument"
     ],
     "evidence_views": [],
-    "evidence_sql": "SELECT s.synthetic_code,s.scheme,i.name,i.issuer_id FROM security_identifiers s JOIN financial_instruments i USING(instrument_id) WHERE i.instrument_id='INS-015'",
+    "evidence_sql": "SELECT i.instrument_id,s.synthetic_code,s.scheme,i.name AS instrument_name,i.issuer_id,e.name AS issuer_name FROM security_identifiers s JOIN financial_instruments i USING(instrument_id) JOIN legal_entities e ON e.entity_id=i.issuer_id WHERE i.instrument_id='INS-015'",
     "answer_format": "ordered_rows",
     "numeric_tolerance": 1e-06
   },
@@ -87,7 +89,7 @@
     "id": "FIN-006",
     "scenario_id": "S01",
     "level": "intermediate",
-    "question": "PF-010 关联哪个账户和管理人？",
+    "question": "PF-010 关联的账户编号、组合编号、管理人编号及管理人名称（管理人法律实体的名称）分别是什么？",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "accounts",
@@ -99,7 +101,7 @@
       "account_to_portfolio"
     ],
     "evidence_views": [],
-    "evidence_sql": "SELECT a.account_id,p.portfolio_id,p.manager_id,e.name FROM accounts a JOIN portfolios p USING(portfolio_id) JOIN legal_entities e ON p.manager_id=e.entity_id WHERE p.portfolio_id='PF-010'",
+    "evidence_sql": "SELECT a.account_id,p.portfolio_id,p.manager_id,e.name AS manager_name FROM accounts a JOIN portfolios p USING(portfolio_id) JOIN legal_entities e ON p.manager_id=e.entity_id WHERE p.portfolio_id='PF-010'",
     "answer_format": "ordered_rows",
     "numeric_tolerance": 1e-06
   },
@@ -519,7 +521,7 @@
     "id": "FIN-028",
     "scenario_id": "S03",
     "level": "hard_complex",
-    "question": "将二月未结算指令分为已逾期与尚未到期，分别计数。",
+    "question": "对累计已结算量小于应结算量的二月指令分别计数。计算字段 due_state 的完整分类为：已逾期（约定结算日早于2027-02-28）、未到期（其余情况）。",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "securities_transactions",
@@ -822,7 +824,7 @@
     "id": "FIN-044",
     "scenario_id": "S05",
     "level": "intermediate",
-    "question": "VAL-035-1-4 所关联价格距估值日多少天？",
+    "question": "VAL-035-1-4 所关联价格距估值日多少天？返回估值编号、截至日期、价格日期、日龄及 valuation_reason（估值原因）；估值原因须原样返回 valuation_snapshots.reason 的存储值，不作自由解释。",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "market_prices",
@@ -832,7 +834,7 @@
       "valuation_to_price"
     ],
     "evidence_views": [],
-    "evidence_sql": "SELECT v.valuation_id,v.as_of_date,p.price_date,CAST(julianday(v.as_of_date)-julianday(p.price_date) AS INTEGER) AS age_days,v.reason FROM valuation_snapshots v JOIN market_prices p USING(price_id) WHERE v.valuation_id='VAL-035-1-4'",
+    "evidence_sql": "SELECT v.valuation_id,v.as_of_date,p.price_date,CAST(julianday(v.as_of_date)-julianday(p.price_date) AS INTEGER) AS age_days,v.reason AS valuation_reason FROM valuation_snapshots v JOIN market_prices p USING(price_id) WHERE v.valuation_id='VAL-035-1-4'",
     "answer_format": "ordered_rows",
     "numeric_tolerance": 1e-06
   },
@@ -1611,7 +1613,7 @@
     "id": "FIN-085",
     "scenario_id": "S09",
     "level": "intermediate",
-    "question": "哪些二月卖出成交形成 PF-046 的未结算应收？",
+    "question": "截至2027-02-28逐笔核对 PF-046 的全部二月卖出成交，包括已全结且 open_quantity=0 的行。返回成交编号、方向、工具币种、剩余数量、成交价格、价格乘数及存储的结算失败原因；范围为全部卖出成交审计。",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "accounts",
@@ -1675,7 +1677,7 @@
     "id": "FIN-088",
     "scenario_id": "S09",
     "level": "hard_complex",
-    "question": "将 PF-046 当前应收超限追溯到每笔未结算卖出指令、累计结算状态及美元构成，并将合计与限额评估勾稽。",
+    "question": "将 PF-046 当前应收超限追溯到每笔未结算卖出指令、累计结算状态及美元构成，并将合计与限额评估勾稽。各笔 trade_contribution 为美元显示金额，舍入两位；先加总未舍入的剩余数量×成交价×价格乘数×汇率构成，再将 reconstructed_receivable 合计舍入两位。",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "accounts",

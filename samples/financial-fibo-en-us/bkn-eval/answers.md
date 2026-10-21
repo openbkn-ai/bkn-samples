@@ -34,13 +34,13 @@ Evidence returns 1 row(s). First result: portfolio_id=PF-049; name=Iris Utilitie
 
 ## FIN-004 · intermediate
 
-Trace the synthetic security code of INS-015 to its issuer.
+Trace INS-015 through its complete security identity to its issuer: return instrument_id, synthetic_code, scheme, instrument_name, issuer_id and issuer_name.
 
-Evidence returns 1 row(s). First result: synthetic_code=DEMO-SEC-00015; scheme=local_security_code; name=Harbor Technology Ordinary Share; issuer_id=ISS-008. Identity is established by declared keys and business roles; synthetic codes are not valid regulatory identifiers.
+Evidence returns 1 row(s). First result: instrument_id=INS-015; synthetic_code=DEMO-SEC-00015; scheme=local_security_code; instrument_name=Harbor Technology Ordinary Share; issuer_id=ISS-008; issuer_name=Harbor Technology Holdings. Identity is established by declared keys and business roles; synthetic codes are not valid regulatory identifiers.
 
-| synthetic_code | scheme | name | issuer_id |
-|---|---|---|---|
-| DEMO-SEC-00015 | local_security_code | Harbor Technology Ordinary Share | ISS-008 |
+| instrument_id | synthetic_code | scheme | instrument_name | issuer_id | issuer_name |
+|---|---|---|---|---|---|
+| INS-015 | DEMO-SEC-00015 | local_security_code | Harbor Technology Ordinary Share | ISS-008 | Harbor Technology Holdings |
 
 ## FIN-005 · intermediate
 
@@ -54,11 +54,11 @@ Evidence returns 1 row(s). First result: entity_id=ISS-023; name=Cedar Industria
 
 ## FIN-006 · intermediate
 
-Which account and manager are associated with PF-010?
+Which account_id, portfolio_id, manager_id and manager_name (legal_entities.name of the portfolio manager) are associated with PF-010?
 
-Evidence returns 1 row(s). First result: account_id=ACC-010; portfolio_id=PF-010; manager_id=MGR-010; name=Juniper Technology Asset Management. Identity is established by declared keys and business roles; synthetic codes are not valid regulatory identifiers.
+Evidence returns 1 row(s). First result: account_id=ACC-010; portfolio_id=PF-010; manager_id=MGR-010; manager_name=Juniper Technology Asset Management. Identity is established by declared keys and business roles; synthetic codes are not valid regulatory identifiers.
 
-| account_id | portfolio_id | manager_id | name |
+| account_id | portfolio_id | manager_id | manager_name |
 |---|---|---|---|
 | ACC-010 | PF-010 | MGR-010 | Juniper Technology Asset Management |
 
@@ -345,7 +345,7 @@ Evidence returns 7 row(s). First result: portfolio_id=PF-001; event_status=settl
 
 ## FIN-028 · hard_complex
 
-Count February overdue unsettled instructions separately from unsettled instructions not yet due.
+Count February overdue unsettled instructions separately from unsettled instructions not yet due. Return due_state using the complete computed classification: overdue (due_date before 2027-02-28), not_due (otherwise), for instructions with cumulative settled_quantity below required_quantity.
 
 Evidence returns 2 row(s). First result: due_state=not_due; instructions=80. Accumulate eligible incremental transfers per instruction and take its last eligible event for state; exclude future/planned events from current actual results.
 
@@ -520,11 +520,11 @@ Evidence returns 1 row(s). First result: instrument_id=INS-073; price_count=0. Q
 
 ## FIN-044 · intermediate
 
-How old is the price used by VAL-035-1-4?
+How old is the price used by VAL-035-1-4? Return valuation_id, as_of_date, price_date, age_days and valuation_reason, copying valuation_snapshots.reason exactly as stored rather than writing a free-form explanation.
 
-Evidence returns 1 row(s). First result: valuation_id=VAL-035-1-4; as_of_date=2027-02-28; price_date=2027-02-18; age_days=10; reason=stale. An unusable price blocks valuation. Missing values stay unknown and contaminate the entire portfolio denominator; a branch label cannot override this evidence.
+Evidence returns 1 row(s). First result: valuation_id=VAL-035-1-4; as_of_date=2027-02-28; price_date=2027-02-18; age_days=10; valuation_reason=stale. An unusable price blocks valuation. Missing values stay unknown and contaminate the entire portfolio denominator; a branch label cannot override this evidence.
 
-| valuation_id | as_of_date | price_date | age_days | reason |
+| valuation_id | as_of_date | price_date | age_days | valuation_reason |
 |---|---|---|---|---|
 | VAL-035-1-4 | 2027-02-28 | 2027-02-18 | 10 | stale |
 
@@ -1585,7 +1585,7 @@ Evidence returns 2 row(s). First result: portfolio_id=PF-001; unsettled_receivab
 
 ## FIN-085 · intermediate
 
-Which February sell trades create PF-046’s receivable?
+Audit every February SELL trade for PF-046 as of 2027-02-28, including fully settled trades with open_quantity=0. Return each trade and its side, instrument currency, remaining quantity, execution price, price multiplier and stored settlement failure reason; this is the full trade audit scope.
 
 Evidence returns 7 row(s). First result: trade_id=TR-046-2-4; side=sell; currency=CNY; open_quantity=3632.0; execution_price=99.0; price_multiplier=0.01; failure_reason=cash_mismatch. Receivable exposure includes only unsettled sells at execution price, with dated FX. Settlement failure and limit breach are different decisions; no buy-payable netting or regulatory CCR is implied.
 
@@ -1622,7 +1622,7 @@ Evidence returns 2 row(s). First result: portfolio_id=PF-029; observed_value=200
 
 ## FIN-088 · hard_complex
 
-Trace PF-046’s current receivable breach to each open sell instruction, cumulative settlement state and USD contribution; reconcile the total against the assessed limit.
+Trace PF-046’s current receivable breach to each open sell instruction, cumulative settlement state and USD contribution; reconcile the total against the assessed limit. Display each USD trade_contribution rounded to 2 decimal places; sum the unrounded quantity × execution_price × price_multiplier × FX contributions first, then round reconstructed_receivable to 2 decimal places.
 
 Evidence returns 4 row(s). First result: portfolio_id=PF-046; counterparty_id=CP-046; assessment_id=LA-LIM-046-C-4; assessment_status=breach; threshold=500.0; trade_id=TR-046-2-4; instruction_id=SI-046-2-4. Accumulate transfers before computing each open sell contribution. Sum unrounded contributions then round the aggregate, and reconcile that aggregate with the assessed receivable; display-row rounding can differ.
 

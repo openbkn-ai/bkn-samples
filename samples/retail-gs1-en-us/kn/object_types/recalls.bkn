@@ -1,0 +1,28 @@
+---
+type: object_type
+id: recalls
+name: Product Recall
+tags: [retail, gs1]
+---
+
+## ObjectType: Product Recall
+
+Local operational extension; no equivalent GS1 class asserted.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| recall_id | Recall id | string | Stable unique source-row identifier. | recall_id |
+| root_lot_id | Root lot id | string | Foreign key to lots; blank creates no edge. | root_lot_id |
+| announced_date | Announced date | date | Day-only date governed by business and knowledge cutoff contract. | announced_date |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoff contract. | known_date |
+| reason | Reason | string | Synthetic business value with equivalent bilingual meaning. | reason |
+| status | Status | string | Synthetic business value with equivalent bilingual meaning. Allowed values: Closed, Open. | status |
+| status_code | Status code | string | Stable machine code; localized display value is separate. Allowed values: closed, open. | status_code |
+
+### Keys
+
+Primary Keys: recall_id
+Display Key: recall_id
+Incremental Key:

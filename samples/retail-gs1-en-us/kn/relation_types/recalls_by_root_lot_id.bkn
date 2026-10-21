@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: recalls_by_root_lot_id
+name: recalls by root lot id
+tags: [retail, gs1]
+---
+
+## RelationType: recalls by root lot id
+
+Explicit foreign-key association; blank keys create no edge.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| recalls | lots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| root_lot_id | lot_id |

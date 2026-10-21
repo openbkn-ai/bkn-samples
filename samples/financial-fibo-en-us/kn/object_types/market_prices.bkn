@@ -32,7 +32,7 @@ Synthetic sourced last-price quote assigned to a snapshot. Prior weekday quote d
 | price | Price | decimal | Local-currency quote in the linked instrument basis; apply price_multiplier. | price |
 | currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
 | approval | Approval | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: approved, unapproved. | approval |
-| pricing_source | Pricing Source | string | Declared synthetic demo_pricing provider, not a live exchange or approved production feed. | pricing_source |
+| pricing_source | Pricing Source | string | Declared synthetic demo_pricing provider, not a live exchange or approved production feed. Allowed values: demo_pricing. | pricing_source |
 | view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
 | known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
 

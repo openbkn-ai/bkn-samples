@@ -1,0 +1,34 @@
+---
+type: object_type
+id: organizations
+name: 组织
+tags: [retail, gs1]
+---
+
+## ObjectType: 组织
+
+参考GS1概念；本地标识，不声称标准等价类或完整一致性。
+
+### Semantic Provenance
+
+| Key | Value |
+|---|---|
+| source_iri | https://ref.gs1.org/voc/Organization |
+| source_revision | f8f407bf717233c871dca2f62f4e45b0940e8cad |
+| source_license | Apache-2.0 |
+| source_repository | https://github.com/gs1/WebVoc |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| organization_id | 组织编号 | string | 稳定唯一的源记录编号。 | organization_id |
+| name | 名称 | string | 虚构业务值，双语表达同一业务事实。 | name |
+| role | 业务角色 | string | 虚构业务值，双语表达同一业务事实。 允许取值：供应商, 零售商. | role |
+| role_code | 角色代码 | string | 稳定机器代码；业务展示值另列。 允许取值：retailer, supplier. | role_code |
+
+### Keys
+
+Primary Keys: organization_id
+Display Key: name
+Incremental Key:

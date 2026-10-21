@@ -1,0 +1,38 @@
+---
+type: object_type
+id: movements
+name: 供应链事件
+tags: [retail, gs1]
+---
+
+## ObjectType: 供应链事件
+
+本地运营扩展，不声称对应GS1标准等价类。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| movement_id | 事件源行编号 | string | 稳定唯一的源记录编号。 | movement_id |
+| event_id | 业务事件编号 | string | 相同业务副本去重；冲突副本使相关余额未知。 | event_id |
+| lot_id | 批次编号 | string | 外键关联lots，空值不产生关系。 | lot_id |
+| event_type | 事件类型 | string | 虚构业务值，双语表达同一业务事实。 允许取值：到货, 发运, 客户退货, 收货, 转换产出, 转换投入, 错误撤销, 零售销售. | event_type |
+| event_type_code | 事件类型代码 | string | 稳定机器代码；业务展示值另列。 允许取值：arrive, consume, dispatch, produce, receive, return, reversal, sale. | event_type_code |
+| source_location_id | 来源地点编号 | string | 外键关联locations，空值不产生关系。 | source_location_id |
+| destination_location_id | 目标地点编号 | string | 外键关联locations，空值不产生关系。 | destination_location_id |
+| transfer_id | 调拨编号 | string | 虚构业务值，双语表达同一业务事实。 | transfer_id |
+| order_id | 订单编号 | string | 外键关联orders，空值不产生关系。 | order_id |
+| quantity | 数量 | decimal | 精确十进制值；单位和计算口径见业务契约，未知不是零。 | quantity |
+| unit | 计量单位 | string | 虚构业务值，双语表达同一业务事实。 允许取值：件. | unit |
+| event_date | 业务日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | event_date |
+| event_sequence | 同日序号 | decimal | 显式同日顺序，不使用编号猜测顺序。 | event_sequence |
+| recorded_date | 记录日期 | date | 日粒度业务日期；遵循业务日与知识截止日契约。 | recorded_date |
+| view_kind | 视图类型 | string | 虚构业务值，双语表达同一业务事实。 允许取值：实际, 计划. | view_kind |
+| view_code | 视图代码 | string | 稳定机器代码；业务展示值另列。 允许取值：actual, planned. | view_code |
+| reversal_of | 被撤销事件编号 | string | 虚构业务值，双语表达同一业务事实。 | reversal_of |
+
+### Keys
+
+Primary Keys: movement_id
+Display Key: movement_id
+Incremental Key:

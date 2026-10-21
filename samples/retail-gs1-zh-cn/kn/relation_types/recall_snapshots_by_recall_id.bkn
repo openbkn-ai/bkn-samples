@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: recall_snapshots_by_recall_id
+name: 已记录召回控制关联商品召回
+tags: [retail, gs1]
+---
+
+## RelationType: 已记录召回控制关联商品召回
+
+显式外键关联，空键不产生边。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| recall_snapshots | recalls | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| recall_id | recall_id |
