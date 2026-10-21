@@ -9,6 +9,19 @@ from verify import load,verify_data,decision
 sys.path.insert(0,str(EN/'bkn-eval'))
 from run import evaluate,database,same
 
+class HookEntrypoints(unittest.TestCase):
+ def test_installer_hook_entrypoints_keep_executable_git_modes(self):
+  import subprocess
+  for sample in (EN,ZH):
+   manifest=json.loads((sample/'sample.yaml').read_text())
+   for name,relative in manifest['spec']['hooks'].items():
+    path=sample/relative
+    with self.subTest(sample=sample.name,hook=name):
+     self.assertTrue(path.stat().st_mode & 0o111,relative+' must be directly executable')
+     # The standard archive builder preserves Git index modes, not chmod alone.
+     entry=subprocess.check_output(['git','ls-files','--stage','--',str(path.relative_to(ROOT))],cwd=ROOT,text=True)
+     self.assertTrue(entry.startswith('100755 '),relative+' must retain executable mode in Git and release archives')
+
 class FinancialSemantics(unittest.TestCase):
  @classmethod
  def setUpClass(cls):cls.T,cls.C=load(EN)

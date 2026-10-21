@@ -1,6 +1,6 @@
 {
   "validated_file_count": 306,
-  "adopted_unchanged": 287,
+  "adopted_unchanged": 286,
   "documentation_and_network_description_deltas": [
     {
       "file": "samples/financial-fibo-en-us/README.md",
@@ -98,7 +98,15 @@
       "adopted_sha256": "257e3239a9e1618d615dc746b46f9e015c632a98477e5b17520f72488f9729c8"
     }
   ],
+  "focused_installation_regression_test_deltas": [
+    {
+      "file": "tools/financial_fibo/test_financial_fibo.py",
+      "validated_sha256": "8ec061fb15b5517ce44796246a74aa2b0b4fe1c657f25362c6fe96cf24298345",
+      "adopted_sha256": "338ca7f6ee8cab600ba06529b12ba1a0b6624b4ad63a42f213a808fd9cc01042"
+    }
+  ],
   "all_sample_runtime_python_unchanged": true,
   "data_gold_and_question_files_unchanged_from_validated_candidate": true,
+  "hook_modes": "All eight declared shell hooks restored to Git 100755; frozen byte snapshot did not preserve file modes. Prior a70c237 packaging smoke did not check modes and is not installation acceptance.",
   "no_new_live_model_run": true
 }
