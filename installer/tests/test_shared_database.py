@@ -1,6 +1,8 @@
 from installer.contract import read_version
 """Shared runtime ownership and content-only offline delivery regressions."""
+import io
 import json
+import tarfile
 import subprocess
 import tempfile
 import unittest
@@ -11,7 +13,7 @@ from unittest.mock import Mock, patch
 from installer import shared_database as db
 from installer.deploy_database import DeployError
 from installer.offline_bundle import OfflinePackages
-from installer.remote_bundle import CAPABILITIES, extract_package
+from installer.remote_bundle import CAPABILITIES, extract_package, load_release
 from installer.remote_installation import RemoteInstallation
 from installer.state_store import write_json
 from installer.studio_api import _read_state, _write_failed
@@ -122,7 +124,7 @@ class SharedDatabaseTest(unittest.TestCase):
             import tarfile
             with tarfile.open(package) as source:
                 descriptor = json.load(source.extractfile('offline-release.json'))
-            self.assertEqual(manifest['spec']['requires']['platformVersion'], descriptor['requires']['platformVersion'])
+            self.assertEqual(manifest['spec']['requires'], descriptor['requires'])
             self.assertTrue(archive['locations'][0].endswith('/package.tar.gz'))
             runtime = RemoteInstallation(ROOT, output / 'state', read_version(ROOT), 'arm64', CAPABILITIES,
                                          'registry.example/executor@sha256:' + 'a' * 64)
@@ -130,6 +132,41 @@ class SharedDatabaseTest(unittest.TestCase):
             imported = packages.import_package(package, 'admin')
             self.assertEqual(imported['version'], version)
             self.assertIsNone(packages.find(imported['sample'])['dataImageRef'])
+
+    def test_release_requirements_follow_new_package_not_old_baseline(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            sample = root / 'sample'
+            baseline = sample / 'releases/0.1.2/sample.json'
+            baseline.parent.mkdir(parents=True)
+            previous = json.loads((ROOT / 'samples/order-basics/releases/0.1.2/sample.json').read_text())
+            baseline.write_text(json.dumps(previous))
+            candidate = root / 'candidate'
+            candidate.mkdir()
+            required = dict(previous['spec']['requires'], platformVersion='>=0.2.1 <0.3.0',
+                            architectures=['arm64', 'amd64'], capabilities=[
+                                'vega.catalog', 'knowledge-network.import.kn-json',
+                                'execution.function', 'execution.skill', 'database.shared'])
+            payload = json.dumps({'requires': required}).encode()
+            package = candidate / 'package.tar.gz'
+            with tarfile.open(package, 'w:gz') as archive:
+                member = tarfile.TarInfo('offline-release.json')
+                member.size = len(payload)
+                archive.addfile(member, io.BytesIO(payload))
+            (candidate / 'build.json').write_text(json.dumps({
+                'package': {'digest': 'sha256:' + 'a' * 64, 'size': package.stat().st_size},
+                'releaseNotes': []}))
+            with patch('tools.publication.prepare_shared_release.build', return_value=candidate):
+                result = prepare(sample, '0.1.3', root / 'output')
+            manifest = json.loads(Path(result['manifest']).read_text())
+            self.assertEqual(manifest['spec']['requires'], required)
+            entry = dict(sampleId='order-basics', version='0.1.3', releaseStatus='published', requires=required)
+            for missing in ('execution.function', 'execution.skill'):
+                reader = Mock(side_effect=AssertionError('must reject before reading metadata'))
+                with self.subTest(missing=missing), self.assertRaisesRegex(ValueError, 'required capability is unavailable'):
+                    load_release(entry, ROOT / 'protocol/draft/schemas/sample.schema.json',
+                                 '0.2.1', 'arm64', CAPABILITIES - {missing}, reader=reader)
+                reader.assert_not_called()
 
     def test_content_only_package_imports_without_image_or_registry(self):
         with tempfile.TemporaryDirectory() as temporary:

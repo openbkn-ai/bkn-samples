@@ -1,10 +1,11 @@
 """Prepare one self-contained archive for online/offline installation and a candidate release manifest; never publish."""
 import argparse
 import json
+import tarfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-from tools.publication.build_candidate import build, require, platform_range
+from tools.publication.build_candidate import build, require
 
 
 def prepare(sample_dir, version, output):
@@ -17,12 +18,12 @@ def prepare(sample_dir, version, output):
     manifest = json.loads(baseline.read_text())
     manifest['metadata']['version'] = version
     spec = manifest['spec']
-    spec['requires']['platformVersion'] = platform_range()
+    with tarfile.open(candidate / 'package.tar.gz') as archive:
+        descriptor = json.load(archive.extractfile('offline-release.json'))
+    spec['requires'] = descriptor['requires']
     spec['release']['publishedAt'] = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
     report = json.loads((candidate / 'build.json').read_text())
     spec['release']['releaseNotes'] = [{**note, 'path': Path(note['path']).name} for note in report['releaseNotes']]
-    if 'database.shared' not in spec['requires']['capabilities']:
-        spec['requires']['capabilities'].append('database.shared')
     archive = next(a for a in spec['artifacts'] if a['type'] == 'archive')
     archive['digest'] = report['package']['digest']
     archive['sizeBytes'] = report['package']['size']
