@@ -1,0 +1,91 @@
+{
+  "sampleId": "retail-gs1-zh-cn",
+  "version": "0.1.0",
+  "packageDigest": "sha256:7313ddec87edf4d90eb3510441e8fe6d13d17f86a30791b363a6be7b459f4e83",
+  "sourceCommit": "5a03b975aa9a1dda0df126b0e8bce8f30a00162f",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "executorImage": "ghcr.io/openbkn-ai/bkn-sample-studio@sha256:e8aadcae00819ba2153a64c79c4a784d9e0e22a0c90ee66ab4862835fa7a95ff",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-retail-gs1-zh-cn-bf0b9780a7e54863856486a5a2c73868",
+    "attemptId": "9bfd0d8e5e2d431c821222ebe33ebf34",
+    "sample": "retail-gs1-zh-cn",
+    "version": "0.1.0",
+    "status": "installed",
+    "operation": "install",
+    "startedAt": "2026-10-20T23:46:25.605389Z",
+    "finishedAt": "2026-10-20T23:47:07.347347Z",
+    "installedAt": "2026-10-20T23:47:07.347347Z",
+    "stages": [
+      {
+        "id": "database",
+        "name": "准备样例库",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "name": "扫描数据资源",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "name": "导入并绑定知识网络",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "name": "发布能力",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "name": "冒烟验收",
+        "state": "succeeded"
+      }
+    ],
+    "freshAfterUninstall": true
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "All15 live table counts equal dataset.lock, totaling2911 rows; embedded shared MariaDB runtime."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "15 native BKN objects,30 relations,3groups and15 actual source bindings and queries verified."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Three registered functions executed once against live data; both published snapshot metrics and mounted Skill plus business-contract attachment matched sources."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Fixed-release inventory(PRD001), shared-order fulfillment(PRD001) and recall(REC001) smoke checks matched packaged deterministic results. No new full-bank or nine-case model evaluation claimed."
+    }
+  ],
+  "limits": [
+    "Only arm64 runtime was tested; amd64 is declared compatible but not runtime-certified.",
+    "No cluster-wide outbound-isolation policy was applied; existing product shared MariaDB was used without a sample-specific image.",
+    "Technical function-output parity uses the packaged deterministic engine, not a fresh independent business oracle.",
+    "Original full evaluation scores EN96/100 and ZH95/100 and targeted EN4/4 and ZH5/5 remain historical at their original package digests; revised full banks were not rerun.",
+    "The publication archive differs from the prior targeted archive only in README,release notes and offline descriptor; all runtime and data bytes are identical.",
+    "Technical-interaction evidence was assembling at finish; execution completed. No final evidence-closure claim or platform trace repair.",
+    "Online official-catalog refresh/install awaits the unmerged catalog PR; this local offline-install proof does not claim that post-merge step.",
+    "Immutable archived notes retain source-review preparation wording; actual availability follows Release and catalog metadata."
+  ],
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-retail-gs1-zh-cn-v0.1.0/acceptance.json",
+  "evidenceDigest": "sha256:ff3e334b0f0e8abec0e058cfb8ddd9db19a3c097b11eed7504504a1cace1863d",
+  "lifecycle": {
+    "previousCandidateUninstalled": true,
+    "offlineCacheRemovedBeforeImport": true,
+    "fixedReleaseFreshInstallPassed": true,
+    "otherSamplesUnchanged": 9
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "retail-gs1-zh-cn",
+    "version": "0.1.0",
+    "displayName": "食品供应链追溯与召回",
+    "summary": "虚构食品流通、履约和召回闭环。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT synthetic assets; GS1 WebVoc Apache-2.0 semantic references"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-20T23:50:49Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:0edfd36303f7982dccbbf75fad52b63fb7dc5e087538b0b0331c64f17af9a4c3"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:5eaed02c1c12c0ed2c8b7844775491c5f4442d77e852c2740d681e80fe634327"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.function",
+        "execution.skill",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:7313ddec87edf4d90eb3510441e8fe6d13d17f86a30791b363a6be7b459f4e83",
+        "sizeBytes": 85690,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-retail-gs1-zh-cn-v0.1.0/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "retail-gs1-zh-cn-network",
+        "questions": [
+          "哪些批次当前被隔离？",
+          "问题批次流向哪些门店？",
+          "2027年3月补货缺口是多少？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "retail-gs1-zh-cn-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "retail-gs1-zh-cn-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "retail-gs1-zh-cn-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "retail-gs1-zh-cn-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "retail_gs1_zh_cn",
+          "expectedTables": 15
+        }
+      ],
+      "bindings": [
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "organizations",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "organizations"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "locations",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "locations"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "products",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "products"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "lots",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "lots"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "movements",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "movements"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "inspections",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "inspections"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "holds",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "holds"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "orders",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "orders"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "order_lines",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "order_lines"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "reservations",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "reservations"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "demand_forecasts",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "demand_forecasts"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "recalls",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "recalls"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "lot_links",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "lot_links"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "inventory_snapshots",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "inventory_snapshots"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "recall_snapshots",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "recall_snapshots"
+        }
+      ]
+    }
+  }
+}

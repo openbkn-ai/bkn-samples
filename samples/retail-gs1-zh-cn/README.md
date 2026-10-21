@@ -2,7 +2,7 @@
 
 虚构食品流通业务样例。覆盖到货检验、仓店流转、销售退货、效期预留、共享库存履约、未来补货及召回处置。需要OpenBKN >=0.2.1 <0.3.0。
 
-通过首页导入离线包并安装，再打开知识网络。此版本是未发布本地候选；实际安装与单轮100题验收状态以verification证据为准，本文不宣称已通过。中英文是两个独立sample。
+在OpenBKN0.2.1及以上通过首页导入[0.1.0固定离线包](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.0)并安装，再打开知识网络。[正式包验收凭证](releases/0.1.0/verification.json)绑定精确归档。后续官方目录PR保持未合并，目前使用离线导入；中英文是两个独立sample。
 
 [PRD](docs/PRD.zh-CN.md) · [Business contract](docs/business-contract.md) · [BKN ontology](docs/ontology.md) · [GS1 sources/license](docs/standard-sources.md).
 

@@ -2,7 +2,7 @@
 
 Synthetic receipt inspection, warehouse/store movements, sales/returns, expiry/reservations, shared-stock fulfillment, future replenishment and recall. Requires OpenBKN >=0.2.1 <0.3.0.
 
-Import the offline archive from the homepage, install and open the network. This is an unpublished local candidate; installation and one-pass Q&A acceptance are recorded separately in verification evidence, not assumed here. English and Chinese are separate samples.
+Import the fixed [0.1.0 release archive](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0) from the homepage, install and open the network on OpenBKN 0.2.1 or later. Release metadata and exact-package verification are in [releases/0.1.0](releases/0.1.0/verification.json). The follow-up official-catalog PR remains unmerged; English and Chinese are separate samples.
 
 [PRD](docs/PRD.en-US.md) · [Business contract](docs/business-contract.md) · [BKN ontology](docs/ontology.md) · [GS1 sources/license](docs/standard-sources.md).
 
