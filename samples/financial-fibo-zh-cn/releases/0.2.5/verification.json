@@ -1,0 +1,84 @@
+{
+  "sampleId": "financial-fibo-zh-cn",
+  "version": "0.2.5",
+  "packageDigest": "sha256:2e86b89d70d79d8434396585ff92d9f5a82f366901f7eeada6aa07172fe4e3c9",
+  "sourceCommit": "9d469ac08c20ca2c1f9c01c4cba0da8a94a432be",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "executorImage": "docker.io/library/import-2026-10-16@sha256:e7bf197b71b396ab401634c925c7dee63cbc46d14d3b892cd346068e1966e645",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-financial-fibo-zh-cn-bb40874abe6d4788b3ff4fa0e7d8518b",
+    "sample": "financial-fibo-zh-cn",
+    "version": "0.2.5",
+    "attemptId": "01d4bfd4302b4e2eb17775936b817746",
+    "status": "installed",
+    "startedAt": "2026-10-21T04:34:39.997540Z",
+    "finishedAt": "2026-10-21T04:36:23.947214Z",
+    "installedAt": "2026-10-21T04:36:23.947214Z",
+    "stages": [
+      {
+        "id": "database",
+        "name": "准备样例库",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "name": "扫描数据资源",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "name": "导入并绑定知识网络",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "name": "发布能力",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "name": "冒烟验收",
+        "state": "succeeded"
+      }
+    ],
+    "freshAfterUninstall": true
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "Exact 0.2.5 fresh-install database stage succeeded, running unchanged dbInit/dbVerify hooks against 20 locked tables and 78,356 typed rows. Raw database hook stdout is not retained by the existing runtime."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh knowledge and verify stages succeeded using unchanged native BKN installation and verification hooks: 20 object types, 29 relations, 20 bindings and 20 live object queries. See recorded stage checks."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Installation capabilities and verify stages succeeded; unchanged capability registration/verification hooks check 3 function definitions, 2 metric definitions and 1 Skill registration. This patch does not re-execute business functions. Online/offline requirements match and reject missing execution.function or execution.skill before metadata access."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Bounded installation smoke only: the standard verify hook checks 20 live object queries and resource ownership/bindings. No new model QA, business-function execution, independent oracle or full question-bank replay."
+    }
+  ],
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-financial-fibo-zh-cn-v0.2.5/acceptance.json",
+  "evidenceDigest": "sha256:aaec23e81f51d2eaf35e66e5ea38d147d452bb12ec0a66213b7f7ce7f487c6f7",
+  "formalQuestionsThisReleaseCycle": 0,
+  "modelCallsThisReleaseCycle": 0,
+  "limits": [
+    "This 0.2.5 publication patch is verified only by fresh offline installation, standard hook checks, compatibility gates and package/source parity. Zero model questions and no replay of the old four paths or 0.2.4 eight-check native interactions.",
+    "The existing patched arm64 8081 runtime was used; no platform image/configuration changes. Not vanilla 0.2.1 certification, AMD64 execution validation or cluster-level outbound isolation.",
+    "Database hook stdout is discarded by the existing runtime; successful exact-package stage results and installed verification checks are preserved.",
+    "The unchanged Skill has SKILL.md only; its ../../docs/business-capability-contract.md source reference is not a mounted attachment and runtime reference resolution remains unverified.",
+    "Official catalog refresh/online installation remains pending PR #188 merge.",
+    "Original public EN/ZH scores remain 96/100 financial fields; historical 4/4 tool paths and 16/16 representative 0.2.4 checks are historical, not new 0.2.5 model accuracy."
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "sampleId": "financial-fibo-en-us",
+  "version": "0.2.4",
+  "packageDigest": "sha256:6c4eb89b9755b5af335845502838682a5ce89293d6e4ea135ba338d665789a56",
+  "sourceCommit": "763f318348f1901f42b6733872a12e1610f2d2a8",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "executorImage": "docker.io/library/import-2026-10-16@sha256:e7bf197b71b396ab401634c925c7dee63cbc46d14d3b892cd346068e1966e645",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-financial-fibo-en-us-7c066ad874434aca90ccd5735205dc2e",
+    "sample": "financial-fibo-en-us",
+    "version": "0.2.4",
+    "attemptId": "17ce3d2edc1d40d79e9f07568e90f728",
+    "status": "installed",
+    "startedAt": "2026-10-21T03:05:56.240280Z",
+    "finishedAt": "2026-10-21T03:07:39.148341Z",
+    "installedAt": "2026-10-21T03:07:39.148341Z",
+    "stages": [
+      {
+        "id": "database",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "state": "succeeded"
+      }
+    ],
+    "freshAfterUninstall": true
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "20 embedded shared-MariaDB tables; all 78,356 typed rows verified by the fixed package database init/verify hooks. No duplicate full-table MCP read."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "20 native objects, 29 relations, 3 groups, 20 distinct actual resource bindings; object resource names match their source tables."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "All 3 mounted functions executed once for PF-046 actual 2027-02-28; 2 real published snapshot metrics and mounted Skill text matched source. No Skill attachment or runtime source-reference resolution claimed."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Bounded PF-046 settlement, valuation and mandate smoke outputs match packaged source kernel; limit scalar 2002.41 USD, threshold500, excess1502.41 independently fixed as regression. Not a fresh independent oracle or full-bank model QA."
+    }
+  ],
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-financial-fibo-en-us-v0.2.4/acceptance.json",
+  "evidenceDigest": "sha256:cc5308f4eff2ed81049c1cf1189e40c57b144bac9e7d62cec2a146f5b1251f78",
+  "lifecycle": {
+    "previousCandidateUninstalled": true,
+    "offlineCacheRemovedBeforeImport": true,
+    "fixedReleaseFreshInstallPassed": true,
+    "firstInstallAttemptPassed": false,
+    "standardRetryCount": 1,
+    "otherSamplesUnchanged": 9
+  },
+  "scopedTechnicalResult": {
+    "passed": 8,
+    "total": 8,
+    "percent": 100
+  },
+  "limits": [
+    "EN first fresh install failed in knowledge stage with WriteDatasetDocument HTTP500; one authorized standard retry succeeded. Root cause remains unconfirmed; recovery is not proof of a transient cause or first-attempt success.",
+    "Native function expected output uses the same frozen source kernel; this is implementation/source parity, not an independent financial oracle. Frozen PF046 LIM-046-C scalar expectations were asserted separately.",
+    "Each language has 20 tables and 78,356 typed records verified by successful exact-package dbInit/dbVerify all-row hooks. Full table MCP reads were not duplicated.",
+    "Three functions are tested only for PF-046 actual, as_of_date=knowledge_date=2027-02-28. Two recorded snapshot metrics were queried on representative instances. This is not full-bank or blanket model accuracy.",
+    "Mounted Skill contains only SKILL.md. Relative ../../docs/business-capability-contract.md points at a source document, has no mounted attachment, and was not resolved at runtime. These technical calls rely on the function schemas and Skill body.",
+    "Local AOI and retrieval c24-fix2-reviewed2 images, local sample-studio main-contract-fixes-r2, upgraded Vega7bb933f and sandbox control plane ba89095 are part of the observed 8081 environment. Sandbox executor actually uses official python-basic 37b2b3b after earlier reconstruction; no fresh platform rebuild was performed here.",
+    "Shared product MariaDB runtime was used, without a per-sample database image. AMD64 execution and outbound-network isolation were not validated.",
+    "Only final scoped technical checks carry 8/8 (100%); original public EN/ZH scores remain96/100. Earlier four-path regression4/4 is historical and not a rerun of this Release package.",
+    "Official online catalog refresh/install is pending the follow-up publication PR merge; this proof verifies offline fixed-package installation.",
+    "Archive README/release-note preparation wording is retained from fixed source763f318; availability follows the published Release and official catalog."
+  ]
+}

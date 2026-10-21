@@ -1,0 +1,1576 @@
+{
+  "source_commit": "9d469ac08c20ca2c1f9c01c4cba0da8a94a432be",
+  "version": "0.2.5",
+  "minimum_openbkn_version": "0.2.1",
+  "scope": "standard fresh exact-package offline installation, compatibility gates and retained platformVerify smoke only",
+  "packages": [
+    {
+      "sample": "financial-fibo-en-us",
+      "version": "0.2.5",
+      "sourceCommit": "9d469ac08c20ca2c1f9c01c4cba0da8a94a432be",
+      "packageDigest": "sha256:bd191c446c34dbb0cc80d420fc74461e1f64563d8bc1527be4cefe48942390a3",
+      "bytes": 996159,
+      "hooks": {
+        "db/init.sh": "0o755",
+        "db/verify.sh": "0o755",
+        "platform/install.sh": "0o755",
+        "platform/verify.sh": "0o755"
+      },
+      "offlineRequires": {
+        "architectures": [
+          "amd64",
+          "arm64"
+        ],
+        "capabilities": [
+          "vega.catalog",
+          "knowledge-network.import.bkn-directory",
+          "execution.function",
+          "execution.skill",
+          "database.shared"
+        ],
+        "installationProfiles": [
+          "openbkn.ai/sample-install.v1"
+        ],
+        "platformVersion": ">=0.2.1 <0.3.0",
+        "requiredExtensions": []
+      },
+      "compatibility": [
+        {
+          "case": "platform-0.2.0",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "incompatible platform version",
+          "passed": true
+        },
+        {
+          "case": "missing-function",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "required capability is unavailable",
+          "passed": true
+        },
+        {
+          "case": "missing-skill",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "required capability is unavailable",
+          "passed": true
+        },
+        {
+          "case": "platform-0.2.1-full",
+          "accepted": true,
+          "expected_accept": true,
+          "error": null,
+          "passed": true
+        }
+      ],
+      "skill_contract_files": [
+        "docs/business-capability-contract.md"
+      ]
+    },
+    {
+      "sample": "financial-fibo-zh-cn",
+      "version": "0.2.5",
+      "sourceCommit": "9d469ac08c20ca2c1f9c01c4cba0da8a94a432be",
+      "packageDigest": "sha256:2e86b89d70d79d8434396585ff92d9f5a82f366901f7eeada6aa07172fe4e3c9",
+      "bytes": 994875,
+      "hooks": {
+        "db/init.sh": "0o755",
+        "db/verify.sh": "0o755",
+        "platform/install.sh": "0o755",
+        "platform/verify.sh": "0o755"
+      },
+      "offlineRequires": {
+        "architectures": [
+          "amd64",
+          "arm64"
+        ],
+        "capabilities": [
+          "vega.catalog",
+          "knowledge-network.import.bkn-directory",
+          "execution.function",
+          "execution.skill",
+          "database.shared"
+        ],
+        "installationProfiles": [
+          "openbkn.ai/sample-install.v1"
+        ],
+        "platformVersion": ">=0.2.1 <0.3.0",
+        "requiredExtensions": []
+      },
+      "compatibility": [
+        {
+          "case": "platform-0.2.0",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "incompatible platform version",
+          "passed": true
+        },
+        {
+          "case": "missing-function",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "required capability is unavailable",
+          "passed": true
+        },
+        {
+          "case": "missing-skill",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "required capability is unavailable",
+          "passed": true
+        },
+        {
+          "case": "platform-0.2.1-full",
+          "accepted": true,
+          "expected_accept": true,
+          "error": null,
+          "passed": true
+        }
+      ],
+      "skill_contract_files": [
+        "docs/business-capability-contract.md"
+      ]
+    }
+  ],
+  "languages": {
+    "en-us": {
+      "lifecycle": {
+        "uninstall": {
+          "id": "inst-financial-fibo-en-us-7c066ad874434aca90ccd5735205dc2e",
+          "attemptId": "f4451ef8e7e046bfa97f5bb659c6f373",
+          "sample": "financial-fibo-en-us",
+          "version": "0.2.4",
+          "startedAt": "2026-10-21T04:04:06.016426Z",
+          "finishedAt": "2026-10-21T04:04:07.117725Z",
+          "installedAt": null,
+          "status": "uninstalled",
+          "requestedBy": "admin",
+          "operation": "uninstall",
+          "stages": [
+            {
+              "id": "preflight",
+              "name": "检查样例资源归属",
+              "state": "succeeded"
+            },
+            {
+              "id": "knowledge",
+              "name": "删除知识网络和指标",
+              "state": "succeeded"
+            },
+            {
+              "id": "capabilities",
+              "name": "删除函数和 Skill",
+              "state": "succeeded"
+            },
+            {
+              "id": "discover",
+              "name": "删除数据源",
+              "state": "succeeded"
+            },
+            {
+              "id": "database",
+              "name": "删除样例库和存储",
+              "state": "succeeded"
+            },
+            {
+              "id": "verify",
+              "name": "验证清理结果",
+              "state": "succeeded"
+            }
+          ],
+          "error": null
+        },
+        "own_offline_cache_deleted": {
+          "http_status": 200,
+          "result": {
+            "sample": "financial-fibo-en-us",
+            "deleted": true
+          }
+        },
+        "import": {
+          "http_status": 201,
+          "packageDigest": "sha256:bd191c446c34dbb0cc80d420fc74461e1f64563d8bc1527be4cefe48942390a3",
+          "result": {
+            "sample": "financial-fibo-en-us",
+            "version": "0.2.5",
+            "packageDigest": "sha256:bd191c446c34dbb0cc80d420fc74461e1f64563d8bc1527be4cefe48942390a3"
+          }
+        },
+        "first_install": {
+          "id": "inst-financial-fibo-en-us-672a88213c7e43e888514dc4d1eb22ce",
+          "attemptId": "195828d344994db697f311661a989c33",
+          "sample": "financial-fibo-en-us",
+          "version": "0.2.5",
+          "startedAt": "2026-10-21T04:04:08.283179Z",
+          "finishedAt": "2026-10-21T04:34:36.426757Z",
+          "installedAt": "2026-10-21T04:34:36.426757Z",
+          "status": "installed",
+          "requestedBy": "admin",
+          "operation": "install",
+          "stages": [
+            {
+              "id": "database",
+              "name": "准备样例库",
+              "state": "succeeded"
+            },
+            {
+              "id": "discover",
+              "name": "扫描数据资源",
+              "state": "succeeded"
+            },
+            {
+              "id": "knowledge",
+              "name": "导入并绑定知识网络",
+              "state": "succeeded"
+            },
+            {
+              "id": "capabilities",
+              "name": "发布能力",
+              "state": "succeeded"
+            },
+            {
+              "id": "verify",
+              "name": "冒烟验收",
+              "state": "succeeded"
+            }
+          ],
+          "error": null
+        },
+        "standard_retry_count": 0,
+        "initial_install_failure": null,
+        "final_actual_installation": {
+          "id": "inst-financial-fibo-en-us-672a88213c7e43e888514dc4d1eb22ce",
+          "sample": "financial-fibo-en-us",
+          "version": "0.2.5",
+          "attemptId": "195828d344994db697f311661a989c33",
+          "status": "installed",
+          "startedAt": "2026-10-21T04:04:08.283179Z",
+          "finishedAt": "2026-10-21T04:34:36.426757Z",
+          "installedAt": "2026-10-21T04:34:36.426757Z",
+          "packageDigest": "sha256:bd191c446c34dbb0cc80d420fc74461e1f64563d8bc1527be4cefe48942390a3",
+          "manifestSha256": "62b6aedc5b5cb2ed38d341664e2997fd463ddff74dbb6a065892feaf8798980f",
+          "stages": {
+            "database": "succeeded",
+            "discover": "succeeded",
+            "knowledge": "succeeded",
+            "capabilities": "succeeded",
+            "verify": "succeeded"
+          },
+          "resources": {
+            "catalogId": "01a15ca1-91b7-77ef-9864-fa89b81e42d2",
+            "knowledgeNetworkId": "financial_fibo_en_us",
+            "ownedExecution": {
+              "toolboxes": [
+                "01a15cbc-b520-7891-a0fb-137e6552db78"
+              ],
+              "skills": [
+                "01a15cbc-e122-78d1-8863-c2773bbd9013"
+              ]
+            },
+            "capabilitySummary": {
+              "toolbox_id": "01a15cbc-b520-7891-a0fb-137e6552db78",
+              "tool_ids": {
+                "settlement_asof": "01a15cbc-b9fe-7bcb-8c23-c73c87502c76",
+                "valuation_asof": "01a15cbc-be1a-76d9-9ca9-6d2ef89ad34b",
+                "limit_assessment_asof": "01a15cbc-c25d-7f17-bd4b-66eadfa25898"
+              },
+              "source_sha256": {
+                "settlement_asof": "5b60c9e1be36fa984df16af997c82c3fde9230679e1eec5ce7dd6636039ebd38",
+                "valuation_asof": "573e942b205f708f01fd0935a00a9c2f8747f2d6711f9e27cc55430b8c090a2c",
+                "limit_assessment_asof": "0992903f724c99233d53f69cce331b8ac7f484d64068052b8ac848959d028c92"
+              },
+              "metrics": [
+                {
+                  "code": "issuer_ratio_recorded",
+                  "id": "01a15cbc-cd80-74c7-9d20-a2a0d8d399f8",
+                  "version": 1
+                },
+                {
+                  "code": "sell_receivable_recorded_usd",
+                  "id": "01a15cbc-d58c-7609-bac9-6dad18233563",
+                  "version": 1
+                }
+              ],
+              "skills": {
+                "mode": "apply",
+                "skills": [
+                  {
+                    "name": "post-trade-investigation-en-us",
+                    "skill_id": "01a15cbc-e122-78d1-8863-c2773bbd9013",
+                    "operation": "registered",
+                    "status": "published"
+                  }
+                ]
+              },
+              "ownedExecution": {
+                "toolboxes": [
+                  "01a15cbc-b520-7891-a0fb-137e6552db78"
+                ],
+                "skills": [
+                  "01a15cbc-e122-78d1-8863-c2773bbd9013"
+                ]
+              }
+            }
+          },
+          "checks": [
+            {
+              "name": "ownership",
+              "ok": true
+            },
+            {
+              "name": "20-object-types",
+              "ok": true
+            },
+            {
+              "name": "29-relations",
+              "ok": true
+            },
+            {
+              "name": "20-resource-bindings",
+              "ok": true
+            },
+            {
+              "name": "20-live-object-queries",
+              "ok": true
+            }
+          ],
+          "error": null,
+          "databaseRuntime": {
+            "kind": "shared-mariadb",
+            "name": "financial_fibo_en_us",
+            "staging": "financial_fibo_en_us_loading",
+            "ownership": "fa37d49a90364ca89c7e1f7194453ae8"
+          },
+          "offlineReleasePresent": true,
+          "remoteReleasePresent": false
+        },
+        "observed_wall_clock_elapsed_seconds": 1828.143578
+      },
+      "compatibility": [
+        {
+          "case": "platform-0.2.0",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "incompatible platform version",
+          "passed": true
+        },
+        {
+          "case": "missing-function",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "required capability is unavailable",
+          "passed": true
+        },
+        {
+          "case": "missing-skill",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "required capability is unavailable",
+          "passed": true
+        },
+        {
+          "case": "platform-0.2.1-full",
+          "accepted": true,
+          "expected_accept": true,
+          "error": null,
+          "passed": true
+        }
+      ],
+      "platform_smoke": {
+        "persisted_checks": [
+          {
+            "name": "ownership",
+            "ok": true
+          },
+          {
+            "name": "20-object-types",
+            "ok": true
+          },
+          {
+            "name": "29-relations",
+            "ok": true
+          },
+          {
+            "name": "20-resource-bindings",
+            "ok": true
+          },
+          {
+            "name": "20-live-object-queries",
+            "ok": true
+          }
+        ],
+        "all_checks_passed": true,
+        "registered_capabilities": {
+          "toolbox_id": "01a15cbc-b520-7891-a0fb-137e6552db78",
+          "tool_ids": {
+            "settlement_asof": "01a15cbc-b9fe-7bcb-8c23-c73c87502c76",
+            "valuation_asof": "01a15cbc-be1a-76d9-9ca9-6d2ef89ad34b",
+            "limit_assessment_asof": "01a15cbc-c25d-7f17-bd4b-66eadfa25898"
+          },
+          "source_sha256": {
+            "settlement_asof": "5b60c9e1be36fa984df16af997c82c3fde9230679e1eec5ce7dd6636039ebd38",
+            "valuation_asof": "573e942b205f708f01fd0935a00a9c2f8747f2d6711f9e27cc55430b8c090a2c",
+            "limit_assessment_asof": "0992903f724c99233d53f69cce331b8ac7f484d64068052b8ac848959d028c92"
+          },
+          "metrics": [
+            {
+              "code": "issuer_ratio_recorded",
+              "id": "01a15cbc-cd80-74c7-9d20-a2a0d8d399f8",
+              "version": 1
+            },
+            {
+              "code": "sell_receivable_recorded_usd",
+              "id": "01a15cbc-d58c-7609-bac9-6dad18233563",
+              "version": 1
+            }
+          ],
+          "skills": {
+            "mode": "apply",
+            "skills": [
+              {
+                "name": "post-trade-investigation-en-us",
+                "skill_id": "01a15cbc-e122-78d1-8863-c2773bbd9013",
+                "operation": "registered",
+                "status": "published"
+              }
+            ]
+          },
+          "ownedExecution": {
+            "toolboxes": [
+              "01a15cbc-b520-7891-a0fb-137e6552db78"
+            ],
+            "skills": [
+              "01a15cbc-e122-78d1-8863-c2773bbd9013"
+            ]
+          }
+        },
+        "capabilities_executed": false
+      },
+      "database": {
+        "tables": 20,
+        "records": 78356,
+        "record_counts": {
+          "legal_entities": 150,
+          "legal_entity_identifiers": 150,
+          "financial_instruments": 100,
+          "security_identifiers": 100,
+          "portfolios": 200,
+          "accounts": 200,
+          "opening_positions": 1600,
+          "trade_orders": 8000,
+          "securities_transactions": 8000,
+          "settlement_instructions": 8000,
+          "settlement_events": 16176,
+          "positions": 8000,
+          "market_prices": 498,
+          "fx_rates": 150,
+          "valuation_snapshots": 8000,
+          "issuer_exposures": 4000,
+          "exposure_contributions": 8000,
+          "counterparty_exposures": 1000,
+          "mandate_limits": 1032,
+          "limit_assessments": 5000
+        },
+        "proof": "successful database stage running exact package dbInit/dbVerify all-typed-row checks; raw stdout not persisted by platform"
+      },
+      "formal_questions": 0,
+      "model_calls": 0
+    },
+    "zh-cn": {
+      "lifecycle": {
+        "uninstall": {
+          "id": "inst-financial-fibo-zh-cn-82db3e7c33ec461c90aae01ca2731e40",
+          "attemptId": "41aa1bc2411d4314ba993f31a74b78b6",
+          "sample": "financial-fibo-zh-cn",
+          "version": "0.2.4",
+          "startedAt": "2026-10-21T04:34:37.744922Z",
+          "finishedAt": "2026-10-21T04:34:38.767561Z",
+          "installedAt": null,
+          "status": "uninstalled",
+          "requestedBy": "admin",
+          "operation": "uninstall",
+          "stages": [
+            {
+              "id": "preflight",
+              "name": "检查样例资源归属",
+              "state": "succeeded"
+            },
+            {
+              "id": "knowledge",
+              "name": "删除知识网络和指标",
+              "state": "succeeded"
+            },
+            {
+              "id": "capabilities",
+              "name": "删除函数和 Skill",
+              "state": "succeeded"
+            },
+            {
+              "id": "discover",
+              "name": "删除数据源",
+              "state": "succeeded"
+            },
+            {
+              "id": "database",
+              "name": "删除样例库和存储",
+              "state": "succeeded"
+            },
+            {
+              "id": "verify",
+              "name": "验证清理结果",
+              "state": "succeeded"
+            }
+          ],
+          "error": null
+        },
+        "own_offline_cache_deleted": {
+          "http_status": 200,
+          "result": {
+            "sample": "financial-fibo-zh-cn",
+            "deleted": true
+          }
+        },
+        "import": {
+          "http_status": 201,
+          "packageDigest": "sha256:2e86b89d70d79d8434396585ff92d9f5a82f366901f7eeada6aa07172fe4e3c9",
+          "result": {
+            "sample": "financial-fibo-zh-cn",
+            "version": "0.2.5",
+            "packageDigest": "sha256:2e86b89d70d79d8434396585ff92d9f5a82f366901f7eeada6aa07172fe4e3c9"
+          }
+        },
+        "first_install": {
+          "id": "inst-financial-fibo-zh-cn-bb40874abe6d4788b3ff4fa0e7d8518b",
+          "attemptId": "01d4bfd4302b4e2eb17775936b817746",
+          "sample": "financial-fibo-zh-cn",
+          "version": "0.2.5",
+          "startedAt": "2026-10-21T04:34:39.997540Z",
+          "finishedAt": "2026-10-21T04:36:23.947214Z",
+          "installedAt": "2026-10-21T04:36:23.947214Z",
+          "status": "installed",
+          "requestedBy": "admin",
+          "operation": "install",
+          "stages": [
+            {
+              "id": "database",
+              "name": "准备样例库",
+              "state": "succeeded"
+            },
+            {
+              "id": "discover",
+              "name": "扫描数据资源",
+              "state": "succeeded"
+            },
+            {
+              "id": "knowledge",
+              "name": "导入并绑定知识网络",
+              "state": "succeeded"
+            },
+            {
+              "id": "capabilities",
+              "name": "发布能力",
+              "state": "succeeded"
+            },
+            {
+              "id": "verify",
+              "name": "冒烟验收",
+              "state": "succeeded"
+            }
+          ],
+          "error": null
+        },
+        "standard_retry_count": 0,
+        "initial_install_failure": null,
+        "final_actual_installation": {
+          "id": "inst-financial-fibo-zh-cn-bb40874abe6d4788b3ff4fa0e7d8518b",
+          "sample": "financial-fibo-zh-cn",
+          "version": "0.2.5",
+          "attemptId": "01d4bfd4302b4e2eb17775936b817746",
+          "status": "installed",
+          "startedAt": "2026-10-21T04:34:39.997540Z",
+          "finishedAt": "2026-10-21T04:36:23.947214Z",
+          "installedAt": "2026-10-21T04:36:23.947214Z",
+          "packageDigest": "sha256:2e86b89d70d79d8434396585ff92d9f5a82f366901f7eeada6aa07172fe4e3c9",
+          "manifestSha256": "f59379fde138199656bbe56f9ffd3986196679975b6b384b1ba7b24a59b96c99",
+          "stages": {
+            "database": "succeeded",
+            "discover": "succeeded",
+            "knowledge": "succeeded",
+            "capabilities": "succeeded",
+            "verify": "succeeded"
+          },
+          "resources": {
+            "catalogId": "01a15cbd-84f7-77c9-b1cf-f6a090265474",
+            "knowledgeNetworkId": "financial_fibo_zh_cn",
+            "ownedExecution": {
+              "toolboxes": [
+                "01a15cbe-59cf-7c99-9952-bc6bd206a65e"
+              ],
+              "skills": [
+                "01a15cbe-8639-7883-b51a-594f2a194a9e"
+              ]
+            },
+            "capabilitySummary": {
+              "toolbox_id": "01a15cbe-59cf-7c99-9952-bc6bd206a65e",
+              "tool_ids": {
+                "settlement_asof": "01a15cbe-5f53-7e47-8d7d-868bf0a0c6af",
+                "valuation_asof": "01a15cbe-63fb-739e-8ecb-4c1162041b08",
+                "limit_assessment_asof": "01a15cbe-6848-70e6-90d0-c7f4cc88bd89"
+              },
+              "source_sha256": {
+                "settlement_asof": "11a71ec214a4f251685678955219ecd6ef68656e8cc92838fcc3dd2799c226d2",
+                "valuation_asof": "9767fe3e4e217b745ec4528c70638f1ede19048719b7b0ba43900c825e27879c",
+                "limit_assessment_asof": "6d466357ba6b63ce2362b0eec77acdc8c6e168407e4587a429f506034ae3b7fb"
+              },
+              "metrics": [
+                {
+                  "code": "issuer_ratio_recorded",
+                  "id": "01a15cbe-73a0-720b-ae4c-c83e4b350507",
+                  "version": 1
+                },
+                {
+                  "code": "sell_receivable_recorded_usd",
+                  "id": "01a15cbe-7a49-72a3-82bc-783d5218ebdf",
+                  "version": 1
+                }
+              ],
+              "skills": {
+                "mode": "apply",
+                "skills": [
+                  {
+                    "name": "post-trade-investigation-zh-cn",
+                    "skill_id": "01a15cbe-8639-7883-b51a-594f2a194a9e",
+                    "operation": "registered",
+                    "status": "published"
+                  }
+                ]
+              },
+              "ownedExecution": {
+                "toolboxes": [
+                  "01a15cbe-59cf-7c99-9952-bc6bd206a65e"
+                ],
+                "skills": [
+                  "01a15cbe-8639-7883-b51a-594f2a194a9e"
+                ]
+              }
+            }
+          },
+          "checks": [
+            {
+              "name": "ownership",
+              "ok": true
+            },
+            {
+              "name": "20-object-types",
+              "ok": true
+            },
+            {
+              "name": "29-relations",
+              "ok": true
+            },
+            {
+              "name": "20-resource-bindings",
+              "ok": true
+            },
+            {
+              "name": "20-live-object-queries",
+              "ok": true
+            }
+          ],
+          "error": null,
+          "databaseRuntime": {
+            "kind": "shared-mariadb",
+            "name": "financial_fibo_zh_cn",
+            "staging": "financial_fibo_zh_cn_loading",
+            "ownership": "2dc63abc7fc14b28b055943294f5143d"
+          },
+          "offlineReleasePresent": true,
+          "remoteReleasePresent": false
+        },
+        "observed_wall_clock_elapsed_seconds": 103.949674
+      },
+      "compatibility": [
+        {
+          "case": "platform-0.2.0",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "incompatible platform version",
+          "passed": true
+        },
+        {
+          "case": "missing-function",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "required capability is unavailable",
+          "passed": true
+        },
+        {
+          "case": "missing-skill",
+          "accepted": false,
+          "expected_accept": false,
+          "error": "required capability is unavailable",
+          "passed": true
+        },
+        {
+          "case": "platform-0.2.1-full",
+          "accepted": true,
+          "expected_accept": true,
+          "error": null,
+          "passed": true
+        }
+      ],
+      "platform_smoke": {
+        "persisted_checks": [
+          {
+            "name": "ownership",
+            "ok": true
+          },
+          {
+            "name": "20-object-types",
+            "ok": true
+          },
+          {
+            "name": "29-relations",
+            "ok": true
+          },
+          {
+            "name": "20-resource-bindings",
+            "ok": true
+          },
+          {
+            "name": "20-live-object-queries",
+            "ok": true
+          }
+        ],
+        "all_checks_passed": true,
+        "registered_capabilities": {
+          "toolbox_id": "01a15cbe-59cf-7c99-9952-bc6bd206a65e",
+          "tool_ids": {
+            "settlement_asof": "01a15cbe-5f53-7e47-8d7d-868bf0a0c6af",
+            "valuation_asof": "01a15cbe-63fb-739e-8ecb-4c1162041b08",
+            "limit_assessment_asof": "01a15cbe-6848-70e6-90d0-c7f4cc88bd89"
+          },
+          "source_sha256": {
+            "settlement_asof": "11a71ec214a4f251685678955219ecd6ef68656e8cc92838fcc3dd2799c226d2",
+            "valuation_asof": "9767fe3e4e217b745ec4528c70638f1ede19048719b7b0ba43900c825e27879c",
+            "limit_assessment_asof": "6d466357ba6b63ce2362b0eec77acdc8c6e168407e4587a429f506034ae3b7fb"
+          },
+          "metrics": [
+            {
+              "code": "issuer_ratio_recorded",
+              "id": "01a15cbe-73a0-720b-ae4c-c83e4b350507",
+              "version": 1
+            },
+            {
+              "code": "sell_receivable_recorded_usd",
+              "id": "01a15cbe-7a49-72a3-82bc-783d5218ebdf",
+              "version": 1
+            }
+          ],
+          "skills": {
+            "mode": "apply",
+            "skills": [
+              {
+                "name": "post-trade-investigation-zh-cn",
+                "skill_id": "01a15cbe-8639-7883-b51a-594f2a194a9e",
+                "operation": "registered",
+                "status": "published"
+              }
+            ]
+          },
+          "ownedExecution": {
+            "toolboxes": [
+              "01a15cbe-59cf-7c99-9952-bc6bd206a65e"
+            ],
+            "skills": [
+              "01a15cbe-8639-7883-b51a-594f2a194a9e"
+            ]
+          }
+        },
+        "capabilities_executed": false
+      },
+      "database": {
+        "tables": 20,
+        "records": 78356,
+        "record_counts": {
+          "legal_entities": 150,
+          "legal_entity_identifiers": 150,
+          "financial_instruments": 100,
+          "security_identifiers": 100,
+          "portfolios": 200,
+          "accounts": 200,
+          "opening_positions": 1600,
+          "trade_orders": 8000,
+          "securities_transactions": 8000,
+          "settlement_instructions": 8000,
+          "settlement_events": 16176,
+          "positions": 8000,
+          "market_prices": 498,
+          "fx_rates": 150,
+          "valuation_snapshots": 8000,
+          "issuer_exposures": 4000,
+          "exposure_contributions": 8000,
+          "counterparty_exposures": 1000,
+          "mandate_limits": 1032,
+          "limit_assessments": 5000
+        },
+        "proof": "successful database stage running exact package dbInit/dbVerify all-typed-row checks; raw stdout not persisted by platform"
+      },
+      "formal_questions": 0,
+      "model_calls": 0
+    }
+  },
+  "other_samples": [
+    {
+      "sample": "supply-chain",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-supply-chain-354d2bbb88f54f288127fea070b24087",
+      "version": "0.1.7"
+    },
+    {
+      "sample": "world-cup",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-world-cup-995586b65ea54efe81199869586c5fa0",
+      "version": "0.1.3"
+    },
+    {
+      "sample": "order-basics",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-order-basics-c5d51ae58297491186eaf9a0031c0b30",
+      "version": "0.1.3"
+    },
+    {
+      "sample": "supply-chain-en",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-supply-chain-en-497f4e6d0eb84134bca20a16bd039cd4",
+      "version": "0.1.2"
+    },
+    {
+      "sample": "world-cup-en",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-world-cup-en-deaecd4cc5e94fadb64aa1961e730269",
+      "version": "0.1.1"
+    },
+    {
+      "sample": "retail-gs1-en-us",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-retail-gs1-en-us-c48a2bc19e784064946f2e9326923fee",
+      "version": "0.1.0"
+    },
+    {
+      "sample": "retail-gs1-zh-cn",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-retail-gs1-zh-cn-47405a9d23774665b89ec49fe6079078",
+      "version": "0.1.0"
+    },
+    {
+      "sample": "manufacturing-industry-en-us",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-manufacturing-industry-en-us-3e584898f27c4278be7a398f23c73eed",
+      "version": "0.1.1"
+    },
+    {
+      "sample": "manufacturing-industry-zh-cn",
+      "full_card_unchanged": true,
+      "full_installation_unchanged": true,
+      "installationId": "inst-manufacturing-industry-zh-cn",
+      "version": "0.1.1"
+    }
+  ],
+  "runtime_before": [
+    {
+      "name": "agent-observability-7fbc67dfc7-bj7dd",
+      "uid": "2bbd5a5f-8114-40c8-bc4e-a18488e21ab4",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "agent-observability",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/agent-observability-ee:0.2.1-main.20261016154814.sha3673f27",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/agent-observability-ee@sha256:db8d44962f033db1916f380dc9e8b5f63baec496886facc58111409f388d53c0",
+          "ready": true,
+          "restartCount": 5
+        }
+      ]
+    },
+    {
+      "name": "agent-operator-integration-6895764c76-4njch",
+      "uid": "9135fae6-12ec-44a1-a737-fb89212f0c6b",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "agent-operator-integration",
+          "image": "docker.io/bkn-local/agent-operator-integration:c24-fix2-reviewed2",
+          "imageID": "docker.io/library/import-2026-10-19@sha256:469ac00fec903864b7ef48f3bcee0fe8f328328c7dcfb89a12b48f4c288fdd44",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "agent-retrieval-77f7469df8-pqlhd",
+      "uid": "ed7979c3-df57-4fb9-81d7-09434fbce446",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "agent-retrieval",
+          "image": "docker.io/bkn-local/agent-retrieval:c24-fix2-reviewed2",
+          "imageID": "sha256:8959f66e72e324adbe310a3f7facadd2e39296e505de932f5c45bedcfee76aa6",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "bkn-agent-6fd8b9d7f8-tc45z",
+      "uid": "255200f0-0d35-415f-a26a-0066521004ea",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "bkn-agent",
+          "image": "ghcr.io/openbkn-ai/bkn-agent:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/bkn-agent@sha256:dce2382b361d4b19d3611ab75213a8894dd3594601ede5601bcfad74fc2fae17",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-backend-77bfc7cd4f-hkpxh",
+      "uid": "daf44088-ce7e-4718-afa9-f1ac577a4f0e",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "bkn-backend",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-backend-ee:0.2.1-main.20261016154814.sha3673f27",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-backend-ee@sha256:60b7113acd3c197d92f627dd95cc65b37067405ae4f8dcaddf66324fcde3bc4a",
+          "ready": true,
+          "restartCount": 8
+        }
+      ]
+    },
+    {
+      "name": "bkn-safe-5cb689c497-9mbz8",
+      "uid": "cb8167ac-09b0-447d-aafc-446b49a3b8fb",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "bkn-safe",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-safe-ee:0.2.1-main.20261016154814.sha3673f27",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-safe-ee@sha256:582c3ea50660d0657c144217db017f0cf16a9542e558fae9a556edb66c063194",
+          "ready": true,
+          "restartCount": 5
+        }
+      ]
+    },
+    {
+      "name": "bkn-safe-hydra-76d7d776b5-ptzwx",
+      "uid": "03047780-5cb6-40fd-84a9-aa2ececfebd8",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "hydra",
+          "image": "ghcr.io/openbkn-ai/oryd/hydra:v26.2.0",
+          "imageID": "ghcr.io/openbkn-ai/oryd/hydra@sha256:530bf5b53cc801d533f79ec45707cff98c8f3b966b42ebdb5a4e6a86fbe9fc5b",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-safe-postgres-89c775cbd-mm65b",
+      "uid": "f9c68831-8beb-4eb6-9e8d-1b322ded5749",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "postgres",
+          "image": "ghcr.io/openbkn-ai/postgres:16",
+          "imageID": "ghcr.io/openbkn-ai/postgres@sha256:d3378e1a2b0accaf0fd8b2c7f110f18472cd68e458de7572595c45cfeb54c7ad",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-sample-database-0",
+      "uid": "cb674c1b-4c23-41a4-8f9d-f6dc6256e72a",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "mariadb",
+          "image": "ghcr.io/openbkn-ai/mariadb:11.4.7",
+          "imageID": "ghcr.io/openbkn-ai/mariadb@sha256:c5bb662f24634059a0748aa84bd0f982d50428ebd178e4b4eb40caec9582cc89",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-sample-studio-88b75b446-cjtkt",
+      "uid": "db25a52e-74e0-4cbb-bc3e-f692dde8271d",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "studio",
+          "image": "docker.io/bkn-local/bkn-sample-studio:main-contract-fixes-r2-20261016",
+          "imageID": "docker.io/library/import-2026-10-16@sha256:e7bf197b71b396ab401634c925c7dee63cbc46d14d3b892cd346068e1966e645",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-studio-75f774b874-lwx8z",
+      "uid": "9c28b1b4-d94c-42cc-8a90-bdf1e7c62b9f",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "bkn-studio",
+          "image": "docker.io/bkn-local/bkn-studio-ee:main-merged-b71152e-20261017",
+          "imageID": "docker.io/library/import-2026-10-17@sha256:1eef92c8a4aa24608ba38c70ca6148bb43243d9cc82bb7d20d281f98338f9f88",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "core-data-migrator-job-b6bm9",
+      "uid": "d4900d6d-b574-4c70-a2eb-7e6ffd6b3e58",
+      "phase": "Succeeded",
+      "containers": [
+        {
+          "name": "core-data-migrator",
+          "image": "ghcr.io/openbkn-ai/core-data-migrator:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/core-data-migrator@sha256:3cdd2ad09eaf5342cfe9547e5d51b8f8ae2071bcd45be91b03929739b9796bf2",
+          "ready": false,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "install-status-557cd98d77-l5tc6",
+      "uid": "a7698a0a-6700-4830-9651-647ebb47cb54",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "log-reader",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/library/python:3.12-alpine",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/library/python@sha256:9b8dad7f66b5c7751df6cb7a64a07812e86bed85d0116efe82b3a11209f1440d",
+          "ready": true,
+          "restartCount": 2
+        },
+        {
+          "name": "nginx",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/library/nginx:1.27-alpine",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/library/nginx@sha256:06777150f7cf8dff938cfaf5044b11a35fb2bc02ec4b4882685b12db08e97f01",
+          "ready": true,
+          "restartCount": 2
+        },
+        {
+          "name": "refresher",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/portainer/kubectl-shell:latest",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/portainer/kubectl-shell@sha256:765ccd773c526733f0e1f00ff400d68e8659081c102df34e0ac162b261b404e9",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "mf-model-api-754649d848-8gfcm",
+      "uid": "187ae4f6-4a3c-4380-9a97-69f268f26e9a",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "mf-model-api",
+          "image": "ghcr.io/openbkn-ai/mf-model-api:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/mf-model-api@sha256:735bce405207574aa402632f63f5204ffb1bc3725330b0f97416fa3bffd182d5",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "mf-model-manager-54979d8469-rk84z",
+      "uid": "b7c72802-0791-4cde-bff9-cdd57dfa896c",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "mf-model-manager",
+          "image": "ghcr.io/openbkn-ai/mf-model-manager:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/mf-model-manager@sha256:fde65fe74c3db83fbb275576c3eaac2cd79ad3fb0817d96b3ed3e02c846e07c3",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "minio-64fd8f7dc6-mt4f2",
+      "uid": "1239a45d-04b8-47df-a6f1-6faed5afacd2",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "minio",
+          "image": "docker.io/openbkn-local/minio:RELEASE.2025-09-07T16-13-09Z-arm64-src-01ce918",
+          "imageID": "docker.io/library/import-2026-10-08@sha256:6f9539e9bf9c7bd28e1a4079be92d21edd00873cd32da5522f69054fcdd12a09",
+          "ready": true,
+          "restartCount": 5
+        }
+      ]
+    },
+    {
+      "name": "ontology-query-86b89969bb-h67mv",
+      "uid": "e45af901-65d0-41e7-80bd-2b9f1b85d89a",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "ontology-query",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/ontology-query-ee:0.2.1-main.20261016154814.sha3673f27",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/ontology-query-ee@sha256:5301976a04d5f3c49b5ad8d6e0daa79a86afe5f2edad3cdf02c2ad6d62f0ebfa",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "oss-gateway-backend-56c589567-hmvgv",
+      "uid": "d2754ea0-6481-496b-a466-c9de9fa23a48",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "oss-gateway-backend",
+          "image": "ghcr.io/openbkn-ai/oss-gateway-backend:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/oss-gateway-backend@sha256:14a96db9ca245c5d2780ca0c6332f383feee5614c3f0906bacb32b309a90d7db",
+          "ready": true,
+          "restartCount": 6
+        }
+      ]
+    },
+    {
+      "name": "otelcol-contrib-5b449bb64f-q6r29",
+      "uid": "1736d9db-2c73-4bd6-8ffd-a39eba4f5258",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "otelcol-contrib",
+          "image": "ghcr.io/openbkn-ai/otelcol-openbkn:0.2.0-main.20261009001912.sha628dd24",
+          "imageID": "ghcr.io/openbkn-ai/otelcol-openbkn@sha256:8136771001ee5d91d777dabb73fb26791dab2feef468103a6935cf49b3fd30de",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "sandbox-control-plane-756d7bbbb9-wmhbt",
+      "uid": "b122b81e-8754-4d97-99ee-a51be11ecdc5",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "control-plane",
+          "image": "ghcr.io/openbkn-ai/sandbox-control-plane:0.2.1-main.20261021005935.shaba89095",
+          "imageID": "docker.io/library/import-2026-10-21@sha256:b5b5c292df625792bbad02b184fcc767b7fdb55201fa2404a39927fce7a4b8f1",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "sandbox-sandbox-sess-aoi-0",
+      "uid": "919cbd3c-3396-48a7-99ed-9b3892d5be01",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "executor",
+          "image": "ghcr.io/openbkn-ai/sandbox-template-python-basic:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/sandbox-template-python-basic@sha256:fe9eccc45cb63cc3325f1229cb469d39610d8a15f495182ffe37d4e44bfe7da9",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "vega-backend-669794bff6-pp82s",
+      "uid": "cc56ff31-86d9-4ef8-858d-842682b812bc",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "vega-backend",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/vega-backend-ee:0.2.1-main.20261020181403.sha7bb933f",
+          "imageID": "docker.io/library/import-2026-10-21@sha256:f4ff46b9f24f586c69deb3262cf21f40e41976788fe63ba3ccdd3e8181ad8e8c",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    }
+  ],
+  "runtime_after": [
+    {
+      "name": "agent-observability-7fbc67dfc7-bj7dd",
+      "uid": "2bbd5a5f-8114-40c8-bc4e-a18488e21ab4",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "agent-observability",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/agent-observability-ee:0.2.1-main.20261016154814.sha3673f27",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/agent-observability-ee@sha256:db8d44962f033db1916f380dc9e8b5f63baec496886facc58111409f388d53c0",
+          "ready": true,
+          "restartCount": 5
+        }
+      ]
+    },
+    {
+      "name": "agent-operator-integration-6895764c76-4njch",
+      "uid": "9135fae6-12ec-44a1-a737-fb89212f0c6b",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "agent-operator-integration",
+          "image": "docker.io/bkn-local/agent-operator-integration:c24-fix2-reviewed2",
+          "imageID": "docker.io/library/import-2026-10-19@sha256:469ac00fec903864b7ef48f3bcee0fe8f328328c7dcfb89a12b48f4c288fdd44",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "agent-retrieval-77f7469df8-pqlhd",
+      "uid": "ed7979c3-df57-4fb9-81d7-09434fbce446",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "agent-retrieval",
+          "image": "docker.io/bkn-local/agent-retrieval:c24-fix2-reviewed2",
+          "imageID": "sha256:8959f66e72e324adbe310a3f7facadd2e39296e505de932f5c45bedcfee76aa6",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "bkn-agent-6fd8b9d7f8-tc45z",
+      "uid": "255200f0-0d35-415f-a26a-0066521004ea",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "bkn-agent",
+          "image": "ghcr.io/openbkn-ai/bkn-agent:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/bkn-agent@sha256:dce2382b361d4b19d3611ab75213a8894dd3594601ede5601bcfad74fc2fae17",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-backend-77bfc7cd4f-hkpxh",
+      "uid": "daf44088-ce7e-4718-afa9-f1ac577a4f0e",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "bkn-backend",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-backend-ee:0.2.1-main.20261016154814.sha3673f27",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-backend-ee@sha256:60b7113acd3c197d92f627dd95cc65b37067405ae4f8dcaddf66324fcde3bc4a",
+          "ready": true,
+          "restartCount": 8
+        }
+      ]
+    },
+    {
+      "name": "bkn-safe-5cb689c497-9mbz8",
+      "uid": "cb8167ac-09b0-447d-aafc-446b49a3b8fb",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "bkn-safe",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-safe-ee:0.2.1-main.20261016154814.sha3673f27",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-safe-ee@sha256:582c3ea50660d0657c144217db017f0cf16a9542e558fae9a556edb66c063194",
+          "ready": true,
+          "restartCount": 5
+        }
+      ]
+    },
+    {
+      "name": "bkn-safe-hydra-76d7d776b5-ptzwx",
+      "uid": "03047780-5cb6-40fd-84a9-aa2ececfebd8",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "hydra",
+          "image": "ghcr.io/openbkn-ai/oryd/hydra:v26.2.0",
+          "imageID": "ghcr.io/openbkn-ai/oryd/hydra@sha256:530bf5b53cc801d533f79ec45707cff98c8f3b966b42ebdb5a4e6a86fbe9fc5b",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-safe-postgres-89c775cbd-mm65b",
+      "uid": "f9c68831-8beb-4eb6-9e8d-1b322ded5749",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "postgres",
+          "image": "ghcr.io/openbkn-ai/postgres:16",
+          "imageID": "ghcr.io/openbkn-ai/postgres@sha256:d3378e1a2b0accaf0fd8b2c7f110f18472cd68e458de7572595c45cfeb54c7ad",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-sample-database-0",
+      "uid": "cb674c1b-4c23-41a4-8f9d-f6dc6256e72a",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "mariadb",
+          "image": "ghcr.io/openbkn-ai/mariadb:11.4.7",
+          "imageID": "ghcr.io/openbkn-ai/mariadb@sha256:c5bb662f24634059a0748aa84bd0f982d50428ebd178e4b4eb40caec9582cc89",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-sample-studio-88b75b446-cjtkt",
+      "uid": "db25a52e-74e0-4cbb-bc3e-f692dde8271d",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "studio",
+          "image": "docker.io/bkn-local/bkn-sample-studio:main-contract-fixes-r2-20261016",
+          "imageID": "docker.io/library/import-2026-10-16@sha256:e7bf197b71b396ab401634c925c7dee63cbc46d14d3b892cd346068e1966e645",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "bkn-studio-75f774b874-lwx8z",
+      "uid": "9c28b1b4-d94c-42cc-8a90-bdf1e7c62b9f",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "bkn-studio",
+          "image": "docker.io/bkn-local/bkn-studio-ee:main-merged-b71152e-20261017",
+          "imageID": "docker.io/library/import-2026-10-17@sha256:1eef92c8a4aa24608ba38c70ca6148bb43243d9cc82bb7d20d281f98338f9f88",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "core-data-migrator-job-b6bm9",
+      "uid": "d4900d6d-b574-4c70-a2eb-7e6ffd6b3e58",
+      "phase": "Succeeded",
+      "containers": [
+        {
+          "name": "core-data-migrator",
+          "image": "ghcr.io/openbkn-ai/core-data-migrator:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/core-data-migrator@sha256:3cdd2ad09eaf5342cfe9547e5d51b8f8ae2071bcd45be91b03929739b9796bf2",
+          "ready": false,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "install-status-557cd98d77-l5tc6",
+      "uid": "a7698a0a-6700-4830-9651-647ebb47cb54",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "log-reader",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/library/python:3.12-alpine",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/library/python@sha256:9b8dad7f66b5c7751df6cb7a64a07812e86bed85d0116efe82b3a11209f1440d",
+          "ready": true,
+          "restartCount": 2
+        },
+        {
+          "name": "nginx",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/library/nginx:1.27-alpine",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/library/nginx@sha256:06777150f7cf8dff938cfaf5044b11a35fb2bc02ec4b4882685b12db08e97f01",
+          "ready": true,
+          "restartCount": 2
+        },
+        {
+          "name": "refresher",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/portainer/kubectl-shell:latest",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/portainer/kubectl-shell@sha256:765ccd773c526733f0e1f00ff400d68e8659081c102df34e0ac162b261b404e9",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "mf-model-api-754649d848-8gfcm",
+      "uid": "187ae4f6-4a3c-4380-9a97-69f268f26e9a",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "mf-model-api",
+          "image": "ghcr.io/openbkn-ai/mf-model-api:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/mf-model-api@sha256:735bce405207574aa402632f63f5204ffb1bc3725330b0f97416fa3bffd182d5",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "mf-model-manager-54979d8469-rk84z",
+      "uid": "b7c72802-0791-4cde-bff9-cdd57dfa896c",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "mf-model-manager",
+          "image": "ghcr.io/openbkn-ai/mf-model-manager:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/mf-model-manager@sha256:fde65fe74c3db83fbb275576c3eaac2cd79ad3fb0817d96b3ed3e02c846e07c3",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "minio-64fd8f7dc6-mt4f2",
+      "uid": "1239a45d-04b8-47df-a6f1-6faed5afacd2",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "minio",
+          "image": "docker.io/openbkn-local/minio:RELEASE.2025-09-07T16-13-09Z-arm64-src-01ce918",
+          "imageID": "docker.io/library/import-2026-10-08@sha256:6f9539e9bf9c7bd28e1a4079be92d21edd00873cd32da5522f69054fcdd12a09",
+          "ready": true,
+          "restartCount": 5
+        }
+      ]
+    },
+    {
+      "name": "ontology-query-86b89969bb-h67mv",
+      "uid": "e45af901-65d0-41e7-80bd-2b9f1b85d89a",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "ontology-query",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/ontology-query-ee:0.2.1-main.20261016154814.sha3673f27",
+          "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/ontology-query-ee@sha256:5301976a04d5f3c49b5ad8d6e0daa79a86afe5f2edad3cdf02c2ad6d62f0ebfa",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "oss-gateway-backend-56c589567-hmvgv",
+      "uid": "d2754ea0-6481-496b-a466-c9de9fa23a48",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "oss-gateway-backend",
+          "image": "ghcr.io/openbkn-ai/oss-gateway-backend:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/oss-gateway-backend@sha256:14a96db9ca245c5d2780ca0c6332f383feee5614c3f0906bacb32b309a90d7db",
+          "ready": true,
+          "restartCount": 6
+        }
+      ]
+    },
+    {
+      "name": "otelcol-contrib-5b449bb64f-q6r29",
+      "uid": "1736d9db-2c73-4bd6-8ffd-a39eba4f5258",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "otelcol-contrib",
+          "image": "ghcr.io/openbkn-ai/otelcol-openbkn:0.2.0-main.20261009001912.sha628dd24",
+          "imageID": "ghcr.io/openbkn-ai/otelcol-openbkn@sha256:8136771001ee5d91d777dabb73fb26791dab2feef468103a6935cf49b3fd30de",
+          "ready": true,
+          "restartCount": 2
+        }
+      ]
+    },
+    {
+      "name": "sandbox-control-plane-756d7bbbb9-wmhbt",
+      "uid": "b122b81e-8754-4d97-99ee-a51be11ecdc5",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "control-plane",
+          "image": "ghcr.io/openbkn-ai/sandbox-control-plane:0.2.1-main.20261021005935.shaba89095",
+          "imageID": "docker.io/library/import-2026-10-21@sha256:b5b5c292df625792bbad02b184fcc767b7fdb55201fa2404a39927fce7a4b8f1",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "sandbox-sandbox-sess-aoi-0",
+      "uid": "919cbd3c-3396-48a7-99ed-9b3892d5be01",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "executor",
+          "image": "ghcr.io/openbkn-ai/sandbox-template-python-basic:0.2.1-main.20261016170546.sha37b2b3b",
+          "imageID": "ghcr.io/openbkn-ai/sandbox-template-python-basic@sha256:fe9eccc45cb63cc3325f1229cb469d39610d8a15f495182ffe37d4e44bfe7da9",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "vega-backend-669794bff6-pp82s",
+      "uid": "cc56ff31-86d9-4ef8-858d-842682b812bc",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "vega-backend",
+          "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/vega-backend-ee:0.2.1-main.20261020181403.sha7bb933f",
+          "imageID": "docker.io/library/import-2026-10-21@sha256:f4ff46b9f24f586c69deb3262cf21f40e41976788fe63ba3ccdd3e8181ad8e8c",
+          "ready": true,
+          "restartCount": 0
+        }
+      ]
+    }
+  ],
+  "platform_updates": 0,
+  "formal_questions": 0,
+  "model_calls": 0,
+  "native_interactions": 0,
+  "function_executions": 0,
+  "historical_qa": {
+    "en_us": {
+      "passed": 96,
+      "total": 100
+    },
+    "zh_cn": {
+      "passed": 96,
+      "total": 100
+    },
+    "targeted_post_fix_four_paths": {
+      "passed": 4,
+      "total": 4
+    },
+    "new_full_bank_run": false
+  },
+  "limitations": [
+    "Limited 0.2.5 fresh offline install and platform-provided smoke only: no formal question, model call, new native interaction or mounted function execution in this run.",
+    "Platform shared-MariaDB runtime discards dbInit/dbVerify stdout and does not persist raw hook output. The installed database stage is the actual success receipt; exact-package database.py requires all typed rows, version and lock checks before zero exit. No hook was rerun for evidence.",
+    "PlatformVerify persisted checks cover ownership,20 object types,29 relations,20 resource bindings,20 live object queries (limit2 per table); capabilitySummary records3 functions,2 metrics and1 Skill registration/validation, not execution.",
+    "Skill contains a source document relative reference ../../docs/business-capability-contract.md. The source doc is in archive docs/, outside the mounted Skill directory; no mounted attachment resolution is claimed. This existing0.2.4 operational-payload limitation is retained.",
+    "Local AOI/retrieval c24-fix2-reviewed2 and sample-studio main-contract-fixes-r2 images remain part of the8081 test environment; exact before/after runtime images retained. No platform update was performed.",
+    "arm64 shared product MariaDB runtime only; AMD64 and outbound-network-isolation were not runtime validated.",
+    "Historical0.2.4 first full run EN96/100 and ZH96/100 and separately targeted4/4 are historical, at original evidence/digests. This0.2.5 installation smoke does not establish fresh full-bank100% accuracy.",
+    "EN install receipt spans approximately30.5min of host wall clock; no cause or continuous-execution/performance claim is inferred from this duration. ZH receipt spans approximately104sec. Both are single attempts, with no retry."
+  ],
+  "local_preflight_interruption": {
+    "stage": "local preflight before any platform call",
+    "cause": "Operator-added unsupported assertion that mounted Skill relative source-doc reference should change. Not a package regression; 0.2.5 intentionally preserves 0.2.4 operational payload.",
+    "assertion": "all ../../docs/ not present in Skill contents",
+    "resolution": "Removed out-of-scope assertion with parent approval; kept existing source-reference limitation. No package or source modification.",
+    "platform_install_attempts_before_interruption": 0,
+    "platform_failure": false
+  },
+  "runtime_images_and_identities_unchanged": true
+}
