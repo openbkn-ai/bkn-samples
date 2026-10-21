@@ -25,6 +25,7 @@ def prepare(sample_dir, version, output):
         spec['requires']['capabilities'].append('database.shared')
     archive = next(a for a in spec['artifacts'] if a['type'] == 'archive')
     archive['digest'] = report['package']['digest']
+    archive['sizeBytes'] = report['package']['size']
     archive['locations'] = ['https://github.com/openbkn-ai/bkn-samples/releases/download/'
                             f"sample-{manifest['metadata']['sampleId']}-v{version}/package.tar.gz"]
     spec['artifacts'] = [archive]

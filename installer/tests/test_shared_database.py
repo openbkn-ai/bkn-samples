@@ -118,6 +118,7 @@ class SharedDatabaseTest(unittest.TestCase):
             archive = manifest['spec']['artifacts'][0]
             self.assertEqual(len(manifest['spec']['artifacts']), 1)
             self.assertEqual(archive['digest'], report['package']['digest'])
+            self.assertEqual(archive['sizeBytes'], package.stat().st_size)
             import tarfile
             with tarfile.open(package) as source:
                 descriptor = json.load(source.extractfile('offline-release.json'))

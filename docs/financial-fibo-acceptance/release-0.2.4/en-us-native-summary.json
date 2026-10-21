@@ -1,0 +1,203 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "20-distinct-live-resource-bindings",
+      "passed": true,
+      "bindings": [
+        {
+          "object": "legal_entities",
+          "resource_id": "01a15c68-4125-7383-ba90-308d2d42ce4e"
+        },
+        {
+          "object": "legal_entity_identifiers",
+          "resource_id": "01a15c68-413b-7109-83ff-5869be7db0a9"
+        },
+        {
+          "object": "financial_instruments",
+          "resource_id": "01a15c68-4132-7c6d-83d4-208b2b073d12"
+        },
+        {
+          "object": "security_identifiers",
+          "resource_id": "01a15c68-4135-7c82-ae40-0a5f457976d9"
+        },
+        {
+          "object": "portfolios",
+          "resource_id": "01a15c68-4147-7683-8b68-3da0c53a24e6"
+        },
+        {
+          "object": "accounts",
+          "resource_id": "01a15c68-411f-7358-ba6f-93e86c2a1232"
+        },
+        {
+          "object": "opening_positions",
+          "resource_id": "01a15c68-413e-77d9-825d-3470c1522646"
+        },
+        {
+          "object": "trade_orders",
+          "resource_id": "01a15c68-4155-7f0f-9444-760a2dde4cf0"
+        },
+        {
+          "object": "securities_transactions",
+          "resource_id": "01a15c68-412a-7ded-b929-1a75f75fcf7e"
+        },
+        {
+          "object": "settlement_instructions",
+          "resource_id": "01a15c68-4122-7441-a698-45966b46b06b"
+        },
+        {
+          "object": "settlement_events",
+          "resource_id": "01a15c68-414d-7466-a23b-551ce03073b9"
+        },
+        {
+          "object": "positions",
+          "resource_id": "01a15c68-4153-73b6-b6b8-0ad12e236c48"
+        },
+        {
+          "object": "market_prices",
+          "resource_id": "01a15c68-4159-7b98-b56d-0f5684447143"
+        },
+        {
+          "object": "fx_rates",
+          "resource_id": "01a15c68-4130-7582-93c7-e44e8e6b26d6"
+        },
+        {
+          "object": "valuation_snapshots",
+          "resource_id": "01a15c68-411b-7526-aa94-ed60b057d19a"
+        },
+        {
+          "object": "issuer_exposures",
+          "resource_id": "01a15c68-4141-75f1-a86b-2a9b5b9f8de5"
+        },
+        {
+          "object": "exposure_contributions",
+          "resource_id": "01a15c68-4150-73e3-b2df-0d879b92eefc"
+        },
+        {
+          "object": "counterparty_exposures",
+          "resource_id": "01a15c68-4144-7722-a565-127056561e4a"
+        },
+        {
+          "object": "mandate_limits",
+          "resource_id": "01a15c68-4127-7ef0-9be8-4d98ae22c1ae"
+        },
+        {
+          "object": "limit_assessments",
+          "resource_id": "01a15c68-414a-75ca-bbb0-715048385d88"
+        }
+      ]
+    },
+    {
+      "name": "20-tables-78356-typed-records",
+      "passed": true,
+      "counts": {
+        "legal_entities": 150,
+        "legal_entity_identifiers": 150,
+        "financial_instruments": 100,
+        "security_identifiers": 100,
+        "portfolios": 200,
+        "accounts": 200,
+        "opening_positions": 1600,
+        "trade_orders": 8000,
+        "securities_transactions": 8000,
+        "settlement_instructions": 8000,
+        "settlement_events": 16176,
+        "positions": 8000,
+        "market_prices": 498,
+        "fx_rates": 150,
+        "valuation_snapshots": 8000,
+        "issuer_exposures": 4000,
+        "exposure_contributions": 8000,
+        "counterparty_exposures": 1000,
+        "mandate_limits": 1032,
+        "limit_assessments": 5000
+      },
+      "evidence_basis": "Successful fixed-package database stage runs exact dbInit/dbVerify hooks; each checks every typed row against locked CSV, not separately re-read via MCP."
+    },
+    {
+      "name": "settlement_asof",
+      "passed": true,
+      "rows": 32,
+      "source_parity": true,
+      "source_parity_not_independent_oracle": true,
+      "seconds": 1.909045125
+    },
+    {
+      "name": "valuation_asof",
+      "passed": true,
+      "rows": 8,
+      "source_parity": true,
+      "source_parity_not_independent_oracle": true,
+      "seconds": 1.8569795830000002
+    },
+    {
+      "name": "limit_assessment_asof",
+      "passed": true,
+      "rows": 5,
+      "source_parity": true,
+      "source_parity_not_independent_oracle": true,
+      "seconds": 1.9330007499999997,
+      "frozen_scalar_regression": {
+        "limit_id": "LIM-046-C",
+        "observed_value": "2002.41",
+        "threshold": "500.000000",
+        "excess_value": "1502.410000",
+        "recorded_difference": "0.000000"
+      }
+    },
+    {
+      "name": "mounted-skill-source-parity",
+      "passed": true,
+      "attachments": "Source Skill directory and mounted package declare only SKILL.md; ../../docs/business-capability-contract.md is a source-document reference, not an attached Skill file. Small technical checks use function schemas and Skill text, not an attachment; mounted reference resolution was not verified.",
+      "skill_id": "01a15c6d-4ad3-7160-8f01-0e5dfa3acc31"
+    },
+    {
+      "name": "Recorded sell receivable USD",
+      "passed": true,
+      "metric_id": "01a15c6d-42b8-790d-b673-efdaa40d7a8d",
+      "instance": "CE-046-4",
+      "value": 2002.41
+    },
+    {
+      "name": "Recorded issuer concentration",
+      "passed": true,
+      "metric_id": "01a15c6d-3cd5-7e7e-a86d-3e8b21224607",
+      "instance": "IE-046-1-4",
+      "value": 0.254176
+    }
+  ],
+  "error": null,
+  "interaction_id": "int_398efce49d2e3db83c83a7ab5f0d1fa6",
+  "finish": {
+    "value": {
+      "execution_status": "completed",
+      "evidence_status": "assembling",
+      "interaction_id": "int_398efce49d2e3db83c83a7ab5f0d1fa6",
+      "conversation_id": "conv_5da918f3aef605c8662a3316d44f24c5"
+    },
+    "raw": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"execution_status\":\"completed\",\"evidence_status\":\"assembling\",\"interaction_id\":\"int_398efce49d2e3db83c83a7ab5f0d1fa6\",\"conversation_id\":\"conv_5da918f3aef605c8662a3316d44f24c5\"}"
+        }
+      ],
+      "structuredContent": {
+        "conversation_id": "conv_5da918f3aef605c8662a3316d44f24c5",
+        "evidence_status": "assembling",
+        "execution_status": "completed",
+        "interaction_id": "int_398efce49d2e3db83c83a7ab5f0d1fa6"
+      }
+    }
+  },
+  "evidence_terminal": "complete",
+  "evidence_timed_out": false,
+  "formal_questions": 0,
+  "model_calls": 0,
+  "limitations": [
+    "Source-kernel parity is not an independent oracle.",
+    "Database full typed content is proved by fixed-package dbVerify stage success, not duplicated MCP full-table reads.",
+    "Only PF046 actual 2027-02-28 representatives, not full-bank QA or blanket model accuracy.",
+    "Mounted Skill contains only SKILL.md; relative business-capability-contract.md source reference is not an attachment and was not resolved at runtime; current small checks did not require it."
+  ]
+}
