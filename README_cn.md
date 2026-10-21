@@ -29,8 +29,8 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 | [世界杯](samples/world-cup-en/) | 英文 | 对象查询、多表关联、排名及跨届赛事分析，提供 50 道评测题 | 在线目录已发布 |
 | [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 仅离线发布；要求 OpenBKN ≥ 0.2.1 |
 | [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | 中文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 仅离线发布；要求 OpenBKN ≥ 0.2.1 |
-| [Financial Portfolio Operations（FIBO）](samples/financial-fibo-en-us/) | 英文 | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 固定制品0.2.4；在线版本以官方目录为准；要求 OpenBKN ≥ 0.2.1 |
-| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 中文本体与业务数据，覆盖交易后运营控制；20 张表、78,356 条记录和 100 道评测题 | 固定制品0.2.4；在线版本以官方目录为准；要求 OpenBKN ≥ 0.2.1 |
+| [Financial Portfolio Operations（FIBO）](samples/financial-fibo-en-us/) | 英文 | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 固定制品0.2.5；在线版本以官方目录为准；要求 OpenBKN ≥ 0.2.1 |
+| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 中文本体与业务数据，覆盖交易后运营控制；20 张表、78,356 条记录和 100 道评测题 | 固定制品0.2.5；在线版本以官方目录为准；要求 OpenBKN ≥ 0.2.1 |
 | [Food Supply and Recall（GS1）](samples/retail-gs1-en-us/) | 英文 | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | 固定制品0.1.0已发布，目录PR待审核；要求OpenBKN ≥ 0.2.1 |
 | [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | 中文 | 中文本体、数据及业务能力，与英文样例事实对应；15张表、2,911条记录、100题 | 固定制品0.1.0已发布，目录PR待审核；要求OpenBKN ≥ 0.2.1 |
 
@@ -40,7 +40,7 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 
 两个制造业样例刻意不加入官方目录和历史 `020` 发现入口。请在目标集群预先加载与离线包匹配的数据镜像，再导入固定离线包；它们使用独立数据库和知识网络 ID，可并存安装。
 
-两个金融样例以 MIT 许可的[选定 FIBO 来源](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890)作语义参考，业务数据全部虚构，不宣称全量 FIBO。**[英文0.2.4](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.4)** 与 **[中文0.2.4](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.4)** 固定包每语含3个函数、2个已记录快照指标、1个调查Skill，要求 **OpenBKN 0.2.1及以上**（`>=0.2.1 <0.3.0`）。可从Release下载固定包离线导入，在线可用版本以已合并官方目录为准。原单轮中英文各100题的财务字段得分仍为**各96/100**；平台修复后的指定历史工具路径为**4/4（该四项100%）**，执行和证据均完成，不代表全量100%或新盲测准确率。固定包最终技术检查**16/16（该检查集100%）**；英文首装失败经一次标准重试恢复，安装过程及边界另记于[发布验收报告](docs/financial-fibo-release-0.2.4.zh-CN.md)。历史0.1.x制品保持不变。
+两个金融样例以 MIT 许可的[选定 FIBO 来源](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890)作语义参考，业务数据全部虚构，不宣称全量 FIBO。**[英文0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.5)** 与 **[中文0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.5)** 每语含3个函数、2个已记录快照指标、1个调查Skill，要求 **OpenBKN 0.2.1及以上**（`>=0.2.1 <0.3.0`）。0.2.5仅修正发布说明和执行能力要求，业务内容和题库不变；可下载固定包离线导入，在线可用版本以已合并官方目录为准。本修正版仅验证全新安装、兼容门槛与包一致性，不新增模型问答。历史单轮财务字段仍为**中英文各96/100**；指定历史工具路径为**4/4（该四项100%）**、0.2.4代表性技术检查为**16/16（该检查集100%）**，均不代表0.2.5全量问答准确率。详见[0.2.5发布验收与边界](docs/financial-fibo-release-0.2.5.zh-CN.md)。历史0.2.4及0.1.x资产不变。
 
 世界杯数据是冻结的历史快照，包含截至 2022 年的男足赛事和截至 2019 年的女足赛事；不同明细表的覆盖范围有所差异。各样例的数据范围、许可和场景假设见对应 README。
 
