@@ -1,0 +1,218 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "financial-fibo-zh-cn",
+    "version": "0.2.4",
+    "displayName": "金融投资组合运营（中文）",
+    "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT · Synthetic demonstration data / 虚构演示数据"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-21T03:19:11Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:9bb21f26060dc41667fee99eb90de9fb865ff0d1894337fa10dcc1b8ab569791"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:92fc86e5f2c6452ba21d77e0eebd4312c1d720441d8da515bf31a648b380f502"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:f99c88eadabcae64752039cca4ea9da3ad4a26d7fdab3bd0303a6bf23e59e519",
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-financial-fibo-zh-cn-v0.2.4/package.tar.gz"
+        ],
+        "sizeBytes": 994468
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "financial-fibo-zh-cn-network",
+        "questions": [
+          "INS-001 的发行方编号和名称是什么？",
+          "INS-002 使用什么资产类别与报价口径？",
+          "PF-049 的名称和本位币是什么？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "financial-fibo-zh-cn-network"
+        }
+      ],
+      "functionPackages": [],
+      "skillPackages": []
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "financial-fibo-zh-cn-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "financial_fibo_zh_cn",
+          "expectedTables": 20
+        }
+      ],
+      "bindings": [
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "legal_entities",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "legal_entities"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "legal_entity_identifiers",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "legal_entity_identifiers"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "financial_instruments",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "financial_instruments"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "security_identifiers",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "security_identifiers"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "portfolios",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "portfolios"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "accounts",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "accounts"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "opening_positions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "opening_positions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "trade_orders",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "trade_orders"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "securities_transactions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "securities_transactions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "settlement_instructions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "settlement_instructions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "settlement_events",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "settlement_events"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "positions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "positions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "market_prices",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "market_prices"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "fx_rates",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "fx_rates"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "valuation_snapshots",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "valuation_snapshots"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "issuer_exposures",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "issuer_exposures"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "exposure_contributions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "exposure_contributions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "counterparty_exposures",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "counterparty_exposures"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "mandate_limits",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "mandate_limits"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "limit_assessments",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "limit_assessments"
+        }
+      ]
+    }
+  }
+}

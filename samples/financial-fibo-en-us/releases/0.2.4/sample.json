@@ -1,0 +1,218 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "financial-fibo-en-us",
+    "version": "0.2.4",
+    "displayName": "Financial Portfolio Operations (EN)",
+    "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT · Synthetic demonstration data / 虚构演示数据"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-21T03:19:09Z",
+      "defaultLocale": "en-US",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:9bb21f26060dc41667fee99eb90de9fb865ff0d1894337fa10dcc1b8ab569791"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:92fc86e5f2c6452ba21d77e0eebd4312c1d720441d8da515bf31a648b380f502"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:6c4eb89b9755b5af335845502838682a5ce89293d6e4ea135ba338d665789a56",
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-financial-fibo-en-us-v0.2.4/package.tar.gz"
+        ],
+        "sizeBytes": 995597
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "financial-fibo-en-us-network",
+        "questions": [
+          "Who issues INS-001, and what is the issuer name?",
+          "What asset class and price basis does INS-002 use?",
+          "What is PF-049’s name and base currency?"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "financial-fibo-en-us-network"
+        }
+      ],
+      "functionPackages": [],
+      "skillPackages": []
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "financial-fibo-en-us-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "financial_fibo_en_us",
+          "expectedTables": 20
+        }
+      ],
+      "bindings": [
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "legal_entities",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "legal_entities"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "legal_entity_identifiers",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "legal_entity_identifiers"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "financial_instruments",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "financial_instruments"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "security_identifiers",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "security_identifiers"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "portfolios",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "portfolios"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "accounts",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "accounts"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "opening_positions",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "opening_positions"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "trade_orders",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "trade_orders"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "securities_transactions",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "securities_transactions"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "settlement_instructions",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "settlement_instructions"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "settlement_events",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "settlement_events"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "positions",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "positions"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "market_prices",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "market_prices"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "fx_rates",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "fx_rates"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "valuation_snapshots",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "valuation_snapshots"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "issuer_exposures",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "issuer_exposures"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "exposure_contributions",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "exposure_contributions"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "counterparty_exposures",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "counterparty_exposures"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "mandate_limits",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "mandate_limits"
+        },
+        {
+          "contentId": "financial-fibo-en-us-network",
+          "objectTypeId": "limit_assessments",
+          "dataDependencyId": "financial-fibo-en-us-data",
+          "tableName": "limit_assessments"
+        }
+      ]
+    }
+  }
+}
