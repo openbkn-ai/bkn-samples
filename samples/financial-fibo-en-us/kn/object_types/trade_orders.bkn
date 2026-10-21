@@ -20,9 +20,9 @@ Local operational extension; no FIBO equivalence asserted.
 | instrument_id | Instrument Id | string | Foreign key to financial_instruments; blank only where contract declares absent/inapplicable evidence. | instrument_id |
 | counterparty_id | Counterparty Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | counterparty_id |
 | order_date | Order Date | date | Date of this business event under the fictional weekday calendar; distinguish planned and actual. | order_date |
-| side | Side | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. Allowed values: buy, sell. | side |
+| side | Side | string | Source buy/sell direction uses the language-specific allowed values. Native reconstructed row.side uses stable buy/sell machine codes in both languages. Allowed values: buy, sell. | side |
 | order_quantity | Order Quantity | decimal | Positive business quantity in the linked instrument’s share or face units. | order_quantity |
-| order_status | Order Status | string | Explicit controlled state/reason; absence never implies completion or acceptance. | order_status |
+| order_status | Order Status | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: accepted, planned. | order_status |
 | view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |
 | known_date | Known Date | date | Date this fact/assumption was available; actual facts cannot use future knowledge, planned assumptions are known by 2027-02-28. | known_date |
 

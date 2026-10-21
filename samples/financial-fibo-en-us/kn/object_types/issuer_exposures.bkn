@@ -20,8 +20,8 @@ Local operational extension; no FIBO equivalence asserted.
 | issuer_id | Issuer Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | issuer_id |
 | as_of_date | As Of Date | date | Business snapshot date, distinct from quote/fixing date and date of knowledge. | as_of_date |
 | exposure_status | Exposure Status | string | Explicit controlled state/reason; absence never implies completion or acceptance. Allowed values: blocked, complete. | exposure_status |
-| exposure_amount | Exposure Amount | decimal | Issuer numerator: sum of contributing position USD values; unavailable when portfolio pricing is incomplete. | exposure_amount |
-| denominator_amount | Denominator Amount | decimal | All securities-position USD values in this portfolio/date; any blocked position makes this blank. Cash is excluded. | denominator_amount |
+| exposure_amount | Exposure Amount | decimal | Recorded issuer numerator may be blank under snapshot-wide controls. Reconstruction preserves the issuer amount when all its contributions are known, even if another issuer blocks the portfolio denominator. Proved zero is zero; uncovered holdings cannot be zero-filled. | exposure_amount |
+| denominator_amount | Denominator Amount | decimal | All securities-position USD values in this portfolio/date, excluding cash. Any unknown contribution makes the total unknown; a proved zero total remains zero but does not define an issuer ratio. | denominator_amount |
 | ratio | Ratio | decimal | Issuer numerator divided by complete securities-asset denominator, 0–1 ratio, 6dp; not percent points or NAV share. | ratio |
 | currency | Currency | string | Base currency USD; amounts are expressed in dollars. | currency |
 | view_kind | View Kind | string | actual is a synthetic observed fact; planned is an explicit forecast known at the observation date, never actual future completion. Allowed values: actual, planned. | view_kind |

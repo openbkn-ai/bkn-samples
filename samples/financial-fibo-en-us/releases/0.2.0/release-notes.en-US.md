@@ -1,0 +1,1 @@
+Candidate: atomic post-trade reconstruction, recorded snapshot metrics, read-only investigation Skill and separated evaluation. Requires OpenBKN >=0.2.1 <0.3.0. Not released; verification results are reported independently.

@@ -1,0 +1,54 @@
+[
+  {
+    "service": "control-plane",
+    "runtime_oci_wrapper_sha256": "b5b5c292df625792bbad02b184fcc767b7fdb55201fa2404a39927fce7a4b8f1",
+    "tag_arm64_manifest_sha256": "6494a7810559ab4d606aaf87e6e4422d4ff6f8166f6b5c9789840be8718a8acb",
+    "runtime_wrapper_contains_tag_manifest": true,
+    "wrapper": {
+      "schemaVersion": 2,
+      "mediaType": "application/vnd.oci.image.index.v1+json",
+      "manifests": [
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "digest": "sha256:6494a7810559ab4d606aaf87e6e4422d4ff6f8166f6b5c9789840be8718a8acb",
+          "size": 2269,
+          "annotations": {
+            "containerd.io/distribution.source.ghcr.io": "openbkn-ai/sandbox-control-plane",
+            "io.containerd.image.name": "ghcr.io/openbkn-ai/sandbox-control-plane:0.2.1-main.20261021005935.shaba89095",
+            "org.opencontainers.image.ref.name": "0.2.1-main.20261021005935.shaba89095"
+          },
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "service": "vega",
+    "runtime_oci_wrapper_sha256": "f4ff46b9f24f586c69deb3262cf21f40e41976788fe63ba3ccdd3e8181ad8e8c",
+    "tag_arm64_manifest_sha256": "8680146aada4a65369a4f7524f1fb44724927c6d1fc282e34ad38afffe0e4f03",
+    "runtime_wrapper_contains_tag_manifest": true,
+    "wrapper": {
+      "schemaVersion": 2,
+      "mediaType": "application/vnd.oci.image.index.v1+json",
+      "manifests": [
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "digest": "sha256:8680146aada4a65369a4f7524f1fb44724927c6d1fc282e34ad38afffe0e4f03",
+          "size": 1681,
+          "annotations": {
+            "containerd.io/distribution.source.swr.cn-east-3.myhuaweicloud.com": "openbkn-ai-ee/vega-backend-ee",
+            "io.containerd.image.name": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/vega-backend-ee:0.2.1-main.20261020181403.sha7bb933f",
+            "org.opencontainers.image.ref.name": "0.2.1-main.20261020181403.sha7bb933f"
+          },
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        }
+      ]
+    }
+  }
+]

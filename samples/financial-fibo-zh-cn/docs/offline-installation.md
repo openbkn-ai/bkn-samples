@@ -1,11 +1,13 @@
-# Offline candidate installation / 离线候选包安装
+# 离线候选包安装
 
-Requires OpenBKN >=0.2.1 <0.3.0 with sample offline.v2 and database.shared support.
+要求 **OpenBKN >=0.2.1 <0.3.0**，并支持 `sample offline.v2` 与 `database.shared`。
 
-1. Build the candidate using `python3 -m tools.publication.build_candidate samples/SAMPLE --version VERSION --output /absolute/output --shared-database` from the source repository. The Git index is the explicit file allowlist; candidate bytes come from the working tree. No commit, push or catalogue update is required for local acceptance.
-2. In Studio, import the resulting `package.tar.gz` as an offline sample. The corresponding API is `POST /api/studio/samples/import` with raw gzip bytes and an authorized local session.
-3. Install the imported version from its sample card. The installer creates an owned shared-MariaDB database, discovers 20 table resources, imports the BKN directory and binds all 20 objects. It checks all 78,356 typed records against locked CSV contents, model counts, bindings and live queries for every object type.
-4. Wait until all five stages succeed. A partial install is not acceptance. For removal use the sample card's uninstall operation, which uses installer ownership receipts; do not delete shared databases or unrelated networks manually.
-5. Run all 100 actual question-only model conversations separately for each language. Use the frozen answers only after model answers are saved; report answer quality and tool/lifecycle failures separately from deterministic SQL replay.
+1. 在仓库根目录执行 `python3 -m tools.publication.build_candidate samples/SAMPLE --version VERSION --output /absolute/output --shared-database`。Git 暂存区明确限定交付文件，包内容取工作区文件；本地验收不需要提交、推送或更新目录清单。
+2. 在 Studio 将生成的 `package.tar.gz` 导入为离线样例。对应接口为 `POST /api/studio/samples/import`，通过已有本地授权会话提交原始 gzip 字节。
+3. 在样例卡片安装导入版本。安装器创建受所有权回执管理的共享 MariaDB 数据库，发现20张表、导入BKN并绑定20类对象；同时安装并核验2个已记录快照指标、3个原生只读函数及1个Skill。安装还逐字段核对78,356条记录、模型数量、绑定和全部对象类的实际查询。
+4. 必须等待5个阶段全部成功；部分安装不算验收。卸载通过样例卡片的标准卸载操作，按所有权回执清理资源，不手工删除共享数据库或其他知识网络。
+5. 分别执行中英文100题公开回归及30题复杂能力开发集，固定版本各三轮。模型只接收题目、输出结构和已安装能力；保存响应后才使用参考答案评分。公开开发参考、独立盲测、原始数据扰动与确定性校验分开报告，保留失败和工具/会话错误。
 
-两个语言是独立样例，具有独立数据库、知识网络和安装回执。不得把本地候选包加入线上发布列表。原始问答记录、模型与工具调用、评分、包摘要保存在独立验收目录，避免混入数据源。
+两个语言是独立样例，具有独立数据库、知识网络和安装回执。当前候选不加入线上发布目录。隔离盲测、扰动答案、原始模型记录和评分保存在独立验收目录，不混入数据源或安装包。SQL回放与原生函数比对分别证明冻结查询和部署一致性，不能代替模型业务准确率。
+
+候选 **0.2.4** 尚未发布，本PR只提交源码与实际验收记录。源码合并后从固定提交构建并验收精确包，再另开固定制品及目录发布PR；不可把历史包证明改标为本版本。详见[实际结果与边界](../../../docs/financial-fibo-183-readiness.zh-CN.md)。

@@ -32,7 +32,7 @@ tags: [finance, fibo]
 | price | 价格 | decimal | 按关联工具报价口径表达的本币价格，须配合 price_multiplier 使用。 | price |
 | currency | 币种 | string | 工具计价币种，须与对应成交、结算指令、开仓及持仓一致。 | currency |
 | approval | 批准状态 | string | 明确受控的状态或原因；缺失记录不得被推断为完成或通过。 允许取值：已批准, 未批准. | approval |
-| pricing_source | 价格来源 | string | 已声明的合成模拟价格源，不是真实交易所或生产行情接口。 | pricing_source |
+| pricing_source | 价格来源 | string | 已声明的合成模拟价格源，不是真实交易所或生产行情接口。 允许取值：模拟价格源. | pricing_source |
 | view_kind | 视图类型 | string | 实际为虚构已观测事实，计划为观察日已知的明确预测，不能充当实际未来完成。 允许取值：实际, 计划. | view_kind |
 | known_date | 已知日期 | date | 事实或假设可知日期；实际事实不能使用未来知识，计划假设必须于 2027-02-28 前已知。 | known_date |
 

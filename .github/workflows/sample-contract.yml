@@ -35,7 +35,13 @@ jobs:
       - name: Validate sample contracts
         run: python -m unittest discover -s installer/tests -v
       - name: Validate bilingual FIBO financial semantics and frozen answers
-        run: python tools/financial_fibo/test_financial_fibo.py
+        run: |
+          python tools/financial_fibo/test_financial_fibo.py
+          python tools/financial_fibo/test_capabilities.py
+          python tools/financial_fibo/test_known_fields.py
+          python tools/financial_fibo/test_issuer_known_amount.py
+          python tools/financial_fibo/test_observations.py
+          python tools/financial_fibo/test_response_contracts.py
       - name: Validate GS1 retail source and recorded acceptance
         run: |
           python tools/retail_source_audit.py

@@ -1,0 +1,91 @@
+[
+  {
+    "language": "en-us",
+    "id": "FIN-010",
+    "business_regression_passed": true,
+    "checks": {
+      "all_expected_fields_match": true,
+      "actual_rows": 1,
+      "expected_rows": 1,
+      "all_fetches_no_cursor": "proven by original in-sandbox assertions",
+      "date_filter_shape": "original ISO date string; row dates not separately emitted"
+    },
+    "exception": null,
+    "interaction_id": "int_5f5acb26474211022dec316dae6fd4a9",
+    "finish": {
+      "conversation_id": "conv_af76cc2b11bb1577463a77b114f31e71",
+      "execution_status": "completed",
+      "evidence_status": "assembling",
+      "interaction_id": "int_5f5acb26474211022dec316dae6fd4a9"
+    },
+    "evidence_terminal": "complete",
+    "evidence_timed_out": false,
+    "finish_exception": null
+  },
+  {
+    "language": "en-us",
+    "id": "FIN-088",
+    "business_regression_passed": true,
+    "checks": {
+      "all_expected_fields_match": true,
+      "actual_rows": 4,
+      "expected_rows": 4,
+      "current_limit_assessment_matches": true,
+      "historical_contribution_payload_reconciles_to_current_total": "2002.41",
+      "caveat": "Second original request embeds historical contribution literal; it is intentionally retained to replay the same long payload."
+    },
+    "exception": null,
+    "interaction_id": "int_d60c8f89ec4f7e528d30b391eeb5cf91",
+    "finish": {
+      "interaction_id": "int_d60c8f89ec4f7e528d30b391eeb5cf91",
+      "conversation_id": "conv_04bca6bff3ee59ed764e8920e507c3c9",
+      "execution_status": "completed",
+      "evidence_status": "assembling"
+    },
+    "evidence_terminal": "complete",
+    "evidence_timed_out": false,
+    "finish_exception": null
+  },
+  {
+    "language": "zh-cn",
+    "id": "FIN-015",
+    "business_regression_passed": true,
+    "checks": {
+      "all_expected_fields_match": true,
+      "actual_rows": 8,
+      "expected_rows": 8
+    },
+    "exception": null,
+    "interaction_id": "int_dcd2f890eef46100027eb51e9398d925",
+    "finish": {
+      "interaction_id": "int_dcd2f890eef46100027eb51e9398d925",
+      "conversation_id": "conv_5a8d9c420f83e205e949e1066287c9e8",
+      "execution_status": "completed",
+      "evidence_status": "assembling"
+    },
+    "evidence_terminal": "complete",
+    "evidence_timed_out": false,
+    "finish_exception": null
+  },
+  {
+    "language": "zh-cn",
+    "id": "FIN-071",
+    "business_regression_passed": true,
+    "checks": {
+      "all_expected_fields_match": true,
+      "actual_rows": 1,
+      "expected_rows": 1
+    },
+    "exception": null,
+    "interaction_id": "int_d7796a3bcbcff8576ae2415875992df0",
+    "finish": {
+      "interaction_id": "int_d7796a3bcbcff8576ae2415875992df0",
+      "conversation_id": "conv_0c78f7707608124220951e6eca54a1dd",
+      "execution_status": "completed",
+      "evidence_status": "assembling"
+    },
+    "evidence_terminal": "complete",
+    "evidence_timed_out": false,
+    "finish_exception": null
+  }
+]

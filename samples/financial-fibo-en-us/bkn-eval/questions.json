@@ -51,17 +51,19 @@
     "id": "FIN-004",
     "scenario_id": "S01",
     "level": "intermediate",
-    "question": "Trace the synthetic security code of INS-015 to its issuer.",
+    "question": "Trace INS-015 through its complete security identity to its issuer: return instrument_id, synthetic_code, scheme, instrument_name, issuer_id and issuer_name.",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "financial_instruments",
+      "legal_entities",
       "security_identifiers"
     ],
     "required_relations": [
+      "instrument_to_issuer",
       "security_id_to_instrument"
     ],
     "evidence_views": [],
-    "evidence_sql": "SELECT s.synthetic_code,s.scheme,i.name,i.issuer_id FROM security_identifiers s JOIN financial_instruments i USING(instrument_id) WHERE i.instrument_id='INS-015'",
+    "evidence_sql": "SELECT i.instrument_id,s.synthetic_code,s.scheme,i.name AS instrument_name,i.issuer_id,e.name AS issuer_name FROM security_identifiers s JOIN financial_instruments i USING(instrument_id) JOIN legal_entities e ON e.entity_id=i.issuer_id WHERE i.instrument_id='INS-015'",
     "answer_format": "ordered_rows",
     "numeric_tolerance": 1e-06
   },
@@ -87,7 +89,7 @@
     "id": "FIN-006",
     "scenario_id": "S01",
     "level": "intermediate",
-    "question": "Which account and manager are associated with PF-010?",
+    "question": "Which account_id, portfolio_id, manager_id and manager_name (legal_entities.name of the portfolio manager) are associated with PF-010?",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "accounts",
@@ -99,7 +101,7 @@
       "account_to_portfolio"
     ],
     "evidence_views": [],
-    "evidence_sql": "SELECT a.account_id,p.portfolio_id,p.manager_id,e.name FROM accounts a JOIN portfolios p USING(portfolio_id) JOIN legal_entities e ON p.manager_id=e.entity_id WHERE p.portfolio_id='PF-010'",
+    "evidence_sql": "SELECT a.account_id,p.portfolio_id,p.manager_id,e.name AS manager_name FROM accounts a JOIN portfolios p USING(portfolio_id) JOIN legal_entities e ON p.manager_id=e.entity_id WHERE p.portfolio_id='PF-010'",
     "answer_format": "ordered_rows",
     "numeric_tolerance": 1e-06
   },
@@ -519,7 +521,7 @@
     "id": "FIN-028",
     "scenario_id": "S03",
     "level": "hard_complex",
-    "question": "Count February overdue unsettled instructions separately from unsettled instructions not yet due.",
+    "question": "Count February overdue unsettled instructions separately from unsettled instructions not yet due. Return due_state using the complete computed classification: overdue (due_date before 2027-02-28), not_due (otherwise), for instructions with cumulative settled_quantity below required_quantity.",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "securities_transactions",
@@ -822,7 +824,7 @@
     "id": "FIN-044",
     "scenario_id": "S05",
     "level": "intermediate",
-    "question": "How old is the price used by VAL-035-1-4?",
+    "question": "How old is the price used by VAL-035-1-4? Return valuation_id, as_of_date, price_date, age_days and valuation_reason, copying valuation_snapshots.reason exactly as stored rather than writing a free-form explanation.",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "market_prices",
@@ -832,7 +834,7 @@
       "valuation_to_price"
     ],
     "evidence_views": [],
-    "evidence_sql": "SELECT v.valuation_id,v.as_of_date,p.price_date,CAST(julianday(v.as_of_date)-julianday(p.price_date) AS INTEGER) AS age_days,v.reason FROM valuation_snapshots v JOIN market_prices p USING(price_id) WHERE v.valuation_id='VAL-035-1-4'",
+    "evidence_sql": "SELECT v.valuation_id,v.as_of_date,p.price_date,CAST(julianday(v.as_of_date)-julianday(p.price_date) AS INTEGER) AS age_days,v.reason AS valuation_reason FROM valuation_snapshots v JOIN market_prices p USING(price_id) WHERE v.valuation_id='VAL-035-1-4'",
     "answer_format": "ordered_rows",
     "numeric_tolerance": 1e-06
   },
@@ -1611,7 +1613,7 @@
     "id": "FIN-085",
     "scenario_id": "S09",
     "level": "intermediate",
-    "question": "Which February sell trades create PF-046’s receivable?",
+    "question": "Audit every February SELL trade for PF-046 as of 2027-02-28, including fully settled trades with open_quantity=0. Return each trade and its side, instrument currency, remaining quantity, execution price, price multiplier and stored settlement failure reason; this is the full trade audit scope.",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "accounts",
@@ -1675,7 +1677,7 @@
     "id": "FIN-088",
     "scenario_id": "S09",
     "level": "hard_complex",
-    "question": "Trace PF-046’s current receivable breach to each open sell instruction, cumulative settlement state and USD contribution; reconcile the total against the assessed limit.",
+    "question": "Trace PF-046’s current receivable breach to each open sell instruction, cumulative settlement state and USD contribution; reconcile the total against the assessed limit. Display each USD trade_contribution rounded to 2 decimal places; sum the unrounded quantity × execution_price × price_multiplier × FX contributions first, then round reconstructed_receivable to 2 decimal places.",
     "as_of_date": "2027-02-28",
     "evidence_tables": [
       "accounts",

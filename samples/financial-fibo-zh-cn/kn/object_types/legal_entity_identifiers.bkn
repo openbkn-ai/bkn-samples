@@ -18,7 +18,7 @@ tags: [finance, fibo]
 | identifier_id | 标识编号 | string | 该业务记录的稳定唯一标识。 | identifier_id |
 | entity_id | 实体编号 | string | 外键关联 legal_entities，空值仅允许在合同明确声明缺失/不适用时使用。 | entity_id |
 | synthetic_code | 合成编码 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | synthetic_code |
-| scheme | 标识体系 | string | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | scheme |
+| scheme | 标识体系 | string | 标识体系名称，不是 synthetic_code 的 DEMO 编码前缀；使用完整的允许体系取值。 允许取值：本地合成实体编码. | scheme |
 | is_synthetic | 是否合成 | boolean | 该对象的具名业务属性，取值需符合 model-contract.json 中的类型及受控词汇。 | is_synthetic |
 
 ### Keys

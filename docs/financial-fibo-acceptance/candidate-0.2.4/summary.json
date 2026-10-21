@@ -1,0 +1,1690 @@
+{
+  "scope": "This campaign public round1 FIN-001..FIN-100 only; EN100+ZH100 fixed denominator200",
+  "grader_sha256": "c4dda1f5f66d18a90d21b95f362747bcd123a4d3135429fd1e2f65f0ffe808ab",
+  "same_bank_regression_not_new_blind": true,
+  "populations": [
+    {
+      "round": 1,
+      "language": "en-us",
+      "fixed_denominator": 100,
+      "answered": 96,
+      "failed": 4,
+      "missing": 0,
+      "financial_fields_pass": 96,
+      "rawpass": 94,
+      "financial_fields_not_pass": 4,
+      "evidence_categories": {
+        "not_deterministically_proven": 97,
+        "no_successful_business_tool": 3
+      },
+      "lifecycle_execution_statuses": {
+        "completed": 96,
+        "failed": 3,
+        "not_reported": 1
+      },
+      "lifecycle_capture_statuses": {
+        "complete": 99,
+        "not_reported": 1
+      },
+      "lifecycle_finish_exceptions": 0,
+      "lifecycle_raw_isError": 1,
+      "lifecycle_finish_missing": 0,
+      "error_code_cases": {
+        "HTTP_500": 1,
+        "Cypher.Unsupported": 1,
+        "Public.BadGateway": 1
+      },
+      "tool_errors_total": 3,
+      "cases_with_tool_errors": 3,
+      "answered_with_tool_errors": 0,
+      "tool_error_followed_by_successful_business_tool": 0,
+      "financial_pass_with_tool_errors": 0
+    },
+    {
+      "round": 1,
+      "language": "zh-cn",
+      "fixed_denominator": 100,
+      "answered": 96,
+      "failed": 4,
+      "missing": 0,
+      "financial_fields_pass": 96,
+      "rawpass": 93,
+      "financial_fields_not_pass": 4,
+      "evidence_categories": {
+        "not_deterministically_proven": 97,
+        "no_successful_business_tool": 3
+      },
+      "lifecycle_execution_statuses": {
+        "completed": 95,
+        "failed": 3,
+        "not_reported": 2
+      },
+      "lifecycle_capture_statuses": {
+        "complete": 98,
+        "not_reported": 2
+      },
+      "lifecycle_finish_exceptions": 0,
+      "lifecycle_raw_isError": 1,
+      "lifecycle_finish_missing": 0,
+      "error_code_cases": {
+        "Cypher.SyntaxError": 1,
+        "Cypher.Unsupported": 2
+      },
+      "tool_errors_total": 3,
+      "cases_with_tool_errors": 3,
+      "answered_with_tool_errors": 0,
+      "tool_error_followed_by_successful_business_tool": 0,
+      "financial_pass_with_tool_errors": 0
+    }
+  ],
+  "exclusions": [
+    "CAP",
+    "independent",
+    "round2",
+    "round3",
+    "old campaigns"
+  ],
+  "method": "Calls unchanged original grade/grade_raw/evidence_status. Failed terminals remain failures; no reanswer. Error recovery statistics describe observed ordering, not financial correctness. Capture assembling remains assembling. No expected/actual financial values or answer prose exported.",
+  "terminal_input_manifest": [
+    {
+      "language": "en-us",
+      "id": "FIN-001",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-001.json",
+      "status": "answered",
+      "bytes": 149028,
+      "sha256": "69618bd815ade9b10f3be4803e36565858b095bd21da7b2ccd513030c4bf2005"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-002",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-002.json",
+      "status": "answered",
+      "bytes": 129287,
+      "sha256": "04b05f1f7b894e096e8332503a412a5d5b647d41f484f83b140b2c4a57d09329"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-003",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-003.json",
+      "status": "answered",
+      "bytes": 151638,
+      "sha256": "298352c11667a685884f8aead1adc44a3274f74962990abdae9ff311d655b27c"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-004",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-004.json",
+      "status": "answered",
+      "bytes": 135692,
+      "sha256": "93514c2a7c9cd8462818e0ba935b768f328d26d0cf39dd90dedb980e283e6cf7"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-005",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-005.json",
+      "status": "answered",
+      "bytes": 132306,
+      "sha256": "21b47c21343a8b0f39b0ba19c00a81607f85041618a0590491c6da5e48cf1e3d"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-006",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-006.json",
+      "status": "answered",
+      "bytes": 133262,
+      "sha256": "7b1ad82dea4179e40b614f4c3ae2e4d5fb70be5a438e28bd4b21497434414aa9"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-007",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-007.json",
+      "status": "answered",
+      "bytes": 131931,
+      "sha256": "5470c565fc500ac2bb86696929b582de92cbda8258b6edd40c02b8c86e5d5662"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-008",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-008.json",
+      "status": "answered",
+      "bytes": 167457,
+      "sha256": "d28dd7d315f2945050b887e7c7f98530e54ef58c40ca37826bdb46403bce42fe"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-009",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-009.json",
+      "status": "answered",
+      "bytes": 127907,
+      "sha256": "54a8905ce9cc4aef2726b765a8751c4a44fd86bde5b24fb5e4528db5b5e27726"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-010",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-010.json",
+      "status": "failed",
+      "bytes": 132801,
+      "sha256": "a5a647e2f895949ad38676ed43a76cb3fe9189eb42609634483454f01d9cb36b"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-011",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-011.json",
+      "status": "answered",
+      "bytes": 148916,
+      "sha256": "58eff979af5da3dedcf49296daad2e5a7481f7e630ddd1a8c5908279752fc65a"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-012",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-012.json",
+      "status": "answered",
+      "bytes": 129185,
+      "sha256": "e20007767699788939caecbcedaf2efe334bbba99778d1b62230327f56e7d599"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-013",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-013.json",
+      "status": "answered",
+      "bytes": 127329,
+      "sha256": "25dec8f4302111c55795c7e999ad08e57026f6ebe0fe87c06109722cc1f7a06f"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-014",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-014.json",
+      "status": "answered",
+      "bytes": 127097,
+      "sha256": "91a1fb0929a1be7351005aea73f78b28f045de9a9215c4941fdfe4e8b7d30583"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-015",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-015.json",
+      "status": "answered",
+      "bytes": 138719,
+      "sha256": "c27bd2a97e6743fe7f88c4116d9e61b1861870caf1922c0e4b92894d34e4dbdb"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-016",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-016.json",
+      "status": "answered",
+      "bytes": 132362,
+      "sha256": "158848ea194af9aa1cb9cef9c2e3343f786afa2f0750024c8367c8d5c1af136a"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-017",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-017.json",
+      "status": "answered",
+      "bytes": 133972,
+      "sha256": "aa4e9b819961d5c16b16b13f0581ce3cb71122d6da8e125af01e27134abe9eb2"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-018",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-018.json",
+      "status": "failed",
+      "bytes": 150423,
+      "sha256": "8c7488ecc768844b9bf4c43d139cad7cb4b0441b86b7b2e77cd76e408c617056"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-019",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-019.json",
+      "status": "failed",
+      "bytes": 138927,
+      "sha256": "3201cba5b93b8fe07eae15607610a149b04a5e644dadc4e8365655cbbba792e2"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-020",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-020.json",
+      "status": "answered",
+      "bytes": 412785,
+      "sha256": "f7feeb910532cc852bc7d627bf27ecd50d8dced536186bc4c9811e38ec2ede0f"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-021",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-021.json",
+      "status": "answered",
+      "bytes": 144444,
+      "sha256": "bf423bced40106dc4f779c1ccb46730253649209c093e823cb052ce6505c731f"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-022",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-022.json",
+      "status": "answered",
+      "bytes": 129679,
+      "sha256": "14d0f2b995818bb2b492653176ce2571604ff944ae82907e45cec90f910952ab"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-023",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-023.json",
+      "status": "answered",
+      "bytes": 128440,
+      "sha256": "6a3f7026ad7c3e998bbbfae3def58c41d2987ef6f9f9e39bfaabdd20b40eca30"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-024",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-024.json",
+      "status": "answered",
+      "bytes": 169083,
+      "sha256": "3a6661cbdba347d1200668178257c9cbb97bd05bcef6700bec0341881a29acaf"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-025",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-025.json",
+      "status": "answered",
+      "bytes": 152830,
+      "sha256": "5e926eb29373ba30a4ce5dd08544ff9af67a3af0444ddf1cf07e7ba1c77d222a"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-026",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-026.json",
+      "status": "answered",
+      "bytes": 129232,
+      "sha256": "7db4696f470931179b769b990aee3fb787957b9d81e4c4634d858ffef14540b7"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-027",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-027.json",
+      "status": "answered",
+      "bytes": 157332,
+      "sha256": "9abbba3c5b81a990268c9146b7bf798f6822bb5886a9d8cca898e37a7ae6f63b"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-028",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-028.json",
+      "status": "answered",
+      "bytes": 173414,
+      "sha256": "38ef4d9f9bd6a08fd9e8de215ee0721eb8ccbc68deb659b01eb5fce0afe190fd"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-029",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-029.json",
+      "status": "answered",
+      "bytes": 174093,
+      "sha256": "95ffa375038d5b0dc85536c4daee742785bd5497250080af2285c676ab45eebe"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-030",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-030.json",
+      "status": "answered",
+      "bytes": 177100,
+      "sha256": "6d660379cb696300e6a54e368ed2f2efdd4cf5229726b797755dfa7a7d0b9a13"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-031",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-031.json",
+      "status": "answered",
+      "bytes": 130315,
+      "sha256": "eaaef1d1136c29fb4690a7dd0dc59b5365193eab2048a580df408baf9d3c7e44"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-032",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-032.json",
+      "status": "answered",
+      "bytes": 128816,
+      "sha256": "1e33d368d676f27d5467c2426be89e024c70b9a0a7bd4b60b5a336aafb246a5a"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-033",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-033.json",
+      "status": "answered",
+      "bytes": 128588,
+      "sha256": "fd492ccc6742034de04043953a89644eb891d521a0c862d3b78e3c049bd34c5d"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-034",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-034.json",
+      "status": "answered",
+      "bytes": 126228,
+      "sha256": "d0ba483201de7117cb9f88ca7afa9e0dffe7e40656bdf2164df5b5f24b95e724"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-035",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-035.json",
+      "status": "answered",
+      "bytes": 153033,
+      "sha256": "cfa20c85c6ab429b8c5399b849ebbcb4749ae7c3e7d40ea4ee948a218c96f797"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-036",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-036.json",
+      "status": "answered",
+      "bytes": 128989,
+      "sha256": "968b99166d6b66e193fa0bca3d5245d2c2197e6bc5adc4f2e0a33bc160a67e5d"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-037",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-037.json",
+      "status": "answered",
+      "bytes": 138712,
+      "sha256": "08bcba44e9f205e5a46fee3ebf802869cac7c27fffa3853e458ad6e348caed1f"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-038",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-038.json",
+      "status": "answered",
+      "bytes": 153346,
+      "sha256": "679830d7c81e1442df9f52c14d0e8d2078ca2d994ef84636a8b881effc8f8090"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-039",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-039.json",
+      "status": "answered",
+      "bytes": 151316,
+      "sha256": "58d8f1c06144b5c7c048af0d11e5f3803f1543b97d8120b69b5c4669918bdf69"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-040",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-040.json",
+      "status": "answered",
+      "bytes": 129277,
+      "sha256": "e25796da3c5bd628617156a9edcec557119af8ade9143ea9a41bb6c2483903c1"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-041",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-041.json",
+      "status": "answered",
+      "bytes": 155255,
+      "sha256": "900335c5d8979d14c80fe0539a9008df85528ef7593fc9d4fb02209dab83546e"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-042",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-042.json",
+      "status": "answered",
+      "bytes": 129705,
+      "sha256": "5ef13c6c314163aed676c79ae913e73b9edebd8a4ab90a099969384568b1355a"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-043",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-043.json",
+      "status": "answered",
+      "bytes": 125907,
+      "sha256": "bd9597c09c6b5a8e93d7854560d65d91881d6531053ba500f30a2d4b79d9ff7f"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-044",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-044.json",
+      "status": "answered",
+      "bytes": 129155,
+      "sha256": "a6956fab1342f7ae57440fe6348397b6ed218ffa638f1004e8f3eca322569e75"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-045",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-045.json",
+      "status": "answered",
+      "bytes": 127256,
+      "sha256": "7a1773ede1dd344c4fd4ce5a225a9c1afdcbc289385cddea5bde781f883031dc"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-046",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-046.json",
+      "status": "answered",
+      "bytes": 129742,
+      "sha256": "91aaa9b838225ae906206b17b300d6bbc26e5406ebb26de350366e7f6c4361fd"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-047",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-047.json",
+      "status": "answered",
+      "bytes": 135784,
+      "sha256": "e775ac1103a87e39c4018afc840c1607c8b492fb02539400f054a809884cdec9"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-048",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-048.json",
+      "status": "answered",
+      "bytes": 128372,
+      "sha256": "83d4a38d725ac8a74cc295110c2f6b4c0d2e21abed52c3c67a1c670749f2c0a5"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-049",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-049.json",
+      "status": "answered",
+      "bytes": 499669,
+      "sha256": "e631f9f026565eb78befff040c70d47348545ea1d4fe01b32bb84f249a930ee2"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-050",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-050.json",
+      "status": "answered",
+      "bytes": 222115,
+      "sha256": "f4537dd306124da5989381f54c735eb910d4f5fdb889b903d47d323dd09c9104"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-051",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-051.json",
+      "status": "answered",
+      "bytes": 128922,
+      "sha256": "a5bbb803c100d378917ce9ffbcc0b4b0eb70bf36bcd6c94bff3b43e73ebed773"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-052",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-052.json",
+      "status": "answered",
+      "bytes": 128335,
+      "sha256": "ba40f474fc096cecbbd4d4b5544ca6938580b0c78fa6ecf3fa1f709f9e6d1925"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-053",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-053.json",
+      "status": "answered",
+      "bytes": 125780,
+      "sha256": "bac7b5d03142c3b0df6cb59013250cb260aca0f77e030d23a7befca503a2dc24"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-054",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-054.json",
+      "status": "answered",
+      "bytes": 129189,
+      "sha256": "b993c50c02bfd9629a9a6fe215bd11fc81eeac12892a053e2acb9f948d1bac30"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-055",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-055.json",
+      "status": "answered",
+      "bytes": 153555,
+      "sha256": "46e8b4c194f13fe3147e4f8db56776281b94489e117193def2b515d8d702ff3d"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-056",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-056.json",
+      "status": "answered",
+      "bytes": 127093,
+      "sha256": "80aee7ae7e4f02da8face9b1581fc1e26c94a4b71e7973d52f00b3268f8665e4"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-057",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-057.json",
+      "status": "answered",
+      "bytes": 131521,
+      "sha256": "ada30a4df5eebdf4b686ed25795bd5240dc2fded677213c8004372de088b3eba"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-058",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-058.json",
+      "status": "answered",
+      "bytes": 130587,
+      "sha256": "5af559e2208c4ffa601eb70e881d028f17ff8b3c7c8a9200ff28d62de0fcb8ad"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-059",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-059.json",
+      "status": "answered",
+      "bytes": 133485,
+      "sha256": "cfe81c1700d825654bc04bb298c4ffe1108602ddb53311bea41679259efcdfd4"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-060",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-060.json",
+      "status": "answered",
+      "bytes": 127804,
+      "sha256": "163b8e270c45dcb3b832b9f96270f4c168932e630249bee5154daae7103348e7"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-061",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-061.json",
+      "status": "answered",
+      "bytes": 128653,
+      "sha256": "ccbc5ceb668fc0214f9a44d1ca719445081a89de39f35147094a11dee3853d72"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-062",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-062.json",
+      "status": "answered",
+      "bytes": 130149,
+      "sha256": "4663f3e27f32ab89a3b6361cecdeb97893764c4813e0f669f2332eb54a018caa"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-063",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-063.json",
+      "status": "answered",
+      "bytes": 129464,
+      "sha256": "ecaba1e8797431368ca876573edf9f81f27eaca30eaadaf4673f89b31247b2e4"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-064",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-064.json",
+      "status": "answered",
+      "bytes": 132769,
+      "sha256": "c4ea3676bb3df3f8fd2689389a24507ba4207f5e9fe197f013c0f7e52649afae"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-065",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-065.json",
+      "status": "answered",
+      "bytes": 133918,
+      "sha256": "fe0f01c32d0aba88a48623700f7b0a4e756ff1b3edddafc37ba7f694797cb897"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-066",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-066.json",
+      "status": "answered",
+      "bytes": 139829,
+      "sha256": "93be3b6f1a83d8c052201327603a16fd73137126201757c8214d017ed7ac07be"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-067",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-067.json",
+      "status": "answered",
+      "bytes": 130401,
+      "sha256": "597454d7b858ca773427cad08aea57f19009d33949a810bcbd69cfc788c533a3"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-068",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-068.json",
+      "status": "answered",
+      "bytes": 134690,
+      "sha256": "3008fd88c36bb0e780fb343995aecd93548bb05806e428c5504dc5cdae3d6384"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-069",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-069.json",
+      "status": "answered",
+      "bytes": 178930,
+      "sha256": "98a1250cb7ebb5475764ee56fb61779c84ec17c6c88a6de66403532dd272bc8a"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-070",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-070.json",
+      "status": "answered",
+      "bytes": 158242,
+      "sha256": "4c088bb19bfbc750a18e63d2f7f5b88ab3d88f675982dd7631cabe929155951d"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-071",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-071.json",
+      "status": "answered",
+      "bytes": 130326,
+      "sha256": "94077d59b696f5c8a96ebd946c4c645bc3682b72bf0f0f528691d11b570ed32a"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-072",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-072.json",
+      "status": "answered",
+      "bytes": 129873,
+      "sha256": "b365ff54d7d3f0a2498773d29ef300259f9aa06b59dff0bea898191f23fef8e3"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-073",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-073.json",
+      "status": "answered",
+      "bytes": 158867,
+      "sha256": "4caaa973c9929248cb62a0651d7e871d1e26aa1fc9341ee80f1af9f2e0d904a5"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-074",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-074.json",
+      "status": "answered",
+      "bytes": 148216,
+      "sha256": "458423f0406c8899c8181f20368f765e60f0f1693c2d8af1196a048157381bf4"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-075",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-075.json",
+      "status": "answered",
+      "bytes": 130506,
+      "sha256": "8b5dcfa8f1a51507aa7177b310b523e4f919ed5de93eeb62b830f0c7a8174c6f"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-076",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-076.json",
+      "status": "answered",
+      "bytes": 130615,
+      "sha256": "7e24c632695c474f4c64237499d6061ef92d18a1fe027f114f3204e427af839f"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-077",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-077.json",
+      "status": "answered",
+      "bytes": 129799,
+      "sha256": "c0a7a0e02fa3e52c740ddbfead9c9873d5a9f293fdfae2353fc3ad0ebe5263b9"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-078",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-078.json",
+      "status": "answered",
+      "bytes": 149715,
+      "sha256": "4d5ddf30811f5080c4d7d16a58e5074b7877555d572f26a35c4823b8fe7560fa"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-079",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-079.json",
+      "status": "answered",
+      "bytes": 185602,
+      "sha256": "7f8035dc362ab404bbd2012411090b141c59a7911f434ddc5f75a582bf9f4d7d"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-080",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-080.json",
+      "status": "answered",
+      "bytes": 169372,
+      "sha256": "34b554ca791ee5302e4f32980fac02eb87daac704f3f53961287fc77c8bbd690"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-081",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-081.json",
+      "status": "answered",
+      "bytes": 138849,
+      "sha256": "8a686899a5b75b9373cfac4201fcfaf81992369209517086c1091761579f4638"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-082",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-082.json",
+      "status": "answered",
+      "bytes": 127902,
+      "sha256": "4629dba7ccd5cd6e1ee7ae6a849ca2d148b31b3b6d8cd1fd6cb2418738345e45"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-083",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-083.json",
+      "status": "answered",
+      "bytes": 126376,
+      "sha256": "71d3fc6ebbff6cfaae39061fb7675f9f9c89e756e14ecbf559bb71282c03c3b8"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-084",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-084.json",
+      "status": "answered",
+      "bytes": 127556,
+      "sha256": "b6c4496ab9a7c8dd50bf0c59340829ba19564d836db8ec41d6e80febeab4bf03"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-085",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-085.json",
+      "status": "answered",
+      "bytes": 163449,
+      "sha256": "1f71a6d17a47b592e854395a3a6edc3c469daf053469a6953ad8715a2958b37a"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-086",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-086.json",
+      "status": "answered",
+      "bytes": 131433,
+      "sha256": "207b44b795ee0a405c62464a3672d76ef773dad3aa86a9afcb0e6fab57be8509"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-087",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-087.json",
+      "status": "answered",
+      "bytes": 154820,
+      "sha256": "ee1b902b44975437ac6f1206309ae30d87c45d98ed8620219d08e11a1a505181"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-088",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-088.json",
+      "status": "failed",
+      "bytes": 189473,
+      "sha256": "f3965556ad7de8f0926a34d0790f845e3d50babd6e6071011fa730b86f1b402e"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-089",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-089.json",
+      "status": "answered",
+      "bytes": 150581,
+      "sha256": "40c71d4a3940dcfd7f0d34a2b8e95547177389915b07e2e6d46c5f70c30ce9c8"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-090",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-090.json",
+      "status": "answered",
+      "bytes": 164931,
+      "sha256": "a20eab054e1a8811cf2ebc5e83487686ad7720b0acbbbcb7b15bf869d96c85c0"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-091",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-091.json",
+      "status": "answered",
+      "bytes": 138783,
+      "sha256": "4eb029a2c440c2a644803e79cc99a1e0d6474ca8cf3a3f7ec9a9d9218310d688"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-092",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-092.json",
+      "status": "answered",
+      "bytes": 129335,
+      "sha256": "7818832587188e556fcfed42ccacfb6b6c8d5e3d2e44667a7e5c416568ed6c07"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-093",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-093.json",
+      "status": "answered",
+      "bytes": 128464,
+      "sha256": "5676f95db6cce0ec433b6509a039e549612343e796f71a7df79737c2dd23afdf"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-094",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-094.json",
+      "status": "answered",
+      "bytes": 132355,
+      "sha256": "c31ff864e7b2d35076c445d59acf0ac05d86cd87e16676249890082bd274babb"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-095",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-095.json",
+      "status": "answered",
+      "bytes": 132503,
+      "sha256": "54cfa06b187d1c057ed9ca48f6e853807cdb703d0c406ffdd5c4490c34849aa0"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-096",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-096.json",
+      "status": "answered",
+      "bytes": 140006,
+      "sha256": "eba7296b46518acef10b5ed5afc26954635d101709fa99f94e7d17208ac7114b"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-097",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-097.json",
+      "status": "answered",
+      "bytes": 151735,
+      "sha256": "a8cd47e48501fe16777859f6432831f76da3520048a3d57e2c5e5f544fe59dd5"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-098",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-098.json",
+      "status": "answered",
+      "bytes": 128156,
+      "sha256": "c816b701a082a81fbc34928e9c8c60c1a01a20f8d3c4e15fe6d71b8c545f3e2d"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-099",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-099.json",
+      "status": "answered",
+      "bytes": 129430,
+      "sha256": "eab8ece795a1ce381d72b220b4d37c08017be3ff1815ba5e0220d436ecb3bdb9"
+    },
+    {
+      "language": "en-us",
+      "id": "FIN-100",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-en-us/FIN-100.json",
+      "status": "answered",
+      "bytes": 129435,
+      "sha256": "e722c96b36508a22dca9beb91df17fb38636a29d0e7d836a990e47b346d4d03b"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-001",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-001.json",
+      "status": "answered",
+      "bytes": 140986,
+      "sha256": "d20092d9fe25cabba94f6150bc9837e11136ad27146d3d332017e8fdbed3abaa"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-002",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-002.json",
+      "status": "answered",
+      "bytes": 124299,
+      "sha256": "b6fd8cba2459ad8c5dc218b2ed29a39c06db3939e2297bf1718c2372e11e938a"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-003",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-003.json",
+      "status": "answered",
+      "bytes": 146281,
+      "sha256": "651210a480a461f6b385413f4914094873d4fa4d3256068b4cad3d4669e0a9a4"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-004",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-004.json",
+      "status": "answered",
+      "bytes": 125841,
+      "sha256": "fe36acd25dec151867c521a735181ba9dd08104286f32025b474520950622d5c"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-005",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-005.json",
+      "status": "answered",
+      "bytes": 125272,
+      "sha256": "88921938732043d1100e46a138121c362dc3b92dd03d47e3fbfbb5f9e32668d4"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-006",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-006.json",
+      "status": "answered",
+      "bytes": 123405,
+      "sha256": "65e83480cf0683507c4542c76f2ad698c3a844e4afed9c620db0d1855f429239"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-007",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-007.json",
+      "status": "answered",
+      "bytes": 126482,
+      "sha256": "484be45e968f8834309c5ed410cd81c105c5bd33768a5527f0136105a2f37d65"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-008",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-008.json",
+      "status": "answered",
+      "bytes": 161866,
+      "sha256": "6885210be57ea9c40c1ab3ba52adb342e3a8444c93424d880359566565a1da56"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-009",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-009.json",
+      "status": "answered",
+      "bytes": 154460,
+      "sha256": "f36f8655e195248b410c0779440fd6bdc1ff8da5846a2eaa1461047e97d8c081"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-010",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-010.json",
+      "status": "answered",
+      "bytes": 125568,
+      "sha256": "2e3b6f2cfa7378442daab75442516916b14be38f44a5303854d2e0af423a6fb5"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-011",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-011.json",
+      "status": "failed",
+      "bytes": 141729,
+      "sha256": "3bce4e95f419de74b35add901d6538a56f0036bd97d870d2909d8e72c72c1402"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-012",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-012.json",
+      "status": "answered",
+      "bytes": 123930,
+      "sha256": "82143ab5845ac0d43ce19162ce682391ce41a4b7d375b3070cae41530e45f1a6"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-013",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-013.json",
+      "status": "answered",
+      "bytes": 121866,
+      "sha256": "90983c7218705dbc7bbd6294bc783c04289dc6840fd087658ebcd573bf436934"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-014",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-014.json",
+      "status": "answered",
+      "bytes": 122881,
+      "sha256": "03f886aa572dbc13c397df834fed00a83c20820cf64cf014a38ae54d87043ca9"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-015",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-015.json",
+      "status": "failed",
+      "bytes": 124801,
+      "sha256": "ee3e2d4ad7ea3d05f985699a4ce147773c4d14888d2158db2186f7e3fd9f87fe"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-016",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-016.json",
+      "status": "answered",
+      "bytes": 127467,
+      "sha256": "c245cba23cf73150354723111dad2057368340a22a8488e2683797cf02cf4530"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-017",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-017.json",
+      "status": "answered",
+      "bytes": 129764,
+      "sha256": "406ce3f6c180acc8df66baea363a33162d9bca10ffe802100eac2afdf1509e28"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-018",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-018.json",
+      "status": "failed",
+      "bytes": 123498,
+      "sha256": "17a5f2f507f13e0b480565ef095ead271ffa7103f0162b546b28f6b7e070ee67"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-019",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-019.json",
+      "status": "answered",
+      "bytes": 165997,
+      "sha256": "4abc91e439484a4b1be8c88cd5d3e95c2858938047bd94c34353928ed55bd3f6"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-020",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-020.json",
+      "status": "answered",
+      "bytes": 438322,
+      "sha256": "48e1f21edd96f1ae1c45618430cf04a5d6b650462e98b97b865df872a7158488"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-021",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-021.json",
+      "status": "answered",
+      "bytes": 139269,
+      "sha256": "00a0e4f7f48153c9bd5142d2bcdec101e2034e650ec10382375033e55485d169"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-022",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-022.json",
+      "status": "answered",
+      "bytes": 124844,
+      "sha256": "4032418e03f960b0eea5596d5445fa24036053f420b66c6e50c2ed979711b2fe"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-023",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-023.json",
+      "status": "answered",
+      "bytes": 123020,
+      "sha256": "20785a688b5cfbc9859180c2bed803e4c7443959de29a17a05a84f34f319f3a1"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-024",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-024.json",
+      "status": "answered",
+      "bytes": 147513,
+      "sha256": "3bd643c26178e69547bf61697c8fb0f57f28a1acf1aa3530d8c0b023395a2d56"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-025",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-025.json",
+      "status": "answered",
+      "bytes": 148307,
+      "sha256": "ba152e41ea6861adc9425eac711c3d3b2bd0e3b7dd266a6d07fb284bc50f5ce2"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-026",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-026.json",
+      "status": "answered",
+      "bytes": 124984,
+      "sha256": "ca0d868b669a17fc1d21cbe69cfd43eb10745d26a637aafd3bba3a31188b7982"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-027",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-027.json",
+      "status": "answered",
+      "bytes": 153359,
+      "sha256": "0b679efbf8499e3b626b5378461c46cf6a6bee2c88d9505c31a19c8c9c77f655"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-028",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-028.json",
+      "status": "answered",
+      "bytes": 170032,
+      "sha256": "aa481f93e59a220fde008382d40b051289d36713232ac3f084e863872011cfa6"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-029",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-029.json",
+      "status": "answered",
+      "bytes": 170818,
+      "sha256": "e69601e6577aae02a67f740a7d7f2c9086dd2c51983814528fa4d3a6e3cec8fc"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-030",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-030.json",
+      "status": "answered",
+      "bytes": 164386,
+      "sha256": "753f39e8c2f84d2cb64d059d00e39a4f90ac6cdba5973bdfb49c722563d55f5c"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-031",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-031.json",
+      "status": "answered",
+      "bytes": 124983,
+      "sha256": "dd8393888c36ab842b75918b9f8aefe063004ce3e10848ac0a753f2e314485c1"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-032",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-032.json",
+      "status": "answered",
+      "bytes": 123984,
+      "sha256": "350a2f3ef29443203cf00d972208480ca8521c47fdce93c807bd397001ef3cf7"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-033",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-033.json",
+      "status": "answered",
+      "bytes": 123083,
+      "sha256": "d8fe5dbc64a38297bda97aad4968fa14ba2cc04ec64e99f0ab16f2bde7e411c2"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-034",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-034.json",
+      "status": "answered",
+      "bytes": 122606,
+      "sha256": "6ae77c974672f179d91b340c89f6c25c22a321b6dc811a129bf256a5c9448a66"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-035",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-035.json",
+      "status": "answered",
+      "bytes": 136002,
+      "sha256": "251e2432f8e59e6733b5055e730e5af575fea422e9f7a340e189d54e8ff46d2a"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-036",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-036.json",
+      "status": "answered",
+      "bytes": 124810,
+      "sha256": "82aa667bf2fa9e561b02beb61cb0176bc3e08f10ed2cd650b7984a70715f4ba4"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-037",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-037.json",
+      "status": "answered",
+      "bytes": 130452,
+      "sha256": "6694a0f56de1c205e3f8c93134614247bc6fc41f246f58441c9c0f4be8fd4583"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-038",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-038.json",
+      "status": "answered",
+      "bytes": 151525,
+      "sha256": "90f741b9dc07bf39f077e2061edaa82a1bc91168061a700d0261180f360c3a87"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-039",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-039.json",
+      "status": "answered",
+      "bytes": 148223,
+      "sha256": "2817564fbe3c593377b33f4ec4c6fd229933d156609a8afbac366def9b85a194"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-040",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-040.json",
+      "status": "answered",
+      "bytes": 124992,
+      "sha256": "22c0ba972facad8eaf87eae57fa7b310e32ca8aa859d44d8c4c3209075b0eac4"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-041",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-041.json",
+      "status": "answered",
+      "bytes": 157171,
+      "sha256": "d8dfefa3dc2031d30b6befc3b41c47108a31bea026e675461d4384784f1ebb43"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-042",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-042.json",
+      "status": "answered",
+      "bytes": 123936,
+      "sha256": "4a0710f34e5c56f19d420dd19233174d8b9769b24467f2df0c07e860a4d4c84b"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-043",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-043.json",
+      "status": "answered",
+      "bytes": 136735,
+      "sha256": "ee80850e7b6d0f234d31e57afd92df6c7d234fdde708d0cd7a9fe865cc5990e0"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-044",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-044.json",
+      "status": "answered",
+      "bytes": 124732,
+      "sha256": "9842b2de5efe2ef7c0e7befad3e673bd396e7b2202f29344f0ca99c37b51974d"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-045",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-045.json",
+      "status": "answered",
+      "bytes": 123069,
+      "sha256": "416b9d577bbcbf3ea20fc2d248711774febb226da9aa95ef14b6aa7bd0ac7420"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-046",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-046.json",
+      "status": "answered",
+      "bytes": 123951,
+      "sha256": "e0210ab4201ce80401c40977439559b12ab2fd47c1396b2a387ad1a00189bd6c"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-047",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-047.json",
+      "status": "answered",
+      "bytes": 132310,
+      "sha256": "c666150fb768fb08add6e7a439fd5fd4a998dba3de1c4a0c871e8adabee840fd"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-048",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-048.json",
+      "status": "answered",
+      "bytes": 124264,
+      "sha256": "887ecdbfe4efca776753583e9ddde767e3dd1b0fdd8ca247be7fd67565e54976"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-049",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-049.json",
+      "status": "answered",
+      "bytes": 481732,
+      "sha256": "76b5d9286b835c3d8735cd604af90fc8b8943fd9482dc26719d97a5242b5ce25"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-050",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-050.json",
+      "status": "answered",
+      "bytes": 168328,
+      "sha256": "a16c6996e282aad5f3b0d216f459bd78febbac9018bb88ce3886a609d114c309"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-051",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-051.json",
+      "status": "answered",
+      "bytes": 124078,
+      "sha256": "68376334c93727a3a0da912c51062f82386a4508d3420fc459702216c5ca677f"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-052",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-052.json",
+      "status": "answered",
+      "bytes": 123201,
+      "sha256": "fc857cc15b0af2d41e3ae9844de0cfa77cce8eec83117717b4b0c5e72d807ed5"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-053",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-053.json",
+      "status": "answered",
+      "bytes": 121576,
+      "sha256": "02e8fd59717b99e7555608cc129a265a2b491ecece22f0ff894f1d2e1d7a3b47"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-054",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-054.json",
+      "status": "answered",
+      "bytes": 125032,
+      "sha256": "97ddfce7062685e34c079d436d0d2fa06968cf3441f07db0b1882e6139a9cad2"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-055",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-055.json",
+      "status": "answered",
+      "bytes": 125997,
+      "sha256": "c3d473de5b6f43bf6573e2edcae753a1f8760a102a11a4e618695e2aa3b77d64"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-056",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-056.json",
+      "status": "failed",
+      "bytes": 124339,
+      "sha256": "274db7d4d00ea4f54d484132fbca9754661882d0861a2b73b8ae5f3f6a1600f1"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-057",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-057.json",
+      "status": "answered",
+      "bytes": 127412,
+      "sha256": "1d19b649a5bbe18b8ede438361a05c217ed030576fb80e776ca3390752a04ef5"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-058",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-058.json",
+      "status": "answered",
+      "bytes": 126425,
+      "sha256": "127e4d8ffb8d013b251d9a3ead7c3101c59fcc24ef3b25caeb5648fc2fde5d85"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-059",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-059.json",
+      "status": "answered",
+      "bytes": 129276,
+      "sha256": "a947dd41f21f57b8e7ad75855244c60d9d4e8a6e467f430a4a3951a6fb734d71"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-060",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-060.json",
+      "status": "answered",
+      "bytes": 124280,
+      "sha256": "1c853e95203f4905333b25455a6947a48265fc124d882c189c1008e773b6dd3f"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-061",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-061.json",
+      "status": "answered",
+      "bytes": 122384,
+      "sha256": "890107b1ac3087173ae3e428265c92a25eec21b27c7ca508a662e5088bca9fbc"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-062",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-062.json",
+      "status": "answered",
+      "bytes": 124080,
+      "sha256": "d2815169f02f7203f411ad22b36ff300b83ed75cabc866d335b6877a9624c4be"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-063",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-063.json",
+      "status": "answered",
+      "bytes": 122577,
+      "sha256": "e7c920555d1b67a10d4bc69ed3472d52db8c31742e69de2dbedc161c84460ef6"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-064",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-064.json",
+      "status": "answered",
+      "bytes": 128466,
+      "sha256": "51e8000400d5dad0e05b8791de7f7d796715337c9d12a74bc80ed9161493b8b3"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-065",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-065.json",
+      "status": "answered",
+      "bytes": 129515,
+      "sha256": "2893969f378409cfbf42e054d3c1b58a48dc4073564aded661c663b27aa31732"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-066",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-066.json",
+      "status": "answered",
+      "bytes": 135640,
+      "sha256": "20ca599da8e14f08117d53ed9a7c15119769eff2f2f458f579a8b02981cf728a"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-067",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-067.json",
+      "status": "answered",
+      "bytes": 126129,
+      "sha256": "43b9a1ece88b5e6e8140f591781fb89f1b3185ac030e35c0e841f9ed38faf059"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-068",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-068.json",
+      "status": "answered",
+      "bytes": 130257,
+      "sha256": "0ef39430bc4c38b42482e709483e10d8f0f7998e916e525d7f8b2f0fcec5debe"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-069",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-069.json",
+      "status": "answered",
+      "bytes": 174593,
+      "sha256": "d1c7e0b0d721a3b991b3a1458e1588d6b18e1b99de4134d4a90ed501ae59e252"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-070",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-070.json",
+      "status": "answered",
+      "bytes": 153994,
+      "sha256": "4ec0e54e64a4a026a992d2fb5a19aaea81a6933e5ab156ccdab4d55320e41838"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-071",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-071.json",
+      "status": "answered",
+      "bytes": 163648,
+      "sha256": "dc8d8f2c8803a3a7e6b2760330e2c8322325f8028cd8fbde05566d9d947b0d27"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-072",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-072.json",
+      "status": "answered",
+      "bytes": 124495,
+      "sha256": "0c9169020cad1d8c57a3fb7464857520c1a6f577fb35cc19a2f5fdad998988ee"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-073",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-073.json",
+      "status": "answered",
+      "bytes": 127771,
+      "sha256": "09ecc8a446c3a7ac21748c5e8f043b9ce7983dc7339fac91a31e02ed797df315"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-074",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-074.json",
+      "status": "answered",
+      "bytes": 123658,
+      "sha256": "46525586eb6a7fbb20d4de5790f77d107ece8e00962e701452e9e22e64c241b2"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-075",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-075.json",
+      "status": "answered",
+      "bytes": 126261,
+      "sha256": "5c6b14997b4b003ff39d03c6b0910d7ba1e3214a3ba4f1b463205997ff703696"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-076",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-076.json",
+      "status": "answered",
+      "bytes": 126558,
+      "sha256": "160d3a50e2737a72f22b6dcfcf40ab5ad8702d7d808f55ed5d55faf88f597b7b"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-077",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-077.json",
+      "status": "answered",
+      "bytes": 125579,
+      "sha256": "1de820951833f6445adf0fb7525db8b9e497db41ab45460a05747f2340c68f7d"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-078",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-078.json",
+      "status": "answered",
+      "bytes": 145570,
+      "sha256": "3272044949ceb125fb269a7814ed9bbf706f83caab13acf59d1c33b8191bd440"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-079",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-079.json",
+      "status": "answered",
+      "bytes": 181646,
+      "sha256": "2a417605f835f5181835b88c75a3b132890ae1b5a8590e08560ef3d501f8767f"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-080",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-080.json",
+      "status": "answered",
+      "bytes": 165119,
+      "sha256": "b16973131fa5fd55048f197d2e0666159e047eac308a56bb8175c990cc92018c"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-081",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-081.json",
+      "status": "answered",
+      "bytes": 123393,
+      "sha256": "99698a2c3550c976dbdb27799323ae1ff484359f97a3c76ba12e9b94ea51ec85"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-082",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-082.json",
+      "status": "answered",
+      "bytes": 123798,
+      "sha256": "ce325f80e988db8bc480e7e2391f306861ed33ac9e2ed0c2eef1dc332d1f3be8"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-083",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-083.json",
+      "status": "answered",
+      "bytes": 132449,
+      "sha256": "e8eada1882671535c6bead8b61c11805e94381df4eb42aaa585e6adcdcd22176"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-084",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-084.json",
+      "status": "answered",
+      "bytes": 123442,
+      "sha256": "026cd496ee28df6474e0c54692298f15fdc409ee7aafbf55229c9e809382c84c"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-085",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-085.json",
+      "status": "answered",
+      "bytes": 159445,
+      "sha256": "f2f8a802cfea5b6717f204682e051d899d1211c021ce22410cae440991d21517"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-086",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-086.json",
+      "status": "answered",
+      "bytes": 127271,
+      "sha256": "ae64bb1a89285f5d7b1e2510b07da01c6f07ffb40ff17dae457a9e34984383a2"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-087",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-087.json",
+      "status": "answered",
+      "bytes": 125641,
+      "sha256": "37c03ce9ef533a704dbf23054f7d0d705db9794ad0011fcaecc07bffd9105539"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-088",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-088.json",
+      "status": "answered",
+      "bytes": 193211,
+      "sha256": "bb2931cf69c23cc28329f50b50c4cb4e41fd348d3b92aa678644fa32f07dd44d"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-089",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-089.json",
+      "status": "answered",
+      "bytes": 167507,
+      "sha256": "f7ae60558b2d483ebf9e33c6939d180057f368fc906af99b0738511b80d1dd16"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-090",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-090.json",
+      "status": "answered",
+      "bytes": 130665,
+      "sha256": "5e718a67a7d7e08a90a8b48fadf8cdbfdd9659b416490a04f415b3bec39f3ec6"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-091",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-091.json",
+      "status": "answered",
+      "bytes": 123637,
+      "sha256": "48fce61b07e4c47ff3dc212e7a9330ea859e903ccbd7dede9fd4f07bde2997bf"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-092",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-092.json",
+      "status": "answered",
+      "bytes": 125101,
+      "sha256": "77776ecafa4ffa976a0104feea10f464a25c7f758508fb66bc87dba529b3c892"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-093",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-093.json",
+      "status": "answered",
+      "bytes": 123118,
+      "sha256": "09c52634dc17aed464a1a36a7ac28407ea38419e384b493ecd9583410cf4bab3"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-094",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-094.json",
+      "status": "answered",
+      "bytes": 128217,
+      "sha256": "74ec58e65cf6d9f5115846161ffa8f7c6359f12f41926b03757c217d7057a3a4"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-095",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-095.json",
+      "status": "answered",
+      "bytes": 128354,
+      "sha256": "4c10cc0babb48697c808a5db692d514407492dfc7060c7b12cb22f9c7b9dc74d"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-096",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-096.json",
+      "status": "answered",
+      "bytes": 135882,
+      "sha256": "746024cfd7240978148e622d3c3ba7561b00c926fcf437d0fa796c2265ad5e4c"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-097",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-097.json",
+      "status": "answered",
+      "bytes": 147911,
+      "sha256": "2df37fe21e5c7294cff073d30a40ce91d8f8d9286dbd0cd0e603b942e82dc6d3"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-098",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-098.json",
+      "status": "answered",
+      "bytes": 123851,
+      "sha256": "54e044c3feba2abeb87c13330ac85103b1fc42f41c1a9ad5a9e19c9a78d892a7"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-099",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-099.json",
+      "status": "answered",
+      "bytes": 133450,
+      "sha256": "7ad170be944e34149e554bd54ff68a7995c4858e37abcb87b1bbf6cb3ecc85a8"
+    },
+    {
+      "language": "zh-cn",
+      "id": "FIN-100",
+      "path": "/Users/leecky/Downloads/Dev/oneclick-onboard/artifacts/acceptance/financial-fibo-business-20261018/candidate-0.2.4-platform-fix2/codex-agent-evaluation/public/runs/round-1/financial-fibo-zh-cn/FIN-100.json",
+      "status": "answered",
+      "bytes": 125144,
+      "sha256": "b61743cbe6811fc9caf2a2889e05cba4d6dd5ec86398e65331c9a0a6991a119a"
+    }
+  ]
+}

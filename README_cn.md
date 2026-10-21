@@ -29,8 +29,8 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 | [世界杯](samples/world-cup-en/) | 英文 | 对象查询、多表关联、排名及跨届赛事分析，提供 50 道评测题 | 在线目录已发布 |
 | [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 仅离线发布；要求 OpenBKN ≥ 0.2.1 |
 | [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | 中文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 仅离线发布；要求 OpenBKN ≥ 0.2.1 |
-| [Financial Portfolio Operations（FIBO）](samples/financial-fibo-en-us/) | 英文 | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 已验收离线候选 0.1.3；发布 PR 待审核；要求 OpenBKN ≥ 0.2.1 |
-| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 中文本体与业务数据，覆盖交易后运营控制；20 张表、78,356 条记录和 100 道评测题 | 已验收离线候选 0.1.4；发布 PR 待审核；要求 OpenBKN ≥ 0.2.1 |
+| [Financial Portfolio Operations（FIBO）](samples/financial-fibo-en-us/) | 英文 | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 未发布0.2.4源码候选；要求 OpenBKN ≥ 0.2.1 |
+| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 中文本体与业务数据，覆盖交易后运营控制；20 张表、78,356 条记录和 100 道评测题 | 未发布0.2.4源码候选；要求 OpenBKN ≥ 0.2.1 |
 | [Food Supply and Recall（GS1）](samples/retail-gs1-en-us/) | 英文 | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | 固定制品0.1.0已发布，目录PR待审核；要求OpenBKN ≥ 0.2.1 |
 | [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | 中文 | 中文本体、数据及业务能力，与英文样例事实对应；15张表、2,911条记录、100题 | 固定制品0.1.0已发布，目录PR待审核；要求OpenBKN ≥ 0.2.1 |
 
@@ -40,7 +40,7 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 
 两个制造业样例刻意不加入官方目录和历史 `020` 发现入口。请在目标集群预先加载与离线包匹配的数据镜像，再导入固定离线包；它们使用独立数据库和知识网络 ID，可并存安装。
 
-两个金融样例分别安装中英文本体和数据，具有独立数据库及知识网络 ID。它们以 MIT 许可的[选定 FIBO 来源](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890)作语义参考，业务数据全部虚构，不宣称覆盖全量 FIBO。两者均已完成本地安装及各 100 题实际模型问答，详见[验收摘要与适用限制](docs/financial-fibo-repair-acceptance.zh-CN.md)。源码审核后按[标准发布流程](docs/candidate-publication.md)发布固定制品、提交正式元数据，再通过目录 PR 注册可下载版本。
+两个金融样例以 MIT 许可的[选定 FIBO 来源](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890)作语义参考，业务数据全部虚构，不宣称覆盖全量 FIBO。已有英文 0.1.3、中文 0.1.4 是不含后续指标、函数及 Skill 的历史制品，官方目录登记继续暂停。本PR交付未发布0.2.4源码，每语含3函数、2快照指标、1 Skill，单轮财务字段得分为中英文各 96/100；平台修复后指定四条历史工具路径通过，证据均完整。不同版本不可混用验收结论，四条路径复测不修改原全量得分。详见[当前 PR 就绪核对与验证边界](docs/financial-fibo-183-readiness.zh-CN.md)。
 
 世界杯数据是冻结的历史快照，包含截至 2022 年的男足赛事和截至 2019 年的女足赛事；不同明细表的覆盖范围有所差异。各样例的数据范围、许可和场景假设见对应 README。
 

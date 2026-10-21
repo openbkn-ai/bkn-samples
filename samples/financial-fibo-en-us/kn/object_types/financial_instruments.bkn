@@ -27,10 +27,10 @@ Fictional equity or debt master. An issuer can issue both asset classes; currenc
 | instrument_id | Instrument Id | string | Stable unique identifier of this business record. | instrument_id |
 | name | Name | string | Human-readable fictional business name with equivalent bilingual meaning. | name |
 | issuer_id | Issuer Id | string | Foreign key to legal_entities; blank only where contract declares absent/inapplicable evidence. | issuer_id |
-| asset_class | Asset Class | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | asset_class |
+| asset_class | Asset Class | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. Allowed values: bond, equity. | asset_class |
 | currency | Currency | string | Instrument denomination; must agree across trade, instruction, opening and position. | currency |
-| unit | Unit | string | Share count for equity, currency face units for bonds; not bond contract lots. | unit |
-| price_basis | Price Basis | string | Per share for equity, dirty price per 100 face for debt; must agree with asset class and multiplier. | price_basis |
+| unit | Unit | string | Share count for equity, currency face units for bonds; not bond contract lots. Allowed values: face_unit, share. | unit |
+| price_basis | Price Basis | string | Per share for equity, dirty price per 100 face for debt; must agree with asset class and multiplier. Allowed values: dirty_per_100, per_share. | price_basis |
 | price_multiplier | Price Multiplier | decimal | 1 for a per-share equity quote; 0.01 for dirty bond price per 100 face units. | price_multiplier |
 | maturity_date | Maturity Date | date | Date of this business event under the fictional weekday calendar; distinguish planned and actual. | maturity_date |
 | is_synthetic | Is Synthetic | boolean | Named business attribute constrained by model-contract.json types and controlled vocabulary. | is_synthetic |

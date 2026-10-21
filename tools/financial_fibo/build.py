@@ -328,7 +328,7 @@ def model(sample,T,zh,classes):
    label=FIELDS_ZH.get(f,f) if zh else f.replace('_',' ').title()
    assert not zh or f in FIELDS_ZH, f
    description=field_description(t,f,zh,SCHEMA)
-   if f in {'view_kind','side','trade_status','event_status','valuation_status','exposure_status','assessment_status','approval','measure','branch'}:
+   if f in {'view_kind','side','entity_role','scheme','order_status','trade_status','event_status','valuation_status','reason','failure_reason','exposure_status','assessment_status','approval','measure','branch','asset_class','unit','price_basis','valuation_method','pricing_source'}:
     values=sorted({r[f] for r in T[t] if r[f]!=''})
     description+=(' 允许取值：' if zh else ' Allowed values: ')+', '.join(values)+'.'
    lines.append(f'| {f} | {label} | {dtype} | {description} | {f} |')
@@ -347,7 +347,8 @@ def model(sample,T,zh,classes):
   p.write_text(f'---\ntype: concept_group\nid: {gid}\nname: {name}\ntags: [finance, fibo]\n---\n\n## ConceptGroup: {name}\n\n### Object Types\n\n| ID | Name | Description |\n|---|---|---|\n'+'\n'.join(f'| {t} | {names[t]} | {names[t]} |' for t in tables)+'\n',encoding='utf-8')
  name='金融投资组合运营' if zh else 'Financial Portfolio Operations'
  (kn/'network.bkn').write_text(f'---\ntype: knowledge_network\nid: financial_fibo_{"zh_cn" if zh else "en_us"}\nname: {name}\ntags: [finance, fibo]\nversion: 0.1.0\nbranch: main\n---\n\n# {name}\n\n'+('虚构的证券交易、结算、持仓、估值、敞口与限额控制。' if zh else 'Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.')+'\n\n'+ANALYSIS_CONTRACT[1 if zh else 0]+f'\n\n## Network Overview\n\n- **ObjectTypes** ({len(T)})\n- **RelationTypes** ({len(relations)})\n- **ConceptGroups** (3)\n',encoding='utf-8')
- jwrite(sample/'model-contract.json',{'object_types':{t:{'primary_key':v[0],'display_key':v[1],'fields':{f:field_type(f) for f in T[t][0]}} for t,v in SCHEMA.items()},'relations':relations,'current_as_of':CURRENT,'planning_end':'2027-03-31','numeric_rounding':'ROUND_HALF_UP; money 2dp; ratio and FX 6dp','source_revision':REV,'localized_values':ZH,'portfolios':PORTFOLIOS,'positions_per_portfolio':len(ISSUER_OFFSETS)*2,'limits_per_snapshot':len(ISSUER_OFFSETS)+1,'calendar':'Fictional Monday-Friday; no jurisdiction holidays; sample T+2 business days'})
+ (kn/'network.bkn').write_text((kn/'network.bkn').read_text()+'\n\n## Runtime Controls\n\n'+('通过 search_capabilities 发现三个只读函数 settlement_asof、valuation_asof、limit_assessment_asof；输入组合、业务日期、知识截止及实际/计划视图。指标仅对应带日期的已记录敞口实例；未知不等于零。' if zh else 'Discover settlement_asof, valuation_asof and limit_assessment_asof with search_capabilities; supply portfolio, business date, knowledge cutoff and actual/planned view. Metrics represent individual recorded dated exposure instances; unknown is not zero.')+'\n')
+ jwrite(sample/'model-contract.json',{'language':'zh-cn' if zh else 'en-us','object_types':{t:{'primary_key':v[0],'display_key':v[1],'fields':{f:field_type(f) for f in T[t][0]}} for t,v in SCHEMA.items()},'relations':relations,'current_as_of':CURRENT,'planning_end':'2027-03-31','numeric_rounding':'ROUND_HALF_UP; money 2dp; ratio and FX 6dp','source_revision':REV,'localized_values':ZH,'portfolios':PORTFOLIOS,'positions_per_portfolio':len(ISSUER_OFFSETS)*2,'limits_per_snapshot':len(ISSUER_OFFSETS)+1,'calendar':'Fictional Monday-Friday; no jurisdiction holidays; sample T+2 business days'})
  return relations
 
 def field_type(f):

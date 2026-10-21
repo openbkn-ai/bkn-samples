@@ -27,7 +27,7 @@ Local DEMO-SEC security identifier with a named synthetic scheme; not a real ISI
 | identifier_id | Identifier Id | string | Stable unique identifier of this business record. | identifier_id |
 | instrument_id | Instrument Id | string | Foreign key to financial_instruments; blank only where contract declares absent/inapplicable evidence. | instrument_id |
 | synthetic_code | Synthetic Code | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | synthetic_code |
-| scheme | Scheme | string | Named business attribute constrained by model-contract.json types and controlled vocabulary. | scheme |
+| scheme | Scheme | string | Declared identifier scheme, not the DEMO prefix of synthetic_code. Use the complete allowed scheme value. Allowed values: local_security_code. | scheme |
 | is_synthetic | Is Synthetic | boolean | Named business attribute constrained by model-contract.json types and controlled vocabulary. | is_synthetic |
 
 ### Keys

@@ -2,6 +2,8 @@
 import json,os,re,shutil,subprocess,sys,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/'tools'))
+from register_capabilities import run as register_capabilities
 MANIFEST=json.loads((ROOT/'sample.yaml').read_text());SAMPLE=MANIFEST['metadata']['name'];KN=MANIFEST['spec']['knowledgeNetwork']['id']
 def require(ok,msg):
     if not ok:raise ValueError(msg)
@@ -43,6 +45,13 @@ def main():
     for table,spec in specs.items():
         obj=single(cli('bkn','object-type','get',KN,table));require(obj['data_source']['id']==bindings[table],'binding differs')
         data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
-    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':{'toolboxes':[],'skills':[]}},'checks':[{'name':n,'ok':True} for n in ('ownership','20-object-types','29-relations','20-resource-bindings','20-live-object-queries')],'degrade':[],'message':''}
+    capabilities=register_capabilities(KN,apply=sys.argv[1]=='install')
+    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership','20-object-types','29-relations','20-resource-bindings','20-live-object-queries')],'degrade':[],'message':''}
     Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result));print(json.dumps(result))
-if __name__=='__main__':main()
+if __name__=='__main__':
+    try:main()
+    except Exception as error:
+        message=re.sub(r'(?i)(bearer\s+|password[\"\s:=]+|token[\"\s:=]+)[^\s,}]+',r'\1***',str(error))[:1000]
+        result={'ok':False,'code':'financial_platform_hook_failed','message':message}
+        if os.environ.get('BKN_SAMPLE_OUTPUT'):Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result))
+        print(json.dumps(result));sys.exit(1)

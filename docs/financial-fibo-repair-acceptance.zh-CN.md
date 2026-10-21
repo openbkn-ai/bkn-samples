@@ -1,6 +1,8 @@
-# FIBO 双语离线验收与发布准备
+# FIBO 旧版双语离线验收与发布历史
 
-2026-10-18 完成 localhost:8081 标准离线导入、安装与实际问答验收；两个样例要求 **OpenBKN 0.2.1 及以上**，当前清单兼容范围为 `>=0.2.1 <0.3.0`。本 PR 提交源码与发布准备，尚未上传 Release 或注册官方目录。
+> 本文只记录英文 0.1.3 / 中文 0.1.4 的历史开发回归，100/100 不是新能力版的盲测或整体验收结论。当前状态以[183 就绪核对](financial-fibo-183-readiness.zh-CN.md)为准。
+
+2026-10-18 完成 localhost:8081 标准离线导入、安装与实际问答验收；两个样例要求 **OpenBKN 0.2.1 及以上**，当前清单兼容范围为 `>=0.2.1 <0.3.0`。源码 PR #182 已合并。英文0.1.3、中文0.1.4的固定 Release 已发布，正式元数据固定在 `2be1e229d9bfd3ad16e151ec214035fc67797b36`，由保留 tag `samples-financial-fibo-metadata-20261018` 锚定；旧目录登记提案已暂停；这些证明不能用于后续 0.2.4 能力候选。
 
 | 语言 | 已验收版本 | 实际问答 | 自动评分通过 | 部分通过 / 失败 | 排除题目 |
 |---|---|---:|---:|---:|---:|
@@ -17,4 +19,13 @@
 
 平台Trace与答案正确性分开核验：英文89条证据完整、11条partial；中文94条完整、4条partial、2条仍assembling。只读操作事实中存在尚无结束记录的查询操作，具体后端根因未确认，不能宣称Trace已修复。原有七个样例的版本、状态、来源及安装身份均保持不变。
 
-按[标准发布流程](candidate-publication.md)，源码PR审核后从固定提交重建，要求与已验收包摘要一致；上传同一份制品并核对远端摘要，再提交正式发布元数据，最后通过独立目录PR固定引用。两个包使用产品共享MariaDB，无样例专属数据库镜像。
+按[标准发布流程](candidate-publication.md)，已从合并提交 `c594b44bce81ca2be28d92e82853b85d3ca4d64b` 重建，并确认与原验收包逐字节一致。两个Release的包、acceptance.json及SHA256SUMS已回下载逐字节核对。
+
+- [英文0.1.3 Release](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.1.3)：`sha256:87fd02dadba0a2f65bc16d2ea5681ed716a7be5eaf5012059cbc8e174ae99adf`。
+- [中文0.1.4 Release](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.1.4)：`sha256:5bc53f0864eb96ff5586179c3a58369e16608531ff32d50354d9dc87d41149b3`。
+
+发布前再次执行卸载、清除离线缓存、重新导入及安装：中文五阶段一次通过；英文首次在knowledge阶段出现通用hook失败，20对象已绑定，标准重试后五阶段通过，未修改包字节。原始失败、恢复回执及重装后20表实时计数均保存在各Release的acceptance.json中；原有七个样例的版本、状态及安装身份保持不变。该轮未重新执行模型100题，沿用同一精确包摘要的先前实际问答，不能称为重装后新增问答。
+
+两个包使用产品共享MariaDB，无样例专属数据库镜像。运行验证仅覆盖arm64，未执行集群级断外网策略；不声称完成全基础设施离网验证。为保持已验收包不可变，包内候选版本说明保留原阶段措辞，当前发布状态以Release和目录为准。目录合并后仍需刷新官方目录并验证正式在线安装，本文不提前宣称该项通过。
+
+标准在线客户端下载器已对公开Release验证固定元数据及证明摘要、GitHub附件下载、安全解包、原生BKN和全部20条绑定，详见[发布客户端检查](financial-fibo-acceptance/publication-client-verification.json)。同时验证0.2.0不能安装而0.2.1满足声明要求；这不代替目录合并后的平台在线安装。

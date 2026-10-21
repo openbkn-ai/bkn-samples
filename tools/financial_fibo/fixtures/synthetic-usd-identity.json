@@ -1,0 +1,106 @@
+{
+  "id": "synthetic-usd-identity",
+  "scope": {
+    "portfolio_ids": [
+      "SYN-P"
+    ],
+    "as_of_date": "2027-04-30",
+    "knowledge_date": "2027-04-01",
+    "view_kind": "actual"
+  },
+  "source": {
+    "legal_entities": [
+      {
+        "entity_id": "SYN-ISS",
+        "name": "Synthetic Issuer",
+        "entity_role": "issuer",
+        "country": "ZZ",
+        "sector": "Synthetic",
+        "is_synthetic": "true"
+      },
+      {
+        "entity_id": "SYN-CP",
+        "name": "Synthetic Broker",
+        "entity_role": "broker",
+        "country": "ZZ",
+        "sector": "Synthetic",
+        "is_synthetic": "true"
+      },
+      {
+        "entity_id": "SYN-M",
+        "name": "Synthetic Manager",
+        "entity_role": "manager",
+        "country": "ZZ",
+        "sector": "Synthetic",
+        "is_synthetic": "true"
+      }
+    ],
+    "legal_entity_identifiers": [],
+    "financial_instruments": [
+      {
+        "instrument_id": "SYN-I",
+        "name": "Synthetic Equity",
+        "issuer_id": "SYN-ISS",
+        "asset_class": "equity",
+        "currency": "USD",
+        "unit": "share",
+        "price_basis": "per_share",
+        "price_multiplier": "1",
+        "maturity_date": "",
+        "is_synthetic": "true"
+      }
+    ],
+    "security_identifiers": [],
+    "portfolios": [
+      {
+        "portfolio_id": "SYN-P",
+        "name": "Synthetic Portfolio",
+        "manager_id": "SYN-M",
+        "base_currency": "USD",
+        "mandate": "long_only",
+        "branch": "normal"
+      }
+    ],
+    "accounts": [
+      {
+        "account_id": "SYN-A",
+        "name": "Synthetic Account",
+        "portfolio_id": "SYN-P",
+        "currency": "USD"
+      }
+    ],
+    "opening_positions": [
+      {
+        "opening_id": "SYN-OP",
+        "account_id": "SYN-A",
+        "instrument_id": "SYN-I",
+        "opening_date": "2027-04-01",
+        "quantity": "2",
+        "cost_unit_price": "10",
+        "currency": "USD"
+      }
+    ],
+    "trade_orders": [],
+    "securities_transactions": [],
+    "settlement_instructions": [],
+    "settlement_events": [],
+    "positions": [],
+    "market_prices": [],
+    "fx_rates": [],
+    "valuation_snapshots": [],
+    "issuer_exposures": [],
+    "exposure_contributions": [],
+    "counterparty_exposures": [],
+    "mandate_limits": [],
+    "limit_assessments": []
+  },
+  "expected_fields": {
+    "trade_basis_quantity": "2",
+    "settled_basis_quantity": "2",
+    "cost_amount": "20.00",
+    "cost_value_base": "20.00",
+    "market_value_local": null,
+    "market_value_base": null
+  },
+  "independent_arithmetic": "2*10*1=20.00 USD book cost; USD/USD is 1 by contract, without a fixing row. Missing market quote affects market values only."
+}
