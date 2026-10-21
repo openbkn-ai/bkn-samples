@@ -38,3 +38,9 @@ Release提供原验收包、acceptance.json和SHA256SUMS；固定资产不覆盖
 [源包对应](financial-fibo-acceptance/release-0.2.4/source-package-parity.json)、[历史评分来源](financial-fibo-acceptance/release-0.2.4/historical-evaluation-provenance.json)、[英文技术结果](financial-fibo-acceptance/release-0.2.4/en-us-native-summary.json)、[中文技术结果](financial-fibo-acceptance/release-0.2.4/zh-cn-native-summary.json)、[其他样例不变](financial-fibo-acceptance/release-0.2.4/other-nine-identity-parity.json)供复核。原评分和本轮结果分别保存，不选择最好一次合并分数。
 
 公开标准客户端已读取保留标签下的完整提交SHA元数据，并从真实Release URL下载两包、安全解压、验证原生本体及全部20绑定。0.2.0在读取元数据前被拒绝，0.2.1通过声明兼容检查；包、acceptance和SHA256SUMS摘要均匹配。此步骤不安装到8081，也不代表官方目录已合并。[公开客户端回执](financial-fibo-acceptance/release-0.2.4/publication-client-verification.json)、[上传后回下载字节核对](financial-fibo-acceptance/release-0.2.4/release-asset-roundtrip.json)、[Release发布回执](financial-fibo-acceptance/release-0.2.4/published-releases.json)。
+
+## PR #188 审核修正
+
+审核确认旧基线manifest漏报execution.function、execution.skill，实际已发布离线包的offline-release.json已包含这两项。构建器改为整体读取实际包的requires；两个0.2.4在线manifest及目录同步补齐，包、安装证据及其摘要不变。7项相关测试通过，并对两语分别验证缺少任一执行能力时在元数据读取/下载前拒绝。[定向公开客户端回执](financial-fibo-acceptance/release-0.2.4/publication-client-requires-fix.json)记录新固定引用，原回执保留为发布时历史。
+
+另一项阻塞尚未解决：包内版本说明仍为源码候选措辞，标准客户端要求在线版本说明与包内文件摘要一致，不能仅替换在线文本。0.2.4已发布资产保持不可变；正在等待是否改发0.2.5修正版的确认，PR保持未合并。
