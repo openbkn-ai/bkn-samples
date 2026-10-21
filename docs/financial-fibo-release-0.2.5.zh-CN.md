@@ -33,3 +33,14 @@
 英文回执跨度约30.5分钟，只是主机墙钟跨度，原因未确认，不据此推断连续执行时长或性能；中文约104秒。一次本地预检因超出本轮范围的附件断言而在平台调用前中断，该断言移除后继续；它不是安装失败或重试。
 
 [源包一致性与能力门槛](financial-fibo-acceptance/release-0.2.5/source-package-parity.json)、[实际安装与运行快照](financial-fibo-acceptance/release-0.2.5/platform-install-summary.json)、[历史0.2.4资产未变](financial-fibo-acceptance/release-0.2.5/historical-024-assets-unchanged.json)。
+
+## Published fixed assets and public client
+
+- [EN 0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.5): SHA-256 `bd191c446c34dbb0cc80d420fc74461e1f64563d8bc1527be4cefe48942390a3`, 996,159 bytes.
+- [ZH 0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.5): SHA-256 `2e86b89d70d79d8434396585ff92d9f5a82f366901f7eeada6aa07172fe4e3c9`, 994,875 bytes.
+
+Source: `9d469ac08c20ca2c1f9c01c4cba0da8a94a432be`. Metadata: `57f878c314c7212298b833bc34f2b24e2b2b21be`, retained by `samples-financial-fibo-metadata-20261020-v025`. All six uploaded assets matched byte-for-byte after download. The standard public client read the real pinned metadata and Release assets, verified corrected release notes, missing-capability rejection, package/evidence digests, safe extraction, native BKN and all20bindings. Official online catalog installation remains pending merge.
+
+Official publication validation passed16releases with all14baseline entries preserved; sequence15 adds only the two0.2.5entries. Version0.2.4 is not registered. Manifest-index build/check passed.
+
+[Public client receipt](financial-fibo-acceptance/release-0.2.5/publication-client-verification.json), [six-asset roundtrip](financial-fibo-acceptance/release-0.2.5/release-asset-roundtrip.json), [publication receipts](financial-fibo-acceptance/release-0.2.5/published-releases.json).
