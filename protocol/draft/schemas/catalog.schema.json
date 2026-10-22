@@ -231,6 +231,11 @@
                 "propertyNames": {
                   "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}/[a-zA-Z0-9._-]+$"
                 }
+              },
+              "language": {
+                "type": "string",
+                "pattern": "^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$",
+                "description": "Language of the sample content, independent of release-note translations."
               }
             },
             "required": [

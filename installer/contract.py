@@ -99,6 +99,9 @@ def validate_document(sample_dir: Path, document: dict) -> list[str]:
     for field in ("displayName", "summary"):
         if not isinstance(metadata.get(field), str) or not metadata.get(field).strip():
             errors.append(f"metadata.{field} is required")
+    language = metadata.get("language")
+    if language is not None and (not isinstance(language, str) or not re.fullmatch(r"[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*", language)):
+        errors.append("metadata.language must be a language tag such as zh-CN or en-US")
     aliases = metadata.get("aliases", [])
     if aliases is None:
         aliases = []
@@ -241,6 +244,7 @@ def build_manifest_index(root: Path, revision: str, source_repo: str = OFFICIAL_
                 "name": document["metadata"]["name"],
                 "version": sample_version(document["metadata"]),
                 "displayName": document["metadata"]["displayName"],
+                "language": document["metadata"].get("language"),
                 "summary": document["metadata"]["summary"],
                 "licenseNote": studio["licenseNote"],
                 "questions": list(studio["questions"]),

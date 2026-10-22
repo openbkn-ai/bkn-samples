@@ -81,3 +81,5 @@ OpenBKN 首页 → **一键体验**：刷新官方样例目录，展开卡片查
 包含共享样例数据库能力的 0.2.0 补丁中，所有样例共用产品部署的样例专用 MariaDB，各自使用独立数据库和账号。`sample.yaml` 的 `spec.database` 和已有的 `dbInit`、`dbVerify` 入口继续有效；脚本通过安装器提供的 `MYSQL_HOST`、`MYSQL_PORT`、`MYSQL_DATABASE`、`MYSQL_USER`、`MYSQL_PASSWORD` 连接，不依赖本机 socket、root 账号或镜像首次启动。需要暂存库时使用当前装载脚本的 `<数据库名>_loading` 约定；不能访问其他样例数据库。
 
 离线版本必须使用 `spec.data.mode: embedded`，包含数据、模型和声明的执行资源，不能在安装或重试时下载依赖。参见[离线交付说明](offline-installation.md)，使用 `prepare_shared_release.py` 准备同一份完整 `package.tar.gz` 及候选清单，供在线下载和离线上传。新清单声明 `database.shared` 能力，数据依赖指向 archive，不再指向数据库镜像。新增版本需要实际验收证明，不能复用旧版本的成功证明。
+
+在 `sample.yaml` 中使用可选的 `metadata.language` 声明样例内容语言，如 `zh-CN` 或 `en-US`。新包和 Studio 目录会携带此字段，它与版本说明的语言无关。发布目录条目也可声明 `language`。缺少字段的旧包可复用目录中已声明的语言；仍无法确定时，在“全部”筛选下显示。不要为补充语言字段改写已发布的包或固定版本清单。

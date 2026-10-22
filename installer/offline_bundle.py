@@ -133,6 +133,8 @@ class OfflinePackages:
                     "knowledgeNetworkDisplayName": spec["knowledgeNetwork"]["displayName"],
                     "releaseNotes": release["releaseNotes"]}
             old = next((c for c in result["samples"] if c["name"] == release["sample"]), None)
+            # Legacy packages can reuse an explicit language from their catalog card.
+            item["language"] = item.get("language") or (old or {}).get("language")
             card = _card(item, release["version"], _read_state(self.state_dir, release["sample"]), role, False)
             card["source"] = "offline"
             card["versions"][0]["manifestSha256"] = release["manifestSha256"]
