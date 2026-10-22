@@ -47,6 +47,7 @@ def merge_remote(result, entries, state_dir, role, runtime):
         else:
             selected_view = next(v for v in versions if v["version"] == selected["version"])
             item = {"name": name, "displayName": selected["displayName"], "summary": selected["summary"],
+                    "language": selected.get("language") or (old or {}).get("language"),
                     "manifestSha256": selected_view["manifestSha256"],
                     "status": "not_installed" if not selected_view["reason"] else "unavailable",
                     "code": selected_view["reason"]}

@@ -252,6 +252,7 @@ def _card(item: dict, version: str, state: dict | None, actor_role: str, source_
         "name": item.get("name"),
         "displayName": item.get("displayName") or item.get("name"),
         "summary": item.get("summary", ""),
+        "language": item.get("language"),
         "version": version,
         "licenseNote": item.get("licenseNote", ""),
         "expectedTables": item.get("expectedTables", 0),

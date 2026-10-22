@@ -304,8 +304,14 @@ def main() -> None:
     state_dir = Path(os.environ.get("BKN_SAMPLE_STATE_DIR", "/var/lib/bkn-samples/state"))
     image_index = Path(os.environ.get("BKN_SAMPLE_IMAGE_INDEX", str(root / "manifest-index.json")))
     safe_url = os.environ.get("BKN_SAFE_URL", "http://bkn-safe:3000").rstrip("/")
-    from installer.contract import sample_version
+    from installer.contract import sample_version, discover_sample_dirs, load_sample
     service_version, image, repo = load_indexes(root, image_index)
+    # Explicit source metadata also classifies older packages without changing their bytes.
+    sample_languages = {}
+    for directory in discover_sample_dirs(root):
+        metadata = load_sample(directory)["metadata"]
+        if metadata.get("language"):
+            sample_languages[metadata["name"]] = metadata["language"]
     data_image_ref = configured_image_ref()
     source = OfficialCatalog(state_dir, root / "protocol/draft/schemas/catalog.schema.json",
                              os.environ.get("BKN_SAMPLE_CATALOG_URL", "").strip() or None,
@@ -342,6 +348,8 @@ def main() -> None:
         )
         merge_remote(result, source.entries(), state_dir, role, remote)
         offline.merge(result, role)
+        for item in result["samples"]:
+            item["language"] = item.get("language") or sample_languages.get(item["name"])
         result["sourceRefresh"] = source.metadata()
         return result
 
