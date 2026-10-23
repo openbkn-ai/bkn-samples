@@ -1,0 +1,42 @@
+name: Retest fixed SWR candidate
+
+on:
+  push:
+    # Deliberately does not match the publication workflow's 66-swr-* pattern.
+    branches: ["validation/66-cold-*"]
+
+permissions:
+  contents: read
+
+jobs:
+  cold-pull:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify the fixed published candidate anonymously
+        env:
+          EXPECTED_ARCH: ${{ matrix.arch }}
+          # Reviewed tuple from publication evidence; no arbitrary tag input.
+          CANDIDATE_VERSION: 0.2.1-rc.66.39938478419.1
+          CANDIDATE_SOURCE: e1b284fbbf233e48ddfdd779ce27652bf12c4001
+          PUBLICATION_RUN: "39938478419"
+          SERVICE_DIGEST: sha256:bce59a879ec3dc9514274f6b34159366fcae53f4c33b6279e24e5b55634fc739
+          DATA_DIGEST: sha256:8c736211806bd0a2bc4b861597c881fa6204936f32db2f17dbedc0064adaf7aa
+        run: bash installer/ci/verify_swr_cold_pull.sh
+      - name: Retain evidence including failed attempts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: swr-cold-pull-${{ matrix.arch }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cold-pull-evidence/
+          if-no-files-found: error
+          retention-days: 14

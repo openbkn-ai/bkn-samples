@@ -141,49 +141,25 @@ class DeployDatabaseTest(unittest.TestCase):
         deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _seconds: None, attempts=1)
         self.assertNotIn("kind: Secret", kubectl.applied[0])
 
-    def test_switches_to_ghcr_when_manifest_digests_match(self):
+    def test_pull_failure_never_switches_to_ghcr(self):
         kubectl = FakeKubectl(states=["image_pull_failed", "ready"])
-        result = deploy_database(
-            ROOT,
-            "supply-chain",
-            kubectl,
-            sleep=lambda _seconds: None,
-            attempts=3,
-            digests=lambda _tag: (DIGEST, DIGEST),
-        )
-        self.assertIn(f"{GHCR_IMAGE}@{DIGEST}", kubectl.patched[0])
-        self.assertEqual(kubectl.deleted, ["bkn-sample-supply-chain-0"])
-        self.assertEqual(result["image"], f"{GHCR_IMAGE}@{DIGEST}")
-
-    def test_refuses_ghcr_when_manifest_digests_differ(self):
-        kubectl = FakeKubectl(states=["image_pull_failed", "ready"])
-        with self.assertRaises(DeployError) as caught:
-            deploy_database(
-                ROOT,
-                "supply-chain",
-                kubectl,
-                sleep=lambda _seconds: None,
-                attempts=3,
-                digests=lambda _tag: (DIGEST, OTHER),
-            )
-        self.assertEqual(caught.exception.code, "image_unavailable")
+        result = deploy_database(ROOT, "supply-chain", kubectl, sleep=lambda _: None,
+                                 attempts=3, digests=lambda _: (DIGEST, DIGEST))
         self.assertEqual(kubectl.patched, [])
-        self.assertIn("digests differ", caught.exception.message)
+        self.assertEqual(kubectl.deleted, [])
+        self.assertEqual(result["image"], f"{SWR_IMAGE}@{DIGEST}")
 
-    def test_starts_on_ghcr_when_swr_has_no_manifest(self):
+    def test_swr_identity_is_independent_of_ghcr_manifest(self):
         kubectl = FakeKubectl()
-        result = deploy_database(
-            ROOT,
-            "supply-chain",
-            kubectl,
-            sleep=lambda _seconds: None,
-            attempts=1,
-            digests=lambda _tag: (None, DIGEST),
-        )
-        self.assertIn(f"{GHCR_IMAGE}@{DIGEST}", kubectl.applied[0])
-        self.assertNotIn(SWR_IMAGE, kubectl.applied[0])
-        self.assertEqual(result["image"], f"{GHCR_IMAGE}@{DIGEST}")
-        self.assertEqual(kubectl.patched, [])
+        result = deploy_database(ROOT, "supply-chain", kubectl,
+                                 digests=lambda _: (DIGEST, OTHER))
+        self.assertEqual(result["image"], f"{SWR_IMAGE}@{DIGEST}")
+
+    def test_missing_swr_never_automatically_selects_ghcr(self):
+        kubectl = FakeKubectl()
+        with self.assertRaises(DeployError):
+            deploy_database(ROOT, "supply-chain", kubectl, digests=lambda _: (None, DIGEST))
+        self.assertEqual(kubectl.applied, [])
 
     def test_ready_pod_running_another_image_is_still_pending(self):
         def kubectl(args, stdin=None):
@@ -199,17 +175,12 @@ class DeployDatabaseTest(unittest.TestCase):
 
         self.assertEqual(_pod_state(kubectl, "supply-chain", f"{GHCR_IMAGE}:0.1.0"), "pending")
 
-    def test_switches_to_ghcr_when_swr_has_no_manifest(self):
-        kubectl = FakeKubectl(states=["image_pull_failed", "ready"])
-        result = deploy_database(
-            ROOT,
-            "supply-chain",
-            kubectl,
-            sleep=lambda _seconds: None,
-            attempts=3,
-            digests=lambda _tag: (None, DIGEST),
-        )
-        self.assertEqual(result["image"], f"{GHCR_IMAGE}@{DIGEST}")
+    def test_explicit_other_registry_reference_is_preserved(self):
+        kubectl = FakeKubectl()
+        image = f"{GHCR_IMAGE}@{DIGEST}"
+        result = deploy_database(ROOT, "supply-chain", kubectl, data_image_ref=image,
+                                 digests=lambda _: self.fail("explicit ref must not discover registries"))
+        self.assertEqual(result["image"], image)
 
     def test_reports_image_unavailable_when_both_registries_fail(self):
         kubectl = FakeKubectl(states=["image_pull_failed", "image_pull_failed"])
@@ -314,7 +285,7 @@ class DeployDatabaseTest(unittest.TestCase):
     def test_bundled_default_reference_has_ownership_annotations(self):
         base, kubectl = self.remote_kubectl()
         with patch.dict(os.environ, {}, clear=True):
-            result = deploy_database(ROOT, "supply-chain", kubectl, digests=lambda _: (None, DIGEST), require_ownership=True)
+            result = deploy_database(ROOT, "supply-chain", kubectl, digests=lambda _: (DIGEST, None), require_ownership=True)
         documents = [d for d in yaml.safe_load_all(base.applied[0]) if d.get("kind") != "Namespace"]
         self.assertEqual(len(documents), 3)
         for document in documents:
@@ -369,10 +340,10 @@ class RegistryDigestTest(unittest.TestCase):
             return _Response({"Docker-Content-Digest": DIGEST})
 
         swr, ghcr = registry_digests("0.1.0", opener)
-        self.assertEqual((swr, ghcr), (DIGEST, DIGEST))
-        ghcr_request = next(item for item in seen if item.full_url.startswith("https://ghcr.io/v2/"))
-        self.assertEqual(ghcr_request.get_method(), "HEAD")
-        self.assertEqual(ghcr_request.get_header("Authorization"), "Bearer pull-token")
+        self.assertEqual((swr, ghcr), (DIGEST, None))
+        self.assertEqual(len(seen), 1)
+        self.assertIn('myhuaweicloud.com', seen[0].full_url)
+        self.assertEqual(seen[0].get_method(), 'HEAD')
 
     def test_missing_manifest_is_empty(self):
         def opener(_request, timeout=10):
