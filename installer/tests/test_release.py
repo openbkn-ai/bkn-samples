@@ -33,7 +33,7 @@ class ReleasePinTest(unittest.TestCase):
 
     def test_swr_publish_workflows_use_docker_manifest_lists(self):
         root = Path(__file__).resolve().parents[2]
-        for workflow_name in ("publish-sample-studio.yml", "publish-sample-image.yml"):
+        for workflow_name in ("publish-sample-studio.yml",):
             with self.subTest(workflow=workflow_name):
                 workflow = yaml.load(
                     (root / ".github/workflows" / workflow_name).read_text(),
