@@ -7,7 +7,12 @@ umask 077
 : "${CANDIDATE_SOURCE:?}" "${PUBLICATION_RUN:?}"
 [[ "$CANDIDATE_SOURCE" =~ ^[0-9a-f]{40}$ ]]
 [[ "$PUBLICATION_RUN" =~ ^[0-9]+$ ]]
-[[ "$CANDIDATE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-rc\.66\.${PUBLICATION_RUN}\.[0-9]+$ ]]
+# This acceptance-only branch certifies exactly the merged #66 artifact; it excludes #192.
+[[ "$CANDIDATE_VERSION" == "0.2.1-main.20261023203838.sha3cae3a2" ]]
+[[ "$CANDIDATE_SOURCE" == "3cae3a2ffdf2fd96e6958a634cfb238cc17c8228" ]]
+[[ "$PUBLICATION_RUN" == "40020812230" ]]
+[[ "$SERVICE_DIGEST" == "sha256:faf8d579ec649b7e1cc723b191320c69c7062cbba57cbd6629fe47b07247153f" ]]
+[[ "$DATA_DIGEST" == "sha256:3707d8f8f6ba6603e3fb4e67dbf58c7e3fa5a58c1d291c294e062b52f17b114a" ]]
 registry=swr.cn-east-3.myhuaweicloud.com
 evidence="$PWD/cold-pull-evidence"
 mkdir -p "$evidence"
