@@ -31,6 +31,42 @@ UNINSTALL_STAGES = (("preflight", "检查样例资源归属"), ("knowledge", "�
                     ("discover", "删除数据源"), ("database", "删除样例库和存储"), ("verify", "验证清理结果"))
 
 
+class PlatformFailure(ApiError):
+    """Only status, a bounded code and known safe reasons leave the HTTP client."""
+    def __init__(self, status, code="", *, proxy_pending=False):
+        self.upstream = {"status": status}
+        if code:
+            self.upstream["code"] = code
+        label = f"HTTP {status}" + (f", {code}" if code else "")
+        if proxy_pending:
+            self.upstream["reason"] = "proxy_sync_pending"
+            super().__init__(409, "uninstall_proxy_sync_pending",
+                             f"Knowledge network proxy synchronization is pending ({label}); retry the uninstall after synchronization completes.")
+        else:
+            super().__init__(500, "uninstall_failed",
+                             f"Platform resource operation failed ({label}); retry the uninstall.")
+
+
+def _platform_failure(error, method, path):
+    try:
+        raw = error.read(16385)
+        payload = json.loads(raw) if len(raw) <= 16384 else {}
+    except (ValueError, OSError):
+        payload = {}
+    finally:
+        error.close()
+    if not isinstance(payload, dict):
+        payload = {}
+    code = payload.get("error_code", "")
+    if not isinstance(code, str) or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_.-]{0,159}", code):
+        code = ""
+    pending = (method == "DELETE" and error.code == 409
+               and re.fullmatch(r"/api/bkn-backend/v1/knowledge-networks/[^/?]+", path)
+               and code == "BknBackend.KnowledgeNetwork.InternalError"
+               and payload.get("error_details") == "knowledge network proxy synchronization is pending")
+    return PlatformFailure(error.code, code, proxy_pending=bool(pending))
+
+
 def platform_client(authorization):
     base = os.environ["BKN_BASE_URL"].rstrip("/")
     def call(method, path, body=None):
@@ -43,16 +79,52 @@ def platform_client(authorization):
                     raw = response.read()
                     return json.loads(raw) if raw else {}
             except HTTPError as error:
-                error.close()
+                failure = _platform_failure(error, method, path)
                 if error.code == 404:
                     return None
+                if failure.code == "uninstall_proxy_sync_pending":
+                    raise failure from None
                 # DELETE is idempotent. Retry a platform conflict only once;
                 # a persistent conflict must remain a visible uninstall failure.
                 if method == "DELETE" and error.code == 409 and attempt == 0:
                     time.sleep(1)
                     continue
-                raise ApiError(500, "uninstall_failed", "Platform resource operation failed; retry the uninstall.") from None
+                raise failure from None
     return call
+
+
+def _delete_network(api, path, required_tags, uninstall_deadline):
+    # Generations are internal Backend fields, so the authoritative DELETE guard
+    # decides convergence. Retry only its known pending-sync rejection, not every
+    # 409. Recheck ownership after each wait; never weaken the server's guard.
+    deadline = min(uninstall_deadline, time.monotonic() + 120)
+    last_failure = None
+    for attempt in range(60):
+        if time.monotonic() >= deadline:
+            break
+        try:
+            return api("DELETE", path)
+        except PlatformFailure as error:
+            if error.code != "uninstall_proxy_sync_pending":
+                raise
+            last_failure = error
+        remaining = deadline - time.monotonic()
+        if attempt == 59 or remaining <= 0:
+            break
+        time.sleep(min(2, remaining))
+        if time.monotonic() >= deadline:
+            break
+        resource = _single(api("GET", path))
+        if resource is None:
+            return
+        if not required_tags.issubset(set(resource.get("tags") or [])):
+            raise ApiError(409, "ownership_conflict", "The knowledge network no longer belongs to this sample; cleanup stopped.")
+    failure = ApiError(409, "uninstall_proxy_sync_timeout",
+                       "Knowledge network proxy synchronization did not complete within the uninstall wait budget; retry the uninstall after synchronization completes.")
+    if last_failure is not None:
+        failure.upstream = last_failure.upstream
+        failure.message += f" (HTTP {last_failure.upstream['status']}, {last_failure.upstream.get('code', '')})"
+    raise failure
 
 
 def _single(value):
@@ -217,11 +289,16 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                 resource = _single(api("GET", path))
                 if resource is None:
                     continue
+                if stage == "knowledge" and not required.issubset(set(resource.get("tags") or [])):
+                    raise ApiError(409, "ownership_conflict", "The knowledge network no longer belongs to this sample; cleanup stopped.")
                 if stage == "capabilities":
                     if resource.get("status") == "published":
                         method = "PUT" if "/skills/" in path else "POST"
                         api(method, path + "/status", {"status": "offline"})
-                api("DELETE", path)
+                if stage == "knowledge":
+                    _delete_network(api, path, required, deadline)
+                else:
+                    api("DELETE", path)
                 for attempt in range(10):
                     if _single(api("GET", path)) is None:
                         break
@@ -262,8 +339,11 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         record.update(status="uninstall_failed", finishedAt=timestamp(),
                       error={"code": getattr(error, "code", "uninstall_failed"),
                              "message": getattr(error, "message", "Uninstall failed; retry the uninstall.")})
+        if isinstance(error, ApiError) and hasattr(error, "upstream"):
+            record["error"]["upstream"] = error.upstream
         for stage, value in record["stages"].items():
             if value == "running":
+                record["error"]["stage"] = stage
                 record["stages"][stage] = "failed"
     write_json(destination, record)
     record_terminal_installation(state_dir, record)
