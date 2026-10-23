@@ -1,0 +1,132 @@
+[
+  {
+    "command": [
+      "bkn",
+      "metric"
+    ],
+    "required": [
+      "list",
+      "create",
+      "query"
+    ],
+    "exit": 0,
+    "stdout": "Metrics \u2014 query / dry-run\n\nUSAGE\n  openbkn bkn metric [options] [command]\n\nCOMMANDS\n  query [options] <kn-id> <metric-id>   Query a metric's data (--body / --body-file JSON)\n  dry-run [options] <kn-id>             Dry-run a metric definition (--body / --body-file JSON)\n  list <kn-id>                          List metrics\n  get <kn-id> <metric-id>               Get a metric\n  create [options] <kn-id>              Create a metric (--body / --body-file)\n  update [options] <kn-id> <metric-id>  Update a metric (--body / --body-file)\n  delete <kn-id> <metric-id>            Delete a metric\n  search [options] <kn-id>              Search metrics (--body / --body-file)\n  validate [options] <kn-id>            Validate a metric definition (--body / --body-file)\n  help [command]                        display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "bkn",
+      "capability"
+    ],
+    "required": [
+      "attach",
+      "list"
+    ],
+    "exit": 0,
+    "stdout": "Knowledge networks \u2014 list, query, schema, instances\n\nUSAGE\n  openbkn bkn [options] [command]\n\nCOMMANDS\n  list [options]                              List knowledge networks\n  get [options] <kn-id>                       Get a knowledge network (use --stats or --export)\n  search [options] <kn-id> <query>            Semantic search within a knowledge network\n  object-type                                 object-type list/get/...\n  relation-type                               relation-type list/get/...\n  action-type                                 action-type list/get/...\n  stats <kn-id>                               Get knowledge-network statistics (alias for get --stats)\n  export <kn-id>                              Export a knowledge network (alias for get --export)\n  create [options] <name>                     Create an (empty) knowledge network\n  update [options] <kn-id>                    Update a knowledge network (--body / --body-file)\n  delete [options] <kn-id>                    Delete a knowledge network\n  subgraph [options] <kn-id>                  Query a subgraph (--body / --body-file JSON)\n  action-log                                  Action logs \u2014 list/get/cancel\n  action-execution <kn-id> <execution-id>     Get action execution status\n  metric                                      Metrics \u2014 query / dry-run\n  concept-group                               Concept groups \u2014 list/get\n  action-schedule                             Action schedules \u2014 list/get\n  push [options] <directory>                  Pack a BKN directory into a tar and import it as a knowledge network\n  pull [options] <kn-id> [directory]          Download a knowledge network as a BKN tar and extract it locally\n  relation-type-paths [options] <kn-id>       Query relation-type paths between object types (--body / --body-file JSON)\n  resources                                   List BKN-backend resources\n  create-from-catalog [options] <catalog-id>  Build a knowledge network from a Vega catalog's tables\n  validate <directory>                        Validate a local BKN directory's structure (offline)\n  help [command]                              display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": false
+  },
+  {
+    "command": [
+      "bkn"
+    ],
+    "required": [
+      "get"
+    ],
+    "exit": 0,
+    "stdout": "Knowledge networks \u2014 list, query, schema, instances\n\nUSAGE\n  openbkn bkn [options] [command]\n\nCOMMANDS\n  list [options]                              List knowledge networks\n  get [options] <kn-id>                       Get a knowledge network (use --stats or --export)\n  search [options] <kn-id> <query>            Semantic search within a knowledge network\n  object-type                                 object-type list/get/...\n  relation-type                               relation-type list/get/...\n  action-type                                 action-type list/get/...\n  stats <kn-id>                               Get knowledge-network statistics (alias for get --stats)\n  export <kn-id>                              Export a knowledge network (alias for get --export)\n  create [options] <name>                     Create an (empty) knowledge network\n  update [options] <kn-id>                    Update a knowledge network (--body / --body-file)\n  delete [options] <kn-id>                    Delete a knowledge network\n  subgraph [options] <kn-id>                  Query a subgraph (--body / --body-file JSON)\n  action-log                                  Action logs \u2014 list/get/cancel\n  action-execution <kn-id> <execution-id>     Get action execution status\n  metric                                      Metrics \u2014 query / dry-run\n  concept-group                               Concept groups \u2014 list/get\n  action-schedule                             Action schedules \u2014 list/get\n  push [options] <directory>                  Pack a BKN directory into a tar and import it as a knowledge network\n  pull [options] <kn-id> [directory]          Download a knowledge network as a BKN tar and extract it locally\n  relation-type-paths [options] <kn-id>       Query relation-type paths between object types (--body / --body-file JSON)\n  resources                                   List BKN-backend resources\n  create-from-catalog [options] <catalog-id>  Build a knowledge network from a Vega catalog's tables\n  validate <directory>                        Validate a local BKN directory's structure (offline)\n  help [command]                              display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "bkn",
+      "object-type"
+    ],
+    "required": [
+      "get",
+      "update",
+      "query"
+    ],
+    "exit": 0,
+    "stdout": "object-type list/get/...\n\nUSAGE\n  openbkn bkn object-type [options] [command]\n\nCOMMANDS\n  list [options] <kn-id>           List object-types\n  get <kn-id> <id>                 Get object-type\n  create [options] <kn-id>         Create object-type (--body / --body-file)\n  update [options] <kn-id> <id>    Update object-type (--body / --body-file)\n  delete [options] <kn-id> <id>    Delete object-type\n  query [options] <kn-id> <ot-id>  Query instances of an object type (--body / --body-file JSON)\n  help [command]                   display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "resource"
+    ],
+    "required": [
+      "find",
+      "list"
+    ],
+    "exit": 0,
+    "stdout": "Resources \u2014 list, find, get, query, delete\n\nUSAGE\n  openbkn resource|res [options] [command]\n\nCOMMANDS\n  list [options]         List resources under a catalog\n  find [options]         Search resources by name (fuzzy; --exact for strict)\n  get <id>               Get resource details\n  query [options] <id>   Fetch data rows from a resource\n  delete [options] <id>  Delete a resource\n  help [command]         display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "vega",
+      "catalog"
+    ],
+    "required": [
+      "list",
+      "resources",
+      "get",
+      "create",
+      "enable",
+      "test-connection",
+      "discover"
+    ],
+    "exit": 0,
+    "stdout": "Catalog entries\n\nUSAGE\n  openbkn vega catalog [options] [command]\n\nCOMMANDS\n  list [options]                            List catalog entries\n  get <id>                                  Get a catalog by id\n  resources [options] <id>                  List resources under a catalog\n  health <id>                               Health-status for a catalog\n  create [options]                          Create a catalog (data source)\n  update [options] <id>                     Fully update a catalog\n  enable <id>                               Enable a catalog (required before discovery)\n  disable <id>                              Disable a catalog\n  delete [options] <id>                     Delete a catalog\n  test-connection <id>                      Test a catalog connection\n  test-connection-config [options]          Test an unpersisted catalog connection configuration\n  health-check-schedule <id>                Get a catalog health-check schedule\n  set-health-check-schedule [options] <id>  Update a catalog health-check schedule\n  discover [options] <id>                   Trigger catalog resource discovery\n  help [command]                            display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "toolbox"
+    ],
+    "required": [
+      "list",
+      "publish"
+    ],
+    "exit": 0,
+    "stdout": "Agent toolbox lifecycle\n\nUSAGE\n  openbkn toolbox [options] [command]\n\nCOMMANDS\n  list [options]             List toolboxes\n  create [options]           Create a toolbox\n  publish <box-id>           Publish a toolbox\n  unpublish <box-id>         Unpublish a toolbox (status=draft)\n  delete [options] <box-id>  Delete a toolbox\n  export [options] <box-id>  Export a toolbox config to a local .adp file\n  import [options] <file>    Import a toolbox config from a local .adp file\n  help [command]             display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "tool"
+    ],
+    "required": [
+      "list",
+      "enable",
+      "disable"
+    ],
+    "exit": 0,
+    "stdout": "Tools inside a toolbox\n\nUSAGE\n  openbkn tool [options] [command]\n\nCOMMANDS\n  list [options]                   List tools in a toolbox\n  enable [options] <tool-ids...>   Enable one or more tools\n  disable [options] <tool-ids...>  Disable one or more tools\n  execute [options] <tool-id>      Invoke a published+enabled tool\n  debug [options] <tool-id>        Invoke a tool (draft/disabled too)\n  upload [options] <file>          Upload a tool definition file (OpenAPI spec) into a toolbox\n  help [command]                   display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "skill"
+    ],
+    "required": [
+      "list",
+      "register",
+      "update-package",
+      "set-status"
+    ],
+    "exit": 0,
+    "stdout": "Skill registry and market\n\nUSAGE\n  openbkn skill [options] [command]\n\nCOMMANDS\n  list [options]                             List skills\n  get <skill-id>                             Get a skill by id\n  market [options]                           Browse the skill market\n  market-get <skill-id>                      Get a market skill by id\n  delete <skill-id>                          Delete a skill\n  content [options] <skill-id>               Read a skill's SKILL.md content index\n  read-file [options] <skill-id> <rel-path>  Read a file inside a skill (progressive)\n  files [options] <skill-id> [path]          List a skill's files (one level; --tree for the whole hierarchy)\n  names <ids...>                             Resolve skill ids to names (unknown ids are skipped)\n  execute [options] <skill-id>               Run a skill in the platform sandbox\n  history <skill-id>                         Show a skill's version history\n  set-status <skill-id> <status>             Change status: unpublish | published | offline\n  register [options] <directory>             Zip a local skill directory and register it\n  download [options] <skill-id> [out-path]   Download a skill archive to a local .zip\n  install <skill-id> [directory]             Download a skill archive and extract it locally\n  update-metadata [options] <skill-id>       Update a skill's metadata (--body / --body-file JSON)\n  update-package <skill-id> <directory>      Replace a skill's package from a local directory\n  republish [options] <skill-id>             Republish a previous skill version\n  publish-history [options] <skill-id>       Publish a historical skill version\n  help [command]                             display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [],
+    "required": [
+      "call"
+    ],
+    "exit": 0,
+    "stdout": "Operate the BKN platform from the CLI\n\nUSAGE\n  openbkn [options] [command]\n\nAUTHENTICATION & CONFIG\n  auth                       Login, session, and token management\n  call|curl [options] <url>  Call an API with curl-style flags and auto-injected auth headers\n  config                     Per-platform CLI configuration\n  appkey                     AppKeys \u2014 user-issued long-lived credentials (bak_) for the Context Loader\n\nAI DATA PLATFORM\n  vega                       Vega observability \u2014 catalog, resources, index build tasks\n  bkn                        Knowledge networks \u2014 list, query, schema, instances\n  resource|res               Resources \u2014 list, find, get, query, delete\n  context                    Context loader (MCP) \u2014 schema discovery, instance query, skill recall\n\nDECISION AGENT\n  agent                      [DEPRECATED] Decision Agent \u2014 CRUD, chat, sessions, publish (being phased out)\n  toolbox                    Agent toolbox lifecycle\n  tool                       Tools inside a toolbox\n\nMODELS & SKILLS\n  model                      Model factory \u2014 LLM / small-model CRUD, chat / embeddings / rerank, default selection\n  skill                      Skill registry and market\n\nTRACE AI\n  trace                      BKN Trace \u2014 fetch spans, diagnose (symbolic + LLM rubric), scan, eval-set, schema validate\n\nOPERATOR\n  admin                      Operator CLI: org, user, role, models, audit\n\nFOUNDATION\n  explore [options]          Start a local web server with read-only bkn + vega JSON endpoints\n\nCOMMANDS\n  help [command]             display help for command\n\nFLAGS\n  -V, --version           output the version number\n  --base-url <url>        platform base URL (env: BKN_BASE_URL)\n  --token <value>         access token (env: BKN_TOKEN)\n  --user <id|name>        use specific user credentials (env: BKN_USER)\n  --json                  machine-readable JSON output\n  --compact               single-line JSON output\n  --full                  human view: show all columns (default trims to the key ones)\n  --biz-domain <s>        business domain (alias: -bd)\n  --conversation-id <id>  BKN Trace conversation id (env: BKN_CONVERSATION_ID)\n  --interaction-id <id>   BKN Trace interaction id (env: BKN_INTERACTION_ID)\n  --new-conversation      ignore the remembered conversation for this command (see `openbkn context conversation`)\n  -k, --insecure          skip TLS verification (dev / self-signed only)\n  -h, --help              display help for command\n",
+    "accepted": true
+  }
+]

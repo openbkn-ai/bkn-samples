@@ -1,0 +1,19 @@
+Metrics — query / dry-run
+
+USAGE
+  openbkn bkn metric [options] [command]
+
+COMMANDS
+  query [options] <kn-id> <metric-id>   Query a metric's data (--body / --body-file JSON)
+  dry-run [options] <kn-id>             Dry-run a metric definition (--body / --body-file JSON)
+  list <kn-id>                          List metrics
+  get <kn-id> <metric-id>               Get a metric
+  create [options] <kn-id>              Create a metric (--body / --body-file)
+  update [options] <kn-id> <metric-id>  Update a metric (--body / --body-file)
+  delete <kn-id> <metric-id>            Delete a metric
+  search [options] <kn-id>              Search metrics (--body / --body-file)
+  validate [options] <kn-id>            Validate a metric definition (--body / --body-file)
+  help [command]                        display help for command
+
+FLAGS
+  -h, --help  display help for command

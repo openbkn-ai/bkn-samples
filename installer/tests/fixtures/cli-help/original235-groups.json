@@ -1,0 +1,132 @@
+[
+  {
+    "command": [
+      "bkn",
+      "metric"
+    ],
+    "required": [
+      "list",
+      "create",
+      "query"
+    ],
+    "exit": 0,
+    "stdout": "Metrics \u2014 query / dry-run\n\nUSAGE\n  openbkn bkn metric [options] [command]\n\nREAD\n  list [options] <kn-id>                List metrics\n  get [options] <kn-id> <metric-id>     Get a metric \u2192 {entries}, since the route takes a list of ids\n\nRUN\n  query [options] <kn-id> <metric-id>   Query a metric's data (--body / --body-file JSON)\n  dry-run [options] <kn-id>             Dry-run a metric definition (--body / --body-file JSON)\n  validate [options] <kn-id>            Validate a metric definition (--body / --body-file)\n\nWRITE\n  create [options] <kn-id>              Create metrics (--body / --body-file) \u2192 body is {entries:[\u2026]}\n  update [options] <kn-id> <metric-id>  Update a metric (--body / --body-file)\n  delete [options] <kn-id> <metric-id>  Delete a metric\n\nCOMMANDS\n  help [command]                        display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "bkn",
+      "capability"
+    ],
+    "required": [
+      "attach",
+      "list"
+    ],
+    "exit": 0,
+    "stdout": "Skills, tool box tools and MCP tools bound to a network \u2014 list/attach/detach\n\nUSAGE\n  openbkn bkn capability [options] [command]\n\nREAD\n  list [options] <kn-id>                  List what the network has bound \u2192 {entries, boxes, total_count, \u2026}\n\nWRITE\n  attach [options] <kn-id>                Bind skills, tool box tools or MCP tools; binding one twice is a no-op\n  detach [options] <kn-id> <binding-ids>  Release bindings by id (comma-separated, from `capability list`)\n\nCOMMANDS\n  help [command]                          display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "bkn"
+    ],
+    "required": [
+      "get"
+    ],
+    "exit": 0,
+    "stdout": "Knowledge networks: schema, metrics, search, import/export\n\nUSAGE\n  openbkn bkn [options] [command]\n\nGROUPS\n  object-type                                 object-type list/get/...\n  relation-type                               relation-type list/get/...\n  action-type                                 action-type list/get/...\n  action-log                                  Action logs \u2014 list/get/cancel; list pages with --search-after\n  metric                                      Metrics \u2014 query / dry-run\n  concept-group                               Concept groups \u2014 list/get\n  action-schedule                             Action schedules \u2014 list/get\n  capability                                  Skills, tool box tools and MCP tools bound to a network \u2014 list/attach/detach\n\nREAD\n  list [options]                              List knowledge networks\n  get [options] <kn-id>                       Get a knowledge network (use --stats or --export)\n  search [options] <kn-id> <query>            Recall instances from a plain sentence \u2014 no object type or field names needed \u2192 {nodes, object_types}\n  stats <kn-id>                               Get knowledge-network statistics (alias for get --stats)\n  export <kn-id>                              Export a knowledge network (alias for get --export)\n  subgraph [options] <kn-id>                  Query a subgraph (--body / --body-file JSON)\n  action-execution <kn-id> <execution-id>     Get action execution status\n  pull [options] <kn-id> [directory]          Download a knowledge network as a BKN tar and extract it locally\n  relation-type-paths [options] <kn-id>       Query relation-type paths between object types (--body / --body-file JSON)\n  cypher [options] <kn-id>                    Answer a read-only Cypher query over the network's model, outside any Trace session\n  resources [options]                         List BKN-backend resources (knowledge networks) \u2192 {entries, total_count}\n  validate <directory>                        Validate a local BKN directory's structure (offline)\n\nWRITE\n  create [options] <name>                     Create an (empty) knowledge network\n  update [options] <kn-id>                    Update a knowledge network (--body / --body-file)\n  delete [options] <kn-id>                    Delete a knowledge network\n  push [options] <directory>                  Pack a BKN directory into a tar and import it as a knowledge network\n  create-from-catalog [options] <catalog-id>  Build a knowledge network from a Vega catalog's tables\n\nCOMMANDS\n  help [command]                              display help for command\n\nWHERE IDS COME FROM\n  `list` gives kn ids; `object-type list <kn-id>` and `search <kn-id> \"<q>\"` give the rest.\n\nSEARCH VS THE MCP SIDE\n  `search` recalls instance rows from one sentence and ships the object-type definitions\n  needed to read them \u2014 start here when you do not know the schema yet. It only reaches\n  properties indexed for match/knn, so an unindexed object type yields nothing, and no hits\n  comes back as empty nodes with a message rather than an error. For schema alone use\n  `openbkn context search-schema`; for a structured filter use `object-type query`.\n\nEDITING SCHEMA AS FILES\n  pull <kn-id> ./dir  ->  edit  ->  validate ./dir  ->  push ./dir\n  `validate` is offline and catches structure errors before the upload.\n  network.bkn may declare the skills and tools the network depends on under\n  `capabilities:`. push binds them by id, then by name; one this platform cannot\n  resolve is skipped, not fatal, and push lists every skip on stderr.\n\nCAPABILITIES\n  `capability list <kn-id>` shows what a network has bound \u2014 the set Context Loader\n  recalls skills and tools from; a network with nothing bound recalls nothing.\n\nREQUEST BODIES\n  create/update take a definition; query/execute/dry-run take a query. Both are documented\n  at https://openbkn-ai.github.io/bkn-foundry/ \u2014 definitions under bkn-backend, reads and\n  executions under ontology-query. Each command's --body flag names its own module.\n\nCREATING FROM DATA\n  create-from-catalog <catalog-id> --name \"<n>\" builds a network from a Vega catalog,\n  then `openbkn vega resource build <resource-id>` produces the index. There is no\n  whole-network build.\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "bkn",
+      "object-type"
+    ],
+    "required": [
+      "get",
+      "update",
+      "query"
+    ],
+    "exit": 0,
+    "stdout": "object-type list/get/...\n\nUSAGE\n  openbkn bkn object-type [options] [command]\n\nREAD\n  list [options] <kn-id>           List object-types\n  get [options] <kn-id> <id>       Get object-type \u2192 {entries}\n\nRUN\n  query [options] <kn-id> <ot-id>  Query instances of an object type (--body / --body-file JSON)\n\nWRITE\n  create [options] <kn-id>         Create object-types (--body / --body-file) \u2192 body is {entries:[\u2026]}\n  update [options] <kn-id> <id>    Update object-type (--body / --body-file); the body carries base_version\n  delete [options] <kn-id> <id>    Delete object-type\n\nCOMMANDS\n  help [command]                   display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "resource"
+    ],
+    "required": [
+      "find",
+      "list"
+    ],
+    "exit": 0,
+    "stdout": "Tables and views behind a network: find, inspect, sample, enable, disable\n\nUSAGE\n  openbkn resource|res [options] [command]\n\nREAD\n  list [options]         List resources under a catalog\n  find [options]         Search resources by name, fuzzy unless --exact \u2192 a bare array, not an envelope\n  get <id>               Get resource details\n\nRUN\n  query [options] <id>   Fetch data rows from a resource (default limit 50)\n\nWRITE\n  enable <id>            Enable a resource\n  disable <id>           Disable a resource\n  delete [options] <id>  Delete a resource\n\nCOMMANDS\n  help [command]         display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "vega",
+      "catalog"
+    ],
+    "required": [
+      "list",
+      "resources",
+      "get",
+      "create",
+      "enable",
+      "test-connection",
+      "discover"
+    ],
+    "exit": 0,
+    "stdout": "Catalog entries\n\nUSAGE\n  openbkn vega catalog [options] [command]\n\nREAD\n  list [options]                            List catalog entries\n  get <id>                                  Get a catalog by id\n  stats [options]                           Count visible catalogs by catalog and connector type\n  resources [options] <id>                  List resources under a catalog\n  health <id>                               Health-status for a catalog\n  health-check-schedule <id>                Get a catalog health-check schedule\n\nRUN\n  test-connection <id>                      Test a catalog connection\n  test-connection-config [options]          Test an unpersisted catalog connection configuration\n  discover [options] <id>                   Trigger catalog resource discovery\n\nWRITE\n  create [options]                          Create a catalog (data source)\n  update [options] <id>                     Update a catalog; fields you leave out keep their current values (read, then full PUT)\n  enable <id>                               Enable a catalog (required before discovery)\n  disable <id>                              Disable a catalog\n  delete [options] <id>                     Delete a catalog\n  set-health-check-schedule [options] <id>  Update a catalog health-check schedule\n\nCOMMANDS\n  help [command]                            display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "toolbox"
+    ],
+    "required": [
+      "list",
+      "publish"
+    ],
+    "exit": 0,
+    "stdout": "Toolboxes: group tools into one publishable box\n\nUSAGE\n  openbkn toolbox [options] [command]\n\nREAD\n  list [options]             List toolboxes \u2192 {data, total, page, page_size, has_next}; the id is `box_id`\n  export [options] <box-id>  Export a toolbox config to a local .adp file\n\nWRITE\n  create [options]           Create a toolbox \u2014 openapi proxies to a service, function holds platform functions\n  publish <box-id>           Publish a toolbox\n  unpublish <box-id>         Take a published toolbox down (status=offline)\n  delete [options] <box-id>  Delete a toolbox\n  import [options] <file>    Import a toolbox config from a local .adp file\n\nCOMMANDS\n  help [command]             display help for command\n\nTWO KINDS OF BOX\n  --type openapi   its tools proxy to --service-url; they come from a spec\n  --type function  its tools are platform functions, no service URL to give\n\n  ORDER OF WORK\n  toolbox create --name \"<n>\"        an empty box, not yet published\n  tool create ./add.py --toolbox     a function tool, or --type openapi for a spec\n  tool debug <tool-id>               call it while building, before enable/publish\n  tool enable <tool-ids...>          a tool is off until enabled\n  toolbox publish <box-id>           execute needs a published box\n  tool execute <tool-id>             call an enabled tool in a published box\n\n  Both gates apply to `execute`: the tool must be enabled and the box published \u2014\n  an unpublished or offline box answers 400 ToolNotAvailable. `debug` skips both.\n\n  export / import move a whole box between deploys as an .adp file.\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "tool"
+    ],
+    "required": [
+      "list",
+      "enable",
+      "disable"
+    ],
+    "exit": 0,
+    "stdout": "Advanced tools in a box: add one from code or a spec, enable it, call it\n\nUSAGE\n  openbkn tool [options] [command]\n\nREAD\n  list [options]                     List tools in a toolbox\n  get [options] <tool-id>            One tool in full: metadata, parameters, usage rule\n\nRUN\n  execute [options] <tool-id>        Invoke an enabled tool in a published toolbox\n  debug [options] <tool-id>          Invoke a tool before it is enabled or its toolbox published\n\nWRITE\n  enable [options] <tool-ids...>     Enable one or more tools\n  disable [options] <tool-ids...>    Disable one or more tools\n  create [options] <file>            Create a tool from code (or a spec)\n  update [options] <tool-id> <file>  Replace a tool's definition; the id survives and an enabled tool stays enabled\n  delete [options] <tool-ids...>     Delete tools from a toolbox\n  upload [options] <file>            Add tools from an OpenAPI file \u2014 `tool create` is the same endpoint, as JSON\n\nCOMMANDS\n  help [command]                     display help for command\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [
+      "skill"
+    ],
+    "required": [
+      "list",
+      "register",
+      "update-package",
+      "set-status"
+    ],
+    "exit": 0,
+    "stdout": "Skill packages (SKILL.md + files) agents load on demand\n\nUSAGE\n  openbkn skill [options] [command]\n\nREAD\n  list [options]                             List skills \u2192 {data, total, page, page_size, has_next}; the id to reuse is `skill_id`\n  get <skill-id>                             Get a skill by id\n  market [options]                           Browse the skill market \u2192 {data, total, page, has_next}\n  market-get <skill-id>                      Get a market skill by id\n  content [options] <skill-id>               Read a skill's SKILL.md content index\n  read-file [options] <skill-id> <rel-path>  Read a file inside a skill (progressive)\n  files [options] <skill-id> [path]          List a skill's files (one level; --tree for the whole hierarchy)\n  names <ids...>                             Resolve skill ids to names (unknown ids are skipped)\n  history <skill-id>                         Show a skill's version history\n\nRUN\n  execute [options] <skill-id>               Run a skill in the platform sandbox\n  download [options] <skill-id> [out-path]   Download a skill archive to a local .zip\n  install <skill-id> [directory]             Download a skill archive and extract it locally\n\nWRITE\n  delete <skill-id>                          Delete a skill\n  set-status <skill-id> <status>             Publish or take down a skill: published | offline\n  register [options] <directory>             Zip a local skill directory and register it\n  update-metadata [options] <skill-id>       Replace a skill's metadata (--body / --body-file JSON: name, description, category required)\n  update-package <skill-id> <directory>      Replace a skill's package from a local directory\n  republish [options] <skill-id>             Copy a historical version back into the draft (publishes nothing; see publish-history)\n  publish-history [options] <skill-id>       Publish a historical skill version directly\n\nCOMMANDS\n  help [command]                             display help for command\n\nREADING A SKILL\n  content <id> gives the SKILL.md index; files <id> [path] walks the package; read-file\n  pulls one file. Read progressively \u2014 do not download the whole archive to answer a question.\n\nPUBLISHED VS DRAFT\n  Read commands return the published version. --draft reads the editing copy instead, which\n  is what a Studio user sees. The two differ whenever changes are unpublished.\n\nAUTHORING\n  register <dir> zips and registers; update-package replaces the files; update-metadata\n  changes only the metadata (a full overwrite: name, description, category required).\n  set-status publishes or takes down the current version. republish copies a historical\n  version back into the draft and publishes nothing; publish-history publishes one.\n\nFLAGS\n  -h, --help  display help for command\n",
+    "accepted": true
+  },
+  {
+    "command": [],
+    "required": [
+      "call"
+    ],
+    "exit": 0,
+    "stdout": "openbkn \u2014 one CLI for the BKN platform: knowledge networks, the data behind them,\nthe tools and skills agents run on them, and the traces they leave.\n\nUSAGE\n  openbkn [options] [command]\n\nSIGN IN & SETTINGS\n  auth                             Log in; the token is saved and reused. Start here.\n  config                           Remember a platform URL\n  appkey                           Issue long-lived `bak_` keys for scripts and services\n\nDATA & KNOWLEDGE\n  bkn                              Knowledge networks: schema, metrics, search, import/export\n  vega                             Data sources: catalogs, connectors, SQL, index builds\n  resource|res                     Tables and views behind a network: find, inspect, sample, enable, disable\n  context                          Ask a network questions (the MCP interface agents use)\n\nMODELS\n  model                            Large and small models: chat, embeddings, rerank, defaults\n\nTOOLS & SKILLS\n  skill                            Skill packages (SKILL.md + files) agents load on demand\n  mcp                              Registered MCP Servers: inspect their configuration and discover their tools\n  sandbox                          Sandbox functions: run Python on the platform without registering anything\n  toolbox                          Toolboxes: group tools into one publishable box\n  function                         Function Tools in a toolbox: add one, enable it, and call it\n  api                              OpenAPI Tools in a toolbox: add one, enable it, and call it\n  tool                             Advanced tools in a box: add one from code or a spec, enable it, call it\n\nTRACING\n  trace                            Inspect what an agent actually did, and diagnose bad answers\n\nADMINISTRATION\n  admin                            Orgs, users, roles, license, audit log\n\nRAW API\n  call|curl [options] <url>        Call any platform API endpoint directly (auth added)\n\nCOMMANDS\n  describe [options] [command...]  Print the command tree \u2014 paths, sections, flags (--json for the data)\n  help [command]                   display help for command\n\nFIRST STEPS\n    openbkn auth login https://your-platform -u <user> -p <pass>\n    openbkn bkn list                       # knowledge networks you can see\n    openbkn bkn --help                     # every group has its own help\n    openbkn describe --depth 1             # the whole map as one table; `describe <command>`\n                                           # drills in, --json ships the same tree as data\n\n  COMMON TASKS\n    Answer a question    bkn search <kn-id> \"<q>\"  ->  context search-schema  ->\n                         context query-object-instance --args '<json>'\n    Look at the data     vega catalog list  ->  resource find --name <t>  ->  resource query <id>\n    Build from a catalog bkn create-from-catalog <catalog-id> --name \"<n>\"  ->\n                         vega resource build <resource-id>\n    Edit as files        bkn pull <kn-id> ./kn  ->  bkn validate ./kn  ->  bkn push ./kn\n    Ship an API          toolbox create --name \"<n>\" --service-url <url>  ->\n                         api import ./api.yaml --toolbox <box-id>  ->\n                         api enable <tool-id> --toolbox <box-id>  ->  toolbox publish <box-id>\n                         ->  api execute <tool-id> --toolbox <box-id>\n    Ship some code       sandbox run ./add.py  ->  toolbox create --name \"<n>\" --type function\n                         ->  function create ./add.py --toolbox <box-id> --name add  ->\n                         function enable <tool-id> --toolbox <box-id>  ->\n                         toolbox publish <box-id>  ->  function execute <tool-id> --toolbox <box-id>\n    Debug an answer      trace conversations list  ->  trace diagnose <conversation-id> --llm\n\n  GOOD TO KNOW\n    Every command group sorts its subcommands into the same four sections: GROUPS nests one\n    level deeper, READ changes nothing, RUN acts without changing configuration (triggers a\n    job, spends a model call, rotates a token), WRITE changes platform state \u2014 confirm those\n    with a person first.\n    Add --json to any command for machine-readable output (the default view trims columns,\n    --full widens it). Most list commands answer {entries, total_count}; anything else says\n    so in its own description. Ids come from list/search output \u2014 opaque, never guess one,\n    and the key holding one is not always `id` (`skill_id`, `conversation_id`, `ot_id` \u2026).\n    Saved logins are selected with --user; access follows the account's platform grants.\n    `openbkn call` reaches any endpoint a command does not cover, auth injected. Look the\n    path up at https://openbkn-ai.github.io/bkn-foundry/ first \u2014 do not guess one.\n\nFLAGS\n  -V, --version           output the version number\n  --base-url <url>        platform base URL (env: BKN_BASE_URL)\n  --token <value>         access token (env: BKN_TOKEN)\n  --user <id|name>        use specific user credentials (env: BKN_USER)\n  --json                  machine-readable JSON output\n  --compact               single-line JSON output\n  --full                  human view: show all columns (default trims to the key ones)\n  --conversation-id <id>  BKN Trace conversation id (env: BKN_CONVERSATION_ID)\n  --interaction-id <id>   BKN Trace interaction id (env: BKN_INTERACTION_ID)\n  --new-conversation      ignore the remembered conversation for this command (see `openbkn context conversation`)\n  -k, --insecure          skip TLS verification (dev / self-signed only)\n  --no-retry              fail at once on a refused/dropped connection or a 429/502/503, instead of retrying 3 times\n  --dry-run               print the request this command would send, and send nothing\n  --skip-version-check    send the request even if the platform version does not match this SDK (env: BKN_SKIP_VERSION_CHECK=1)\n  -h, --help              display help for command\n",
+    "accepted": true
+  }
+]

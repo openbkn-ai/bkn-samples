@@ -1,0 +1,109 @@
+{
+  "sha256:147cfecf87311bcdd0cb09bb88490c630e20aac7dbab8fc0441958258b46d281": {
+    "apiRequirement": "legacy knowledge-network metrics CRUD and metric data APIs",
+    "commands": [
+      {
+        "command": [
+          "bkn",
+          "metric"
+        ],
+        "subcommands": [
+          "list",
+          "create",
+          "query"
+        ]
+      },
+      {
+        "command": [
+          "bkn",
+          "capability"
+        ],
+        "subcommands": [
+          "attach",
+          "list"
+        ]
+      },
+      {
+        "command": [
+          "bkn"
+        ],
+        "subcommands": [
+          "get"
+        ]
+      },
+      {
+        "command": [
+          "bkn",
+          "object-type"
+        ],
+        "subcommands": [
+          "get",
+          "update",
+          "query"
+        ]
+      },
+      {
+        "command": [
+          "resource"
+        ],
+        "subcommands": [
+          "find",
+          "list"
+        ]
+      },
+      {
+        "command": [
+          "vega",
+          "catalog"
+        ],
+        "subcommands": [
+          "list",
+          "resources",
+          "get",
+          "create",
+          "enable",
+          "test-connection",
+          "discover"
+        ]
+      },
+      {
+        "command": [
+          "toolbox"
+        ],
+        "subcommands": [
+          "list",
+          "publish"
+        ]
+      },
+      {
+        "command": [
+          "tool"
+        ],
+        "subcommands": [
+          "list",
+          "enable",
+          "disable"
+        ]
+      },
+      {
+        "command": [
+          "skill"
+        ],
+        "subcommands": [
+          "list",
+          "register",
+          "update-package",
+          "set-status"
+        ]
+      },
+      {
+        "command": [],
+        "subcommands": [
+          "call"
+        ]
+      }
+    ],
+    "source": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.4/package.tar.gz",
+    "packageDigest": "sha256:cb0d3f01568c490dca22fdd4ff6273dc83804f6726a3c5c8872e4eb670a14ad0"
+  }
+}
