@@ -7,11 +7,14 @@ persistence:
   size: 1Gi
 
 image:
-  repository: ghcr.io/openbkn-ai/bkn-sample-studio
+  registry: swr.cn-east-3.myhuaweicloud.com/openbkn-ai
+  repository: bkn-sample-studio
   tag: "__VERSION__"
   # The publication workflow stamps the digest of this build for remote installs.
   digest: ""
   pullPolicy: IfNotPresent
+
+imagePullSecrets: []
 
 dataImage:
   tag: "__VERSION__"

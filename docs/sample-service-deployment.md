@@ -90,3 +90,33 @@ The Chart creates and preserves the database Secret across Helm upgrades; `sampl
 ### Sample hook credential boundary
 
 The installer retains its administrative identity for database ownership and Kubernetes operations. All four sample-authored hooks execute as distinct temporary non-root UIDs with empty supplementary groups, an allowlisted environment and a private copy of that sample's files. The Pod disables privilege escalation. Database administrator and Kubernetes service-account credentials are root-readable only; sample hooks receive only the current sample's database connection and authorized platform input. Known config/receipt outputs are copied back without following symlinks. A missing Linux privilege-switching runtime fails closed; there is no root execution fallback.
+
+### Standard image delivery (0.2.1)
+
+Standard service and executor images use SWR. The release workflow requires SWR
+credentials, resolves the digest from SWR itself and checks the Linux amd64/arm64
+manifest before packaging the Chart. GHCR may still receive a copy; equal digests
+between different registries are not required. The executor runs in the installed
+service process and records the same immutable image identity for retry checks.
+
+`image.registry` defaults to `swr.cn-east-3.myhuaweicloud.com/openbkn-ai`;
+`image.repository` defaults to `bkn-sample-studio`. An explicit full repository
+(such as `private.example/team/service`) remains supported, as do tag/digest and
+`imagePullSecrets` overrides. Preserve the correct digest for that repository;
+do not copy a digest from an unrelated registry without verification.
+
+The legacy bundled database installer now discovers only SWR and never switches
+to GHCR after a pull error. An administrator's explicit fixed image reference,
+including an offline package's recorded image, remains unchanged. Published
+historical package manifests are not rewritten: a legacy package that explicitly
+references GHCR still needs its recorded artifact or a separately verified new
+release. Current shared-database packages do not pull a per-sample database image.
+
+An old stored Helm `image.repository` override is an explicit operator choice;
+remove it or set `image.registry` and the short repository when migrating to SWR.
+Release publication and cold-node pulls must be verified in the target registry
+and cluster after review; local template tests do not publish or synchronize images.
+
+Tag publication also verifies the matching SWR data image before publishing the
+Chart. If the separate data-image workflow has not finished, Chart publication
+fails closed; rerun it after the data image is available. No GHCR fallback is used.

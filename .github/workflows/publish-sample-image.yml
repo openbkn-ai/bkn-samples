@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SWR_PASSWORD: ${{ secrets.SWR_PASSWORD }}
+      SWR_USERNAME: ${{ secrets.SWR_USERNAME }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,6 +23,7 @@ jobs:
       - name: Require the tag to match VERSION
         id: version
         run: |
+          test -n "${SWR_PASSWORD}" && test -n "${SWR_USERNAME}" || { echo "SWR credentials are required for a standard release" >&2; exit 1; }
           python -m pip install "PyYAML>=6"
           version="$(PYTHONPATH=. python installer/release.py check-tag --tag "${GITHUB_REF_NAME}")"
           printf 'value=%s\n' "$version" >> "$GITHUB_OUTPUT"
@@ -97,10 +99,12 @@ jobs:
           if [[ "${SWR_ENABLED}" == "true" ]]; then
             publish_manifest swr.cn-east-3.myhuaweicloud.com/openbkn-ai bkn-samples
           fi
-      - name: Require SWR and GHCR digests to match
-        if: steps.version.outputs.swr == 'true'
+      - name: Verify SWR sample image platforms
         run: |
+          set -euo pipefail
           version="${{ steps.version.outputs.value }}"
-          swr="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}")"
-          ghcr="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "ghcr.io/openbkn-ai/bkn-samples:${version}")"
-          PYTHONPATH=. python installer/release.py check-digests --left "$swr" --right "$ghcr"
+          repository=swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples
+          digest="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "${repository}:${version}")"
+          [[ "${digest}" =~ ^sha256:[0-9a-f]{64}$ ]]
+          docker buildx imagetools inspect --raw "${repository}@${digest}" > /tmp/swr-data-manifest.json
+          PYTHONPATH=. python installer/verify_image_manifest.py /tmp/swr-data-manifest.json

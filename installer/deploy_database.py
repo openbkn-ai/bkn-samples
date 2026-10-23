@@ -288,8 +288,12 @@ def _manifest_digest(image: str, tag: str, opener) -> str | None:
 
 
 def registry_digests(tag: str, opener=urllib.request.urlopen) -> tuple[str | None, str | None]:
-    """Read the SWR and GHCR manifest digests for one pinned tag. A missing image is None."""
-    return _manifest_digest(SWR_IMAGE, tag, opener), _manifest_digest(GHCR_IMAGE, tag, opener)
+    """Resolve the standard SWR image without a runtime dependency on GHCR.
+
+    Keep the pair-shaped injection seam for existing callers; the second value
+    is no longer a fallback source. Other registries require an explicit ref.
+    """
+    return _manifest_digest(SWR_IMAGE, tag, opener), None
 
 
 def _digests_conflict(swr_digest: str | None, ghcr_digest: str | None) -> bool:
@@ -417,20 +421,16 @@ def deploy_database(
     image = data_image_ref if data_image_ref is not None else configured_image_ref()
     if image is not None and not _IMAGE_REFERENCE.fullmatch(image):
         raise DeployError("image_unavailable", "sample data image requires a fixed registry digest")
-    ghcr_digest = None
     if offline and data_image_ref is None:
         raise DeployError("offline_image_missing", "offline installation requires the bundled image identity")
     if image is None:
         tag = image_tag(read_version(root))
         lookup = registry_digests if digests is None else digests
-        swr_digest, ghcr_digest = lookup(tag)
-        if _digests_conflict(swr_digest, ghcr_digest):
-            raise DeployError("image_unavailable", "SWR and GHCR manifest digests differ")
+        swr_digest, _ = lookup(tag)
         swr_digest = _usable_digest(swr_digest)
-        ghcr_digest = _usable_digest(ghcr_digest)
-        if not swr_digest and not ghcr_digest:
-            raise DeployError("image_unavailable", "no verified sample image digest is available")
-        image = f"{SWR_IMAGE}@{swr_digest}" if swr_digest else f"{GHCR_IMAGE}@{ghcr_digest}"
+        if not swr_digest:
+            raise DeployError("image_unavailable", "no verified SWR sample image digest is available; configure an explicit image reference for another registry")
+        image = f"{SWR_IMAGE}@{swr_digest}"
     if require_ownership:
         _assert_database_ownership(kubectl, sample, version, image)
     manifest = _manifests(sample, database, version, image, root_password or "unused", user_password or "unused")
@@ -447,12 +447,7 @@ def deploy_database(
     if require_ownership:
         manifest = _owned_manifests(manifest, sample, version, image)
     _apply(kubectl, manifest)
-    # A mirror switch is allowed only when its independently resolved digest
-    # matches the selected artifact. Never fall back to a mutable tag.
-    # Owned resources retain one fixed reference in both state and annotations.
-    # Configure the alternative registry explicitly rather than switching identity.
-    ghcr = f"{GHCR_IMAGE}@{ghcr_digest}" if ghcr_digest and not require_ownership and not offline else None
-    switched = image == ghcr
+    # Keep one fixed image identity throughout the attempt; never switch registries.
     state = "pending"
     for attempt in range(attempts):
         state = _pod_state(kubectl, sample, image)
@@ -472,14 +467,10 @@ def deploy_database(
                 "sample_data_unavailable",
                 "the sample data was not downloaded or did not match its lock file",
             )
-        if state == "image_pull_failed" and not switched and ghcr:
-            _switch_image(kubectl, sample, ghcr)
-            switched = True
-            image = ghcr
         sleep(poll_seconds)
     else:
         if state == "image_pull_failed":
-            raise DeployError("image_unavailable", "neither SWR nor GHCR could provide the sample image")
+            raise DeployError("image_unavailable", "the configured sample image could not be pulled")
         raise DeployError("database_not_ready", "the sample database did not become ready")
     if state != "ready":
         code = "image_unavailable" if state == "image_pull_failed" else "database_not_ready"
