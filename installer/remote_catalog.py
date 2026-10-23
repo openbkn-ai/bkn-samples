@@ -2,6 +2,7 @@
 
 import re
 
+from installer.executor_compatibility import ExecutorCompatibilityError
 from installer.remote_bundle import compatibility
 from installer.studio_api import _card, _read_state
 
@@ -23,18 +24,24 @@ def merge_remote(result, entries, state_dir, role, runtime):
         releases.sort(key=lambda e: tuple(map(int, e["version"].split("."))), reverse=True)
         versions = []
         for entry in releases:
+            detail = ""
             reason = "release_withdrawn" if entry["releaseStatus"] != "published" else ""
             if not reason:
                 try:
                     runtime.require_executor()
                     compatibility(entry["requires"], runtime.platform_version, runtime.architecture, runtime.capabilities)
+                    runtime.compatibility.require(entry)
                     if len(name) > 32 or not name[0].isalpha():
                         raise ValueError("unsupported sample identity")
+                except ExecutorCompatibilityError as error:
+                    reason = "runtime_upgrade_required"
+                    detail = str(error)
                 except ValueError:
                     reason = "runtime_upgrade_required"
             versions.append({"version": entry["version"], "hasReleaseNotes": True,
                              "manifestSha256": entry["manifest"]["digest"].removeprefix("sha256:"),
                              "installable": not reason and role == "admin", "reason": reason,
+                             "compatibilityMessage": detail,
                              "releaseStatus": entry["releaseStatus"], "publishedAt": entry["publishedAt"]})
         published = [e for e in releases if e["releaseStatus"] == "published"]
         selected = next((e for e, v in zip(releases, versions) if not v["reason"]), (published or releases)[0])
@@ -42,7 +49,9 @@ def merge_remote(result, entries, state_dir, role, runtime):
         old = by_name.get(name)
         if old and state and state.get("status") != "uninstalled" and not state.get("remoteRelease"):
             card = old
-        elif old and not any(not v["reason"] for v in versions) and not (state or {}).get("remoteRelease"):
+        elif (old and not any(not v["reason"] for v in versions)
+              and not any(v["compatibilityMessage"] for v in versions)
+              and not (state or {}).get("remoteRelease")):
             card = old
         else:
             selected_view = next(v for v in versions if v["version"] == selected["version"])
@@ -58,6 +67,9 @@ def merge_remote(result, entries, state_dir, role, runtime):
                 item["releaseNotes"] = state.get("releaseNotesSnapshot")
             card = _card(item, selected["version"], state, role, False)
             card["installable"] = card["installable"] and not selected_view["reason"]
+            card["compatibilityMessage"] = selected_view["compatibilityMessage"]
+            if selected_view["compatibilityMessage"] and card["status"] in {"unavailable", "not_installed"}:
+                card["message"] = selected_view["compatibilityMessage"]
             if old:
                 result["samples"][result["samples"].index(old)] = card
             else:
@@ -69,6 +81,13 @@ def merge_remote(result, entries, state_dir, role, runtime):
             card["versions"] = [views.get(v["version"], v) for v in card["versions"]]
             card["versions"].extend(v for v in versions if v["version"] not in existing)
             selected_view = views.get(card["version"], {})
+            if selected_view.get("compatibilityMessage"):
+                card["installable"] = False
+                if card["status"] in {"unavailable", "not_installed"}:
+                    card["code"] = selected_view["reason"]
+                card["compatibilityMessage"] = selected_view.get("compatibilityMessage", "")
+                if card["compatibilityMessage"] and card["status"] in {"unavailable", "not_installed"}:
+                    card["message"] = card["compatibilityMessage"]
             if selected_view.get("releaseStatus") == "withdrawn":
                 card["installable"] = False
                 card["code"] = "release_withdrawn"

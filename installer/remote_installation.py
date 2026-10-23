@@ -9,6 +9,7 @@ from pathlib import Path
 from ssl import SSLError
 from urllib.error import URLError
 
+from installer.executor_compatibility import ExecutorCompatibility, ExecutorCompatibilityError
 from installer.remote_bundle import compatibility, download_package, extract_package, load_release, validate_package
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, _write_failed, timestamp
@@ -32,6 +33,7 @@ class RemoteInstallation:
         self.capabilities = capabilities
         self.executor_digest = executor_digest(root)
         self.executor_image = executor_image
+        self.compatibility = ExecutorCompatibility()
 
     def require_executor(self):
         if not re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[0-9a-f]{64}", self.executor_image):
@@ -46,6 +48,9 @@ class RemoteInstallation:
         try:
             self.require_executor()
             compatibility(entry["requires"], self.platform_version, self.architecture, self.capabilities)
+            self.compatibility.require(entry)
+        except ExecutorCompatibilityError as error:
+            raise ApiError(409, "runtime_upgrade_required", str(error)) from error
         except ValueError as error:
             raise ApiError(409, "runtime_upgrade_required", "release requirements are not supported") from error
         current = _read_state(self.state_dir, sample)
@@ -74,6 +79,9 @@ class RemoteInstallation:
         try:
             self.require_executor()
             compatibility(entry["requires"], self.platform_version, self.architecture, self.capabilities)
+            self.compatibility.require(entry)
+        except ExecutorCompatibilityError as error:
+            raise ApiError(409, "runtime_upgrade_required", str(error)) from error
         except ValueError as error:
             raise ApiError(409, "runtime_upgrade_required", "release requirements are not supported") from error
         current["status"] = "installing"
@@ -93,6 +101,7 @@ class RemoteInstallation:
                 or current["remoteRelease"].get("executorImage") != self.executor_image):
             raise ValueError("fixed remote installation plan is unavailable")
         entry = current["remoteRelease"]["entry"]
+        self.compatibility.require(entry)
         work = self.state_dir / "work"
         work.mkdir(parents=True, exist_ok=True, mode=0o700)
         with tempfile.TemporaryDirectory(prefix=f"{sample}-", dir=work) as temporary:

@@ -1,0 +1,24 @@
+Metrics — query / dry-run
+
+USAGE
+  openbkn bkn metric [options] [command]
+
+READ
+  list [options] <kn-id>                List metrics
+  get [options] <kn-id> <metric-id>     Get a metric → {entries}, since the route takes a list of ids
+
+RUN
+  query [options] <kn-id> <metric-id>   Query a metric's data (--body / --body-file JSON)
+  dry-run [options] <kn-id>             Dry-run a metric definition (--body / --body-file JSON)
+  validate [options] <kn-id>            Validate a metric definition (--body / --body-file)
+
+WRITE
+  create [options] <kn-id>              Create metrics (--body / --body-file) → body is {entries:[…]}
+  update [options] <kn-id> <metric-id>  Update a metric (--body / --body-file)
+  delete [options] <kn-id> <metric-id>  Delete a metric
+
+COMMANDS
+  help [command]                        display help for command
+
+FLAGS
+  -h, --help  display help for command

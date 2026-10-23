@@ -1,0 +1,74 @@
+Knowledge networks: schema, metrics, search, import/export
+
+USAGE
+  openbkn bkn [options] [command]
+
+GROUPS
+  object-type                                 object-type list/get/...
+  relation-type                               relation-type list/get/...
+  action-type                                 action-type list/get/...
+  action-log                                  Action logs — list/get/cancel; list pages with --search-after
+  object-metric                               Versioned object metrics — author, publish, query
+  concept-group                               Concept groups — list/get
+  action-schedule                             Action schedules — list/get
+  capability                                  Skills, tool box tools and MCP tools bound to a network — list/attach/detach
+
+READ
+  list [options]                              List knowledge networks
+  get [options] <kn-id>                       Get a knowledge network (use --stats or --export)
+  search [options] <kn-id> <query>            Recall instances from a plain sentence — no object type or field names needed → {nodes, object_types}
+  stats <kn-id>                               Get knowledge-network statistics (alias for get --stats)
+  export <kn-id>                              Export a knowledge network (alias for get --export)
+  subgraph [options] <kn-id>                  Query a subgraph (--body / --body-file JSON)
+  action-execution <kn-id> <execution-id>     Get action execution status
+  pull [options] <kn-id> [directory]          Download a knowledge network as a BKN tar and extract it locally
+  relation-type-paths [options] <kn-id>       Query relation-type paths between object types (--body / --body-file JSON)
+  cypher [options] <kn-id>                    Answer a read-only Cypher query over the network's model, outside any Trace session
+  resources [options]                         List BKN-backend resources (knowledge networks) → {entries, total_count}
+  validate <directory>                        Validate a local BKN directory's structure (offline)
+
+WRITE
+  create [options] <name>                     Create an (empty) knowledge network
+  update [options] <kn-id>                    Update a knowledge network (--body / --body-file)
+  delete [options] <kn-id>                    Delete a knowledge network
+  push [options] <directory>                  Pack a BKN directory into a tar and import it as a knowledge network
+  create-from-catalog [options] <catalog-id>  Build a knowledge network from a Vega catalog's tables
+
+COMMANDS
+  help [command]                              display help for command
+
+WHERE IDS COME FROM
+  `list` gives kn ids; `object-type list <kn-id>` and `search <kn-id> "<q>"` give the rest.
+
+SEARCH VS THE MCP SIDE
+  `search` recalls instance rows from one sentence and ships the object-type definitions
+  needed to read them — start here when you do not know the schema yet. It only reaches
+  properties indexed for match/knn, so an unindexed object type yields nothing, and no hits
+  comes back as empty nodes with a message rather than an error. For schema alone use
+  `openbkn context search-schema`; for a structured filter use `object-type query`.
+  Object-type reads may omit data_properties when there are none; treat omission as an
+  empty property list.
+
+EDITING SCHEMA AS FILES
+  pull <kn-id> ./dir  ->  edit  ->  validate ./dir  ->  push ./dir
+  `validate` is offline and catches structure errors before the upload.
+  network.bkn may declare the skills and tools the network depends on under
+  `capabilities:`. push binds them by id, then by name; one this platform cannot
+  resolve is skipped, not fatal, and push lists every skip on stderr.
+
+CAPABILITIES
+  `capability list <kn-id>` shows what a network has bound — the set Context Loader
+  recalls skills and tools from; a network with nothing bound recalls nothing.
+
+REQUEST BODIES
+  create/update take a definition; query/execute/dry-run take a query. Both are documented
+  at https://openbkn-ai.github.io/bkn-foundry/ — definitions under bkn-backend, reads and
+  executions under ontology-query. Each command's --body flag names its own module.
+
+CREATING FROM DATA
+  create-from-catalog <catalog-id> --name "<n>" builds a network from a Vega catalog,
+  then `openbkn vega resource build <resource-id>` produces the index. There is no
+  whole-network build.
+
+FLAGS
+  -h, --help  display help for command

@@ -78,7 +78,8 @@ class RemoteHttpTest(unittest.TestCase):
                 remote.assert_not_called()
                 network.assert_not_called()
 
-    def test_default_directory_exposes_published_versions_without_a_refresh(self):
+    @patch("installer.executor_compatibility.cli_capabilities", return_value=True)
+    def test_default_directory_exposes_published_versions_without_a_refresh(self, _sdk):
         for platform_version in ("0.2.0", read_version(ROOT)):
             with self.subTest(platform_version=platform_version):
                 apps = []
