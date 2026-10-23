@@ -10,7 +10,7 @@ from installer.control_plane import ownership_tags
 from installer.history import read_installation_history, begin_installation_attempt, record_terminal_installation
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, _write_installing, _card, installation_view
-from installer.uninstall import prepare_uninstall, execute_uninstall, platform_client
+from installer.uninstall import prepare_uninstall, execute_uninstall, platform_client, PlatformFailure
 
 
 class UninstallTest(unittest.TestCase):
@@ -65,6 +65,32 @@ class UninstallTest(unittest.TestCase):
         begin_installation_attempt(self.state, current, previous)
         execute_uninstall(self.state, "supply-chain", self.api, self.kubectl)
 
+    def test_inflight_network_delete_overall_deadline_preserves_later_resources(self):
+        # In-flight work can exceed the scheduling budget; later cleanup cannot.
+        clock = [0.0]
+        original_api = self.api
+        calls = []
+
+        def slow_delete(method, path):
+            calls.append((method, path))
+            result = original_api(method, path)
+            if method == "DELETE" and path.endswith("network-owned"):
+                clock[0] = 301.0
+            return result
+
+        self.api = slow_delete
+        with patch("installer.uninstall.time.monotonic", side_effect=lambda: clock[0]):
+            self.start()
+        result = _read_state(self.state, "supply-chain")
+        self.assertEqual(result["status"], "uninstall_failed")
+        self.assertEqual(result["error"]["stage"], "knowledge")
+        self.assertEqual(calls[-1], ("DELETE", "/api/bkn-backend/v1/knowledge-networks/network-owned"))
+        self.assertEqual(len(self.database), 4)
+        for path in ("/api/agent-operator-integration/v1/skills/skill-owned",
+                     "/api/agent-operator-integration/v1/tool-box/box-owned",
+                     "/api/vega-backend/v1/catalogs/catalog-owned"):
+            self.assertIn(path, self.platform)
+
     def test_network_delete_cascades_published_metrics_without_legacy_api(self):
         original = self.api
         calls = []
@@ -79,6 +105,60 @@ class UninstallTest(unittest.TestCase):
         self.assertFalse(any("object-metrics" in path for path in self.platform))
         self.assertIn(("DELETE", "/api/bkn-backend/v1/knowledge-networks/network-owned"), calls)
         self.assertIn("/api/agent-operator-integration/v1/skills/other-sample", self.platform)
+
+    def test_proxy_pending_multiple_times_then_uninstall_completes(self):
+        original = self.api
+        attempts = []
+        def converging(method, path):
+            if method == "DELETE" and path.endswith("/knowledge-networks/network-owned"):
+                attempts.append(path)
+                if len(attempts) < 4:
+                    raise PlatformFailure(409, "BknBackend.KnowledgeNetwork.InternalError", proxy_pending=True)
+            return original(method, path)
+        self.api = converging
+        with patch("installer.uninstall.time.sleep"):
+            self.start()
+        self.assertEqual(len(attempts), 4)
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+        self.assertFalse(self.database)
+
+    def test_network_replaced_after_preflight_is_not_deleted(self):
+        original = self.api
+        reads = []
+        def replaced(method, path):
+            if method == "GET" and path.endswith("/knowledge-networks/network-owned"):
+                reads.append(path)
+                if len(reads) > 1:
+                    return {"tags": ["foreign"]}
+            return original(method, path)
+        self.api = replaced
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["error"]["code"], "ownership_conflict")
+        self.assertFalse(self.deleted)
+        self.assertTrue(self.database)
+
+    def test_proxy_timeout_preserves_resources_and_records_diagnostics(self):
+        original = self.api
+        def pending(method, path):
+            if method == "DELETE" and path.endswith("/knowledge-networks/network-owned"):
+                raise PlatformFailure(409, "BknBackend.KnowledgeNetwork.InternalError", proxy_pending=True)
+            return original(method, path)
+        self.api = pending
+        with patch("installer.uninstall.time.sleep"):
+            self.start()
+        record = _read_state(self.state, "supply-chain")
+        self.assertEqual(record["status"], "uninstall_failed")
+        self.assertEqual(record["stages"]["knowledge"], "failed")
+        self.assertEqual(record["error"]["code"], "uninstall_proxy_sync_timeout")
+        self.assertEqual(record["error"]["upstream"]["status"], 409)
+        self.assertEqual(record["error"]["stage"], "knowledge")
+        self.assertIn("HTTP 409", record["error"]["message"])
+        self.assertTrue(self.database)
+        self.assertFalse(self.deleted)
+        # The same installation can resume after synchronization, with receipts intact.
+        self.api = original
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
 
     def test_delete_conflict_retries_once_then_accepts_empty_success(self):
         response = MagicMock()
