@@ -245,6 +245,8 @@ jobs:
           DATA_DIGEST: ${{ needs.publish.outputs.data_digest }}
           EXPECTED_ARCH: ${{ matrix.arch }}
           CANDIDATE_VERSION: ${{ needs.publish.outputs.version }}
+          CANDIDATE_SOURCE: ${{ github.sha }}
+          PUBLICATION_RUN: ${{ github.run_id }}
         run: bash installer/ci/verify_swr_cold_pull.sh
       - name: Retain cold-pull evidence, including failed attempts
         if: always()

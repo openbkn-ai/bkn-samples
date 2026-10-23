@@ -23,7 +23,10 @@ empty image and blob listings before the target pull. The harness image itself
 is downloaded before this isolation and is not a target-layer cache.
 
 The runner firewall allows the harness only HTTPS to the recorded SWR IPv4
-addresses and DNS. The bridge has IPv6 disabled. A GHCR request must fail and
+addresses, the exact observed OBS blob host
+`op-svc-swr-b051-10-147-7-14-3az.obs.cn-east-3.myhuaweicloud.com`, and DNS.
+Host-to-IP mappings are retained. This OBS redirect was first observed (and
+blocked as intended) by both native jobs of run `39938478419`. The bridge has IPv6 disabled. A GHCR request must fail and
 increment the reject counter before the SWR pull begins. Unlisted SWR blob
 redirect/CDN destinations fail closed; do not loosen the firewall to all HTTPS
 to make a failed run pass. If a redirect is required, review the actual endpoint
@@ -43,3 +46,14 @@ A successful run establishes fresh native pulls of these exact candidate
 digests under the recorded egress policy. It does not establish production
 rollout, future-node prewarming, or application behavior. Earlier local kind
 acceptance used cached arm64 layers and cannot substitute for these CI results.
+
+## Retesting the same published content
+
+`retest-swr-candidate.yml` accepts only `validation/66-cold-*` branch pushes.
+This pattern does not trigger publication. Its reviewed environment pins the
+original version, publication run, source commit, and both SWR index digests from
+run `39938478419`; it accepts no arbitrary tag input. Evidence distinguishes the
+image source commit from the updated harness commit. Each rerun still creates
+new empty stores, so fixing an allowlist cannot inherit partially downloaded
+content from an earlier failed run. Updating the pinned tuple requires a normal
+reviewed code change tied to new publication evidence.

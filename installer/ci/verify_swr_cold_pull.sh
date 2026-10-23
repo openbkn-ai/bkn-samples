@@ -4,18 +4,33 @@ set -euo pipefail
 umask 077
 : "${EXPECTED_ARCH:?}"
 : "${SERVICE_DIGEST:?}" "${DATA_DIGEST:?}" "${CANDIDATE_VERSION:?}"
+: "${CANDIDATE_SOURCE:?}" "${PUBLICATION_RUN:?}"
+[[ "$CANDIDATE_SOURCE" =~ ^[0-9a-f]{40}$ ]]
+[[ "$PUBLICATION_RUN" =~ ^[0-9]+$ ]]
+[[ "$CANDIDATE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-rc\.66\.${PUBLICATION_RUN}\.[0-9]+$ ]]
 registry=swr.cn-east-3.myhuaweicloud.com
 evidence="$PWD/cold-pull-evidence"
 mkdir -p "$evidence"
 case "$(uname -m)" in x86_64) native=amd64;; aarch64) native=arm64;; *) exit 1;; esac
 test "$native" = "$EXPECTED_ARCH"
-printf 'native=%s\nversion=%s\nsource=%s\n' "$native" "$CANDIDATE_VERSION" "$(git rev-parse HEAD)" > "$evidence/runner.txt"
+printf 'native=%s\nversion=%s\nimage_source=%s\npublication_run=%s\nharness_source=%s\n' "$native" "$CANDIDATE_VERSION" "$CANDIDATE_SOURCE" "$PUBLICATION_RUN" "$(git rev-parse HEAD)" > "$evidence/runner.txt"
 
 # The harness image is fetched before creating the target image store. No host
 # image/layer mounts are passed to the nested daemon. Each target gets a new volume.
 docker pull docker:27.5.1-dind > "$evidence/harness-pull.log" 2>&1
 docker image inspect docker:27.5.1-dind --format '{{json .RepoDigests}}' > "$evidence/harness-digests.json"
-getent ahostsv4 "$registry" | awk '{print $1}' | sort -u > "$evidence/allowed-registry-ipv4.txt"
+# This exact OBS redirect was observed in both native jobs of run 39938478419.
+# Do not allow arbitrary *.myhuaweicloud.com or all HTTPS traffic.
+blob_host=op-svc-swr-b051-10-147-7-14-3az.obs.cn-east-3.myhuaweicloud.com
+for host in "$registry" "$blob_host"; do
+  addresses="$(getent ahostsv4 "$host" | awk '{print $1}' | sort -u)"
+  test -n "$addresses"
+  while read -r address; do
+    printf '%s %s\n' "$host" "$address" >> "$evidence/allowed-host-addresses.txt"
+    printf '%s\n' "$address" >> "$evidence/allowed-registry-ipv4.txt"
+  done <<< "$addresses"
+done
+sort -u -o "$evidence/allowed-registry-ipv4.txt" "$evidence/allowed-registry-ipv4.txt"
 test -s "$evidence/allowed-registry-ipv4.txt"
 
 container= volume= network= chain= ip= pull_log=
