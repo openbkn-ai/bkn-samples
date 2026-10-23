@@ -34,6 +34,20 @@ class SWRDeliveryTest(unittest.TestCase):
 
 
 class TargetManifestTest(unittest.TestCase):
+    def test_tag_release_has_one_ordered_data_producer(self):
+        path = ROOT / '.github/workflows'
+        workflow = yaml.load((path / 'publish-sample-studio.yml').read_text(), Loader=yaml.BaseLoader)
+        self.assertIn('v*', workflow['on']['push']['tags'])
+        steps = workflow['jobs']['publish']['steps']
+        data_builds = [s for s in steps if s.get('with', {}).get('file') == 'installer/image/Dockerfile']
+        self.assertEqual(len(data_builds), 2)
+        for step in data_builds:
+            self.assertNotIn('if', step)
+            self.assertLess(steps.index(step), next(i for i, s in enumerate(steps) if s.get('id') == 'manifest'))
+        for step in steps:
+            self.assertNotIn('"${GITHUB_REF_TYPE}" != "tag"', step.get('run', ''))
+        self.assertFalse((path / 'publish-sample-image.yml').exists())
+
     def manifest(self):
         return {'schemaVersion': 2, 'mediaType': 'application/vnd.docker.distribution.manifest.list.v2+json',
                 'manifests': [{'digest': DIGEST, 'platform': {'os': 'linux', 'architecture': arch}} for arch in ('amd64', 'arm64')]}

@@ -12,7 +12,7 @@ Explicit `platform.version` and nonempty `platform.capabilities` values remain s
 
 The repository `VERSION` is the product service and image base version, aligned with OpenBKN 0.2.0. Both `bkn-sample-studio` and `bkn-samples` images, and the service Chart, use this base version; main builds append `-main.<UTC timestamp>.sha<commit>`. Individual sample packages retain their own independently published versions and immutable artifact references.
 
-For a release candidate, open GitHub Actions → **Publish sample catalog service** → **Run workflow** on the default branch, then enter `release/X.Y.Z` in **source_branch**. The workflow checks out that branch and publishes both images and the service Chart as `X.Y.Z-release.<UTC timestamp>.sha<commit>`; the branch version must match `VERSION`. A normal `main` push still creates a main build. A final `vX.Y.Z` tag uses the separate release-tag publication path.
+For a release candidate, open GitHub Actions → **Publish sample catalog service** → **Run workflow** on the default branch, then enter `release/X.Y.Z` in **source_branch**. The workflow checks out that branch and publishes both images and the service Chart as `X.Y.Z-release.<UTC timestamp>.sha<commit>`; the branch version must match `VERSION`. A normal `main` push still creates a main build. A final `vX.Y.Z` tag uses the same workflow, which builds both images before publishing their manifests and the Chart.
 
 ## Configuration and installation
 
@@ -117,6 +117,7 @@ remove it or set `image.registry` and the short repository when migrating to SWR
 Release publication and cold-node pulls must be verified in the target registry
 and cluster after review; local template tests do not publish or synchronize images.
 
-Tag publication also verifies the matching SWR data image before publishing the
-Chart. If the separate data-image workflow has not finished, Chart publication
-fails closed; rerun it after the data image is available. No GHCR fallback is used.
+Tag publication builds the matching service and data images in the same workflow,
+then verifies both SWR manifests before publishing the Chart. There is no parallel
+data-image producer or GHCR fallback. For independently reviewable prerelease
+artifacts and native anonymous cold pulls, see [candidate acceptance](swr-candidate-acceptance.md).
