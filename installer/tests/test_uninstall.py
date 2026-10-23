@@ -65,6 +65,32 @@ class UninstallTest(unittest.TestCase):
         begin_installation_attempt(self.state, current, previous)
         execute_uninstall(self.state, "supply-chain", self.api, self.kubectl)
 
+    def test_inflight_network_delete_overall_deadline_preserves_later_resources(self):
+        # In-flight work can exceed the scheduling budget; later cleanup cannot.
+        clock = [0.0]
+        original_api = self.api
+        calls = []
+
+        def slow_delete(method, path):
+            calls.append((method, path))
+            result = original_api(method, path)
+            if method == "DELETE" and path.endswith("network-owned"):
+                clock[0] = 301.0
+            return result
+
+        self.api = slow_delete
+        with patch("installer.uninstall.time.monotonic", side_effect=lambda: clock[0]):
+            self.start()
+        result = _read_state(self.state, "supply-chain")
+        self.assertEqual(result["status"], "uninstall_failed")
+        self.assertEqual(result["error"]["stage"], "knowledge")
+        self.assertEqual(calls[-1], ("DELETE", "/api/bkn-backend/v1/knowledge-networks/network-owned"))
+        self.assertEqual(len(self.database), 4)
+        for path in ("/api/agent-operator-integration/v1/skills/skill-owned",
+                     "/api/agent-operator-integration/v1/tool-box/box-owned",
+                     "/api/vega-backend/v1/catalogs/catalog-owned"):
+            self.assertIn(path, self.platform)
+
     def test_network_delete_cascades_published_metrics_without_legacy_api(self):
         original = self.api
         calls = []
