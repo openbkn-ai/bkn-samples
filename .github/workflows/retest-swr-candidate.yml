@@ -26,11 +26,11 @@ jobs:
         env:
           EXPECTED_ARCH: ${{ matrix.arch }}
           # Reviewed tuple from publication evidence; no arbitrary tag input.
-          CANDIDATE_VERSION: 0.2.1-rc.66.39938478419.1
-          CANDIDATE_SOURCE: e1b284fbbf233e48ddfdd779ce27652bf12c4001
-          PUBLICATION_RUN: "39938478419"
-          SERVICE_DIGEST: sha256:bce59a879ec3dc9514274f6b34159366fcae53f4c33b6279e24e5b55634fc739
-          DATA_DIGEST: sha256:8c736211806bd0a2bc4b861597c881fa6204936f32db2f17dbedc0064adaf7aa
+          CANDIDATE_VERSION: "0.2.1-main.20261023231122.shafe82a5e"
+          CANDIDATE_SOURCE: "fe82a5e54a181df4a6648c93c1e3d5f28e1db0dc"
+          PUBLICATION_RUN: "40038227668"
+          SERVICE_DIGEST: "sha256:172c9750ac9e350235b1966732600ce420e08eddce20284c92954e17bf4a9130"
+          DATA_DIGEST: "sha256:ebd85b0443480ccd95361a2e29734ccf5a7090085b2092935725707c6212c912"
         run: bash installer/ci/verify_swr_cold_pull.sh
       - name: Retain evidence including failed attempts
         if: always()

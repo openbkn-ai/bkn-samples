@@ -7,7 +7,12 @@ umask 077
 : "${CANDIDATE_SOURCE:?}" "${PUBLICATION_RUN:?}"
 [[ "$CANDIDATE_SOURCE" =~ ^[0-9a-f]{40}$ ]]
 [[ "$PUBLICATION_RUN" =~ ^[0-9]+$ ]]
-[[ "$CANDIDATE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-rc\.66\.${PUBLICATION_RUN}\.[0-9]+$ ]]
+# Certifies exactly final main with PR192, PR193 and PR195; no rebuild.
+[[ "$CANDIDATE_VERSION" == "0.2.1-main.20261023231122.shafe82a5e" ]]
+[[ "$CANDIDATE_SOURCE" == "fe82a5e54a181df4a6648c93c1e3d5f28e1db0dc" ]]
+[[ "$PUBLICATION_RUN" == "40038227668" ]]
+[[ "$SERVICE_DIGEST" == "sha256:172c9750ac9e350235b1966732600ce420e08eddce20284c92954e17bf4a9130" ]]
+[[ "$DATA_DIGEST" == "sha256:ebd85b0443480ccd95361a2e29734ccf5a7090085b2092935725707c6212c912" ]]
 registry=swr.cn-east-3.myhuaweicloud.com
 evidence="$PWD/cold-pull-evidence"
 mkdir -p "$evidence"
