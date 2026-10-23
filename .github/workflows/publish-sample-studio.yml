@@ -198,8 +198,7 @@ jobs:
           sed -i "s/^  digest: .*/  digest: \"${SERVICE_IMAGE_DIGEST}\"/" deploy/charts/bkn-sample-studio/values.yaml
           helm lint deploy/charts/bkn-sample-studio
           helm package deploy/charts/bkn-sample-studio --destination /tmp/charts
-      - name: Verify and retain candidate Chart identities
-        if: startsWith(github.ref, 'refs/heads/validation/66-swr-')
+      - name: Verify published Chart identities
         env:
           VERSION: ${{ steps.version.outputs.value }}
           SERVICE_DIGEST: ${{ steps.manifest.outputs.service_digest }}

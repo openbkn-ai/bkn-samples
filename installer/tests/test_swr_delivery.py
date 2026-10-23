@@ -1,6 +1,8 @@
 """Standard deployment must not require a runtime GHCR pull."""
 import json
 from installer.verify_image_manifest import verify_manifest
+from installer.ci.verify_candidate_chart import verify as verify_chart
+from copy import deepcopy
 import subprocess
 import unittest
 from pathlib import Path
@@ -75,3 +77,42 @@ class TargetManifestTest(unittest.TestCase):
         self.assertIn('verify_image_manifest.py', manifest)
         package = next(s for s in steps if s.get('name') == 'Package the chart for the same version')
         self.assertEqual(package['env']['SERVICE_IMAGE_DIGEST'], '${{ steps.manifest.outputs.service_digest }}')
+
+
+class PublishedChartGateTest(unittest.TestCase):
+    def test_gate_runs_for_every_publication_before_push(self):
+        workflow = yaml.load((ROOT / '.github/workflows/publish-sample-studio.yml').read_text(), Loader=yaml.BaseLoader)
+        steps = workflow['jobs']['publish']['steps']
+        gates = [step for step in steps if 'verify_candidate_chart.py' in step.get('run', '')]
+        self.assertEqual(len(gates), 1)
+        gate = gates[0]
+        self.assertNotIn('if', gate)
+        self.assertNotIn('continue-on-error', gate)
+        self.assertEqual(gate['env']['VERSION'], '${{ steps.version.outputs.value }}')
+        self.assertEqual(gate['env']['SERVICE_DIGEST'], '${{ steps.manifest.outputs.service_digest }}')
+        package = next(step for step in steps if 'helm package ' in step.get('run', ''))
+        publish = next(step for step in steps if 'helm push ' in step.get('run', ''))
+        self.assertLess(steps.index(package), steps.index(gate))
+        self.assertLess(steps.index(gate), steps.index(publish))
+        self.assertIn('mkdir publication-evidence', gate['run'])
+        self.assertIn('helm template candidate "/tmp/charts/bkn-sample-studio-${VERSION}.tgz"', gate['run'])
+
+    def test_rendered_chart_rejects_wrong_registry_digest_and_executor(self):
+        rendered = subprocess.check_output([
+            'helm', 'template', 'sample', str(ROOT / 'deploy/charts/bkn-sample-studio'),
+            '--set', 'image.tag=0.2.1', '--set', 'image.digest=' + DIGEST,
+            '--set', 'dataImage.tag=0.2.1'], text=True)
+        documents = list(yaml.safe_load_all(rendered))
+        verify_chart(rendered, DIGEST, '0.2.1')
+        for target in ('service-ghcr', 'executor-ghcr', 'service-wrong-digest', 'executor-wrong-digest'):
+            with self.subTest(target=target):
+                changed = deepcopy(documents)
+                deployment = next(d for d in changed if d and d['kind'] == 'Deployment' and d['metadata']['name'] == 'bkn-sample-studio')
+                studio = next(c for c in deployment['spec']['template']['spec']['containers'] if c['name'] == 'studio')
+                bad = 'ghcr.io/openbkn-ai/bkn-sample-studio@' + DIGEST if target.endswith('ghcr') else SWR + '/bkn-sample-studio@sha256:' + 'b' * 64
+                if target.startswith('service'):
+                    studio['image'] = bad
+                else:
+                    next(e for e in studio['env'] if e['name'] == 'BKN_SAMPLE_EXECUTOR_IMAGE_REF')['value'] = bad
+                with self.assertRaisesRegex(ValueError, 'verified SWR digest'):
+                    verify_chart(yaml.safe_dump_all(changed), DIGEST, '0.2.1')
