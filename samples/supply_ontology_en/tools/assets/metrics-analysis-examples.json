@@ -45,8 +45,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1772294400000
+                      "value_type": "date",
+                      "value": "2026-03-01"
                     }
                   ]
                 },
@@ -63,8 +63,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1774972800000
+                      "value_type": "date",
+                      "value": "2026-04-01"
                     }
                   ]
                 }
@@ -92,8 +92,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1774972800000
+                      "value_type": "date",
+                      "value": "2026-04-01"
                     }
                   ]
                 },
@@ -110,8 +110,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1777564800000
+                      "value_type": "date",
+                      "value": "2026-05-01"
                     }
                   ]
                 }
@@ -139,8 +139,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1777564800000
+                      "value_type": "date",
+                      "value": "2026-05-01"
                     }
                   ]
                 },
@@ -157,8 +157,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1780243200000
+                      "value_type": "date",
+                      "value": "2026-06-01"
                     }
                   ]
                 }
@@ -186,8 +186,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1780243200000
+                      "value_type": "date",
+                      "value": "2026-06-01"
                     }
                   ]
                 },
@@ -204,8 +204,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1782835200000
+                      "value_type": "date",
+                      "value": "2026-07-01"
                     }
                   ]
                 }
@@ -243,8 +243,8 @@
               "right": [
                 {
                   "source": "literal",
-                  "value_type": "int64",
-                  "value": 1774972800000
+                  "value_type": "date",
+                  "value": "2026-04-01"
                 }
               ]
             },
@@ -261,8 +261,8 @@
               "right": [
                 {
                   "source": "literal",
-                  "value_type": "int64",
-                  "value": 1777564800000
+                  "value_type": "date",
+                  "value": "2026-05-01"
                 }
               ]
             }
@@ -325,8 +325,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1772294400000
+                      "value_type": "date",
+                      "value": "2026-03-01"
                     }
                   ]
                 },
@@ -343,8 +343,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1774972800000
+                      "value_type": "date",
+                      "value": "2026-04-01"
                     }
                   ]
                 }
@@ -372,8 +372,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1774972800000
+                      "value_type": "date",
+                      "value": "2026-04-01"
                     }
                   ]
                 },
@@ -390,8 +390,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1777564800000
+                      "value_type": "date",
+                      "value": "2026-05-01"
                     }
                   ]
                 }
@@ -419,8 +419,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1777564800000
+                      "value_type": "date",
+                      "value": "2026-05-01"
                     }
                   ]
                 },
@@ -437,8 +437,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1780243200000
+                      "value_type": "date",
+                      "value": "2026-06-01"
                     }
                   ]
                 }
@@ -466,8 +466,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1780243200000
+                      "value_type": "date",
+                      "value": "2026-06-01"
                     }
                   ]
                 },
@@ -484,8 +484,8 @@
                   "right": [
                     {
                       "source": "literal",
-                      "value_type": "int64",
-                      "value": 1782835200000
+                      "value_type": "date",
+                      "value": "2026-07-01"
                     }
                   ]
                 }
@@ -500,7 +500,7 @@
       "metric_name": "Material Count",
       "title": "Material-type proportions as percentages of all 3497 materials.",
       "body": {
-        "analysis_dimensions": [
+        "group_by": [
           {
             "object_type_id": "supply_ontology_en_material",
             "property_name": "materialattr"
@@ -560,12 +560,6 @@
       "metric_name": "Signing Events",
       "title": "April order-status proportions by time bucket; denominator 5319.",
       "body": {
-        "analysis_dimensions": [
-          {
-            "object_type_id": "supply_ontology_en_salesorder",
-            "property_name": "order_status"
-          }
-        ],
         "filter": {
           "node_type": "group",
           "boolean_operator": "and",
@@ -583,8 +577,8 @@
               "right": [
                 {
                   "source": "literal",
-                  "value_type": "int64",
-                  "value": 1774972800000
+                  "value_type": "date",
+                  "value": "2026-04-01"
                 }
               ]
             },
@@ -601,13 +595,19 @@
               "right": [
                 {
                   "source": "literal",
-                  "value_type": "int64",
-                  "value": 1777564800000
+                  "value_type": "date",
+                  "value": "2026-05-01"
                 }
               ]
             }
           ]
-        }
+        },
+        "group_by": [
+          {
+            "object_type_id": "supply_ontology_en_salesorder",
+            "property_name": "order_status"
+          }
+        ]
       },
       "expected_series": [
         {

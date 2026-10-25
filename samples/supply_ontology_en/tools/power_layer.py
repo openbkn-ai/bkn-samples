@@ -255,8 +255,8 @@ def calendar_month_growth(metric: dict, kn_id: str, case: dict, zone_name: str, 
         expected = {"node_type": "group", "boolean_operator": "and", "children": [
             {"node_type": "predicate", "left": {"source": "property", "property_ref": {
                 "object_type_id": owner, "property_name": "signing_date"}},
-             "comparison_operator": op, "right": [{"source": "literal", "value_type": "int64", "value": value}]}
-            for op, value in (("gte", int(start.timestamp() * 1000)), ("lt", int(end.timestamp() * 1000)))
+             "comparison_operator": op, "right": [{"source": "literal", "value_type": "date", "value": value}]}
+            for op, value in (("gte", start.date().isoformat()), ("lt", end.date().isoformat()))
         ]}
         if query["body"] != {"filter": expected}:
             raise ValueError(f"{period}: expected explicit complete calendar month boundaries")

@@ -31,6 +31,8 @@ def test_scenario_distribution_and_complete_table_coverage():
 
 def test_published_metadata_is_english_and_uses_standard_objects():
     for path in SAMPLE.rglob('*'):
+        if path.name.startswith('release-notes.') and path.name != 'release-notes.en-US.md':
+            continue  # Release-note translations do not change sample content language.
         if path.is_file() and path.suffix in {'.bkn', '.json', '.md', '.yaml', '.py', '.sh'}:
             assert not re.search(r'[\u3400-\u9fff]', path.read_text()), path
     manifest = yaml.safe_load((SAMPLE / 'sample.yaml').read_text())

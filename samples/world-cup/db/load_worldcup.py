@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
+import re
 import urllib.request
 from pathlib import Path
 
@@ -105,10 +107,35 @@ def table_name(csv_path: Path) -> str:
     return f"wc_{stem}"
 
 
+def column_types(table: str, columns: list[str]) -> dict[str, str]:
+    contract = json.loads((SAMPLE_DIR / "db/column-types.json").read_text())
+    fields = contract.get(table)
+    if not fields or any(column not in fields for column in columns):
+        raise ValueError(f"unknown model column in {table}")
+    return {column: fields[column] for column in columns}
+
+
+def convert_value(value: str, kind: str):
+    if not value:
+        return None
+    if kind == "integer":
+        if not re.fullmatch(r"-?[0-9]+", value):
+            raise ValueError("invalid integer in locked World Cup data")
+        result = int(value)
+        if not -(2 ** 63) <= result < 2 ** 63:
+            raise ValueError("World Cup integer exceeds BIGINT range")
+        return result
+    if kind != "string":
+        raise ValueError(f"unsupported World Cup model type: {kind}")
+    return value
+
+
 def create_table_statements(table: str, columns: list[str]) -> tuple[str, str]:
     """One statement each. MariaDB rejects a DROP and CREATE sent together."""
     width = 255 if table in WIDE_TABLES else 512
-    quoted = ", ".join(f"`{column.replace('`', '``')}` VARCHAR({width})" for column in columns)
+    kinds = column_types(table, columns)
+    sql_types = {"integer": "BIGINT", "string": f"VARCHAR({width})"}
+    quoted = ", ".join(f"`{column.replace('`', '``')}` {sql_types[kinds[column]]}" for column in columns)
     drop = f"DROP TABLE IF EXISTS `{table}`"
     create = (
         f"CREATE TABLE `{table}` ({quoted}) "
@@ -215,13 +242,16 @@ def _load_csvs(database: str, files: list[Path]) -> list[str]:
             table = table_name(path)
             for statement in create_table_statements(table, header):
                 conn.execute(text(statement))
+            kinds = column_types(table, header)
             if data:
                 columns = ", ".join(f"`{column.replace('`', '``')}`" for column in header)
                 placeholders = ", ".join(f":c{index}" for index in range(len(header)))
                 statement = text(f"INSERT INTO `{table}` ({columns}) VALUES ({placeholders})")
                 conn.execute(
                     statement,
-                    [{f"c{index}": value or None for index, value in enumerate(row + [""] * len(header))} for row in (record[: len(header)] for record in data)],
+                    [{f"c{index}": convert_value(value, kinds[header[index]])
+                      for index, value in enumerate((record + [""] * len(header))[:len(header)])}
+                     for record in data],
                 )
             tables.append(table)
     engine.dispose()

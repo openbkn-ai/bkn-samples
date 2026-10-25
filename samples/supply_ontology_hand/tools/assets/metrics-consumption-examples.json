@@ -1,0 +1,69 @@
+{
+  "metric_code": "available_qty_sum",
+  "metric_version": 1,
+  "owner_object_type_id": "supply_ontology_hand_inventory",
+  "metric_id_source": "Discover id/version/name from the owner object's get_object_types.related_metrics; confirm identity against the published definition. Never guess IDs.",
+  "cases": [
+    {
+      "id": "inventory-total",
+      "query": {},
+      "expected_total_count": 1,
+      "expected_values": [
+        "100508026.485800"
+      ]
+    },
+    {
+      "id": "warehouse-top-five",
+      "query": {
+        "group_by": [
+          {
+            "object_type_id": "supply_ontology_hand_inventory",
+            "property_name": "warehouse"
+          }
+        ],
+        "order_by": [
+          {
+            "field": "value",
+            "direction": "desc"
+          },
+          {
+            "field": "dimension",
+            "dimension": {
+              "object_type_id": "supply_ontology_hand_inventory",
+              "property_name": "warehouse"
+            },
+            "direction": "asc"
+          }
+        ],
+        "page_size": 5
+      },
+      "expected_total_count": 29,
+      "expected_rows": [
+        {
+          "warehouse": "苏州委外加工仓",
+          "display_value": "53156928.921600"
+        },
+        {
+          "warehouse": "苏州电子原料仓",
+          "display_value": "39132170.834200"
+        },
+        {
+          "warehouse": "苏州无人机原料仓",
+          "display_value": "3957376.000000"
+        },
+        {
+          "warehouse": "苏州装配原料仓",
+          "display_value": "2990036.000000"
+        },
+        {
+          "warehouse": "苏州待处理仓",
+          "display_value": "645906.480000"
+        }
+      ]
+    }
+  ],
+  "continuation": {
+    "next_page": "Repeat the unchanged original query, adding the response next_cursor as cursor. Fetch all pages when claiming completeness; Top 5 alone is intentionally one page.",
+    "participants": "For an entry advertising participants, pass the original full query and that entry bucket_key to drill_through_metric with the same kn_id, metric_id and version. Follow its next_cursor; partial or warnings are not complete evidence."
+  }
+}
