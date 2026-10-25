@@ -12,7 +12,7 @@ from pathlib import Path
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _DEFAULT_JSON = _SCRIPT_DIR.parent / "kn" / "supply_ontology_hand.json"
-_IMPORT_PATH = "/api/ontology-manager/v1/knowledge-networks"
+_IMPORT_PATH = "/api/bkn-backend/v1/knowledge-networks"
 _UI_FALLBACK_MSG = "请按说明书步骤 2 UI 导入知识网络"
 
 

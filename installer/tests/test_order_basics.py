@@ -28,7 +28,7 @@ class OrderBasicsTest(unittest.TestCase):
                                     for name in ("products", "orders")]}
             if args[0] == "call":
                 body = json.loads(args[-1])
-                self.assertEqual(args[:5], ("call", "-X", "POST", "/api/ontology-manager/v1/knowledge-networks", "-d"))
+                self.assertEqual(args[:5], ("call", "-X", "POST", "/api/bkn-backend/v1/knowledge-networks", "-d"))
                 self.assertEqual(body["object_types"][0]["data_source"]["id"], "products-resource")
                 return {"id": "order_basics"}
             if args[:3] == ("bkn", "object-type", "query"):

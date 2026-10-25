@@ -55,7 +55,7 @@ def main():
                 require(found["data_source"]["id"] == obj["data_source"]["id"], "knowledge network binding conflict")
         else:
             require("404" in existing.stderr + existing.stdout, "cannot confirm that knowledge network is absent")
-            cli("call", "-X", "POST", "/api/ontology-manager/v1/knowledge-networks",
+            cli("call", "-X", "POST", "/api/bkn-backend/v1/knowledge-networks",
                 "-d", json.dumps(source, ensure_ascii=False))
         checks = [{"name": "network-import", "ok": True}]
     elif sys.argv[1] == "verify":
