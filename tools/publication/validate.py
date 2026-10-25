@@ -111,13 +111,18 @@ def validate_verification(proof, entry, sample):
             "verification checks have not passed")
 
 
-def validate_catalog(root, official=False):
+def validate_catalog(root, official=False, catalog_path="catalog.json"):
     validators = {}
     for name in ("sample", "catalog"):
         schema = load(SCHEMAS / f"{name}.schema.json")
         Draft202012Validator.check_schema(schema)
         validators[name] = Draft202012Validator(schema, format_checker=FormatChecker())
-    catalog = load(local_file(root, "catalog.json"))
+    catalog = load(local_file(root, catalog_path))
+    if catalog_path != "catalog.json":
+        parts = Path(catalog_path).parts
+        require(len(parts) == 3 and parts[0] == "catalogs" and parts[2] == "catalog.json",
+                "versioned catalog must use catalogs/<product-version>/catalog.json")
+        require(catalog["metadata"].get("productVersion") == parts[1], "catalog product version differs from path")
     validators["catalog"].validate(catalog)
     entries = catalog["spec"]["entries"]
     if official:
@@ -214,6 +219,8 @@ def compare_baseline(current, baseline):
     baseline_catalog, baseline_entries = baseline
     require(current_catalog["metadata"]["sourceId"] == baseline_catalog["metadata"]["sourceId"],
             "baseline source mismatch")
+    require(current_catalog["metadata"].get("productVersion") == baseline_catalog["metadata"].get("productVersion"),
+            "baseline product version mismatch")
     require(current_catalog["metadata"]["channel"] == baseline_catalog["metadata"]["channel"],
             "baseline channel mismatch")
     if current_catalog != baseline_catalog:
@@ -230,14 +237,15 @@ def compare_baseline(current, baseline):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", type=Path, help="local catalog root (catalog.json and release files)")
+    parser.add_argument("--catalog", default="catalog.json", help="repository-relative catalog path")
     parser.add_argument("--baseline", type=Path, help="trusted prior catalog root; enforces release immutability")
     parser.add_argument("--official", action="store_true", help="verify official metadata against pinned Git objects")
     parser.add_argument("--baseline-catalog", type=Path, help="catalog JSON extracted from the trusted base commit")
     args = parser.parse_args()
     try:
-        current = validate_catalog(args.root, official=args.official)
+        current = validate_catalog(args.root, official=args.official, catalog_path=args.catalog)
         if args.baseline:
-            compare_baseline(current, validate_catalog(args.baseline, official=args.official))
+            compare_baseline(current, validate_catalog(args.baseline, official=args.official, catalog_path=args.catalog))
         if args.baseline_catalog:
             baseline = load(args.baseline_catalog)
             compare_baseline(current, (baseline, {(e["sampleId"], e["version"]): e

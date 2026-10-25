@@ -96,7 +96,7 @@ class RemoteHttpTest(unittest.TestCase):
                          patch("installer.catalog_source.read_url") as network:
                         main()
                         catalog = apps[0].catalog("admin")
-                    entries = json.loads((ROOT / "catalog.json").read_text())["spec"]["entries"]
+                    entries = json.loads((ROOT / "catalogs" / platform_version / "catalog.json").read_text())["spec"]["entries"]
                     published = {e["sampleId"]: e for e in sorted(entries, key=lambda e: tuple(map(int, e["version"].split(".")))) if e["releaseStatus"] == "published"}
                     self.assertEqual({c["name"]: c["version"] for c in catalog["samples"]},
                                      {name: entry["version"] for name, entry in published.items()})

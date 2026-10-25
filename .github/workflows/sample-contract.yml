@@ -32,6 +32,19 @@ jobs:
               python tools/publication/validate.py . --official --baseline-catalog /tmp/baseline-catalog.json
             fi
           fi
+      - name: Validate product catalogs and immutable history
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          for catalog in catalogs/*/catalog.json; do
+            python tools/publication/validate.py . --official --catalog "$catalog"
+            if [ -n "$BASE_SHA" ] && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
+              if git cat-file -e "$BASE_SHA:$catalog" 2>/dev/null; then
+                git show "$BASE_SHA:$catalog" > /tmp/baseline-product-catalog.json
+                python tools/publication/validate.py . --official --catalog "$catalog" --baseline-catalog /tmp/baseline-product-catalog.json
+              fi
+            fi
+          done
       - name: Validate sample contracts
         run: python -m unittest discover -s installer/tests -v
       - name: Validate bilingual FIBO financial semantics and frozen answers

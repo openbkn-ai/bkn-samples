@@ -289,7 +289,7 @@ def main() -> None:
                                       list_sample_installations, list_samples, load_indexes,
                                       _read_state, _write_installing, _installation_id, ApiError)
     from installer.release import merge_catalog
-    from installer.catalog_source import OfficialCatalog
+    from installer.catalog_source import ProductCatalog
     from installer.state_store import write_json
     from installer.task_runner import InstallationRunner
     from installer.deploy_database import configured_image_ref
@@ -313,9 +313,6 @@ def main() -> None:
         if metadata.get("language"):
             sample_languages[metadata["name"]] = metadata["language"]
     data_image_ref = configured_image_ref()
-    source = OfficialCatalog(state_dir, root / "protocol/draft/schemas/catalog.schema.json",
-                             os.environ.get("BKN_SAMPLE_CATALOG_URL", "").strip() or None,
-                             bundled_catalog=root / "catalog.json")
     runner = InstallationRunner(state_dir, [item["name"] for item in image.get("samples", []) if item.get("name")])
     runner.recover_interrupted()
     configured_version = os.environ.get("BKN_SAMPLE_PLATFORM_VERSION", "").strip()
@@ -324,6 +321,9 @@ def main() -> None:
                                 {"aarch64": "arm64", "arm64": "arm64", "x86_64": "amd64", "AMD64": "amd64"}.get(platform.machine(), platform.machine()),
                                 configured_capabilities.split(",") if configured_capabilities else sorted(CAPABILITIES),
                                 os.environ.get("BKN_SAMPLE_EXECUTOR_IMAGE_REF", ""))
+    source = ProductCatalog(state_dir, root / "protocol/draft/schemas/catalog.schema.json", root,
+                            lambda: remote.platform_version,
+                            os.environ.get("BKN_SAMPLE_CATALOG_URL", "").strip() or None)
     offline = OfflinePackages(root, state_dir, remote)
 
     def update_platform_version():
@@ -346,6 +346,11 @@ def main() -> None:
             state_dir=state_dir,
             actor_role=role,
         )
+        # Uninstalled online choices come only from the selected product directory.
+        # Preserve receipts; offline imports are merged independently below.
+        result["samples"] = [item for item in result["samples"]
+                             if (_read_state(state_dir, item["name"]) or {}).get("status")
+                             not in (None, "uninstalled")]
         merge_remote(result, source.entries(), state_dir, role, remote)
         offline.merge(result, role)
         for item in result["samples"]:
@@ -356,12 +361,14 @@ def main() -> None:
     def refresh(role):
         if role not in {"admin", "user"}:
             raise ApiError(401, "forbidden", "sign in to refresh the sample catalog")
+        update_platform_version()
         result = source.refresh()
         response = catalog(role)
         response["sourceRefresh"].update(result)
         return response
 
     def release_notes(sample, requested_version, role, locale):
+        update_platform_version()
         try:
             return get_sample_release_notes(sample=sample, version=requested_version, actor_role=role,
                 locale=locale, pinned_version=service_version, image_index=image, repo_index=repo, state_dir=state_dir,
@@ -483,8 +490,8 @@ def main() -> None:
     def create_selected(sample, role, authorization, requested_version, requested_digest):
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must install the sample")
-        require_published_version(sample, requested_version)
         update_platform_version()
+        require_published_version(sample, requested_version)
         bundled = next((i for i in merge_catalog(service_version, image, repo)["samples"] if i["name"] == sample), None)
         offline_release = offline.find(sample)
         if offline_release and offline_release["version"] == requested_version:

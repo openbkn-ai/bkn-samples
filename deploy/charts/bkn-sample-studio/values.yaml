@@ -37,8 +37,8 @@ baseURL: "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local"
 # Optional direct Backend address for public version detection only.
 # Empty uses baseURL. It does not change CLI, hook or uninstall routing.
 backendURL: ""
-# Optional acceptance-only pin to an official raw catalog at a full commit SHA.
-# Empty uses the official main branch pointer.
+# Optional pin to an official raw catalogs/<product-version>/catalog.json at a full SHA.
+# Empty resolves main once, then reads the directory for the detected product version.
 catalogURL: ""
 
 # Optional legacy/operator overrides. Empty version reads the backend health API;

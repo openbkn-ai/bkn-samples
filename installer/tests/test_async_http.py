@@ -38,7 +38,7 @@ class AsyncHttpTest(unittest.TestCase):
                     write_json(state / "supply-chain.json", record)
                     finished.set()
                 env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_IMAGE_INDEX": str(ROOT / "manifest-index.json"),
-                       "BKN_SAMPLE_STATE_DIR": str(state)}
+                       "BKN_SAMPLE_STATE_DIR": str(state), "BKN_SAMPLE_PLATFORM_VERSION": "0.2.0"}
                 bundle_index = build_manifest_index(ROOT, "a" * 40)
                 bundle_index["version"] = service_version
                 with patch.dict("os.environ", env), patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \

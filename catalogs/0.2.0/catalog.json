@@ -1,0 +1,590 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "SampleCatalog",
+  "metadata": {
+    "sourceId": "openbkn-official",
+    "revision": "catalog-000001",
+    "sequence": 1,
+    "channel": "stable",
+    "publishedAt": "2026-10-21T04:38:08.626058Z",
+    "productVersion": "0.2.0"
+  },
+  "spec": {
+    "entries": [
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.1",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "publishedAt": "2026-10-10T05:13:11Z",
+        "releaseStatus": "withdrawn",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "供应链固定制品候选版本 0.1.1",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0840b99b0dc5ad2303733c72ec460f9de3ca0195/samples/supply_ontology_hand/releases/0.1.1/release-notes.en-US.md",
+              "digest": "sha256:1d39faea8017adc157993a81ee552cf14973da436c6e186d516ddff443f99ed2"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0840b99b0dc5ad2303733c72ec460f9de3ca0195/samples/supply_ontology_hand/releases/0.1.1/release-notes.zh-CN.md",
+              "digest": "sha256:eafc65369d3a432fe33c1ad4acd21ae55f26bc252fee6a33da4391a5a5384ee6"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0840b99b0dc5ad2303733c72ec460f9de3ca0195/samples/supply_ontology_hand/releases/0.1.1/sample.json",
+          "digest": "sha256:722a27c7c6646c644cec48d9111a7763706a36b5c9910a7bad7852ca5b42c139"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0840b99b0dc5ad2303733c72ec460f9de3ca0195/samples/supply_ontology_hand/releases/0.1.1/verification.json",
+          "digest": "sha256:3843437dde4d2561897377dc71f76a4bbe3daeefde97d92eb38b6b8058ccdd7b"
+        },
+        "withdrawalReason": "Superseded development release; only the latest verified release remains available for installation."
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.2",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "publishedAt": "2026-10-10T09:00:00Z",
+        "releaseStatus": "withdrawn",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "新增交付风险汇总 Skill，并保持供应链安装与验收链路可复现。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3c4dc840f638982bdfc71bf2fb5283977ea3ffce/samples/supply_ontology_hand/releases/0.1.2/release-notes.en-US.md",
+              "digest": "sha256:5b90b3cb722b9676a41465c72db46a46df93a451c5eac57f426bebb41d3cacd5"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3c4dc840f638982bdfc71bf2fb5283977ea3ffce/samples/supply_ontology_hand/releases/0.1.2/release-notes.zh-CN.md",
+              "digest": "sha256:a443df28d6c4fb79412aae03f6b03a36a82eb774b6f8fa3a35a92ceb8aea1f18"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3c4dc840f638982bdfc71bf2fb5283977ea3ffce/samples/supply_ontology_hand/releases/0.1.2/sample.json",
+          "digest": "sha256:d56affea72e665ab19bd59b671e6db24b830107facf38366e352af43a1e51e1f"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3c4dc840f638982bdfc71bf2fb5283977ea3ffce/samples/supply_ontology_hand/releases/0.1.2/verification.json",
+          "digest": "sha256:9db31b704b91ff193cf7bce5b32e4e843370eaa6c4dc125f73264aa53fe27c24"
+        },
+        "withdrawalReason": "Superseded development release; only the latest verified release remains available for installation."
+      },
+      {
+        "sampleId": "world-cup",
+        "version": "0.1.0",
+        "displayName": "世界杯",
+        "summary": "用公开的世界杯数据体验跨表查询和已发布的 SQL 工具。",
+        "publishedAt": "2026-10-10T15:46:31Z",
+        "releaseStatus": "withdrawn",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "World Cup native BKN and embedded data release 0.1.0",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bad4b049887ac15db543fb7eae011a299e2e692d/samples/world-cup/releases/0.1.0/release-notes.en-US.md",
+              "digest": "sha256:66fb52a2da19bc5fc12f3d76705275c78d936112c6f9a5810b782faec65254a6"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bad4b049887ac15db543fb7eae011a299e2e692d/samples/world-cup/releases/0.1.0/release-notes.zh-CN.md",
+              "digest": "sha256:de3154274af1d5bfb03b01fadb3199713b7533e0bc768002649957fcfeaa14bb"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bad4b049887ac15db543fb7eae011a299e2e692d/samples/world-cup/releases/0.1.0/sample.json",
+          "digest": "sha256:0e3332647902189ddccc8fee818861429c46fd042242f79000ebd49585e8a639"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bad4b049887ac15db543fb7eae011a299e2e692d/samples/world-cup/releases/0.1.0/verification.json",
+          "digest": "sha256:b8ef0120a3cbe0abb5fb736922c3b86203e22f5bff24a25fa2468098d4c0c15e"
+        },
+        "withdrawalReason": "Superseded development release; only the latest verified release remains available for installation."
+      },
+      {
+        "sampleId": "world-cup",
+        "version": "0.1.1",
+        "displayName": "世界杯",
+        "summary": "用公开的世界杯数据体验跨表查询和已发布的 SQL 工具。",
+        "publishedAt": "2026-10-11T01:30:00Z",
+        "releaseStatus": "withdrawn",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "World Cup native BKN and embedded data release 0.1.1",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/5bb43363aaa221507c2585b1a04d68b8b8e63b28/samples/world-cup/releases/0.1.1/release-notes.en-US.md",
+              "digest": "sha256:b189700307d6b3a61eebfbf237dd33318e9e6cf32e1a330028c118d6366fa09e"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/5bb43363aaa221507c2585b1a04d68b8b8e63b28/samples/world-cup/releases/0.1.1/release-notes.zh-CN.md",
+              "digest": "sha256:944590afed51f6d043352a0ffa92a388a970bcc69fd0a5c37996a9b849c5d86d"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/5bb43363aaa221507c2585b1a04d68b8b8e63b28/samples/world-cup/releases/0.1.1/sample.json",
+          "digest": "sha256:8e1ad4ed90bbf581f9be26c8d0103e5d78ddaecf9fc59c3a6b49893a82033cae"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/55e09d89dd23a15d66a0a81397ad8e858fc570c8/samples/world-cup/releases/0.1.1/verification.json",
+          "digest": "sha256:85ae2202292f6fb5169d2d6ad7054835388c09530d1821eb9ce94383e288ca04"
+        },
+        "withdrawalReason": "Superseded development release; only the latest verified release remains available for installation."
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.3",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "publishedAt": "2026-10-11T05:04:51Z",
+        "releaseStatus": "withdrawn",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "供应链 0.1.3：指标导入、绑定与实际计算校验",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/747a02712886a4ebff1f4cb23626d4145a8edf69/samples/supply_ontology_hand/releases/0.1.3/release-notes.en-US.md",
+              "digest": "sha256:a869bc1655460674f2cb5a0e1bd26088b67923ffc5ae98b11fcf409fc03e0014"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/747a02712886a4ebff1f4cb23626d4145a8edf69/samples/supply_ontology_hand/releases/0.1.3/release-notes.zh-CN.md",
+              "digest": "sha256:0002c65c47e03ed34608469d1e98f17bdd6c3e52c31ef8857037c90673956ec0"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/747a02712886a4ebff1f4cb23626d4145a8edf69/samples/supply_ontology_hand/releases/0.1.3/sample.json",
+          "digest": "sha256:8d5e32364fcd5c905b61573c06f5ce7766c82ed0d366cd1e4902db0b262f8c99"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/747a02712886a4ebff1f4cb23626d4145a8edf69/samples/supply_ontology_hand/releases/0.1.3/verification.json",
+          "digest": "sha256:3dc490d237d2a97e70682cb05b53392f90d6fd14020bf9b8bb9416315b800847"
+        },
+        "withdrawalReason": "Superseded development release; only the latest verified release remains available for installation."
+      },
+      {
+        "sampleId": "order-basics",
+        "version": "0.1.0",
+        "displayName": "订单入门",
+        "summary": "用三种产品和四张虚构订单体验对象查询与订单关联。",
+        "publishedAt": "2026-10-11T07:34:03Z",
+        "releaseStatus": "withdrawn",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "Order basics 0.1.0: products and orders through the standard sample protocol.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/45961550dd6a4a1ae7c88ec13272a8fb5de36a24/samples/order-basics/releases/0.1.0/release-notes.en-US.md",
+              "digest": "sha256:76d6eed7088e52995020ae2bbb6a7770a2563cbd094bd37fe07436ecedf21f9a"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/45961550dd6a4a1ae7c88ec13272a8fb5de36a24/samples/order-basics/releases/0.1.0/release-notes.zh-CN.md",
+              "digest": "sha256:e49da55bc2b592fcb77d65080aa459c17c8690370b7d6cf1cd32adad692922cf"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/45961550dd6a4a1ae7c88ec13272a8fb5de36a24/samples/order-basics/releases/0.1.0/sample.json",
+          "digest": "sha256:24616380a0bfb57708f894d84b7a95e534f06c07c7a9df2bea5e776e8a2a5b16"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/45961550dd6a4a1ae7c88ec13272a8fb5de36a24/samples/order-basics/releases/0.1.0/verification.json",
+          "digest": "sha256:3d74879286217978d830fc073a2e93b0ec58951dc716be77ded2153031e3b5ba"
+        },
+        "withdrawalReason": "Publication receipt omitted the required capabilities check; replaced by a newly verified version."
+      },
+      {
+        "sampleId": "order-basics",
+        "version": "0.1.1",
+        "displayName": "订单入门",
+        "summary": "用三种产品和四张虚构订单体验对象查询与订单关联。",
+        "publishedAt": "2026-10-11T07:58:16Z",
+        "releaseStatus": "withdrawn",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "Order basics 0.1.1: complete fixed-artifact acceptance receipt.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82200515bbd7a3bba695b05fdceeb650abe751c9/samples/order-basics/releases/0.1.1/release-notes.en-US.md",
+              "digest": "sha256:612c47f73f5c247135aed277ab4ae22530d6e197774268078d294fde288ea6aa"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82200515bbd7a3bba695b05fdceeb650abe751c9/samples/order-basics/releases/0.1.1/release-notes.zh-CN.md",
+              "digest": "sha256:d638cc8b73c90073af884e49b39cbd0b282b037084e30f8397953998a60aea5e"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82200515bbd7a3bba695b05fdceeb650abe751c9/samples/order-basics/releases/0.1.1/sample.json",
+          "digest": "sha256:e1772a76adb5b393a59fdd1b90941ea8a9dc290acd451b9f11771cf7a075231b"
+        },
+        "requires": {
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json"
+          ],
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "requiredExtensions": [],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ]
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/691721fad028907625c29e5df02d7f8dfb0e5650/samples/order-basics/releases/0.1.1/verification.json",
+          "digest": "sha256:2ec07535c565067d5e8943653ddd20a9ce2ea747cca30d602b65c746fb84eb8d"
+        },
+        "withdrawalReason": "Superseded development release; only the latest verified release remains available for installation."
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.4",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "publishedAt": "2026-10-11T22:38:33Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "供应链 0.1.4：支持归属记录、卸载和重新安装，保留安装历史。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/supply_ontology_hand/releases/0.1.4/release-notes.en-US.md",
+              "digest": "sha256:a2e420cb5f0840b64b8d91664c01bbf6d53f6f864307b7375616e5298904830a"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/supply_ontology_hand/releases/0.1.4/release-notes.zh-CN.md",
+              "digest": "sha256:4c8227268dea8a8c7c003037adbe3c0178b64341c86750cd8aa942c13a2abe83"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/supply_ontology_hand/releases/0.1.4/sample.json",
+          "digest": "sha256:147cfecf87311bcdd0cb09bb88490c630e20aac7dbab8fc0441958258b46d281"
+        },
+        "requires": {
+          "architectures": [
+            "arm64",
+            "amd64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/supply_ontology_hand/releases/0.1.4/verification.json",
+          "digest": "sha256:ede64a29237deebc7fede38fbced79765c7e4f2eec23c9bc45e5f7d3b97db4b0"
+        }
+      },
+      {
+        "sampleId": "world-cup",
+        "version": "0.1.2",
+        "displayName": "世界杯",
+        "summary": "用公开的世界杯数据体验跨表查询和已发布的 SQL 工具。",
+        "publishedAt": "2026-10-11T22:38:37Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "世界杯 0.1.2：支持归属记录、卸载和重新安装，保留安装历史。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/world-cup/releases/0.1.2/release-notes.en-US.md",
+              "digest": "sha256:ca88adc442a453fc4db5be85a13027ed458006de596da6abdfb4035207098cad"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/world-cup/releases/0.1.2/release-notes.zh-CN.md",
+              "digest": "sha256:0cabc59c24163f2ebbabf8d09fb0ced558887189b8aaee3e2906c3c99b42e6d1"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/world-cup/releases/0.1.2/sample.json",
+          "digest": "sha256:76d1f5afe3ddfb5b94419c647543c7a489798076f18c9c0b3b0c696993b3334b"
+        },
+        "requires": {
+          "architectures": [
+            "arm64",
+            "amd64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/world-cup/releases/0.1.2/verification.json",
+          "digest": "sha256:a43f62cccd6719c6ab2eff7309595b76ad113f4a1c8535de6bb3763616e3a7c0"
+        }
+      },
+      {
+        "sampleId": "order-basics",
+        "version": "0.1.2",
+        "displayName": "订单入门",
+        "summary": "用三种产品和四张虚构订单体验对象查询与订单关联。",
+        "publishedAt": "2026-10-11T22:38:41Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "订单入门 0.1.2：支持归属记录、卸载和重新安装，保留安装历史。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/order-basics/releases/0.1.2/release-notes.en-US.md",
+              "digest": "sha256:17d8fb828e334fe084121d82e28fff1cdeca662ade983b5bf2a052e1c0e086e1"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/order-basics/releases/0.1.2/release-notes.zh-CN.md",
+              "digest": "sha256:118c6c1361bc281e4eb3a73f1eb8a44b20077e364f6a89c421ff3a94cfddcd09"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/order-basics/releases/0.1.2/sample.json",
+          "digest": "sha256:7be41e6eb5f053807df1983bb5ee890a5af2ea36acdf59367eabda64cb5b61a9"
+        },
+        "requires": {
+          "architectures": [
+            "arm64",
+            "amd64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/order-basics/releases/0.1.2/verification.json",
+          "digest": "sha256:7327a94db936c18daa6c18485d4d73d81eb4ac9cf1d890ffb78e3fe88ad02985"
+        }
+      },
+      {
+        "sampleId": "supply-chain-en",
+        "version": "0.1.1",
+        "displayName": "Supply Chain (EN)",
+        "summary": "Assess demand coverage using sample orders, stock, BOMs and supply.",
+        "publishedAt": "2026-10-13T08:17:13Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Supply Chain EN 0.1.1: concise metric names and verified supply-chain scenarios.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/43ee50f772a76de3c68d4de4ec1ced1c9e897095/samples/supply_ontology_en/releases/0.1.1/release-notes.en-US.md",
+              "digest": "sha256:c3b107d01d3a1bda57d1198dbf1ed2720198e78672ba495aa23c3604779f09a2"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/43ee50f772a76de3c68d4de4ec1ced1c9e897095/samples/supply_ontology_en/releases/0.1.1/sample.json",
+          "digest": "sha256:afc02050e596cd2b85bffad640268fd38fe7bb623c3014085733eea78d92b1e3"
+        },
+        "requires": {
+          "architectures": [
+            "arm64",
+            "amd64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/43ee50f772a76de3c68d4de4ec1ced1c9e897095/samples/supply_ontology_en/releases/0.1.1/verification.json",
+          "digest": "sha256:11ba5d27e8f1739e75ab7819e389286cd42e48a54d41bfad8d3b13ca30d57b2c"
+        }
+      },
+      {
+        "sampleId": "world-cup-en",
+        "version": "0.1.0",
+        "displayName": "World Cup (EN)",
+        "summary": "Explore World Cup tournaments, teams, players and match events.",
+        "publishedAt": "2026-10-13T15:45:03Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3cfc309bee08a76960b72c9d946142f920944a7d/samples/world-cup-en/releases/0.1.0/release-notes.en-US.md",
+              "digest": "sha256:48892bb3764926bcd240ab716b4e03c02b8f58ae4c0b55a6dab4fe2d243b557c"
+            }
+          ],
+          "summary": "Initial English World Cup sample with 27 tables, complete model fields and 50 independently verified MCP scenarios."
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3cfc309bee08a76960b72c9d946142f920944a7d/samples/world-cup-en/releases/0.1.0/sample.json",
+          "digest": "sha256:c94e46d4e1e9a145bea620269073d0deec5459f0668721e3970371daae7325e2"
+        },
+        "requires": {
+          "architectures": [
+            "arm64",
+            "amd64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.0 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/3cfc309bee08a76960b72c9d946142f920944a7d/samples/world-cup-en/releases/0.1.0/verification.json",
+          "digest": "sha256:1b61b7f4057082aa90a8039cdd170925ef393d734543a4c1d22a398ba34117c6"
+        }
+      }
+    ]
+  }
+}
