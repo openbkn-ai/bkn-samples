@@ -20,7 +20,7 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 
 ## 样例目录
 
-已核对的开发清单共有 **13 个带 manifest 的样例**：主线 11 个，另有能源 SAREF4ENER 中英文 2 个本地未合入样例。主线包括订单入门 1 个，以及供应链、世界杯、制造业、金融 FIBO、零售 GS1 各中英文 2 个。下表区分主线源码、待整合源码、已有版本及本轮候选。
+本次 OpenBKN 0.2.1 更新统一覆盖 **13 个标准样例**：订单入门 1 个，以及供应链、世界杯、制造业、金融 FIBO、零售 GS1、能源 SAREF4ENER 各中英文 2 个。能源源码已在本次变更中整合；13 项以同一份候选清单统一构建和核对，不再只按此前主线清单打包。
 
 | 样例 | 语言 | 体验场景 | 可用状态 |
 | --- | --- | --- | --- |
@@ -29,23 +29,23 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 | [供应链](samples/supply_ontology_en/) | 英文 | 英文数据、本体、函数、指标和 Skill 的供应链分析 | 已有版本 0.1.1；0.2.1 候选 0.1.4，待平台验收 |
 | [世界杯](samples/world-cup/) | 中文模型、英文数据 | 赛事、球队、球员和比赛事件查询，提供 50 道中文评测题 | 已有版本 0.1.2；0.2.1 候选 0.1.6，待平台验收 |
 | [世界杯](samples/world-cup-en/) | 英文 | 对象查询、多表关联、排名及跨届赛事分析，提供 50 道评测题 | 已有版本 0.1.0；0.2.1 候选 0.1.2，待平台验收 |
-| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 源码及 0.1.1 候选说明；本轮未提供新包，打包与验收待补齐 |
-| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | 中文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 源码及 0.1.1 候选说明；本轮未提供新包，打包与验收待补齐 |
+| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 候选 0.1.2；统一自包含包，待平台验收 |
+| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | 中文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 候选 0.1.2；统一自包含包，待平台验收 |
 | [Financial Portfolio Operations（FIBO）](samples/financial-fibo-en-us/) | 英文 | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 已有版本 0.2.5；0.2.1 候选 0.2.6，待平台验收 |
 | [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 中文本体与业务数据，覆盖交易后运营控制；20 张表、78,356 条记录和 100 道评测题 | 已有版本 0.2.5；0.2.1 候选 0.2.6，待平台验收 |
 | [Food Supply and Recall（GS1）](samples/retail-gs1-en-us/) | 英文 | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | 已有版本 0.1.0；0.2.1 候选 0.1.1，待平台验收 |
 | [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | 中文 | 中文本体、数据及业务能力，与英文样例事实对应；15张表、2,911条记录、100题 | 已有版本 0.1.0；0.2.1 候选 0.1.1，待平台验收 |
-| [Energy demand response（SAREF4ENER）](docs/energy-saref4ener-readiness.md#english) | 英文 | 需求响应资格、共享容量调度、计量交付及结算；15 张表、14,787 条记录 | 本地源码及 0.1.3 候选；未合入主线，未进入本轮候选或目录 |
-| [需求响应与柔性用能（SAREF4ENER）](docs/energy-saref4ener-readiness.md#chinese) | 中文 | 中文本体和对应业务事实；3 个函数、2 个已记录快照指标、1 个调查 Skill | 本地源码及 0.1.3 候选；未合入主线，未进入本轮候选或目录 |
+| [Energy demand response（SAREF4ENER）](samples/energy-saref4ener-en-us/) | 英文 | 需求响应资格、共享容量调度、计量交付及结算；15 张表、14,787 条记录 | 0.2.1 候选 0.1.4；统一自包含包，待平台验收 |
+| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | 中文 | 中文本体和对应业务事实；3 个函数、2 个已记录快照指标、1 个调查 Skill | 0.2.1 候选 0.1.4；统一自包含包，待平台验收 |
 
 
-本轮 [OpenBKN 0.2.1 预发布候选](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-83013a7)提供 **9 个包**：主线中除制造业双语外的样例。每个包包含固定摘要，已做本地校验；真实 0.2.1 安装、MCP、函数和业务场景验收待完成。完整交付还需补齐制造业双语的统一包与验收，以及能源双语的源码整合、固定提交重建和验收。不能将这 9 个包称为完整的 0.2.1 样例交付。能源本地构建记录包含未提交变更，不能直接作为固定源码发布证据；见[能源状态与后续工作](docs/energy-saref4ener-readiness.md)。
+本轮[完整 13 包候选集](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r1)包含上表全部样例；[机器可读清单](tools/publication/candidates-0.2.1.json)与源码 manifest 双向核对，缺项、重复或未登记项会使构建失败。候选附固定源码提交及 SHA-256，完成本地校验后供 0.2.1 测试环境离线导入；真实安装、MCP、函数及业务场景验收仍待完成。此前九包候选与历史包保持不变。
 
 已发布 0.2.0 客户端继续使用根[官方目录](catalog.json)。更新后的样例服务按产品版本选择目录，见 [0.2.0 目录](catalogs/0.2.0/catalog.json)、[0.2.1 目录](catalogs/0.2.1/catalog.json)和[目录选择说明](docs/product-version-catalogs.md)。当前 0.2.1 目录保留已有 FIBO/GS1 条目，本轮 9 个新候选尚未加入正式目录。OpenBKN 0.2.1 产品尚未正式发布，候选供其测试环境离线导入。
 
 两个GS1零售样例均要求 **OpenBKN 0.2.1及以上**，当前manifest兼容范围为 `>=0.2.1 <0.3.0`，数据内置，使用产品共享MariaDB。每语言提供3个通用函数、2个日期快照指标、1个调查Skill，以Apache-2.0的[GS1 Web Vocabulary](https://github.com/gs1/WebVoc)为语义参考，业务数据全部虚构，并明确本地扩展。8081首轮各100题：**英文96/100、中文95/100**；修复事件去重和题目契约后，只复测原未通过题，**英文4/4、中文5/5**，9题执行及证据均完成。未再次全量跑，不能称修订版全量100%。详见[验收报告](docs/retail-gs1-acceptance.zh-CN.md)。源码PR #186已合并，[英文0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0)与[中文0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.0)固定制品已发布，目录 PR #187 已合并。目前可在OpenBKN0.2.1及以上离线导入，旧020内置索引未修改。
 
-两个制造业样例尚未进入官方目录，也不在本轮九包候选中。现有 0.1.1 候选说明描述了需要匹配数据镜像的旧交付方式；面向本轮 0.2.1 的统一自包含包及验证记录仍待补齐。两者使用独立数据库和知识网络 ID。
+制造业双语 0.1.2 和能源双语 0.1.4 已纳入统一自包含候选，均使用产品共享 MariaDB，不再要求样例专属数据镜像。制造业保留 40 表、71 关系及 IOF 参考层；能源保留 15 表、3 个函数、2 个快照指标及调查 Skill。源码整合及本地验证的范围见[整合记录](docs/energy-saref4ener-readiness.md)。
 
 两个金融样例以 MIT 许可的[选定 FIBO 来源](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890)作语义参考，业务数据全部虚构，不宣称全量 FIBO。**[英文0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.5)** 与 **[中文0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.5)** 每语含3个函数、2个已记录快照指标、1个调查Skill，要求 **OpenBKN 0.2.1及以上**（`>=0.2.1 <0.3.0`）。0.2.5仅修正发布说明和执行能力要求，业务内容和题库不变；可下载固定包离线导入，在线可用版本以已合并官方目录为准。本修正版仅验证全新安装、兼容门槛与包一致性，不新增模型问答。历史单轮财务字段仍为**中英文各96/100**；指定历史工具路径为**4/4（该四项100%）**、0.2.4代表性技术检查为**16/16（该检查集100%）**，均不代表0.2.5全量问答准确率。详见[0.2.5发布验收与边界](docs/financial-fibo-release-0.2.5.zh-CN.md)。历史0.2.4及0.1.x资产不变。
 

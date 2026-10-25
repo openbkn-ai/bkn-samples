@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: reading_to_meter
+name: 计量读数关联设备电表
+tags: [energy, saref4ener]
+---
+
+## RelationType: 计量读数关联设备电表
+
+显式外键关系；不把日期相同的记录误连。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| meter_readings | meters | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| meter_id | meter_id |

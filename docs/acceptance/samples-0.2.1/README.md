@@ -1,52 +1,66 @@
-# OpenBKN 0.2.1 sample candidates: local evidence
+# Complete OpenBKN 0.2.1 sample candidates: local evidence
 
-Source inventory: **11 mainline samples plus two local unmerged energy samples**,
-13 developed manifest identities in total. This batch contains **9 candidates**;
-`manufacturing-industry-en-us` and `manufacturing-industry-zh-cn` still need unified
-packages and local/target acceptance. The energy pair also requires source
-integration, fixed-source rebuilding and acceptance; see
-[energy readiness](../../energy-saref4ener-readiness.md). The batch is not complete
-product coverage.
+All **13 standard source samples** are covered by the same
+[machine-readable plan](../../../tools/publication/candidates-0.2.1.json): Order Basics
+and bilingual Supply Chain, World Cup, Manufacturing, Financial FIBO, Retail GS1 and
+Energy SAREF4ENER. Missing, duplicate or unregistered identities fail the batch build.
+Manufacturing is **0.1.2** per language and Energy is **0.1.4** per language.
 
-These candidates are intended for download and offline import into a later fixed
-OpenBKN 0.2.1 test environment. They have not passed product installation, real
-MCP/Agent, upgrade or uninstall acceptance. No official catalog entry or successful
-platform verification receipt is created by this work.
+The complete set is built from clean committed source. Archive digests, offline
+inspection and declared architecture compatibility are checked for every sample.
+Those checks do not execute installation hooks or prove amd64/arm64 native runtime
+support. The 0.2.0 product floor rejects these 0.2.1 candidates. No successful
+platform verification receipt is created and no new candidate is added to stable
+catalogs by this work. Prior package assets and the 0.2.0 root catalog remain intact.
 
-Local checks:
+## Current local checks
 
-- Installer: 315 tests, one existing skip (run with Python 3.11 and Helm).
-- Supply tools: 236 tests per language, including frozen data/function business rules.
-- World Cup: 10 baseline tests across both languages.
-- World Cup isolated MariaDB: 27 tables and 81,200 rows per language, 142 physical
-  BIGINT columns per language, all 50 frozen SQL answers per language; the score
-  range query and an independent CSV oracle both give 326.
-- FIBO capability reconstruction: 21 local tests.
-- GS1 structural audit: 2,911 source rows per language, bilingual fact identity.
-- Metric fixtures: upstream MCP request schemas, date literal types, immutable
-  definitions, exact numeric display, warning/partial/no-data handling, opaque
-  cursor/bucket handling, completeness, independent CSV query expectations.
-- Both product catalogs and the legacy root catalog pass metadata validation.
+- Installer: 319 tests, OK with one existing skip, including complete-plan, ownership, data/type, references,
+  schemas and consumer checks.
+- Manufacturing: each language passes 71 relationship checks, material/BOM and
+  shipment gates, 112 IOF reference-instance/link checks, 18 deterministic scenarios
+  and the structural 100-question bank checks. No new Agent bank is run.
+- Energy: 12 independent hand-built engine boundaries and 4 managed adapter tests;
+  100 historical structured-projection cases per language replayed locally with
+  explicit source-record SHA-256 provenance and question output contracts. This
+  regression is not a new model-accuracy score. The lost original independent oracle
+  is not represented as restored; see the [recovery record](energy-recovery.json).
+- Real database hooks for the four Manufacturing/Energy samples: init, full typed
+  row verification, repeat init and verify on an isolated temporary MariaDB. Each
+  manufacturing language has 40 tables/2,700 records; each energy language has
+  15 tables/14,787 records. Column types are separately inspected through
+  information_schema. The report is [industry-energy-database.json](industry-energy-database.json).
+- Supply tools: 236 tests per language; World Cup baseline suites: 10 tests.
+- Eight metric-bearing samples / 34 definitions: request schemas, typed dates,
+  immutable definitions, exact display/units, states, complete paging, opaque
+  cursor/bucket handling and CSV-based example expectations. No metrics are forced
+  into manufacturing or the other non-metric samples.
+- Legacy root and both product catalogs pass metadata validation; Helm rendering,
+  lint and documentation links are checked.
 
-The SQL evidence records the actual cached MariaDB 11.4.13 image ID; it is not a
-claim about product MariaDB 11.4.7 or OpenBKN query pushdown. The harness uses loader
-DDL and value conversion with direct SQL, then compares locked gold answers. The
-existing `AS rows` alias is quoted for MariaDB portability without changing the
-frozen query's business semantics or expected answers. Run:
+## Reproduction
 
 ```sh
-python tools/acceptance/worldcup_mariadb.py --image mariadb:11.4 --output /tmp/worldcup-evidence.json
+python -m unittest discover -s installer/tests
+python -m unittest tools.energy_saref4ener.test_engine tools.energy_saref4ener.test_adapter
+python tools/energy_saref4ener/verify.py --sample en-us
+python tools/energy_saref4ener/verify.py --sample zh-cn
+python tools/acceptance/industry_energy_database.py --output /tmp/four-database-evidence.json
+python -m tools.publication.build_candidate_set --output /absolute/path/outside/repository
 ```
 
-The harness creates a unique temporary container without networking or exposed
-ports and removes it afterwards. It uses a locally cached image (`--pull=never`).
+The database harness needs the existing Python database dependencies, Docker and a
+locally cached MariaDB image (`--pull=never`). It creates an isolated temporary
+bridge and exposes a random port only on 127.0.0.1, then deletes its own container
+and network. The actual report uses MariaDB **11.4.13**, not a claim about product
+MariaDB 11.4.7 or OpenBKN query pushdown. The separate [World Cup report](worldcup-mariadb.json)
+retains 50/50 SQL gold cases per language and CSV-independent score count 326;
+its original `AS rows` alias is quoted for MariaDB SQL portability.
 
-Source function and Skill behavior is preserved. The 0.2.0 branch PR #184 is not
-merged wholesale: it resets supply data and removes Skills. Managed-context,
-function execution and existing-sample replacement remain explicit target-runtime
-checks. The metric inventory documents 30 unchanged version-1 definitions; no
-sample is converted into a live or cross-date metric just to expand the demo.
+## Remaining target-product acceptance
 
-Candidate publication must retain package digests and exact source commit. Failed
-or changed candidates get a new version; stable catalogs accept only the same
-bytes that later pass the target-platform checks.
+Real fixed OpenBKN 0.2.1 install, bounded failure retry, uninstall, replacement,
+CLI/API/MCP, metric create/publish/query/drill, functions/Skills and query-engine
+behavior remain pending under the user's requested scope. Source function/Skill
+behavior is retained; the 0.2.0 PR #184 is not merged wholesale. Candidate publication
+is not stable catalog admission, migration support or proof of target runtime success.

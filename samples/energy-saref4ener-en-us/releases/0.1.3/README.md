@@ -1,0 +1,1 @@
+Local candidate0.1.3: require concrete announced/known dates and failed visibility conditions for unavailable-event explanations. Retain0.1.2 evidence fix; functions, data and gold remain unchanged. Verify only ENE-014 in both languages, preserving prior results; no full rerun or publication claim.

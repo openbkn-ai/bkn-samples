@@ -2,7 +2,7 @@
 
 This is an importable end-to-end manufacturing sample for tracing demand forecast through plan, supply, production, quality, finished-goods receipt, and shipment.
 
-**Installation compatibility:** this sample requires OpenBKN **0.2.1 or later**. Source and 0.1.1 candidate notes are available. This sample is not in the current nine-package OpenBKN 0.2.1 candidate set; its unified self-contained package and acceptance evidence remain pending. It is not registered in the online sample catalog.
+**Installation compatibility:** this sample requires OpenBKN **0.2.1 or later**. Version 0.1.2 is a fixed-source self-contained candidate in the complete thirteen-package update, using the product shared MariaDB and requiring no sample-specific image. Local checks and real platform acceptance are recorded separately; it is not admitted to a stable catalog.
 
 ## What is included
 
@@ -16,7 +16,7 @@ This is an importable end-to-end manufacturing sample for tracing demand forecas
 
 The data chain is forecast → production plan → sales order → material receipt and issue → work order and routing → equipment, people, and execution → quality specification and inspection → finished-goods receipt → shipment.
 
-The planning horizon is **November 2026 through March 2027**. All temporal fields are date-only (`YYYY-MM-DD`): sales delivery, procurement receipt, goods receipt, shift, execution, maintenance, and production due dates. The latest planned production due date is `2027-03-30`.
+The planning horizon is **November 2026 through March 2027**. Day-level temporal fields are date-only (`YYYY-MM-DD`): sales delivery, procurement receipt, goods receipt, shift, execution, maintenance, and production due dates. The latest planned production due date is `2027-03-30`. The forecast period is a `YYYY-MM` planning-month string, not a day-level date.
 
 Fifty connected business cases cover 22 shipped completions, 11 material shortages, 11 quality failures, and 6 work orders in production. Read [the branch design](docs/dataset-scenarios.md) for the evidence represented by each outcome.
 

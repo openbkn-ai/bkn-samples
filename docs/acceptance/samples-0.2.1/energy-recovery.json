@@ -1,0 +1,40 @@
+{
+  "packages": [
+    {
+      "sample": "energy-saref4ener-en-us",
+      "recovered_from_package": "sha256:e2c383f016c76d62475971da521cde1295874df332bfb01ec40b7ee3b7fe79ec",
+      "original_version": "0.1.3",
+      "archive_files": 77,
+      "overlay_differences": [],
+      "additional_source_files": [
+        "releases/0.1.3/README.md",
+        "releases/0.1.2/release-notes.en-US.md",
+        "releases/0.1.2/README.md",
+        "releases/0.1.1/release-notes.en-US.md",
+        "releases/0.1.1/README.md",
+        "releases/0.1.1/release-notes.zh-CN.md"
+      ]
+    },
+    {
+      "sample": "energy-saref4ener-zh-cn",
+      "recovered_from_package": "sha256:1668cfad622cbbba4bc7b3c7f6a41893500131e83940f4b1bb590de757467b02",
+      "original_version": "0.1.3",
+      "archive_files": 77,
+      "overlay_differences": [],
+      "additional_source_files": [
+        "releases/0.1.3/README.md",
+        "releases/0.1.2/README.md",
+        "releases/0.1.2/release-notes.zh-CN.md",
+        "releases/0.1.1/release-notes.en-US.md",
+        "releases/0.1.1/README.md",
+        "releases/0.1.1/release-notes.zh-CN.md"
+      ]
+    }
+  ],
+  "recovery_notes": [
+    "Missing source/data restored from immutable 0.1.3 archives; retained sparse source matched those bytes.",
+    "Upstream Turtle restored from official fixed-version URLs with matching original frozen hashes.",
+    "Original independent oracle and selected-mapping file unavailable. Historical structured projections restored with source-record hashes, explicitly labeled as regression only.",
+    "Obsolete local generator excluded because it overwrites reviewed manifest versions; shipped sources and explicit build tools are authoritative."
+  ]
+}

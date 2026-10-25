@@ -1,0 +1,30 @@
+---
+type: object_type
+id: devices
+name: 柔性设备
+tags: [energy, saref4ener]
+---
+
+## ObjectType: 柔性设备
+
+本地运营对象；来源概念参考不构成OWL等价声明。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| device_id | 设备标识 | string | 稳定唯一源记录标识。 | device_id |
+| site_id | 场所标识 | string | 显式外键关联；空值不创建关系。 | site_id |
+| name | 名称 | string | 与另一语言事实等价的虚构业务值。 | name |
+| device_type | 设备类型 | string | 与另一语言事实等价的虚构业务值。 | device_type |
+| device_type_code | 设备类型代码 | string | 稳定英文代码；展示值在对应字段本地化。 | device_type_code |
+| max_reduction_kw | 最大削减功率 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | max_reduction_kw |
+| min_service_kw | 最低服务功率 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | min_service_kw |
+| status | 状态 | string | 与另一语言事实等价的虚构业务值。 | status |
+| status_code | 状态代码 | string | 稳定英文代码；展示值在对应字段本地化。 | status_code |
+
+### Keys
+
+Primary Keys: device_id
+Display Key: name
+Incremental Key:

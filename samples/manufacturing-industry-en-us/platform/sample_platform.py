@@ -1,53 +1,56 @@
-#!/usr/bin/env python3
-"""Install and verify the resource-backed BKN manufacturing sample."""
-import json, os, re, subprocess, sys, tempfile
+"""Native BKN import with explicit ownership, resource bindings and live queries."""
+import json,os,re,shutil,subprocess,sys,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-SAMPLE='manufacturing-industry-en-us'; KN='manufacturing_industry_en_us'
-def run(*args):
-    p=subprocess.run(['openbkn','--json',*args],text=True,capture_output=True)
-    if p.returncode: raise RuntimeError(p.stderr or p.stdout)
+sys.path.insert(0,str(ROOT/'tools'))
+MANIFEST=json.loads((ROOT/'sample.yaml').read_text());SAMPLE=MANIFEST['metadata']['name'];KN=MANIFEST['spec']['knowledgeNetwork']['id']
+def require(ok,msg):
+    if not ok:raise ValueError(msg)
+def cli(*args):
+    p=subprocess.run(['openbkn','--json',*args],capture_output=True,text=True)
+    if p.returncode:raise RuntimeError('OpenBKN call failed: '+re.sub(r'(?i)(password\s*[:=]\s*)[^\s,]+',r'\1***',(p.stderr or p.stdout))[:600])
     return json.loads(p.stdout or '{}')
-def checked(*args):
-    p=subprocess.run(['openbkn',*args],text=True,capture_output=True)
-    if p.returncode:
-        detail=(p.stderr or p.stdout or '').strip().replace('\n',' ')
-        detail=re.sub(r'(?i)(password\s*[:=]\s*)[^\s,]+', r'\1***', detail)
-        raise RuntimeError(f"openbkn {' '.join(args)}: {detail[:1000] or 'command failed'}")
-    return p.stdout
-def payload():
-    p=json.loads(Path(os.environ['BKN_SAMPLE_INPUT']).read_text(encoding='utf-8'))
-    if p.get('sample')!=SAMPLE: raise RuntimeError('unexpected sample')
-    return p
-def entries(v): return v.get('entries',v) if isinstance(v,dict) else v
-def output(raw,ok,checks,message=''):
-    body={'ok':ok,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':{'toolboxes':[],'skills':[]}},'checks':checks,'degrade':[],'message':message}
-    Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(body,ensure_ascii=False),encoding='utf-8')
-    print(json.dumps(body,ensure_ascii=False))
+def entries(value):
+    if isinstance(value,list):return value
+    for key in ('entries','datas','data','instances'):
+        if isinstance(value.get(key),list):return value[key]
+    raise ValueError('missing entries')
+def single(v):return entries(v)[0] if isinstance(v,list) or 'entries' in v else v
 def main():
-    raw=payload()
-    if os.environ.get('BKN_SAMPLE_PRINT_ONLY')=='1':
-        output(raw,True,[{'name':'offline-install-plan','ok':True}]); return
+    raw=json.loads(Path(os.environ['BKN_SAMPLE_INPUT']).read_text());require(raw['sample']==SAMPLE and raw['knowledgeNetwork']['id']==KN and raw['database']['name']==KN,'ownership identity differs')
+    tags={'bkn-samples','bkn-sample-'+SAMPLE,'bkn-samples-version-'+raw['version'].replace('.','-')}
+    specs=json.loads((ROOT/'model-contract.json').read_text())['object_types']
+    resources=entries(cli('vega','resource','list','--catalog-id',raw['catalog']['id'],'--category','table','--limit','100'))
+    bindings={}
+    for table in specs:
+        matches=[r for r in resources if r['name'].rsplit('.',1)[-1]==table];require(len(matches)==1,'missing/ambiguous resource '+table);bindings[table]=matches[0]['id']
     if sys.argv[1]=='install':
-        checked('bkn','validate',str(ROOT/'kn'))
-        with tempfile.TemporaryDirectory() as d:
-            # The standard CLI imports the BKN directory; the installer then binds every object type to its discovered CSV table resource.
-            checked('bkn','push',str(ROOT/'kn'))
-            resources=entries(run('vega','resource','list','--catalog-id',raw['catalog']['id'],'--category','table','--limit','100'))
-            if not isinstance(resources,list): raise RuntimeError('catalog table resources are unavailable')
-            for ot in (ROOT/'kn'/'object_types').glob('*.bkn'):
-                ot_id=ot.stem; match=[r for r in resources if str(r.get('name','')).rsplit('.',1)[-1]==ot_id]
-                if len(match)!=1: raise RuntimeError('missing or ambiguous resource: '+ot_id)
-                current=entries(run('bkn','object-type','get',KN,ot_id)); current=current[0] if isinstance(current,list) else current
-                current['data_source']={'type':'resource','id':match[0]['id']}
-                body=Path(d)/(ot_id+'.json'); body.write_text(json.dumps(current),encoding='utf-8')
-                run('bkn','object-type','update',KN,ot_id,'--body-file',str(body))
-        output(raw,True,[{'name':'model-imported','ok':True},{'name':'40-table-resources-bound','ok':True}]); return
-    if sys.argv[1]=='verify':
-        objects=entries(run('bkn','object-type','list',KN)); relations=entries(run('bkn','relation-type','list',KN))
-        ok=len(objects)==40 and len(relations)==71 and all(o.get('data_source',{}).get('type')=='resource' for o in objects)
-        output(raw,ok,[{'name':'40-object-types','ok':len(objects)==40},{'name':'71-relation-types','ok':len(relations)==71},{'name':'resource-bindings','ok':all(o.get('data_source',{}).get('type')=='resource' for o in objects)}]); return
-    raise RuntimeError('expected install or verify')
-try: main()
-except Exception as e:
-    raw=payload(); output(raw,False,[],str(e)); raise
+        existing=subprocess.run(['openbkn','--json','bkn','get',KN],capture_output=True,text=True)
+        if existing.returncode==0:
+            current=json.loads(existing.stdout);require(tags<=set(current.get('tags',[])),'knowledge network ownership conflict')
+            for table in specs:require(single(cli('bkn','object-type','get',KN,table))['data_source']['id']==bindings[table],'existing binding differs')
+        else:
+            require('404' in existing.stderr+existing.stdout,'cannot confirm network absence')
+            with tempfile.TemporaryDirectory() as d:
+                dest=Path(d)/'kn';shutil.copytree(ROOT/'kn',dest)
+                n=dest/'network.bkn';n.write_text(re.sub(r'^tags:.*$', 'tags: '+json.dumps(sorted(tags|{'manufacturing','iof'})),n.read_text(),flags=re.M))
+                cli('bkn','validate',str(dest));cli('bkn','push',str(dest))
+                for table in specs:
+                    obj=single(cli('bkn','object-type','get',KN,table));obj['data_source']={'type':'resource','id':bindings[table]}
+                    p=Path(d)/(table+'.json');p.write_text(json.dumps(obj));cli('bkn','object-type','update',KN,table,'--body-file',str(p))
+    elif sys.argv[1]!='verify':raise ValueError('expected install or verify')
+    network=cli('bkn','get',KN,'--export');require(tags<=set(network.get('tags',[])),'network ownership differs')
+    require(len(network['object_types'])==len(specs) and len(network['relation_types'])==71,'model counts differ')
+    for table,spec in specs.items():
+        obj=single(cli('bkn','object-type','get',KN,table));require(obj['data_source']['id']==bindings[table],'binding differs')
+        data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
+    capabilities={'ownedExecution':{'toolboxes':[],'skills':[]}}
+    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership','40-object-types',str(71)+'-relations','40-resource-bindings','40-live-object-queries')],'degrade':[],'message':''}
+    Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result));print(json.dumps(result))
+if __name__=='__main__':
+    try:main()
+    except Exception as error:
+        message=re.sub(r'(?i)(bearer\s+|password[\"\s:=]+|token[\"\s:=]+)[^\s,}]+',r'\1***',str(error))[:1000]
+        result={'ok':False,'code':'manufacturing_platform_hook_failed','message':message}
+        if os.environ.get('BKN_SAMPLE_OUTPUT'):Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result))
+        print(json.dumps(result));sys.exit(1)

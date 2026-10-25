@@ -69,6 +69,19 @@ jobs:
           python tools/retail_gs1/test_runtime_adapter.py
           python tools/retail_eval/validate_bank.py
           python tools/retail_eval/replay_recorded.py
+      - name: Validate complete 0.2.1 coverage and integrated samples
+        run: |
+          python -m pip install -r tools/energy_saref4ener/requirements.txt
+          python -c 'import json; from pathlib import Path; from tools.publication.build_candidate_set import validate_plan; validate_plan(Path.cwd(), json.loads(Path("tools/publication/candidates-0.2.1.json").read_text()))'
+          python -m unittest tools.energy_saref4ener.test_engine tools.energy_saref4ener.test_adapter
+          python tools/energy_saref4ener/audit_sources.py
+          python tools/energy_saref4ener/verify.py --sample en-us
+          python tools/energy_saref4ener/verify.py --sample zh-cn
+          for sample in manufacturing-industry-en-us manufacturing-industry-zh-cn; do
+            python "samples/$sample/tools/verify_industry_links.py"
+            python "samples/$sample/iof-reference/tools/verify_reference_instances.py"
+            python "samples/$sample/bkn-eval/run.py"
+          done
       - name: Build and check the manifest index
         run: |
           python installer/build_manifest_index.py --revision "${{ github.sha }}" --output /tmp/manifest-index.json

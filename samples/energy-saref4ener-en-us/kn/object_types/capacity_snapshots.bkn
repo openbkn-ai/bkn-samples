@@ -1,0 +1,28 @@
+---
+type: object_type
+id: capacity_snapshots
+name: Capacity Snapshot
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Capacity Snapshot
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| snapshot_id | Snapshot id | string | Stable unique source-row identifier. | snapshot_id |
+| event_id | Event id | string | Explicit foreign-key association; blank creates no edge. | event_id |
+| as_of_date | As of date | date | Day-only date governed by business and knowledge cutoffs. | as_of_date |
+| knowledge_date | Knowledge date | date | Day-only date governed by business and knowledge cutoffs. | knowledge_date |
+| eligible_kw | Eligible kw | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | eligible_kw |
+| quality | Quality | string | Fictional business value with equivalent bilingual meaning. | quality |
+| quality_code | Quality code | string | Stable English code; paired display field is localized. | quality_code |
+
+### Keys
+
+Primary Keys: snapshot_id
+Display Key: snapshot_id
+Incremental Key:

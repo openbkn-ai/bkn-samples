@@ -1,0 +1,34 @@
+---
+type: object_type
+id: response_events
+name: 响应事件
+tags: [energy, saref4ener]
+---
+
+## ObjectType: 响应事件
+
+本地运营对象；来源概念参考不构成OWL等价声明。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| event_id | 事件标识 | string | 稳定唯一源记录标识。 | event_id |
+| name | 名称 | string | 与另一语言事实等价的虚构业务值。 | name |
+| response_date | 响应日期 | date | 仅日期；受业务日与知识截止日约束。 | response_date |
+| block_code | 响应时段 | string | 稳定英文代码；展示值在对应字段本地化。 | block_code |
+| duration_hours | 时段小时数 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | duration_hours |
+| target_kw | 目标削减功率 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | target_kw |
+| priority | 优先级 | integer | 与另一语言事实等价的虚构业务值。 | priority |
+| reward_cny_kwh | 奖励单价 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | reward_cny_kwh |
+| minimum_ratio | 最低达成率 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | minimum_ratio |
+| status | 状态 | string | 与另一语言事实等价的虚构业务值。 | status |
+| status_code | 状态代码 | string | 稳定英文代码；展示值在对应字段本地化。 | status_code |
+| announced_date | 公告日期 | date | 仅日期；受业务日与知识截止日约束。 | announced_date |
+| known_date | 知识日期 | date | 仅日期；受业务日与知识截止日约束。 | known_date |
+
+### Keys
+
+Primary Keys: event_id
+Display Key: name
+Incremental Key:

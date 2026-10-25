@@ -1,0 +1,29 @@
+---
+type: object_type
+id: execution_logs
+name: Execution Receipt
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Execution Receipt
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| execution_id | Execution id | string | Stable unique source-row identifier. | execution_id |
+| allocation_id | Allocation id | string | Explicit foreign-key association; blank creates no edge. | allocation_id |
+| response_date | Response date | date | Day-only date governed by business and knowledge cutoffs. | response_date |
+| status | Status | string | Fictional business value with equivalent bilingual meaning. | status |
+| status_code | Status code | string | Stable English code; paired display field is localized. | status_code |
+| reason | Reason | string | Fictional business value with equivalent bilingual meaning. | reason |
+| revision | Revision | integer | Fictional business value with equivalent bilingual meaning. | revision |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoffs. | known_date |
+
+### Keys
+
+Primary Keys: execution_id
+Display Key: execution_id
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: capacity_snapshot_to_event
+name: 能力快照关联响应事件
+tags: [energy, saref4ener]
+---
+
+## RelationType: 能力快照关联响应事件
+
+显式外键关系；不把日期相同的记录误连。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| capacity_snapshots | response_events | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| event_id | event_id |

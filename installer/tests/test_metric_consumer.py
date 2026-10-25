@@ -9,8 +9,9 @@ from installer.tests.test_metric_requests import SCHEMA
 from jsonschema import Draft7Validator
 
 ROOT = Path(__file__).resolve().parents[2]
-SAMPLES = ('supply_ontology_hand', 'supply_ontology_en', 'financial-fibo-zh-cn',
-           'financial-fibo-en-us', 'retail-gs1-zh-cn', 'retail-gs1-en-us')
+from installer.contract import discover_sample_dirs, load_sample
+SAMPLES = tuple(path.name for path in discover_sample_dirs(ROOT)
+                if load_sample(path)['spec']['components']['metrics'])
 ARGS = {'kn_id': 'network', 'metric_id': 'metric', 'version': 1, 'query': {'page_size': 1}}
 
 
@@ -84,7 +85,8 @@ class MetricExampleOracleTest(unittest.TestCase):
     def test_examples_match_locked_csv_without_running_runtime_functions(self):
         import csv
         fields = {'issuer_ratio_recorded': 'ratio', 'sell_receivable_recorded_usd': 'unsettled_receivable',
-                  'recorded_available_quantity': 'available', 'recorded_recall_coverage': 'coverage_ratio'}
+                  'recorded_available_quantity': 'available', 'recorded_recall_coverage': 'coverage_ratio',
+                  'recorded_eligible_kw': 'eligible_kw', 'recorded_delivery_ratio': 'delivery_ratio'}
         for sample in SAMPLES:
             root = ROOT / 'samples' / sample
             document = json.loads((root / 'tools/assets/metrics-consumption-examples.json').read_text())

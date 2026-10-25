@@ -1,0 +1,51 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1alpha1",
+  "kind": "Sample",
+  "metadata": {
+    "name": "energy-saref4ener-en-us",
+    "aliases": [],
+    "displayName": "Demand response and flexible energy",
+    "summary": "Synthetic response readiness, shared-resource planning and measured settlement.",
+    "version": "0.1.4",
+    "language": "en-US"
+  },
+  "spec": {
+    "studio": {
+      "licenseNote": "MIT synthetic sample; SAREF4ENER semantic attribution is documented separately.",
+      "questions": [
+        "Which devices are ready?",
+        "How is shared capacity allocated?",
+        "Does measured delivery meet the payment threshold?"
+      ]
+    },
+    "database": {
+      "engine": "mariadb",
+      "name": "energy_saref4ener_en_us",
+      "expectedTables": 15
+    },
+    "data": {
+      "mode": "embedded"
+    },
+    "platformVersion": ">=0.2.1 <0.3.0",
+    "knowledgeNetwork": {
+      "id": "energy_saref4ener_en_us",
+      "displayName": "Demand response and flexible energy"
+    },
+    "capabilities": {
+      "required": true
+    },
+    "components": {
+      "objects": true,
+      "relations": true,
+      "metrics": true,
+      "functions": true,
+      "skills": true
+    },
+    "hooks": {
+      "dbInit": "db/init.sh",
+      "dbVerify": "db/verify.sh",
+      "platformInstall": "platform/install.sh",
+      "platformVerify": "platform/verify.sh"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+---
+type: object_type
+id: device_constraints
+name: Device Constraint
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Device Constraint
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| constraint_id | Constraint id | string | Stable unique source-row identifier. | constraint_id |
+| device_id | Device id | string | Explicit foreign-key association; blank creates no edge. | device_id |
+| block_code | Block code | string | Stable English code; paired display field is localized. | block_code |
+| effective_from | Effective from | date | Day-only date governed by business and knowledge cutoffs. | effective_from |
+| effective_to | Effective to | date | Day-only date governed by business and knowledge cutoffs. | effective_to |
+| constraint_type | Constraint type | string | Fictional business value with equivalent bilingual meaning. | constraint_type |
+| constraint_type_code | Constraint type code | string | Stable English code; paired display field is localized. | constraint_type_code |
+| cap_kw | Cap kw | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | cap_kw |
+| reason | Reason | string | Fictional business value with equivalent bilingual meaning. | reason |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoffs. | known_date |
+
+### Keys
+
+Primary Keys: constraint_id
+Display Key: constraint_id
+Incremental Key:

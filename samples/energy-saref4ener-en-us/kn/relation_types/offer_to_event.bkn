@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: offer_to_event
+name: Offer to event
+tags: [energy, saref4ener]
+---
+
+## RelationType: Offer to event
+
+Explicit foreign key; date equality alone does not create an association.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| flexibility_offers | response_events | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| event_id | event_id |

@@ -1,0 +1,1 @@
+Local candidate0.1.2: collect complete site evidence even when capacity is unknown, preserving unknown totals, formulas and data. Clarify issue attribution, knowledge views, withdrawn commitments and per-stage completeness. Targeted affected-question verification only; retain first-pass results, with no full rerun or publication claim.

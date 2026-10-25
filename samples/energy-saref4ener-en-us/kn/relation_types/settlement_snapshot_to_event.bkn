@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: settlement_snapshot_to_event
+name: Settlement snapshot to event
+tags: [energy, saref4ener]
+---
+
+## RelationType: Settlement snapshot to event
+
+Explicit foreign key; date equality alone does not create an association.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| settlement_snapshots | response_events | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| event_id | event_id |

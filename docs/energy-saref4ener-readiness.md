@@ -1,60 +1,64 @@
-# Energy SAREF4ENER samples awaiting source integration
+# Manufacturing and Energy integration for OpenBKN 0.2.1
 
-The wider sample inventory includes two developed, local unpublished energy samples
-in addition to the eleven samples currently on main. They are not prototypes without
-manifests: each has `sample.yaml`, data, native models, hooks, capabilities and a
-0.1.3 local candidate archive. They are absent from the current main source tree,
-its catalogs and the nine-package 0.2.1 prerelease batch.
+All 13 sample identities are now in the source tree and in
+[one candidate plan](../tools/publication/candidates-0.2.1.json). The four additions
+to the earlier candidate coverage are Manufacturing EN/ZH **0.1.2** and Energy
+SAREF4ENER EN/ZH **0.1.4**. They use content-only shared-MariaDB packages and retain
+native BKN formats and declared capabilities. Stable catalog admission still
+requires the target OpenBKN acceptance; candidate construction does not create a
+successful platform verification receipt.
 
-## English
+## Manufacturing
 
-- Identity: `energy-saref4ener-en-us`, local version **0.1.3**.
-- Scenario: demand-response eligibility, shared-capacity dispatch and metered settlement.
-- Content: 15 tables, 14,787 synthetic records, 15 object types, 15 relations,
-  3 functions, 2 recorded object-instance metrics and 1 investigation Skill.
-- Target compatibility: `>=0.2.1 <0.3.0`, shared sample MariaDB.
-- Local package SHA-256: `e2c383f016c76d62475971da521cde1295874df332bfb01ec40b7ee3b7fe79ec`.
+Each language retains 40 operational tables, 2,700 records, 71 relations, the IOF
+reference layer and the 100-question bank. Database columns now match the model's
+decimal, integer and day-level date types. `forecast_period` is explicitly a
+YYYY-MM string; converting a month into an invented day is not its business meaning.
+The two unmodeled raw reference-ID columns are retained as strings in the complete
+loading contract. Installation checks network ownership before import and verifies
+resource bindings and live-object queries without overwriting unrelated networks.
 
-## Chinese
+## Energy source recovery
 
-- Identity: `energy-saref4ener-zh-cn`, local version **0.1.3**.
-- Scenario: 需求响应资格、共享容量计划、计量交付及结算调查。
-- Same declared model/data cardinalities and capabilities as the English sample.
-- Target compatibility: `>=0.2.1 <0.3.0`, shared sample MariaDB.
-- Local package SHA-256: `1668cfad622cbbba4bc7b3c7f6a41893500131e83940f4b1bb590de757467b02`.
+The previous temporary source area had lost data/model/reference/evaluation files.
+The immutable local 0.1.3 archives restored delivered source and data; every retained
+sparse-source file matched the same archive bytes. The old archive hashes and
+recovery decisions are preserved in
+[the recovery record](acceptance/samples-0.2.1/energy-recovery.json).
 
-## Evidence boundary and remaining work
+SAREF4ENER 2.1.1 and SAREF Core 4.1.1 Turtle files were fetched from their official
+fixed-version URLs and matched the retained historical SHA-256 freeze. Actual
+upstream BSD-3-Clause license files are pinned to official repository commits.
+The source/reference inventories, locks and notices are included in each new
+archive. They are semantic references, not OWL equivalence or ETSI certification.
 
-Source and candidate archives were located in the local energy development area,
-outside the active main checkout. Historical installation and question-bank evidence
-also exists, including targeted corrections. It has not been independently rerun by
-this update, and targeted reruns must not be combined into a new full-bank score.
-The historical records distinguish install/definition checks from actual function,
-metric and model calls; successful installation alone is not business acceptance.
+Each language retains 15 tables, 14,787 synthetic records, 15 object types,
+15 relations, 3 functions, 2 immutable version-1 object-instance snapshot metrics
+and 1 investigation Skill. Its units are kW, kWh and CNY as declared by the business
+contract. Recorded eligible power and delivered ratio remain dated snapshots,
+not live recomputation or cross-date aggregates.
 
-The 0.1.3 build reports identify baseline commit
-`96cea0fddf238aa6406715909faa1e37b33c6f7a` with **workingTreeChanges=true** and
-`candidate-not-verified`. A baseline SHA plus dirty changes does not bind all delivered
-source. These archives must not be presented as the fixed-source candidates built by
-PR #198 or silently copied into its prerelease set.
+The original independent-oracle file was not retained. Question contracts and
+structured reference projections were recovered from historical terminal records,
+with per-record SHA-256 provenance and explicitly identified targeted revisions.
+Local replay against these historical projections is regression, not a new Agent
+accuracy score. Independent hand-built boundary tests and managed adapter checks
+are retained separately. Original session/auth data and raw execution logs are
+not copied into source or packages. Evaluation answers remain source-only.
 
-For the 0.2.1 delivery, preserve and review the complete local source, upstream SAREF
-references/license notices and relevant evidence, commit it, and build new immutable
-candidates from that fixed source. Add the content language declaration and confirm
-all required provenance files survive standard packaging. Then perform local import
-and contract checks before target-product acceptance and catalog admission.
+## Complete delivery and remaining acceptance
 
-## Object Metrics V1 coverage
+The V1 audit now covers **8 metric-bearing samples / 34 definitions**. The shared
+consumer, input schemas and independent CSV fixture expectations cover Energy too.
+Manufacturing does not gain artificial metrics/functions/Skills.
 
-Each language declares two version-1 atomic `object_instance` snapshot metrics:
+The candidate-set builder rejects missing or duplicate sample identities, requires
+clean committed source, verifies package digests and offline imports for declared
+architectures, and checks that 0.2.0 rejects 0.2.1 packages. Those architecture checks
+validate metadata, not native execution. Actual database hooks are tested locally
+on an isolated temporary MariaDB separately from source-only checks.
 
-| Code | Meaning | Unit |
-| --- | --- | --- |
-| `recorded_eligible_kw` | Recorded eligible response power | kW |
-| `recorded_delivery_ratio` | Recorded delivered ratio | 1 |
-
-They must retain their event, business-date and knowledge-cutoff identity. They are
-not live reconstruction or cross-date aggregates. Add their requests, unit/precision,
-no-data and consumer behavior to the same V1 audit as the six mainline metric packs.
-The combined developed inventory therefore has **eight metric-bearing samples and
-34 metric definitions**, while the current mainline audit contains six packs and 30.
+Real fixed OpenBKN 0.2.1 install/retry/uninstall/replacement, CLI/API/MCP, function,
+Skill and query-engine acceptance remains pending by the user's requested scope.
+Historical package bytes, prior candidate releases and the 0.2.0 root catalog are
+not overwritten. See [local evidence](acceptance/samples-0.2.1/README.md).

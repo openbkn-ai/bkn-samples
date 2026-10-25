@@ -1,0 +1,30 @@
+---
+type: object_type
+id: settlements
+name: 结算台账
+tags: [energy, saref4ener]
+---
+
+## ObjectType: 结算台账
+
+本地运营对象；来源概念参考不构成OWL等价声明。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| settlement_id | 结算标识 | string | 稳定唯一源记录标识。 | settlement_id |
+| event_id | 事件标识 | string | 显式外键关联；空值不创建关系。 | event_id |
+| posted_date | 入账日期 | date | 仅日期；受业务日与知识截止日约束。 | posted_date |
+| revenue_cny | 收入 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | revenue_cny |
+| cost_cny | 成本 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | cost_cny |
+| net_cny | 净额 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | net_cny |
+| status | 状态 | string | 与另一语言事实等价的虚构业务值。 | status |
+| status_code | 状态代码 | string | 稳定英文代码；展示值在对应字段本地化。 | status_code |
+| known_date | 知识日期 | date | 仅日期；受业务日与知识截止日约束。 | known_date |
+
+### Keys
+
+Primary Keys: settlement_id
+Display Key: settlement_id
+Incremental Key:

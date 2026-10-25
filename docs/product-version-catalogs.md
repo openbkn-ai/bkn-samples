@@ -22,8 +22,9 @@ switching between them does not delete another version's cache or installation h
 
 The initial 0.2.0 directory preserves its existing sample entries. The initial 0.2.1
 directory contains the already published bilingual FIBO/GS1 releases declaring
-0.2.1 compatibility. Updated supply, World Cup and order-basics packages are added
-only after fixed-candidate acceptance. Missing entries are not replaced with an
+0.2.1 compatibility. All thirteen packages, including newly integrated Manufacturing and Energy, are
+tracked by tools/publication/candidates-0.2.1.json and added to stable directories
+only after fixed-candidate platform acceptance. Missing entries are not replaced with an
 unverified bundled development sample in the online listing.
 
 ## Publish and verify
