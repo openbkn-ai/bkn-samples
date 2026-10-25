@@ -20,10 +20,11 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 
 ## Sample directory
 
-Main contains **11 standard samples**: one Order Basics sample and bilingual pairs
-for Supply Chain, World Cup, Manufacturing, Financial FIBO and Retail GS1. The table
-separates existing releases from this update's candidates; candidate count is not
-the total source inventory.
+The verified development inventory contains **13 samples with manifests**: eleven
+on main and two local, unmerged Energy SAREF4ENER samples. Main includes one Order
+Basics sample and bilingual pairs for Supply Chain, World Cup, Manufacturing,
+Financial FIBO and Retail GS1. The table separates integrated and pending source,
+existing releases and this update's candidates.
 
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |
@@ -38,8 +39,11 @@ the total source inventory.
 | [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | Chinese | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | Existing release 0.2.5; 0.2.1 candidate 0.2.6, platform acceptance pending |
 | [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | English | Receipt inspection, lot traceability, inventory, shared-stock fulfillment, March 2027 replenishment and recall; 15 tables, 2,911 records and 100 questions | Existing release 0.1.0; 0.2.1 candidate 0.1.1, platform acceptance pending |
 | [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | Chinese | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | Existing release 0.1.0; 0.2.1 candidate 0.1.1, platform acceptance pending |
+| [Energy demand response (SAREF4ENER)](docs/energy-saref4ener-readiness.md#english) | English | Eligibility, shared-capacity dispatch and metered settlement; 15 tables and 14,787 records | Local source/candidate 0.1.3; unmerged, absent from current batch and catalogs |
+| [需求响应与柔性用能（SAREF4ENER）](docs/energy-saref4ener-readiness.md#chinese) | Chinese | Localized model and aligned facts; 3 functions, 2 snapshot metrics and 1 investigation Skill | Local source/candidate 0.1.3; unmerged, absent from current batch and catalogs |
 
-The [OpenBKN 0.2.1 prerelease candidate set](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-83013a7) contains **9 packages**: all samples above except the manufacturing pair. These packages have local integrity and contract validation; real 0.2.1 installation, MCP, function and business-scenario acceptance remain pending. Manufacturing remains part of the source inventory and needs its unified packages and acceptance evidence; these nine packages are not the complete 0.2.1 sample delivery.
+
+The [OpenBKN 0.2.1 prerelease candidate set](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-83013a7) contains **9 packages**: the mainline samples except the manufacturing pair. These packages have local integrity and contract validation; real 0.2.1 installation, MCP, function and business-scenario acceptance remain pending. Complete delivery still requires unified manufacturing packages and acceptance, plus energy source integration, fixed-source rebuilding and acceptance. These nine packages are not the complete 0.2.1 sample delivery. Local energy build reports contain uncommitted source changes, so they are not fixed-source publication evidence; see [energy readiness](docs/energy-saref4ener-readiness.md).
 
 Published 0.2.0 clients continue to use the root [official catalog](catalog.json).
 The updated sample service selects directories by product version: [0.2.0](catalogs/0.2.0/catalog.json)

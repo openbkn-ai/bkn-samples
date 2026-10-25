@@ -1,8 +1,12 @@
 # OpenBKN 0.2.1 sample candidates: local evidence
 
-Source inventory: **11 standard samples**. This batch contains **9 candidates**;
+Source inventory: **11 mainline samples plus two local unmerged energy samples**,
+13 developed manifest identities in total. This batch contains **9 candidates**;
 `manufacturing-industry-en-us` and `manufacturing-industry-zh-cn` still need unified
-packages and local/target acceptance. The batch is not complete product coverage.
+packages and local/target acceptance. The energy pair also requires source
+integration, fixed-source rebuilding and acceptance; see
+[energy readiness](../../energy-saref4ener-readiness.md). The batch is not complete
+product coverage.
 
 These candidates are intended for download and offline import into a later fixed
 OpenBKN 0.2.1 test environment. They have not passed product installation, real
