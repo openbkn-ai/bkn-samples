@@ -398,6 +398,9 @@ def main() -> None:
         if merged["sourceRejected"] or not item or item.get("status") == "unavailable":
             raise ApiError(409, "source_rejected", "sample is not currently installable")
         require_published_version(sample, sample_version(item))
+        if not any(e["sampleId"] == sample and e["version"] == sample_version(item)
+                   and e["releaseStatus"] == "published" for e in source.entries()):
+            raise ApiError(409, "source_rejected", "select a fixed package from the product catalog or import it offline")
         current = _read_state(state_dir, sample)
         if current and current.get("status") in {"installed", "failed", "installing", "uninstalling", "uninstall_failed"}:
             code = ("already_installed" if current["status"] == "installed" else
@@ -513,6 +516,9 @@ def main() -> None:
                                          data_image_ref=fixed_image, require_ownership=True, sample_release_version=fixed_version, offline=True), kubectl=kubectl_run,
                                      run=process_run, authorization=authorization)))
         if bundled and requested_version == sample_version(bundled) and requested_digest == bundled.get("manifestSha256"):
+            if not any(e["sampleId"] == sample and e["version"] == requested_version
+                       and e["releaseStatus"] == "published" for e in source.entries()):
+                raise ApiError(409, "source_rejected", "bundled sample is not in the product catalog")
             return create(sample, role, authorization)
         entry = next((e for e in source.entries() if e["sampleId"] == sample and e["version"] == requested_version), None)
         if not entry or requested_digest != entry["manifest"]["digest"].removeprefix("sha256:"):

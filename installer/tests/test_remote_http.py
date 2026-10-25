@@ -111,6 +111,24 @@ class RemoteHttpTest(unittest.TestCase):
                     self.assertIsNone(catalog["sourceRefresh"]["lastSuccessfulRefreshAt"])
                     network.assert_not_called()
 
+    def test_unlisted_bundled_sample_cannot_bypass_product_directory(self):
+        apps = []
+        with tempfile.TemporaryDirectory() as directory:
+            index = build_manifest_index(ROOT, "a" * 40)
+            env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_STATE_DIR": directory,
+                   "BKN_SAMPLE_PLATFORM_VERSION": "0.2.1", "BKN_SAMPLE_CATALOG_URL": ""}
+            with patch.dict("os.environ", env), \
+                 patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
+                 patch("installer.studio_api.load_indexes", return_value=(read_version(ROOT), index, index)), \
+                 patch("installer.runtime.install_sample") as install:
+                main()
+                apps[0].authenticate = lambda _: "admin"
+                status, payload = dispatch(apps[0], "POST", "/api/studio/samples/supply-chain/installations", "Bearer test", b"{}")
+                self.assertEqual(status, 409)
+                self.assertEqual(payload["code"], "source_rejected")
+                install.assert_not_called()
+                self.assertFalse((Path(directory) / "supply-chain.json").exists())
+
     def test_offline_import_uses_the_same_automatic_runtime_defaults(self):
         from tools.publication.build_candidate import build
         from installer.studio_api import ApiError

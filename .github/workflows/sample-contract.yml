@@ -36,6 +36,13 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
+          if [ -n "$BASE_SHA" ] && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            git ls-tree -r --name-only "$BASE_SHA" -- catalogs | while IFS= read -r previous; do
+              case "$previous" in
+                catalogs/*/catalog.json) test -f "$previous" || { echo "Product catalog removed: $previous"; exit 1; } ;;
+              esac
+            done
+          fi
           for catalog in catalogs/*/catalog.json; do
             python tools/publication/validate.py . --official --catalog "$catalog"
             if [ -n "$BASE_SHA" ] && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then

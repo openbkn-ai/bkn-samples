@@ -7,7 +7,7 @@ platform verification receipt is created by this work.
 
 Local checks:
 
-- Installer: 314 tests, one existing skip (run with Python 3.11 and Helm).
+- Installer: 315 tests, one existing skip (run with Python 3.11 and Helm).
 - Supply tools: 236 tests per language, including frozen data/function business rules.
 - World Cup: 10 baseline tests across both languages.
 - World Cup isolated MariaDB: 27 tables and 81,200 rows per language, 142 physical
