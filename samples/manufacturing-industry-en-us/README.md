@@ -2,7 +2,7 @@
 
 This is an importable end-to-end manufacturing sample for tracing demand forecast through plan, supply, production, quality, finished-goods receipt, and shipment.
 
-**Installation compatibility:** this sample requires OpenBKN **0.2.1 or later**. It is distributed as an offline package and is intentionally not registered in the online sample catalog.
+**Installation compatibility:** this sample requires OpenBKN **0.2.1 or later**. Source and 0.1.1 candidate notes are available. This sample is not in the current nine-package OpenBKN 0.2.1 candidate set; its unified self-contained package and acceptance evidence remain pending. It is not registered in the online sample catalog.
 
 ## What is included
 

@@ -10,6 +10,8 @@
 
 - [中文开发与版本更新指南](SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md)
 - [Sample Development Guide](SAMPLE_DEVELOPMENT_GUIDE.md)
+- [按产品版本选择样例目录](product-version-catalogs.md)：产品版本、目录、固定包及缓存隔离。
+- [0.2.1 本地验证与候选边界](acceptance/samples-0.2.1/README.md)：11 个源码样例中的 9 个候选包，制造业双语待补齐。
 - [固定包构建与发布](candidate-publication.md)
 - [完整离线安装](offline-installation.md)：自包含包、节点本地镜像导入、禁拉取与断网验收。
 - [卸载与重装](sample-uninstall.md)
@@ -18,4 +20,4 @@
 - [供应链历史数据追溯与本次评测基线](supply-sample-history-forensics.zh-CN.md)：8 月底 POC 数据证据、变更时间线及完整 CSV 基线。
 - [供应链优化实施记录](supply-sample-implementation-status.zh-CN.md)：本轮修复、真实 BKN 验证及剩余发布门禁。
 
-样例内容、独立版本说明和正式验收凭证位于 `samples/<directory>/releases/<version>/`。可安装版本以根目录 [catalog.json](../catalog.json) 为准。
+样例内容、独立版本说明和正式验收凭证位于 `samples/<directory>/releases/<version>/`。根目录 [catalog.json](../catalog.json) 保留给已发布的 0.2.0 客户端；新服务按产品版本选择 [0.2.0 目录](../catalogs/0.2.0/catalog.json)或 [0.2.1 目录](../catalogs/0.2.1/catalog.json)。源码样例总数为 11，本轮候选包为 9，候选不代表平台验收通过。
