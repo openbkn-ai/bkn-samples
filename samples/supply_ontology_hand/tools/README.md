@@ -20,3 +20,9 @@ PYTHONPATH=tools python -m pytest tools/tests -q
 ```
 
 离线检查不能代替实际安装与 MCP 业务验收；评测说明见 [BKN-Eval](../bkn-eval/README.md)。
+
+### 结构化结论证据（源码候选）
+
+`bom_shared_list` 原生 Function 可选输出 `trace_evidence`：仅声明给定产品、层级和替代料规则下的公共物料集合及数量。业务校验与 5,000 行保护由本样例负责；`fn/trace_evidence.py` 不声明库存、齐套或可接单。无效或不完整结果不输出声明，零交集有效。
+
+该声明需配合 Foundry 的 `function_result_evidence/v1` 接入及管理员对实际工具版本、代码哈希的明确批准；旧平台仍可使用原有业务结果。这里没有发布、重新注册 Function、修改已有制品或自动启用 Trace。代码更新后需另行发布新候选并重新核对批准哈希。

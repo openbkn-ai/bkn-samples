@@ -22,6 +22,7 @@ ENTRY_SOURCE = r'''
 from sandbox_sdk import bkn, tool
 from managed_execution import KN_ID, execute_from_bkn_rows, load_bkn_rows
 from datetime import datetime, timezone
+from fn.trace_evidence import bom_intersection_evidence
 
 @tool
 def supply_function(
@@ -51,6 +52,10 @@ def supply_function(
         "knowledge_network_id": KN_ID,
         "loaded_datasets": list(rows),
     }
+    if _FIXED_OPERATION == "bom_shared_list":
+        declaration = bom_intersection_evidence(result)
+        if declaration is not None:
+            result["trace_evidence"] = declaration
     return result
 '''
 
