@@ -16,6 +16,24 @@ def entries(value):
         if isinstance(value.get(key),list):return value[key]
     raise ValueError('missing entries')
 def single(v):return entries(v)[0] if isinstance(v,list) or 'entries' in v else v
+def bind_resources(specs,bindings,apply):
+    # Read every binding before mutating any object; never replace another source.
+    pending=[]
+    for table in specs:
+        obj=single(cli('bkn','object-type','get',KN,table))
+        source=obj.get('data_source')
+        if source is None:source={}
+        require(isinstance(source,dict),'invalid data source '+table)
+        if source.get('type')=='resource' and source.get('id')==bindings[table]:continue
+        empty=not source or (set(source)<= {'type','id'} and source.get('type') in (None,'','resource') and not source.get('id'))
+        require(empty,'existing binding differs: '+table)
+        require(apply,'binding missing: '+table)
+        pending.append((table,obj))
+    with tempfile.TemporaryDirectory() as directory:
+        for table,obj in pending:
+            obj['data_source']={'type':'resource','id':bindings[table]}
+            path=Path(directory)/(table+'.json');path.write_text(json.dumps(obj))
+            cli('bkn','object-type','update',KN,table,'--body-file',str(path))
 def main():
     raw=json.loads(Path(os.environ['BKN_SAMPLE_INPUT']).read_text());require(raw['sample']==SAMPLE and raw['knowledgeNetwork']['id']==KN and raw['database']['name']==KN,'ownership identity differs')
     tags={'bkn-samples','bkn-sample-'+SAMPLE,'bkn-samples-version-'+raw['version'].replace('.','-')}
@@ -28,17 +46,15 @@ def main():
         existing=subprocess.run(['openbkn','--json','bkn','get',KN],capture_output=True,text=True)
         if existing.returncode==0:
             current=json.loads(existing.stdout);require(tags<=set(current.get('tags',[])),'knowledge network ownership conflict')
-            for table in specs:require(single(cli('bkn','object-type','get',KN,table))['data_source']['id']==bindings[table],'existing binding differs')
         else:
             require('404' in existing.stderr+existing.stdout,'cannot confirm network absence')
             with tempfile.TemporaryDirectory() as d:
                 dest=Path(d)/'kn';shutil.copytree(ROOT/'kn',dest)
                 n=dest/'network.bkn';n.write_text(re.sub(r'^tags:.*$', 'tags: '+json.dumps(sorted(tags|{'manufacturing','iof'})),n.read_text(),flags=re.M))
                 cli('bkn','validate',str(dest));cli('bkn','push',str(dest))
-                for table in specs:
-                    obj=single(cli('bkn','object-type','get',KN,table));obj['data_source']={'type':'resource','id':bindings[table]}
-                    p=Path(d)/(table+'.json');p.write_text(json.dumps(obj));cli('bkn','object-type','update',KN,table,'--body-file',str(p))
-    elif sys.argv[1]!='verify':raise ValueError('expected install or verify')
+        bind_resources(specs,bindings,apply=True)
+    elif sys.argv[1]=='verify':bind_resources(specs,bindings,apply=False)
+    else:raise ValueError('expected install or verify')
     network=cli('bkn','get',KN,'--export');require(tags<=set(network.get('tags',[])),'network ownership differs')
     require(len(network['object_types'])==len(specs) and len(network['relation_types'])==71,'model counts differ')
     for table,spec in specs.items():

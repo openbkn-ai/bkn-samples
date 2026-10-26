@@ -33,17 +33,17 @@ the previous mainline inventory.
 | [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Existing release 0.1.1; 0.2.1 candidate 0.1.4, platform acceptance pending |
 | [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Existing release 0.1.2; 0.2.1 candidate 0.1.6, platform acceptance pending |
 | [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Existing release 0.1.0; 0.2.1 candidate 0.1.2, platform acceptance pending |
-| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | 0.2.1 candidate 0.1.2; self-contained, platform acceptance pending |
-| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 candidate 0.1.2; self-contained, platform acceptance pending |
+| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | 0.2.1 candidate 0.1.3; self-contained, platform acceptance pending |
+| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 candidate 0.1.3; self-contained, platform acceptance pending |
 | [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | English | Securities trading, settlement, positions, valuation, issuer concentration and receivable limits; 20 tables, 78,356 records and 100 evaluation questions | Existing release 0.2.5; 0.2.1 candidate 0.2.6, platform acceptance pending |
 | [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | Chinese | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | Existing release 0.2.5; 0.2.1 candidate 0.2.6, platform acceptance pending |
 | [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | English | Receipt inspection, lot traceability, inventory, shared-stock fulfillment, March 2027 replenishment and recall; 15 tables, 2,911 records and 100 questions | Existing release 0.1.0; 0.2.1 candidate 0.1.1, platform acceptance pending |
 | [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | Chinese | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | Existing release 0.1.0; 0.2.1 candidate 0.1.1, platform acceptance pending |
-| [Energy demand response (SAREF4ENER)](samples/energy-saref4ener-en-us/) | English | Eligibility, shared-capacity dispatch and metered settlement; 15 tables and 14,787 records | 0.2.1 candidate 0.1.4; self-contained, platform acceptance pending |
-| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | Chinese | Localized model and aligned facts; 3 functions, 2 snapshot metrics and 1 investigation Skill | 0.2.1 candidate 0.1.4; self-contained, platform acceptance pending |
+| [Energy demand response (SAREF4ENER)](samples/energy-saref4ener-en-us/) | English | Eligibility, shared-capacity dispatch and metered settlement; 15 tables and 14,787 records | 0.2.1 candidate 0.1.5; self-contained, platform acceptance pending |
+| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | Chinese | Localized model and aligned facts; 3 functions, 2 snapshot metrics and 1 investigation Skill | 0.2.1 candidate 0.1.5; self-contained, platform acceptance pending |
 
 
-The [complete thirteen-package candidate set](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r1) includes every sample
+The [complete thirteen-package candidate set](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r2) includes every sample
 above. Its [machine-readable plan](tools/publication/candidates-0.2.1.json) is checked
 against source manifests in both directions: missing, duplicate or unregistered
 samples fail the build. Fixed-source SHA-256 candidates are intended for offline
@@ -58,7 +58,7 @@ The 0.2.1 directory currently retains existing FIBO/GS1 entries. None of the nin
 candidates is admitted to a stable directory yet. The OpenBKN 0.2.1 product is not
 formally released; the candidates are intended for offline import into its test environments.
 
-Manufacturing 0.1.2 and Energy 0.1.4 are now included as bilingual, content-only
+Manufacturing 0.1.3 and Energy 0.1.5 are now included as bilingual, content-only
 shared-MariaDB candidates without sample-specific database images. Manufacturing
 retains its 40 operational tables, 71 relations and IOF reference layer; Energy
 retains its 15 tables, 3 functions, 2 snapshot metrics and investigation Skill.

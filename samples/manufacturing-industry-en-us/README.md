@@ -2,7 +2,7 @@
 
 This is an importable end-to-end manufacturing sample for tracing demand forecast through plan, supply, production, quality, finished-goods receipt, and shipment.
 
-**Installation compatibility:** this sample requires OpenBKN **0.2.1 or later**. Version 0.1.2 is a fixed-source self-contained candidate in the complete thirteen-package update, using the product shared MariaDB and requiring no sample-specific image. Local checks and real platform acceptance are recorded separately; it is not admitted to a stable catalog.
+**Installation compatibility:** this sample requires OpenBKN **0.2.1 or later**. Version 0.1.3 is a fixed-source self-contained candidate in the complete thirteen-package update, using the product shared MariaDB and requiring no sample-specific image. Local checks and real platform acceptance are recorded separately; it is not admitted to a stable catalog.
 
 ## What is included
 

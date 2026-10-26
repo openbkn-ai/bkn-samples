@@ -48,6 +48,32 @@ class IndustryEnergyTest(unittest.TestCase):
                 self.assertTrue(all(call[0]=='vega' for call in calls))
                 self.assertFalse(output.exists())
 
+    def test_owned_partial_binding_retry_and_conflicts(self):
+        for family,filename in [('manufacturing-industry','sample_platform.py'),('energy-saref4ener','network.py')]:
+            for lang in ('en-us','zh-cn'):
+                path=ROOT/'samples'/(family+'-'+lang)/'platform'/filename
+                module=load(path,family+lang+'_bindings')
+                bindings={'a':'resource-a','b':'resource-b'}
+                objects={'a':{'id':'a','data_source':{'type':'resource','id':'resource-a'}},'b':{'id':'b'}}
+                updates=[]
+                def cli(*args):
+                    if args[2]=='get':return copy.deepcopy(objects[args[4]])
+                    self.assertEqual(args[2],'update');table=args[4]
+                    objects[table]=json.loads(Path(args[6]).read_text());updates.append(table)
+                    return {}
+                with patch.object(module,'cli',side_effect=cli):
+                    module.bind_resources(bindings,bindings,apply=True)
+                    self.assertEqual(updates,['b'])
+                    module.bind_resources(bindings,bindings,apply=True)
+                    module.bind_resources(bindings,bindings,apply=False)
+                    self.assertEqual(updates,['b'])
+                    objects['a'].pop('data_source');objects['b']['data_source']['id']='human-resource'
+                    with self.assertRaisesRegex(ValueError,'existing binding differs'):module.bind_resources(bindings,bindings,apply=True)
+                    self.assertEqual(updates,['b'])
+                    objects['b']['data_source']['id']='resource-b'
+                    with self.assertRaisesRegex(ValueError,'binding missing'):module.bind_resources(bindings,bindings,apply=False)
+                    self.assertEqual(updates,['b'])
+
     def test_energy_reference_material_is_deliverable_and_hashes_match(self):
         import hashlib
         for lang in ('en-us','zh-cn'):

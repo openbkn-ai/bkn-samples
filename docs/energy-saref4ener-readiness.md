@@ -2,8 +2,8 @@
 
 All 13 sample identities are now in the source tree and in
 [one candidate plan](../tools/publication/candidates-0.2.1.json). The four additions
-to the earlier candidate coverage are Manufacturing EN/ZH **0.1.2** and Energy
-SAREF4ENER EN/ZH **0.1.4**. They use content-only shared-MariaDB packages and retain
+to the earlier candidate coverage are Manufacturing EN/ZH **0.1.3** and Energy
+SAREF4ENER EN/ZH **0.1.5**. They use content-only shared-MariaDB packages and retain
 native BKN formats and declared capabilities. Stable catalog admission still
 requires the target OpenBKN acceptance; candidate construction does not create a
 successful platform verification receipt.

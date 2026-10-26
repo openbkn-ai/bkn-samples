@@ -4,7 +4,7 @@ All **13 standard source samples** are covered by the same
 [machine-readable plan](../../../tools/publication/candidates-0.2.1.json): Order Basics
 and bilingual Supply Chain, World Cup, Manufacturing, Financial FIBO, Retail GS1 and
 Energy SAREF4ENER. Missing, duplicate or unregistered identities fail the batch build.
-Manufacturing is **0.1.2** per language and Energy is **0.1.4** per language.
+Manufacturing is **0.1.3** per language and Energy is **0.1.5** per language.
 
 The complete set is built from clean committed source. Archive digests, offline
 inspection and declared architecture compatibility are checked for every sample.
@@ -15,7 +15,7 @@ catalogs by this work. Prior package assets and the 0.2.0 root catalog remain in
 
 ## Current local checks
 
-- Installer: 319 tests, OK with one existing skip, including complete-plan, ownership, data/type, references,
+- Installer: 320 tests, OK with one existing skip, including complete-plan, ownership, data/type, references,
   schemas and consumer checks.
 - Manufacturing: each language passes 71 relationship checks, material/BOM and
   shipment gates, 112 IOF reference-instance/link checks, 18 deterministic scenarios
@@ -64,3 +64,13 @@ CLI/API/MCP, metric create/publish/query/drill, functions/Skills and query-engin
 behavior remain pending under the user's requested scope. Source function/Skill
 behavior is retained; the 0.2.0 PR #184 is not merged wholesale. Candidate publication
 is not stable catalog admission, migration support or proof of target runtime success.
+
+## Interrupted binding recovery
+
+Manufacturing 0.1.3 and Energy 0.1.5 add a local regression for an interrupted
+owned-network import: a retry preserves existing matching resource bindings and
+fills only unbound objects. All object bindings are inspected before the first
+update, so a foreign binding aborts without changing any object. Verify refuses
+missing bindings and performs no writes. The test covers all four sample hooks;
+this does not replace target-product install/retry acceptance. Previous package
+versions and their assets remain immutable.
