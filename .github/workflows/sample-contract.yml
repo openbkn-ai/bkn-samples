@@ -54,6 +54,13 @@ jobs:
           done
       - name: Validate sample contracts
         run: python -m unittest discover -s installer/tests -v
+      - name: Validate bilingual supply material assurance and native tool contracts
+        run: |
+          python -m pip install "pytest>=8,<10" -r samples/supply_ontology_hand/tools/requirements.txt
+          PYTHONPATH=samples/supply_ontology_hand/tools python -m pytest samples/supply_ontology_hand/tools/tests -q
+          PYTHONPATH=samples/supply_ontology_en/tools python -m pytest samples/supply_ontology_en/tools/tests -q
+          python tools/acceptance/material_assurance.py --language zh-CN --output /tmp/material-assurance-zh.json
+          python tools/acceptance/material_assurance.py --language en-US --output /tmp/material-assurance-en.json
       - name: Validate bilingual FIBO financial semantics and frozen answers
         run: |
           python tools/financial_fibo/test_financial_fibo.py

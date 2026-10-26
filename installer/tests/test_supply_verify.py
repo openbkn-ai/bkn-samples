@@ -54,6 +54,7 @@ class SupplyVerifyTest(unittest.TestCase):
                     ("toolbox", "list"): {"data": [{"box_name": VERIFY.BOX_NAME, "box_id": "box-1"}]},
                     ("tool", "list"): {"tools": tools},
                     ("bkn", "capability"): {"entries": bindings},
+                    ("bkn", "action-type"): {"action_source": {"type": "tool", "box_id": "box-1", "tool_id": "replenishment_draft"}},
                     ("skill", "list"): {"data": names},
                 }
             ),

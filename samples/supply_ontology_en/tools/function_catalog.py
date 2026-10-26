@@ -23,6 +23,9 @@ def _spec(
 
 
 FUNCTION_CATALOG = {
+    "material_coverage": _spec("Material_Assurance", "material_coverage", "Use case: material assurance. Input: product, whole-kit quantity, explicit customer_delivery/new_production purpose, optional scope (all). Result: bounded coverage, allocations, gaps and BOM revision; no incoming supply or alternates.", minimum_business_inputs=["product", "qty", "demand_purpose"]),
+    "replenishment_draft": _spec("Replenishment_Draft", "replenishment_draft", "Use case: replenishment proposal. Input: complete material_coverage result. Result: structure-checked supplied evidence in a non-executable draft; no fact re-query, persistence or business writes.", minimum_business_inputs=["coverage"]),
+
     "bom_list": _spec(
         'BOM_Structure',
         "bom_list",

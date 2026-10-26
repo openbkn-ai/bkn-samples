@@ -31,7 +31,11 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     substitute = _input("substitute_enabled", "boolean", "是否启用替代料；需要替代判断时必须明确。")
     substitute_required = _input("substitute_enabled", "boolean", "是否启用替代料；必须明确传 true 或 false。", required=True)
     scope = _input("warehouse_scope", "string", "仓范围预设或明确仓库列表。")
+    assurance = [product, _input("qty", "number", "Positive integer demand quantity.", required=True),
+                 _input("demand_purpose", "string", "customer_delivery or new_production; required and never inferred.", required=True), _input("warehouse_scope", "string", "all (default), production_available or finished_goods.")]
     cases = {
+        "material_coverage": assurance,
+        "replenishment_draft": [_input("coverage", "object", "Complete material_coverage result; structure is checked but facts are not requeried. Draft only, no persistence or business writes.", required=True)],
         "bom_list": [product, _input("depth", "number", "展开层数；不传为一层。"), _input("include_substitute", "boolean", "是否包含替代料行。"), _input("report_grain", "string", "结果粒度；默认 summary 返回结构统计和一级主料，传 full 才返回明细。"), _input("page_size", "number", "full 明细的单页行数，1 到 500。"), _input("offset", "number", "full 明细的起始偏移量，默认 0。")],
         "bom_shared_list": [_input("products", "array", "至少两个产品编码。", required=True), _input("depth", "number", "展开层数；不传为全层。"), _input("include_substitute", "boolean", "是否包含替代料行。")],
         "material_where_used": [_input("material_code", "string", "物料编码。", required=True), _input("include_substitute", "boolean", "是否将替代料分支计入受影响产品；默认 true。"), _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回命中 BOM 路径。")],
@@ -73,7 +77,7 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
                 "name": "result",
                 "type": "object",
                 "required": True,
-                "description": "计算结果、业务依据和函数自行读取的数据来源。",
+                "description": ("Draft from supplied coverage: structure checked, not requeried or persisted." if operation == "replenishment_draft" else "计算结果、业务依据和函数自行读取的数据来源。"),
             }
         ],
         }
@@ -162,6 +166,8 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
     if legacy and legacy.get("status") != "disabled":
         _call(["tool", "disable", "--toolbox", box_id, legacy["tool_id"]])
     if kn_id:
+        from bind_draft_action import bind_draft_action
+        bind_draft_action(_call, kn_id, box_id, tool_ids["replenishment_draft"])
         _call(["bkn", "capability", "attach", kn_id, "--box", box_id,
                "--tool", ",".join(tool_ids.values())])
     return {**preview, "box_id": box_id, "tool_ids": tool_ids, "legacy_tool_disabled": bool(legacy)}

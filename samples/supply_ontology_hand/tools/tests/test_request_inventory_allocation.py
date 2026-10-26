@@ -13,7 +13,7 @@ def row(product, parent, code, usage=1, *, group='', alternative=False):
     return {'bom_material_code': product, 'parent_material_code': parent,
             'material_code': code, 'bom_level': 1, 'standard_usage': usage,
             'alt_group_no': group, 'alt_priority': 1 if alternative else 0,
-            'alt_method': '替代' if alternative else ''}
+            'alt_method': '替代' if group or alternative else ''}
 
 
 def snapshot(rows, stock, po=None):

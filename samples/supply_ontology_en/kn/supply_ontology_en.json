@@ -6041,6 +6041,36 @@
       "icon": "",
       "color": "#52C41A",
       "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_act_replenishment_draft",
+      "name": "Replenishment Draft",
+      "action_type": "add",
+      "object_type_id": "supply_ontology_en_product",
+      "action_source": {
+        "type": "tool",
+        "box_id": "",
+        "tool_id": ""
+      },
+      "parameters": [
+        {
+          "name": "coverage",
+          "type": "object",
+          "source": "Body",
+          "value_from": "input",
+          "value": null
+        }
+      ],
+      "schedule": {
+        "type": "",
+        "expression": ""
+      },
+      "tags": [
+        "draft_only",
+        "no_business_write"
+      ],
+      "comment": "Return a proposal from supplied coverage. Structure validation only, no fact re-query, persistence, purchase order, business write or scheduling.",
+      "branch": "main"
     }
   ]
 }

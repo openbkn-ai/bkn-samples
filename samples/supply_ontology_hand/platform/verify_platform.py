@@ -44,7 +44,21 @@ def capability_ready(run_cli) -> bool:
     bindings = run_cli(["bkn", "capability", "list", "supply_ontology_hand", "--limit", "100"])
     mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
                if item.get("capability_type") == "function" and item.get("box_id") == box["box_id"]}
-    return {enabled[name] for name in expected} <= mounted
+    if not {enabled[name] for name in expected} <= mounted:return False
+    action = run_cli(["bkn", "action-type", "get", "supply_ontology_hand", "supply_ontology_hand_act_replenishment_draft"])
+    if isinstance(action, list):
+        if len(action) != 1:return False
+        action = action[0]
+    if not isinstance(action, dict):return False
+    if isinstance(action.get("entries"), list):
+        if len(action["entries"]) != 1:return False
+        action = action["entries"][0]
+    draft_name = FUNCTION_CATALOG["replenishment_draft"]["name"]
+    source = action.get("action_source") or {}
+    return (isinstance(source, dict) and source.get("type") == "tool"
+            and source.get("box_id") == box["box_id"] and source.get("tool_id") == enabled[draft_name]
+            and not source.get("mcp_id") and not source.get("tool_name"))
+
 
 
 def skills_ready(run_cli) -> bool:

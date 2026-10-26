@@ -4,7 +4,7 @@ from __future__ import annotations
 import math
 from collections import Counter, defaultdict
 
-from .bom import product_bom_rows
+from .bom import product_bom_rows, is_main_row, is_substitute_row
 from .errors import CannotCompute
 from .inventory import available_qty
 from .warehouse import resolve_warehouse_scope
@@ -21,11 +21,11 @@ def finite_quantity(value, label: str, *, positive=False) -> float:
 
 
 def _main(row):
-    return finite_quantity(row.get("alt_priority", 0), "替代优先级") == 0
+    return is_main_row(row)
 
 
 def _substitute(row):
-    return not _main(row)
+    return is_substitute_row(row)
 
 
 def _template_rows(rows):
@@ -44,7 +44,7 @@ def _template_rows(rows):
         count = incoming.get((level - 1, parent), 1)
         def key(row):
             return (str(row.get("material_code") or "").strip(), row.get("standard_usage"),
-                    str(row.get("alt_group_no") or ""), row.get("alt_priority", 0))
+                    str(row.get("alt_group_no") or ""), row.get("alt_priority", 0), str(row.get("alt_method") or ""))
         frequencies = Counter(key(row) for row in bucket)
         if count > 1 and any(n % count for n in frequencies.values()):
             raise CannotCompute(f"{parent} 重复父件子树不一致，不能建立 BOM 模板")

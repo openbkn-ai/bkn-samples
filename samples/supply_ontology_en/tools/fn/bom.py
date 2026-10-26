@@ -1,21 +1,44 @@
 from __future__ import annotations
 
+import math
 from collections import defaultdict
 
 from .errors import CannotCompute
 from .snapshot import Snapshot, _f, _i
 
 
+def classify_bom_row(row: dict) -> str:
+    """Interpret ERP replacement method, group and priority together.
+
+    The whole replacement group carries the method label: priority zero is its
+    primary candidate, while positive priorities are alternatives. An ordinary
+    position has no replacement method/group. Contradictory rows are not usable.
+    """
+    method = str(row.get("alt_method") or "").strip()
+    group = str(row.get("alt_group_no") or "").strip()
+    if group == "0":group = ""
+    raw = row.get("alt_priority")
+    if raw is None or str(raw).strip() == "":
+        if method or group:raise CannotCompute("replacement group is missing alt_priority")
+        raw = 0
+    if isinstance(raw, bool):raise CannotCompute("alt_priority must be a nonnegative integer")
+    try:priority = float(raw)
+    except (TypeError, ValueError) as error:raise CannotCompute("invalid alt_priority") from error
+    if not math.isfinite(priority) or priority < 0 or not priority.is_integer():
+        raise CannotCompute("alt_priority must be a nonnegative integer")
+    if method in {"", "主料", "main component"} and priority == 0:
+        return "group_main" if group else "ordinary_main"
+    if method in {"替代", "Alternate"} and group:
+        return "group_main" if priority == 0 else "substitute"
+    raise CannotCompute("contradictory or unsupported alt_method, alt_group_no and alt_priority")
+
+
 def is_main_row(row: dict) -> bool:
-    priority = _i(row.get("alt_priority"), 0)
-    # ERP labels the entire replacement group with alt_method=Alternate,
-    # including its priority-zero primary row.
-    return priority == 0
+    return classify_bom_row(row) in {"ordinary_main", "group_main"}
 
 
 def is_substitute_row(row: dict) -> bool:
-    priority = _i(row.get("alt_priority"), 0)
-    return priority > 0
+    return classify_bom_row(row) == "substitute"
 
 
 def product_bom_rows(snap: Snapshot, product: str) -> list[dict]:

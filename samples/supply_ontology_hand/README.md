@@ -28,3 +28,7 @@
 升级时先卸载旧样例，再安装新版本。卸载会清理样例数据和用户修改；删除离线包缓存不会卸载已安装资源。
 
 开发者可查看 `sample.yaml`、`db/`、`platform/` 和 [tools/](tools/README.md)。这些脚本由标准安装 hooks 调用，客户和伙伴不需要逐个执行。
+
+## Material assurance / 材料保障
+
+候选 0.1.10 新增“材料保障净算”和“生成补货草稿”，共 16 个原生函数。必须明确 customer_delivery 或 new_production；草稿不保存、不发采购。见[口径与验收边界](docs/material-assurance.md)。原始历史回执及真实产品验收仍待补齐。

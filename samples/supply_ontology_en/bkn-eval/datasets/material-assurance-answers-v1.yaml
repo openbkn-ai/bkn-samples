@@ -1,0 +1,32 @@
+schema_version: '1.0'
+set_id: material-assurance-answers-v1
+audience: evaluator_only
+evaluated_agent_access: forbidden
+basis_kind: new locked-CSV replay, not original 2026-10-07 receipt
+answers:
+- id: MA-01
+  answer:
+    customer_delivery: 43
+    new_production: 26
+    customer_shortages:
+      468-000282: 17
+      606-000129: 17
+    production_shortages:
+      468-000282: 34
+      606-000129: 34
+  basis:
+    functions:
+    - Material_Assurance
+- id: MA-02
+  answer:
+    status: draft
+    persisted: false
+    executable: false
+    items:
+      468-000282: 17
+      606-000129: 17
+    delivery_date: not evaluated
+    basis_validation: structure_only_not_requeried
+  basis:
+    functions:
+    - Replenishment_Draft

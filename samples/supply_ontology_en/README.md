@@ -22,3 +22,7 @@ After installation, verify objects, metrics, functions and Skills through MCP. U
 To install a new version, uninstall the existing sample first. Uninstallation removes sample data and user edits. Deleting a cached offline package does not uninstall platform resources.
 
 Developers can inspect `sample.yaml`, `db/`, `platform/` and [tools/](tools/README.md). Standard installation hooks run these scripts; users do not execute them individually.
+
+## Material assurance / 材料保障
+
+Candidate 0.1.6 adds Material_Assurance and Replenishment_Draft (16 native Functions total). Explicitly choose customer_delivery or new_production; drafts never persist or execute purchases. See [contract and acceptance boundaries](docs/material-assurance.md). Original historical receipts and target-product acceptance remain pending.

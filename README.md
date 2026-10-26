@@ -29,8 +29,8 @@ the previous mainline inventory.
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |
 | [Order Basics](samples/order-basics/) | Chinese | A small starting point for orders, products and object relationships | Existing release 0.1.2; 0.2.1 candidate 0.1.4, platform acceptance pending |
-| [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Existing release 0.1.4; 0.2.1 candidate 0.1.9, platform acceptance pending |
-| [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Existing release 0.1.1; 0.2.1 candidate 0.1.4, platform acceptance pending |
+| [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Existing release 0.1.4; 0.2.1 candidate 0.1.9, platform acceptance pending; #189 source candidate 0.1.10: [details](docs/material-assurance-189.md) |
+| [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Existing release 0.1.1; 0.2.1 candidate 0.1.4, platform acceptance pending; #189 source candidate 0.1.6: [details](docs/material-assurance-189.md) |
 | [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Existing release 0.1.2; 0.2.1 candidate 0.1.6, platform acceptance pending |
 | [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Existing release 0.1.0; 0.2.1 candidate 0.1.2, platform acceptance pending |
 | [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | 0.2.1 candidate 0.1.3; self-contained, platform acceptance pending |

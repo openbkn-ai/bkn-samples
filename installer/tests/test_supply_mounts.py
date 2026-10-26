@@ -1,4 +1,5 @@
 import sys
+import json
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -16,6 +17,11 @@ class SupplyMountTest(unittest.TestCase):
 
         def call(args):
             calls.append(args)
+            if args[:2] == ['bkn', 'get']:
+                return {'tags':['bkn-samples','bkn-sample-supply-chain']}
+            if args[:3] == ['bkn', 'action-type', 'get']:
+                kn=json.loads((TOOLS.parent/'kn/supply_ontology_hand.json').read_text())
+                return next(a for a in kn['action_types'] if a['id'].endswith('_act_replenishment_draft'))
             if args[:2] == ['toolbox', 'list']:
                 return {'data': [{'box_name': 'Supply', 'box_id': 'box-1', 'status': 'published'}]}
             if args[:2] == ['tool', 'list']:
@@ -24,9 +30,9 @@ class SupplyMountTest(unittest.TestCase):
             return {}
 
         with patch.object(FUNCTIONS, '_call', call):
-            FUNCTIONS.run(box_name='Supply', apply=True, kn_id='network')
+            FUNCTIONS.run(box_name='Supply', apply=True, kn_id='supply_ontology_hand')
         attach = next(args for args in calls if args[:3] == ['bkn', 'capability', 'attach'])
-        self.assertEqual(attach, ['bkn', 'capability', 'attach', 'network', '--box', 'box-1',
+        self.assertEqual(attach, ['bkn', 'capability', 'attach', 'supply_ontology_hand', '--box', 'box-1',
                                   '--tool', ','.join(FUNCTION_CATALOG)])
         self.assertNotIn('--all-tools', attach)
 

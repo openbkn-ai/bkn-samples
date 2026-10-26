@@ -38,3 +38,7 @@ description: >
 ## 确定性覆盖题
 
 当题目明确只使用当前可用库存、禁用替代和采购时，调用对应函数，直接按叶子净缺是否为零给出是/否及缺口；中间组件净缺须继续展开，不能当作最终缺料。多个需求按题目数组顺序共用库存，结构共用数不等于实际短缺数。指定业务日期、需要日与确认供应池的物料题使用按期覆盖字段，不推测未来新采购。完整条件下应给出确定结论。
+
+## Single-demand material assurance
+
+For the stock-only Workshop material-assurance case, use `material_coverage` with an explicit `demand_purpose`: `customer_delivery` allocates finished goods first; `new_production` excludes them. Read the published tool metadata to select its localized name. Return the bounded covered/uncovered quantities, all material gaps, source BOM version and collection provenance. `replenishment_draft` accepts the prior complete coverage result and checks its structure only; it does not re-query facts and returns a proposal only; it does not persist, place purchases or promise delivery. Do not equate a saved-looking draft ID with a stored business record. This path handles one demand; use shared contention for multiple demands.
