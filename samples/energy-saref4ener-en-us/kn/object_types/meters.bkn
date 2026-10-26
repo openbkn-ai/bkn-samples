@@ -1,0 +1,26 @@
+---
+type: object_type
+id: meters
+name: Device Meter
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Device Meter
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| meter_id | Meter id | string | Stable unique source-row identifier. | meter_id |
+| device_id | Device id | string | Explicit foreign-key association; blank creates no edge. | device_id |
+| name | Name | string | Fictional business value with equivalent bilingual meaning. | name |
+| unit | Unit | string | Fictional business value with equivalent bilingual meaning. | unit |
+| unit_code | Unit code | string | Stable English code; paired display field is localized. | unit_code |
+
+### Keys
+
+Primary Keys: meter_id
+Display Key: name
+Incremental Key:

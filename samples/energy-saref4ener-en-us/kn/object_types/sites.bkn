@@ -1,0 +1,27 @@
+---
+type: object_type
+id: sites
+name: Energy Site
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Energy Site
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| site_id | Site id | string | Stable unique source-row identifier. | site_id |
+| customer_id | Customer id | string | Explicit foreign-key association; blank creates no edge. | customer_id |
+| name | Name | string | Fictional business value with equivalent bilingual meaning. | name |
+| region | Region | string | Fictional business value with equivalent bilingual meaning. | region |
+| region_code | Region code | string | Stable English code; paired display field is localized. | region_code |
+| response_cap_kw | Response cap kw | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | response_cap_kw |
+
+### Keys
+
+Primary Keys: site_id
+Display Key: name
+Incremental Key:

@@ -1,0 +1,25 @@
+---
+type: object_type
+id: customers
+name: 用能客户
+tags: [energy, saref4ener]
+---
+
+## ObjectType: 用能客户
+
+本地运营对象；来源概念参考不构成OWL等价声明。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| customer_id | 客户标识 | string | 稳定唯一源记录标识。 | customer_id |
+| name | 名称 | string | 与另一语言事实等价的虚构业务值。 | name |
+| sector | 行业 | string | 与另一语言事实等价的虚构业务值。 | sector |
+| sector_code | 行业代码 | string | 稳定英文代码；展示值在对应字段本地化。 | sector_code |
+
+### Keys
+
+Primary Keys: customer_id
+Display Key: name
+Incremental Key:

@@ -1,0 +1,709 @@
+{
+  "modules": [
+    {
+      "source": "sources/saref4ener-v2.1.1.ttl",
+      "sha256": "73fe1ccf93620d6125e1b178b10d481b33df3e01715838313de0268f761612da",
+      "classes": [
+        "http://www.w3.org/2006/time#DurationDescription",
+        "http://www.w3.org/2006/time#Interval",
+        "http://www.w3.org/2006/time#TemporalEntity",
+        "http://xmlns.com/foaf/0.1/Agent",
+        "https://saref.etsi.org/saref4ener/ActuatorLevel",
+        "https://saref.etsi.org/saref4ener/ActuatorSwitch",
+        "https://saref.etsi.org/saref4ener/AlternativesGroup",
+        "https://saref.etsi.org/saref4ener/ContractualPowerLimit",
+        "https://saref.etsi.org/saref4ener/DDBCInstruction",
+        "https://saref.etsi.org/saref4ener/DataPoint",
+        "https://saref.etsi.org/saref4ener/DemandDrivenProfile",
+        "https://saref.etsi.org/saref4ener/Device",
+        "https://saref.etsi.org/saref4ener/EndInterruptionInstruction",
+        "https://saref.etsi.org/saref4ener/EndTimeDurationDescription",
+        "https://saref.etsi.org/saref4ener/EnergyConstraint",
+        "https://saref.etsi.org/saref4ener/EventActionConsume",
+        "https://saref.etsi.org/saref4ener/EventActionProduce",
+        "https://saref.etsi.org/saref4ener/EventStateConsume",
+        "https://saref.etsi.org/saref4ener/EventStateProduce",
+        "https://saref.etsi.org/saref4ener/FRBCInstruction",
+        "https://saref.etsi.org/saref4ener/FailsafePowerLimit",
+        "https://saref.etsi.org/saref4ener/FailsafeState",
+        "https://saref.etsi.org/saref4ener/FillLevelTargetProfile",
+        "https://saref.etsi.org/saref4ener/FillLevelTargetProfileElement",
+        "https://saref.etsi.org/saref4ener/FillRateProfile",
+        "https://saref.etsi.org/saref4ener/FlexOffer",
+        "https://saref.etsi.org/saref4ener/FlexRequest",
+        "https://saref.etsi.org/saref4ener/FlexibilityInstruction",
+        "https://saref.etsi.org/saref4ener/FlexibilityProfile",
+        "https://saref.etsi.org/saref4ener/GaussianDataPoint",
+        "https://saref.etsi.org/saref4ener/Incentive",
+        "https://saref.etsi.org/saref4ener/IncentiveTableProfile",
+        "https://saref.etsi.org/saref4ener/IncentiveTableSlot",
+        "https://saref.etsi.org/saref4ener/IncentiveTableTier",
+        "https://saref.etsi.org/saref4ener/IncentiveType",
+        "https://saref.etsi.org/saref4ener/InstructionStatus",
+        "https://saref.etsi.org/saref4ener/InterruptionInstruction",
+        "https://saref.etsi.org/saref4ener/LeakageBehaviour",
+        "https://saref.etsi.org/saref4ener/LeakageBehaviourElement",
+        "https://saref.etsi.org/saref4ener/LoadControlEventAction",
+        "https://saref.etsi.org/saref4ener/LoadControlEventData",
+        "https://saref.etsi.org/saref4ener/LoadControlEventState",
+        "https://saref.etsi.org/saref4ener/LoadControlStateData",
+        "https://saref.etsi.org/saref4ener/NominalPowerLimit",
+        "https://saref.etsi.org/saref4ener/NumberRange",
+        "https://saref.etsi.org/saref4ener/OMBCInstruction",
+        "https://saref.etsi.org/saref4ener/OperationMode",
+        "https://saref.etsi.org/saref4ener/OperationModeElement",
+        "https://saref.etsi.org/saref4ener/OperationModeProfile",
+        "https://saref.etsi.org/saref4ener/PEBCInstruction",
+        "https://saref.etsi.org/saref4ener/PPBCInstruction",
+        "https://saref.etsi.org/saref4ener/PowerConstraint",
+        "https://saref.etsi.org/saref4ener/PowerEnvelope",
+        "https://saref.etsi.org/saref4ener/PowerEnvelopeConsequenceType",
+        "https://saref.etsi.org/saref4ener/PowerEnvelopeLimitType",
+        "https://saref.etsi.org/saref4ener/PowerEnvelopeProfile",
+        "https://saref.etsi.org/saref4ener/PowerLimit",
+        "https://saref.etsi.org/saref4ener/PowerLimitProfile",
+        "https://saref.etsi.org/saref4ener/PowerPlan",
+        "https://saref.etsi.org/saref4ener/PowerProfile",
+        "https://saref.etsi.org/saref4ener/PowerRange",
+        "https://saref.etsi.org/saref4ener/PowerSequence",
+        "https://saref.etsi.org/saref4ener/PowerSequenceContainer",
+        "https://saref.etsi.org/saref4ener/PowerSequenceElement",
+        "https://saref.etsi.org/saref4ener/PowerSequenceState",
+        "https://saref.etsi.org/saref4ener/PowerSequenceStatus",
+        "https://saref.etsi.org/saref4ener/PowerSource",
+        "https://saref.etsi.org/saref4ener/Role",
+        "https://saref.etsi.org/saref4ener/RoleType",
+        "https://saref.etsi.org/saref4ener/ScheduleInstruction",
+        "https://saref.etsi.org/saref4ener/ScopeType",
+        "https://saref.etsi.org/saref4ener/Slot",
+        "https://saref.etsi.org/saref4ener/StartInterruptionInstruction",
+        "https://saref.etsi.org/saref4ener/Storage",
+        "https://saref.etsi.org/saref4ener/TimeSeries",
+        "https://saref.etsi.org/saref4ener/Timer",
+        "https://saref.etsi.org/saref4ener/Transition",
+        "https://saref.etsi.org/saref4ener/Usage",
+        "https://saref.etsi.org/saref4ener/ValueSource",
+        "https://saref.etsi.org/saref4ener/ValueTendency"
+      ],
+      "object_properties": [
+        "https://saref.etsi.org/core/hasPrice",
+        "https://saref.etsi.org/saref4ener/allowedLimitRange",
+        "https://saref.etsi.org/saref4ener/belongsTo",
+        "https://saref.etsi.org/saref4ener/belongsToTimeSeries",
+        "https://saref.etsi.org/saref4ener/endOfRange",
+        "https://saref.etsi.org/saref4ener/fillRate",
+        "https://saref.etsi.org/saref4ener/fromOperationMode",
+        "https://saref.etsi.org/saref4ener/hasActiveOperationMode",
+        "https://saref.etsi.org/saref4ener/hasAppliedEventActionConsume",
+        "https://saref.etsi.org/saref4ener/hasAppliedEventActionProduce",
+        "https://saref.etsi.org/saref4ener/hasCommodity",
+        "https://saref.etsi.org/saref4ener/hasConsequenceType",
+        "https://saref.etsi.org/saref4ener/hasConstraints",
+        "https://saref.etsi.org/saref4ener/hasContractualConsumptionMax",
+        "https://saref.etsi.org/saref4ener/hasContractualProductionMax",
+        "https://saref.etsi.org/saref4ener/hasCost",
+        "https://saref.etsi.org/saref4ener/hasDataPoint",
+        "https://saref.etsi.org/saref4ener/hasDemandRate",
+        "https://saref.etsi.org/saref4ener/hasDemandRateForecast",
+        "https://saref.etsi.org/saref4ener/hasDevice",
+        "https://saref.etsi.org/saref4ener/hasEffectivePeriod",
+        "https://saref.etsi.org/saref4ener/hasElapsedSlotTime",
+        "https://saref.etsi.org/saref4ener/hasEnergy",
+        "https://saref.etsi.org/saref4ener/hasEnvelope",
+        "https://saref.etsi.org/saref4ener/hasEventStateConsume",
+        "https://saref.etsi.org/saref4ener/hasEventStateProduce",
+        "https://saref.etsi.org/saref4ener/hasFailsafeConsumptionMax",
+        "https://saref.etsi.org/saref4ener/hasFailsafeProductionMax",
+        "https://saref.etsi.org/saref4ener/hasFillLevelRange",
+        "https://saref.etsi.org/saref4ener/hasFillLevelTargetProfile",
+        "https://saref.etsi.org/saref4ener/hasFillLevelTargetProfileElement",
+        "https://saref.etsi.org/saref4ener/hasIncentive",
+        "https://saref.etsi.org/saref4ener/hasIncentiveType",
+        "https://saref.etsi.org/saref4ener/hasInstructionStatus",
+        "https://saref.etsi.org/saref4ener/hasLeakageBehaviour",
+        "https://saref.etsi.org/saref4ener/hasLeakageBehaviourElement",
+        "https://saref.etsi.org/saref4ener/hasLowerBoundary",
+        "https://saref.etsi.org/saref4ener/hasNominalConsumption",
+        "https://saref.etsi.org/saref4ener/hasNominalProduction",
+        "https://saref.etsi.org/saref4ener/hasNumberRange",
+        "https://saref.etsi.org/saref4ener/hasOperationMode",
+        "https://saref.etsi.org/saref4ener/hasOperationModeElement",
+        "https://saref.etsi.org/saref4ener/hasPowerEnvelope",
+        "https://saref.etsi.org/saref4ener/hasPowerEnvelopeElement",
+        "https://saref.etsi.org/saref4ener/hasPowerLimitConsumptionMax",
+        "https://saref.etsi.org/saref4ener/hasPowerLimitProductionMax",
+        "https://saref.etsi.org/saref4ener/hasPowerLimitState",
+        "https://saref.etsi.org/saref4ener/hasPowerPlan",
+        "https://saref.etsi.org/saref4ener/hasPowerRange",
+        "https://saref.etsi.org/saref4ener/hasPowerSequence",
+        "https://saref.etsi.org/saref4ener/hasPowerSequenceContainer",
+        "https://saref.etsi.org/saref4ener/hasPowerSequenceElement",
+        "https://saref.etsi.org/saref4ener/hasPowerSequenceStatus",
+        "https://saref.etsi.org/saref4ener/hasPowerSource",
+        "https://saref.etsi.org/saref4ener/hasPreviousOperationMode",
+        "https://saref.etsi.org/saref4ener/hasRecipient",
+        "https://saref.etsi.org/saref4ener/hasResumeCostEstimated",
+        "https://saref.etsi.org/saref4ener/hasResumeEnergyEstimated",
+        "https://saref.etsi.org/saref4ener/hasRole",
+        "https://saref.etsi.org/saref4ener/hasRoleType",
+        "https://saref.etsi.org/saref4ener/hasRunningCosts",
+        "https://saref.etsi.org/saref4ener/hasScopeType",
+        "https://saref.etsi.org/saref4ener/hasSlotValue",
+        "https://saref.etsi.org/saref4ener/hasStorage",
+        "https://saref.etsi.org/saref4ener/hasSupplyRange",
+        "https://saref.etsi.org/saref4ener/hasTier",
+        "https://saref.etsi.org/saref4ener/hasTimer",
+        "https://saref.etsi.org/saref4ener/hasTransition",
+        "https://saref.etsi.org/saref4ener/hasUpperBoundary",
+        "https://saref.etsi.org/saref4ener/hasUsage",
+        "https://saref.etsi.org/saref4ener/hasUsageForecast",
+        "https://saref.etsi.org/saref4ener/hasValueSource",
+        "https://saref.etsi.org/saref4ener/includes",
+        "https://saref.etsi.org/saref4ener/isActuatedBy",
+        "https://saref.etsi.org/saref4ener/isBlockedBy",
+        "https://saref.etsi.org/saref4ener/isBoundTo",
+        "https://saref.etsi.org/saref4ener/isLimitedWith",
+        "https://saref.etsi.org/saref4ener/isProtectedBy",
+        "https://saref.etsi.org/saref4ener/leakageRate",
+        "https://saref.etsi.org/saref4ener/limitType",
+        "https://saref.etsi.org/saref4ener/presentFillLevel",
+        "https://saref.etsi.org/saref4ener/producedBy",
+        "https://saref.etsi.org/saref4ener/rangeBoundary",
+        "https://saref.etsi.org/saref4ener/receives",
+        "https://saref.etsi.org/saref4ener/receivesPowerLimit",
+        "https://saref.etsi.org/saref4ener/relatesToCommodity",
+        "https://saref.etsi.org/saref4ener/relatesToOffer",
+        "https://saref.etsi.org/saref4ener/relatesToPowerProfile",
+        "https://saref.etsi.org/saref4ener/relatesToPowerProfileSequence",
+        "https://saref.etsi.org/saref4ener/relatesToPowerProfileSequenceContainer",
+        "https://saref.etsi.org/saref4ener/relatesToRequest",
+        "https://saref.etsi.org/saref4ener/startOfRange",
+        "https://saref.etsi.org/saref4ener/startsTimer",
+        "https://saref.etsi.org/saref4ener/toOperationMode",
+        "https://saref.etsi.org/saref4ener/triggersEventActionConsume",
+        "https://saref.etsi.org/saref4ener/triggersEventActionProduce",
+        "https://saref.etsi.org/saref4ener/valueTendency"
+      ],
+      "datatype_properties": [
+        "https://saref.etsi.org/saref4ener/abnormalCondition",
+        "https://saref.etsi.org/saref4ener/abnormalConditionOnly",
+        "https://saref.etsi.org/saref4ener/activateSlot",
+        "https://saref.etsi.org/saref4ener/activeRepetitionNumber",
+        "https://saref.etsi.org/saref4ener/activeSlotNumber",
+        "https://saref.etsi.org/saref4ener/brandName",
+        "https://saref.etsi.org/saref4ener/cheapest",
+        "https://saref.etsi.org/saref4ener/deviceCode",
+        "https://saref.etsi.org/saref4ener/deviceName",
+        "https://saref.etsi.org/saref4ener/firmwareVersion",
+        "https://saref.etsi.org/saref4ener/greenest",
+        "https://saref.etsi.org/saref4ener/hardwareRevision",
+        "https://saref.etsi.org/saref4ener/hasActivationDelay",
+        "https://saref.etsi.org/saref4ener/hasActiveDurationMax",
+        "https://saref.etsi.org/saref4ener/hasActiveDurationMin",
+        "https://saref.etsi.org/saref4ener/hasActiveDurationSumMax",
+        "https://saref.etsi.org/saref4ener/hasActiveDurationSumMin",
+        "https://saref.etsi.org/saref4ener/hasCreationTime",
+        "https://saref.etsi.org/saref4ener/hasDefaultDuration",
+        "https://saref.etsi.org/saref4ener/hasDuration",
+        "https://saref.etsi.org/saref4ener/hasDurationMin",
+        "https://saref.etsi.org/saref4ener/hasDurationUncertainty",
+        "https://saref.etsi.org/saref4ener/hasEarliestStartTime",
+        "https://saref.etsi.org/saref4ener/hasEndTime",
+        "https://saref.etsi.org/saref4ener/hasExecutionTime",
+        "https://saref.etsi.org/saref4ener/hasFailsafeDuration",
+        "https://saref.etsi.org/saref4ener/hasIndex",
+        "https://saref.etsi.org/saref4ener/hasInterruptionEndTime",
+        "https://saref.etsi.org/saref4ener/hasInterruptionStartTime",
+        "https://saref.etsi.org/saref4ener/hasLatestEndTime",
+        "https://saref.etsi.org/saref4ener/hasLowerAveragePower",
+        "https://saref.etsi.org/saref4ener/hasManufacturerNodeIdentification",
+        "https://saref.etsi.org/saref4ener/hasMaxDuration",
+        "https://saref.etsi.org/saref4ener/hasMaxPauseBefore",
+        "https://saref.etsi.org/saref4ener/hasMinDuration",
+        "https://saref.etsi.org/saref4ener/hasOperationModeFactor",
+        "https://saref.etsi.org/saref4ener/hasPauseDurationMax",
+        "https://saref.etsi.org/saref4ener/hasPauseDurationMin",
+        "https://saref.etsi.org/saref4ener/hasPowerLimitDuration",
+        "https://saref.etsi.org/saref4ener/hasQuantile",
+        "https://saref.etsi.org/saref4ener/hasRemainingPauseTime",
+        "https://saref.etsi.org/saref4ener/hasRemainingSlotTime",
+        "https://saref.etsi.org/saref4ener/hasStandardDeviation",
+        "https://saref.etsi.org/saref4ener/hasStartTime",
+        "https://saref.etsi.org/saref4ener/hasTaskIdentifier",
+        "https://saref.etsi.org/saref4ener/hasTemporalResolution",
+        "https://saref.etsi.org/saref4ener/hasTransitionCosts",
+        "https://saref.etsi.org/saref4ener/hasTransitionDuration",
+        "https://saref.etsi.org/saref4ener/hasTransitionTimestamp",
+        "https://saref.etsi.org/saref4ener/hasUpdateRate",
+        "https://saref.etsi.org/saref4ener/hasUpperAveragePower",
+        "https://saref.etsi.org/saref4ener/hasValue",
+        "https://saref.etsi.org/saref4ener/isActive",
+        "https://saref.etsi.org/saref4ener/isChangeable",
+        "https://saref.etsi.org/saref4ener/isFinishedAt",
+        "https://saref.etsi.org/saref4ener/isInterruptible",
+        "https://saref.etsi.org/saref4ener/isObligatory",
+        "https://saref.etsi.org/saref4ener/isPausable",
+        "https://saref.etsi.org/saref4ener/isStoppable",
+        "https://saref.etsi.org/saref4ener/isWritable",
+        "https://saref.etsi.org/saref4ener/maxCyclesPerDay",
+        "https://saref.etsi.org/saref4ener/nodeRemoteControllable",
+        "https://saref.etsi.org/saref4ener/optionalSlot",
+        "https://saref.etsi.org/saref4ener/progress",
+        "https://saref.etsi.org/saref4ener/repetitionsTotal",
+        "https://saref.etsi.org/saref4ener/requiresUpdate",
+        "https://saref.etsi.org/saref4ener/sequenceRemoteControllable",
+        "https://saref.etsi.org/saref4ener/serialNumber",
+        "https://saref.etsi.org/saref4ener/slotActivated",
+        "https://saref.etsi.org/saref4ener/slotNumber",
+        "https://saref.etsi.org/saref4ener/softwareRevision",
+        "https://saref.etsi.org/saref4ener/supportsReselection",
+        "https://saref.etsi.org/saref4ener/supportsSingleSlotSchedulingOnly",
+        "https://saref.etsi.org/saref4ener/totalSequencesCountMax",
+        "https://saref.etsi.org/saref4ener/vendorCode",
+        "https://saref.etsi.org/saref4ener/vendorName"
+      ],
+      "anonymous_class_expressions": 22,
+      "labels": {
+        "http://www.w3.org/2006/time#DurationDescription": [],
+        "http://www.w3.org/2006/time#Interval": [],
+        "http://www.w3.org/2006/time#TemporalEntity": [],
+        "http://xmlns.com/foaf/0.1/Agent": [],
+        "https://saref.etsi.org/saref4ener/ActuatorLevel": [
+          "Actuator level"
+        ],
+        "https://saref.etsi.org/saref4ener/ActuatorSwitch": [
+          "Actuator switch"
+        ],
+        "https://saref.etsi.org/saref4ener/AlternativesGroup": [
+          "Alternatives group"
+        ],
+        "https://saref.etsi.org/saref4ener/ContractualPowerLimit": [
+          "Contractual Power Limit"
+        ],
+        "https://saref.etsi.org/saref4ener/DDBCInstruction": [
+          "Demand Driven Based Control Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/DataPoint": [
+          "Data point"
+        ],
+        "https://saref.etsi.org/saref4ener/DemandDrivenProfile": [
+          "Demand driven control"
+        ],
+        "https://saref.etsi.org/saref4ener/Device": [
+          "Device"
+        ],
+        "https://saref.etsi.org/saref4ener/EndInterruptionInstruction": [
+          "End Interruption Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/EndTimeDurationDescription": [
+          "End time duration Description"
+        ],
+        "https://saref.etsi.org/saref4ener/EnergyConstraint": [
+          "Energy Constraint"
+        ],
+        "https://saref.etsi.org/saref4ener/EventActionConsume": [
+          "Event action consume"
+        ],
+        "https://saref.etsi.org/saref4ener/EventActionProduce": [
+          "Event action produce"
+        ],
+        "https://saref.etsi.org/saref4ener/EventStateConsume": [
+          "Event state consume"
+        ],
+        "https://saref.etsi.org/saref4ener/EventStateProduce": [
+          "Event state produce"
+        ],
+        "https://saref.etsi.org/saref4ener/FRBCInstruction": [
+          "Fill Rate Based Control Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/FailsafePowerLimit": [
+          "Failsafe Power Limit"
+        ],
+        "https://saref.etsi.org/saref4ener/FailsafeState": [
+          "Fail-safe state"
+        ],
+        "https://saref.etsi.org/saref4ener/FillLevelTargetProfile": [
+          "Fill level target profile"
+        ],
+        "https://saref.etsi.org/saref4ener/FillLevelTargetProfileElement": [
+          "Fill level target profile element"
+        ],
+        "https://saref.etsi.org/saref4ener/FillRateProfile": [
+          "Fill rate control"
+        ],
+        "https://saref.etsi.org/saref4ener/FlexOffer": [
+          "Flex offer"
+        ],
+        "https://saref.etsi.org/saref4ener/FlexRequest": [
+          "Flex request"
+        ],
+        "https://saref.etsi.org/saref4ener/FlexibilityInstruction": [
+          "Flexibility Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/FlexibilityProfile": [
+          "Flexibility Profile"
+        ],
+        "https://saref.etsi.org/saref4ener/GaussianDataPoint": [
+          "Gaussian data point"
+        ],
+        "https://saref.etsi.org/saref4ener/Incentive": [
+          "Incentive"
+        ],
+        "https://saref.etsi.org/saref4ener/IncentiveTableProfile": [
+          "Incentive table based profile"
+        ],
+        "https://saref.etsi.org/saref4ener/IncentiveTableSlot": [
+          "Incentive table slot"
+        ],
+        "https://saref.etsi.org/saref4ener/IncentiveTableTier": [
+          "Incentive table tier"
+        ],
+        "https://saref.etsi.org/saref4ener/IncentiveType": [
+          "Incentive Type"
+        ],
+        "https://saref.etsi.org/saref4ener/InstructionStatus": [
+          "Instruction Status"
+        ],
+        "https://saref.etsi.org/saref4ener/InterruptionInstruction": [
+          "Interruption Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/LeakageBehaviour": [
+          "Leakage behaviour"
+        ],
+        "https://saref.etsi.org/saref4ener/LeakageBehaviourElement": [
+          "Leakage behaviour element"
+        ],
+        "https://saref.etsi.org/saref4ener/LoadControlEventAction": [
+          "Load Control event action"
+        ],
+        "https://saref.etsi.org/saref4ener/LoadControlEventData": [
+          "Load control event data"
+        ],
+        "https://saref.etsi.org/saref4ener/LoadControlEventState": [
+          "Load control event state "
+        ],
+        "https://saref.etsi.org/saref4ener/LoadControlStateData": [
+          "Load control state data"
+        ],
+        "https://saref.etsi.org/saref4ener/NominalPowerLimit": [
+          "Nominal Power Limit"
+        ],
+        "https://saref.etsi.org/saref4ener/NumberRange": [
+          "Number range"
+        ],
+        "https://saref.etsi.org/saref4ener/OMBCInstruction": [
+          "Operation Mode Based Control Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/OperationMode": [
+          "Operation Mode"
+        ],
+        "https://saref.etsi.org/saref4ener/OperationModeElement": [
+          "Operation Mode Element"
+        ],
+        "https://saref.etsi.org/saref4ener/OperationModeProfile": [
+          "Operation mode control"
+        ],
+        "https://saref.etsi.org/saref4ener/PEBCInstruction": [
+          "Power Envelop Based Control Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/PPBCInstruction": [
+          "Power Profile Based Control Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerConstraint": [
+          "Power constraint"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerEnvelope": [
+          "Power Envelope"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerEnvelopeConsequenceType": [
+          "Power Envelope Consequence Type"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerEnvelopeLimitType": [
+          "Power Envelope Limit Type"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerEnvelopeProfile": [
+          "Power envelope control"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerLimit": [
+          "Power Limit"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerLimitProfile": [
+          "Power limit profile"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerPlan": [
+          "Power plan"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerProfile": [
+          "Power profile control"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerRange": [
+          "Power range"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerSequence": [
+          "Power sequence"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerSequenceContainer": [
+          "Power profile container"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerSequenceElement": [
+          "Power sequence element"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerSequenceState": [
+          "Power sequence state"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerSequenceStatus": [
+          "Power sequence status"
+        ],
+        "https://saref.etsi.org/saref4ener/PowerSource": [
+          "Power source"
+        ],
+        "https://saref.etsi.org/saref4ener/Role": [
+          "Role"
+        ],
+        "https://saref.etsi.org/saref4ener/RoleType": [
+          "Role Type"
+        ],
+        "https://saref.etsi.org/saref4ener/ScheduleInstruction": [
+          "Schedule Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/ScopeType": [
+          "Scope Type"
+        ],
+        "https://saref.etsi.org/saref4ener/Slot": [
+          "Slot"
+        ],
+        "https://saref.etsi.org/saref4ener/StartInterruptionInstruction": [
+          "Start Interruption Instruction"
+        ],
+        "https://saref.etsi.org/saref4ener/Storage": [
+          "Storage"
+        ],
+        "https://saref.etsi.org/saref4ener/TimeSeries": [
+          "Time Series"
+        ],
+        "https://saref.etsi.org/saref4ener/Timer": [
+          "Timer"
+        ],
+        "https://saref.etsi.org/saref4ener/Transition": [
+          "Transition"
+        ],
+        "https://saref.etsi.org/saref4ener/Usage": [
+          "Usage"
+        ],
+        "https://saref.etsi.org/saref4ener/ValueSource": [
+          "Value source"
+        ],
+        "https://saref.etsi.org/saref4ener/ValueTendency": [
+          "Value tendency"
+        ]
+      }
+    },
+    {
+      "source": "sources/saref-core-v4.1.1.ttl",
+      "sha256": "28189acd8cfb49bf6b7e5709275a1162d943576f643b2cffdccfe20cc00ad701",
+      "classes": [
+        "http://www.w3.org/2006/time#TemporalEntity",
+        "http://www.w3.org/2006/time#TemporalPosition",
+        "https://saref.etsi.org/core/Actuation",
+        "https://saref.etsi.org/core/Actuator",
+        "https://saref.etsi.org/core/Appliance",
+        "https://saref.etsi.org/core/Command",
+        "https://saref.etsi.org/core/CommandExecution",
+        "https://saref.etsi.org/core/CommandOfInterest",
+        "https://saref.etsi.org/core/Commodity",
+        "https://saref.etsi.org/core/Device",
+        "https://saref.etsi.org/core/DeviceKind",
+        "https://saref.etsi.org/core/FeatureKind",
+        "https://saref.etsi.org/core/FeatureOfInterest",
+        "https://saref.etsi.org/core/Function",
+        "https://saref.etsi.org/core/FunctionOfInterest",
+        "https://saref.etsi.org/core/Meter",
+        "https://saref.etsi.org/core/Observation",
+        "https://saref.etsi.org/core/Operation",
+        "https://saref.etsi.org/core/OperationExecution",
+        "https://saref.etsi.org/core/ProcedureExecution",
+        "https://saref.etsi.org/core/Profile",
+        "https://saref.etsi.org/core/Property",
+        "https://saref.etsi.org/core/PropertyOfInterest",
+        "https://saref.etsi.org/core/PropertyValue",
+        "https://saref.etsi.org/core/Sensor",
+        "https://saref.etsi.org/core/Service",
+        "https://saref.etsi.org/core/State",
+        "https://saref.etsi.org/core/StateOfInterest",
+        "https://saref.etsi.org/core/StateValue",
+        "https://saref.etsi.org/core/Task",
+        "https://saref.etsi.org/core/UnitOfMeasure",
+        "https://saref.etsi.org/saref4syst/System"
+      ],
+      "object_properties": [
+        "http://www.w3.org/2004/02/skos/core#broader",
+        "http://www.w3.org/2004/02/skos/core#narrower",
+        "https://saref.etsi.org/core/accomplishes",
+        "https://saref.etsi.org/core/consistsOf",
+        "https://saref.etsi.org/core/consumes",
+        "https://saref.etsi.org/core/controls",
+        "https://saref.etsi.org/core/hasApplicableTime",
+        "https://saref.etsi.org/core/hasCommand",
+        "https://saref.etsi.org/core/hasCommandKind",
+        "https://saref.etsi.org/core/hasCommandOfInterest",
+        "https://saref.etsi.org/core/hasDeviceKind",
+        "https://saref.etsi.org/core/hasFeatureKind",
+        "https://saref.etsi.org/core/hasFunction",
+        "https://saref.etsi.org/core/hasFunctionKind",
+        "https://saref.etsi.org/core/hasFunctionOfInterest",
+        "https://saref.etsi.org/core/hasInput",
+        "https://saref.etsi.org/core/hasMandatoryCommand",
+        "https://saref.etsi.org/core/hasOperation",
+        "https://saref.etsi.org/core/hasOptionalCommand",
+        "https://saref.etsi.org/core/hasOutput",
+        "https://saref.etsi.org/core/hasPhenomenonTime",
+        "https://saref.etsi.org/core/hasProfile",
+        "https://saref.etsi.org/core/hasProperty",
+        "https://saref.etsi.org/core/hasPropertyKind",
+        "https://saref.etsi.org/core/hasPropertyOfInterest",
+        "https://saref.etsi.org/core/hasPropertyValue",
+        "https://saref.etsi.org/core/hasResult",
+        "https://saref.etsi.org/core/hasState",
+        "https://saref.etsi.org/core/hasStateKind",
+        "https://saref.etsi.org/core/hasStateOfInterest",
+        "https://saref.etsi.org/core/hasStateValue",
+        "https://saref.etsi.org/core/isAccomplishedBy",
+        "https://saref.etsi.org/core/isCommandOf",
+        "https://saref.etsi.org/core/isCommandOfInterestOf",
+        "https://saref.etsi.org/core/isConsumedBy",
+        "https://saref.etsi.org/core/isControlledBy",
+        "https://saref.etsi.org/core/isExecutionOf",
+        "https://saref.etsi.org/core/isFunctionOf",
+        "https://saref.etsi.org/core/isFunctionOfInterestOf",
+        "https://saref.etsi.org/core/isMeasuredIn",
+        "https://saref.etsi.org/core/isObservedBy",
+        "https://saref.etsi.org/core/isOfferedBy",
+        "https://saref.etsi.org/core/isOperationOf",
+        "https://saref.etsi.org/core/isProducedBy",
+        "https://saref.etsi.org/core/isProfileOf",
+        "https://saref.etsi.org/core/isPropertyOf",
+        "https://saref.etsi.org/core/isPropertyOfInterestOf",
+        "https://saref.etsi.org/core/isStateOf",
+        "https://saref.etsi.org/core/isStateOfInterestOf",
+        "https://saref.etsi.org/core/isStoredBy",
+        "https://saref.etsi.org/core/isTargetOf",
+        "https://saref.etsi.org/core/isValueOfProperty",
+        "https://saref.etsi.org/core/isValueOfState",
+        "https://saref.etsi.org/core/madeBy",
+        "https://saref.etsi.org/core/madeExecution",
+        "https://saref.etsi.org/core/observes",
+        "https://saref.etsi.org/core/offers",
+        "https://saref.etsi.org/core/produces",
+        "https://saref.etsi.org/core/profileHasPrice",
+        "https://saref.etsi.org/core/represents",
+        "https://saref.etsi.org/core/stores",
+        "https://saref.etsi.org/core/targets",
+        "https://saref.etsi.org/core/whenPropertyValue",
+        "https://saref.etsi.org/core/whenState"
+      ],
+      "datatype_properties": [
+        "https://saref.etsi.org/core/hasIdentifier",
+        "https://saref.etsi.org/core/hasManufacturer",
+        "https://saref.etsi.org/core/hasModel",
+        "https://saref.etsi.org/core/hasResultTime",
+        "https://saref.etsi.org/core/hasRevisionNumber",
+        "https://saref.etsi.org/core/hasTimestamp",
+        "https://saref.etsi.org/core/hasValue",
+        "https://saref.etsi.org/core/hasVersion"
+      ],
+      "anonymous_class_expressions": 41,
+      "labels": {
+        "http://www.w3.org/2006/time#TemporalEntity": [],
+        "http://www.w3.org/2006/time#TemporalPosition": [],
+        "https://saref.etsi.org/core/Actuation": [
+          "Actuation"
+        ],
+        "https://saref.etsi.org/core/Actuator": [
+          "Actuator"
+        ],
+        "https://saref.etsi.org/core/Appliance": [
+          "Appliance"
+        ],
+        "https://saref.etsi.org/core/Command": [
+          "Command"
+        ],
+        "https://saref.etsi.org/core/CommandExecution": [
+          "Command Execution"
+        ],
+        "https://saref.etsi.org/core/CommandOfInterest": [
+          "Command Of Interest"
+        ],
+        "https://saref.etsi.org/core/Commodity": [
+          "Commodity"
+        ],
+        "https://saref.etsi.org/core/Device": [
+          "Device"
+        ],
+        "https://saref.etsi.org/core/DeviceKind": [
+          "Device kinds"
+        ],
+        "https://saref.etsi.org/core/FeatureKind": [
+          "Feature kinds"
+        ],
+        "https://saref.etsi.org/core/FeatureOfInterest": [
+          "Feature of interest"
+        ],
+        "https://saref.etsi.org/core/Function": [
+          "Function"
+        ],
+        "https://saref.etsi.org/core/FunctionOfInterest": [
+          "Function of Interest"
+        ],
+        "https://saref.etsi.org/core/Meter": [
+          "Meter"
+        ],
+        "https://saref.etsi.org/core/Observation": [
+          "Observation"
+        ],
+        "https://saref.etsi.org/core/Operation": [
+          "Operation"
+        ],
+        "https://saref.etsi.org/core/OperationExecution": [
+          "Operation Execution"
+        ],
+        "https://saref.etsi.org/core/ProcedureExecution": [
+          "Procedure Execution"
+        ],
+        "https://saref.etsi.org/core/Profile": [
+          "Profile"
+        ],
+        "https://saref.etsi.org/core/Property": [
+          "Property"
+        ],
+        "https://saref.etsi.org/core/PropertyOfInterest": [
+          "Property of Interest"
+        ],
+        "https://saref.etsi.org/core/PropertyValue": [
+          "Property Value"
+        ],
+        "https://saref.etsi.org/core/Sensor": [
+          "Sensor"
+        ],
+        "https://saref.etsi.org/core/Service": [
+          "Service"
+        ],
+        "https://saref.etsi.org/core/State": [
+          "State"
+        ],
+        "https://saref.etsi.org/core/StateOfInterest": [
+          "State of Interest"
+        ],
+        "https://saref.etsi.org/core/StateValue": [
+          "State Value"
+        ],
+        "https://saref.etsi.org/core/Task": [
+          "Task"
+        ],
+        "https://saref.etsi.org/core/UnitOfMeasure": [
+          "Unit of measure"
+        ],
+        "https://saref.etsi.org/saref4syst/System": []
+      }
+    }
+  ]
+}

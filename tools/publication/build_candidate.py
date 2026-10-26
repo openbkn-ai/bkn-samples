@@ -20,7 +20,7 @@ from installer.remote_bundle import MAX_ARCHIVE
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
 NOTE = re.compile(r"release-notes\.([a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*)\.md")
-DIRECTORIES = {"data", "db", "kn", "platform", "skills", "tools", "docs", "scripts", "iof-reference", "fibo-reference"}
+DIRECTORIES = {"data", "db", "kn", "platform", "skills", "tools", "docs", "scripts", "iof-reference", "fibo-reference", "saref-reference"}
 FILES = {"sample.yaml", "README.md", "LICENSE", "LICENSE.md", "run.sh", "dataset.lock",
          "vega_sql_execute.openapi.json", "model-contract.json"}
 

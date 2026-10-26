@@ -1,0 +1,30 @@
+---
+type: object_type
+id: devices
+name: Flexible Device
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Flexible Device
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| device_id | Device id | string | Stable unique source-row identifier. | device_id |
+| site_id | Site id | string | Explicit foreign-key association; blank creates no edge. | site_id |
+| name | Name | string | Fictional business value with equivalent bilingual meaning. | name |
+| device_type | Device type | string | Fictional business value with equivalent bilingual meaning. | device_type |
+| device_type_code | Device type code | string | Stable English code; paired display field is localized. | device_type_code |
+| max_reduction_kw | Max reduction kw | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | max_reduction_kw |
+| min_service_kw | Min service kw | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | min_service_kw |
+| status | Status | string | Fictional business value with equivalent bilingual meaning. | status |
+| status_code | Status code | string | Stable English code; paired display field is localized. | status_code |
+
+### Keys
+
+Primary Keys: device_id
+Display Key: name
+Incremental Key:

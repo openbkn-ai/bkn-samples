@@ -1,0 +1,31 @@
+---
+type: object_type
+id: device_constraints
+name: 设备约束
+tags: [energy, saref4ener]
+---
+
+## ObjectType: 设备约束
+
+本地运营对象；来源概念参考不构成OWL等价声明。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| constraint_id | 约束标识 | string | 稳定唯一源记录标识。 | constraint_id |
+| device_id | 设备标识 | string | 显式外键关联；空值不创建关系。 | device_id |
+| block_code | 响应时段 | string | 稳定英文代码；展示值在对应字段本地化。 | block_code |
+| effective_from | 生效起日 | date | 仅日期；受业务日与知识截止日约束。 | effective_from |
+| effective_to | 生效止日 | date | 仅日期；受业务日与知识截止日约束。 | effective_to |
+| constraint_type | 约束类型 | string | 与另一语言事实等价的虚构业务值。 | constraint_type |
+| constraint_type_code | 约束类型代码 | string | 稳定英文代码；展示值在对应字段本地化。 | constraint_type_code |
+| cap_kw | 约束上限 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | cap_kw |
+| reason | 原因 | string | 与另一语言事实等价的虚构业务值。 | reason |
+| known_date | 知识日期 | date | 仅日期；受业务日与知识截止日约束。 | known_date |
+
+### Keys
+
+Primary Keys: constraint_id
+Display Key: constraint_id
+Incremental Key:

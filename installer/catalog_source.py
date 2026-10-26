@@ -58,8 +58,12 @@ def pinned_url(url: str) -> None:
 
 class OfficialCatalog:
     def __init__(self, state_dir: Path, schema_path: Path, catalog_url: str | None = None,
-                 *, bundled_catalog: Path | None = None):
-        self.path = state_dir / "catalogs" / "official.json"
+                 *, bundled_catalog: Path | None = None, platform_version: str | None = None):
+        if platform_version is not None and not re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", platform_version):
+            raise ValueError("catalog requires an exact product version")
+        self.platform_version = platform_version
+        self.relative_path = f"catalogs/{platform_version}/catalog.json" if platform_version else "catalog.json"
+        self.path = state_dir / "catalogs" / (platform_version or "") / "official.json"
         self.lock = threading.Lock()
         self.refresh_lock = threading.Lock()
         self.last_attempt = -60.0
@@ -67,7 +71,7 @@ class OfficialCatalog:
         if self.catalog_url:
             pinned_url(self.catalog_url)
             parts = self.catalog_url[len(RAW_PREFIX):].split("/")
-            if len(parts) != 2 or parts[1] != "catalog.json" or not SHA.fullmatch(parts[0]):
+            if "/".join(parts[1:]) != self.relative_path or not SHA.fullmatch(parts[0]):
                 raise ValueError("pinned catalog URL must identify an official commit")
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
         self.validator = Draft202012Validator(schema, format_checker=FormatChecker())
@@ -96,6 +100,8 @@ class OfficialCatalog:
             raise ValueError("catalog has expired")
         if metadata["sourceId"] != "openbkn-official" or metadata["channel"] != "stable":
             raise ValueError("expected official stable catalog")
+        if metadata.get("productVersion") != self.platform_version:
+            raise ValueError("catalog product version differs")
         entries = catalog["spec"]["entries"]
         if len(entries) > 500:
             raise ValueError("catalog contains too many releases")
@@ -114,7 +120,8 @@ class OfficialCatalog:
     def metadata(self) -> dict:
         with self.lock:
             return {"supported": True, "lastSuccessfulRefreshAt": (self.cache or {}).get("fetchedAt"),
-                    "revision": (self.cache or {}).get("commit"), **self.result}
+                    "revision": (self.cache or {}).get("commit"),
+                    "productVersion": self.platform_version, **self.result}
 
     def entries(self) -> list[dict]:
         with self.lock:
@@ -136,7 +143,7 @@ class OfficialCatalog:
                     commit = ref["object"]["sha"]
                     if not isinstance(commit, str) or not SHA.fullmatch(commit):
                         raise ValueError("invalid repository commit")
-                    catalog_url = RAW_PREFIX + commit + "/catalog.json"
+                    catalog_url = RAW_PREFIX + commit + "/" + self.relative_path
                 catalog = json.loads(read_url(catalog_url, 2 * 1024 * 1024), object_pairs_hook=object_pairs)
                 self.validate(catalog)
                 previous = (self.cache or {}).get("catalog")
@@ -184,3 +191,51 @@ class OfficialCatalog:
                     "content": content, "digest": document["digest"]}
         except Exception as error:
             raise ApiError(502, "release_notes_unavailable", "version notes could not be retrieved") from error
+
+
+class ProductCatalog:
+    """Select an isolated directory using the actual product version, never the service tag."""
+
+    def __init__(self, state_dir, schema_path, root, version_provider, catalog_url=None):
+        self.state_dir, self.schema_path, self.root = state_dir, schema_path, root
+        self.version_provider, self.catalog_url = version_provider, catalog_url
+        self.sources = {}
+        self.lock = threading.Lock()
+
+    def source(self):
+        version = self.version_provider()
+        if not isinstance(version, str) or not re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", version):
+            return None
+        with self.lock:
+            if version not in self.sources:
+                try:
+                    source = OfficialCatalog(
+                        self.state_dir, self.schema_path, self.catalog_url,
+                        bundled_catalog=self.root / "catalogs" / version / "catalog.json",
+                        platform_version=version)
+                except ValueError as error:
+                    raise ApiError(409, "catalog_configuration_invalid",
+                                   "catalog configuration does not match the detected product version") from error
+                self.sources[version] = source
+            return self.sources[version]
+
+    def entries(self):
+        source = self.source()
+        return source.entries() if source else []
+
+    def metadata(self):
+        source = self.source()
+        return source.metadata() if source else {
+            "supported": True, "status": "failed", "code": "platform_version_unavailable",
+            "revision": None, "productVersion": None, "checkedAt": None,
+            "lastSuccessfulRefreshAt": None}
+
+    def refresh(self):
+        source = self.source()
+        return source.refresh() if source else self.metadata()
+
+    def notes(self, sample, version, locale):
+        source = self.source()
+        if source is None:
+            raise ApiError(404, "release_notes_unavailable", "product catalog is unavailable")
+        return source.notes(sample, version, locale)

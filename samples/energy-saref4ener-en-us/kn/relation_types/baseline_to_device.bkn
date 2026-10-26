@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: baseline_to_device
+name: Baseline to device
+tags: [energy, saref4ener]
+---
+
+## RelationType: Baseline to device
+
+Explicit foreign key; date equality alone does not create an association.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| baselines | devices | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| device_id | device_id |

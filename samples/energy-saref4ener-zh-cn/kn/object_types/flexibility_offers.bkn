@@ -1,0 +1,32 @@
+---
+type: object_type
+id: flexibility_offers
+name: 柔性申报
+tags: [energy, saref4ener]
+---
+
+## ObjectType: 柔性申报
+
+本地运营对象；来源概念参考不构成OWL等价声明。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| offer_id | 申报标识 | string | 稳定唯一源记录标识。 | offer_id |
+| event_id | 事件标识 | string | 显式外键关联；空值不创建关系。 | event_id |
+| device_id | 设备标识 | string | 显式外键关联；空值不创建关系。 | device_id |
+| offered_kw | 申报功率 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | offered_kw |
+| cost_cny_kwh | 补偿单价 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | cost_cny_kwh |
+| status | 状态 | string | 与另一语言事实等价的虚构业务值。 | status |
+| status_code | 状态代码 | string | 稳定英文代码；展示值在对应字段本地化。 | status_code |
+| valid_from | 有效起日 | date | 仅日期；受业务日与知识截止日约束。 | valid_from |
+| valid_to | 有效止日 | date | 仅日期；受业务日与知识截止日约束。 | valid_to |
+| revision | 修订号 | integer | 与另一语言事实等价的虚构业务值。 | revision |
+| known_date | 知识日期 | date | 仅日期；受业务日与知识截止日约束。 | known_date |
+
+### Keys
+
+Primary Keys: offer_id
+Display Key: offer_id
+Incremental Key:

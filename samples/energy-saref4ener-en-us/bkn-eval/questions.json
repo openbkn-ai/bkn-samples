@@ -1,0 +1,3227 @@
+[
+  {
+    "id": "ENE-001",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what power can each offered device commit under load and equipment constraints? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-002",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what does the maintenance device contribute? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-003",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, which sites own the customer's participating devices? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "customer_id",
+        "meter_ids",
+        "meter_units",
+        "device_type_code"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "customer_id": "identifier/code",
+        "meter_ids": "identifier/code",
+        "meter_units": "identifier/code",
+        "device_type_code": "identifier/code"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-004",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, how does the service floor restrict participation? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-005",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what device power remains under equipment, forecast and baseline constraints? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-006",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what capacity remains after site limits? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-007",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-013, which devices have zero eligibility and why? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-013"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-008",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, EVT-003, EVT-004, how do device capacities and site caps explain aggregate shortfall? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-003",
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-009",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-013, EVT-021, how do blocked resources differ from unknown numeric sources? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-013",
+        "EVT-021"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-010",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, can cross-customer aggregation be traced without duplicate meters? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S01",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "customer_id",
+        "meter_ids",
+        "meter_units",
+        "device_type_code"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "customer_id": "identifier/code",
+        "meter_ids": "identifier/code",
+        "meter_units": "identifier/code",
+        "device_type_code": "identifier/code"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-011",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-061, what march capacity is announced by the default date? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S02",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-061"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-012",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-065, what is the future event target and capacity gap? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S02",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-065"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-013",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-073, what eligible capacity does each announced march offer provide? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S02",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-014",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-19, for EVT-073, what was the assessment at an earlier knowledge cutoff? Give concrete results, units and source evidence, distinguishing unknown from zero. Also compare every field with the same scope at knowledge cutoff 2027-02-28.",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-19"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-015",
+    "question": "As of 2027-02-28 with knowledge through 2027-03-06, for EVT-073, how does a late offer withdrawal change eligible capacity? Give concrete results, units and source evidence, distinguishing unknown from zero. Also compare every field with the same scope at knowledge cutoff 2027-02-28.",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-06"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-016",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-013, can an event with missing required forecast data be declared zero capacity? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-013"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-017",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-013, can an older forecast replace the latest invalid version? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-013"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-018",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-061, EVT-062, can two overlapping events each consume the full forecast capacity? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S02",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-061",
+        "EVT-062"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-019",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-061, EVT-062, can actual delivery and money be established for an announced event that has not occurred? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S02",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-061",
+        "EVT-062"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-020",
+    "question": "As of 2027-02-28 with knowledge through 2027-03-06, for EVT-073, EVT-074, how do historical forecast versions affect shared-resource planning? Give concrete results, units and source evidence, distinguishing unknown from zero. Also compare every field with the same scope at knowledge cutoff 2027-02-28.",
+    "scenario_id": "S02",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-073",
+        "EVT-074"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-06"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-073",
+        "EVT-074"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-021",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what power remains after a maintenance block? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-022",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-011, what device capacity remains after offer validity checks? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-011"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-023",
+    "question": "As of 2027-02-28 with knowledge through 2027-03-06, for EVT-073, does a withdrawn offer contribute? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-06"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-024",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-005, what capacity remains after active caps and service constraints? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-025",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what power remains under service floor, forecast and approved baseline? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-026",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-021, can capacity be determined with conflicting approved baseline revisions? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-021"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-027",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what event capacity remains with explicitly blocked maintenance resources? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-028",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, what shortfall remains under device constraints and site caps? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-029",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-053, EVT-054, how does one unknown input propagate to the block plan? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S03",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-053",
+        "EVT-054"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-030",
+    "question": "As of 2027-02-28 with knowledge through 2027-03-06, for EVT-073, EVT-074, how does a late offer withdrawal affect the shared event plan? Give concrete results, units and source evidence, distinguishing unknown from zero. Also compare every field with the same scope at knowledge cutoff 2027-02-28.",
+    "scenario_id": "S03",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-073",
+        "EVT-074"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-06"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-073",
+        "EVT-074"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-031",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what is eligible capacity after site aggregation? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-032",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, does device capacity exceed the site contract cap? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-033",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, how do sites contribute to event capacity? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "customer_id",
+        "meter_ids",
+        "meter_units",
+        "device_type_code"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "customer_id": "identifier/code",
+        "meter_ids": "identifier/code",
+        "meter_units": "identifier/code",
+        "device_type_code": "identifier/code"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-034",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what event capacity and target gap remain after applying site limits? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-035",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what remains after existing site commitments? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-036",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, is delivered energy derived from device meters? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-037",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-005, what delivery and ratio are reported for a three-hour zero-commitment event? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-038",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, how is shared-meter verified energy prevented from doubling? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-039",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-005, do events on different dates and blocks share one capacity budget? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-040",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-029, EVT-030, which event amounts become unknown when a shared reading is missing? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S04",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-029",
+        "EVT-030"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-041",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, how much power is already committed? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-042",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, how much incremental allocation is needed? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-043",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-004, do unrequested events reserve resources? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "total_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "total_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-044",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, EVT-003, EVT-004, how much does each event receive by priority? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-003",
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-045",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-004, does querying only the lower priority event change its allocation? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-046",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, do cancelled allocations reserve capacity? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-047",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, are existing high-cost commitments preserved? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-048",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, EVT-003, EVT-004, what are event gaps under shared device and site limits? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-003",
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-049",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-057, are excessive commitments silently clamped? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-050",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-057, EVT-058, EVT-059, EVT-060, which same-block event plans become unknown under excessive reservations? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S05",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-057",
+        "EVT-058",
+        "EVT-059",
+        "EVT-060"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-051",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, which new resources are selected and what are their compensation rates and allocations? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-052",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what are incremental power and total cost? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-053",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-097, does a zero-target event get incremental allocation or estimated cost? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-097"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "total_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "total_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-054",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-005, how are equal-cost resources ordered deterministically? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-055",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-005, how is three-hour cost derived from allocated power? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-056",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-004, can another cheap device be used after its site budget is exhausted? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-057",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-004, what total allocation, shortfall and estimated cost follow the current visible sources? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-058",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, EVT-003, EVT-004, how do priority and price jointly determine allocations and cost? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-003",
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-059",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, what is the total cost with expensive commitments and cheaper increments? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-060",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-053, EVT-054, EVT-055, EVT-056, why is a precise minimum cost unsupported with unknown required inputs? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S06",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-053",
+        "EVT-054",
+        "EVT-055",
+        "EVT-056"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-061",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what energy was committed? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-062",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what are verified delivery and the delivery ratio? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-063",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-057, how much delivery is attributed to a failed receipt? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-064",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-033, does a missing receipt establish zero delivery? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-033"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-065",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-005, how does a three-hour event with no commitments report energy and money? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-066",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-004, what delivery and ratio follow actual consumption above the approved baseline? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-067",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-005, can an event with proposals but no commitments establish delivery? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-068",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, how is shared measured response attributed across completed commitments? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-069",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-057, EVT-058, what ratio and compensation follow excessive commitments and failed receipts? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-057",
+        "EVT-058"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-070",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-029, EVT-030, EVT-033, how do missing shared readings and late receipts propagate into finance? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S07",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-029",
+        "EVT-030",
+        "EVT-033"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-071",
+    "question": "As of 2027-02-28 with knowledge through 2027-01-10, for EVT-037, what delivery was known at the earlier cutoff? Give concrete results, units and source evidence, distinguishing unknown from zero. Also compare every field with the same scope at knowledge cutoff 2027-01-20.",
+    "scenario_id": "S08",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-037"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-10"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-037"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-20"
+    }
+  },
+  {
+    "id": "ENE-072",
+    "question": "As of 2027-02-28 with knowledge through 2027-01-20, for EVT-037, what is verified delivery after the late reading? Give concrete results, units and source evidence, distinguishing unknown from zero. Also compare every field with the same scope at knowledge cutoff 2027-01-10.",
+    "scenario_id": "S08",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-037"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-20"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-037"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-10"
+    }
+  },
+  {
+    "id": "ENE-073",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-013, does a bad latest reading fall back to an old revision? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S08",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-013"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-074",
+    "question": "As of 2027-02-28 with knowledge through 2027-03-04, for EVT-057, how does a baseline correction change revenue? Give concrete results, units and source evidence, distinguishing unknown from zero. Also compare every field with the same scope at knowledge cutoff 2027-02-28.",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-04"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-075",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-021, is capacity unknown for conflicting equal revisions? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-021"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-076",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-034, do identical retries double count? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-034"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-077",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-057, can future-known records leak into a historical result? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-078",
+    "question": "As of 2027-02-28 with knowledge through 2027-01-20, for EVT-037, EVT-038, how do delivery and money change with knowledge cutoffs at the same as-of date? Give concrete results, units and source evidence, distinguishing unknown from zero. Also compare every field with the same scope at knowledge cutoff 2027-01-10.",
+    "scenario_id": "S08",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-037",
+        "EVT-038"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-20"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-037",
+        "EVT-038"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-10"
+    }
+  },
+  {
+    "id": "ENE-079",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-021, EVT-022, how does a shared baseline conflict affect multiple settlements? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S08",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-021",
+        "EVT-022"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-080",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-041, why does a same-day ledger conflict preserve known delivery and recomputed revenue? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S08",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-041"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-081",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what revenue is due for a qualifying event? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-082",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, what are customer compensation and net proceeds? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-083",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-025, what is recorded revenue and its recomputation difference? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-025"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "revenue_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "revenue_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-084",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, how is an event settled exactly at its 0.8 threshold and half-cent revenue boundary? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-085",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-057, is customer compensation due below the market threshold? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-086",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-029, how is ledger comparison expressed with only a pending ledger and a missing required reading? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-029"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-087",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-005, how are ratio and money represented for zero commitments? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-088",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, what net follows aggregation and separate cent rounding? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-089",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-001, EVT-002, EVT-057, EVT-058, how do shared energy, different prices and thresholds determine net proceeds? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-057",
+        "EVT-058"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-090",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-041, which financial values remain known and which are unknown under a same-day ledger conflict? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S09",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-041"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-091",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-061, has the future event already earned revenue? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-061"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "status_code",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "status_code": "identifier/code",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-092",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-009, what settlement state is returned for a cancelled event? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-009"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "status_code",
+        "verified_kwh",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "status_code": "identifier/code",
+        "verified_kwh": "kWh",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-093",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-097, what future power is eligible? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-097"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-094",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-017, does recorded capacity match recomputation? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-017"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "snapshot_id",
+        "recorded_eligible_kw",
+        "recomputed_eligible_kw",
+        "difference_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "snapshot_id": "identifier/code",
+        "recorded_eligible_kw": "kW",
+        "recomputed_eligible_kw": "kW",
+        "difference_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-095",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-025, how does a delivery snapshot differ at the same scope? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-025"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "snapshot_id",
+        "recorded_delivery_ratio",
+        "recomputed_delivery_ratio",
+        "difference_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "snapshot_id": "identifier/code",
+        "recorded_delivery_ratio": "ratio",
+        "recomputed_delivery_ratio": "ratio",
+        "difference_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-096",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-029, what evidence supports a missing-measurement investigation? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-029"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-097",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-053, what evidence is needed before deciding an unknown plan? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-053"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-098",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-065, how much does the capacity snapshot differ from recomputation at the same scope? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-065"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "snapshot_id",
+        "recorded_eligible_kw",
+        "recomputed_eligible_kw",
+        "difference_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "snapshot_id": "identifier/code",
+        "recorded_eligible_kw": "kW",
+        "recomputed_eligible_kw": "kW",
+        "difference_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-099",
+    "question": "As of 2027-02-28 with knowledge through 2027-02-28, for EVT-061, EVT-062, EVT-063, EVT-064, how are four competing future events allocated and what gaps remain? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-061",
+        "EVT-062",
+        "EVT-063",
+        "EVT-064"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-100",
+    "question": "As of 2027-02-28 with knowledge through 2027-03-04, for EVT-057, EVT-058, EVT-059, EVT-060, how can offers, commitments, measurement and finance be reconciled end to end? Give concrete results, units and source evidence, distinguishing unknown from zero.",
+    "scenario_id": "S10",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-057",
+        "EVT-058",
+        "EVT-059",
+        "EVT-060"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-04"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  }
+]

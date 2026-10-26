@@ -1,0 +1,51 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1alpha1",
+  "kind": "Sample",
+  "metadata": {
+    "name": "energy-saref4ener-zh-cn",
+    "aliases": [],
+    "displayName": "需求响应与柔性用能",
+    "summary": "合成需求响应评估、共享资源计划与计量结算。",
+    "version": "0.1.5",
+    "language": "zh-CN"
+  },
+  "spec": {
+    "studio": {
+      "licenseNote": "MIT synthetic sample; SAREF4ENER semantic attribution is documented separately.",
+      "questions": [
+        "哪些设备可以参与响应？",
+        "共享场所容量如何分配？",
+        "计量交付是否达到补偿门槛？"
+      ]
+    },
+    "database": {
+      "engine": "mariadb",
+      "name": "energy_saref4ener_zh_cn",
+      "expectedTables": 15
+    },
+    "data": {
+      "mode": "embedded"
+    },
+    "platformVersion": ">=0.2.1 <0.3.0",
+    "knowledgeNetwork": {
+      "id": "energy_saref4ener_zh_cn",
+      "displayName": "需求响应与柔性用能"
+    },
+    "capabilities": {
+      "required": true
+    },
+    "components": {
+      "objects": true,
+      "relations": true,
+      "metrics": true,
+      "functions": true,
+      "skills": true
+    },
+    "hooks": {
+      "dbInit": "db/init.sh",
+      "dbVerify": "db/verify.sh",
+      "platformInstall": "platform/install.sh",
+      "platformVerify": "platform/verify.sh"
+    }
+  }
+}

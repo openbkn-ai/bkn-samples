@@ -1,0 +1,29 @@
+---
+type: object_type
+id: execution_logs
+name: 执行回执
+tags: [energy, saref4ener]
+---
+
+## ObjectType: 执行回执
+
+本地运营对象；来源概念参考不构成OWL等价声明。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| execution_id | 回执标识 | string | 稳定唯一源记录标识。 | execution_id |
+| allocation_id | 分配标识 | string | 显式外键关联；空值不创建关系。 | allocation_id |
+| response_date | 响应日期 | date | 仅日期；受业务日与知识截止日约束。 | response_date |
+| status | 状态 | string | 与另一语言事实等价的虚构业务值。 | status |
+| status_code | 状态代码 | string | 稳定英文代码；展示值在对应字段本地化。 | status_code |
+| reason | 原因 | string | 与另一语言事实等价的虚构业务值。 | reason |
+| revision | 修订号 | integer | 与另一语言事实等价的虚构业务值。 | revision |
+| known_date | 知识日期 | date | 仅日期；受业务日与知识截止日约束。 | known_date |
+
+### Keys
+
+Primary Keys: execution_id
+Display Key: execution_id
+Incremental Key:

@@ -1,0 +1,32 @@
+---
+type: object_type
+id: flexibility_offers
+name: Flexibility Offer
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Flexibility Offer
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| offer_id | Offer id | string | Stable unique source-row identifier. | offer_id |
+| event_id | Event id | string | Explicit foreign-key association; blank creates no edge. | event_id |
+| device_id | Device id | string | Explicit foreign-key association; blank creates no edge. | device_id |
+| offered_kw | Offered kw | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | offered_kw |
+| cost_cny_kwh | Cost cny kwh | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | cost_cny_kwh |
+| status | Status | string | Fictional business value with equivalent bilingual meaning. | status |
+| status_code | Status code | string | Stable English code; paired display field is localized. | status_code |
+| valid_from | Valid from | date | Day-only date governed by business and knowledge cutoffs. | valid_from |
+| valid_to | Valid to | date | Day-only date governed by business and knowledge cutoffs. | valid_to |
+| revision | Revision | integer | Fictional business value with equivalent bilingual meaning. | revision |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoffs. | known_date |
+
+### Keys
+
+Primary Keys: offer_id
+Display Key: offer_id
+Incremental Key:

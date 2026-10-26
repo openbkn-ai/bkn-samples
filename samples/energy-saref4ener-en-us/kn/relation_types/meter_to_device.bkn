@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: meter_to_device
+name: Meter to device
+tags: [energy, saref4ener]
+---
+
+## RelationType: Meter to device
+
+Explicit foreign key; date equality alone does not create an association.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| meters | devices | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| device_id | device_id |

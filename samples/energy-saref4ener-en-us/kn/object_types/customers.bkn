@@ -1,0 +1,25 @@
+---
+type: object_type
+id: customers
+name: Customer
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Customer
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| customer_id | Customer id | string | Stable unique source-row identifier. | customer_id |
+| name | Name | string | Fictional business value with equivalent bilingual meaning. | name |
+| sector | Sector | string | Fictional business value with equivalent bilingual meaning. | sector |
+| sector_code | Sector code | string | Stable English code; paired display field is localized. | sector_code |
+
+### Keys
+
+Primary Keys: customer_id
+Display Key: name
+Incremental Key:

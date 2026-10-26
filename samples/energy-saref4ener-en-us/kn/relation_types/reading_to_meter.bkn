@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: reading_to_meter
+name: Reading to meter
+tags: [energy, saref4ener]
+---
+
+## RelationType: Reading to meter
+
+Explicit foreign key; date equality alone does not create an association.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| meter_readings | meters | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| meter_id | meter_id |

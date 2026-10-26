@@ -1,0 +1,254 @@
+{
+  "default_as_of_date": "2027-02-28",
+  "horizon_date": "2027-03-31",
+  "event_dates": [
+    "2026-11-04",
+    "2026-11-11",
+    "2026-11-18",
+    "2026-11-25",
+    "2026-12-02",
+    "2026-12-09",
+    "2026-12-16",
+    "2026-12-23",
+    "2026-12-30",
+    "2027-01-06",
+    "2027-01-13",
+    "2027-01-20",
+    "2027-01-27",
+    "2027-02-10",
+    "2027-02-24",
+    "2027-03-03",
+    "2027-03-06",
+    "2027-03-09",
+    "2027-03-12",
+    "2027-03-15",
+    "2027-03-18",
+    "2027-03-21",
+    "2027-03-24",
+    "2027-03-27",
+    "2027-03-31"
+  ],
+  "historical_events": 60,
+  "future_events": 40,
+  "records_by_table": {
+    "customers": 50,
+    "sites": 50,
+    "devices": 150,
+    "meters": 150,
+    "response_events": 100,
+    "load_forecasts": 3751,
+    "baselines": 3752,
+    "flexibility_offers": 3001,
+    "device_constraints": 76,
+    "dispatch_allocations": 894,
+    "execution_logs": 341,
+    "meter_readings": 2251,
+    "settlements": 61,
+    "capacity_snapshots": 100,
+    "settlement_snapshots": 60
+  },
+  "anomalies": [
+    {
+      "kind": "missing_constraint_cap",
+      "source_ids": [
+        "CON-076"
+      ],
+      "response_date": "2027-02-10",
+      "device_id": "DEV-061"
+    },
+    {
+      "kind": "latest_invalid_forecast",
+      "source_ids": [
+        "FOR-04-046",
+        "FOR-04-046-R2"
+      ],
+      "device_id": "DEV-046",
+      "response_date": "2026-11-25"
+    },
+    {
+      "kind": "same_revision_baseline_conflict",
+      "source_ids": [
+        "BAS-06-076",
+        "BAS-06-076-CONFLICT"
+      ],
+      "device_id": "DEV-076",
+      "response_date": "2026-12-09"
+    },
+    {
+      "kind": "missing_reading",
+      "source_ids": [
+        "REA-08-106"
+      ],
+      "device_id": "DEV-106",
+      "response_date": "2026-12-23"
+    },
+    {
+      "kind": "identical_reading_retry",
+      "source_ids": [
+        "REA-09-136",
+        "REA-09-136-RETRY"
+      ],
+      "device_id": "DEV-136",
+      "response_date": "2026-12-30"
+    },
+    {
+      "kind": "late_reading_correction",
+      "source_ids": [
+        "REA-10-136",
+        "REA-10-136-R2"
+      ],
+      "device_id": "DEV-136",
+      "response_date": "2027-01-06",
+      "known_date": "2027-01-18"
+    },
+    {
+      "kind": "post_cutoff_baseline_restatement",
+      "source_ids": [
+        "BAS-15-061",
+        "BAS-15-061-R2"
+      ],
+      "device_id": "DEV-061",
+      "response_date": "2027-02-24",
+      "known_date": "2027-03-03"
+    },
+    {
+      "kind": "missing_execution_receipt",
+      "event_id": "EVT-033",
+      "allocation_id": "ALL-0283"
+    },
+    {
+      "kind": "overreserved_block",
+      "event_ids": [
+        "EVT-057",
+        "EVT-058",
+        "EVT-059",
+        "EVT-060"
+      ],
+      "allocation_id": "ALL-0499",
+      "device_id": "DEV-061",
+      "response_date": "2027-02-24"
+    },
+    {
+      "kind": "future_offer_withdrawal",
+      "source_ids": [
+        "OFF-2161",
+        "OFF-2161-R2"
+      ],
+      "event_id": "EVT-073",
+      "known_date": "2027-03-05"
+    },
+    {
+      "kind": "shared_meter_prorata",
+      "response_date": "2026-11-04",
+      "block_code": "peak_a",
+      "shared_devices": [
+        {
+          "device_id": "DEV-016",
+          "meter_id": "MTR-016",
+          "reading_id": "REA-01-016",
+          "allocation_ids": [
+            "ALL-0004",
+            "ALL-0010"
+          ],
+          "event_ids": [
+            "EVT-001",
+            "EVT-002"
+          ],
+          "total_committed_kwh": "12.250000",
+          "observed_reduction_kwh": "9.800000"
+        },
+        {
+          "device_id": "DEV-017",
+          "meter_id": "MTR-017",
+          "reading_id": "REA-01-017",
+          "allocation_ids": [
+            "ALL-0005",
+            "ALL-0011"
+          ],
+          "event_ids": [
+            "EVT-001",
+            "EVT-002"
+          ],
+          "total_committed_kwh": "12.250000",
+          "observed_reduction_kwh": "9.800000"
+        },
+        {
+          "device_id": "DEV-018",
+          "meter_id": "MTR-018",
+          "reading_id": "REA-01-018",
+          "allocation_ids": [
+            "ALL-0006",
+            "ALL-0012"
+          ],
+          "event_ids": [
+            "EVT-001",
+            "EVT-002"
+          ],
+          "total_committed_kwh": "12.250000",
+          "observed_reduction_kwh": "9.800000"
+        }
+      ]
+    },
+    {
+      "kind": "inclusive_threshold_half_cent",
+      "event_id": "EVT-001",
+      "committed_kwh": "37.500000",
+      "verified_kwh": "30.000000",
+      "delivery_ratio": "0.800000",
+      "minimum_ratio": "0.800000",
+      "reward_cny_kwh": "1.200500",
+      "unrounded_revenue_cny": "36.015000000000",
+      "rounded_revenue_cny": "36.02"
+    },
+    {
+      "kind": "load_increase_no_response",
+      "device_id": "DEV-046",
+      "reading_id": "REA-01-046",
+      "response_date": "2026-11-04"
+    },
+    {
+      "kind": "recorded_capacity_drift",
+      "snapshot_id": "CAP-017",
+      "event_id": "EVT-017",
+      "difference_kw": "7.000000"
+    },
+    {
+      "kind": "posted_revenue_drift",
+      "event_id": "EVT-025",
+      "settlement_id": "SET-025",
+      "snapshot_id": "SSP-025",
+      "difference_cny": "5.00"
+    },
+    {
+      "kind": "recorded_capacity_drift",
+      "snapshot_id": "CAP-065",
+      "event_id": "EVT-065",
+      "difference_kw": "7.000000"
+    },
+    {
+      "kind": "recorded_capacity_drift",
+      "snapshot_id": "CAP-091",
+      "event_id": "EVT-091",
+      "difference_kw": "7.000000"
+    },
+    {
+      "kind": "same_day_posted_ledger_conflict",
+      "event_id": "EVT-041",
+      "source_ids": [
+        "SET-041",
+        "SET-041-CONFLICT"
+      ],
+      "posted_date": "2027-01-15",
+      "effect": "Reconciliation unknown; measured delivery and recomputed revenue remain independently known."
+    }
+  ],
+  "data_rules": [
+    "No source numeric answer is generated by or imported from the implementation engine.",
+    "All event names are fictional business response products; dates distinguish real operating observations, not renamed company batches.",
+    "Exactly one device meter per device, no parent/site meter double counting.",
+    "Committed6small allocations/event except EVT005zero commitments; proposed/cancelled rows do not reserve.",
+    "Only EVT057block has explicit over-reservation, confined to4of100events.",
+    "No actual reading, execution or posted settlement is created for March future events.",
+    "Capacity and settlement source snapshots are independently assembled fixture records, with labelled intentional drift."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "operations": [
+    "flexibility_assessment",
+    "dispatch_plan",
+    "settlement_assessment"
+  ],
+  "scope": {
+    "event_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "uniqueItems": true
+    },
+    "as_of_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "knowledge_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "source_max_rows_per_table": 20000,
+  "result_max_bytes": 1048576
+}

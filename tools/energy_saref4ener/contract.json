@@ -1,0 +1,336 @@
+{
+  "version": "0.1.0",
+  "default_as_of_date": "2027-02-28",
+  "horizon_date": "2027-03-31",
+  "languages": [
+    "en-us",
+    "zh-cn"
+  ],
+  "currency": "CNY",
+  "block_durations": {
+    "peak_a": "2",
+    "peak_b": "3"
+  },
+  "object_types": {
+    "customers": {
+      "primary_key": "customer_id",
+      "name_en": "Customer",
+      "name_zh": "用能客户",
+      "fields": {
+        "customer_id": "string",
+        "name": "string",
+        "sector": "string",
+        "sector_code": "string"
+      },
+      "foreign_keys": {}
+    },
+    "sites": {
+      "primary_key": "site_id",
+      "name_en": "Energy Site",
+      "name_zh": "用能场所",
+      "fields": {
+        "site_id": "string",
+        "customer_id": "string",
+        "name": "string",
+        "region": "string",
+        "region_code": "string",
+        "response_cap_kw": "decimal"
+      },
+      "foreign_keys": {
+        "customer_id": [
+          "customers",
+          "customer_id"
+        ]
+      }
+    },
+    "devices": {
+      "primary_key": "device_id",
+      "name_en": "Flexible Device",
+      "name_zh": "柔性设备",
+      "fields": {
+        "device_id": "string",
+        "site_id": "string",
+        "name": "string",
+        "device_type": "string",
+        "device_type_code": "string",
+        "max_reduction_kw": "decimal",
+        "min_service_kw": "decimal",
+        "status": "string",
+        "status_code": "string"
+      },
+      "foreign_keys": {
+        "site_id": [
+          "sites",
+          "site_id"
+        ]
+      }
+    },
+    "meters": {
+      "primary_key": "meter_id",
+      "name_en": "Device Meter",
+      "name_zh": "设备电表",
+      "fields": {
+        "meter_id": "string",
+        "device_id": "string",
+        "name": "string",
+        "unit": "string",
+        "unit_code": "string"
+      },
+      "foreign_keys": {
+        "device_id": [
+          "devices",
+          "device_id"
+        ]
+      }
+    },
+    "response_events": {
+      "primary_key": "event_id",
+      "name_en": "Response Event",
+      "name_zh": "响应事件",
+      "fields": {
+        "event_id": "string",
+        "name": "string",
+        "response_date": "date",
+        "block_code": "string",
+        "duration_hours": "decimal",
+        "target_kw": "decimal",
+        "priority": "integer",
+        "reward_cny_kwh": "decimal",
+        "minimum_ratio": "decimal",
+        "status": "string",
+        "status_code": "string",
+        "announced_date": "date",
+        "known_date": "date"
+      },
+      "foreign_keys": {}
+    },
+    "load_forecasts": {
+      "primary_key": "forecast_id",
+      "name_en": "Load Forecast",
+      "name_zh": "负荷预测",
+      "fields": {
+        "forecast_id": "string",
+        "device_id": "string",
+        "response_date": "date",
+        "block_code": "string",
+        "forecast_kw": "decimal",
+        "quality": "string",
+        "quality_code": "string",
+        "revision": "integer",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "device_id": [
+          "devices",
+          "device_id"
+        ]
+      }
+    },
+    "baselines": {
+      "primary_key": "baseline_id",
+      "name_en": "Approved Baseline",
+      "name_zh": "核定基线",
+      "fields": {
+        "baseline_id": "string",
+        "device_id": "string",
+        "response_date": "date",
+        "block_code": "string",
+        "baseline_kw": "decimal",
+        "quality": "string",
+        "quality_code": "string",
+        "revision": "integer",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "device_id": [
+          "devices",
+          "device_id"
+        ]
+      }
+    },
+    "flexibility_offers": {
+      "primary_key": "offer_id",
+      "name_en": "Flexibility Offer",
+      "name_zh": "柔性申报",
+      "fields": {
+        "offer_id": "string",
+        "event_id": "string",
+        "device_id": "string",
+        "offered_kw": "decimal",
+        "cost_cny_kwh": "decimal",
+        "status": "string",
+        "status_code": "string",
+        "valid_from": "date",
+        "valid_to": "date",
+        "revision": "integer",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "event_id": [
+          "response_events",
+          "event_id"
+        ],
+        "device_id": [
+          "devices",
+          "device_id"
+        ]
+      }
+    },
+    "device_constraints": {
+      "primary_key": "constraint_id",
+      "name_en": "Device Constraint",
+      "name_zh": "设备约束",
+      "fields": {
+        "constraint_id": "string",
+        "device_id": "string",
+        "block_code": "string",
+        "effective_from": "date",
+        "effective_to": "date",
+        "constraint_type": "string",
+        "constraint_type_code": "string",
+        "cap_kw": "decimal",
+        "reason": "string",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "device_id": [
+          "devices",
+          "device_id"
+        ]
+      }
+    },
+    "dispatch_allocations": {
+      "primary_key": "allocation_id",
+      "name_en": "Dispatch Allocation",
+      "name_zh": "响应分配",
+      "fields": {
+        "allocation_id": "string",
+        "event_id": "string",
+        "device_id": "string",
+        "committed_kw": "decimal",
+        "status": "string",
+        "status_code": "string",
+        "planned_date": "date",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "event_id": [
+          "response_events",
+          "event_id"
+        ],
+        "device_id": [
+          "devices",
+          "device_id"
+        ]
+      }
+    },
+    "execution_logs": {
+      "primary_key": "execution_id",
+      "name_en": "Execution Receipt",
+      "name_zh": "执行回执",
+      "fields": {
+        "execution_id": "string",
+        "allocation_id": "string",
+        "response_date": "date",
+        "status": "string",
+        "status_code": "string",
+        "reason": "string",
+        "revision": "integer",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "allocation_id": [
+          "dispatch_allocations",
+          "allocation_id"
+        ]
+      }
+    },
+    "meter_readings": {
+      "primary_key": "reading_id",
+      "name_en": "Meter Reading",
+      "name_zh": "计量读数",
+      "fields": {
+        "reading_id": "string",
+        "meter_id": "string",
+        "response_date": "date",
+        "block_code": "string",
+        "duration_hours": "decimal",
+        "actual_kwh": "decimal",
+        "quality": "string",
+        "quality_code": "string",
+        "revision": "integer",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "meter_id": [
+          "meters",
+          "meter_id"
+        ]
+      }
+    },
+    "settlements": {
+      "primary_key": "settlement_id",
+      "name_en": "Settlement Ledger",
+      "name_zh": "结算台账",
+      "fields": {
+        "settlement_id": "string",
+        "event_id": "string",
+        "posted_date": "date",
+        "revenue_cny": "decimal",
+        "cost_cny": "decimal",
+        "net_cny": "decimal",
+        "status": "string",
+        "status_code": "string",
+        "known_date": "date"
+      },
+      "foreign_keys": {
+        "event_id": [
+          "response_events",
+          "event_id"
+        ]
+      }
+    },
+    "capacity_snapshots": {
+      "primary_key": "snapshot_id",
+      "name_en": "Capacity Snapshot",
+      "name_zh": "能力快照",
+      "fields": {
+        "snapshot_id": "string",
+        "event_id": "string",
+        "as_of_date": "date",
+        "knowledge_date": "date",
+        "eligible_kw": "decimal",
+        "quality": "string",
+        "quality_code": "string"
+      },
+      "foreign_keys": {
+        "event_id": [
+          "response_events",
+          "event_id"
+        ]
+      }
+    },
+    "settlement_snapshots": {
+      "primary_key": "snapshot_id",
+      "name_en": "Settlement Snapshot",
+      "name_zh": "结算快照",
+      "fields": {
+        "snapshot_id": "string",
+        "event_id": "string",
+        "as_of_date": "date",
+        "knowledge_date": "date",
+        "delivery_ratio": "decimal",
+        "revenue_cny": "decimal",
+        "quality": "string",
+        "quality_code": "string"
+      },
+      "foreign_keys": {
+        "event_id": [
+          "response_events",
+          "event_id"
+        ]
+      }
+    }
+  },
+  "language": "en-us"
+}

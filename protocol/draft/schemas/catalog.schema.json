@@ -40,6 +40,11 @@
         "expiresAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "productVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "description": "Exact OpenBKN product version selecting this catalog; absent only in the legacy catalog."
         }
       },
       "required": [

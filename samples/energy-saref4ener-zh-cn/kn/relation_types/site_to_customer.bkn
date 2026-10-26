@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: site_to_customer
+name: 用能场所关联用能客户
+tags: [energy, saref4ener]
+---
+
+## RelationType: 用能场所关联用能客户
+
+显式外键关系；不把日期相同的记录误连。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| sites | customers | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| customer_id | customer_id |

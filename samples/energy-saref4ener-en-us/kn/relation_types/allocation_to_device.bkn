@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: allocation_to_device
+name: Allocation to device
+tags: [energy, saref4ener]
+---
+
+## RelationType: Allocation to device
+
+Explicit foreign key; date equality alone does not create an association.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| dispatch_allocations | devices | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| device_id | device_id |

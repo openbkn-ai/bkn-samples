@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: offer_to_device
+name: 柔性申报关联柔性设备
+tags: [energy, saref4ener]
+---
+
+## RelationType: 柔性申报关联柔性设备
+
+显式外键关系；不把日期相同的记录误连。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| flexibility_offers | devices | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| device_id | device_id |

@@ -1,0 +1,34 @@
+---
+type: object_type
+id: response_events
+name: Response Event
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Response Event
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| event_id | Event id | string | Stable unique source-row identifier. | event_id |
+| name | Name | string | Fictional business value with equivalent bilingual meaning. | name |
+| response_date | Response date | date | Day-only date governed by business and knowledge cutoffs. | response_date |
+| block_code | Block code | string | Stable English code; paired display field is localized. | block_code |
+| duration_hours | Duration hours | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | duration_hours |
+| target_kw | Target kw | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | target_kw |
+| priority | Priority | integer | Fictional business value with equivalent bilingual meaning. | priority |
+| reward_cny_kwh | Reward cny kwh | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | reward_cny_kwh |
+| minimum_ratio | Minimum ratio | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | minimum_ratio |
+| status | Status | string | Fictional business value with equivalent bilingual meaning. | status |
+| status_code | Status code | string | Stable English code; paired display field is localized. | status_code |
+| announced_date | Announced date | date | Day-only date governed by business and knowledge cutoffs. | announced_date |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoffs. | known_date |
+
+### Keys
+
+Primary Keys: event_id
+Display Key: name
+Incremental Key:

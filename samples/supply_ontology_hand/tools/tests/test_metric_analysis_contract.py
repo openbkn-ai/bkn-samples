@@ -43,8 +43,8 @@ def test_complete_consecutive_months_use_standard_typed_filter():
         lower, upper = query["body"]["filter"]["children"]
         assert lower["comparison_operator"] == "gte" and upper["comparison_operator"] == "lt"
         assert lower["left"]["property_ref"]["property_name"] == "signing_date"
-        start = datetime.fromtimestamp(lower["right"][0]["value"] / 1000, zone)
-        end = datetime.fromtimestamp(upper["right"][0]["value"] / 1000, zone)
+        start = datetime.fromisoformat(lower["right"][0]["value"]).replace(tzinfo=zone)
+        end = datetime.fromisoformat(upper["right"][0]["value"]).replace(tzinfo=zone)
         assert start.strftime("%Y-%m") == query["period"]
         assert start.day == end.day == 1
         assert previous is None or start == previous
@@ -81,7 +81,7 @@ def test_calendar_queries_verify_every_month_and_baseline_before_arithmetic():
     # Equal errors preserve all differences, but must fail source totals.
     assert verify_metrics("network", [case], run_cmd=runner(case,[6084,5320,4566,4430]), business_timezone="Asia/Shanghai")["failed"]
     shortened = copy.deepcopy(case)
-    shortened["queries"][2]["body"]["filter"]["children"][1]["right"][0]["value"] -= 86400000
+    shortened["queries"][2]["body"]["filter"]["children"][1]["right"][0]["value"] = "2026-05-31"
     assert verify_metrics("network", [shortened], run_cmd=runner(case,[6083,5319,4517,4429]), business_timezone="Asia/Shanghai")["failed"]
 
 

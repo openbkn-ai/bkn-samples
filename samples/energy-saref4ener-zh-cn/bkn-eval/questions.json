@@ -1,0 +1,3227 @@
+[
+  {
+    "id": "ENE-001",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，当前申报资源按负荷与设备约束逐台能承诺多少功率？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S01",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-002",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，维护设备还能贡献多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S01",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-003",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，客户的设备分别归属哪些场所？请列出各设备归属与电表。",
+    "scenario_id": "S01",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "customer_id",
+        "meter_ids",
+        "meter_units",
+        "device_type_code"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "customer_id": "identifier/code",
+        "meter_ids": "identifier/code",
+        "meter_units": "identifier/code",
+        "device_type_code": "identifier/code"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-004",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，设备服务底线怎样限制参与？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-005",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，设备铭牌、预测和基线约束共同限制后逐台可用多少功率？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-006",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，场所限额后的总能力是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-007",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-013，零能力设备有哪些且为何排除？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S01",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-013"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-008",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002,EVT-003,EVT-004，同一场所多设备的可用功率及总缺口如何对应？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S01",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-003",
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-009",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-013,EVT-021，已知不可参与和缺少数值是否得到不同结论？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S01",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-013",
+        "EVT-021"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-010",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002，跨客户资源聚合能否追溯每台设备而不重复计量？请列出各设备归属与电表。",
+    "scenario_id": "S01",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "customer_id",
+        "meter_ids",
+        "meter_units",
+        "device_type_code"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "customer_id": "identifier/code",
+        "meter_ids": "identifier/code",
+        "meter_units": "identifier/code",
+        "device_type_code": "identifier/code"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-011",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-061，默认日已公告的三月事件有多少可用能力？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S02",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-061"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-012",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-065，未来事件的目标与能力缺口是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S02",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-065"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-013",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-073，三月已知的申报资源逐台可承诺多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S02",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-014",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-19，针对EVT-073，较早知识截止日的评估结果是什么？请列出具体结果、单位及相关来源，说明未知与零的区别。 并与知识截止日2027-02-28的同口径结果逐项对比。",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-19"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-015",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-03-06，针对EVT-073，撤回申报在后到知识口径下怎样改变能力？请列出具体结果、单位及相关来源，说明未知与零的区别。 并与知识截止日2027-02-28的同口径结果逐项对比。",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-06"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-016",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-013，必要预测缺数时能否把事件能力认作零？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-013"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-017",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-013，最新无效预测能否沿用旧版本？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S02",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-013"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-018",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-061,EVT-062，同日两个事件可否分别承诺全部预测能力？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S02",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-061",
+        "EVT-062"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-019",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-061,EVT-062，公告可见而执行日期仍在未来时可否确认实际交付与财务？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S02",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-061",
+        "EVT-062"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-020",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-03-06，针对EVT-073,EVT-074，历史知识与当前知识的预测版本如何影响共享资源安排？请列出具体结果、单位及相关来源，说明未知与零的区别。 并与知识截止日2027-02-28的同口径结果逐项对比。",
+    "scenario_id": "S02",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-073",
+        "EVT-074"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-06"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-073",
+        "EVT-074"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-021",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，维护阻断后设备可用多少功率？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-022",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-011，该事件申报与有效期限制后逐台还可用多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-011"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-023",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-03-06，针对EVT-073，退出申报是否还计入总能力？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-073"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-06"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-024",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-005，有效功率上限及服务限制后逐台能力是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-025",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，设备服务底线、预测和核定基线共同限制的功率是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-026",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-021，同版本核定基线冲突时能力能否确定？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-021"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-027",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，维护已明确阻断资源后事件可用多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-028",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002，多项限制与场所上限共同作用时真正缺口是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-029",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-053,EVT-054，一项必要来源未知会如何传播到同区段计划？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S03",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-053",
+        "EVT-054"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-030",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-03-06，针对EVT-073,EVT-074，晚到申报撤回后共享事件计划如何变化？请列出具体结果、单位及相关来源，说明未知与零的区别。 并与知识截止日2027-02-28的同口径结果逐项对比。",
+    "scenario_id": "S03",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-073",
+        "EVT-074"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-06"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-073",
+        "EVT-074"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-031",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，场所汇总后的能力是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-032",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，设备贡献合计是否超过场所合同上限？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-033",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，不同场所贡献怎样组成事件能力？请列出各设备归属与电表。",
+    "scenario_id": "S04",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "customer_id",
+        "meter_ids",
+        "meter_units",
+        "device_type_code"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "customer_id": "identifier/code",
+        "meter_ids": "identifier/code",
+        "meter_units": "identifier/code",
+        "device_type_code": "identifier/code"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-034",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，场所上限之后事件能力与目标缺口分别是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-035",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，同场所已承诺后还可新增多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-036",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，实际削减电量是否由设备表计算？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-037",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-005，三小时零承诺事件的交付和达成率分别是什么？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-038",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002，多个事件共享电表时总核验量如何避免翻倍？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-039",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-005，不同日期和区段的事件会否共享同一容量预算？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-040",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-029,EVT-030，一个共享表缺测会影响哪些事件金额？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S04",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-029",
+        "EVT-030"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-041",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，当前已承诺功率是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-042",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，还需新增多少才能满足目标？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-043",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-004，未请求事件会占用资源吗？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "total_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "total_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-044",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002,EVT-003,EVT-004，两事件按优先级分别获得多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-003",
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-045",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-004，只问低优先级事件会改变分配吗？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-046",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，计划取消记录是否占用预算？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-047",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，既有高成本承诺是否被保留？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-048",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002,EVT-003,EVT-004，共享设备与场所双重限制下每事件缺口是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-003",
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-049",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-057，超额既有承诺会被截断成可行计划吗？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-050",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-057,EVT-058,EVT-059,EVT-060，超额承诺影响同区段哪些事件的新增与缺口？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S05",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-057",
+        "EVT-058",
+        "EVT-059",
+        "EVT-060"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-051",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，新增采用哪些资源以及各自补偿单价和分配量是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-052",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，此次新增功率与总成本是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-053",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-097，零目标事件是否还新增分配或产生预测成本？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-097"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "total_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "total_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-054",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-005，同价资源如何稳定排序？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-055",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-005，三小时区段成本如何从功率换算？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "new_kw",
+        "total_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-056",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-004，场所预算耗尽后下一台低价设备能用吗？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-057",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-004，按当前已知来源分配后总量、缺口及预计成本是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-058",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002,EVT-003,EVT-004，优先级与价格同时作用后的分配和成本如何解释？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-003",
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-059",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002，已有昂贵承诺和便宜新增并存时总成本是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "device_id",
+        "site_id",
+        "kind",
+        "allocated_kw",
+        "cost_cny_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "device_id": "identifier/code",
+        "site_id": "identifier/code",
+        "kind": "identifier/code",
+        "allocated_kw": "kW",
+        "cost_cny_kwh": "CNY/kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-060",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-053,EVT-054,EVT-055,EVT-056，未知必要输入时为什么不能报出精确最低成本？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S06",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-053",
+        "EVT-054",
+        "EVT-055",
+        "EVT-056"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-061",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，已承诺电量是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-062",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，核验交付与达成率是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-063",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-057，失败回执贡献多少交付？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-064",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-033，缺少回执时能否确认交付为零？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-033"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-065",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-005，三小时事件没有承诺时如何换算交付与财务？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-066",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-004，实际用电高于核定基线时该事件的交付和达成率是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-004"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-067",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-005，只有提案而没有承诺的事件能产生实际交付吗？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-068",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002，同表多事件如何按完成承诺比例归因？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-069",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-057,EVT-058，既有超额承诺与失败回执下的达成率和补偿是什么？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-057",
+        "EVT-058"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-070",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-029,EVT-030,EVT-033，同表缺失读数与迟到回执如何传播到财务？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S07",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-029",
+        "EVT-030",
+        "EVT-033"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-071",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-01-10，针对EVT-037，较早知识截止日的交付是什么？请列出具体结果、单位及相关来源，说明未知与零的区别。 并与知识截止日2027-01-20的同口径结果逐项对比。",
+    "scenario_id": "S08",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-037"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-10"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-037"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-20"
+    }
+  },
+  {
+    "id": "ENE-072",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-01-20，针对EVT-037，晚到读数之后核验量是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。 并与知识截止日2027-01-10的同口径结果逐项对比。",
+    "scenario_id": "S08",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-037"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-20"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-037"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-10"
+    }
+  },
+  {
+    "id": "ENE-073",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-013，最新坏质量读数是否回退旧版本？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S08",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-013"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-074",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-03-04，针对EVT-057，基线更正会怎样改变应收？请列出具体结果、单位及相关来源，说明未知与零的区别。 并与知识截止日2027-02-28的同口径结果逐项对比。",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-04"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    }
+  },
+  {
+    "id": "ENE-075",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-021，同版本冲突的容量是否未知？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-021"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw",
+        "target_kw",
+        "shortfall_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW",
+        "target_kw": "kW",
+        "shortfall_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-076",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-034，重复相同载荷记录会重复计算吗？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-034"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-077",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-057，未来才知道的记录会泄漏到历史结果吗？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S08",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-078",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-01-20，针对EVT-037,EVT-038，同一业务观察日不同知识截止日的交付与金额有何变化？请列出具体结果、单位及相关来源，说明未知与零的区别。 并与知识截止日2027-01-10的同口径结果逐项对比。",
+    "scenario_id": "S08",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-037",
+        "EVT-038"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-20"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    },
+    "reference_scope": {
+      "event_ids": [
+        "EVT-037",
+        "EVT-038"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-01-10"
+    }
+  },
+  {
+    "id": "ENE-079",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-021,EVT-022，共享基线冲突如何影响多个事件的结算？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S08",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-021",
+        "EVT-022"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-080",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-041，同日台账冲突为何不影响已知核验电量和重算应收？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S08",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-041"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-081",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，达标事件的应收是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-082",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，客户补偿与净额是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-083",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-025，已入账应收与重算差额是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-025"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "revenue_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "revenue_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-084",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，恰好达到0.8门槛且应收恰在半分边界时如何结算？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-001"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-085",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-057，未达门槛时客户补偿是否仍需计算？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-057"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-086",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-029，只有待处理台账且缺少必要读数时账面对比如何表达？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-029"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-087",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-005，零承诺时达成率和财务怎样表达？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-005"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-088",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002，先聚合未舍入金额再分别到分会得到什么净额？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-089",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001,EVT-002,EVT-057,EVT-058，共享核验电量、不同单价和门槛怎样共同决定净额？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-001",
+        "EVT-002",
+        "EVT-057",
+        "EVT-058"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-090",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-041，台账同日冲突时哪些财务数值仍可确定且哪些必须未知？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S09",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-041"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-091",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-061，未来事件是否已经产生应收？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-061"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "status_code",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "status_code": "identifier/code",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-092",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-009，取消事件会返回什么结算状态？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-009"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "status_code",
+        "verified_kwh",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "status_code": "identifier/code",
+        "verified_kwh": "kWh",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-093",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-097，未来可承诺功率是多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "easy",
+    "scope": {
+      "event_ids": [
+        "EVT-097"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "eligible_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "eligible_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-094",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-017，记录能力快照与当前重算一致吗？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-017"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "snapshot_id",
+        "recorded_eligible_kw",
+        "recomputed_eligible_kw",
+        "difference_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "snapshot_id": "identifier/code",
+        "recorded_eligible_kw": "kW",
+        "recomputed_eligible_kw": "kW",
+        "difference_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-095",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-025，记录达成率快照与同口径重算相差多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-025"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "snapshot_id",
+        "recorded_delivery_ratio",
+        "recomputed_delivery_ratio",
+        "difference_ratio"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "snapshot_id": "identifier/code",
+        "recorded_delivery_ratio": "ratio",
+        "recomputed_delivery_ratio": "ratio",
+        "difference_ratio": "ratio"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-096",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-029，缺测异常应追溯哪些来源？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-029"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-097",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-053，计划未知时应补什么证据再决策？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "medium",
+    "scope": {
+      "event_ids": [
+        "EVT-053"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-098",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-065，相同观察日与知识截止日的能力快照和重算差多少？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-065"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "snapshot_id",
+        "recorded_eligible_kw",
+        "recomputed_eligible_kw",
+        "difference_kw"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "snapshot_id": "identifier/code",
+        "recorded_eligible_kw": "kW",
+        "recomputed_eligible_kw": "kW",
+        "difference_kw": "kW"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-099",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-061,EVT-062,EVT-063,EVT-064，未来四个竞争事件如何分配且仍有哪些缺口？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-061",
+        "EVT-062",
+        "EVT-063",
+        "EVT-064"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-02-28"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kw",
+        "new_kw",
+        "total_kw",
+        "shortfall_kw",
+        "estimated_cost_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kw": "kW",
+        "new_kw": "kW",
+        "total_kw": "kW",
+        "shortfall_kw": "kW",
+        "estimated_cost_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  },
+  {
+    "id": "ENE-100",
+    "question": "业务观察日为2027-02-28、知识截止日为2027-03-04，针对EVT-057,EVT-058,EVT-059,EVT-060，从申报到计划再到计量和财务应如何完整核对？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+    "scenario_id": "S10",
+    "difficulty": "hard",
+    "scope": {
+      "event_ids": [
+        "EVT-057",
+        "EVT-058",
+        "EVT-059",
+        "EVT-060"
+      ],
+      "as_of_date": "2027-02-28",
+      "knowledge_date": "2027-03-04"
+    },
+    "output_contract": {
+      "fields": [
+        "event_id",
+        "committed_kwh",
+        "verified_kwh",
+        "delivery_ratio",
+        "revenue_cny",
+        "cost_cny",
+        "net_cny",
+        "recorded_revenue_cny",
+        "revenue_difference_cny"
+      ],
+      "filter": {},
+      "units": {
+        "event_id": "identifier/code",
+        "committed_kwh": "kWh",
+        "verified_kwh": "kWh",
+        "delivery_ratio": "ratio",
+        "revenue_cny": "CNY",
+        "cost_cny": "CNY",
+        "net_cny": "CNY",
+        "recorded_revenue_cny": "CNY",
+        "revenue_difference_cny": "CNY"
+      },
+      "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+    }
+  }
+]

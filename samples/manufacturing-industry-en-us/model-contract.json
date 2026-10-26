@@ -1,0 +1,523 @@
+{
+  "version": "0.1.2",
+  "language": "en-us",
+  "object_types": {
+    "bill_of_materials": {
+      "primary_key": "bom_id",
+      "fields": {
+        "bom_id": "string",
+        "bom_version_id": "string",
+        "bom_name": "string",
+        "quantity_basis": "decimal"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "bom_components": {
+      "primary_key": "bom_component_id",
+      "fields": {
+        "bom_component_id": "string",
+        "bom_version_id": "string",
+        "bom_id": "string",
+        "component_product_id": "string",
+        "quantity_per": "decimal",
+        "unit": "string",
+        "scrap_factor": "decimal"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": [
+        "bom_version_id"
+      ]
+    },
+    "customers": {
+      "primary_key": "customer_id",
+      "fields": {
+        "customer_id": "string",
+        "customer_name": "string",
+        "customer_segment": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "demand_forecasts": {
+      "primary_key": "forecast_id",
+      "fields": {
+        "forecast_id": "string",
+        "product_id": "string",
+        "forecast_period": "string",
+        "forecast_quantity": "decimal",
+        "unit": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "equipment_capabilities": {
+      "primary_key": "capability_id",
+      "fields": {
+        "capability_id": "string",
+        "capability_name": "string",
+        "capability_category": "string"
+      },
+      "row_count": 150,
+      "unmodeled_string_columns": []
+    },
+    "finished_goods_receipts": {
+      "primary_key": "finished_goods_receipt_id",
+      "fields": {
+        "finished_goods_receipt_id": "string",
+        "production_order_id": "string",
+        "inspection_lot_id": "string",
+        "inventory_location_id": "string",
+        "received_quantity": "decimal",
+        "receipt_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "goods_receipts": {
+      "primary_key": "goods_receipt_id",
+      "fields": {
+        "goods_receipt_id": "string",
+        "purchase_order_line_id": "string",
+        "product_id": "string",
+        "inventory_location_id": "string",
+        "received_quantity": "decimal",
+        "received_date": "date",
+        "inspection_status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "inventory_balances": {
+      "primary_key": "inventory_balance_id",
+      "fields": {
+        "inventory_balance_id": "string",
+        "inventory_location_id": "string",
+        "product_id": "string",
+        "on_hand_quantity": "decimal",
+        "allocated_quantity": "decimal",
+        "available_quantity": "decimal",
+        "unit": "string",
+        "as_of_date": "date"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "inventory_locations": {
+      "primary_key": "inventory_location_id",
+      "fields": {
+        "inventory_location_id": "string",
+        "site_id": "string",
+        "location_name": "string",
+        "location_type": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "machine_capability_assignments": {
+      "primary_key": "machine_capability_assignment_id",
+      "fields": {
+        "machine_capability_assignment_id": "string",
+        "machine_id": "string",
+        "capability_id": "string",
+        "qualification_status": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "maintenance_plans": {
+      "primary_key": "maintenance_plan_id",
+      "fields": {
+        "maintenance_plan_id": "string",
+        "machine_id": "string",
+        "plan_name": "string",
+        "frequency_days": "integer",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "maintenance_work_orders": {
+      "primary_key": "maintenance_work_order_id",
+      "fields": {
+        "maintenance_work_order_id": "string",
+        "maintenance_plan_id": "string",
+        "machine_id": "string",
+        "planned_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "manufacturing_operations": {
+      "primary_key": "operation_id",
+      "fields": {
+        "operation_id": "string",
+        "production_order_id": "string",
+        "routing_operation_id": "string",
+        "work_center_id": "string",
+        "operation_name": "string",
+        "sequence_number": "integer",
+        "status": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "manufacturing_sites": {
+      "primary_key": "site_id",
+      "fields": {
+        "site_id": "string",
+        "site_name": "string",
+        "site_type": "string",
+        "country_code": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "material_issue_transactions": {
+      "primary_key": "material_issue_transaction_id",
+      "fields": {
+        "material_issue_transaction_id": "string",
+        "material_requirement_id": "string",
+        "production_order_id": "string",
+        "goods_receipt_id": "string",
+        "inventory_location_id": "string",
+        "issued_quantity": "decimal",
+        "issue_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "operator_qualifications": {
+      "primary_key": "operator_qualification_id",
+      "fields": {
+        "operator_qualification_id": "string",
+        "operator_id": "string",
+        "capability_id": "string",
+        "qualification_status": "string",
+        "valid_to": "date"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "operator_shift_assignments": {
+      "primary_key": "operator_shift_assignment_id",
+      "fields": {
+        "operator_shift_assignment_id": "string",
+        "operator_id": "string",
+        "shift_id": "string",
+        "work_center_id": "string",
+        "assignment_status": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "operators": {
+      "primary_key": "operator_id",
+      "fields": {
+        "operator_id": "string",
+        "operator_name": "string",
+        "home_site_id": "string",
+        "employment_status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "process_steps": {
+      "primary_key": "process_step_id",
+      "fields": {
+        "process_step_id": "string",
+        "operation_id": "string",
+        "process_step_name": "string",
+        "sequence_number": "integer",
+        "required_capability_id": "string",
+        "setup_class": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "product_bom_versions": {
+      "primary_key": "bom_version_id",
+      "fields": {
+        "bom_version_id": "string",
+        "product_id": "string",
+        "version_code": "string",
+        "status": "string",
+        "effective_from": "date"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "production_execution_records": {
+      "primary_key": "execution_record_id",
+      "fields": {
+        "execution_record_id": "string",
+        "process_step_id": "string",
+        "machine_id": "string",
+        "operator_id": "string",
+        "started_date": "date",
+        "completed_date": "date",
+        "good_quantity": "decimal",
+        "scrap_quantity": "decimal",
+        "status": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "production_machines": {
+      "primary_key": "machine_id",
+      "fields": {
+        "machine_id": "string",
+        "site_id": "string",
+        "work_center_id": "string",
+        "machine_name": "string",
+        "machine_type": "string",
+        "status": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "production_order_material_requirements": {
+      "primary_key": "material_requirement_id",
+      "fields": {
+        "material_requirement_id": "string",
+        "production_order_id": "string",
+        "bom_component_id": "string",
+        "product_id": "string",
+        "required_quantity": "decimal",
+        "issued_quantity": "decimal",
+        "unit": "string",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "production_orders": {
+      "primary_key": "production_order_id",
+      "fields": {
+        "production_order_id": "string",
+        "sales_order_line_id": "string",
+        "product_id": "string",
+        "bom_version_id": "string",
+        "routing_id": "string",
+        "requested_quantity": "decimal",
+        "unit": "string",
+        "due_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "production_plan_lines": {
+      "primary_key": "production_plan_line_id",
+      "fields": {
+        "production_plan_line_id": "string",
+        "production_plan_id": "string",
+        "forecast_id": "string",
+        "product_id": "string",
+        "site_id": "string",
+        "production_order_id": "string",
+        "planned_quantity": "decimal",
+        "planned_start_date": "date",
+        "planned_completion_date": "date",
+        "scenario_as_of_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "production_plans": {
+      "primary_key": "production_plan_id",
+      "fields": {
+        "production_plan_id": "string",
+        "plan_version": "string",
+        "snapshot_date": "date",
+        "planning_start_date": "date",
+        "planning_end_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "products": {
+      "primary_key": "product_id",
+      "fields": {
+        "product_id": "string",
+        "product_code": "string",
+        "product_name": "string",
+        "product_type": "string",
+        "base_unit": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "purchase_order_lines": {
+      "primary_key": "purchase_order_line_id",
+      "fields": {
+        "purchase_order_line_id": "string",
+        "purchase_order_id": "string",
+        "product_id": "string",
+        "ordered_quantity": "decimal",
+        "unit": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "purchase_orders": {
+      "primary_key": "purchase_order_id",
+      "fields": {
+        "purchase_order_id": "string",
+        "supplier_id": "string",
+        "order_date": "date",
+        "expected_receipt_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "quality_inspection_lots": {
+      "primary_key": "inspection_lot_id",
+      "fields": {
+        "inspection_lot_id": "string",
+        "production_order_id": "string",
+        "product_id": "string",
+        "inspection_type": "string",
+        "lot_quantity": "decimal",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "quality_inspection_results": {
+      "primary_key": "inspection_result_id",
+      "fields": {
+        "inspection_result_id": "string",
+        "inspection_lot_id": "string",
+        "characteristic_name": "string",
+        "measured_value": "decimal",
+        "target_value": "decimal",
+        "lower_limit": "decimal",
+        "upper_limit": "decimal",
+        "result_status": "string",
+        "quality_specification_id": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": [
+        "quality_specification_id"
+      ]
+    },
+    "quality_specifications": {
+      "primary_key": "quality_specification_id",
+      "fields": {
+        "quality_specification_id": "string",
+        "product_id": "string",
+        "characteristic_name": "string",
+        "target_value": "decimal",
+        "lower_limit": "decimal",
+        "upper_limit": "decimal",
+        "effective_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "routing_operations": {
+      "primary_key": "routing_operation_id",
+      "fields": {
+        "routing_operation_id": "string",
+        "routing_id": "string",
+        "operation_code": "string",
+        "operation_name": "string",
+        "sequence_number": "integer",
+        "work_center_id": "string",
+        "required_capability_id": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    },
+    "routings": {
+      "primary_key": "routing_id",
+      "fields": {
+        "routing_id": "string",
+        "product_id": "string",
+        "routing_name": "string",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "sales_order_lines": {
+      "primary_key": "sales_order_line_id",
+      "fields": {
+        "sales_order_line_id": "string",
+        "sales_order_id": "string",
+        "product_id": "string",
+        "ordered_quantity": "decimal",
+        "unit": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "sales_orders": {
+      "primary_key": "sales_order_id",
+      "fields": {
+        "sales_order_id": "string",
+        "customer_id": "string",
+        "order_date": "date",
+        "requested_delivery_date": "date",
+        "status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "shifts": {
+      "primary_key": "shift_id",
+      "fields": {
+        "shift_id": "string",
+        "site_id": "string",
+        "shift_name": "string",
+        "starts_date": "date",
+        "ends_date": "date"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "shipments": {
+      "primary_key": "shipment_id",
+      "fields": {
+        "shipment_id": "string",
+        "sales_order_line_id": "string",
+        "production_order_id": "string",
+        "finished_goods_receipt_id": "string",
+        "shipped_quantity": "decimal",
+        "shipment_date": "date",
+        "delivery_status": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "suppliers": {
+      "primary_key": "supplier_id",
+      "fields": {
+        "supplier_id": "string",
+        "supplier_name": "string",
+        "supplier_category": "string"
+      },
+      "row_count": 50,
+      "unmodeled_string_columns": []
+    },
+    "work_centers": {
+      "primary_key": "work_center_id",
+      "fields": {
+        "work_center_id": "string",
+        "site_id": "string",
+        "work_center_name": "string",
+        "work_center_type": "string"
+      },
+      "row_count": 100,
+      "unmodeled_string_columns": []
+    }
+  }
+}

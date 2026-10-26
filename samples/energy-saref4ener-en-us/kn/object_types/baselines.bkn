@@ -1,0 +1,30 @@
+---
+type: object_type
+id: baselines
+name: Approved Baseline
+tags: [energy, saref4ener]
+---
+
+## ObjectType: Approved Baseline
+
+Local operational object; source concept reference does not assert OWL equivalence.
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| baseline_id | Baseline id | string | Stable unique source-row identifier. | baseline_id |
+| device_id | Device id | string | Explicit foreign-key association; blank creates no edge. | device_id |
+| response_date | Response date | date | Day-only date governed by business and knowledge cutoffs. | response_date |
+| block_code | Block code | string | Stable English code; paired display field is localized. | block_code |
+| baseline_kw | Baseline kw | decimal | Decimal source value; blank is unknown, not zero. Power kW, energy kWh, money CNY; see business contract. | baseline_kw |
+| quality | Quality | string | Fictional business value with equivalent bilingual meaning. | quality |
+| quality_code | Quality code | string | Stable English code; paired display field is localized. | quality_code |
+| revision | Revision | integer | Fictional business value with equivalent bilingual meaning. | revision |
+| known_date | Known date | date | Day-only date governed by business and knowledge cutoffs. | known_date |
+
+### Keys
+
+Primary Keys: baseline_id
+Display Key: baseline_id
+Incremental Key:

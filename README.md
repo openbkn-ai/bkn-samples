@@ -20,29 +20,56 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 
 ## Sample directory
 
+The OpenBKN 0.2.1 update covers **13 standard samples**: one Order Basics sample
+and bilingual pairs for Supply Chain, World Cup, Manufacturing, Financial FIBO,
+Retail GS1 and Energy SAREF4ENER. Energy source is integrated in this change. All
+thirteen are built and checked through one candidate plan, rather than using only
+the previous mainline inventory.
+
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |
-| [Order Basics](samples/order-basics/) | Chinese | A small starting point for orders, products and object relationships | Online catalog |
-| [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Online catalog |
-| [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Online catalog |
-| [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Online catalog |
-| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Online catalog |
-| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | Offline release only; requires OpenBKN ≥ 0.2.1 |
-| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 仅离线发布；要求 OpenBKN ≥ 0.2.1 |
-| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | English | Securities trading, settlement, positions, valuation, issuer concentration and receivable limits; 20 tables, 78,356 records and 100 evaluation questions | Fixed Release 0.2.5; online availability follows the official catalog; requires OpenBKN ≥ 0.2.1 |
-| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | Chinese | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 固定制品0.2.5；在线版本以官方目录为准；要求 OpenBKN ≥ 0.2.1 |
-| [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | English | Receipt inspection, lot traceability, inventory, shared-stock fulfillment, March 2027 replenishment and recall; 15 tables, 2,911 records and 100 questions | Published assets 0.1.0; catalog PR pending; requires OpenBKN ≥ 0.2.1 |
-| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | Chinese | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | 固定制品0.1.0已发布，目录PR待审核；要求OpenBKN ≥ 0.2.1 |
+| [Order Basics](samples/order-basics/) | Chinese | A small starting point for orders, products and object relationships | Existing release 0.1.2; 0.2.1 candidate 0.1.4, platform acceptance pending |
+| [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Existing release 0.1.4; 0.2.1 candidate 0.1.9, platform acceptance pending |
+| [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Existing release 0.1.1; 0.2.1 candidate 0.1.4, platform acceptance pending |
+| [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Existing release 0.1.2; 0.2.1 candidate 0.1.6, platform acceptance pending |
+| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Existing release 0.1.0; 0.2.1 candidate 0.1.2, platform acceptance pending |
+| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | 0.2.1 candidate 0.1.3; self-contained, platform acceptance pending |
+| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 candidate 0.1.3; self-contained, platform acceptance pending |
+| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | English | Securities trading, settlement, positions, valuation, issuer concentration and receivable limits; 20 tables, 78,356 records and 100 evaluation questions | Existing release 0.2.5; 0.2.1 candidate 0.2.6, platform acceptance pending |
+| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | Chinese | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | Existing release 0.2.5; 0.2.1 candidate 0.2.6, platform acceptance pending |
+| [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | English | Receipt inspection, lot traceability, inventory, shared-stock fulfillment, March 2027 replenishment and recall; 15 tables, 2,911 records and 100 questions | Existing release 0.1.0; 0.2.1 candidate 0.1.1, platform acceptance pending |
+| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | Chinese | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | Existing release 0.1.0; 0.2.1 candidate 0.1.1, platform acceptance pending |
+| [Energy demand response (SAREF4ENER)](samples/energy-saref4ener-en-us/) | English | Eligibility, shared-capacity dispatch and metered settlement; 15 tables and 14,787 records | 0.2.1 candidate 0.1.5; self-contained, platform acceptance pending |
+| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | Chinese | Localized model and aligned facts; 3 functions, 2 snapshot metrics and 1 investigation Skill | 0.2.1 candidate 0.1.5; self-contained, platform acceptance pending |
 
-The [official catalog](catalog.json) determines downloadable versions for the published samples.
 
-The two manufacturing samples are intentionally kept out of the official catalog and legacy `020` discovery. Import their fixed offline package only after loading its matching data image into the target cluster; they install independently and can coexist because they use separate databases and knowledge-network IDs.
+The [complete thirteen-package candidate set](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r2) includes every sample
+above. Its [machine-readable plan](tools/publication/candidates-0.2.1.json) is checked
+against source manifests in both directions: missing, duplicate or unregistered
+samples fail the build. Fixed-source SHA-256 candidates are intended for offline
+import into a 0.2.1 test environment after local checks. Real product installation,
+MCP, function and business acceptance remain pending. The earlier nine-package
+candidate set and historical assets remain unchanged.
+
+Published 0.2.0 clients continue to use the root [official catalog](catalog.json).
+The updated sample service selects directories by product version: [0.2.0](catalogs/0.2.0/catalog.json)
+and [0.2.1](catalogs/0.2.1/catalog.json); see [directory selection](docs/product-version-catalogs.md).
+The 0.2.1 directory currently retains existing FIBO/GS1 entries. None of the nine new
+candidates is admitted to a stable directory yet. The OpenBKN 0.2.1 product is not
+formally released; the candidates are intended for offline import into its test environments.
+
+Manufacturing 0.1.3 and Energy 0.1.5 are now included as bilingual, content-only
+shared-MariaDB candidates without sample-specific database images. Manufacturing
+retains its 40 operational tables, 71 relations and IOF reference layer; Energy
+retains its 15 tables, 3 functions, 2 snapshot metrics and investigation Skill.
+See the [source integration record](docs/energy-saref4ener-readiness.md) for local
+validation scope and historical recovery provenance.
 
 The FIBO samples use selected MIT-licensed [FIBO sources](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890) as semantic references and fictional data, rather than claiming full-FIBO coverage. Fixed **[English 0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.5)** and **[Chinese 0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.5)** packages each provide 3 functions, 2 recorded-snapshot metrics and 1 investigation Skill and require **OpenBKN 0.2.1 or later** (`>=0.2.1 <0.3.0`). Version 0.2.5 corrects publication notes and execution-capability requirements; business content and question banks are unchanged. Import the fixed package offline; online availability follows the merged official catalog. Validation of 0.2.5 is limited to fresh installation, compatibility gates and package parity, without new model QA. Historical results remain **96/100 financial fields per language**, **4/4 specified post-fix tool paths (100% of those paths)** and **16/16 representative 0.2.4 technical checks (100% of those checks)**; they are not a new 0.2.5 full-bank accuracy score. See the [0.2.5 release acceptance and limits](docs/financial-fibo-release-0.2.5.zh-CN.md). Historical 0.2.4 and 0.1.x assets remain unchanged.
 
 World Cup data is a locked historical snapshot covering men's editions through 2022 and women's editions through 2019. Detailed coverage varies by table. See each sample's README for its data scope, license and scenario assumptions.
 
-The GS1 samples are two independently installable packages with fictional, aligned bilingual data, three functions, two dated snapshot metrics and one investigation Skill per language. They reference the Apache-2.0 [GS1 Web Vocabulary](https://github.com/gs1/WebVoc), with explicit local operational extensions. On local port 8081, the original single full pass scored **English 96/100 and Chinese 95/100**. After an event-deduplication repair and question-contract corrections, only the prior nonpassing cases were retested: **English 4/4 and Chinese 5/5**, all execution and evidence states complete. The revised full banks were not rerun; this is not a full-bank 100% claim. See the [acceptance report](docs/retail-gs1-acceptance.en-US.md). Source PR #186 is merged. Immutable [English 0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0) and [Chinese 0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.0) assets are published; the follow-up catalog PR remains unmerged. Offline import requires OpenBKN 0.2.1 or later; no legacy 020 bundled index was changed.
+The GS1 samples are two independently installable packages with fictional, aligned bilingual data, three functions, two dated snapshot metrics and one investigation Skill per language. They reference the Apache-2.0 [GS1 Web Vocabulary](https://github.com/gs1/WebVoc), with explicit local operational extensions. On local port 8081, the original single full pass scored **English 96/100 and Chinese 95/100**. After an event-deduplication repair and question-contract corrections, only the prior nonpassing cases were retested: **English 4/4 and Chinese 5/5**, all execution and evidence states complete. The revised full banks were not rerun; this is not a full-bank 100% claim. See the [acceptance report](docs/retail-gs1-acceptance.en-US.md). Source PR #186 is merged. Immutable [English 0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0) and [Chinese 0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.0) assets are published; catalog PR #187 is merged. Offline import requires OpenBKN 0.2.1 or later; no legacy 020 bundled index was changed.
 
 ## Scenario evaluation
 
@@ -76,7 +103,7 @@ samples/<directory>/
 └── releases/<version>/         # Release notes and published artifact metadata
 ```
 
-Add a manifest and standard hooks for a new sample, and update the directory table above; the installer discovers sample identities dynamically. Keep all user-facing sample content in its intended language. Declare only the components actually installed, verify the exact package and fixed data image, and publish immutable release metadata before registering the version in `catalog.json`.
+Add a manifest and standard hooks for a new sample, and update the directory table above; the installer discovers sample identities dynamically. Keep all user-facing sample content in its intended language. Declare only the components actually installed, verify the exact package and its declared runtime dependencies, and publish immutable release metadata before registering it in the corresponding product-version catalog.
 
 Evaluation suites and tests stay in source control. Execution logs, temporary bindings, translation mappings and local work files do not belong in release packages.
 

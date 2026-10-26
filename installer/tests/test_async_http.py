@@ -38,10 +38,14 @@ class AsyncHttpTest(unittest.TestCase):
                     write_json(state / "supply-chain.json", record)
                     finished.set()
                 env = {"BKN_SAMPLES_ROOT": str(ROOT), "BKN_SAMPLE_IMAGE_INDEX": str(ROOT / "manifest-index.json"),
-                       "BKN_SAMPLE_STATE_DIR": str(state)}
+                       "BKN_SAMPLE_STATE_DIR": str(state), "BKN_SAMPLE_PLATFORM_VERSION": "0.2.0"}
                 bundle_index = build_manifest_index(ROOT, "a" * 40)
                 bundle_index["version"] = service_version
-                with patch.dict("os.environ", env), patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
+                directory_entry = next(e for e in json.loads((ROOT / "catalogs/0.2.0/catalog.json").read_text())["spec"]["entries"]
+                                       if e["sampleId"] == "supply-chain" and e["releaseStatus"] == "published")
+                directory_entry["version"] = "0.1.0"
+                with patch("installer.catalog_source.ProductCatalog.entries", return_value=[directory_entry]), \
+                     patch.dict("os.environ", env), patch("installer.studio_http.serve", side_effect=lambda app, *args: apps.append(app)), \
                      patch("installer.studio_api.load_indexes", return_value=(service_version, bundle_index, bundle_index)), \
                      patch("installer.runtime.install_sample", side_effect=run), patch("installer.runtime.retry_sample", side_effect=run):
                     main()

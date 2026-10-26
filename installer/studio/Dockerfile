@@ -43,6 +43,7 @@ COPY samples /opt/bkn-samples/samples
 COPY VERSION /opt/bkn-samples/VERSION
 COPY manifest-index.json /opt/bkn-samples/manifest-index.json
 COPY catalog.json /opt/bkn-samples/catalog.json
+COPY catalogs /opt/bkn-samples/catalogs
 ENV PYTHONPATH=/opt/bkn-samples
 EXPOSE 8080
 CMD ["python3", "-m", "installer.studio_http"]

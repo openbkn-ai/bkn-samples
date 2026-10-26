@@ -1,0 +1,30 @@
+---
+type: object_type
+id: baselines
+name: 核定基线
+tags: [energy, saref4ener]
+---
+
+## ObjectType: 核定基线
+
+本地运营对象；来源概念参考不构成OWL等价声明。
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|---|---|---|---|---|
+| baseline_id | 基线标识 | string | 稳定唯一源记录标识。 | baseline_id |
+| device_id | 设备标识 | string | 显式外键关联；空值不创建关系。 | device_id |
+| response_date | 响应日期 | date | 仅日期；受业务日与知识截止日约束。 | response_date |
+| block_code | 响应时段 | string | 稳定英文代码；展示值在对应字段本地化。 | block_code |
+| baseline_kw | 基线功率 | decimal | 十进制源值；空值为未知，不是零。功率kW、电量kWh、金额CNY；详见业务契约。 | baseline_kw |
+| quality | 质量 | string | 与另一语言事实等价的虚构业务值。 | quality |
+| quality_code | 质量代码 | string | 稳定英文代码；展示值在对应字段本地化。 | quality_code |
+| revision | 修订号 | integer | 与另一语言事实等价的虚构业务值。 | revision |
+| known_date | 知识日期 | date | 仅日期；受业务日与知识截止日约束。 | known_date |
+
+### Keys
+
+Primary Keys: baseline_id
+Display Key: baseline_id
+Incremental Key:
