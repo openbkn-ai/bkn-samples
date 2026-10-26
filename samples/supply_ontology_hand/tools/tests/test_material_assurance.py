@@ -198,3 +198,15 @@ def test_draft_input_structure_is_validated_without_claiming_fact_verification(c
     if change=='bad_quantity':result['gaps'][0]['shortage_qty']=float('nan')
     if change=='inconsistent_count':result['uncovered_qty']=0
     with pytest.raises(CannotCompute):replenishment_draft(result)
+
+
+@pytest.mark.parametrize('method,group', [('Alternate',''), ('unknown','G'), ('替代','')])
+def test_allocation_itself_rejects_invalid_priority_zero_combinations(method,group):
+    # Call the common allocator directly: assurance's preflight must not hide
+    # a different classification policy used by other Functions.
+    from fn.allocation import net_requirements
+    snapshot=build_snapshot({'bom':[{'bom_material_code':'P','bom_level':1,
+        'parent_material_code':'P','material_code':'M','standard_usage':1,
+        'alt_method':method,'alt_group_no':group,'alt_priority':0}],
+        'inventory':[{'material_code':'M','warehouse':'W','available_inventory_qty':10}]})
+    with pytest.raises(CannotCompute):net_requirements(snapshot,'P',1,substitute_enabled=False)

@@ -21,7 +21,7 @@ def finite_quantity(value, label: str, *, positive=False) -> float:
 
 
 def _main(row):
-    return finite_quantity(row.get("alt_priority", 0), 'alternate priority') == 0
+    return is_main_row(row)
 
 
 def _substitute(row):

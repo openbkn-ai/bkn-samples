@@ -25,4 +25,4 @@ Developers can inspect `sample.yaml`, `db/`, `platform/` and [tools/](tools/READ
 
 ## Material assurance / 材料保障
 
-Candidate 0.1.5 adds Material_Assurance and Replenishment_Draft (16 native Functions total). Explicitly choose customer_delivery or new_production; drafts never persist or execute purchases. See [contract and acceptance boundaries](docs/material-assurance.md). Original historical receipts and target-product acceptance remain pending.
+Candidate 0.1.6 adds Material_Assurance and Replenishment_Draft (16 native Functions total). Explicitly choose customer_delivery or new_production; drafts never persist or execute purchases. See [contract and acceptance boundaries](docs/material-assurance.md). Original historical receipts and target-product acceptance remain pending.

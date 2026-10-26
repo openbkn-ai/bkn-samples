@@ -95,7 +95,7 @@ python tools/acceptance/material_assurance.py --language zh-CN --output /tmp/mat
 python tools/acceptance/material_assurance.py --language en-US --output /tmp/material-assurance-en.json
 ```
 
-Source/candidate versions: Supply Chain Chinese **0.1.10**, English **0.1.5**.
+Source/candidate versions: Supply Chain Chinese **0.1.10**, English **0.1.6**.
 They remain outside the formal catalog. Actual 0.2.1 native Function and action
 query/execution receipts, target permissions, Workshop integration and original
 historical replay reconciliation remain pending; #189 is not closed by local tests.
