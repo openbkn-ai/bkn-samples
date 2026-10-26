@@ -41,6 +41,8 @@ def test_bkn_eval_covers_every_published_function_by_its_actual_name():
     published = {spec["name"] for spec in FUNCTION_CATALOG.values()}
 
     assert used <= published
+    assurance = yaml.safe_load((EVAL_DATASETS / "material-assurance-answers-v1.yaml").read_text())
+    used.update(name for answer in assurance["answers"] for name in answer["basis"].get("functions", []))
     assert published <= used
 
 

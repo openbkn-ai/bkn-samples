@@ -30,3 +30,7 @@ Use this Skill for at least two demands. For one fixed demand, call **Demand_Cov
 For a fully specified stock-only question with alternatives and purchases disabled, give a definite yes/no from final leaf shortages. Expand intermediate net shortages first. Multiple demands share stock in input order. Structural overlap does not imply actual contention. For a material with explicit business date, need date and confirmed supply pool, use the on-time coverage fields without speculating about future purchases.
 
 See `references/` where provided for inputs, evidence and reporting.
+
+## Single-demand material assurance
+
+For the stock-only Workshop material-assurance case, use `material_coverage` with an explicit `demand_purpose`: `customer_delivery` allocates finished goods first; `new_production` excludes them. Read the published tool metadata to select its localized name. Return the bounded covered/uncovered quantities, all material gaps, source BOM version and collection provenance. `replenishment_draft` accepts the prior complete coverage result and checks its structure only; it does not re-query facts and returns a proposal only; it does not persist, place purchases or promise delivery. Do not equate a saved-looking draft ID with a stored business record. This path handles one demand; use shared contention for multiple demands.

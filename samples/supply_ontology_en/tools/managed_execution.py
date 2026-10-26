@@ -33,6 +33,8 @@ from fn import (
     theoretical_build,
     total_sellable,
 )
+from fn.material_assurance import material_coverage, replenishment_draft, validate_inputs
+from fn.read_complete import read_complete
 from fn.snapshot import build_snapshot
 from fn.warehouse import resolve_warehouse_scope
 
@@ -102,6 +104,15 @@ def load_bkn_rows(
     """
     params = dict(parameters or {})
     _validate_operation_parameters(operation, params)
+    if operation == "material_coverage":
+        def complete(dataset, condition):
+            return read_complete(query_object_instance, {"kn_id": KN_ID, "ot_id": _OBJECT_TYPES[dataset], "condition": condition}, _page_rows,
+                                 page_size=_PAGE_SIZE, max_rows=_MAX_ROWS_PER_DATASET)
+        product = str(params["product"]).strip()
+        bom = complete("bom", _equal_condition("bom_material_code", product))
+        codes = {product} | {str(r.get("material_code") or "").strip() for r in bom if _is_main_bom_row(r)}
+        inventory = complete("inventory", _in_condition("material_code", sorted(codes)))
+        return {"bom": bom, "inventory": inventory}
     rows_by_dataset: dict[str, list[dict[str, Any]]] = {}
     product_codes = _product_codes(operation, params)
     material_codes = set(product_codes)
@@ -205,7 +216,9 @@ def _load_forecast_by_id(query_object_instance, forecast_id: str) -> list[dict[s
 
 def _validate_operation_parameters(operation: str, params: Mapping[str, Any]) -> None:
     """Reject malformed business inputs before a Function reads BKN facts."""
-    if operation == "shared_contention":
+    if operation == "material_coverage":
+        validate_inputs(params.get("product"), params.get("qty"), params.get("demand_purpose"), params.get("warehouse_scope", "all"))
+    elif operation == "shared_contention":
         demands = params.get("demands")
         if not isinstance(demands, list) or len(demands) < 2:
             raise ValueError(
@@ -549,6 +562,10 @@ def execute_from_bkn_rows(
     product = params.get("product")
     scope = params.get("warehouse_scope", "all")
     substitute = params.get("substitute_enabled")
+    if operation == "replenishment_draft":
+        return {**replenishment_draft(params.get("coverage")), "action_type_id": KN_ID + "_act_replenishment_draft"}
+    if operation == "material_coverage":
+        return material_coverage(snapshot, product, params.get("qty"), demand_purpose=params.get("demand_purpose"), warehouse_scope=scope)
     if operation == "bom_list":
         return bom_list(
             snapshot,

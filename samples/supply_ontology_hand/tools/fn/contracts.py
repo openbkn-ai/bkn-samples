@@ -6,6 +6,8 @@ from collections.abc import Mapping
 
 
 OPERATION_CONTRACTS: Mapping[str, frozenset[str]] = {
+    "material_coverage": frozenset({"bom", "inventory"}),
+    "replenishment_draft": frozenset(),
     "bom_list": frozenset({"bom"}),
     "bom_shared_list": frozenset({"bom"}),
     "material_where_used": frozenset({"bom"}),

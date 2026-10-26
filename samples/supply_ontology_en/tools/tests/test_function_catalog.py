@@ -6,8 +6,10 @@ from __future__ import annotations
 def test_function_catalog_exposes_all_business_operations_with_concise_guidance():
     from function_catalog import FUNCTION_CATALOG
 
-    assert len(FUNCTION_CATALOG) == 14
+    assert len(FUNCTION_CATALOG) == 16
     assert set(FUNCTION_CATALOG) == {
+        "material_coverage",
+        "replenishment_draft",
         "bom_list",
         "bom_shared_list",
         "layered_inventory",

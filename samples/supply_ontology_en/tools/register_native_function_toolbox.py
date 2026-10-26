@@ -31,7 +31,11 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     substitute = _input("substitute_enabled", "boolean", 'Explicit alternate policy required for alternate analysis.')
     substitute_required = _input("substitute_enabled", "boolean", 'Explicitly set substitute_enabled to true or false.', required=True)
     scope = _input("warehouse_scope", "string", 'Warehouse preset or explicit warehouse list.')
+    assurance = [product, _input("qty", "number", "Positive integer demand quantity.", required=True),
+                 _input("demand_purpose", "string", "customer_delivery or new_production; required and never inferred.", required=True), _input("warehouse_scope", "string", "all (default), production_available or finished_goods.")]
     cases = {
+        "material_coverage": assurance,
+        "replenishment_draft": [_input("coverage", "object", "Complete material_coverage result; structure is checked but facts are not requeried. Draft only, no persistence or business writes.", required=True)],
         "bom_list": [product, _input("depth", "number", 'Expansion depth; default one level.'), _input("include_substitute", "boolean", 'Include alternate BOM rows.'), _input("report_grain", "string", 'Report grain; summary gives structure counts and first-level main components; full returns paged details.'), _input("page_size", "number", 'Full-detail page size, from 1 to 500.'), _input("offset", "number", 'Start offset for full details; default 0.')],
         "bom_shared_list": [_input("products", "array", 'At least two product codes.', required=True), _input("depth", "number", 'Expansion depth; default all levels.'), _input("include_substitute", "boolean", 'Include alternate BOM rows.')],
         "material_where_used": [_input("material_code", "string", 'Material code.', required=True), _input("include_substitute", "boolean", 'Include alternate branches in affected products; default true.'), _input("report_grain", "string", 'Report grain; summary by default, full for matching BOM paths.')],
@@ -73,7 +77,7 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
                 "name": "result",
                 "type": "object",
                 "required": True,
-                "description": 'Result, business evidence and runtime data sources read by the function.',
+                "description": ('Draft from supplied coverage: structure checked, not requeried or persisted.' if operation == 'replenishment_draft' else 'Result, business evidence and runtime data sources read by the function.'),
             }
         ],
         }
@@ -162,6 +166,8 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
     if legacy and legacy.get("status") != "disabled":
         _call(["tool", "disable", "--toolbox", box_id, legacy["tool_id"]])
     if kn_id:
+        from bind_draft_action import bind_draft_action
+        bind_draft_action(_call, kn_id, box_id, tool_ids["replenishment_draft"])
         _call(["bkn", "capability", "attach", kn_id, "--box", box_id,
                "--tool", ",".join(tool_ids.values())])
     return {**preview, "box_id": box_id, "tool_ids": tool_ids, "legacy_tool_disabled": bool(legacy)}

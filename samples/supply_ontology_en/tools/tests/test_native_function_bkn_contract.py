@@ -231,8 +231,8 @@ def test_bom_loader_reads_one_complete_root_bom_instead_of_recursive_parent_quer
         if root == "FG-1":
             return {
                 "datas": [
-                    {"bom_material_code": "FG-1", "parent_material_code": "FG-1", "material_code": "MAIN-1", "alt_priority": 0},
-                    {"bom_material_code": "FG-1", "parent_material_code": "FG-1", "material_code": "ALT-1", "alt_priority": 1, "alt_method": 'Alternate'},
+                    {"bom_material_code": "FG-1", "parent_material_code": "FG-1", "material_code": "MAIN-1", "alt_group_no": "G1", "alt_priority": 0},
+                    {"bom_material_code": "FG-1", "parent_material_code": "FG-1", "material_code": "ALT-1", "alt_group_no": "G1", "alt_priority": 1, "alt_method": 'Alternate'},
                     {"bom_material_code": "FG-1", "parent_material_code": "MAIN-1", "material_code": "RAW-1", "alt_priority": 0},
                 ]
             }
