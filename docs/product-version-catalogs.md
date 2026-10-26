@@ -46,3 +46,9 @@ python tools/publication/validate.py . --official --catalog catalogs/0.2.1/catal
 Use `--baseline-catalog` with the previous version of that same product directory
 for immutability checks. The contract workflow checks all product directories.
 The root directory retains its existing validation and publication lifecycle.
+
+A fixed catalog pin that does not match the detected product directory is rejected
+with HTTP 409 / `catalog_configuration_invalid`, including legacy root pins after
+a product upgrade. Update the pin to `catalogs/<actual-version>/catalog.json` at
+a trusted immutable commit. The service does not fetch or fall back to another
+product directory in this case.

@@ -78,6 +78,29 @@ class ProductCatalogTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 OfficialCatalog(self.state, SCHEMA, bad, platform_version='0.2.1')
 
+    def test_mismatched_pin_returns_controlled_error_without_fallback(self):
+        from installer.studio_http import StudioApp, dispatch
+        for path in ('catalog.json', 'catalogs/0.2.0/catalog.json'):
+            source = ProductCatalog(self.state, SCHEMA, ROOT, lambda: '0.2.1',
+                                    RAW_PREFIX + 'a' * 40 + '/' + path)
+            app = StudioApp(
+                catalog=lambda role: {'samples': source.entries()},
+                refresh=lambda role: source.refresh(),
+                create=lambda *args: source.entries(), retry=None, get=None,
+                notes=lambda *args: source.notes('supply-chain', '0.1.9', 'en-US'),
+                authenticate=lambda token: 'admin')
+            routes = [('GET', '/api/studio/samples'), ('POST', '/api/studio/samples/refresh'),
+                      ('POST', '/api/studio/samples/supply-chain/installations'),
+                      ('GET', '/api/studio/samples/supply-chain/versions/0.1.9/release-notes')]
+            with patch('installer.catalog_source.read_url') as network:
+                for method, route in routes:
+                    status, payload = dispatch(app, method, route, None, b'')
+                    self.assertEqual(status, 409)
+                    self.assertEqual(payload['code'], 'catalog_configuration_invalid')
+                    self.assertNotIn(RAW_PREFIX, payload['message'])
+                network.assert_not_called()
+            self.assertEqual(source.sources, {})
+
     def test_product_directory_rejects_rewrite_and_removal_with_advanced_sequence(self):
         original = self.document('0.2.1')
         for change in ('rewrite', 'remove', 'rollback'):

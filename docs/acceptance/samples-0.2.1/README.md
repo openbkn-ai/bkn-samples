@@ -15,7 +15,7 @@ catalogs by this work. Prior package assets and the 0.2.0 root catalog remain in
 
 ## Current local checks
 
-- Installer: 320 tests, OK with one existing skip, including complete-plan, ownership, data/type, references,
+- Installer: 321 tests, OK with one existing skip, including complete-plan, ownership, data/type, references,
   schemas and consumer checks.
 - Manufacturing: each language passes 71 relationship checks, material/BOM and
   shipment gates, 112 IOF reference-instance/link checks, 18 deterministic scenarios

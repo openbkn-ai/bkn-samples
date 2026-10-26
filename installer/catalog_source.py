@@ -208,10 +208,15 @@ class ProductCatalog:
             return None
         with self.lock:
             if version not in self.sources:
-                self.sources[version] = OfficialCatalog(
-                    self.state_dir, self.schema_path, self.catalog_url,
-                    bundled_catalog=self.root / "catalogs" / version / "catalog.json",
-                    platform_version=version)
+                try:
+                    source = OfficialCatalog(
+                        self.state_dir, self.schema_path, self.catalog_url,
+                        bundled_catalog=self.root / "catalogs" / version / "catalog.json",
+                        platform_version=version)
+                except ValueError as error:
+                    raise ApiError(409, "catalog_configuration_invalid",
+                                   "catalog configuration does not match the detected product version") from error
+                self.sources[version] = source
             return self.sources[version]
 
     def entries(self):
