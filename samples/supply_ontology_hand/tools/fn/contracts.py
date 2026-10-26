@@ -6,6 +6,8 @@ from collections.abc import Mapping
 
 
 OPERATION_CONTRACTS: Mapping[str, frozenset[str]] = {
+    # Event types/relations are resolved by the dedicated native adapter.
+    "shortage_rule": frozenset(),
     "material_coverage": frozenset({"bom", "inventory"}),
     "replenishment_draft": frozenset(),
     "bom_list": frozenset({"bom"}),

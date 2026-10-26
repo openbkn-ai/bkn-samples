@@ -23,6 +23,8 @@ def _spec(
 
 
 FUNCTION_CATALOG = {
+    "shortage_rule": _spec("材料缺料事件规则", "shortage_rule", "适用场景：缺料规则求值。输入：已解析的 event_source 与固定 window_start/window_end。结果：已核实需求的缺料候选、证据和可关闭事件 ID；不写入、不调度，由 Workshop 事件入口去重与执行。", minimum_business_inputs=["event_source", "window_start", "window_end"]),
+
     "material_coverage": _spec("材料保障净算", "material_coverage", "适用场景：材料保障基线分析。输入：产品、整数数量、customer_delivery 或 new_production 需求用途、仓范围。结果：需求范围内覆盖套数、逐层分配、全部缺料与 BOM 版本；全仓默认，不计在途、不替代。", minimum_business_inputs=["product", "qty", "demand_purpose"]),
     "replenishment_draft": _spec("生成补货草稿", "replenishment_draft", "适用场景：基于材料缺口起草补货建议。输入：材料保障净算的完整 coverage 结果。结果：仅检查输入结构并返回草稿；事实未重新查询，不保存、不发采购、不执行行动。", minimum_business_inputs=["coverage"]),
 

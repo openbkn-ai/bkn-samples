@@ -34,6 +34,9 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     assurance = [product, _input("qty", "number", "Positive integer demand quantity.", required=True),
                  _input("demand_purpose", "string", "customer_delivery or new_production; required and never inferred.", required=True), _input("warehouse_scope", "string", "all (default), production_available or finished_goods.")]
     cases = {
+        "shortage_rule": [_input("event_source", "object", "Resolved event object/relation IDs, demand/shortage event types and verified/processing/closed lifecycle codes (sample adapter v1).", required=True),
+                          _input("window_start", "string", "Inclusive RFC3339 boundary with explicit timezone; fixed across retries.", required=True),
+                          _input("window_end", "string", "Exclusive RFC3339 boundary with explicit timezone; fixed across retries.", required=True)],
         "material_coverage": assurance,
         "replenishment_draft": [_input("coverage", "object", "Complete material_coverage result; structure is checked but facts are not requeried. Draft only, no persistence or business writes.", required=True)],
         "bom_list": [product, _input("depth", "number", 'Expansion depth; default one level.'), _input("include_substitute", "boolean", 'Include alternate BOM rows.'), _input("report_grain", "string", 'Report grain; summary gives structure counts and first-level main components; full returns paged details.'), _input("page_size", "number", 'Full-detail page size, from 1 to 500.'), _input("offset", "number", 'Start offset for full details; default 0.')],

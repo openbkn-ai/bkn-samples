@@ -23,6 +23,8 @@ def _spec(
 
 
 FUNCTION_CATALOG = {
+    "shortage_rule": _spec("Material_Shortage_Rule", "shortage_rule", "Use case: scheduled shortage evaluation. Input: resolved event_source and fixed window_start/window_end. Result: candidates, evidence and eligible closure IDs; reads verified inputs only, never writes or schedules events.", minimum_business_inputs=["event_source", "window_start", "window_end"]),
+
     "material_coverage": _spec("Material_Assurance", "material_coverage", "Use case: material assurance. Input: product, whole-kit quantity, explicit customer_delivery/new_production purpose, optional scope (all). Result: bounded coverage, allocations, gaps and BOM revision; no incoming supply or alternates.", minimum_business_inputs=["product", "qty", "demand_purpose"]),
     "replenishment_draft": _spec("Replenishment_Draft", "replenishment_draft", "Use case: replenishment proposal. Input: complete material_coverage result. Result: structure-checked supplied evidence in a non-executable draft; no fact re-query, persistence or business writes.", minimum_business_inputs=["coverage"]),
 

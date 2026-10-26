@@ -102,6 +102,7 @@ def load_bkn_rows(
     The injected callable is normally ``bkn.query_object_instance``; keeping it
     explicit makes the query shape independently testable without credentials.
     """
+    if operation == "shortage_rule":raise CannotCompute("shortage_rule requires its dedicated native event adapter")
     params = dict(parameters or {})
     _validate_operation_parameters(operation, params)
     if operation == "material_coverage":
@@ -562,6 +563,7 @@ def execute_from_bkn_rows(
     """
     if operation not in OPERATION_CONTRACTS:
         raise KeyError(f"unknown operation: {operation}")
+    if operation == "shortage_rule":raise CannotCompute("shortage_rule requires its dedicated native event adapter")
     params = dict(parameters)
     snapshot = build_snapshot(dict(rows))
     product = params.get("product")

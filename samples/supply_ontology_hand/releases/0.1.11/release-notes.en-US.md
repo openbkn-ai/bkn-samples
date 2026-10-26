@@ -1,0 +1,3 @@
+# 0.1.11: read-only shortage rule candidate
+
+Add a native rule for verified unprocessed demand events, reusing material coverage. Return stable ingress deduplication components, shortages and evidence, observed eligible closure IDs and preconditions; never write or schedule. Re-read source verification and product associations, defer changed/missing sources or rule implementations, include late verification and older active windows. Requires separately installed event projection and trusted App Spec mappings. Only local synthetic-event/CSV checks are claimed; real Workshop/0.2.1 integration remains pending. Source data, metric definitions and stable catalogs are unchanged.
