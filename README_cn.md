@@ -93,3 +93,5 @@ samples/<directory>/
 - [卸载与重装](docs/sample-uninstall.md)
 - [样例服务部署](docs/sample-service-deployment.md)
 - [设计与文档索引](docs/README.md)
+
+[供应链缺料规则 #190](docs/shortage-rule-190.md)：中文 0.1.11、英文 0.1.7 源码候选；上游事件联调和正式接纳仍待完成。

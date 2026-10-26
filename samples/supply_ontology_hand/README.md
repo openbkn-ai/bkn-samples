@@ -32,3 +32,7 @@
 ## Material assurance / 材料保障
 
 候选 0.1.10 新增“材料保障净算”和“生成补货草稿”，共 16 个原生函数。必须明确 customer_delivery 或 new_production；草稿不保存、不发采购。见[口径与验收边界](docs/material-assurance.md)。原始历史回执及真实产品验收仍待补齐。
+
+## Read-only shortage rule / 只读缺料规则
+
+候选 0.1.11 新增“材料缺料事件规则”，共 17 个原生函数。需先解析并固定受信事件投影配置；函数只返回候选和关闭建议，ID、写入与调度归 Workshop。见[适配契约和待完成联调](docs/shortage-rule.md)。

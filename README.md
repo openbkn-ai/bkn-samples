@@ -114,3 +114,5 @@ Useful guides:
 - [Uninstall and reinstall](docs/sample-uninstall.md)
 - [Sample service deployment](docs/sample-service-deployment.md)
 - [Design and documentation index](docs/README.md)
+
+[Supply shortage rule follow-up #190](docs/shortage-rule-190.md): Chinese 0.1.11 and English 0.1.7 source candidates; upstream event integration and formal admission pending.

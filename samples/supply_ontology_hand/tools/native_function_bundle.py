@@ -68,6 +68,18 @@ def supply_function(coverage: dict) -> dict:
 '''
 
 
+RULE_ENTRY_SOURCE = r'''
+from sandbox_sdk import bkn, tool
+from shortage_rule_runtime import run
+
+@tool
+def supply_function(event_source: dict, window_start: str, window_end: str) -> dict:
+    """Read verified demand events and return proposals; Workshop performs writes."""
+    return run(bkn.query_object_instance, bkn.query_instance_subgraph,
+               event_source, window_start, window_end)
+'''
+
+
 def _archive_source() -> str:
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
@@ -75,6 +87,7 @@ def _archive_source() -> str:
             for file_path in sorted(package.rglob("*.py")):
                 archive.write(file_path, file_path.relative_to(TOOLS))
         archive.write(TOOLS / "managed_execution.py", "managed_execution.py")
+        archive.write(TOOLS / "shortage_rule_runtime.py", "shortage_rule_runtime.py")
     return base64.b64encode(buffer.getvalue()).decode("ascii")
 
 
@@ -98,4 +111,4 @@ def build_native_function_code(*, fixed_operation: str | None = None) -> str:
         sys.path.insert(0, root)
         '''
     )
-    return bootstrap + "\n" + textwrap.dedent(DRAFT_ENTRY_SOURCE if fixed_operation == "replenishment_draft" else ENTRY_SOURCE).lstrip()
+    return bootstrap + "\n" + textwrap.dedent(RULE_ENTRY_SOURCE if fixed_operation == "shortage_rule" else DRAFT_ENTRY_SOURCE if fixed_operation == "replenishment_draft" else ENTRY_SOURCE).lstrip()

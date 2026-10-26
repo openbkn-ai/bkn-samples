@@ -1,0 +1,24 @@
+schema_version: '1.0'
+set_id: shortage-rule-answers-v1
+audience: evaluator_only
+evaluated_agent_access: forbidden
+evidence_kind: local synthetic events and locked CSV only; no target Workshop receipt
+answers:
+- id: SR-01
+  answer:
+    if_test_dependencies_available:
+      covered_qty: 43
+      shortages:
+        468-000282: 17
+        606-000129: 17
+      rule_id: supply.material-shortage
+      rule_version: 1
+      event_ids_created_by_function: false
+      writer: Workshop event ingress
+    if_dependencies_unavailable: explicit unavailable; never invent event rows or
+      return guessed close IDs
+    close_only_if: owned active event with unchanged verified source and fresh full
+      coverage; ingress must revalidate preconditions
+  basis:
+    functions:
+    - Material_Shortage_Rule

@@ -101,3 +101,5 @@ query/execution receipts, target permissions, Workshop integration and original
 historical replay reconciliation remain pending; #189 is not closed by local tests.
 #190 can consume this result contract, but event registration/projection and rule
 scheduling remain dependent on Foundry #2331/#2332.
+
+The subsequent #190 candidate adds a seventeenth Function; see [the rule adapter](shortage-rule.md). Version counts above describe the initial #189 feature.

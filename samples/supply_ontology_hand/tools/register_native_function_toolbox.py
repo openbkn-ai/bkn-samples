@@ -34,6 +34,9 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     assurance = [product, _input("qty", "number", "Positive integer demand quantity.", required=True),
                  _input("demand_purpose", "string", "customer_delivery or new_production; required and never inferred.", required=True), _input("warehouse_scope", "string", "all (default), production_available or finished_goods.")]
     cases = {
+        "shortage_rule": [_input("event_source", "object", "Resolved event object/relation IDs, demand/shortage event types and verified/processing/closed lifecycle codes (sample adapter v1).", required=True),
+                          _input("window_start", "string", "Inclusive RFC3339 boundary with explicit timezone; fixed across retries.", required=True),
+                          _input("window_end", "string", "Exclusive RFC3339 boundary with explicit timezone; fixed across retries.", required=True)],
         "material_coverage": assurance,
         "replenishment_draft": [_input("coverage", "object", "Complete material_coverage result; structure is checked but facts are not requeried. Draft only, no persistence or business writes.", required=True)],
         "bom_list": [product, _input("depth", "number", "展开层数；不传为一层。"), _input("include_substitute", "boolean", "是否包含替代料行。"), _input("report_grain", "string", "结果粒度；默认 summary 返回结构统计和一级主料，传 full 才返回明细。"), _input("page_size", "number", "full 明细的单页行数，1 到 500。"), _input("offset", "number", "full 明细的起始偏移量，默认 0。")],
