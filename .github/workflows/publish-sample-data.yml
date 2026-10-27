@@ -42,7 +42,7 @@ jobs:
         env:
           BUILD_CONTEXT: ${{ inputs.build_context }}
         run: |
-          python -m pip install "PyYAML>=6"
+          python -m pip install "PyYAML>=6" "jsonschema>=4.18,<5"
           PYTHONPATH=. python tools/publication/plan_data_image.py \
             --sample "$SAMPLE" --version "$VERSION" --context "$BUILD_CONTEXT" \
             --github-output "$GITHUB_OUTPUT"
