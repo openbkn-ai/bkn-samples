@@ -127,7 +127,11 @@ class RuntimeTest(unittest.TestCase):
         rendered = json.dumps(view)
         self.assertNotIn(PASSWORD, rendered)
         self.assertNotIn("admin-token", rendered)
-        served = get_sample_experience_set(sample="supply-chain", state_dir=state_dir, actor_role="user")
+        record = json.loads((state_dir / "supply-chain.json").read_text(encoding="utf-8"))
+        record.setdefault("resources", {})["knowledgeNetworkId"] = "supply_ontology_hand"
+        (state_dir / "supply-chain.json").write_text(json.dumps(record), encoding="utf-8")
+        served = get_sample_experience_set(knowledge_network="supply_ontology_hand", state_dir=state_dir,
+                                           actor_role="user")
         self.assertEqual(served["experienceSet"]["kind"], "ExperienceSet")
         self.assertEqual(served["experienceSet"]["metadata"]["language"], "zh-CN")
 

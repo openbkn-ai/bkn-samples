@@ -181,14 +181,24 @@ def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
             "content": document["content"], "digest": document["digest"]}
 
 
-def get_sample_experience_set(*, sample: str, state_dir: Path, actor_role: str) -> dict:
-    """The experience set of the installed version, as the installation recorded it."""
+def get_sample_experience_set(*, knowledge_network: str, state_dir: Path, actor_role: str) -> dict:
+    """The experience set of the installed sample that created this knowledge network.
+
+    Only a successful installation that owns the network answers; any other network, including
+    one with the same id made by hand, has no experience set.
+    """
     _require_role(actor_role)
-    _require_sample(sample)
-    record = _read_state(state_dir, sample)
-    if not record or record.get("status") != "installed" or not isinstance(record.get("experienceSet"), dict):
-        raise ApiError(404, "experience_set_unavailable", "the installed sample has no experience set")
-    return {"sample": sample, "version": record.get("version", ""), "experienceSet": record["experienceSet"]}
+    for path in sorted(state_dir.glob("*.json")) if state_dir.is_dir() else []:
+        try:
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if (isinstance(record, dict) and record.get("status") == "installed"
+                and (record.get("resources") or {}).get("knowledgeNetworkId") == knowledge_network
+                and isinstance(record.get("experienceSet"), dict)):
+            return {"sample": record.get("sample", path.stem), "version": record.get("version", ""),
+                    "knowledgeNetwork": knowledge_network, "experienceSet": record["experienceSet"]}
+    raise ApiError(404, "experience_set_unavailable", "this knowledge network has no sample experience set")
 
 
 def installation_view(record: dict, actor_role: str) -> dict:

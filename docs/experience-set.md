@@ -61,13 +61,13 @@ spec:
 
 ## Reading it after installation
 
-When an installation or retry succeeds, the sample service records that version's experience set with the installation; the package itself is not kept. Studio finds the installed sample whose `knowledgeNetwork.id` is the current network and reads:
+When an installation or retry succeeds, the sample service records that version's experience set with the installation; the package itself is not kept. Studio reads it for the current knowledge network:
 
 ```http
-GET /api/studio/samples/{sample}/experience-set
+GET /api/studio/samples/experience-sets/{knowledgeNetworkId}
 ```
 
-Any signed-in user may read it. The response is `{sample, version, experienceSet}`. A sample that is not installed, failed, or whose installed version has no set returns 404 `experience_set_unavailable`, and Studio shows no experience mode. A set is available only after installing a version that contains it; an older installed version must be reinstalled.
+Any signed-in user may read it. It returns `{sample, version, knowledgeNetwork, experienceSet}` only when a sample installed successfully and its record names this network as the one it created (`resources.knowledgeNetworkId`). Anything else, including a hand-made network with the same id, a failed installation, or an installed version without a set, returns 404 `experience_set_unavailable`, and Studio shows no experience mode. A set is available only after installing a version that contains it; an older installed version must be reinstalled.
 
 ## Comparing expected values with a query result
 

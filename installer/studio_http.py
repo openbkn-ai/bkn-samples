@@ -26,7 +26,7 @@ _GET = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/installatio
 _NOTES = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,63})/versions/(?P<version>[0-9]+\.[0-9]+\.[0-9]+)/release-notes$")
 _UNINSTALL = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/installations/(?P<installation>[^/]+)/uninstall$")
 _OFFLINE_DELETE = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/offline$")
-_EXPERIENCE = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/experience-set$")
+_EXPERIENCE = re.compile(r"^/api/studio/samples/experience-sets/(?P<network>[A-Za-z0-9_-]{1,128})$")
 
 
 def role_from_safe(me_status: int, permissions: dict | None) -> str:
@@ -124,8 +124,8 @@ def _route(method: str, path: str, payload: dict | None = None, locale: str = "z
         return create
     experience = _EXPERIENCE.fullmatch(path)
     if experience and method == "GET":
-        sample = experience.group("sample")
-        return lambda app, role, _authorization: (200, app.experience(sample, role)) if app.experience else (404, {"code": "experience_set_unavailable", "message": "experience set unavailable"})
+        network = experience.group("network")
+        return lambda app, role, _authorization: (200, app.experience(network, role)) if app.experience else (404, {"code": "experience_set_unavailable", "message": "experience set unavailable"})
     notes = _NOTES.fullmatch(path)
     if notes and method == "GET":
         return lambda app, role, _authorization: (200, app.notes(notes.group("sample"), notes.group("version"), role, locale)) if app.notes else (404, {"code": "release_notes_unavailable", "message": "version notes unavailable"})
@@ -601,8 +601,8 @@ def main() -> None:
         uninstall=uninstall,
         installation_history=lambda sample, role: list_sample_installations(
             sample=sample, state_dir=state_dir, actor_role=role),
-        experience_set=lambda sample, role: get_sample_experience_set(
-            sample=sample, state_dir=state_dir, actor_role=role),
+        experience_set=lambda network, role: get_sample_experience_set(
+            knowledge_network=network, state_dir=state_dir, actor_role=role),
     )
     serve(app, os.environ.get("BKN_SAMPLE_HTTP_HOST", "0.0.0.0"), int(os.environ.get("BKN_SAMPLE_HTTP_PORT", "8080")))
 

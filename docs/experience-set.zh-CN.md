@@ -61,13 +61,13 @@ spec:
 
 ## 安装后如何读取
 
-安装或重试成功时，安装服务把该版本的体验集记入安装记录；安装包本身不保留。Studio 先从样例目录中找到 `knowledgeNetwork.id` 与当前知识网络相同、且状态为已安装的样例，再读取：
+安装或重试成功时，安装服务把该版本的体验集记入安装记录；安装包本身不保留。Studio 按当前知识网络读取：
 
 ```http
-GET /api/studio/samples/{sample}/experience-set
+GET /api/studio/samples/experience-sets/{knowledgeNetworkId}
 ```
 
-已登录用户都可以读取。返回 `{sample, version, experienceSet}`。样例未安装、安装失败，或安装的版本没有体验集时，返回 404 `experience_set_unavailable`，Studio 不显示场景体验。体验集只在安装包含它的版本后才可用，已安装的旧版本需要重新安装。
+已登录用户都可以读取。只有某个样例安装成功、且安装记录中它创建的知识网络（`resources.knowledgeNetworkId`）正是该网络时，才返回 `{sample, version, knowledgeNetwork, experienceSet}`。其他情况，包括手工创建的同名网络、安装失败，或已安装版本没有体验集，都返回 404 `experience_set_unavailable`，Studio 不显示场景体验。体验集只在安装包含它的版本后才可用，已安装的旧版本需要重新安装。
 
 ## 期望值与查询结果的比对
 
