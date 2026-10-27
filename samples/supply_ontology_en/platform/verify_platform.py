@@ -45,7 +45,7 @@ def capability_ready(run_cli) -> bool:
     mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
                if item.get("capability_type") == "function" and item.get("box_id") == box["box_id"]}
     if not {enabled[name] for name in expected} <= mounted:return False
-    action = run_cli(["bkn", "action-type", "get", "supply_ontology_en", "supply_ontology_en_act_replenishment_draft"])
+    action = run_cli(["bkn", "action-type", "get", "supply_ontology_en", "supply_ontology_en_act_replen_draft"])
     if isinstance(action, list):
         if len(action) != 1:return False
         action = action[0]

@@ -51,7 +51,7 @@ exhaustion fail rather than becoming a partial success.
 
 ## Draft-only action
 
-`<kn>_act_replenishment_draft` calls the new draft Function with one `coverage` object
+`<kn>_act_replen_draft` calls the new draft Function with one `coverage` object
 from the prior material-assurance calculation. It validates the supplied structure,
 not the underlying facts, and returns a `draft_id`, item quantities,
 source coverage, `status=draft`, `persisted=false`, `executable=false`, and

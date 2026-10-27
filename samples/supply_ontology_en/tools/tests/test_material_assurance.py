@@ -121,14 +121,18 @@ def test_draft_action_binding_is_owned_conflict_checked_and_idempotent(monkeypat
     import bind_draft_action as binder
     import yaml
     manifest=yaml.safe_load((binder.ROOT/'sample.yaml').read_text());kn_id=manifest['spec']['knowledgeNetwork']['id']
-    definition=next(a for a in json.loads((binder.ROOT/'kn'/(kn_id+'.json')).read_text())['action_types'] if a['id'].endswith('_act_replenishment_draft'))
+    definition=next(a for a in json.loads((binder.ROOT/'kn'/(kn_id+'.json')).read_text())['action_types'] if a['id'].endswith('_act_replen_draft'))
+    # Retain compatibility with deployed 0.2.1 builds whose import ID limit is 40.
+    assert len(definition['id']) <= 40
     current=copy.deepcopy(definition);calls=[]
     tags=['bkn-samples','bkn-sample-'+manifest['metadata']['name']]
     monkeypatch.delenv('BKN_SAMPLE_OWNERSHIP_TAGS',raising=False)
     def call(args):
         calls.append(args)
         if args[:2]==['bkn','get']:return {'tags':tags}
-        if args[:3]==['bkn','action-type','get']:return copy.deepcopy(current)
+        if args[:3]==['bkn','action-type','get']:
+            assert args[3:]==[kn_id,definition['id']]
+            return copy.deepcopy(current)
         assert args[0]=='call' and args[3]=='PUT'
         current.update(json.loads(args[5]));return {}
     binder.bind_draft_action(call,kn_id,'box','draft-tool')

@@ -570,7 +570,7 @@ def execute_from_bkn_rows(
     scope = params.get("warehouse_scope", "all")
     substitute = params.get("substitute_enabled")
     if operation == "replenishment_draft":
-        return {**replenishment_draft(params.get("coverage")), "action_type_id": KN_ID + "_act_replenishment_draft"}
+        return {**replenishment_draft(params.get("coverage")), "action_type_id": KN_ID + "_act_replen_draft"}
     if operation == "material_coverage":
         return material_coverage(snapshot, product, params.get("qty"), demand_purpose=params.get("demand_purpose"), warehouse_scope=scope)
     if operation == "bom_list":

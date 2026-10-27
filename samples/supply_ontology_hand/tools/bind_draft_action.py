@@ -25,7 +25,7 @@ def bind_draft_action(call, kn_id, box_id, tool_id):
     tags |= {'bkn-samples', 'bkn-sample-' + manifest['metadata']['name']}
     if not tags <= set(network.get('tags') or []):
         raise ValueError('draft action network ownership conflict')
-    action_id = kn_id + '_act_replenishment_draft'
+    action_id = kn_id + '_act_replen_draft'
     definition = next(a for a in json.loads((ROOT / 'kn' / (kn_id + '.json')).read_text())['action_types'] if a['id'] == action_id)
     current = call(['bkn', 'action-type', 'get', kn_id, action_id])
     if isinstance(current, list):
