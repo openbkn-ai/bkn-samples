@@ -1,0 +1,21 @@
+schema_version: '1.0'
+set_id: material-field-semantics-answers-v1
+audience: evaluator_only
+evaluated_agent_access: forbidden
+evidence_kind: locked sample CSV and field metadata; not a live caller acceptance receipt
+answers:
+- id: MF-01
+  answer:
+    material_code: 382-000005
+    leadtime_days: 1
+    source_field: product_fixedleadtime
+    unit: day
+    group_name: 库存商品-产成品
+    group_type: 406包装成品
+  all_facts_required: true
+  acceptance_rule: 交期、来源字段和两项分类必须全部正确；附加事实标签串位时整体失败，即使交期数值正确。
+  basis:
+    objects: [物料]
+    functions: [标准交期]
+    source: data/erp_material.csv
+    fields: [materialattr, product_fixedleadtime, group_name, group_type]

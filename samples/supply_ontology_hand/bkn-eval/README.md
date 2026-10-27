@@ -75,3 +75,10 @@
 [10月3日函数审查对照](../docs/function-review-followup-2026-10-12.zh-CN.md)记录本轮修复及验收边界。
 
 当前确定性 v3 基线已完成 [8081 独立 MCP 全量验收](baselines/2026-10-12-business-rules-v2/runs/2026-10-12-deterministic-mcp-r2/README.md)：**50/50，100%**；S-01/S-05/S-08 均有确定数值和是/否。239项测试、指标5/5与属性11/11通过，首轮失败证据保留。
+
+## 分类字段与交期附加事实回归（MF-01）
+
+[问题](datasets/material-field-questions-v1.yaml)与[参考答案](datasets/material-field-answers-v1.yaml)
+是独立于冻结核心50题的单项回归。被测Agent只读取问题与已安装的BKN/MCP信息，不能读取答案、CSV或本地函数源码。
+交期和两项分类必须全部正确；把物料分类放到存货类别下时整体失败，不能只按“1天”判通过。
+本地测试只验证元数据、导入载荷和CSV金标一致，不是模型回答或现场MCP验收成绩；实际回答需单独保留并评判。

@@ -1251,7 +1251,7 @@
           "name": "group_name",
           "display_name": "Stock Category",
           "type": "string",
-          "comment": "Subassemblies",
+          "comment": "Stock category, such as Subassemblies or Finished Goods. This is distinct from group_type (Material Category); use this source value when reporting Stock Category.",
           "mapped_field": {
             "name": "group_name",
             "type": "string",
@@ -1276,7 +1276,7 @@
           "name": "group_type",
           "display_name": "Material Category",
           "type": "string",
-          "comment": "Material category description.",
+          "comment": "Source material classification, which may include a category code, such as 406 packed product. This is distinct from group_name (Stock Category); do not report it as Stock Category.",
           "mapped_field": {
             "name": "group_type",
             "type": "string",

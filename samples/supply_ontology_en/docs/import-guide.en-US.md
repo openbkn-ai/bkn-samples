@@ -34,3 +34,10 @@ Read installation failure details, resolve the cause and retry the same installa
 Before installing a new version, uninstall the old sample and wait for cleanup to finish. Uninstallation deletes sample data and user edits. Removing a cached package does not uninstall resources. Contact the administrator if uninstallation is unavailable or cleanup fails.
 
 See the [FAQ](faq.md) for common questions.
+
+## Stock Category and Material Category description update
+
+`group_name` is Stock Category; `group_type` is Material Category. Property names, mappings and source values stay unchanged.
+The source clarification takes effect only when included in a new sample artifact and imported; published releases and frozen acceptance records are unchanged.
+`tools/import_kn.py` reuses an existing managed network and does not overwrite its descriptions on retry. For an existing network, an authorized maintainer should review customizations before explicitly updating these two property descriptions; do not blindly reimport or uninstall it for this change.
+Read back the installed definitions and run [MF-01](../bkn-eval/README.md#classification-and-lead-time-supporting-facts-mf-01). Passing local source tests does not establish that an existing network or caller answer is fixed.

@@ -1,0 +1,21 @@
+schema_version: '1.0'
+set_id: material-field-semantics-answers-v1
+audience: evaluator_only
+evaluated_agent_access: forbidden
+evidence_kind: locked sample CSV and field metadata; not a live caller acceptance receipt
+answers:
+- id: MF-01
+  answer:
+    material_code: 382-000005
+    leadtime_days: 1
+    source_field: product_fixedleadtime
+    unit: day
+    group_name: Finished Goods
+    group_type: 406 packed product
+  all_facts_required: true
+  acceptance_rule: All requested facts must be correct. Swapping either category label fails the answer even when the lead-time number is correct.
+  basis:
+    objects: [Material]
+    functions: [Lead_Time]
+    source: data/erp_material.csv
+    fields: [materialattr, product_fixedleadtime, group_name, group_type]

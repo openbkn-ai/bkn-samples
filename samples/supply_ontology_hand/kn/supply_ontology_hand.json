@@ -1251,7 +1251,7 @@
           "name": "group_name",
           "display_name": "存货类别",
           "type": "string",
-          "comment": "原材料-半成品",
+          "comment": "存货类别名称，例如原材料-半成品、库存商品-产成品。与 group_type（物料分类）不同；回答存货类别时使用本字段的源值。",
           "mapped_field": {
             "name": "group_name",
             "type": "string",
@@ -1276,7 +1276,7 @@
           "name": "group_type",
           "display_name": "物料分类",
           "type": "string",
-          "comment": "物料的类别描述",
+          "comment": "物料分类的源名称，可能包含分类编码，例如406包装成品。与 group_name（存货类别）不同，不得作为存货类别输出。",
           "mapped_field": {
             "name": "group_type",
             "type": "string",
