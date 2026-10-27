@@ -32,6 +32,7 @@ OpenBKN 首页 → **一键体验**：刷新官方样例目录，展开卡片查
 | 函数/接口 | `tools/`：使用既有标准接口注册，验证参数、执行结果和绑定。 |
 | 指标 | 既有 BKN/KN JSON 定义或样例指标资产；安装时创建、绑定，校验真实计算结果。 |
 | Skill | `skills/`：内容、引用文件及依赖函数；安装、发布、挂载并验证业务场景。 |
+| 体验集 | `experience/experience-set.yaml`（可选）：从 `bkn-eval/` 抽取的体验题与参考答案，见 [样例体验集标准](experience-set.zh-CN.md)。 |
 | 版本说明 | `releases/<version>/release-notes.zh-CN.md` 或英文版本：变化、兼容性及限制。 |
 
 仅声明实际交付的组件。安装 hooks 导入包里已有内容，不需要 creator 或生成型 Skill；不要增加样例专属的 Studio/安装服务代码。

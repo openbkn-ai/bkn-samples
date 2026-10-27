@@ -1,0 +1,277 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: zh-CN
+  source: {answerSet: bkn-eval/baselines/2026-10-12-business-rules-v2/answer-set-v3.yaml, setId: supply-business-rules-v3}
+spec:
+  businessDate: '2026-08-25'
+  cases:
+  - id: M-04
+    title: 销售订单总数
+    explanation: 对象计数：按订单号去重统计销售订单。
+    question: 当前销售订单共有多少张？
+    answer: 当前销售订单共有 800 张。
+    expected: {value: 800}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (s:supply_ontology_hand_salesorder)
+        RETURN count(DISTINCT s.sales_order_id) AS value
+  - id: M-06
+    title: 成品仓可用库存
+    explanation: 沿「产品关联库存」找到库存记录，限定三个成品仓后汇总可用数量。
+    question: 产品 382-000005 在三个成品仓的可用库存是多少？
+    answer: 产品 382-000005 在三个成品仓的可用库存为 534。
+    expected: {value: 534}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[:supply_ontology_hand_prod2inv]->(i:supply_ontology_hand_inventory)
+        WHERE i.warehouse IN ['苏州成品仓', '乌鲁木齐成品仓', '哈尔滨成品仓']
+        RETURN sum(i.available_inventory_qty) AS value
+  - id: M-10
+    title: 签约、发货与未发货
+    explanation: 沿「销售订单关联产品」汇总签约和发货数量，再求差。
+    question: 产品 382-000005 已签约多少套、已发货多少套，还有多少套未发货？
+    answer: 产品 382-000005 已签约 1081 套，已发货 1066 套，未发货 15 套。
+    expected: {signing_qty: 1081, shipping_qty: 1066, unshipped_qty: 15}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (s:supply_ontology_hand_salesorder)-[:supply_ontology_hand_so2prod]->(p:supply_ontology_hand_product {material_number: '382-000005'})
+        RETURN sum(s.signing_quantity) AS signing_qty, sum(s.shipping_quantity) AS shipping_qty,
+               sum(s.signing_quantity) - sum(s.shipping_quantity) AS unshipped_qty
+  - id: M-12
+    title: 未关闭需求预测
+    explanation: 沿「产品关联需求预测单」排除已关闭预测单后计数并汇总。
+    question: 产品 U00-000080 当前未关闭的需求预测有多少张、合计多少套？
+    answer: 产品 U00-000080 当前未关闭的需求预测有 12 张，合计 20000 套。
+    expected: {count: 12, qty: 20000}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[:supply_ontology_hand_prod2fcst]->(f:supply_ontology_hand_forecast)
+        WHERE f.closestatus_title <> '已关闭'
+        RETURN count(f) AS count, sum(f.qty) AS qty
+  - id: M-15
+    title: 采购员负责的供应商
+    explanation: 按属性过滤后计数：采购员为杨强云的供应商档案。
+    question: 采购员杨强云负责维护多少家供应商档案？
+    answer: 采购员杨强云负责维护 51 家供应商档案。
+    expected: {value: 51}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (s:supply_ontology_hand_supplier)
+        WHERE s.purchaserid_name = '杨强云'
+        RETURN count(DISTINCT s.supplier_code) AS value
+  - id: F-07
+    title: 标准采购交期
+    explanation: 读取物料的标准采购交期；智能问答通过已发布的「标准交期」函数回答。
+    question: 外购件 606-000989 的标准采购交期是多少天？
+    answer: 外购件 606-000989 的标准采购交期为 14 天。
+    expected: {leadtime_days: 14}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (m:supply_ontology_hand_material {material_code: '606-000989'})
+        RETURN m.purchase_fixedleadtime AS leadtime_days
+  - id: F-01
+    title: 产品的一级主料
+    explanation: 沿「产品关联产品bom」和「产品bom关联物料」展开一层，只取主料、不含替代料。
+    question: 请列出产品 382-000005 的一级主料，不需要库存信息。
+    answer: 产品 382-000005 的一级主料共 9 种：468-000493、468-000530、528-000036、606-000989、606-000990、791-000007、791-000013、791-000015、994-000550。
+    expected:
+      material_codes: [468-000493, 468-000530, 528-000036, 606-000989, 606-000990, 791-000007, 791-000013, 791-000015, 994-000550]
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN DISTINCT m.material_code AS material_codes
+      graph: |-
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN p, r1, b, r2, m
+  - id: R-02
+    title: 一级主料数量
+    explanation: 从产品展开一层 BOM，看清它直接由哪些主料组成。
+    question: 产品 U00-000080 的一级主料有多少种？
+    answer: 产品 U00-000080 的一级主料有 5 种。
+    expected: {count: 5}
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN count(DISTINCT m.material_code) AS count
+      graph: |-
+        MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN p, r1, b, r2, m
+  - id: R-05
+    title: 物料被哪些产品使用
+    explanation: 从物料沿 BOM 关系反查产品，替代料位置也算使用。
+    question: 物料 321-000569 被哪些产品使用？
+    answer: 物料 321-000569 被 P61-000328、P61-000331、P61-000351 三个产品使用。
+    expected:
+      product_codes: [P61-000328, P61-000331, P61-000351]
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product)-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '321-000569'})
+        WHERE b.bom_level >= 1
+        RETURN DISTINCT p.material_number AS product_codes
+      graph: |-
+        MATCH (p:supply_ontology_hand_product)-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '321-000569'})
+        WHERE b.bom_level >= 1
+        RETURN p, r1, b, r2, m
+  - id: R-07
+    title: 通用物料的使用范围
+    explanation: 反查一个通用件被多少产品的 BOM 引用。
+    question: 物料 725-000226 被多少种产品使用？
+    answer: 物料 725-000226 被 30 种产品使用。
+    expected: {count: 30}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product)-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '725-000226'})
+        WHERE b.bom_level >= 1
+        RETURN count(DISTINCT p.material_number) AS count
+  - id: R-08
+    title: 两个产品的共同一级主料
+    explanation: 分别展开两个产品的一层 BOM，同时连到两个产品的物料就是共同主料。
+    question: 产品 382-000005 与 382-000006 的一级主料中，有哪些是共同的？
+    answer: 产品 382-000005 与 382-000006 的共同一级主料有 4 种：468-000493、606-000989、606-000990、994-000550。
+    expected:
+      material_codes: [468-000493, 606-000989, 606-000990, 994-000550]
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product)-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)
+        WHERE p.material_number IN ['382-000005', '382-000006'] AND b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        WITH b.material_code AS material, count(DISTINCT p.material_number) AS products
+        WHERE products = 2
+        RETURN material AS material_codes ORDER BY material_codes
+      graph: |-
+        MATCH (p:supply_ontology_hand_product)-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE p.material_number IN ['382-000005', '382-000006'] AND b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN p, r1, b, r2, m
+  - id: F-02
+    title: 两个产品的共同物料
+    explanation: 比较两个产品完整主料 BOM（不含根、不含替代）的物料交集。
+    question: 产品 382-000005 与 P61-000351 的 完整主料 BOM（不含根、不含替代） 共同物料有多少种？
+    answer: 产品 382-000005 与 P61-000351 的完整主料 BOM 共同物料有 38 种。
+    expected: {shared_count: 38}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product)-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)
+        WHERE p.material_number IN ['382-000005', 'P61-000351'] AND b.bom_level >= 1 AND coalesce(b.alt_priority, 0) = 0
+        WITH b.material_code AS material, count(DISTINCT p.material_number) AS products
+        WHERE products = 2
+        RETURN count(material) AS shared_count
+  - id: F-14
+    title: 完整 BOM 结构规模
+    explanation: 读取完整主料 BOM 结构：非根行数与含根节点数。
+    question: 产品 U00-000080 的完整主料 BOM（不含替代）共有多少条非根行、含根共多少个结构节点？请查询完整结构，不使用净制造倒排节点数代替。
+    answer: 产品 U00-000080 的完整主料 BOM 共有 76 条非根行，含根共 77 个结构节点。
+    expected: {non_root_line_count: 76, node_count: 77}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)
+        WHERE coalesce(b.alt_priority, 0) = 0
+        RETURN sum(CASE WHEN b.bom_level >= 1 THEN 1 ELSE 0 END) AS non_root_line_count, count(b) AS node_count
+  - id: R-09
+    title: 替代料与库存
+    explanation: 在指定父件和替代组内找到替代物料，再沿「物料关联库存」汇总全仓可用库存。
+    question: 产品 382-000005 的父件 588-000620、替代组12中，主料356-000061对应什么替代物料？请返回替代料在全仓可用库存及其单耗，禁止合并其他父件或产品的同号组。
+    answer: 主料 356-000061 可由替代物料 356-000356 替代，单耗为 1，全仓可用库存为 4673。
+    expected:
+      substitutes:
+      - {material_code: 356-000356, available_qty: 4673, usage: 1}
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)-[:supply_ontology_hand_mat2inv]->(i:supply_ontology_hand_inventory)
+        WHERE b.bom_material_code = '382-000005' AND b.parent_material_code = '588-000620'
+          AND b.alt_group_no = '12' AND b.alt_priority > 0
+        RETURN m.material_code AS material_code, sum(i.available_inventory_qty) AS available_qty, b.standard_usage AS usage
+      graph: |-
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)-[r3:supply_ontology_hand_mat2inv]->(i:supply_ontology_hand_inventory)
+        WHERE b.parent_material_code = '588-000620' AND b.alt_group_no = '12' AND i.available_inventory_qty > 0
+        RETURN p, r1, b, r2, m, r3, i
+  - id: F-04
+    title: 可售能力（不用替代料）
+    explanation: 调用可售函数：成品现货加库存支持的再制造数量，制造时逐层先扣组件库存。
+    question: 产品 382-000005 不启用替代料、全仓可用库存、不计PO；请给出成品现货、库存支持再制造数量和合计可售数量。制造时先扣每层组件库存再展开净缺。
+    answer: 产品 382-000005 成品现货 816 套，库存支持再制造 51 套，合计可售 867 套。
+    expected: {fg_qty: 816, theoretical_build_qty: 51, total_sellable_qty: 867}
+    surfaces: [agent]
+  - id: F-15
+    title: 可售能力（启用替代料）
+    explanation: 同一产品启用替代料后再算可售，对比替代料带来的产能。
+    question: 产品 382-000005 启用位置合格替代料、全仓可用库存、不计PO；请给出成品现货、确定分配策略支持再制造数量和合计可售数量。每位置单选候选、不混料，并使用候选自身单耗与共享库存。
+    answer: 启用替代料后，产品 382-000005 成品现货 816 套，库存支持再制造 344 套，合计可售 1160 套。
+    expected: {fg_qty: 816, theoretical_build_qty: 344, total_sellable_qty: 1160}
+    surfaces: [agent]
+  - id: F-10
+    title: 新增需求齐套判断
+    explanation: 调用齐套函数：先扣成品，再逐层扣组件，判断库存能否覆盖。
+    question: 产品 P61-000351 新增 60 套、不启用替代料，默认全仓；先扣成品后按层扣组件，是否有库存缺口及缺口物料数？
+    answer: 库存不能覆盖产品 P61-000351 新增的 60 套需求，最终缺口物料共 3 种。
+    expected: {inventory_covers: false, shortage_material_count: 3}
+    surfaces: [agent]
+  - id: S-01
+    title: 客户需求能否覆盖
+    explanation: 用齐套 Skill 回答客户：给出确定的是/否和叶子缺口明细。
+    question: 客户新增 P61-000351 共60套，不启用替代料，全仓可用库存；只允许使用成品和现有组件/原料，不计PO、不新增采购。按先成品、逐层净扣规则，现有库存能否完整覆盖该需求？列出最终叶子缺口及数量，输出确定的是/否。
+    answer: 不能完整覆盖。P61-000351 的 60 套需求最终缺口为：606-000069 缺 41，606-000071 缺 30，994-000645 缺 20。
+    expected:
+      inventory_covers: false
+      leaf_shortages: {606-000069: 41, 606-000071: 30, 994-000645: 20}
+    surfaces: [agent]
+  - id: S-04
+    title: 两单同时承接
+    explanation: 按产品出现顺序共用同一库存池，分别判断两单的覆盖情况。
+    question: 两个客户同时新增需求：382-000005 共 50 套、P61-000351 共 60 套，均不能使用替代料。请判断是否可以同时承接，并说明各自的缺料情况。 全仓、只用库存不计PO，按题中产品出现顺序扣减共享池。
+    answer: 不能同时承接。382-000005 的 50 套可以覆盖，没有缺料；P61-000351 的 60 套不能覆盖，缺 606-000069 共 41、606-000071 共 30、994-000645 共 20。
+    expected:
+      all_covered: false
+      demands:
+      - product_code: 382-000005
+        inventory_covers: true
+        leaf_shortages: {}
+      - product_code: P61-000351
+        inventory_covers: false
+        leaf_shortages: {606-000069: 41, 606-000071: 30, 994-000645: 20}
+    surfaces: [agent]
+  - id: S-02
+    title: 可售能力不等于交期承诺
+    explanation: 区分「当前能卖多少」与「能否承诺交期」两个业务口径。
+    question: 客户要产品 U00-000151，先不启用替代料。请给出当前可售能力，并明确这是否等于交期承诺。
+    answer: U00-000151 不启用替代料时，成品现货 4609 套，库存支持再制造 129 套，合计可售 4738 套；这只是可售能力，不等于交期承诺。
+    expected: {fg_qty: 4609, theoretical_build_qty: 129, total_sellable_qty: 4738, delivery_promise: false}
+    surfaces: [agent]
+  - id: S-10
+    title: 需求数量是否超出供货能力
+    explanation: 把客户需求量与合计可售能力比较，给出差额。
+    question: 客户需要 U00-000151 共 3851 套，不能使用替代料。请判断当前供货能力是否满足该数量，并说明差额。
+    answer: 可以满足。U00-000151 合计可售 4738 套，覆盖客户需要的 3851 套，差额为 0。
+    expected: {covers: true, capacity_shortfall: 0}
+    surfaces: [agent]
+  - id: S-07
+    title: 按期交付（成品直发）
+    explanation: 在业务日 2026-08-25 判断成品现货能否在截止日前直发。
+    question: 业务日2026-08-25，客户需要382-000005共50套，截止2026-09-05。显式全仓，允许替代；若成品现货已覆盖则当天直发，不计运输时间、不新增采购或制造。请给出成品可用数量、是否按时覆盖和发货后剩余数量。
+    answer: 可以按时覆盖。382-000005 成品可用 816 套，发出 50 套后剩余 766 套。
+    expected: {fg_qty: 816, on_time: true, remaining_qty: 766}
+    surfaces: [agent]
+  - id: S-08
+    title: 已确认供给能否按期覆盖
+    explanation: 只计可用库存和有效按期采购在途，判断物料在需要日前能否覆盖毛需求。
+    question: 业务日2026-08-25，物料321-000569毛需求240个，需要日2026-09-08，全仓。只统计可用库存与已存在PO的净未收量max(qty-actqty,0)，关闭PO、到货日不晚于业务日的逾期未收PO和无有效日期PO不计已确认供给。不假设新增采购。已确认供给能否按需要日覆盖240个？返回库存、有效按期PO数量、按期供给及缺口，输出确定的是/否。
+    answer: 不能覆盖。物料 321-000569 可用库存 40，有效按期采购在途 0，按期供给共 40，缺口 200。
+    expected: {inventory_qty: 40, on_time_po_qty: 0, confirmed_supply_qty: 40, shortage_qty: 200, covers: false}
+    surfaces: [agent]

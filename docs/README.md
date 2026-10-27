@@ -10,6 +10,7 @@
 
 - [中文开发与版本更新指南](SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md)
 - [Sample Development Guide](SAMPLE_DEVELOPMENT_GUIDE.md)
+- [样例体验集标准](experience-set.zh-CN.md) / [Sample experience sets](experience-set.md)：从评测问题集和答案集抽取体验题、参考答案及适用页面。
 - [制造业与能源源码整合记录](energy-saref4ener-readiness.md)：四个样例已整合至固定源码候选，说明恢复来源、类型修复及本地验证边界。
 - [按产品版本选择样例目录](product-version-catalogs.md)：产品版本、目录、固定包及缓存隔离。
 - [0.2.1 本地验证与候选边界](acceptance/samples-0.2.1/README.md)：完整13项候选计划，涵盖制造业及能源双语；真实平台验收待完成。

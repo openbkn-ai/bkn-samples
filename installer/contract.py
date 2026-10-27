@@ -9,6 +9,8 @@ from pathlib import Path
 
 import yaml
 
+from installer import experience_set
+
 OFFICIAL_SOURCE_REPO = "https://github.com/openbkn-ai/bkn-samples"
 API_VERSION = "samples.openbkn.ai/v1alpha1"
 NAME_RE = re.compile(r"^[a-z0-9-]{1,32}$")
@@ -121,6 +123,13 @@ def validate_document(sample_dir: Path, document: dict) -> list[str]:
         errors.append("spec.studio.questions must be a list of at most 3")
     elif any(not isinstance(item, str) or not item.strip() for item in questions):
         errors.append("spec.studio.questions entries must be non-empty strings")
+    if "experienceSet" in studio:
+        experience_path = _hook_path(sample_dir, studio["experienceSet"], "spec.studio.experienceSet", errors)
+        if experience_path is not None:
+            experience = experience_set.load(experience_path)
+            errors.extend(f"spec.studio.experienceSet: {item}" for item in experience_set.validate(experience))
+            if isinstance(experience, dict) and experience.get("metadata", {}).get("language") != metadata.get("language"):
+                errors.append("spec.studio.experienceSet language must match metadata.language")
 
     database = _require_mapping(spec.get("database"), "spec.database", errors)
     if database.get("engine") != "mariadb":
