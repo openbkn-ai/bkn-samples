@@ -134,6 +134,8 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
         capabilities = ["vega.catalog", "knowledge-network.import." + native_format]
         capabilities.extend("execution." + component for component, key in
                             (("function", "functions"), ("skill", "skills")) if components[key])
+        if contract["spec"].get("studio", {}).get("experienceSet"):
+            capabilities.append("sample.experience-set")
         require(contract["spec"]["data"]["mode"] == "embedded", "offline packages require embedded data")
         if shared_database:
             architectures = ["amd64", "arm64"]

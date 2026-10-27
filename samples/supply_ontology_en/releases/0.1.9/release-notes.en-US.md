@@ -1,0 +1,7 @@
+# 0.1.9: ship the scenario experience set
+
+The package adds `experience/experience-set.yaml`: 23 experience cases whose questions and reference answers come from answer set `supply-en-question-set-v1` (business date 2026-08-25). After a successful installation the sample service records the set with that installation. When Studio opens the knowledge network this sample created, it shows the scenario experience card beside Q&A, data query and graph exploration, one case at a time against its reference answer. Reference answers appear only in the card and are never sent to the agent.
+
+Data, knowledge network, functions, metrics and Skills are unchanged from 0.1.8. This package requires a sample service with the `sample.experience-set` capability; older sample services reject this version before download and keep offering 0.1.8, so upgrade the sample service first. The graph exploration card is an enterprise extension.
+
+A new version does not overwrite an existing network, and an installed older version does not gain the card. To use the card, replace the whole package with the existing uninstall/install workflow; uninstall removes this sample's data and owned resources. Installation retry is not a metadata update. Actual acceptance is recorded separately with release evidence; this note does not promise correctness for every model answer.

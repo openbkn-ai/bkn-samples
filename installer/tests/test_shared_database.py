@@ -133,6 +133,19 @@ class SharedDatabaseTest(unittest.TestCase):
             self.assertEqual(imported['version'], version)
             self.assertIsNone(packages.find(imported['sample'])['dataImageRef'])
 
+    def test_package_with_experience_set_requires_the_capability(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary).resolve()
+            with_set = build(ROOT / 'samples/supply_ontology_hand', '0.1.13', output / 'with', shared_database=True)
+            without = build(ROOT / 'samples/order-basics', '0.1.3', output / 'without', shared_database=True)
+            requires = {}
+            for name, candidate in (('with', with_set), ('without', without)):
+                with tarfile.open(candidate / 'package.tar.gz') as source:
+                    requires[name] = json.load(source.extractfile('offline-release.json'))['requires']
+            self.assertIn('sample.experience-set', requires['with']['capabilities'])
+            self.assertNotIn('sample.experience-set', requires['without']['capabilities'])
+            self.assertIn('sample.experience-set', CAPABILITIES)
+
     def test_release_requirements_follow_new_package_not_old_baseline(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
