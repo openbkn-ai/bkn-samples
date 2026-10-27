@@ -1,0 +1,277 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: en-US
+  source: {answerSet: bkn-eval/datasets/sample-answer-set-v1.yaml, setId: supply-en-question-set-v1}
+spec:
+  businessDate: '2026-08-25'
+  cases:
+  - id: M-04
+    title: Sales order count
+    explanation: 'Object count: sales orders, deduplicated by order number.'
+    question: How many sales orders are in the current snapshot?
+    answer: There are 800 sales orders in the current snapshot.
+    expected: {value: 800}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (s:supply_ontology_en_salesorder)
+        RETURN count(DISTINCT s.sales_order_id) AS value
+  - id: M-06
+    title: Finished goods stock
+    explanation: Follows Product Stock to the stock records, keeps the three finished goods warehouses and sums available quantity.
+    question: What is the available stock of product 382-000005 across the three finished goods warehouses?
+    answer: Product 382-000005 has 534 available across the three finished goods warehouses.
+    expected: {value: 534}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product {material_number: '382-000005'})-[:supply_ontology_en_prod2inv]->(i:supply_ontology_en_inventory)
+        WHERE i.warehouse IN ['Suzhou Finished Goods', 'Urumqi Finished Goods', 'Harbin Finished Goods']
+        RETURN sum(i.available_inventory_qty) AS value
+  - id: M-10
+    title: Signed, shipped and unshipped
+    explanation: Follows Sales Order Product, sums signed and shipped quantities and takes the difference.
+    question: For product 382-000005, how many sets are signed, shipped and still unshipped?
+    answer: Product 382-000005 has 1081 sets signed, 1066 shipped and 15 unshipped.
+    expected: {signing_qty: 1081, shipping_qty: 1066, unshipped_qty: 15}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (s:supply_ontology_en_salesorder)-[:supply_ontology_en_so2prod]->(p:supply_ontology_en_product {material_number: '382-000005'})
+        RETURN sum(s.signing_quantity) AS signing_qty, sum(s.shipping_quantity) AS shipping_qty,
+               sum(s.signing_quantity) - sum(s.shipping_quantity) AS unshipped_qty
+  - id: M-12
+    title: Open demand forecasts
+    explanation: Follows Product Forecast, leaves out closed forecasts, then counts and sums them.
+    question: For product U00-000080, how many open forecasts and forecast sets are there?
+    answer: Product U00-000080 has 12 open forecasts totalling 20000 sets.
+    expected: {count: 12, qty: 20000}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product {material_number: 'U00-000080'})-[:supply_ontology_en_prod2fcst]->(f:supply_ontology_en_forecast)
+        WHERE f.closestatus_title <> 'Closed'
+        RETURN count(f) AS count, sum(f.qty) AS qty
+  - id: M-15
+    title: Suppliers per buyer
+    explanation: Filters supplier records by buyer and counts them.
+    question: How many supplier records does buyer Alex Reed manage?
+    answer: Buyer Alex Reed manages 51 supplier records.
+    expected: {value: 51}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (s:supply_ontology_en_supplier)
+        WHERE s.purchaserid_name = 'Alex Reed'
+        RETURN count(DISTINCT s.supplier_code) AS value
+  - id: F-07
+    title: Standard purchase lead time
+    explanation: Reads the material's standard purchase lead time; Q&A answers it with the published lead-time function.
+    question: What is the standard purchase lead time in days for Purchased material 606-000989?
+    answer: Purchased material 606-000989 has a standard purchase lead time of 14 days.
+    expected: {leadtime_days: 14}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (m:supply_ontology_en_material {material_code: '606-000989'})
+        RETURN m.purchase_fixedleadtime AS leadtime_days
+  - id: F-01
+    title: First-level main components
+    explanation: Expands one level through Product BOM and BOM Material, main components only, no alternatives.
+    question: List the first-level main components of product 382-000005, without stock information.
+    answer: 'Product 382-000005 has 9 first-level main components: 468-000493, 468-000530, 528-000036, 606-000989, 606-000990, 791-000007, 791-000013, 791-000015, 994-000550.'
+    expected:
+      material_codes: [468-000493, 468-000530, 528-000036, 606-000989, 606-000990, 791-000007, 791-000013, 791-000015, 994-000550]
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product {material_number: '382-000005'})-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material)
+        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN DISTINCT m.material_code AS material_codes
+      graph: |-
+        MATCH (p:supply_ontology_en_product {material_number: '382-000005'})-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material)
+        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN p, r1, b, r2, m
+  - id: R-02
+    title: Count of first-level components
+    explanation: Expands one BOM level to show what the product is directly built from.
+    question: How many first-level main components does U00-000080 have?
+    answer: Product U00-000080 has 5 first-level main components.
+    expected: {count: 5}
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product {material_number: 'U00-000080'})-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material)
+        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN count(DISTINCT m.material_code) AS count
+      graph: |-
+        MATCH (p:supply_ontology_en_product {material_number: 'U00-000080'})-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material)
+        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN p, r1, b, r2, m
+  - id: R-05
+    title: Products that use a material
+    explanation: Walks the BOM relations back from a material to products; alternative positions count as use.
+    question: Which products use material 321-000569?
+    answer: 'Material 321-000569 is used by three products: P61-000328, P61-000331 and P61-000351.'
+    expected:
+      product_codes: [P61-000328, P61-000331, P61-000351]
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product)-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material {material_code: '321-000569'})
+        WHERE b.bom_level >= 1
+        RETURN DISTINCT p.material_number AS product_codes
+      graph: |-
+        MATCH (p:supply_ontology_en_product)-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material {material_code: '321-000569'})
+        WHERE b.bom_level >= 1
+        RETURN p, r1, b, r2, m
+  - id: R-07
+    title: Reach of a common material
+    explanation: Counts how many product BOMs reference one common part.
+    question: How many products use material 725-000226?
+    answer: Material 725-000226 is used by 30 products.
+    expected: {count: 30}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product)-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material {material_code: '725-000226'})
+        WHERE b.bom_level >= 1
+        RETURN count(DISTINCT p.material_number) AS count
+  - id: R-08
+    title: Shared first-level components
+    explanation: Expands one BOM level for both products; materials linked to both are shared.
+    question: Which first-level main components are shared by 382-000005 and 382-000006?
+    answer: 'Products 382-000005 and 382-000006 share 4 first-level main components: 468-000493, 606-000989, 606-000990 and 994-000550.'
+    expected:
+      material_codes: [468-000493, 606-000989, 606-000990, 994-000550]
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product)-[:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)
+        WHERE p.material_number IN ['382-000005', '382-000006'] AND b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        WITH b.material_code AS material, count(DISTINCT p.material_number) AS products
+        WHERE products = 2
+        RETURN material AS material_codes ORDER BY material_codes
+      graph: |-
+        MATCH (p:supply_ontology_en_product)-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material)
+        WHERE p.material_number IN ['382-000005', '382-000006'] AND b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        RETURN p, r1, b, r2, m
+  - id: F-02
+    title: Materials two products share
+    explanation: Intersects the complete main-component BOMs of two products, excluding roots and alternatives.
+    question: How many distinct materials are shared by the complete main-component BOMs of 382-000005 and P61-000351, excluding roots and alternatives?
+    answer: The complete main-component BOMs of 382-000005 and P61-000351 share 38 materials.
+    expected: {shared_count: 38}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product)-[:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)
+        WHERE p.material_number IN ['382-000005', 'P61-000351'] AND b.bom_level >= 1 AND coalesce(b.alt_priority, 0) = 0
+        WITH b.material_code AS material, count(DISTINCT p.material_number) AS products
+        WHERE products = 2
+        RETURN count(material) AS shared_count
+  - id: F-14
+    title: Size of a complete BOM
+    explanation: 'Reads the complete main-component BOM structure: non-root rows and nodes including the root.'
+    question: For the complete main-component BOM of U00-000080, excluding alternatives, how many non-root rows and total structural nodes including the root are there? Query the full structure; do not substitute net manufacturing backward-plan node counts.
+    answer: The complete main-component BOM of U00-000080 has 76 non-root rows and 77 structural nodes including the root.
+    expected: {non_root_line_count: 76, node_count: 77}
+    surfaces: [agent, query]
+    cypher:
+      query: |-
+        MATCH (p:supply_ontology_en_product {material_number: 'U00-000080'})-[:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)
+        WHERE coalesce(b.alt_priority, 0) = 0
+        RETURN sum(CASE WHEN b.bom_level >= 1 THEN 1 ELSE 0 END) AS non_root_line_count, count(b) AS node_count
+  - id: R-09
+    title: Alternative and its stock
+    explanation: Finds the alternative within the given parent and group, then sums its stock through Material Stock.
+    question: For product 382-000005, parent 588-000620 and alternate group 12, which alternative replaces main component 356-000061? Report its all-warehouse available stock and usage ratio. Do not merge group 12 from other parents or products.
+    answer: Main component 356-000061 can be replaced by 356-000356, with usage ratio 1 and 4673 available across all warehouses.
+    expected:
+      substitutes:
+      - {material_code: 356-000356, available_qty: 4673, usage: 1}
+    surfaces: [agent, query, graph]
+    cypher:
+      query: |-
+        MATCH (b:supply_ontology_en_bom)-[:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material)-[:supply_ontology_en_mat2inv]->(i:supply_ontology_en_inventory)
+        WHERE b.bom_material_code = '382-000005' AND b.parent_material_code = '588-000620'
+          AND b.alt_group_no = '12' AND b.alt_priority > 0
+        RETURN m.material_code AS material_code, sum(i.available_inventory_qty) AS available_qty, b.standard_usage AS usage
+      graph: |-
+        MATCH (p:supply_ontology_en_product {material_number: '382-000005'})-[r1:supply_ontology_en_prod2bom]->(b:supply_ontology_en_bom)-[r2:supply_ontology_en_bom2mat]->(m:supply_ontology_en_material)-[r3:supply_ontology_en_mat2inv]->(i:supply_ontology_en_inventory)
+        WHERE b.parent_material_code = '588-000620' AND b.alt_group_no = '12' AND i.available_inventory_qty > 0
+        RETURN p, r1, b, r2, m, r3, i
+  - id: F-04
+    title: Sellable quantity, no alternatives
+    explanation: 'Calls the sellable-quantity function: finished stock plus what stock can still build, deducting components level by level.'
+    question: For 382-000005, disable alternatives, use available stock in all warehouses and exclude POs. Report finished stock, stock-supported manufacturing capacity and total sellable quantity. Deduct component stock at every level before expanding net shortages.
+    answer: Product 382-000005 has 816 sets of finished stock and stock to build 51 more, so 867 sets are sellable.
+    expected: {fg_qty: 816, theoretical_build_qty: 51, total_sellable_qty: 867}
+    surfaces: [agent]
+  - id: F-15
+    title: Sellable quantity with alternatives
+    explanation: Recalculates the same product with alternatives enabled to show the extra capacity they bring.
+    question: For 382-000005, enable position-eligible alternatives, use all-warehouse available stock and exclude POs. Report finished stock, deterministic stock-supported manufacturing capacity and total sellable quantity. Select one candidate per position without mixing, using its own usage ratio and shared stock.
+    answer: With alternatives enabled, product 382-000005 has 816 sets of finished stock and stock to build 344 more, so 1160 sets are sellable.
+    expected: {fg_qty: 816, theoretical_build_qty: 344, total_sellable_qty: 1160}
+    surfaces: [agent]
+  - id: F-10
+    title: Coverage of a new demand
+    explanation: 'Calls the coverage function: finished stock first, then components level by level.'
+    question: Can all-warehouse stock cover a new demand for 60 sets of P61-000351 with alternatives disabled? Allocate finished stock first, then component stock at each level. Report coverage and the number of final shortage materials.
+    answer: Stock cannot cover the new demand for 60 sets of P61-000351; 3 materials are short in the end.
+    expected: {inventory_covers: false, shortage_material_count: 3}
+    surfaces: [agent]
+  - id: S-01
+    title: Can a customer demand be covered
+    explanation: 'Answers the customer with the coverage skill: a definite yes/no and the leaf shortages.'
+    question: A customer needs 60 sets of P61-000351. Disable alternatives; use only available finished, component and raw-material stock in all warehouses. Exclude POs and new purchases. Allocate finished stock first and deduct stock at each level. Can stock cover the whole demand? Give a definite yes/no and final leaf shortage quantities.
+    answer: No. For 60 sets of P61-000351 the final shortages are 606-000069 short by 41, 606-000071 by 30 and 994-000645 by 20.
+    expected:
+      inventory_covers: false
+      leaf_shortages: {606-000069: 41, 606-000071: 30, 994-000645: 20}
+    surfaces: [agent]
+  - id: S-04
+    title: Two demands at once
+    explanation: Shares one stock pool in the stated product order and checks each demand.
+    question: Two customers add 50 sets of 382-000005 and 60 sets of P61-000351. Disable alternatives. Can both demands be covered, and what are their shortages? Use all warehouses, current stock only and no POs; deduct from one shared pool in the stated product order.
+    answer: No, not both. 50 sets of 382-000005 are covered with no shortage; 60 sets of P61-000351 are not, short of 606-000069 by 41, 606-000071 by 30 and 994-000645 by 20.
+    expected:
+      all_covered: false
+      demands:
+      - product_code: 382-000005
+        inventory_covers: true
+        leaf_shortages: {}
+      - product_code: P61-000351
+        inventory_covers: false
+        leaf_shortages: {606-000069: 41, 606-000071: 30, 994-000645: 20}
+    surfaces: [agent]
+  - id: S-02
+    title: Sellable is not a promise
+    explanation: Separates how much can be sold now from whether a delivery date can be promised.
+    question: A customer asks for U00-000151 with alternatives disabled. Report current sellable capacity and state whether that establishes a delivery deadline promise.
+    answer: With alternatives disabled, U00-000151 has 4609 sets of finished stock and stock to build 129 more, 4738 sellable in total; this is capacity, not a delivery promise.
+    expected: {fg_qty: 4609, theoretical_build_qty: 129, total_sellable_qty: 4738, delivery_promise: false}
+    surfaces: [agent]
+  - id: S-10
+    title: Demand against capacity
+    explanation: Compares the requested quantity with total sellable capacity and reports the difference.
+    question: A customer needs 3851 sets of U00-000151 with alternatives disabled. Can current supply capacity cover this quantity? Report the difference.
+    answer: Yes. U00-000151 can sell 4738 sets, which covers the 3851 requested; the shortfall is 0.
+    expected: {covers: true, capacity_shortfall: 0}
+    surfaces: [agent]
+  - id: S-07
+    title: On-time shipment from stock
+    explanation: Checks on business date 2026-08-25 whether finished stock can ship before the deadline.
+    question: 'Business date: 2026-08-25. A customer needs 50 sets of 382-000005 by 2026-09-05. Explicitly use all warehouses and allow alternatives. If finished stock covers demand, ship that day; exclude transport time, new purchases and manufacturing. Report available finished stock, on-time coverage and stock remaining after shipment.'
+    answer: Yes, on time. 382-000005 has 816 sets of finished stock; 766 remain after shipping 50.
+    expected: {fg_qty: 816, on_time: true, remaining_qty: 766}
+    surfaces: [agent]
+  - id: S-08
+    title: Confirmed supply by the need date
+    explanation: Counts only available stock and valid on-time PO quantities against the gross demand.
+    question: 'Business date: 2026-08-25. Material 321-000569 has gross demand 240 pcs due 2026-09-08 across all warehouses. Count only available stock and net unreceived quantities max(qty-actqty,0) of existing POs. Exclude closed POs, overdue unreceived POs arriving on or before the business date, and POs without valid dates from confirmed supply. Assume no new purchases. Can confirmed supply cover 240 pcs by the need date? Give a definite yes/no, stock, valid on-time PO quantity, total on-time supply and shortage.'
+    answer: No. Material 321-000569 has 40 in stock and 0 on valid on-time POs, 40 of on-time supply in total, leaving a shortage of 200.
+    expected: {inventory_qty: 40, on_time_po_qty: 0, confirmed_supply_qty: 40, shortage_qty: 200, covers: false}
+    surfaces: [agent]

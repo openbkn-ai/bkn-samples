@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbkn.ai/schemas/samples/v1alpha1/experience-set.schema.json",
+  "title": "OpenBKN sample experience set",
+  "description": "Questions with reference answers that Studio offers on the Q&A, data query and graph explorer pages after a sample is installed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": { "const": "samples.openbkn.ai/v1alpha1" },
+    "kind": { "const": "ExperienceSet" },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "source"],
+      "properties": {
+        "language": { "type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$" },
+        "source": {
+          "description": "The evaluation answer set the cases are taken from. It stays in the repository; packages carry only this reference.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["answerSet", "setId"],
+          "properties": {
+            "answerSet": { "type": "string", "pattern": "^bkn-eval/[^\\s]+\\.ya?ml$" },
+            "setId": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["businessDate", "cases"],
+      "properties": {
+        "businessDate": {
+          "description": "The frozen date the answers hold for; Studio shows it with every case.",
+          "type": "string",
+          "format": "date"
+        },
+        "cases": {
+          "description": "In the order Studio offers them.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/case" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "explanation", "question", "answer", "expected", "surfaces"],
+      "properties": {
+        "id": { "description": "The source answer-set id.", "type": "string", "pattern": "^[A-Z]+-[0-9]{2,}$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "explanation": { "description": "What the case shows about the knowledge network.", "type": "string", "minLength": 1 },
+        "question": { "description": "The source question, verbatim. Studio puts only this into a page's input.", "type": "string", "minLength": 1 },
+        "answer": { "description": "The reference answer shown after a run; it names every value in expected.", "type": "string", "minLength": 1 },
+        "expected": { "description": "The source expected values, verbatim.", "type": "object", "minProperties": 1 },
+        "surfaces": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": { "enum": ["agent", "query", "graph"] },
+          "contains": { "const": "agent" }
+        },
+        "cypher": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "query": {
+              "description": "Returns the expected values: columns are named after the expected fields.",
+              "type": "string",
+              "minLength": 1
+            },
+            "graph": { "description": "Returns the nodes and relations to draw.", "type": "string", "minLength": 1 }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "surfaces": { "contains": { "const": "query" } } } },
+          "then": { "required": ["cypher"], "properties": { "cypher": { "required": ["query"] } } },
+          "else": { "properties": { "cypher": { "not": { "required": ["query"] } } } }
+        },
+        {
+          "if": { "properties": { "surfaces": { "contains": { "const": "graph" } } } },
+          "then": { "required": ["cypher"], "properties": { "cypher": { "required": ["graph"] } } },
+          "else": { "properties": { "cypher": { "not": { "required": ["graph"] } } } }
+        }
+      ]
+    }
+  }
+}
