@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: finished_goods_receipts_production_order_id_to_production_orders
+name: finished_goods_receipts_production_order_id_to_production_orders
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: finished_goods_receipts_production_order_id_to_production_orders
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| finished_goods_receipts | production_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| production_order_id | production_order_id |
