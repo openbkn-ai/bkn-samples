@@ -82,7 +82,7 @@ def supply_function(event_source: dict, window_start: str, window_end: str) -> d
 
 def _archive_source() -> str:
     buffer = io.BytesIO()
-    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED, strict_timestamps=False) as archive:
         for package in PACKAGE_PATHS:
             for file_path in sorted(package.rglob("*.py")):
                 archive.write(file_path, file_path.relative_to(TOOLS))

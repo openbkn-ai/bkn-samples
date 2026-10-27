@@ -7,3 +7,5 @@ This package uses supply-chain main including #204 and the product's shared Mari
 A new version does not overwrite an existing network. Preserve and review customizations before an authorized maintainer explicitly updates these two descriptions and reads them back. Replacing the whole package uses the existing uninstall/install workflow; uninstall removes this sample's data and owned resources. Installation retry is not a metadata update. Actual acceptance is recorded separately with release evidence; this note does not promise correctness for every model answer.
 
 Also shorten the not-yet-released replenishment-draft Action ID to at most 40 characters, updating its definition, binding, result reference and verification together. This sample identifier works with existing test deployments and current main; platform ID rules and replenishment logic are unchanged.
+
+Fix native Function ZIP construction after release extraction normalizes file timestamps to the Unix epoch: clamp ZIP timestamps to its supported range without changing source bytes or calculations.
