@@ -14,6 +14,7 @@
 - [按产品版本选择样例目录](product-version-catalogs.md)：产品版本、目录、固定包及缓存隔离。
 - [0.2.1 本地验证与候选边界](acceptance/samples-0.2.1/README.md)：完整13项候选计划，涵盖制造业及能源双语；真实平台验收待完成。
 - [固定包构建与发布](candidate-publication.md)
+- [供应链分类补丁发布验收](supply-field-semantics-release-20261027.zh-CN.md)：中英文固定包、MF-01 实测及交付边界。
 - [完整离线安装](offline-installation.md)：自包含包、节点本地镜像导入、禁拉取与断网验收。
 - [卸载与重装](sample-uninstall.md)
 - [服务部署](sample-service-deployment.md)
