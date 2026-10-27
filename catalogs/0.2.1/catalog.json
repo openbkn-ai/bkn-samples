@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000001",
-    "sequence": 1,
+    "revision": "catalog-000002",
+    "sequence": 2,
     "channel": "stable",
-    "publishedAt": "2026-10-21T04:38:08.626058Z",
+    "publishedAt": "2026-10-27T14:15:40.888098Z",
     "productVersion": "0.2.1"
   },
   "spec": {
@@ -209,6 +209,98 @@
           ],
           "platformVersion": ">=0.2.1 <0.3.0",
           "requiredExtensions": []
+        }
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.12",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "language": "zh-CN",
+        "publishedAt": "2026-10-27T13:58:41.254521Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "分类字段说明修正；MF-01 1/1、固定包安装与交期函数通过；要求 OpenBKN >=0.2.1。",
+          "documents": [
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bc24fe1cd1109ddc99bbf99583d0a30979834e2c/samples/supply_ontology_hand/releases/0.1.12/release-notes.zh-CN.md",
+              "digest": "sha256:039c77263f91dd11c984b2456b12c0971cc2040f912ac70974be32a5616cf657"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bc24fe1cd1109ddc99bbf99583d0a30979834e2c/samples/supply_ontology_hand/releases/0.1.12/sample.json",
+          "digest": "sha256:7dea7304c42f1307e49294e937249027dfe0bbafafc1c90e759737dd00cb4819"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bc24fe1cd1109ddc99bbf99583d0a30979834e2c/samples/supply_ontology_hand/releases/0.1.12/verification.json",
+          "digest": "sha256:5be558d1212d8008c78eb0130e46a804ddcf5733285f2e7042b8a4d99c9b02af"
+        }
+      },
+      {
+        "sampleId": "supply-chain-en",
+        "version": "0.1.8",
+        "displayName": "Supply Chain (EN)",
+        "summary": "Assess demand coverage using sample orders, stock, BOMs and supply.",
+        "language": "en-US",
+        "publishedAt": "2026-10-27T13:58:42.294322Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Distinct material categories; MF-01 1/1, fixed-package installation and lead-time function passed; requires OpenBKN >=0.2.1.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bc24fe1cd1109ddc99bbf99583d0a30979834e2c/samples/supply_ontology_en/releases/0.1.8/release-notes.en-US.md",
+              "digest": "sha256:5cb6619b9cab575349e3d606c2cbc000f5a41296231433e4df3030efdb4f2824"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bc24fe1cd1109ddc99bbf99583d0a30979834e2c/samples/supply_ontology_en/releases/0.1.8/sample.json",
+          "digest": "sha256:53ad879e5a2e0ad1e86073560c6e79af032f9783b235cfd5089dc0a3132ea291"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bc24fe1cd1109ddc99bbf99583d0a30979834e2c/samples/supply_ontology_en/releases/0.1.8/verification.json",
+          "digest": "sha256:24f013e23ecf2c06c89477a1dc03d240e55b799cd091f1cf8a49db2a9c519ac9"
         }
       }
     ]

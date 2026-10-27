@@ -1,0 +1,88 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.12",
+  "packageDigest": "sha256:a90125eaa669079d4ba8ff494c3a72dbbdddb4fb2cdb99f685b82946a4e9b456",
+  "sourceCommit": "7c6dbcd70b7ca806b7b23ebe03995107c1bfffe0",
+  "platformVersion": "0.2.1",
+  "platformBuild": "0.2.1-main.20261016154814.sha3673f27",
+  "architectureTested": "arm64",
+  "executorImage": "docker.io/bkn-local/bkn-sample-studio@sha256:e8f3e7a734973794c3362de0d002043161ea15a093e71dde611acc9a3850b3dd",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-supply-chain-166a0df021644c0bb447991687ea62f9",
+    "attemptId": "4241e4456030486c8890d0396a25657e",
+    "sample": "supply-chain",
+    "version": "0.1.12",
+    "startedAt": "2026-10-27T14:06:19.136884Z",
+    "finishedAt": "2026-10-27T14:08:54.187516Z",
+    "installedAt": "2026-10-27T14:08:54.187516Z",
+    "status": "installed",
+    "requestedBy": "admin",
+    "operation": "install",
+    "stages": [
+      {
+        "id": "database",
+        "name": "准备样例库",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "name": "扫描数据资源",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "name": "导入并绑定知识网络",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "name": "发布能力",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "name": "冒烟验收",
+        "state": "succeeded"
+      }
+    ],
+    "error": null
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables and 78,635 rows match the previous installed sample by unordered per-row digest; bookkeeping excluded."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh knowledge/verify stages and all seven standard checks passed. Live MF-01 discovered full field descriptions and queried the installed source."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Native functions and Skills mounted and verified; metrics query/ownership checks passed. Installed standard lead-time function returned 1 day from product_fixedleadtime with a durable completed receipt."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "MF-01: one real model question passed with both categories and lead time correct; question/gold isolated, complete interaction evidence. Not a core-50 or historical caller replay."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.12/acceptance.json",
+  "evidenceDigest": "sha256:ad332e650f9cbdca9dc36bb43cee15a8e09765c6bf3ae50ca1d22ef32a687410",
+  "modelQuestionsForThisArtifact": 1,
+  "earlierUnpublishedCandidateQuestions": 1,
+  "retriedSameArtifacts": true,
+  "limits": [
+    "Bounded MF-01 smoke: one question per language on this artifact, not a replay of the core 50 or an overall model accuracy claim. Earlier unpublished f62e413 candidate questions are retained separately and not pooled.",
+    "Existing patched arm64 8081 runtime; this work changed no platform images/configuration. No AMD64 execution or vanilla 0.2.1 certification.",
+    "Safe Pod replacement at 2026-10-27T14:04:08Z and authentication HTTP 503 overlapped the initial attempts. Those failures are retained; identical packages/executors completed after one standard retry. No first-attempt success claim.",
+    "Configured model alias and manager ID retained; immutable provider build is unavailable. This is not a replay of the original DSH Desktop caller.",
+    "No Workshop shortage-event integration acceptance, platform capability change, automatic network upgrade or user-customization migration is claimed.",
+    "At validation time, official product-catalog registration requires PR #205 merge; online catalog installation is not claimed here."
+  ]
+}
