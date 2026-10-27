@@ -29,8 +29,8 @@ the previous mainline inventory.
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |
 | [Order Basics](samples/order-basics/) | Chinese | A small starting point for orders, products and object relationships | Existing release 0.1.2; 0.2.1 candidate 0.1.4, platform acceptance pending |
-| [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Existing release 0.1.4; 0.2.1 candidate 0.1.9, platform acceptance pending; #189 source candidate 0.1.10: [details](docs/material-assurance-189.md) |
-| [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Existing release 0.1.1; 0.2.1 candidate 0.1.4, platform acceptance pending; #189 source candidate 0.1.6: [details](docs/material-assurance-189.md) |
+| [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Release [0.1.12](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.12); installation, lead-time function and MF-01 1/1 verified; [scope](docs/supply-field-semantics-release-20261027.zh-CN.md) |
+| [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Release [0.1.8](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.8); installation, lead-time function and MF-01 1/1 verified; [scope](docs/supply-field-semantics-release-20261027.zh-CN.md) |
 | [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Existing release 0.1.2; 0.2.1 candidate 0.1.6, platform acceptance pending |
 | [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Existing release 0.1.0; 0.2.1 candidate 0.1.2, platform acceptance pending |
 | [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | 0.2.1 candidate 0.1.3; self-contained, platform acceptance pending |
@@ -54,8 +54,8 @@ candidate set and historical assets remain unchanged.
 Published 0.2.0 clients continue to use the root [official catalog](catalog.json).
 The updated sample service selects directories by product version: [0.2.0](catalogs/0.2.0/catalog.json)
 and [0.2.1](catalogs/0.2.1/catalog.json); see [directory selection](docs/product-version-catalogs.md).
-The 0.2.1 directory currently retains existing FIBO/GS1 entries. None of the nine new
-candidates is admitted to a stable directory yet. The OpenBKN 0.2.1 product is not
+The 0.2.1 directory retains FIBO/GS1 and adds the independently verified supply-chain
+patch releases. Other samples retain their stated candidate acceptance status. The OpenBKN 0.2.1 product is not
 formally released; the candidates are intended for offline import into its test environments.
 
 Manufacturing 0.1.3 and Energy 0.1.5 are now included as bilingual, content-only

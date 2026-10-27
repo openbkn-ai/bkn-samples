@@ -25,8 +25,8 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 | 样例 | 语言 | 体验场景 | 可用状态 |
 | --- | --- | --- | --- |
 | [订单入门](samples/order-basics/) | 中文 | 用少量订单和产品了解对象及关系 | 已有版本 0.1.2；0.2.1 候选 0.1.4，待平台验收 |
-| [供应链](samples/supply_ontology_hand/) | 中文 | 订单、预测、BOM、库存、采购、缺料及交付分析 | 已有版本 0.1.4；0.2.1 候选 0.1.9，待平台验收；#189 源码候选 0.1.10 见[说明](docs/material-assurance-189.md) |
-| [供应链](samples/supply_ontology_en/) | 英文 | 英文数据、本体、函数、指标和 Skill 的供应链分析 | 已有版本 0.1.1；0.2.1 候选 0.1.4，待平台验收；#189 源码候选 0.1.6 见[说明](docs/material-assurance-189.md) |
+| [供应链](samples/supply_ontology_hand/) | 中文 | 订单、预测、BOM、库存、采购、缺料及交付分析 | 已发布 [0.1.12](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.12)；安装、交期函数和 MF-01 1/1 已验；[范围说明](docs/supply-field-semantics-release-20261027.zh-CN.md) |
+| [供应链](samples/supply_ontology_en/) | 英文 | 英文数据、本体、函数、指标和 Skill 的供应链分析 | 已发布 [0.1.8](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.8)；安装、交期函数和 MF-01 1/1 已验；[范围说明](docs/supply-field-semantics-release-20261027.zh-CN.md) |
 | [世界杯](samples/world-cup/) | 中文模型、英文数据 | 赛事、球队、球员和比赛事件查询，提供 50 道中文评测题 | 已有版本 0.1.2；0.2.1 候选 0.1.6，待平台验收 |
 | [世界杯](samples/world-cup-en/) | 英文 | 对象查询、多表关联、排名及跨届赛事分析，提供 50 道评测题 | 已有版本 0.1.0；0.2.1 候选 0.1.2，待平台验收 |
 | [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 候选 0.1.3；统一自包含包，待平台验收 |
@@ -41,7 +41,7 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 
 本轮[完整 13 包候选集](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r2)包含上表全部样例；[机器可读清单](tools/publication/candidates-0.2.1.json)与源码 manifest 双向核对，缺项、重复或未登记项会使构建失败。候选附固定源码提交及 SHA-256，完成本地校验后供 0.2.1 测试环境离线导入；真实安装、MCP、函数及业务场景验收仍待完成。此前九包候选与历史包保持不变。
 
-已发布 0.2.0 客户端继续使用根[官方目录](catalog.json)。更新后的样例服务按产品版本选择目录，见 [0.2.0 目录](catalogs/0.2.0/catalog.json)、[0.2.1 目录](catalogs/0.2.1/catalog.json)和[目录选择说明](docs/product-version-catalogs.md)。当前 0.2.1 目录保留已有 FIBO/GS1 条目，本轮 9 个新候选尚未加入正式目录。OpenBKN 0.2.1 产品尚未正式发布，候选供其测试环境离线导入。
+已发布 0.2.0 客户端继续使用根[官方目录](catalog.json)。更新后的样例服务按产品版本选择目录，见 [0.2.0 目录](catalogs/0.2.0/catalog.json)、[0.2.1 目录](catalogs/0.2.1/catalog.json)和[目录选择说明](docs/product-version-catalogs.md)。当前 0.2.1 目录保留已有 FIBO/GS1，并新增独立验收的供应链补丁版本；其他样例仍以各自候选验收状态为准。OpenBKN 0.2.1 产品尚未正式发布，候选供其测试环境离线导入。
 
 两个GS1零售样例均要求 **OpenBKN 0.2.1及以上**，当前manifest兼容范围为 `>=0.2.1 <0.3.0`，数据内置，使用产品共享MariaDB。每语言提供3个通用函数、2个日期快照指标、1个调查Skill，以Apache-2.0的[GS1 Web Vocabulary](https://github.com/gs1/WebVoc)为语义参考，业务数据全部虚构，并明确本地扩展。8081首轮各100题：**英文96/100、中文95/100**；修复事件去重和题目契约后，只复测原未通过题，**英文4/4、中文5/5**，9题执行及证据均完成。未再次全量跑，不能称修订版全量100%。详见[验收报告](docs/retail-gs1-acceptance.zh-CN.md)。源码PR #186已合并，[英文0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0)与[中文0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.0)固定制品已发布，目录 PR #187 已合并。目前可在OpenBKN0.2.1及以上离线导入，旧020内置索引未修改。
 

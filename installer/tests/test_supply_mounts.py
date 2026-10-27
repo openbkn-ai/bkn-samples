@@ -21,7 +21,7 @@ class SupplyMountTest(unittest.TestCase):
                 return {'tags':['bkn-samples','bkn-sample-supply-chain']}
             if args[:3] == ['bkn', 'action-type', 'get']:
                 kn=json.loads((TOOLS.parent/'kn/supply_ontology_hand.json').read_text())
-                return next(a for a in kn['action_types'] if a['id'].endswith('_act_replenishment_draft'))
+                return next(a for a in kn['action_types'] if a['id'].endswith('_act_replen_draft'))
             if args[:2] == ['toolbox', 'list']:
                 return {'data': [{'box_name': 'Supply', 'box_id': 'box-1', 'status': 'published'}]}
             if args[:2] == ['tool', 'list']:
