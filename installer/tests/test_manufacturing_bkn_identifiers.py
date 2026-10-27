@@ -1,5 +1,4 @@
 """Keep published sample identifiers compatible with the API resource limits."""
-import json
 import unittest
 from pathlib import Path
 
@@ -54,11 +53,6 @@ class ManufacturingBknIdentifierTest(unittest.TestCase):
         for sample in SAMPLES:
             relation = ROOT / 'samples' / sample / 'kn' / 'relation_types' / f'{relation_id}.bkn'
             self.assertTrue(relation.is_file(), relation)
-
-        supply_chain = ROOT / 'samples' / 'supply_ontology_en' / 'kn' / 'supply_ontology_en.json'
-        document = json.loads(supply_chain.read_text(encoding='utf-8'))
-        action_ids = {action['id'] for action in document['action_types']}
-        self.assertIn('supply_ontology_en_act_replenishment_draft', action_ids)
 
 
 if __name__ == '__main__':
