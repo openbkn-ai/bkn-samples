@@ -10,4 +10,4 @@ Also shorten the not-yet-released replenishment-draft Action ID to at most 40 ch
 
 Omit the unused `value: null` constant on the draft Action input parameter, matching backend readback so ownership validation does not reject its own import. Parameter and tool binding checks remain strict.
 
-Accept successful empty Action-update responses in the function registration script. Nonempty responses still require valid JSON and failed commands still raise errors, avoiding a failed installation after a successful first binding.
+Accept successful empty raw PUT-update responses in the function registration script. List reads and nonempty responses still require valid JSON and failed commands still raise errors, avoiding a failed installation after a successful first binding.

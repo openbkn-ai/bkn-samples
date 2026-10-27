@@ -46,3 +46,7 @@ def test_action_update_accepts_empty_success_without_masking_bad_responses(monke
     with pytest.raises(json.JSONDecodeError):registry._call(args)
     monkeypatch.setattr(registry.subprocess, "run", lambda *a, **kw: subprocess.CompletedProcess(a, 1, "", "permission denied"))
     with pytest.raises(RuntimeError, match="permission denied"):registry._call(args)
+
+    monkeypatch.setattr(registry.subprocess, "run", lambda *a, **kw: subprocess.CompletedProcess(a, 0, "\n", ""))
+    for read in (["toolbox", "list", "--limit", "100"], ["tool", "list", "--toolbox", "box", "--all"], ["call", "/api/bkn-backend/v1/knowledge-networks", "-X", "GET"]):
+        with pytest.raises(json.JSONDecodeError):registry._call(read)
