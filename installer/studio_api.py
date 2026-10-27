@@ -181,6 +181,26 @@ def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
             "content": document["content"], "digest": document["digest"]}
 
 
+def get_sample_experience_set(*, knowledge_network: str, state_dir: Path, actor_role: str) -> dict:
+    """The experience set of the installed sample that created this knowledge network.
+
+    Only a successful installation that owns the network answers; any other network, including
+    one with the same id made by hand, has no experience set.
+    """
+    _require_role(actor_role)
+    for path in sorted(state_dir.glob("*.json")) if state_dir.is_dir() else []:
+        try:
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if (isinstance(record, dict) and record.get("status") == "installed"
+                and (record.get("resources") or {}).get("knowledgeNetworkId") == knowledge_network
+                and isinstance(record.get("experienceSet"), dict)):
+            return {"sample": record.get("sample", path.stem), "version": record.get("version", ""),
+                    "knowledgeNetwork": knowledge_network, "experienceSet": record["experienceSet"]}
+    raise ApiError(404, "experience_set_unavailable", "this knowledge network has no sample experience set")
+
+
 def installation_view(record: dict, actor_role: str) -> dict:
     error = record.get("error") if isinstance(record.get("error"), dict) else None
     download_failed = (record.get("status") == "failed" and record.get("operation") != "uninstall"

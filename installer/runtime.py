@@ -14,7 +14,7 @@ import sys
 
 from installer.hook_process import run_hook
 
-from installer import shared_database
+from installer import experience_set, shared_database
 from pathlib import Path
 
 from installer.control_plane import ControlError, create_installation, retry_installation
@@ -130,6 +130,20 @@ def _record_database_image(state_dir, sample, version, deployed):
     write_json(state_dir / f"{sample}.json", current)
 
 
+def record_experience_set(root: Path, sample: str, state_dir: Path) -> None:
+    """Keeps the installed version's experience set with its installation; packages are not kept."""
+    current = _read_state(state_dir, sample)
+    if not current or current.get("status") != "installed":
+        return
+    sample_dir, document = _sample(root, sample)
+    relative = document["spec"]["studio"].get("experienceSet")
+    if relative:
+        current["experienceSet"] = experience_set.load(sample_dir / relative)
+    else:
+        current.pop("experienceSet", None)
+    write_json(state_dir / f"{sample}.json", current)
+
+
 def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None) -> dict:
     if actor_role != "admin":
         raise ApiError(403, "forbidden", "an administrator must install the sample")
@@ -151,6 +165,7 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
             knowledge_network=knowledge_network,
             components=components,
         )
+        record_experience_set(root, sample, state_dir)
     except DeployError as exc:
         _write_failed(state_dir, sample, version, exc.code, exc.message, stage="database")
         raise ApiError(500, exc.code, exc.message) from exc
@@ -190,6 +205,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             components=components,
             accepted=accepted,
         )
+        record_experience_set(root, sample, state_dir)
     except (DeployError, ControlError) as exc:
         if isinstance(exc, DeployError):
             _write_failed(state_dir, sample, version, exc.code, exc.message, stage="database")

@@ -7,6 +7,7 @@ from pathlib import Path
 from installer.contract import OFFICIAL_SOURCE_REPO
 from installer.deploy_database import DeployError
 from installer.studio_api import (
+    get_sample_experience_set,
     ApiError,
     create_sample_installation,
     get_sample_installation,
@@ -303,3 +304,45 @@ class StudioApiTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+
+class ExperienceSetApiTest(unittest.TestCase):
+    NETWORK = "supply_ontology_hand"
+    RECORDED = {"kind": "ExperienceSet", "spec": {"cases": []}}
+
+    def write(self, state: Path, name: str, **record) -> None:
+        record.setdefault("experienceSet", self.RECORDED)
+        record.setdefault("resources", {"knowledgeNetworkId": self.NETWORK})
+        (state / f"{name}.json").write_text(json.dumps({"sample": name, "version": "0.1.12", **record}),
+                                            encoding="utf-8")
+
+    def read(self, state: Path, network: str = NETWORK) -> dict:
+        return get_sample_experience_set(knowledge_network=network, state_dir=state, actor_role="user")
+
+    def test_the_installed_sample_that_owns_the_network_answers(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            state = Path(temporary)
+            self.write(state, "world-cup", status="installed", resources={"knowledgeNetworkId": "world_cup"})
+            self.write(state, "supply-chain", status="installed")
+            self.assertEqual(self.read(state), {"sample": "supply-chain", "version": "0.1.12",
+                                                "knowledgeNetwork": self.NETWORK, "experienceSet": self.RECORDED})
+
+    def test_other_networks_and_unfinished_installations_have_none(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            state = Path(temporary)
+            for status in ("installing", "failed", "uninstalled"):
+                self.write(state, "supply-chain", status=status)
+                with self.subTest(status=status), self.assertRaises(ApiError) as raised:
+                    self.read(state)
+                self.assertEqual(raised.exception.code, "experience_set_unavailable")
+            self.write(state, "supply-chain", status="installed", experienceSet=None)
+            with self.assertRaises(ApiError):
+                self.read(state)
+            self.write(state, "supply-chain", status="installed")
+            with self.assertRaises(ApiError):
+                self.read(state, "hand_made_network")
+
+    def test_reading_requires_a_signed_in_role(self):
+        with tempfile.TemporaryDirectory() as temporary, self.assertRaises(ApiError):
+            get_sample_experience_set(knowledge_network=self.NETWORK, state_dir=Path(temporary), actor_role="")

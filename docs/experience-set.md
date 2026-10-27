@@ -59,6 +59,16 @@ spec:
 5. **Answers stay out of the agent's context.** `answer` and `expected` are shown to the reader only, never added to the question or passed to an agent, keeping the gold set hidden from the evaluated side.
 6. **Curated, not complete.** A set holds representative questions that show the capability plainly, 15–25 as a guide, from simple facts to relations to business decisions.
 
+## Reading it after installation
+
+When an installation or retry succeeds, the sample service records that version's experience set with the installation; the package itself is not kept. Studio reads it for the current knowledge network:
+
+```http
+GET /api/studio/samples/experience-sets/{knowledgeNetworkId}
+```
+
+Any signed-in user may read it. It returns `{sample, version, knowledgeNetwork, experienceSet}` only when a sample installed successfully and its record names this network as the one it created (`resources.knowledgeNetworkId`). Anything else, including a hand-made network with the same id, a failed installation, or an installed version without a set, returns 404 `experience_set_unavailable`, and Studio shows no experience mode. A set is available only after installing a version that contains it; an older installed version must be reinstalled.
+
 ## Comparing expected values with a query result
 
 The live check and Studio compare a `cypher.query` result this way:

@@ -26,6 +26,7 @@ _GET = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/installatio
 _NOTES = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,63})/versions/(?P<version>[0-9]+\.[0-9]+\.[0-9]+)/release-notes$")
 _UNINSTALL = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/installations/(?P<installation>[^/]+)/uninstall$")
 _OFFLINE_DELETE = re.compile(r"^/api/studio/samples/(?P<sample>[a-z0-9-]{1,32})/offline$")
+_EXPERIENCE = re.compile(r"^/api/studio/samples/experience-sets/(?P<network>[A-Za-z0-9_-]{1,128})$")
 
 
 def role_from_safe(me_status: int, permissions: dict | None) -> str:
@@ -37,7 +38,7 @@ def role_from_safe(me_status: int, permissions: dict | None) -> str:
 
 
 class StudioApp:
-    def __init__(self, *, catalog, create, retry, get, authenticate, notes=None, history=None, refresh=None, create_selected=None, import_package=None, delete_package=None, uninstall=None):
+    def __init__(self, *, catalog, create, retry, get, authenticate, notes=None, history=None, refresh=None, create_selected=None, import_package=None, delete_package=None, uninstall=None, experience=None):
         self.catalog = catalog
         self.create = create
         self.retry = retry
@@ -50,6 +51,7 @@ class StudioApp:
         self.import_package = import_package
         self.delete_package = delete_package
         self.uninstall = uninstall
+        self.experience = experience
 
 
 def _empty_body(body: bytes) -> bool:
@@ -120,6 +122,10 @@ def _route(method: str, path: str, payload: dict | None = None, locale: str = "z
                         raise ApiError(409, "version_changed", "sample version or manifest changed; confirm again")
             return 202, app.create(sample, role, authorization)
         return create
+    experience = _EXPERIENCE.fullmatch(path)
+    if experience and method == "GET":
+        network = experience.group("network")
+        return lambda app, role, _authorization: (200, app.experience(network, role)) if app.experience else (404, {"code": "experience_set_unavailable", "message": "experience set unavailable"})
     notes = _NOTES.fullmatch(path)
     if notes and method == "GET":
         return lambda app, role, _authorization: (200, app.notes(notes.group("sample"), notes.group("version"), role, locale)) if app.notes else (404, {"code": "release_notes_unavailable", "message": "version notes unavailable"})
@@ -260,7 +266,7 @@ def authenticate_bearer(fetch, authorization: str | None) -> str:
     return role_from_safe(me_status, permissions if isinstance(permissions, dict) else None)
 
 
-def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate, release_notes=None, installation_history=None, refresh_catalog=None, create_selected=None, import_package=None, delete_package=None, uninstall=None) -> StudioApp:
+def build_app(*, list_samples, create_installation, retry_installation, get_installation, authenticate, release_notes=None, installation_history=None, refresh_catalog=None, create_selected=None, import_package=None, delete_package=None, uninstall=None, experience_set=None) -> StudioApp:
     return StudioApp(
         catalog=list_samples,
         create=create_installation,
@@ -274,6 +280,7 @@ def build_app(*, list_samples, create_installation, retry_installation, get_inst
         import_package=import_package,
         delete_package=delete_package,
         uninstall=uninstall,
+        experience=experience_set,
     )
 
 
@@ -285,7 +292,7 @@ def main() -> None:
 
     from installer.runtime import deploy as deploy_database_sample
     from installer.runtime import install_sample, kubectl_run, process_run, retry_sample
-    from installer.studio_api import (get_sample_installation, get_sample_release_notes,
+    from installer.studio_api import (get_sample_experience_set, get_sample_installation, get_sample_release_notes,
                                       list_sample_installations, list_samples, load_indexes,
                                       _read_state, _write_installing, _installation_id, ApiError)
     from installer.release import merge_catalog
@@ -594,6 +601,8 @@ def main() -> None:
         uninstall=uninstall,
         installation_history=lambda sample, role: list_sample_installations(
             sample=sample, state_dir=state_dir, actor_role=role),
+        experience_set=lambda network, role: get_sample_experience_set(
+            knowledge_network=network, state_dir=state_dir, actor_role=role),
     )
     serve(app, os.environ.get("BKN_SAMPLE_HTTP_HOST", "0.0.0.0"), int(os.environ.get("BKN_SAMPLE_HTTP_PORT", "8080")))
 
