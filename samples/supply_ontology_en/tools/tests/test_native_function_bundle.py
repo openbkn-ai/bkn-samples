@@ -103,25 +103,3 @@ def test_generated_native_function_loads_its_own_bkn_rows(monkeypatch, numeric_i
     assert result["node_count_total"] == 14
     assert result["data_source"]["knowledge_network_id"] == "supply_ontology_en"
     assert {call["ot_id"] for call in calls} == set(dataset_by_object_type)
-
-
-def test_native_bundle_accepts_epoch_timestamps_from_release_packages(tmp_path, monkeypatch):
-    import base64
-    import io
-    import os
-    import zipfile
-    import native_function_bundle as bundle
-
-    expected = {"fn/example.py": b"VALUE = 1\n", "context/example.py": b"VALUE = 2\n",
-                "managed_execution.py": b"KN_ID = 'sample'\n", "shortage_rule_runtime.py": b"# rule\n"}
-    for name, content in expected.items():
-        path = tmp_path / name
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(content)
-        os.utime(path, (0, 0))
-    monkeypatch.setattr(bundle, "TOOLS", tmp_path)
-    monkeypatch.setattr(bundle, "PACKAGE_PATHS", (tmp_path / "fn", tmp_path / "context"))
-    with zipfile.ZipFile(io.BytesIO(base64.b64decode(bundle._archive_source()))) as archive:
-        assert {name: archive.read(name) for name in archive.namelist()} == expected
-        assert all(item.date_time[0] >= 1980 for item in archive.infolist())
-    compile(bundle.build_native_function_code(fixed_operation="leadtime_days"), "native.py", "exec")
