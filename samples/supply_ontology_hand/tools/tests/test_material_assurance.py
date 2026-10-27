@@ -125,6 +125,9 @@ def test_draft_action_binding_is_owned_conflict_checked_and_idempotent(monkeypat
     # Retain compatibility with deployed 0.2.1 builds whose import ID limit is 40.
     assert len(definition['id']) <= 40
     current=copy.deepcopy(definition);calls=[]
+    # The backend omits null value fields on imported input parameters.
+    for parameter in current["parameters"]:
+        if parameter.get("value") is None:parameter.pop("value",None)
     tags=['bkn-samples','bkn-sample-'+manifest['metadata']['name']]
     monkeypatch.delenv('BKN_SAMPLE_OWNERSHIP_TAGS',raising=False)
     def call(args):
