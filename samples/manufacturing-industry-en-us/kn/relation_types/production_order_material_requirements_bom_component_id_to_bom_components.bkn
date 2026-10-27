@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: production_order_material_requirements_bom_component_id_to_bom_components
+name: production_order_material_requirements_bom_component_id_to_bom_components
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: production_order_material_requirements_bom_component_id_to_bom_components
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| production_order_material_requirements | bom_components | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| bom_component_id | bom_component_id |

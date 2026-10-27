@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: sales_order_lines_sales_order_id_to_sales_orders
+name: sales_order_lines_sales_order_id_to_sales_orders
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: sales_order_lines_sales_order_id_to_sales_orders
+
+由 CSV 外键建立的直接关联。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| sales_order_lines | sales_orders | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| sales_order_id | sales_order_id |

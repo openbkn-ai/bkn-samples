@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: inventory_locations_site_id_to_manufacturing_sites
+name: inventory_locations_site_id_to_manufacturing_sites
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: inventory_locations_site_id_to_manufacturing_sites
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| inventory_locations | manufacturing_sites | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| site_id | site_id |
