@@ -24,7 +24,9 @@ class ProductCatalogTests(unittest.TestCase):
 
     def test_product_switch_isolated_cache_sequence_and_restart(self):
         documents = {v: self.document(v) for v in ('0.2.0', '0.2.1')}
-        documents['0.2.0']['metadata']['sequence'] = 99
+        new_product_sequence = documents['0.2.1']['metadata']['sequence']
+        old_product_sequence = max(doc['metadata']['sequence'] for doc in documents.values()) + 100
+        documents['0.2.0']['metadata']['sequence'] = old_product_sequence
         def read(url, _limit):
             if url == REF_URL:
                 return json.dumps({'object': {'sha': 'a' * 40}}).encode()
@@ -34,7 +36,7 @@ class ProductCatalogTests(unittest.TestCase):
             self.version = '0.2.1'
             self.assertEqual(self.source.refresh()['status'], 'unchanged')
             self.assertEqual(self.source.metadata()['productVersion'], self.version)
-            self.assertEqual(self.source.source().cache['catalog']['metadata']['sequence'], 1)
+            self.assertEqual(self.source.source().cache['catalog']['metadata']['sequence'], new_product_sequence)
             urls = [call.args[0] for call in network.call_args_list]
             self.assertIn(RAW_PREFIX + 'a' * 40 + '/catalogs/0.2.1/catalog.json', urls)
         for version in documents:
@@ -43,7 +45,7 @@ class ProductCatalogTests(unittest.TestCase):
         restarted = ProductCatalog(self.state, SCHEMA, ROOT, lambda: self.version)
         self.assertEqual(restarted.entries(), documents['0.2.1']['spec']['entries'])
         self.version = '0.2.0'
-        self.assertEqual(restarted.source().cache['catalog']['metadata']['sequence'], 99)
+        self.assertEqual(restarted.source().cache['catalog']['metadata']['sequence'], old_product_sequence)
 
     def test_unknown_product_never_reads_legacy_catalog_or_main_fallback(self):
         for version in ('', 'latest', '../0.2.0', '0.2.01'):
