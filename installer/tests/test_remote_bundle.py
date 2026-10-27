@@ -39,6 +39,8 @@ class RemoteBundleTest(unittest.TestCase):
         self.entry["releaseNotes"]["documents"][0]["digest"] = sha(self.note)
         self.archive = self.root / "package.tar.gz"
         files = {"sample.yaml": (ROOT / "samples/supply_ontology_hand/sample.yaml").read_bytes(),
+                 "experience/experience-set.yaml":
+                     (ROOT / "samples/supply_ontology_hand/experience/experience-set.yaml").read_bytes(),
                  "data/data.txt": b"reviewed test data", "functions/README": b"functions", "skills/README": b"skills",
                  "kn/supply_ontology_hand.json": json.dumps({"id": "supply_ontology_hand",
                      "object_types": [{"id": "supply_ontology_hand_inventory"}]}).encode(),
