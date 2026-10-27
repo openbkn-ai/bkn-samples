@@ -7,6 +7,7 @@ from pathlib import Path
 from installer.contract import OFFICIAL_SOURCE_REPO
 from installer.deploy_database import DeployError
 from installer.studio_api import (
+    get_sample_experience_set,
     ApiError,
     create_sample_installation,
     get_sample_installation,
@@ -303,3 +304,28 @@ class StudioApiTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ExperienceSetApiTest(unittest.TestCase):
+    def write(self, state: Path, record: dict) -> None:
+        (state / "supply-chain.json").write_text(json.dumps(record), encoding="utf-8")
+
+    def test_only_an_installed_version_serves_its_recorded_set(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            state = Path(temporary)
+            recorded = {"kind": "ExperienceSet", "spec": {"cases": []}}
+            for status in ("installing", "failed", "uninstalled"):
+                self.write(state, {"status": status, "version": "0.1.12", "experienceSet": recorded})
+                with self.subTest(status=status), self.assertRaises(ApiError) as raised:
+                    get_sample_experience_set(sample="supply-chain", state_dir=state, actor_role="user")
+                self.assertEqual(raised.exception.code, "experience_set_unavailable")
+            self.write(state, {"status": "installed", "version": "0.1.12"})
+            with self.assertRaises(ApiError):
+                get_sample_experience_set(sample="supply-chain", state_dir=state, actor_role="user")
+            self.write(state, {"status": "installed", "version": "0.1.12", "experienceSet": recorded})
+            self.assertEqual(get_sample_experience_set(sample="supply-chain", state_dir=state, actor_role="user"),
+                             {"sample": "supply-chain", "version": "0.1.12", "experienceSet": recorded})
+
+    def test_reading_requires_a_signed_in_role(self):
+        with tempfile.TemporaryDirectory() as temporary, self.assertRaises(ApiError):
+            get_sample_experience_set(sample="supply-chain", state_dir=Path(temporary), actor_role="")

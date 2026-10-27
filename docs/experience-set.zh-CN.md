@@ -59,6 +59,16 @@ spec:
 5. **答案不进 Agent 上下文。** `answer` 和 `expected` 只展示给用户，不能拼进提问或传给 Agent，以保持金标"被测方不可见"的约束。
 6. **精选，不全量。** 体验集只收能直观说明能力的代表题，建议 15～25 道，从简单事实到关系，再到业务判断，依次排列。
 
+## 安装后如何读取
+
+安装或重试成功时，安装服务把该版本的体验集记入安装记录；安装包本身不保留。Studio 先从样例目录中找到 `knowledgeNetwork.id` 与当前知识网络相同、且状态为已安装的样例，再读取：
+
+```http
+GET /api/studio/samples/{sample}/experience-set
+```
+
+已登录用户都可以读取。返回 `{sample, version, experienceSet}`。样例未安装、安装失败，或安装的版本没有体验集时，返回 404 `experience_set_unavailable`，Studio 不显示场景体验。体验集只在安装包含它的版本后才可用，已安装的旧版本需要重新安装。
+
 ## 期望值与查询结果的比对
 
 在线核验和 Studio 都按以下规则比对 `cypher.query` 的结果：

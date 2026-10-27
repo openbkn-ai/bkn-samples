@@ -109,6 +109,16 @@ class StudioHttpTest(unittest.TestCase):
             self.assertEqual(status, 202)
         self.assertEqual(calls["create"], 3)
 
+    def test_experience_set_route_reads_the_installed_set(self):
+        built, _calls = app("user")
+        status, payload = dispatch(built, "GET", "/api/studio/samples/supply-chain/experience-set", "Bearer t", b"")
+        self.assertEqual((status, payload["code"]), (404, "experience_set_unavailable"))
+        built.experience = lambda sample, role: {"sample": sample, "requestedBy": role}
+        status, payload = dispatch(built, "GET", "/api/studio/samples/supply-chain/experience-set", "Bearer t", b"")
+        self.assertEqual((status, payload), (200, {"sample": "supply-chain", "requestedBy": "user"}))
+        status, _payload = dispatch(built, "POST", "/api/studio/samples/supply-chain/experience-set", "Bearer t", b"")
+        self.assertEqual(status, 404)
+
     def test_user_can_read_but_not_install(self):
         built, calls = app("user")
         status, payload = dispatch(built, "GET", "/api/studio/samples", "Bearer t", b"")

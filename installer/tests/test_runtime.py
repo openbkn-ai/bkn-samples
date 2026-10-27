@@ -9,7 +9,7 @@ from pathlib import Path
 from installer.control_plane import ControlError
 from installer.runtime import database_config, install_sample, openbkn_json, retry_sample, run_platform_hook
 from installer.deploy_database import DeployError
-from installer.studio_api import ApiError, installation_view, _write_installing
+from installer.studio_api import ApiError, get_sample_experience_set, installation_view, _write_installing
 
 ROOT = Path(__file__).resolve().parents[2]
 PASSWORD = "secret-password"
@@ -102,10 +102,11 @@ class RuntimeTest(unittest.TestCase):
             Path(env["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps({"ok": True, "resources": {}}), encoding="utf-8")
             return completed()
 
+        state_dir = Path(tempfile.mkdtemp())
         view = install_sample(
             sample="supply-chain",
             actor_role="admin",
-            state_dir=Path(tempfile.mkdtemp()),
+            state_dir=state_dir,
             root=ROOT,
             version="0.1.0",
             deploy=deploy,
@@ -126,6 +127,9 @@ class RuntimeTest(unittest.TestCase):
         rendered = json.dumps(view)
         self.assertNotIn(PASSWORD, rendered)
         self.assertNotIn("admin-token", rendered)
+        served = get_sample_experience_set(sample="supply-chain", state_dir=state_dir, actor_role="user")
+        self.assertEqual(served["experienceSet"]["kind"], "ExperienceSet")
+        self.assertEqual(served["experienceSet"]["metadata"]["language"], "zh-CN")
 
     def test_user_retry_does_not_deploy(self):
         state = Path(tempfile.mkdtemp())

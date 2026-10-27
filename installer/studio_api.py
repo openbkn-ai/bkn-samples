@@ -181,6 +181,16 @@ def get_sample_release_notes(*, sample: str, version: str, actor_role: str,
             "content": document["content"], "digest": document["digest"]}
 
 
+def get_sample_experience_set(*, sample: str, state_dir: Path, actor_role: str) -> dict:
+    """The experience set of the installed version, as the installation recorded it."""
+    _require_role(actor_role)
+    _require_sample(sample)
+    record = _read_state(state_dir, sample)
+    if not record or record.get("status") != "installed" or not isinstance(record.get("experienceSet"), dict):
+        raise ApiError(404, "experience_set_unavailable", "the installed sample has no experience set")
+    return {"sample": sample, "version": record.get("version", ""), "experienceSet": record["experienceSet"]}
+
+
 def installation_view(record: dict, actor_role: str) -> dict:
     error = record.get("error") if isinstance(record.get("error"), dict) else None
     download_failed = (record.get("status") == "failed" and record.get("operation") != "uninstall"
