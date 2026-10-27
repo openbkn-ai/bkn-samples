@@ -9,3 +9,5 @@ A new version does not overwrite an existing network. Preserve and review custom
 Also shorten the not-yet-released replenishment-draft Action ID to at most 40 characters, updating its definition, binding, result reference and verification together. This sample identifier works with existing test deployments and current main; platform ID rules and replenishment logic are unchanged.
 
 Omit the unused `value: null` constant on the draft Action input parameter, matching backend readback so ownership validation does not reject its own import. Parameter and tool binding checks remain strict.
+
+Accept successful empty Action-update responses in the function registration script. Nonempty responses still require valid JSON and failed commands still raise errors, avoiding a failed installation after a successful first binding.

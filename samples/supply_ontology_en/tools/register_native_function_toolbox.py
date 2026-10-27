@@ -64,7 +64,7 @@ def _call(args: list[str]) -> Any:
     if completed.returncode:
         detail = (completed.stderr or completed.stdout).strip()
         raise RuntimeError(detail or f"""openbkn call failed (exit code {completed.returncode})""")
-    return json.loads(completed.stdout)
+    return json.loads(completed.stdout.strip() or "{}")
 
 
 def _tool_inputs() -> dict[str, dict[str, Any]]:
