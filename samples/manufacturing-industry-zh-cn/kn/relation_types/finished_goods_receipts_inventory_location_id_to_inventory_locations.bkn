@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: finished_goods_receipts_inventory_location_id_to_inventory_locations
+name: finished_goods_receipts_inventory_location_id_to_inventory_locations
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: finished_goods_receipts_inventory_location_id_to_inventory_locations
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| finished_goods_receipts | inventory_locations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| inventory_location_id | inventory_location_id |

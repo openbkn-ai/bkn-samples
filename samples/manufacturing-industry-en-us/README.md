@@ -1,4 +1,4 @@
-# Manufacturing Operations Sample
+# End-to-End Manufacturing Operations Sample
 
 This is an importable end-to-end manufacturing sample for tracing demand forecast through plan, supply, production, quality, finished-goods receipt, and shipment.
 
@@ -19,10 +19,6 @@ The data chain is forecast → production plan → sales order → material rece
 The planning horizon is **November 2026 through March 2027**. Day-level temporal fields are date-only (`YYYY-MM-DD`): sales delivery, procurement receipt, goods receipt, shift, execution, maintenance, and production due dates. The latest planned production due date is `2027-03-30`. The forecast period is a `YYYY-MM` planning-month string, not a day-level date.
 
 Fifty connected business cases cover 22 shipped completions, 11 material shortages, 11 quality failures, and 6 work orders in production. Read [the branch design](docs/dataset-scenarios.md) for the evidence represented by each outcome.
-
-## Identifier compatibility
-
-OpenBKN 0.2.1 limits BKN resource `id` and `name` values to 40 characters. The network, all 40 object types, 71 relation types, and 3 concept groups satisfy that limit. Relation IDs use stable abbreviated endpoint names such as `material_issue_to_prod_mat_req`; the source and target CSV fields remain fully explicit in each relation mapping.
 
 ## English and Chinese packages
 

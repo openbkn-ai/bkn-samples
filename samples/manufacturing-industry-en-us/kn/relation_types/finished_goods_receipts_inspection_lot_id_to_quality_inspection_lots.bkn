@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: finished_goods_receipts_inspection_lot_id_to_quality_inspection_lots
+name: finished_goods_receipts_inspection_lot_id_to_quality_inspection_lots
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: finished_goods_receipts_inspection_lot_id_to_quality_inspection_lots
+
+Direct association established by a CSV foreign key.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| finished_goods_receipts | quality_inspection_lots | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| inspection_lot_id | inspection_lot_id |

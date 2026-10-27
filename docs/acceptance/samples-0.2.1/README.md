@@ -4,7 +4,11 @@ All **13 standard source samples** are covered by the same
 [machine-readable plan](../../../tools/publication/candidates-0.2.1.json): Order Basics
 and bilingual Supply Chain, World Cup, Manufacturing, Financial FIBO, Retail GS1 and
 Energy SAREF4ENER. Missing, duplicate or unregistered identities fail the batch build.
-Manufacturing is **0.1.3** per language and Energy is **0.1.5** per language.
+Manufacturing is **0.1.4** per language and Energy is **0.1.5** per language.
+Manufacturing 0.1.4 restores the original relation IDs and names (up to 93
+characters) and the 42-character English network name against the 128-character
+resource contract in openbkn-ai/bkn-foundry #2207; live import acceptance remains
+pending until that Foundry change is available.
 
 The complete set is built from clean committed source. Archive digests, offline
 inspection and declared architecture compatibility are checked for every sample.
@@ -67,7 +71,7 @@ is not stable catalog admission, migration support or proof of target runtime su
 
 ## Interrupted binding recovery
 
-Manufacturing 0.1.3 and Energy 0.1.5 add a local regression for an interrupted
+Manufacturing 0.1.4 and Energy 0.1.5 include the local regression for an interrupted
 owned-network import: a retry preserves existing matching resource bindings and
 fills only unbound objects. All object bindings are inspected before the first
 update, so a foreign binding aborts without changing any object. Verify refuses
