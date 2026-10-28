@@ -62,6 +62,13 @@ class ValidateTest(unittest.TestCase):
     def test_query_surface_needs_its_cypher(self):
         self.assertTrue(experience_set.validate(document_with(cypher={"graph": "MATCH (n) RETURN n"})))
 
+    def test_graph_is_a_pattern_the_explorer_completes(self):
+        pattern = "MATCH (p:product)-[:uses]->(m:material)\nWHERE m.code = '321-000569'"
+        graph = dict(CASE["cypher"], graph=pattern)
+        self.assertEqual(experience_set.validate(document_with(surfaces=["agent", "query", "graph"], cypher=graph)), [])
+        graph["graph"] = pattern + "\nreturn p, m"
+        self.assertTrue(experience_set.validate(document_with(surfaces=["agent", "query", "graph"], cypher=graph)))
+
     def test_cypher_without_its_surface_is_rejected(self):
         self.assertTrue(experience_set.validate(document_with(surfaces=["agent"])))
 

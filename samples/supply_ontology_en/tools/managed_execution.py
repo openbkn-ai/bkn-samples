@@ -356,26 +356,54 @@ def _load_bom_rows_by_material(
 
 
 def _load_bom_ancestor_rows(query_object_instance, material_code: str) -> list[dict[str, Any]]:
-    """Acquire parent links as well as direct hits for non-expanded BOMs."""
-    pending = [material_code]
+    """Acquire all ancestor links with bounded, paginated frontier reads."""
+    pending = {material_code} if material_code else set()
     seen = set()
     rows = []
     identities = set()
+    object_type_id = _OBJECT_TYPES["bom"]
+    limit_error = f"{object_type_id} query exceeds {_MAX_ROWS_PER_DATASET} rows; narrow the business scope and retry"
+
+    def read_materials(codes):
+        condition = (
+            _equal_condition("material_code", codes[0])
+            if len(codes) == 1
+            else _in_condition("material_code", codes)
+        )
+        try:
+            batch_rows = _query_rows(query_object_instance, object_type_id, condition)
+        except ValueError as exc:
+            # The original limit applies to each material, not their union.
+            # Split only this explicit row-limit rejection; transport failures
+            # and a single material reaching its old limit still propagate.
+            if len(codes) == 1 or str(exc) != limit_error:
+                raise
+            middle = len(codes) // 2
+            yield from read_materials(codes[:middle])
+            yield from read_materials(codes[middle:])
+        else:
+            yield from batch_rows
+
     while pending:
-        child = pending.pop(0)
-        if not child or child in seen:
-            continue
-        seen.add(child)
-        for row in _load_bom_rows_by_material(query_object_instance, child):
-            identity = tuple(sorted((key, repr(value)) for key, value in row.items()))
-            if identity not in identities:
-                identities.add(identity)
-                rows.append(row)
-                if len(rows) > _MAX_ROWS_PER_DATASET:
-                    raise CannotCompute('Where-used results exceed the safety limit; narrow the scope')
-            parent = str(row.get("parent_material_code") or "").strip()
-            if parent and parent not in seen:
-                pending.append(parent)
+        frontier = sorted(pending - seen)
+        if not frontier:
+            break
+        seen.update(frontier)
+        pending = set()
+        # Batch only the transport reads. Graph traversal and row identity stay
+        # unchanged, including non-expanded BOMs and cycles across products.
+        for start in range(0, len(frontier), 100):
+            codes = frontier[start:start + 100]
+            for row in read_materials(codes):
+                identity = tuple(sorted((key, repr(value)) for key, value in row.items()))
+                if identity not in identities:
+                    identities.add(identity)
+                    rows.append(row)
+                    if len(rows) > _MAX_ROWS_PER_DATASET:
+                        raise CannotCompute('Where-used results exceed the safety limit; narrow the scope')
+                parent = str(row.get("parent_material_code") or "").strip()
+                if parent and parent not in seen:
+                    pending.add(parent)
     return rows
 
 
