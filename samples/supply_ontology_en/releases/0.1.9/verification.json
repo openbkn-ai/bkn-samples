@@ -1,0 +1,62 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.9",
+  "packageDigest": "sha256:bea16e73fa30621041748bf709d00fde0278d3e135f6772d9edc6344c708809d",
+  "sourceCommit": "30ac708c02a4837862716fae8311948745f7d1bd",
+  "platformVersion": "0.2.1",
+  "platformBuild": "0.2.1-main.20261016154814.sha3673f27",
+  "architectureTested": "arm64",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a670ad0b99cbfcb1513a3f1619091b4acb394d0a0122e206e02c494dc24aee7f",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-supply-chain-en-1c88d2390a4745989d59870ac5625031",
+    "attemptId": "46b1eb63727943c78b05e0e78f79e577",
+    "sample": "supply-chain-en",
+    "version": "0.1.9",
+    "startedAt": "2026-10-28T01:36:10.441796Z",
+    "finishedAt": "2026-10-28T01:38:38.240149Z",
+    "installedAt": "2026-10-28T01:38:38.240149Z",
+    "status": "installed",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    }
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables and 78,635 rows, matching the 0.1.12/0.1.8 record; version metadata excluded."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh discover/knowledge/verify stages passed; tables-discovered, object-query and cross-table-query checks passed."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Native functions callable, Skills discoverable, metric query and ownership checks passed."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "Experience set served for the created network (23 cases); 14/14 reference queries reproduce the gold and 5/5 graph patterns match 4-19 paths on the 0.2.1 backend."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.9/acceptance.json",
+  "evidenceDigest": "sha256:22a68e339c098a89a7e2a4c923d1fa548cb8d874a5acb16876f44f26a0ac6259",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "limits": [
+    "Existing arm64 8081 runtime with backend 0.2.1-main.20261016154814.sha3673f27; the sample service was upgraded to the main build of #208 for this acceptance. No AMD64 execution or vanilla 0.2.1 certification.",
+    "Scenario evidence is the experience set's 14 reference queries and 5 graph patterns reproducing the gold on the installed network; no model question was asked for this artifact and no model accuracy is claimed.",
+    "The Studio experience card was not exercised in a browser on this instance; its Studio and EE builds are not deployed here.",
+    "An earlier unpublished candidate of the same versions failed 9 of 23 reference queries on this backend; it was withdrawn and rebuilt after #209, and its results are not pooled."
+  ]
+}
