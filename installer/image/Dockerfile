@@ -13,7 +13,7 @@ RUN for source in /etc/apt/sources.list /etc/apt/sources.list.d/*; do \
     && apt-get -o Acquire::Retries=3 update \
     && apt-get -o Acquire::Retries=3 install -y --no-install-recommends python3 python3-pip \
     && python3 -m pip install --break-system-packages --no-cache-dir \
-        "PyYAML>=6" "SQLAlchemy>=2" "PyMySQL>=1.1" "psycopg[binary]>=3.1" \
+        "PyYAML>=6" "SQLAlchemy>=2" "PyMySQL>=1.1" "psycopg[binary]>=3.1" "jsonschema>=4.18,<5" \
     && rm -rf /var/lib/apt/lists/*
 
 COPY VERSION /opt/bkn-samples/VERSION

@@ -28,9 +28,11 @@ PROFILE = "openbkn.ai/sample-install.v1"
 # Standard API adapters implemented by this installation profile. This is not
 # a platform feature or licensing inventory; target API errors are recorded by
 # the installation stages. Explicit operator configuration may restrict it.
+# `sample.experience-set` is this service recording and serving a package's
+# experience set; services without it reject such packages before download.
 CAPABILITIES = {"database.shared", "vega.catalog", "knowledge-network.import.kn-json",
                 "knowledge-network.import.bkn-directory",
-                "execution.function", "execution.skill"}
+                "execution.function", "execution.skill", "sample.experience-set"}
 
 
 class UniqueLoader(yaml.SafeLoader):

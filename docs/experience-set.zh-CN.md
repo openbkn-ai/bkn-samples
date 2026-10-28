@@ -69,6 +69,8 @@ GET /api/studio/samples/experience-sets/{knowledgeNetworkId}
 
 已登录用户都可以读取。只有某个样例安装成功、且安装记录中它创建的知识网络（`resources.knowledgeNetworkId`）正是该网络时，才返回 `{sample, version, knowledgeNetwork, experienceSet}`。其他情况，包括手工创建的同名网络、安装失败，或已安装版本没有体验集，都返回 404 `experience_set_unavailable`，Studio 不显示场景体验。体验集只在安装包含它的版本后才可用，已安装的旧版本需要重新安装。
 
+声明了体验集的安装包在 `requires.capabilities` 中要求 `sample.experience-set` 能力。不会记录体验集的旧样例服务在下载前就拒绝这类版本，继续提供上一版本。显式配置了 `platform.capabilities` 列表的运维方，需要加入这一项才能安装这类版本。
+
 ## 期望值与查询结果的比对
 
 在线核验和 Studio 都按以下规则比对 `cypher.query` 的结果：

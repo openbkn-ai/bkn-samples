@@ -41,7 +41,7 @@ jobs:
           SOURCE_BRANCH: ${{ inputs.source_branch }}
         run: |
           test -n "${SWR_PASSWORD}" && test -n "${SWR_USERNAME}" || { echo "SWR credentials are required for a standard release" >&2; exit 1; }
-          python -m pip install "PyYAML>=6"
+          python -m pip install "PyYAML>=6" "jsonschema>=4.18,<5"
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
             if [[ ! "${SOURCE_BRANCH}" =~ ^release/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
               echo "source_branch must be release/X.Y.Z" >&2

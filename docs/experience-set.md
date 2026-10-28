@@ -69,6 +69,8 @@ GET /api/studio/samples/experience-sets/{knowledgeNetworkId}
 
 Any signed-in user may read it. It returns `{sample, version, knowledgeNetwork, experienceSet}` only when a sample installed successfully and its record names this network as the one it created (`resources.knowledgeNetworkId`). Anything else, including a hand-made network with the same id, a failed installation, or an installed version without a set, returns 404 `experience_set_unavailable`, and Studio shows no experience mode. A set is available only after installing a version that contains it; an older installed version must be reinstalled.
 
+A package that declares an experience set requires the `sample.experience-set` capability in `requires.capabilities`. Sample services that do not record experience sets reject such a version before downloading it and keep offering the previous one. An operator who sets an explicit `platform.capabilities` list must add this name to install these versions.
+
 ## Comparing expected values with a query result
 
 The live check and Studio compare a `cypher.query` result this way:
