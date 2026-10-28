@@ -1,6 +1,30 @@
 from __future__ import annotations
 
 
+def test_creation_and_update_publish_use_rules_on_the_existing_tool_contract(monkeypatch):
+    import json
+    import register_native_function_toolbox as registry
+    from function_catalog import FUNCTION_CATALOG
+
+    monkeypatch.setattr(registry, 'require_owned', lambda *args: None)
+    for existing in (False, True):
+        bodies = []
+        def fake_call(args):
+            if args[:2] == ['toolbox', 'list']:
+                return {'data': [{'box_name': 'Supply_EN_Functions', 'box_id': 'box', 'status': 'published'}]}
+            if args[:2] == ['tool', 'list']:
+                return {'tools': [{'name': spec['name'], 'tool_id': operation, 'status': 'enabled'} for operation, spec in FUNCTION_CATALOG.items()] if existing else []}
+            if args[0] == 'call' and args[1].startswith('/api/agent-operator-integration/v1/tool-box/box/tool'):
+                payload = json.loads(args[args.index('-d') + 1]); bodies.append(payload)
+                return {'success_ids': [payload['function_input']['name']]}
+            return {}
+        monkeypatch.setattr(registry, '_call', fake_call)
+        registry.run(box_name='Supply_EN_Functions', apply=True)
+        assert len(bodies) == len(FUNCTION_CATALOG)
+        assert all('toolbox_id=owner_id' in b['use_rule'] for b in bodies)
+        assert all('use_rule' not in b['function_input'] for b in bodies), 'usage rules belong to the Tool metadata, not Function inputs'
+
+
 def test_existing_native_toolbox_updates_every_business_named_function(monkeypatch):
     import register_native_function_toolbox as registry
     from function_catalog import FUNCTION_CATALOG
@@ -50,3 +74,16 @@ def test_action_update_accepts_empty_success_without_masking_bad_responses(monke
     monkeypatch.setattr(registry.subprocess, "run", lambda *a, **kw: subprocess.CompletedProcess(a, 0, "\n", ""))
     for read in (["toolbox", "list", "--limit", "100"], ["tool", "list", "--toolbox", "box", "--all"], ["call", "/api/bkn-backend/v1/knowledge-networks", "-X", "GET"]):
         with pytest.raises(json.JSONDecodeError):registry._call(read)
+
+
+def test_shared_demand_parameters_describe_object_items_not_string_items():
+    from register_native_function_toolbox import _operation_inputs
+
+    demands = next(p for p in _operation_inputs('shared_contention') if p['name'] == 'demands')
+    assert demands['type'] == 'array'
+    items, = demands.get('sub_parameters', [])
+    assert items['type'] == 'object'
+    fields = {p['name']: p for p in items['sub_parameters']}
+    assert set(fields) == {'product', 'qty'}
+    assert fields['product']['type'] == 'string' and fields['product']['required']
+    assert fields['qty']['type'] == 'number' and fields['qty']['required']

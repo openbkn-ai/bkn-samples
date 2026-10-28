@@ -50,3 +50,16 @@ def test_action_update_accepts_empty_success_without_masking_bad_responses(monke
     monkeypatch.setattr(registry.subprocess, "run", lambda *a, **kw: subprocess.CompletedProcess(a, 0, "\n", ""))
     for read in (["toolbox", "list", "--limit", "100"], ["tool", "list", "--toolbox", "box", "--all"], ["call", "/api/bkn-backend/v1/knowledge-networks", "-X", "GET"]):
         with pytest.raises(json.JSONDecodeError):registry._call(read)
+
+
+def test_shared_demand_parameters_describe_object_items_not_string_items():
+    from register_native_function_toolbox import _operation_inputs
+
+    demands = next(p for p in _operation_inputs('shared_contention') if p['name'] == 'demands')
+    assert demands['type'] == 'array'
+    items, = demands.get('sub_parameters', [])
+    assert items['type'] == 'object'
+    fields = {p['name']: p for p in items['sub_parameters']}
+    assert set(fields) == {'product', 'qty'}
+    assert fields['product']['type'] == 'string' and fields['product']['required']
+    assert fields['qty']['type'] == 'number' and fields['qty']['required']

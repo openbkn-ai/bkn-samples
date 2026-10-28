@@ -2,6 +2,13 @@
 
 from __future__ import annotations
 
+EXECUTION_USE_RULE = (
+    'Call execute_tool with unchanged toolbox_id=owner_id and tool_id=capability_id from discovery. '
+    'Check body.exit_code and result; HTTP 200 is insufficient. '
+    'Preserve requested fields; do not character-truncate JSON. '
+    'Reuse verified same-scope results instead of repeating calls.'
+)
+
 
 def _spec(
     name: str,
@@ -16,6 +23,7 @@ def _spec(
         "name": name,
         "operation": operation,
         "description": description,
+        "use_rule": EXECUTION_USE_RULE,
         "use_when": use_when,
         "do_not_use_when": do_not_use_when,
         "minimum_business_inputs": minimum_business_inputs or [],
@@ -49,7 +57,7 @@ FUNCTION_CATALOG = {
     "substitute_status": _spec(
         'Alternate_Status',
         "substitute_status",
-        'Use case: alternatives. Input: exactly one of product/material_code, optional scope/policy. Result: position-specific groups, candidates, usage and available stock.',
+        'Use case: alternatives. Input: prefer material_code for a named component, or product, never both; scope/policy. Result: parent-scoped groups with available_qty and usage per candidate. Preserve matched group members; never truncate JSON by characters.',
     ),
     "theoretical_build": _spec(
         'Manufacturing_Capacity',
@@ -67,12 +75,12 @@ FUNCTION_CATALOG = {
     "kitting_net_demand": _spec(
         'Demand_Coverage',
         "kitting_net_demand",
-        'Use case: fixed demand. Input: product, quantity, explicit alternate policy, optional scope (all). Result: coverage, all shortages and suggested replenishment; finished/component stock first, no POs.',
+        'Use case: fixed demand. Input: product, qty, policy, scope (all). Result: coverage, all shortages and suggested replenishment; summary includes gaps with net_requirement; full adds lines. Stock only; no POs.',
     ),
     "shared_contention": _spec(
         'Shared_Demand_Allocation',
         "shared_contention",
-        'Use case: shared stock allocation. Input: ordered demands, explicit alternate policy, optional scope (all). Result: per-demand coverage and shortages; full adds allocations and remaining pool.',
+        'Use case: shared stock allocation. Input: ordered {product, qty} objects, policy, scope (all). Result: per-demand coverage and shortages in summary; full adds allocations/remaining pool. Do not replace with independent single-demand calculations.',
         use_when='Use to assess simultaneous coverage for multiple products with explicit quantities.',
         do_not_use_when='For one product or structure-only comparison without quantities, choose another function.',
         minimum_business_inputs=["demands", "substitute_enabled"],

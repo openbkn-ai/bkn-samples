@@ -17,8 +17,8 @@ OPERATION_CONTRACTS: Mapping[str, frozenset[str]] = {
     "substitute_status": frozenset({"bom", "inventory"}),
     "theoretical_build": frozenset({"bom", "inventory"}),
     "total_sellable": frozenset({"bom", "inventory"}),
-    "kitting_net_demand": frozenset({"bom", "inventory", "purchase_order"}),
-    "shared_contention": frozenset({"bom", "inventory", "purchase_order"}),
+    "kitting_net_demand": frozenset({"bom", "inventory"}),
+    "shared_contention": frozenset({"bom", "inventory"}),
     "max_build_without_po": frozenset({"bom", "inventory"}),
     "leadtime_days": frozenset({"material"}),
     "supply_status": frozenset(

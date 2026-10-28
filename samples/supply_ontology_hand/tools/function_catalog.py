@@ -2,6 +2,12 @@
 
 from __future__ import annotations
 
+EXECUTION_USE_RULE = (
+    '通过 execute_tool 直接调用；从发现结果原样复制 toolbox_id=owner_id、tool_id=capability_id，不重构 ID。'
+    '检查 body.exit_code 和 result，HTTP 200 不等于计算成功。'
+    '保留问题所需的完整字段，不按字符截断 JSON；同一快照、相同输入与范围的已核实结果应复用，避免重复执行。'
+)
+
 
 def _spec(
     name: str,
@@ -16,6 +22,7 @@ def _spec(
         "name": name,
         "operation": operation,
         "description": description,
+        "use_rule": EXECUTION_USE_RULE,
         "use_when": use_when,
         "do_not_use_when": do_not_use_when,
         "minimum_business_inputs": minimum_business_inputs or [],
@@ -49,7 +56,7 @@ FUNCTION_CATALOG = {
     "substitute_status": _spec(
         "替代料状态",
         "substitute_status",
-        "适用场景：确认产品或物料是否存在替代料及候选料库存。输入：产品编码或物料编码（二选一），可选仓范围和替代料策略。结果：替代组、候选料、可用量和策略状态。",
+        "适用场景：确认替代料及库存。输入：指定物料时优先 material_code，与 product 二选一；可选仓范围和策略。结果：按产品、父件、替代组区分的完整候选料、available_qty 和单耗；按业务范围选取对应组，不按字符截断 JSON。",
     ),
     "theoretical_build": _spec(
         "理论可产",
@@ -67,12 +74,12 @@ FUNCTION_CATALOG = {
     "kitting_net_demand": _spec(
         "要X套净需求与齐套",
         "kitting_net_demand",
-        "适用场景：判断指定数量是否齐套并找出缺料。输入：产品编码、需求套数、替代料策略，默认全仓、不计PO；先扣成品及逐层组件库存。结果：默认返回齐套结论、全部缺料清单及每项按当前需求快照建议补货量；传 report_grain=full 才返回全部物料明细。",
+        "适用场景：判断指定数量是否齐套并找出缺料。输入：产品、套数、替代策略、仓范围，默认全仓、不计PO。结果：默认返回齐套结论、全部缺料清单；summary 的 gaps 已含每项 net_requirement 与建议补货量，full 另外返回逐层 lines，无需为缺料数量重复调用。",
     ),
     "shared_contention": _spec(
         "共用料与多需求争用",
         "shared_contention",
-        "适用场景：判断多条需求同时承接时的共用物料争用。输入：至少两条产品与数量需求，数组顺序代表扣减优先级。结果：默认返回逐单满足状态和缺料清单；传 report_grain=full 才返回逐料分配和完整剩余池。",
+        "适用场景：判断多条需求能否同时承接。输入：按顺序的 {product, qty} 对象数组、替代策略、仓范围。结果：默认返回逐单满足状态和缺料清单；summary 已含全部 shortages 数量，full 另加逐料分配及剩余池，不用多个独立单需求计算替代共享分配。",
         use_when="多个产品有明确数量，需要判断能否同时承接时使用。",
         do_not_use_when="只有一个产品，或数量缺失而只需比较结构时不要使用。",
         minimum_business_inputs=["demands", "substitute_enabled"],

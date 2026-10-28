@@ -268,7 +268,7 @@ def test_new_demand_backward_plan_filters_forecast_by_product():
     }
 
 
-def test_kitting_loader_scopes_inventory_and_purchase_orders_before_loading_rows():
+def test_inventory_only_kitting_scopes_stock_and_never_loads_purchase_orders():
     from managed_execution import load_bkn_rows
 
     calls = []
@@ -298,13 +298,7 @@ def test_kitting_loader_scopes_inventory_and_purchase_orders_before_loading_rows
             {"field": "stock_status", "operation": "==", "value": "可用", "value_from": "const"},
         ],
     }
-    assert by_type["supply_ontology_hand_po"]["condition"] == {
-        "operation": "and",
-        "sub_conditions": [
-            {"field": "material_number", "operation": "in", "value": ["FG-382", "RM-001", "RM-002"], "value_from": "const"},
-            {"field": "rowclosestatus_title", "operation": "!=", "value": "已关闭", "value_from": "const"},
-        ],
-    }
+    assert "supply_ontology_hand_po" not in by_type
 
 
 def test_backward_plan_scopes_large_purchase_request_material_scope_to_open_rows():
