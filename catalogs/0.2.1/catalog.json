@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000003",
-    "sequence": 3,
+    "revision": "catalog-000004",
+    "sequence": 4,
     "channel": "stable",
-    "publishedAt": "2026-10-28T01:42:29.906126Z",
+    "publishedAt": "2026-10-28T11:51:56Z",
     "productVersion": "0.2.1"
   },
   "spec": {
@@ -395,6 +395,100 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/79f050f9e191145c9999b6285813d19ea51d10ad/samples/supply_ontology_en/releases/0.1.9/verification.json",
           "digest": "sha256:e4f13e444462bd306794cb89a48048a403ef984a6455d9e8f64c8ecdbb1732d2"
+        }
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.14",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "language": "zh-CN",
+        "publishedAt": "2026-10-28T11:51:19Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "优化供应排产指引、批量反查与场景体验讲解。",
+          "documents": [
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0170623f694ce0b87d87c92ca87268da354e1ba2/samples/supply_ontology_hand/releases/0.1.14/release-notes.zh-CN.md",
+              "digest": "sha256:9b558b6bb035232a42d9134ee734ff984c8ba26bbb98731fb347646c23554973"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0170623f694ce0b87d87c92ca87268da354e1ba2/samples/supply_ontology_hand/releases/0.1.14/sample.json",
+          "digest": "sha256:afee3ab0d3c69c3adb7553062b7b6da43c5cf0eaa7188f10d4e57322fe19a1e7"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0170623f694ce0b87d87c92ca87268da354e1ba2/samples/supply_ontology_hand/releases/0.1.14/verification.json",
+          "digest": "sha256:8e2a78c91fe6f7109031fac64573ae0b4f0950ac928af8c12afcb2a64ce24354"
+        }
+      },
+      {
+        "sampleId": "supply-chain-en",
+        "version": "0.1.10",
+        "displayName": "Supply Chain (EN)",
+        "summary": "Assess demand coverage using sample orders, stock, BOMs and supply.",
+        "language": "en-US",
+        "publishedAt": "2026-10-28T11:51:56Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Improve supply planning guidance, where-used lookups and business scenario explanations.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0170623f694ce0b87d87c92ca87268da354e1ba2/samples/supply_ontology_en/releases/0.1.10/release-notes.en-US.md",
+              "digest": "sha256:20986fe3d1c39cf3bde26fbd074a18dae6124af25af1b8d1ada6e4d2a4ebb610"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0170623f694ce0b87d87c92ca87268da354e1ba2/samples/supply_ontology_en/releases/0.1.10/sample.json",
+          "digest": "sha256:3772504c9a4e90fd5893bb4bb7b6007e9087c2c81c7a8443e637879d927bf2e0"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/0170623f694ce0b87d87c92ca87268da354e1ba2/samples/supply_ontology_en/releases/0.1.10/verification.json",
+          "digest": "sha256:ff3ff50361b222b6dbec149512b2432909aac5b2580dd29162b7d11bff23f62c"
         }
       }
     ]
