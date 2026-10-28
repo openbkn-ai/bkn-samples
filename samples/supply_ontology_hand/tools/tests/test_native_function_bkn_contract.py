@@ -135,7 +135,7 @@ def test_material_substitute_loader_reads_inventory_for_every_candidate():
     def query_object_instance(**kwargs):
         calls.append(kwargs)
         if kwargs["ot_id"] == "supply_ontology_hand_bom":
-            if kwargs["condition"]["field"] == "material_code":
+            if kwargs["condition"].get("field") == "material_code":
                 return {
                     "datas": [
                         {

@@ -105,6 +105,17 @@ def load_bkn_rows(
     if operation == "shortage_rule":raise CannotCompute("shortage_rule requires its dedicated native event adapter")
     params = dict(parameters or {})
     _validate_operation_parameters(operation, params)
+    if operation in {"substitute_status", "shared_contention"}:
+        read_instances = query_object_instance
+
+        def query_object_instance(**query):
+            # These two calculations consume only the available stock pool.
+            # Keep rows, scope and status semantics; omit unrelated batch fields.
+            if query["ot_id"] == _OBJECT_TYPES["inventory"]:
+                query["properties"] = [
+                    "material_code", "warehouse", "stock_status", "available_inventory_qty",
+                ]
+            return read_instances(**query)
     if operation == "material_coverage":
         def complete(dataset, condition):
             return read_complete(query_object_instance, {"kn_id": KN_ID, "ot_id": _OBJECT_TYPES[dataset], "condition": condition}, _page_rows,
@@ -427,12 +438,26 @@ def _load_bom_rows_for_material_substitutes(
     }
     if not roots or not group_keys:
         return matches
-    # The root query returns the whole denormalized BOM tree.  Keep only the
-    # exact alternate groups that contain the requested material; inventory
-    # must not be fetched for unrelated nodes in the same product tree.
+    # Narrow the tree by its parent code, then keep the original normalized
+    # group-key filter below. Exact parent/group equality would lose members
+    # whose ERP values differ only in surrounding whitespace. A literal
+    # substring is a safe superset; blank or wildcard-bearing parents fall
+    # back to the same root scope used before this optimization.
+    conditions = []
+    for root, parent in sorted({(key[0], key[1]) for key in group_keys}):
+        parts = [_equal_condition("bom_material_code", root)]
+        if parent and "%" not in parent and "\\" not in parent:
+            parts.append({
+                "field": "parent_material_code", "operation": "like",
+                "value": parent, "value_from": "const",
+            })
+        conditions.append(_and_condition(parts))
+    condition = conditions[0] if len(conditions) == 1 else {
+        "operation": "or", "sub_conditions": conditions,
+    }
     return [
         row
-        for row in _load_root_bom_rows(query_object_instance, roots)
+        for row in _query_rows(query_object_instance, _OBJECT_TYPES["bom"], condition)
         if (
             str(row.get("bom_material_code") or "").strip(),
             str(row.get("parent_material_code") or "").strip(),
