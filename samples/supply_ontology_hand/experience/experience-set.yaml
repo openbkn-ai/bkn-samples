@@ -52,7 +52,7 @@ spec:
       query: |-
         MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[:supply_ontology_hand_prod2fcst]->(f:supply_ontology_hand_forecast)
         WHERE f.closestatus_title <> '已关闭'
-        RETURN count(f) AS count, sum(f.qty) AS qty
+        RETURN count(*) AS count, sum(f.qty) AS qty
   - id: M-15
     title: 采购员负责的供应商
     explanation: 按属性过滤后计数：采购员为杨强云的供应商档案。
@@ -86,13 +86,12 @@ spec:
     surfaces: [agent, query, graph]
     cypher:
       query: |-
-        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
-        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE b.bom_level = 1 AND (b.alt_priority = 0 OR b.alt_priority IS NULL)
         RETURN DISTINCT m.material_code AS material_codes
       graph: |-
-        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
-        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
-        RETURN p, r1, b, r2, m
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE b.bom_level = 1 AND (b.alt_priority = 0 OR b.alt_priority IS NULL)
   - id: R-02
     title: 一级主料数量
     explanation: 从产品展开一层 BOM，看清它直接由哪些主料组成。
@@ -102,13 +101,12 @@ spec:
     surfaces: [agent, query, graph]
     cypher:
       query: |-
-        MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
-        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
+        MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE b.bom_level = 1 AND (b.alt_priority = 0 OR b.alt_priority IS NULL)
         RETURN count(DISTINCT m.material_code) AS count
       graph: |-
-        MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
-        WHERE b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
-        RETURN p, r1, b, r2, m
+        MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE b.bom_level = 1 AND (b.alt_priority = 0 OR b.alt_priority IS NULL)
   - id: R-05
     title: 物料被哪些产品使用
     explanation: 从物料沿 BOM 关系反查产品，替代料位置也算使用。
@@ -119,13 +117,12 @@ spec:
     surfaces: [agent, query, graph]
     cypher:
       query: |-
-        MATCH (p:supply_ontology_hand_product)-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '321-000569'})
+        MATCH (p:supply_ontology_hand_product)-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '321-000569'})
         WHERE b.bom_level >= 1
         RETURN DISTINCT p.material_number AS product_codes
       graph: |-
-        MATCH (p:supply_ontology_hand_product)-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '321-000569'})
+        MATCH (p:supply_ontology_hand_product)-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '321-000569'})
         WHERE b.bom_level >= 1
-        RETURN p, r1, b, r2, m
   - id: R-07
     title: 通用物料的使用范围
     explanation: 反查一个通用件被多少产品的 BOM 引用。
@@ -135,7 +132,7 @@ spec:
     surfaces: [agent, query]
     cypher:
       query: |-
-        MATCH (p:supply_ontology_hand_product)-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '725-000226'})
+        MATCH (p:supply_ontology_hand_product)-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material {material_code: '725-000226'})
         WHERE b.bom_level >= 1
         RETURN count(DISTINCT p.material_number) AS count
   - id: R-08
@@ -148,15 +145,12 @@ spec:
     surfaces: [agent, query, graph]
     cypher:
       query: |-
-        MATCH (p:supply_ontology_hand_product)-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)
-        WHERE p.material_number IN ['382-000005', '382-000006'] AND b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
-        WITH b.material_code AS material, count(DISTINCT p.material_number) AS products
-        WHERE products = 2
-        RETURN material AS material_codes ORDER BY material_codes
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)<-[:supply_ontology_hand_bom2mat]-(c:supply_ontology_hand_bom)<-[:supply_ontology_hand_prod2bom]-(q:supply_ontology_hand_product {material_number: '382-000006'})
+        WHERE b.bom_level = 1 AND c.bom_level = 1 AND (b.alt_priority = 0 OR b.alt_priority IS NULL) AND (c.alt_priority = 0 OR c.alt_priority IS NULL)
+        RETURN DISTINCT m.material_code AS material_codes ORDER BY material_codes
       graph: |-
-        MATCH (p:supply_ontology_hand_product)-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
-        WHERE p.material_number IN ['382-000005', '382-000006'] AND b.bom_level = 1 AND coalesce(b.alt_priority, 0) = 0
-        RETURN p, r1, b, r2, m
+        MATCH (p:supply_ontology_hand_product)-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)
+        WHERE p.material_number IN ['382-000005', '382-000006'] AND b.bom_level = 1 AND (b.alt_priority = 0 OR b.alt_priority IS NULL)
   - id: F-02
     title: 两个产品的共同物料
     explanation: 比较两个产品完整主料 BOM（不含根、不含替代）的物料交集。
@@ -166,11 +160,9 @@ spec:
     surfaces: [agent, query]
     cypher:
       query: |-
-        MATCH (p:supply_ontology_hand_product)-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)
-        WHERE p.material_number IN ['382-000005', 'P61-000351'] AND b.bom_level >= 1 AND coalesce(b.alt_priority, 0) = 0
-        WITH b.material_code AS material, count(DISTINCT p.material_number) AS products
-        WHERE products = 2
-        RETURN count(material) AS shared_count
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)<-[:supply_ontology_hand_bom2mat]-(c:supply_ontology_hand_bom)<-[:supply_ontology_hand_prod2bom]-(q:supply_ontology_hand_product {material_number: 'P61-000351'})
+        WHERE b.bom_level >= 1 AND c.bom_level >= 1 AND (b.alt_priority = 0 OR b.alt_priority IS NULL) AND (c.alt_priority = 0 OR c.alt_priority IS NULL)
+        RETURN count(DISTINCT m.material_code) AS shared_count
   - id: F-14
     title: 完整 BOM 结构规模
     explanation: 读取完整主料 BOM 结构：非根行数与含根节点数。
@@ -181,8 +173,8 @@ spec:
     cypher:
       query: |-
         MATCH (p:supply_ontology_hand_product {material_number: 'U00-000080'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)
-        WHERE coalesce(b.alt_priority, 0) = 0
-        RETURN sum(CASE WHEN b.bom_level >= 1 THEN 1 ELSE 0 END) AS non_root_line_count, count(b) AS node_count
+        WHERE (b.alt_priority = 0 OR b.alt_priority IS NULL)
+        RETURN count(b.parent_material_code) AS non_root_line_count, count(*) AS node_count
   - id: R-09
     title: 替代料与库存
     explanation: 在指定父件和替代组内找到替代物料，再沿「物料关联库存」汇总全仓可用库存。
@@ -199,9 +191,8 @@ spec:
           AND b.alt_group_no = '12' AND b.alt_priority > 0
         RETURN m.material_code AS material_code, sum(i.available_inventory_qty) AS available_qty, b.standard_usage AS usage
       graph: |-
-        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[r1:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[r2:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)-[r3:supply_ontology_hand_mat2inv]->(i:supply_ontology_hand_inventory)
+        MATCH (p:supply_ontology_hand_product {material_number: '382-000005'})-[:supply_ontology_hand_prod2bom]->(b:supply_ontology_hand_bom)-[:supply_ontology_hand_bom2mat]->(m:supply_ontology_hand_material)-[:supply_ontology_hand_mat2inv]->(i:supply_ontology_hand_inventory)
         WHERE b.parent_material_code = '588-000620' AND b.alt_group_no = '12' AND i.available_inventory_qty > 0
-        RETURN p, r1, b, r2, m, r3, i
   - id: F-04
     title: 可售能力（不用替代料）
     explanation: 调用可售函数：成品现货加库存支持的再制造数量，制造时逐层先扣组件库存。
