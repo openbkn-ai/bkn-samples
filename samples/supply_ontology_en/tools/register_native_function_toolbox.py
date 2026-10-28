@@ -46,7 +46,7 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
         "substitute_status": [_input("product", "string", 'Product code; provide this or material_code, not both.'), _input("material_code", "string", 'Material code; provide this or product, not both.'), scope, substitute],
         "theoretical_build": [product, scope, substitute, _input("report_grain", "string", 'Report grain; summary by default, full for all material constraints.')],
         "total_sellable": [product, _input("production_scope", "string", 'Production warehouse scope.'), _input("finished_goods_scope", "string", 'Finished goods warehouse scope.'), substitute],
-        "kitting_net_demand": [product, _input("qty", "number", 'Required sets.', required=True), scope, substitute, _input("report_grain", "string", 'Report grain; summary by default, full for all material details.')],
+        "kitting_net_demand": [product, _input("qty", "number", 'Required sets.', required=True), scope, substitute, _input("report_grain", "string", 'summary includes complete gaps and their net/replenishment quantities; full additionally includes all allocation lines. Do not request full merely to obtain shortage quantities.')],
         "shared_contention": [_input("demands", "array", 'At least two demands, such as [{"product":"382-000005","qty":50},{"product":"P61-000351","qty":60}]. Array order sets allocation priority.', required=True), scope, substitute_required, _input("report_grain", "string", 'Report grain; summary by default, full for per-material allocation and the entire remaining pool.')],
         "max_build_without_po": [product, scope, substitute, _input("report_grain", "string", 'Report grain; summary by default, full for all material constraints.')],
         "leadtime_days": [_input("material_code", "string", 'Material code.', required=True)],
@@ -153,7 +153,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
         if tool is None:
             created = _call([
                 "call", f"{API}/tool-box/{box_id}/tool", "-X", "POST", "-d",
-                json.dumps({"metadata_type": "function", "function_input": tool_input}, ensure_ascii=False),
+                json.dumps({"metadata_type": "function", "use_rule": FUNCTION_CATALOG[operation]["use_rule"], "function_input": tool_input}, ensure_ascii=False),
             ])
             tool_id = created["success_ids"][0]
             _call(["tool", "enable", "--toolbox", box_id, tool_id])
@@ -161,7 +161,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
             tool_id = tool["tool_id"]
             _call([
                 "call", f"{API}/tool-box/{box_id}/tool/{tool_id}", "-X", "POST", "-d",
-                json.dumps({"name": tool_input["name"], "description": tool_input["description"], "metadata_type": "function", "function_input": tool_input}, ensure_ascii=False),
+                json.dumps({"name": tool_input["name"], "description": tool_input["description"], "use_rule": FUNCTION_CATALOG[operation]["use_rule"], "metadata_type": "function", "function_input": tool_input}, ensure_ascii=False),
             ])
             if tool.get("status") != "enabled":
                 _call(["tool", "enable", "--toolbox", box_id, tool_id])

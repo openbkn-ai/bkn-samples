@@ -1,6 +1,6 @@
 # BKN-Eval
 
-The core contains 50 questions in `datasets/sample-question-set-v1.yaml`; expected answers are in `datasets/sample-answer-set-v1.yaml`. Four calendar-month checks are versioned separately. The business date is `2026-08-25`.
+The candidate paper contains only 50 question IDs and business questions in `datasets/sample-question-set-v1.yaml`. Before the exam, give both candidates only the common time statement in `exam-time-reference.txt`. Expected answers and rule evidence in `datasets/sample-answer-set-v1.yaml` are judge-only. Four calendar-month checks are versioned separately.
 
 The frozen baseline pins the delivered CSV files and deterministic business rules. Its independent Decimal oracle calculates expected outputs directly from these files without importing or calling the evaluated functions.
 

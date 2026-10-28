@@ -46,7 +46,7 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
         "substitute_status": [_input("product", "string", "产品编码；与物料编码二选一。"), _input("material_code", "string", "物料编码；与产品编码二选一。"), scope, substitute],
         "theoretical_build": [product, scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料约束。")],
         "total_sellable": [product, _input("production_scope", "string", "生产仓范围。"), _input("finished_goods_scope", "string", "成品仓范围。"), substitute],
-        "kitting_net_demand": [product, _input("qty", "number", "需求套数。", required=True), scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料明细。")],
+        "kitting_net_demand": [product, _input("qty", "number", "需求套数。", required=True), scope, substitute, _input("report_grain", "string", "summary 已包含完整 gaps、净缺料与建议补货数量；full 另外返回全部逐层 lines，不必为缺料数量重复执行。")],
         "shared_contention": [_input("demands", "array", '至少两条对象需求，格式 [{"product":"382-000005","qty":50},{"product":"P61-000351","qty":60}]；数组顺序即扣减优先级。', required=True), scope, substitute_required, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回逐料分配和完整剩余池。")],
         "max_build_without_po": [product, scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料约束。")],
         "leadtime_days": [_input("material_code", "string", "物料编码。", required=True)],
@@ -153,7 +153,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
         if tool is None:
             created = _call([
                 "call", f"{API}/tool-box/{box_id}/tool", "-X", "POST", "-d",
-                json.dumps({"metadata_type": "function", "function_input": tool_input}, ensure_ascii=False),
+                json.dumps({"metadata_type": "function", "use_rule": FUNCTION_CATALOG[operation]["use_rule"], "function_input": tool_input}, ensure_ascii=False),
             ])
             tool_id = created["success_ids"][0]
             _call(["tool", "enable", "--toolbox", box_id, tool_id])
@@ -161,7 +161,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
             tool_id = tool["tool_id"]
             _call([
                 "call", f"{API}/tool-box/{box_id}/tool/{tool_id}", "-X", "POST", "-d",
-                json.dumps({"name": tool_input["name"], "description": tool_input["description"], "metadata_type": "function", "function_input": tool_input}, ensure_ascii=False),
+                json.dumps({"name": tool_input["name"], "description": tool_input["description"], "use_rule": FUNCTION_CATALOG[operation]["use_rule"], "metadata_type": "function", "function_input": tool_input}, ensure_ascii=False),
             ])
             if tool.get("status") != "enabled":
                 _call(["tool", "enable", "--toolbox", box_id, tool_id])
