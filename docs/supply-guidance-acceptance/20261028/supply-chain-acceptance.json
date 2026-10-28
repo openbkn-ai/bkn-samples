@@ -1,0 +1,443 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.14",
+  "sourceCommit": "f4008399a4b922b5a5c8273a0662b7be18950b3e",
+  "packageDigest": "sha256:dace7919bdb86f34f5edb80201893df6e63a444865c078cab8104e5b4d236049",
+  "installation": {
+    "id": "inst-supply-chain-7e9438b80a4b49b4b1cd2308bd571b77",
+    "version": "0.1.14",
+    "status": "installed",
+    "attemptId": "61478827c339486a806b215ac5888b26",
+    "startedAt": "2026-10-28T11:30:35.138965Z",
+    "finishedAt": "2026-10-28T11:31:58.230300Z",
+    "installedAt": "2026-10-28T11:31:58.230300Z",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    },
+    "checks": [
+      {
+        "name": "tables-discovered",
+        "ok": true
+      },
+      {
+        "name": "object-query",
+        "ok": true
+      },
+      {
+        "name": "cross-table-query",
+        "ok": true
+      },
+      {
+        "name": "capability-callable",
+        "ok": true
+      },
+      {
+        "name": "skill-discoverable",
+        "ok": true
+      },
+      {
+        "name": "metric-query",
+        "ok": true
+      },
+      {
+        "name": "metric-ownership",
+        "ok": true
+      }
+    ],
+    "packageDigest": "sha256:dace7919bdb86f34f5edb80201893df6e63a444865c078cab8104e5b4d236049",
+    "manifestSha256": "89e0569fbdfee1cd1ede84c42bbd83e687c524c033f73163661fc66d1a50ef37",
+    "resources": {
+      "catalogId": "01a18246-d491-7ed9-aa1b-565ab4754d71",
+      "knowledgeNetworkId": "supply_ontology_hand",
+      "capabilitySummary": "35b918e90177165ccad5922006f081cd46d45bb4745e5a4715c8e71da413c0cb",
+      "ownedExecution": {
+        "toolboxes": [
+          "01a18247-41a5-7a55-88e0-3e1b32470932"
+        ],
+        "skills": [
+          "01a18247-a070-712e-855e-6a38876469c4",
+          "01a18247-a302-74e3-a78c-9d5fcbd76315",
+          "01a18247-a5c8-75c0-9bc1-b9153e7f0740",
+          "01a18247-a802-7045-af34-38018d2400cc",
+          "01a18247-aa18-7240-91df-a88cbe09ad93"
+        ]
+      }
+    },
+    "experienceCaseCount": 23
+  },
+  "database": {
+    "sample": "supply_ontology_hand",
+    "database": "supply_demo_hand",
+    "tableCounts": {
+      "erp_material": 3497,
+      "hd_product_view": 30,
+      "erp_material_bom": 31423,
+      "erp_real_time_inventory": 19724,
+      "erp_supplier": 230,
+      "erp_mds_forecast": 137,
+      "erp_mrp_plan_order": 824,
+      "erp_purchase_request": 19333,
+      "erp_purchase_order": 1972,
+      "erp_production_work_order": 605,
+      "customer_entity": 60,
+      "sales_order": 800
+    },
+    "businessTables": 12,
+    "businessRows": 78635
+  },
+  "experienceSet": {
+    "caseCount": 23,
+    "servedSetMatchesPackage": true,
+    "cypherAcceptance": {
+      "passed": true,
+      "query_count": 14,
+      "graph_count": 5,
+      "checks": [
+        {
+          "id": "M-04",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "M-06",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "M-10",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "M-12",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "M-15",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-07",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-01",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-01",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-02",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-02",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-05",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-05",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-07",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-08",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-08",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-02",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-14",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-09",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-09",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        }
+      ]
+    }
+  },
+  "functionParity": {
+    "passed": true,
+    "count": 17,
+    "checks": [
+      {
+        "name": "材料缺料事件规则",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "材料保障净算",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "生成补货草稿",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "BOM清单",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "产品BOM共用清单",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "子料分层库存",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "替代料状态",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "理论可产",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "合计可售",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "要X套净需求与齐套",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "共用料与多需求争用",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "无需采购最大可产",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "标准交期",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "供应状态诊断",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "未关闭预测单数",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "生产计划齐套倒排",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "物料反查产品",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      }
+    ],
+    "note": "Function bundles contain ZIP mtimes from their source files; normalized comparison checks every uncompressed source byte and the complete entrypoint AST, excluding only the encoded ZIP container."
+  },
+  "functionTraceAcceptance": {
+    "kn": "supply_ontology_hand",
+    "calls": [
+      {
+        "name": "bkn_start_interaction",
+        "seconds": 0.056
+      },
+      {
+        "name": "search_capabilities",
+        "seconds": 0.285
+      },
+      {
+        "name": "execute_tool",
+        "seconds": 3.449,
+        "status_code": 200,
+        "exit_code": 0
+      },
+      {
+        "name": "execute_tool",
+        "seconds": 4.249,
+        "status_code": 200,
+        "exit_code": 0
+      },
+      {
+        "name": "bkn_finish_interaction",
+        "seconds": 0.065
+      }
+    ],
+    "passed": true,
+    "interaction": {
+      "conversation_id": "conv_1f9c01fefb8c930995f2e40851c4d153",
+      "interaction_id": "int_a5a03dac6c1d98dca510d3348f058a72"
+    },
+    "operations": 16,
+    "integrity": "complete"
+  },
+  "runtime": {
+    "agent-observability": {
+      "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/agent-observability-ee:0.2.1-main.20261027172439.shafa9fd7a",
+      "imageID": "docker.io/library/import-2026-10-28@sha256:0afb7a60b80eebc04b9d6b29e711f0f8d76355e46b167136602e2cce0e1a25ec"
+    },
+    "agent-retrieval": {
+      "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/agent-retrieval:0.2.1-main.20261028124252.shaddcc6ab",
+      "imageID": "docker.io/library/import-2026-10-28@sha256:75fe8ca2abee86b09d4f9e290761a603926bbaa82a8331b47863bf8b7fb52830"
+    },
+    "bkn-backend": {
+      "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-backend-ee:0.2.1-main.20261027150035.sha0588b4b",
+      "imageID": "docker.io/library/import-2026-10-28@sha256:fb6fd04f8f7e432b9de7ad8ff0137bdd29e409d3d30516b1f386ac0f9a1c520f"
+    },
+    "bkn-sample-studio": {
+      "image": "sha256:711e49d7cbdde71bc0e558ee8c3a1734abaf2ce26be8ae45a28c9009e0193948",
+      "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a482d7260d8a8dd9368ea4fb96b4f5d164052ddb3900126f9fcb9d65f2d625b8"
+    },
+    "bkn-studio": {
+      "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-studio-ee:0.2.1-main.20261028070735.sha685bb43",
+      "imageID": "docker.io/library/import-2026-10-28@sha256:9fb404d1da70b68f8763b3d7f89aba08d6577875b4514132aced3e64c0b15905"
+    },
+    "function-runtime": {
+      "image": "ghcr.io/openbkn-ai/sandbox-template-python-basic:0.2.1-main.20261028111348.sha1bc5a7e",
+      "imageID": "ghcr.io/openbkn-ai/sandbox-template-python-basic@sha256:f2391c3af43207c5a2aad7edadba68efac18375f4cb6e7018626810649697a6a"
+    }
+  },
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a482d7260d8a8dd9368ea4fb96b4f5d164052ddb3900126f9fcb9d65f2d625b8",
+  "functionRuntimeImage": "ghcr.io/openbkn-ai/sandbox-template-python-basic@sha256:f2391c3af43207c5a2aad7edadba68efac18375f4cb6e7018626810649697a6a",
+  "protectedHistoricalExamFiles": {
+    "checked": 56,
+    "unchanged": true
+  },
+  "limits": [
+    "Tested on the recorded local arm64 8081 mainline runtime. No vanilla 0.2.1, AMD64 or cluster-wide network-disconnection certification.",
+    "No CORE-50 exam, accuracy scoring or video editing was performed. Reference Cypher and deterministic function checks are not model accuracy evidence.",
+    "English Studio reference graph rendering passed (19 nodes, 18 edges). The separate graph AI helper remains unpublished in this runtime; its natural-language entry point was not accepted. Cypher generation and Studio smart QA were published with explicit user approval, without changing model, prompts or tool limits.",
+    "Two earlier Chinese attempts hit legacy resources: an old version-tagged catalog, then an existing unowned function toolbox. Those attempts were retained; after explicit user-authorized legacy cleanup the same package completed a new clean installation. The legacy ownership guards were not bypassed or changed."
+  ],
+  "modelAccuracyEvaluated": false,
+  "uiAcceptance": {
+    "englishReferenceQuery": {
+      "value": 800,
+      "passed": true
+    },
+    "englishReferenceGraph": {
+      "nodes": 19,
+      "edges": 18,
+      "passed": true
+    },
+    "graphNaturalLanguage": {
+      "passed": false,
+      "reason": "separate graph AI helper remains unpublished; no model answer obtained"
+    },
+    "builtinAgentsPublishedByExplicitUserApproval": [
+      "cypher_generation",
+      "studio_smart_qa"
+    ],
+    "naturalLanguageQueryPostPublish": {
+      "passed": true,
+      "result": 800,
+      "modelQuestionCount": 1,
+      "scope": "English query-card smoke only; no CORE-50 exam or accuracy score"
+    }
+  }
+}
