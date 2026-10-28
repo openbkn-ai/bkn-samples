@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000002",
-    "sequence": 2,
+    "revision": "catalog-000003",
+    "sequence": 3,
     "channel": "stable",
-    "publishedAt": "2026-10-27T14:15:40.888098Z",
+    "publishedAt": "2026-10-28T01:42:29.906126Z",
     "productVersion": "0.2.1"
   },
   "spec": {
@@ -258,6 +258,53 @@
         }
       },
       {
+        "sampleId": "supply-chain",
+        "version": "0.1.13",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "language": "zh-CN",
+        "publishedAt": "2026-10-28T01:32:55.066306Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "附带 23 道场景体验题与参考答案；参考查询已在 0.2.1 实测复现；需样例服务支持体验集。",
+          "documents": [
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/79f050f9e191145c9999b6285813d19ea51d10ad/samples/supply_ontology_hand/releases/0.1.13/release-notes.zh-CN.md",
+              "digest": "sha256:cd12dca8cf990dd6a38f24618db44aa5476ad3506d9cceefab91a0f45cdcb85d"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/79f050f9e191145c9999b6285813d19ea51d10ad/samples/supply_ontology_hand/releases/0.1.13/sample.json",
+          "digest": "sha256:8073c88d4de724a7731367ac1dc0822a874e0df877fea586fc1dcfbe53feaa8f"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/79f050f9e191145c9999b6285813d19ea51d10ad/samples/supply_ontology_hand/releases/0.1.13/verification.json",
+          "digest": "sha256:db1cb5e78435c29b3e9c3df9461b9c8281d13ed7ad7c1d8718f84cc94d848303"
+        }
+      },
+      {
         "sampleId": "supply-chain-en",
         "version": "0.1.8",
         "displayName": "Supply Chain (EN)",
@@ -301,6 +348,53 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bc24fe1cd1109ddc99bbf99583d0a30979834e2c/samples/supply_ontology_en/releases/0.1.8/verification.json",
           "digest": "sha256:24f013e23ecf2c06c89477a1dc03d240e55b799cd091f1cf8a49db2a9c519ac9"
+        }
+      },
+      {
+        "sampleId": "supply-chain-en",
+        "version": "0.1.9",
+        "displayName": "Supply Chain (EN)",
+        "summary": "Assess demand coverage using sample orders, stock, BOMs and supply.",
+        "language": "en-US",
+        "publishedAt": "2026-10-28T01:32:56.107935Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Ships 23 experience cases with reference answers; reference queries reproduce the gold on 0.2.1; needs a sample service with experience sets.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/79f050f9e191145c9999b6285813d19ea51d10ad/samples/supply_ontology_en/releases/0.1.9/release-notes.en-US.md",
+              "digest": "sha256:3378c7003914001909de75079c149d6e3ef99c7e9f21f50b4879e0bedb4dc59e"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/79f050f9e191145c9999b6285813d19ea51d10ad/samples/supply_ontology_en/releases/0.1.9/sample.json",
+          "digest": "sha256:ee76bda67c393af019de6fcf748a24c5c1c082f7e03370c2600e405755b33d3e"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/79f050f9e191145c9999b6285813d19ea51d10ad/samples/supply_ontology_en/releases/0.1.9/verification.json",
+          "digest": "sha256:e4f13e444462bd306794cb89a48048a403ef984a6455d9e8f64c8ecdbb1732d2"
         }
       }
     ]
