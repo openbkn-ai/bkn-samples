@@ -43,8 +43,9 @@ spec:
       query: |-                     # 列名与 expected 字段同名
         MATCH (p:...)-[...]->(m:... {material_code: '321-000569'})
         RETURN DISTINCT p.material_number AS product_codes
-      graph: |-                     # 返回要画出的节点和关系
-        MATCH (p:...)-[r1:...]->(b:...)-[r2:...]->(m:...) RETURN p, r1, b, r2, m
+      graph: |-                     # MATCH/WHERE 模式，图探索补全后画出匹配结果
+        MATCH (p:...)-[:...]->(b:...)-[:...]->(m:... {material_code: '321-000569'})
+        WHERE b.bom_level >= 1
 ```
 
 ## 规则
@@ -53,11 +54,12 @@ spec:
 2. **参考答案写给人看。** `answer` 是一句完整的业务结论，必须写出 `expected` 中的每个数值和编码；是/否标记不强制出现原词，但结论里要说清楚。
 3. **按页面选题。** 每道题都可以在智能问答中体验，所以 `surfaces` 必须包含 `agent`。
    - `query`（数据查询）：答案能由对象属性过滤、固定的关系路径和 count/sum 算出，不依赖业务函数口径。必须提供 `cypher.query`，返回列与 `expected` 字段同名。
-   - `graph`（图探索）：答案是从具名节点出发、经关系连到的一小组实体，在画布上一眼能看懂。必须提供 `cypher.graph`，返回不超过 50 条路径。
+   - `graph`（图探索）：答案是从具名节点出发、经关系连到的一小组实体，在画布上一眼能看懂。必须提供 `cypher.graph`：不带 `RETURN` 的 `MATCH`/`WHERE` 模式，由图探索补全并画出，匹配不超过 50 条路径。
    - 需要函数或 Skill 推理的题（可售、齐套、交期、多单争用）只放在 `agent`。
-4. **参考 Cypher 不进输入框。** Studio 只把 `question` 填入页面输入框；参考 Cypher 在结果出来后作为"参考查询"展示。
-5. **答案不进 Agent 上下文。** `answer` 和 `expected` 只展示给用户，不能拼进提问或传给 Agent，以保持金标"被测方不可见"的约束。
-6. **精选，不全量。** 体验集只收能直观说明能力的代表题，建议 15～25 道，从简单事实到关系，再到业务判断，依次排列。
+4. **参考 Cypher 要能在最低支持的平台上运行。** 按样例最低平台版本的 `run_cypher` 子集来写。OpenBKN 0.2.1 不支持 `WITH`、`CASE`、`coalesce` 等函数、关系变量、返回整个节点，以及属性与属性比较；可以改用 `IS NULL`/`OR`、`count(*)`、`count(DISTINCT x.p)`，以及在同一节点汇合的路径。
+5. **参考 Cypher 不进输入框。** Studio 只把 `question` 填入页面输入框；参考 Cypher 在结果出来后作为"参考查询"展示。
+6. **答案不进 Agent 上下文。** `answer` 和 `expected` 只展示给用户，不能拼进提问或传给 Agent，以保持金标"被测方不可见"的约束。
+7. **精选，不全量。** 体验集只收能直观说明能力的代表题，建议 15～25 道，从简单事实到关系，再到业务判断，依次排列。
 
 ## 安装后如何读取
 
@@ -84,7 +86,7 @@ GET /api/studio/samples/experience-sets/{knowledgeNetworkId}
 ## 校验
 
 - 离线校验：`python -m unittest installer.tests.test_experience_set`。它检查 Schema、参考答案是否写出了全部期望值、页面声明与 Cypher 是否对应，以及与来源答案集是否一致。样例契约校验（`validate_document`）也会检查声明的体验集，因此发布包导入时同样会校验。
-- 在线核验：在已安装该样例的平台上运行，确认每条参考查询都能复现期望值、每条图查询的结果都适合在画布上查看。令牌从环境变量读取，不会输出。
+- 在线核验：在已安装该样例的平台上运行，确认每条参考查询都能复现期望值；每个图模式补上 `RETURN count(*)` 后，匹配 1～50 条路径。令牌从环境变量读取，不会输出。
 
 ```bash
 OPENBKN_TOKEN=<token> python3 tools/acceptance/experience_set.py samples/supply_ontology_hand --base-url http://localhost:8081
@@ -100,4 +102,4 @@ OPENBKN_TOKEN=<token> python3 tools/acceptance/experience_set.py samples/supply_
 | 数据查询（14） | M-04、M-06、M-10、M-12、M-15、F-07、F-01、R-02、R-05、R-07、R-08、F-02、F-14、R-09 |
 | 图探索（5） | F-01、R-02、R-05、R-08、R-09 |
 
-R-07（30 个产品、228 条路径）和 R-03、R-04（完整多级 BOM）规模太大，不放在图探索中。2026-10-27 已在本地 8081 实测：两种语言的 14 条参考查询全部复现期望值，5 条图查询分别返回 4～19 条路径。
+R-07（30 个产品、228 条路径）和 R-03、R-04（完整多级 BOM）规模太大，不放在图探索中。2026-10-28 已在本地 8081 的 OpenBKN 0.2.1 后端（`0.2.1-main.20261016154814`）上实测：两种语言的 14 条参考查询全部复现期望值，5 个图模式分别匹配 4～19 条路径。

@@ -43,8 +43,9 @@ spec:
       query: |-                     # columns are named after the expected fields
         MATCH (p:...)-[...]->(m:... {material_code: '321-000569'})
         RETURN DISTINCT p.material_number AS product_codes
-      graph: |-                     # returns the nodes and relations to draw
-        MATCH (p:...)-[r1:...]->(b:...)-[r2:...]->(m:...) RETURN p, r1, b, r2, m
+      graph: |-                     # a MATCH/WHERE pattern; the graph explorer draws what it matches
+        MATCH (p:...)-[:...]->(b:...)-[:...]->(m:... {material_code: '321-000569'})
+        WHERE b.bom_level >= 1
 ```
 
 ## Rules
@@ -53,11 +54,12 @@ spec:
 2. **Answers are for people.** `answer` is one complete business conclusion that names every number and code in `expected`; yes/no flags need not appear word for word, but the conclusion must make them clear.
 3. **Choose pages per question.** Every case can be tried in Q&A, so `surfaces` always includes `agent`.
    - `query` (data query): the answer follows from property filters, a fixed relation path and count/sum, without business-function rules. `cypher.query` is required, and its columns are named after the `expected` fields.
-   - `graph` (graph explorer): the answer is a small set of entities reached through relations from a named node, readable at a glance on the canvas. `cypher.graph` is required and returns at most 50 paths.
+   - `graph` (graph explorer): the answer is a small set of entities reached through relations from a named node, readable at a glance on the canvas. `cypher.graph` is required: a `MATCH`/`WHERE` pattern without `RETURN`, which the graph explorer completes and draws, matching at most 50 paths.
    - Questions that need a function or skill (sellable quantity, coverage, delivery dates, competing demands) are `agent` only.
-4. **Reference Cypher stays out of the input.** Studio puts only `question` into a page's input; the reference Cypher is shown as a "reference query" after the result.
-5. **Answers stay out of the agent's context.** `answer` and `expected` are shown to the reader only, never added to the question or passed to an agent, keeping the gold set hidden from the evaluated side.
-6. **Curated, not complete.** A set holds representative questions that show the capability plainly, 15–25 as a guide, from simple facts to relations to business decisions.
+4. **Reference Cypher runs on the oldest supported platform.** Write it in the `run_cypher` subset of the sample's lowest platform version. For OpenBKN 0.2.1 that excludes `WITH`, `CASE`, functions such as `coalesce`, relationship variables, returning whole nodes and comparing one property with another. Use `IS NULL`/`OR`, `count(*)`, `count(DISTINCT x.p)` and patterns that meet at a shared node instead.
+5. **Reference Cypher stays out of the input.** Studio puts only `question` into a page's input; the reference Cypher is shown as a "reference query" after the result.
+6. **Answers stay out of the agent's context.** `answer` and `expected` are shown to the reader only, never added to the question or passed to an agent, keeping the gold set hidden from the evaluated side.
+7. **Curated, not complete.** A set holds representative questions that show the capability plainly, 15–25 as a guide, from simple facts to relations to business decisions.
 
 ## Reading it after installation
 
@@ -84,7 +86,7 @@ The live check and Studio compare a `cypher.query` result this way:
 ## Validation
 
 - Offline: `python -m unittest installer.tests.test_experience_set` checks the schema, that answers name every expected value, that surfaces and Cypher match, and that the set agrees with its source. The sample contract (`validate_document`) also checks a declared set, so package import checks it too.
-- Live: on a platform with the sample installed, confirm every reference query reproduces its expected values and every graph query is small enough for the canvas. The token is read from the environment and never printed.
+- Live: on a platform with the sample installed, confirm every reference query reproduces its expected values and every graph pattern, completed with `RETURN count(*)`, matches between 1 and 50 paths. The token is read from the environment and never printed.
 
 ```bash
 OPENBKN_TOKEN=<token> python3 tools/acceptance/experience_set.py samples/supply_ontology_en --base-url http://localhost:8081
@@ -100,4 +102,4 @@ Both languages use the same 23 questions. The Chinese set takes `business-rules-
 | Data query (14) | M-04, M-06, M-10, M-12, M-15, F-07, F-01, R-02, R-05, R-07, R-08, F-02, F-14, R-09 |
 | Graph explorer (5) | F-01, R-02, R-05, R-08, R-09 |
 
-R-07 (30 products, 228 paths) and R-03/R-04 (complete multi-level BOMs) are too large for the graph explorer. Checked on a local 8081 platform on 2026-10-27: all 14 reference queries in both languages reproduce their expected values, and the 5 graph queries return 4–19 paths.
+R-07 (30 products, 228 paths) and R-03/R-04 (complete multi-level BOMs) are too large for the graph explorer. Checked on a local 8081 platform with the OpenBKN 0.2.1 backend (`0.2.1-main.20261016154814`) on 2026-10-28: all 14 reference queries in both languages reproduce their expected values, and the 5 graph patterns match 4–19 paths.

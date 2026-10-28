@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Run a sample's experience-set Cypher on an installed platform and compare it with the answers.
 
-Every `cypher.query` must return its case's expected values; every `cypher.graph` must return a
-small, non-empty graph.
+Every `cypher.query` must return its case's expected values; every `cypher.graph` pattern, completed
+with `RETURN count(*)`, must match a small, non-empty graph.
 The platform token is read from OPENBKN_TOKEN and never printed.
 
     OPENBKN_TOKEN=... python3 tools/acceptance/experience_set.py samples/supply_ontology_hand \
@@ -59,11 +59,11 @@ def check(sample_dir: Path, base_url: str, token: str) -> dict:
                 result["query"] = experience_set.compare_query_result(
                     case["expected"], columns, response.get("entries", []))
         if "graph" in cypher:
-            response = run_cypher(base_url, token, kn_id, cypher["graph"])
+            response = run_cypher(base_url, token, kn_id, cypher["graph"] + "\nRETURN count(*) AS paths")
             if "error" in response:
                 result["graph"] = [response["error"]]
             else:
-                rows = len(response.get("entries", []))
+                rows = int((response.get("entries") or [{}])[0].get("paths") or 0)
                 result["graphRows"] = rows
                 if not rows:
                     result["graph"] = ["graph query returned no rows"]
