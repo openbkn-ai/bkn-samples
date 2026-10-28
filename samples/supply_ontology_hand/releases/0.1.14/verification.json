@@ -1,0 +1,61 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.14",
+  "packageDigest": "sha256:dace7919bdb86f34f5edb80201893df6e63a444865c078cab8104e5b4d236049",
+  "sourceCommit": "f4008399a4b922b5a5c8273a0662b7be18950b3e",
+  "platformVersion": "0.2.1",
+  "platformBuild": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-backend-ee:0.2.1-main.20261027150035.sha0588b4b",
+  "architectureTested": "arm64",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a482d7260d8a8dd9368ea4fb96b4f5d164052ddb3900126f9fcb9d65f2d625b8",
+  "functionRuntimeImage": "ghcr.io/openbkn-ai/sandbox-template-python-basic@sha256:f2391c3af43207c5a2aad7edadba68efac18375f4cb6e7018626810649697a6a",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-supply-chain-7e9438b80a4b49b4b1cd2308bd571b77",
+    "attemptId": "61478827c339486a806b215ac5888b26",
+    "version": "0.1.14",
+    "status": "installed",
+    "startedAt": "2026-10-28T11:30:35.138965Z",
+    "finishedAt": "2026-10-28T11:31:58.230300Z",
+    "installedAt": "2026-10-28T11:31:58.230300Z",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    }
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables; 78,635 rows. Exact per-table counts are recorded in acceptance.json."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Clean installation passed database/discover/knowledge/capabilities/verify stages and table/object/cross-table smoke checks."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "All 17 native function entrypoints, uncompressed source bytes and usage rules match the release source; callable functions, Skills and metrics passed installation checks. Where-used and coverage were executed in an independent engineering interaction with complete provenance."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "All 23 installed cards exactly match package YAML. All 14 reference data queries match expected answers; 5 graph patterns return nonempty bounded paths. This is not an agent accuracy test."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.14/acceptance.json",
+  "evidenceDigest": "sha256:81b2cabbde12a0a29b9ebab74ca1dd39498676b8cdbf92c17eae85d48c0e5cc1",
+  "modelQuestionsForThisArtifact": 0,
+  "limits": [
+    "Tested on the recorded local arm64 8081 mainline runtime. No vanilla 0.2.1, AMD64 or cluster-wide network-disconnection certification.",
+    "No CORE-50 exam, accuracy scoring or video editing was performed. Reference Cypher and deterministic function checks are not model accuracy evidence.",
+    "English Studio reference graph rendering passed (19 nodes, 18 edges). The separate graph AI helper remains unpublished in this runtime; its natural-language entry point was not accepted. Cypher generation and Studio smart QA were published with explicit user approval, without changing model, prompts or tool limits.",
+    "Two earlier Chinese attempts hit legacy resources: an old version-tagged catalog, then an existing unowned function toolbox. Those attempts were retained; after explicit user-authorized legacy cleanup the same package completed a new clean installation. The legacy ownership guards were not bypassed or changed."
+  ]
+}

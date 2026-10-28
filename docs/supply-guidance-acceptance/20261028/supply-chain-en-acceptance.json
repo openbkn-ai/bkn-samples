@@ -1,0 +1,442 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.10",
+  "sourceCommit": "f4008399a4b922b5a5c8273a0662b7be18950b3e",
+  "packageDigest": "sha256:bb4b2ce30211cc4ab3e833c4d1dad3ec67a2a332ca543557ccf0773882561404",
+  "installation": {
+    "id": "inst-supply-chain-en-a6d9fbbc2a3c45ba9955328ddaeff756",
+    "version": "0.1.10",
+    "status": "installed",
+    "attemptId": "7755d0a4de7c442f88e5314b67ccfd86",
+    "startedAt": "2026-10-28T11:25:18.660215Z",
+    "finishedAt": "2026-10-28T11:27:25.174934Z",
+    "installedAt": "2026-10-28T11:27:25.174934Z",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    },
+    "checks": [
+      {
+        "name": "tables-discovered",
+        "ok": true
+      },
+      {
+        "name": "object-query",
+        "ok": true
+      },
+      {
+        "name": "cross-table-query",
+        "ok": true
+      },
+      {
+        "name": "capability-callable",
+        "ok": true
+      },
+      {
+        "name": "skill-discoverable",
+        "ok": true
+      },
+      {
+        "name": "metric-query",
+        "ok": true
+      },
+      {
+        "name": "metric-ownership",
+        "ok": true
+      }
+    ],
+    "packageDigest": "sha256:bb4b2ce30211cc4ab3e833c4d1dad3ec67a2a332ca543557ccf0773882561404",
+    "manifestSha256": "acfe5807db2a4ff9bb07ff4246fff57480fc9314776ba4805c106429be092b94",
+    "resources": {
+      "catalogId": "01a18241-febd-7487-b889-09a587578928",
+      "knowledgeNetworkId": "supply_ontology_en",
+      "capabilitySummary": "b67fd49b2edf580db717823a80cab453d9e8acb8b416e8cb6dfc02d35f37acf2",
+      "ownedExecution": {
+        "toolboxes": [
+          "01a18242-8c49-7bf9-8452-ca982ac6302b"
+        ],
+        "skills": [
+          "01a18242-f4d3-76dd-83b6-a269c94617b7",
+          "01a18242-f934-7698-a8a0-5a4d9e22efc9",
+          "01a18242-fd1b-700f-8e2f-64eaffe8e83f",
+          "01a18243-00cf-78e0-b6a5-e3526404de17",
+          "01a18243-046e-7b68-9b45-db2c58a9ef6c"
+        ]
+      }
+    },
+    "experienceCaseCount": 23
+  },
+  "database": {
+    "sample": "supply_ontology_en",
+    "database": "supply_demo_en",
+    "tableCounts": {
+      "erp_material": 3497,
+      "hd_product_view": 30,
+      "erp_material_bom": 31423,
+      "erp_real_time_inventory": 19724,
+      "erp_supplier": 230,
+      "erp_mds_forecast": 137,
+      "erp_mrp_plan_order": 824,
+      "erp_purchase_request": 19333,
+      "erp_purchase_order": 1972,
+      "erp_production_work_order": 605,
+      "customer_entity": 60,
+      "sales_order": 800
+    },
+    "businessTables": 12,
+    "businessRows": 78635
+  },
+  "experienceSet": {
+    "caseCount": 23,
+    "servedSetMatchesPackage": true,
+    "cypherAcceptance": {
+      "passed": true,
+      "query_count": 14,
+      "graph_count": 5,
+      "checks": [
+        {
+          "id": "M-04",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "M-06",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "M-10",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "M-12",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "M-15",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-07",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-01",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-01",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-02",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-02",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-05",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-05",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-07",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-08",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-08",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-02",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "F-14",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-09",
+          "kind": "query",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "R-09",
+          "kind": "graph",
+          "passed": true,
+          "errors": []
+        }
+      ]
+    }
+  },
+  "functionParity": {
+    "passed": true,
+    "count": 17,
+    "checks": [
+      {
+        "name": "Material_Shortage_Rule",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Material_Assurance",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Replenishment_Draft",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "BOM_Structure",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Shared_BOM",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "BOM_Stock",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Alternate_Status",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Manufacturing_Capacity",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Total_Sellable",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Demand_Coverage",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Shared_Demand_Allocation",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Stock_Only_Capacity",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Lead_Time",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Supply_Status",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Open_Forecast_Count",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Backward_Plan",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      },
+      {
+        "name": "Where_Used",
+        "entrypointMatched": true,
+        "allSourceFilesMatched": true,
+        "sourceFiles": 21,
+        "useRuleMatched": true
+      }
+    ],
+    "note": "Function bundles contain ZIP mtimes from their source files; normalized comparison checks every uncompressed source byte and the complete entrypoint AST, excluding only the encoded ZIP container."
+  },
+  "functionTraceAcceptance": {
+    "kn": "supply_ontology_en",
+    "calls": [
+      {
+        "name": "bkn_start_interaction",
+        "seconds": 0.176
+      },
+      {
+        "name": "search_capabilities",
+        "seconds": 0.44
+      },
+      {
+        "name": "execute_tool",
+        "seconds": 3.288,
+        "status_code": 200,
+        "exit_code": 0
+      },
+      {
+        "name": "execute_tool",
+        "seconds": 2.952,
+        "status_code": 200,
+        "exit_code": 0
+      },
+      {
+        "name": "bkn_finish_interaction",
+        "seconds": 0.053
+      }
+    ],
+    "passed": true,
+    "interaction": {
+      "conversation_id": "conv_8880ab58ae572b3f3101cef62842d0c3",
+      "interaction_id": "int_5cead63d9d9361e09aa9f8ce4d99bc47"
+    },
+    "operations": 16,
+    "integrity": "complete"
+  },
+  "runtime": {
+    "agent-observability": {
+      "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/agent-observability-ee:0.2.1-main.20261027172439.shafa9fd7a",
+      "imageID": "docker.io/library/import-2026-10-28@sha256:0afb7a60b80eebc04b9d6b29e711f0f8d76355e46b167136602e2cce0e1a25ec"
+    },
+    "agent-retrieval": {
+      "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/agent-retrieval:0.2.1-main.20261028124252.shaddcc6ab",
+      "imageID": "docker.io/library/import-2026-10-28@sha256:75fe8ca2abee86b09d4f9e290761a603926bbaa82a8331b47863bf8b7fb52830"
+    },
+    "bkn-backend": {
+      "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-backend-ee:0.2.1-main.20261027150035.sha0588b4b",
+      "imageID": "docker.io/library/import-2026-10-28@sha256:fb6fd04f8f7e432b9de7ad8ff0137bdd29e409d3d30516b1f386ac0f9a1c520f"
+    },
+    "bkn-sample-studio": {
+      "image": "sha256:711e49d7cbdde71bc0e558ee8c3a1734abaf2ce26be8ae45a28c9009e0193948",
+      "imageID": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a482d7260d8a8dd9368ea4fb96b4f5d164052ddb3900126f9fcb9d65f2d625b8"
+    },
+    "bkn-studio": {
+      "image": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai-ee/bkn-studio-ee:0.2.1-main.20261028070735.sha685bb43",
+      "imageID": "docker.io/library/import-2026-10-28@sha256:9fb404d1da70b68f8763b3d7f89aba08d6577875b4514132aced3e64c0b15905"
+    },
+    "function-runtime": {
+      "image": "ghcr.io/openbkn-ai/sandbox-template-python-basic:0.2.1-main.20261028111348.sha1bc5a7e",
+      "imageID": "ghcr.io/openbkn-ai/sandbox-template-python-basic@sha256:f2391c3af43207c5a2aad7edadba68efac18375f4cb6e7018626810649697a6a"
+    }
+  },
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a482d7260d8a8dd9368ea4fb96b4f5d164052ddb3900126f9fcb9d65f2d625b8",
+  "functionRuntimeImage": "ghcr.io/openbkn-ai/sandbox-template-python-basic@sha256:f2391c3af43207c5a2aad7edadba68efac18375f4cb6e7018626810649697a6a",
+  "protectedHistoricalExamFiles": {
+    "checked": 56,
+    "unchanged": true
+  },
+  "limits": [
+    "Tested on the recorded local arm64 8081 mainline runtime. No vanilla 0.2.1, AMD64 or cluster-wide network-disconnection certification.",
+    "No CORE-50 exam, accuracy scoring or video editing was performed. Reference Cypher and deterministic function checks are not model accuracy evidence.",
+    "English Studio reference graph rendering passed (19 nodes, 18 edges). The separate graph AI helper remains unpublished in this runtime; its natural-language entry point was not accepted. Cypher generation and Studio smart QA were published with explicit user approval, without changing model, prompts or tool limits."
+  ],
+  "modelAccuracyEvaluated": false,
+  "uiAcceptance": {
+    "englishReferenceQuery": {
+      "value": 800,
+      "passed": true
+    },
+    "englishReferenceGraph": {
+      "nodes": 19,
+      "edges": 18,
+      "passed": true
+    },
+    "graphNaturalLanguage": {
+      "passed": false,
+      "reason": "separate graph AI helper remains unpublished; no model answer obtained"
+    },
+    "builtinAgentsPublishedByExplicitUserApproval": [
+      "cypher_generation",
+      "studio_smart_qa"
+    ],
+    "naturalLanguageQueryPostPublish": {
+      "passed": true,
+      "result": 800,
+      "modelQuestionCount": 1,
+      "scope": "English query-card smoke only; no CORE-50 exam or accuracy score"
+    }
+  }
+}
