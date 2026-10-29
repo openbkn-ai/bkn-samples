@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000015",
-    "sequence": 15,
+    "revision": "catalog-000016",
+    "sequence": 16,
     "channel": "stable",
-    "publishedAt": "2026-10-21T04:38:08.626058Z"
+    "publishedAt": "2026-10-29T19:07:52Z"
   },
   "spec": {
     "entries": [
@@ -360,7 +360,7 @@
         "displayName": "供应链",
         "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
         "publishedAt": "2026-10-11T22:38:33Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "供应链 0.1.4：支持归属记录、卸载和重新安装，保留安装历史。",
@@ -401,6 +401,51 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8131f31e175b0ed8657119973b67a0d5c1613aa9/samples/supply_ontology_hand/releases/0.1.4/verification.json",
           "digest": "sha256:ede64a29237deebc7fede38fbced79765c7e4f2eec23c9bc45e5f7d3b97db4b0"
+        },
+        "withdrawalReason": "Original020 runtime archive removed at user request; use supply-chain0.1.16 on unchanged OpenBKN0.2.0. Historical metadata is retained."
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.16",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和供应数据体验交付判断。",
+        "publishedAt": "2026-10-29T19:04:55Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "原始OpenBKN0.2.0供应链准确性与题目/答案隔离修正；需预加载固定数据库镜像。",
+          "documents": [
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bd5afa968ff2bf3d2c48c871296b55400db83095/samples/supply_ontology_hand/releases/0.1.16/release-notes.zh-CN.md",
+              "digest": "sha256:940f061333ad4397a8fa1f377b951a6b333a7f775aeb128d73f8413d20a66d96"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bd5afa968ff2bf3d2c48c871296b55400db83095/samples/supply_ontology_hand/releases/0.1.16/sample.json",
+          "digest": "sha256:a463868be49b9bf6d6cbd264946a58203e45c6ea08c70c1a7e17ce1f2280b351"
+        },
+        "requires": {
+          "architectures": [
+            "arm64",
+            "amd64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.0 <0.2.1",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/bd5afa968ff2bf3d2c48c871296b55400db83095/samples/supply_ontology_hand/releases/0.1.16/verification.json",
+          "digest": "sha256:072ff1eced00a3ab50cae491ea07994f480be5241209b722581aca7bd803eab4"
         }
       },
       {
