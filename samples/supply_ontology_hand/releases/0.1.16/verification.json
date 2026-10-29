@@ -1,0 +1,86 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.16",
+  "packageDigest": "sha256:0811b4539e1c174b8fd1905f03c27557735088903dd83fd592d48febe3fe4279",
+  "dataImageRef": "ghcr.io/openbkn-ai/bkn-samples@sha256:805317bc1ac93e58f4149e35a7a0a75057330d8888ca54526a354996f313fcd1",
+  "freshInstallation": true,
+  "installation": {
+    "source": "original-0.2.0-studio-offline-import",
+    "id": "inst-supply-chain-603462ecaea342a993ed23171d362753",
+    "attemptId": "0e88781c42bc4442b568baa57ad61cd0",
+    "startedAt": "2026-10-29T18:25:15.539414Z",
+    "finishedAt": "2026-10-29T18:26:03.916089Z",
+    "freshAfterUninstall": true,
+    "stages": [
+      {
+        "id": "database",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "state": "succeeded"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 unchanged CSV-backed business tables; same fixed data image as independent database baseline."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Published object metadata and 7 Skill files inspected; metric/Cypher checks passed; no static snapshot answer comments."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "All14 installed function source bundles match this exact package; object-array and full_tree contracts checked."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "54/54 external deterministic numerical checks passed after uninstall/reinstall. This is not a claim of 50/50 model accuracy."
+    }
+  ],
+  "architectureTested": "arm64",
+  "sourceCommit": "d72639eaecbed0c48afe9a5f109431eb7601544c",
+  "publicArtifact": {
+    "url": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.16/package.tar.gz",
+    "downloadSha256": "0811b4539e1c174b8fd1905f03c27557735088903dd83fd592d48febe3fe4279",
+    "downloadMatchesBlindTestAndReinstallArchive": true
+  },
+  "modelEvaluation": {
+    "newBknQuestions": 50,
+    "bknMainSupported": 49,
+    "bknCompleteSupported": 46,
+    "actualDeliveryConditionsUnconfirmed": 1,
+    "directDbBaselineQuestions": 50,
+    "directDbMainSupported": 44,
+    "directDbCompleteSupported": 41,
+    "directDbIsNewRun": false,
+    "directDbBknMcpCalls": 0,
+    "strictNoRepairAllPassed": false
+  },
+  "limits": [
+    "Original0.2.0 offline.v1 only; not later shared/offline.v2 or0.2.1. Data image must be preloaded.",
+    "Only arm64 exercised; amd64 runtime acceptance not claimed.",
+    "First verification/uninstall attempts needed standard retry; root cause unresolved; subsequent fresh reinstall succeeded.",
+    "BOM raw versus main-only supplemental labels, cross-question shortage premise and actual delivery conditions remain disclosed model-answer limits.",
+    "Customer POC decimal metric anomaly and real dispatch commitments are not claimed resolved.",
+    "Question/answer archives, evaluation strategy, reports and raw tool logs are not public Release attachments."
+  ]
+}
