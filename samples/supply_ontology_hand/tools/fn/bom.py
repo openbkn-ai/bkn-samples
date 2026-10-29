@@ -9,13 +9,13 @@ from .snapshot import Snapshot, _f, _i
 def is_main_row(row: dict) -> bool:
     priority = _i(row.get("alt_priority"), 0)
     method = (row.get("alt_method") or "").strip()
-    return priority == 0 and method != "替代"
+    return priority == 0
 
 
 def is_substitute_row(row: dict) -> bool:
     method = (row.get("alt_method") or "").strip()
     priority = _i(row.get("alt_priority"), 0)
-    return method == "替代" or priority > 0
+    return priority > 0
 
 
 def product_bom_rows(snap: Snapshot, product: str) -> list[dict]:

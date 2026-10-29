@@ -1,0 +1,1195 @@
+schema_version: 1.4-020
+set_id: supply-020-answer-0.1.15
+snapshot_date: '2026-08-13'
+business_date: '2026-08-25'
+audience: evaluator_only
+evaluated_agent_access: forbidden
+frozen_basis:
+  platform: 0.2.0
+  sample_candidate: 0.1.15
+  data_package_sha256: cb0d3f01568c490dca22fdd4ff6273dc83804f6726a3c5c8872e4eb670a14ad0
+  data_snapshot_label: 2026-08-13 (label only; full CSV hashes in facts.json)
+  business_date: '2026-08-25'
+function_result_contract:
+  default: 具名函数默认返回业务摘要；摘要缺少全量明细不构成作答或运行失败。
+  full_only: 题目明确要求完整树、逐料分配、全部物料约束或预测单 ID 列表时，才要求相应 full 粒度。
+  backward_plan_full_tree: F-14 要求完整倒排树节点数，应使用 report_grain=full_tree。
+answers:
+- id: M-01
+  answer: 30 种
+  basis:
+    objects:
+    - 产品
+    relations: []
+    metrics: &id001
+    - 产品数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id001
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 30
+- id: M-02
+  answer: 3497 种
+  basis:
+    objects:
+    - 物料
+    relations: []
+    metrics: &id002
+    - 物料数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id002
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 3497
+- id: M-03
+  answer: 230 家
+  basis:
+    objects:
+    - 供应商
+    relations: []
+    metrics: &id003
+    - 供应商数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id003
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 230
+- id: M-04
+  answer: 800 张
+  basis:
+    objects:
+    - 销售订单
+    relations: []
+    metrics: &id004
+    - 销售订单数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id004
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 800
+- id: M-05
+  answer: 29 个仓库
+  basis:
+    objects:
+    - 库存
+    relations: []
+    metrics: &id005
+    - 仓库数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id005
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 29
+- id: M-06
+  answer: 534 套（三个成品仓）
+  basis:
+    objects:
+    - 产品
+    - 库存
+    relations:
+    - 产品关联库存
+    metrics: &id006
+    - 库存可用量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id006
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 534
+- id: M-07
+  answer: 56340 套
+  basis:
+    objects:
+    - 产品需求预测单
+    relations: []
+    metrics: &id007
+    - 预测需求量合计
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id007
+    evidence: 137 条总记录中排除 47 条已关闭，90 条 qty 合计 56340
+  change_reason: 数据快照变化
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 56340
+- id: M-08
+  answer: 90 条未关闭预测明细；另有 26 个 billno，不是本题计数对象。
+  basis:
+    objects:
+    - 产品需求预测单
+    relations: []
+    metrics:
+    - 未关闭预测单数
+    functions: &id008
+    - 未关闭预测单数
+    skills: []
+    actions: []
+    sequence: *id008
+    evidence: CSV 明细 id / billno 两种独立去重计数
+  change_reason: 计数对象不清 + 快照变化
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 90
+- id: M-09
+  answer: 16 张
+  basis:
+    objects:
+    - 销售订单
+    relations: []
+    metrics: &id009
+    - 销售订单数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id009
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 16
+- id: M-10
+  answer: 签约 1081、发货 1066、未发货 15 套
+  basis:
+    objects:
+    - 销售订单
+    - 产品
+    relations:
+    - 销售订单关联产品
+    metrics: &id010
+    - 签约数量合计
+    - 发货数量合计
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id010
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    signed: 1081
+    shipped: 1066
+    unshipped: 15
+- id: M-11
+  answer: 6 条预测明细，合计 2605 套
+  basis:
+    objects:
+    - 产品
+    - 产品需求预测单
+    relations:
+    - 产品关联需求预测单
+    metrics: &id011
+    - 未关闭预测单数
+    - 预测需求量合计
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id011
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    forecast_detail_count: 6
+    qty: 2605
+- id: M-12
+  answer: 12 条预测明细，合计 20000 套
+  basis:
+    objects:
+    - 产品
+    - 产品需求预测单
+    relations:
+    - 产品关联需求预测单
+    metrics: &id012
+    - 未关闭预测单数
+    - 预测需求量合计
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id012
+    evidence: 三条新增预测合计 9500 套；保留完整数据
+  change_reason: 数据快照变化
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    forecast_detail_count: 12
+    qty: 20000
+- id: M-13
+  answer: 3149 种
+  basis:
+    objects:
+    - 物料
+    relations: []
+    metrics: &id013
+    - 物料数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id013
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 3149
+- id: M-14
+  answer: 233 种
+  basis:
+    objects:
+    - 物料
+    relations: []
+    metrics: &id014
+    - 物料数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id014
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 233
+- id: M-15
+  answer: 51 家
+  basis:
+    objects:
+    - 供应商
+    relations: []
+    metrics: &id015
+    - 供应商数量
+    functions: []
+    skills: []
+    actions: []
+    sequence: *id015
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 51
+- id: F-01
+  answer: 一级主料 9 种：468-000493、468-000530、528-000036、606-000989、606-000990、791-000007、791-000013、791-000015、994-000550
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id016
+    - BOM清单
+    skills: []
+    actions: []
+    sequence: *id016
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    material_codes:
+    - 468-000493
+    - 468-000530
+    - 528-000036
+    - 606-000989
+    - 606-000990
+    - 791-000007
+    - 791-000013
+    - 791-000015
+    - 994-000550
+    order_matters: false
+- id: F-02
+  answer: 38 种共同主料
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id017
+    - 产品BOM共用清单
+    skills: []
+    actions: []
+    sequence: *id017
+    evidence: alt_priority=0；按物料编码去重后求交集
+  change_reason: 旧答案与模型定义冲突
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 38
+- id: F-03
+  answer: 17 种共同主料
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id018
+    - 产品BOM共用清单
+    skills: []
+    actions: []
+    sequence: *id018
+    evidence: alt_priority=0；按物料编码去重后求交集
+  change_reason: 旧答案与模型定义冲突
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 17
+- id: F-04
+  answer: 568 套 = 成品 534 + 新增可产 34
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id019
+    - 理论可产
+    - 合计可售
+    skills: []
+    actions: []
+    sequence: *id019
+    evidence: 独立 Decimal CSV oracle，生产七仓；N/N+1 边界及硬上界证书
+  change_reason: 旧算法遗漏半成品抵扣
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 568
+- id: F-05
+  answer: 3920 套 = 成品 3800 + 新增可产 120
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id020
+    - 理论可产
+    - 合计可售
+    skills: []
+    actions: []
+    sequence: *id020
+    evidence: 独立 Decimal CSV oracle，生产七仓；N/N+1 边界及硬上界证书
+  change_reason: 旧算法遗漏半成品抵扣
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 3920
+- id: F-06
+  answer: 不齐套（新增生产 50 套，不用成品覆盖）。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    - 采购申请单关联物料需求计划
+    - 物料需求计划关联物料
+    metrics:
+    - 库存可用量
+    functions: &id021
+    - 要X套净需求与齐套
+    skills: []
+    actions: []
+    sequence: *id021
+    evidence: 独立逐层抵扣，生产口径保留未关闭 PO 数量；供货先抵扣成品
+  change_reason: 供货/生产歧义 + 评分超出题目
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  supporting_evidence: 165-003886 缺 32；这是辅助证据，题目未问缺口数量，不作为必须额外回答的评分项。
+  demand_mode: production
+  required_answer:
+    kitting_ok: false
+- id: F-07
+  answer: 14 天
+  basis:
+    objects:
+    - 物料
+    relations: []
+    metrics: []
+    functions: &id022
+    - 标准交期
+    skills: []
+    actions: []
+    sequence: *id022
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 14
+- id: F-08
+  answer: 新增可产 34 套
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id023
+    - 理论可产
+    skills: []
+    actions: []
+    sequence: *id023
+    evidence: 独立原始 CSV oracle；不计成品、PO、替代料
+  change_reason: 旧算法遗漏半成品抵扣
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 34
+- id: F-09
+  answer: 新增可产 120 套
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id024
+    - 理论可产
+    skills: []
+    actions: []
+    sequence: *id024
+    evidence: 独立原始 CSV oracle；不计成品、PO、替代料
+  change_reason: 旧算法遗漏半成品抵扣
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 120
+- id: F-10
+  answer: 新生产 60 套不齐套，缺 1 种物料：994-000645 缺 40；本产品成品为 0，供货口径同样缺 40。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    - 采购申请单关联物料需求计划
+    - 物料需求计划关联物料
+    metrics:
+    - 库存可用量
+    functions: &id025
+    - 子料分层库存
+    - 要X套净需求与齐套
+    skills: []
+    actions: []
+    sequence: *id025
+    evidence: 独立 CSV 逐层抵扣半成品及未关闭 PO；321-000569 不再是此计算的缺口
+  change_reason: 旧缺料答案错误
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  demand_mode: production
+  required_answer:
+    kitting_ok: false
+    shortage_material_count: 1
+- id: F-11
+  answer: 382-000005 的 50 套由三仓成品覆盖；P61-000351 的 60 套不齐，994-000645 缺 40。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    - 采购申请单关联物料需求计划
+    - 物料需求计划关联物料
+    metrics:
+    - 库存可用量
+    functions: &id026
+    - 产品BOM共用清单
+    - 要X套净需求与齐套
+    - 共用料与多需求争用
+    skills:
+    - demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    sequence: *id026
+    evidence: 独立顺序共享池复算；承接通常应先抵扣成品
+  change_reason: 供货/生产歧义 + 旧算法缺陷
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  demand_mode: fulfillment
+  required_answer:
+    382-000005: finished_goods_cover
+    P61-000351: not_covered
+- id: F-12
+  answer: 26 种共同主料
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id027
+    - 产品BOM共用清单
+    skills: []
+    actions: []
+    sequence: *id027
+    evidence: alt_priority=0；按物料编码去重后求交集
+  change_reason: 旧答案与模型定义冲突
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 26
+- id: F-13
+  answer: 新增可产 34 套
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id028
+    - 无需采购最大可产
+    skills: []
+    actions: []
+    sequence: *id028
+    evidence: 独立原始 CSV oracle；不计成品、PO、替代料
+  change_reason: 旧算法遗漏半成品抵扣
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 34
+- id: F-14
+  answer: 完整齐套倒排树共有 77 个节点（根节点 1 + 主料节点 76）。须使用预测 ID 0000023181 和 report_grain=full_tree。
+  basis:
+    objects:
+    - 产品需求预测单
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    - 采购申请单
+    - 物料需求计划
+    relations:
+    - 产品关联需求预测单
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 物料需求计划关联产品预测需求
+    - 采购申请单关联物料需求计划
+    - 采购订单关联物料请购单
+    metrics:
+    - 库存可用量
+    functions: &id029
+    - 生产计划齐套倒排
+    skills:
+    - production-schedule-backward-planning
+    actions: []
+    sequence: *id029
+    evidence: 独立 CSV 完整结构；完整倒排在线回归未完成，暂不作为已验收金标
+  change_reason: 主料答案变化 + ID 加载缺陷
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 77
+- id: F-15
+  answer: 878 套 = 成品 534 + 允许替代后的新增可产 344
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id030
+    - 理论可产
+    - 合计可售
+    skills: []
+    actions: []
+    sequence: *id030
+    evidence: 独立 CSV oracle；不可替代一级叶子 606-000989 库存 344 构成硬上界，344 可行、345 不可行
+  change_reason: 主料/净算改变旧答案
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 878
+- id: R-01
+  answer: 16 种主料
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id031
+    - BOM清单
+    skills: []
+    actions: []
+    sequence: *id031
+    evidence: alt_priority=0；按物料编码去重
+  change_reason: 主料角色校准
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 16
+- id: R-02
+  answer: 5 种主料
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id032
+    - BOM清单
+    skills: []
+    actions: []
+    sequence: *id032
+    evidence: alt_priority=0；按物料编码去重
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 5
+- id: R-03
+  answer: 76 种主料
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id033
+    - BOM清单
+    skills: []
+    actions: []
+    sequence: *id033
+    evidence: alt_priority=0；按物料编码去重
+  change_reason: 主料角色校准
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 76
+- id: R-04
+  answer: 333 种主料
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id034
+    - BOM清单
+    skills: []
+    actions: []
+    sequence: *id034
+    evidence: alt_priority=0；按物料编码去重
+  change_reason: 主料角色校准
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 333
+- id: R-05
+  answer: P61-000328、P61-000331、P61-000351
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id035
+    - 物料反查产品
+    skills: []
+    actions: []
+    sequence: *id035
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    products:
+    - P61-000328
+    - P61-000331
+    - P61-000351
+- id: R-06
+  answer: 382-000005、382-000006
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id036
+    - 物料反查产品
+    skills: []
+    actions: []
+    sequence: *id036
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    products:
+    - 382-000005
+    - 382-000006
+- id: R-07
+  answer: 含替代用途时为 30 种产品；应在公共规则声明反查包含替代用途。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id037
+    - 物料反查产品
+    skills: []
+    actions: []
+    sequence: *id037
+    evidence: CSV 按 material_code=725-000226 反查根产品去重
+  change_reason: 旧答案成立，需明确范围
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    value: 30
+- id: R-08
+  answer: 468-000493、606-000989、606-000990、994-000550，共 4 种
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id038
+    - BOM清单
+    skills: []
+    actions: []
+    sequence: *id038
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    material_codes:
+    - 468-000493
+    - 606-000989
+    - 606-000990
+    - 994-000550
+- id: R-09
+  answer: 替代料 356-000356，生产七仓可用库存 500
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id039
+    - 替代料状态
+    skills: []
+    actions: []
+    sequence: *id039
+    evidence: 固定原包 CSV 独立复算
+  change_reason: 旧答案复核成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    substitute_code: 356-000356
+    available_qty: 500
+- id: S-01
+  answer: 当前不齐套，缺 994-000645 共 40，其标准采购交期 35 天，超过 2026-08-25 至 09-05 的 11 天；按无加急/额外供应的标准交期模型不能满足。不得声称是
+    321-000569 缺 240。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    - 采购申请单关联物料需求计划
+    - 物料需求计划关联物料
+    metrics:
+    - 库存可用量
+    functions: &id040
+    - 要X套净需求与齐套
+    skills:
+    - demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    sequence: *id040
+    evidence: 独立缺口 + CSV 标准采购交期；客户实际可交期尚需排程条件
+  change_reason: 旧缺料证据错误，结论须限定模型条件
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  demand_mode: fulfillment
+  required_answer:
+    on_time: false
+    reason: 标准采购周期超过剩余交付窗口，当前有物料缺口
+- id: S-02
+  answer: 当前数量能力 3920 套（3800 + 120）；这不等于交期承诺。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id041
+    - 理论可产
+    - 合计可售
+    skills:
+    - demand-fulfillment-capacity-analysis
+    actions: []
+    sequence: *id041
+    evidence: 独立可产量证书；交期需另行评估
+  change_reason: 旧可产答案错误
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    capacity: 3920
+    delivery_commitment: false
+- id: S-03
+  answer: 作为客户新增供货需求，50 套由三仓成品 534 覆盖；无需新增制造，无组件补货缺口。若客户要求必须新生产，应另算，不沿用旧 35 条缺口。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    - 采购申请单关联物料需求计划
+    - 物料需求计划关联物料
+    metrics:
+    - 库存可用量
+    functions: &id042
+    - 要X套净需求与齐套
+    skills:
+    - demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    sequence: *id042
+    evidence: 成品库存独立求和；制造仅对残余需求展开
+  change_reason: 供货口径澄清 + 旧算法缺陷
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  demand_mode: fulfillment
+  required_answer:
+    quantity_covered: true
+    reason: 三仓成品覆盖50，无需新增制造
+- id: S-04
+  answer: 供货口径：382 的 50 套由成品覆盖；P61 的 60 套不齐，994-000645 缺 40；当前数量不足以同时完全满足。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    - 采购申请单关联物料需求计划
+    - 物料需求计划关联物料
+    metrics:
+    - 库存可用量
+    functions: &id043
+    - 产品BOM共用清单
+    - 要X套净需求与齐套
+    - 共用料与多需求争用
+    skills:
+    - demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    sequence: *id043
+    evidence: 独立顺序共享池，先用各产品成品
+  change_reason: 供货口径澄清 + 旧缺料答案错误
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  demand_mode: fulfillment
+  required_answer:
+    both_covered: false
+    382-000005: finished_goods_cover
+    P61-000351:
+      shortage_code: 994-000645
+      shortage_qty: 40
+- id: S-05
+  answer: 有共同主料 38 种；没有需求数量，不能判断是否可同时承接。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    metrics: []
+    functions: &id044
+    - 产品BOM共用清单
+    skills:
+    - demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    sequence: *id044
+    evidence: 独立主料编码交集；结构共用不等于库存争用
+  change_reason: 共同料旧数错误，业务结论成立
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    shared_materials: true
+    can_judge_acceptance_without_quantities: false
+- id: S-06
+  answer: 建议采购 240 个；300 比题干给定净缺多 60。保留“缺 240”这一给定前提。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    metrics:
+    - 库存可用量
+    functions: &id045
+    - 要X套净需求与齐套
+    skills:
+    - demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    sequence: *id045
+    evidence: 条件推理题；不以更新后的库存净算推翻题干
+  change_reason: 旧答案成立，禁止把另算缺口替换题设
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    given_shortage: 240
+    recommended_purchase_qty: 240
+- id: S-07
+  answer: 可以。按题目已确认的分配、质检及发运条件，三仓成品 534 足够覆盖 50 套，业务日早于交货日。
+  basis:
+    objects:
+    - 产品
+    - 库存
+    relations:
+    - 产品关联库存
+    metrics:
+    - 库存可用量
+    functions: &id046
+    - 合计可售
+    skills:
+    - production-schedule-backward-planning
+    - demand-fulfillment-capacity-analysis
+    actions: []
+    sequence: *id046
+    evidence: 三仓成品 534 仅直接证明数量覆盖；业务日期与交货日固定
+  change_reason: 承诺边界过强
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    on_time_under_given_conditions: true
+- id: S-08
+  answer: 不能。按题设给定关键料必须新购、标准采购交期 35 天，从 2026-08-25 到 09-10 仅 16 天，无加急或其他供应时不能满足。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    metrics:
+    - 库存可用量
+    functions: &id047
+    - 要X套净需求与齐套
+    - 标准交期
+    - 供应状态诊断
+    skills:
+    - demand-fulfillment-requirement-coverage-analysis
+    - demand-fulfillment-risk-summary
+    actions: []
+    sequence: *id047
+    evidence: 独立缺口与交期；不悄悄改写原业务情境
+  change_reason: 题设前提与当前净算结果分开
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    on_time: false
+    reason: 给定35天采购周期超过16天窗口
+- id: S-09
+  answer: 满足 3850 套；当前数量能力 3920，余量 70。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id048
+    - 理论可产
+    - 合计可售
+    skills:
+    - demand-fulfillment-capacity-analysis
+    actions: []
+    sequence: *id048
+    evidence: 独立可产量证书
+  change_reason: 旧答案边界更新
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    quantity_covered: true
+- id: S-10
+  answer: 满足 3851 套；当前数量能力 3920，余量 69。旧“不满足、差 1”需要改正。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    metrics:
+    - 库存可用量
+    functions: &id049
+    - 理论可产
+    - 合计可售
+    skills:
+    - demand-fulfillment-capacity-analysis
+    actions: []
+    sequence: *id049
+    evidence: 独立可产量证书
+  change_reason: 旧可产算法导致错误结论
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  required_answer:
+    quantity_covered: true
+    surplus_to_capacity: 69
+- id: S-11
+  answer: 供货口径：P61 的 60 套缺 994-000645 共 40；U151 的 50 套由成品覆盖。
+  basis:
+    objects:
+    - 产品
+    - 产品BOM
+    - 物料
+    - 库存
+    - 采购订单
+    relations:
+    - 产品关联产品bom
+    - 产品bom关联物料
+    - 物料关联库存
+    - 采购订单关联物料请购单
+    metrics:
+    - 库存可用量
+    functions: &id050
+    - 要X套净需求与齐套
+    - 共用料与多需求争用
+    skills:
+    - demand-fulfillment-requirement-coverage-analysis
+    actions: []
+    sequence: *id050
+    evidence: 独立共享池；两种产品成品先抵扣
+  change_reason: 供货口径澄清 + 旧缺料答案错误
+  verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
+  demand_mode: fulfillment
+  required_answer:
+    P61-000351:
+      shortage_code: 994-000645
+      shortage_qty: 40
+    U00-000151: finished_goods_cover
+status: candidate_deterministic_020_verified_not_published
+grading_policy:
+  required: required_answer 是题目必答语义或数值；接受等价自然语言表达，不要求字段名或字面匹配。
+  supporting: answer/basis/supporting_evidence 的补充数字用于复核，不自动提升为必答项；额外错误或矛盾仍应指出。
+  scope: 答案仅适用于候选题集明确的业务规则；不得用新规则回填历史成绩。

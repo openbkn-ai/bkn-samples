@@ -374,7 +374,7 @@ def test_accumulates_usage_and_gross_requirement_along_each_path():
 def test_substitute_rows_stay_out_of_the_main_backward_tree(substitute_enabled):
     """主树只用主料 BOM；替代策略必须显式，但不改变倒排树结构。"""
     synthetic = rows(
-        bom=[bom_row("MAIN"), substitute_bom_row("ALT")],
+        bom=[{**bom_row("MAIN"), "alt_group_no":"G1"}, substitute_bom_row("ALT")],
         materials=[
             material(PRODUCT, attr="自制", production_lt=5),
             material("MAIN", attr="外购", purchase_lt=3),
@@ -636,12 +636,12 @@ def test_customer_date_fields_use_business_date_and_critical_shortage_lead_time(
     result = run_plan(build_snapshot(synthetic), demand_end="2026-08-17")
 
     assert result["fulfillment_mode"] == "production_plan"
-    assert result["customer_earliest_available_date"] == "2026-08-19"
-    assert result["customer_late_days"] == 2
+    assert result["customer_earliest_available_date"] == "2026-08-21"
+    assert result["customer_late_days"] == 4
     assert result["production_plan_required"] is True
 
 
-def test_skips_cycle_and_emits_warning():
+def test_rejects_cycle_instead_of_returning_incomplete_plan():
     synthetic = rows(
         bom=[
             bom_row("SUB"),
@@ -654,14 +654,9 @@ def test_skips_cycle_and_emits_warning():
         mrps=[mrp("SUB")],
     )
 
-    result = run_plan(build_snapshot(synthetic))
-
-    assert [item["material_code"] for item in result["nodes"]] == [
-        PRODUCT,
-        "SUB",
-    ]
-    assert result["node_count_total"] == 2
-    assert any("环路" in warning for warning in result["warnings"])
+    # A cyclic BOM cannot establish a complete net plan; fail explicitly.
+    with pytest.raises(CannotCompute, match="循环"):
+        run_plan(build_snapshot(synthetic))
 
 
 def flat_tree_rows(child_count: int) -> dict[str, list[dict]]:

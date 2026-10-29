@@ -1,0 +1,436 @@
+{
+  "status": "candidate_r3_fixed_020_and_blind_validation_passed_not_published",
+  "sample": "supply-chain",
+  "version": "0.1.15",
+  "revision": "r3",
+  "compatibility": ">=0.2.0 <0.2.1",
+  "data_baseline": "original 0.1.4 full data",
+  "package": {
+    "path": "package.tar.gz",
+    "digest": "sha256:f2669aa0df9086e0669ae45c3aa2a893a46de2187b469edee33d32d42fd48e52",
+    "size": 1544114
+  },
+  "installation": {
+    "id": "inst-supply-chain-a4f819e93c49470fa5157ab9589b73d9",
+    "attemptId": "815312ae955e4ba4b76ce4e5a527d186",
+    "sample": "supply-chain",
+    "version": "0.1.15",
+    "startedAt": "2026-10-29T13:49:01.415801Z",
+    "finishedAt": "2026-10-29T13:50:48.683149Z",
+    "installedAt": "2026-10-29T13:50:48.683149Z",
+    "status": "installed",
+    "requestedBy": "admin",
+    "operation": "install",
+    "stages": [
+      {
+        "id": "database",
+        "name": "准备样例库",
+        "state": "succeeded"
+      },
+      {
+        "id": "discover",
+        "name": "扫描数据资源",
+        "state": "succeeded"
+      },
+      {
+        "id": "knowledge",
+        "name": "导入并绑定知识网络",
+        "state": "succeeded"
+      },
+      {
+        "id": "capabilities",
+        "name": "发布能力",
+        "state": "succeeded"
+      },
+      {
+        "id": "verify",
+        "name": "冒烟验收",
+        "state": "succeeded"
+      }
+    ],
+    "error": null
+  },
+  "source_tests": {
+    "passed": 210
+  },
+  "online_regression": {
+    "passed": 53,
+    "total": 53,
+    "type": "deterministic_sdk_mcp_metric_cypher_not_agent_score"
+  },
+  "installed_functions_source_verified": 14,
+  "source_code_review": "r3 readonly review: 74 related tests and synthetic date propagation checks, no blocking findings",
+  "all_products_no_alternates_smoke": 30,
+  "csv_files_unchanged": 12,
+  "ontology_files_unchanged": true,
+  "question_count": 50,
+  "answer_count": 50,
+  "per_question_evidence": {
+    "M-01": {
+      "evidence_cases": [
+        "M01"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-02": {
+      "evidence_cases": [
+        "M02"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-03": {
+      "evidence_cases": [
+        "M03"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-04": {
+      "evidence_cases": [
+        "M04"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-05": {
+      "evidence_cases": [
+        "M05"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-06": {
+      "evidence_cases": [
+        "M06"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-07": {
+      "evidence_cases": [
+        "M07"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-08": {
+      "evidence_cases": [
+        "M08"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-09": {
+      "evidence_cases": [
+        "M09"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-10": {
+      "evidence_cases": [
+        "M10-cypher"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-11": {
+      "evidence_cases": [
+        "M11-qty",
+        "M11-count"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-12": {
+      "evidence_cases": [
+        "M12-qty",
+        "M12-count"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-13": {
+      "evidence_cases": [
+        "M13"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-14": {
+      "evidence_cases": [
+        "M14"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "M-15": {
+      "evidence_cases": [
+        "M15"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-01": {
+      "evidence_cases": [
+        "F01"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-02": {
+      "evidence_cases": [
+        "F02"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-03": {
+      "evidence_cases": [
+        "F03"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-04": {
+      "evidence_cases": [
+        "F04"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-05": {
+      "evidence_cases": [
+        "F05"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-06": {
+      "evidence_cases": [
+        "F06"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-07": {
+      "evidence_cases": [
+        "F07"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-08": {
+      "evidence_cases": [
+        "F08"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-09": {
+      "evidence_cases": [
+        "F09"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-10": {
+      "evidence_cases": [
+        "F10"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-11": {
+      "evidence_cases": [
+        "F11"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-12": {
+      "evidence_cases": [
+        "F12"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-13": {
+      "evidence_cases": [
+        "F13"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-14": {
+      "evidence_cases": [
+        "F14"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "F-15": {
+      "evidence_cases": [
+        "F15"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-01": {
+      "evidence_cases": [
+        "R01"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-02": {
+      "evidence_cases": [
+        "R02"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-03": {
+      "evidence_cases": [
+        "R03"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-04": {
+      "evidence_cases": [
+        "R04"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-05": {
+      "evidence_cases": [
+        "R05"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-06": {
+      "evidence_cases": [
+        "R06"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-07": {
+      "evidence_cases": [
+        "R07"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-08": {
+      "evidence_cases": [
+        "R08"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "R-09": {
+      "evidence_cases": [
+        "R09"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-01": {
+      "evidence_cases": [
+        "S01"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-02": {
+      "evidence_cases": [
+        "F05"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-03": {
+      "evidence_cases": [
+        "S03"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-04": {
+      "evidence_cases": [
+        "F11"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-05": {
+      "evidence_cases": [
+        "F02"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-06": {
+      "evidence_cases": [],
+      "basis": "given_premise_arithmetic"
+    },
+    "S-07": {
+      "evidence_cases": [
+        "S07"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-08": {
+      "evidence_cases": [
+        "S08-given-leadtime"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-09": {
+      "evidence_cases": [
+        "F05"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-10": {
+      "evidence_cases": [
+        "F05"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    },
+    "S-11": {
+      "evidence_cases": [
+        "S11"
+      ],
+      "basis": "live_tool_or_metric_values_plus_independent_csv_or_explicit_rules"
+    }
+  },
+  "not_claimed": [
+    "customer_POC_metric_decimal_anomaly_resolved",
+    "live_customer_delivery_commitment",
+    "global_optimal_substitute_schedule"
+  ],
+  "environment_notes": [
+    "localhost8081 preserved and paused",
+    "localhost8082 fixed official 0.2.0",
+    "local Sample ingress body size set to128m for offline import",
+    "020 uninstall network deletion initially failed after metric deletion; official retry completed"
+  ],
+  "pending": [
+    "public_release_and_catalog_registration",
+    "customer_POC_metric_definition_and_call_comparison"
+  ],
+  "blind_agent_evaluation": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "low",
+    "question_count": 50,
+    "answered": 50,
+    "passed": 50,
+    "failed": 0,
+    "accuracy": 1.0,
+    "required_claims_only_passed": 50,
+    "groups": {
+      "M": {
+        "passed": 15,
+        "total": 15
+      },
+      "F": {
+        "passed": 15,
+        "total": 15
+      },
+      "R": {
+        "passed": 9,
+        "total": 9
+      },
+      "S": {
+        "passed": 11,
+        "total": 11
+      }
+    },
+    "online_calls": 77,
+    "question_sha256": "ca9391f6a03471ea5c51b8de694cb1e2b2b21a9cecdf4003fc189307ab828eb0",
+    "gold_sha256": "40e474f55dd9af7250ec721819ddfff7500b758c1a510fd8c761217ca0936fa0",
+    "answer_locks": {
+      "answers.jsonl": "a58c20bce1e51aa521998d9c1b609a37e7fef9c3ad05b3c473810fa43cb80acd",
+      "calls.jsonl": "f22ca8f49d6e3e25f35d1d72ad79a03add145fd9fd1017e1be793631a4570029",
+      "FINAL.md": "9e750ec54b3a2aa2108a5b659c1fc29c7ce31f0bf32ab2aec88fe15d200fe8bf"
+    },
+    "protocol_caveats": [
+      "Instruction-based file access restrictions in shared workspace, not OS isolation.",
+      "M01-M15 business calls accidentally used discovery tag; exact per-answer call IDs retained and verified. Parent procedural reminder only; no business hints or grading feedback.",
+      "Calls and final answer rows retained; one continuous tester session reuses discovered schemas and tool IDs.",
+      "One fixed dataset/model run, not a statistical guarantee or customer POC validation."
+    ]
+  },
+  "prior_blind_trial": {
+    "revision": "r2",
+    "passed": 43,
+    "total": 50,
+    "required_only_passed": 44,
+    "retained_internally": true
+  },
+  "technical_acceptance_passed": true,
+  "published": false
+}

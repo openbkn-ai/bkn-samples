@@ -31,16 +31,29 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     substitute = _input("substitute_enabled", "boolean", "是否启用替代料；需要替代判断时必须明确。")
     substitute_required = _input("substitute_enabled", "boolean", "是否启用替代料；必须明确传 true 或 false。", required=True)
     scope = _input("warehouse_scope", "string", "仓范围预设或明确仓库列表。")
+    demand_mode = _input("demand_mode", "string", "production（默认）：新增生产，不抵扣成品；fulfillment：客户供货，先抵扣三仓成品。")
+    demands = {
+        **_input("demands", "array", '至少两条对象需求，格式 [{"product":"382-000005","qty":50},{"product":"P61-000351","qty":60}]；数组顺序即扣减优先级。', required=True),
+        # 020 defaults arrays without sub_parameters to string items. Declare
+        # the item object so discovery agrees with the runtime's input contract.
+        "sub_parameters": [{
+            **_input("items", "object", "一条产品需求。"),
+            "sub_parameters": [
+                _input("product", "string", "产品编码。", required=True),
+                _input("qty", "number", "需求套数。", required=True),
+            ],
+        }],
+    }
     cases = {
         "bom_list": [product, _input("depth", "number", "展开层数；不传为一层。"), _input("include_substitute", "boolean", "是否包含替代料行。"), _input("report_grain", "string", "结果粒度；默认 summary 返回结构统计和一级主料，传 full 才返回明细。"), _input("page_size", "number", "full 明细的单页行数，1 到 500。"), _input("offset", "number", "full 明细的起始偏移量，默认 0。")],
-        "bom_shared_list": [_input("products", "array", "至少两个产品编码。", required=True), _input("depth", "number", "展开层数；不传为全层。"), _input("include_substitute", "boolean", "是否包含替代料行。")],
+        "bom_shared_list": [_input("products", "array", "至少两个产品编码。", required=True), _input("depth", "number", "共同料默认不传本参数，统计完整 BOM 全层；仅用户明确问一级时才传 1，一级结果不能代表全层。"), _input("include_substitute", "boolean", "是否包含替代料行。")],
         "material_where_used": [_input("material_code", "string", "物料编码。", required=True), _input("include_substitute", "boolean", "是否将替代料分支计入受影响产品；默认 true。"), _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回命中 BOM 路径。")],
         "layered_inventory": [product, _input("depth", "number", "展开层数；不传为一层。"), scope, _input("include_substitute", "boolean", "是否包含替代料行。")],
         "substitute_status": [_input("product", "string", "产品编码；与物料编码二选一。"), _input("material_code", "string", "物料编码；与产品编码二选一。"), scope, substitute],
         "theoretical_build": [product, scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料约束。")],
         "total_sellable": [product, _input("production_scope", "string", "生产仓范围。"), _input("finished_goods_scope", "string", "成品仓范围。"), substitute],
-        "kitting_net_demand": [product, _input("qty", "number", "需求套数。", required=True), scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料明细。")],
-        "shared_contention": [_input("demands", "array", '至少两条对象需求，格式 [{"product":"382-000005","qty":50},{"product":"P61-000351","qty":60}]；数组顺序即扣减优先级。', required=True), scope, substitute_required, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回逐料分配和完整剩余池。")],
+        "kitting_net_demand": [demand_mode, product, _input("qty", "number", "需求套数。", required=True), scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料明细。")],
+        "shared_contention": [demand_mode, demands, scope, substitute_required, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回逐料分配和完整剩余池。")],
         "max_build_without_po": [product, scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料约束。")],
         "leadtime_days": [_input("material_code", "string", "物料编码。", required=True)],
         "supply_status": [_input("material_code", "string", "物料编码。", required=True), _input("due_date", "string", "到位日或交货日。"), _input("gross_requirement", "number", "毛需求数量。"), scope, _input("child_short", "boolean", "是否已有子件短缺。")],

@@ -46,7 +46,7 @@ def test_backward_plan_loader_uses_business_filters_instead_of_scanning_all_tabl
 
     def query_object_instance(**kwargs):
         calls.append(kwargs)
-        return {"datas": []}
+        return {"datas": [{"id":"0000023181","material_number":"U00-000080"}]} if kwargs["ot_id"].endswith("_forecast") else {"datas": []}
 
     load_bkn_rows(
         "backward_plan",
@@ -56,7 +56,7 @@ def test_backward_plan_loader_uses_business_filters_instead_of_scanning_all_tabl
 
     by_type = {call["ot_id"]: call for call in calls}
     assert by_type["supply_ontology_hand_forecast"]["condition"] == {
-        "field": "id", "operation": "==", "value": "23181", "value_from": "const"
+        "field": "id", "operation": "==", "value": "0000023181", "value_from": "const"
     }
     assert by_type["supply_ontology_hand_bom"]["condition"] == {
         "field": "bom_material_code", "operation": "==", "value": "U00-000080", "value_from": "const"
@@ -78,7 +78,7 @@ def test_backward_plan_loader_uses_business_filters_instead_of_scanning_all_tabl
         "operation": "and",
         "sub_conditions": [
             {"field": "material_code", "operation": "in", "value": ["U00-000080"], "value_from": "const"},
-            {"field": "warehouse", "operation": "in", "value": ["苏州半成品仓", "苏州成品仓", "苏州电子原料仓", "苏州无人机原料仓", "苏州装配原料仓", "乌鲁木齐成品仓", "哈尔滨成品仓"], "value_from": "const"},
+            {"field": "warehouse", "operation": "in", "value": sorted(["苏州半成品仓", "苏州成品仓", "苏州电子原料仓", "苏州无人机原料仓", "苏州装配原料仓", "乌鲁木齐成品仓", "哈尔滨成品仓"]), "value_from": "const"},
             {"field": "stock_status", "operation": "==", "value": "可用", "value_from": "const"},
         ],
     }
@@ -322,7 +322,7 @@ def test_backward_plan_scopes_large_purchase_request_material_scope_to_open_rows
                     for code in codes
                 ]
             }
-        return {"datas": []}
+        return {"datas": [{"id":"0000023181","material_number":"FG-382"}]} if kwargs["ot_id"].endswith("_forecast") else {"datas": []}
 
     load_bkn_rows(
         "backward_plan",

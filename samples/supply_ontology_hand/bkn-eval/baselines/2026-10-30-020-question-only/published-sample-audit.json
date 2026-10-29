@@ -1,0 +1,140 @@
+{
+  "checked_at_utc": "2026-10-29T17:25:22.820704+00:00",
+  "read_only": true,
+  "method": "Official GitHub REST API and release asset download; tar inspected as data only, no package execution",
+  "release": {
+    "tag": "sample-supply-chain-v0.1.14",
+    "commit": "f4008399a4b922b5a5c8273a0662b7be18950b3e",
+    "published_at": "2026-10-28T11:51:19Z",
+    "url": "https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.14",
+    "package_url": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.14/package.tar.gz",
+    "package_sha256": "dace7919bdb86f34f5edb80201893df6e63a444865c078cab8104e5b4d236049",
+    "checksum_matches_official_SHA256SUMS": true,
+    "platform_constraint": ">=0.2.1 <0.3.0",
+    "required_capabilities": [
+      "vega.catalog",
+      "knowledge-network.import.kn-json",
+      "execution.function",
+      "execution.skill",
+      "sample.experience-set",
+      "database.shared"
+    ],
+    "files": 97,
+    "contains_bkn_eval": false
+  },
+  "findings": [
+    {
+      "id": "runtime-experience-answers",
+      "severity": "high-for-blind-input-isolation",
+      "source_url": "https://github.com/openbkn-ai/bkn-samples/blob/f4008399a4b922b5a5c8273a0662b7be18950b3e/samples/supply_ontology_hand/experience/experience-set.yaml#L10",
+      "path": "experience/experience-set.yaml",
+      "case_count": 23,
+      "case_ids": [
+        "M-04",
+        "M-06",
+        "M-10",
+        "M-12",
+        "M-15",
+        "F-07",
+        "F-01",
+        "R-02",
+        "R-05",
+        "R-07",
+        "R-08",
+        "F-02",
+        "F-14",
+        "R-09",
+        "F-04",
+        "F-15",
+        "F-10",
+        "S-01",
+        "S-04",
+        "S-02",
+        "S-10",
+        "S-07",
+        "S-08"
+      ],
+      "all_cases_have_answer": true,
+      "all_cases_have_expected": true,
+      "example": {
+        "id": "M-04",
+        "question": "当前销售订单共有多少张？",
+        "answer": "当前销售订单共有 800 张。",
+        "expected": {
+          "value": 800
+        }
+      },
+      "explanation": "Runtime excludes bkn-eval but includes23 experience cases with benchmark-overlapping IDs, question/answer/expected and executable Cypher. Demonstration/UI material must be isolated from a blind answering agent. This audit establishes presence, not that any past Agent actually read it.",
+      "release_notes_url": "https://github.com/openbkn-ai/bkn-samples/blob/f4008399a4b922b5a5c8273a0662b7be18950b3e/samples/supply_ontology_hand/releases/0.1.14/release-notes.zh-CN.md#L7"
+    },
+    {
+      "id": "deterministic-v3-contains-evaluation-policy",
+      "severity": "high-for-question-only-protocol",
+      "source_url": "https://github.com/openbkn-ai/bkn-samples/blob/f4008399a4b922b5a5c8273a0662b7be18950b3e/samples/supply_ontology_hand/bkn-eval/baselines/2026-10-12-business-rules-v2/question-set-v3.yaml#L115",
+      "evidence": "audience:evaluated_agent; evaluation_policy lists inventory_scope/stock_status/quantity_supply/allocation/substitution/date_supply/date_claim. Question text also gives netting algorithms and warehouse policies; F-14 changed to static structural question.",
+      "explanation": "Does not satisfy customer-original-question-only protocol, even if numeric answers are absent. v3 is a separate disclosed deterministic task, not equivalent to original blind50."
+    },
+    {
+      "id": "raw-v1-and-current-v2-not-rule-leak",
+      "severity": "informational",
+      "source_url": "https://github.com/openbkn-ai/bkn-samples/blob/f4008399a4b922b5a5c8273a0662b7be18950b3e/samples/supply_ontology_hand/bkn-eval/datasets/sample-question-set-v1.yaml",
+      "explanation": "Canonical raw v1 and current-csv v2 each have50 questions and no public_rules/evaluation_policy. Do not claim every published question file leaks rules. Official guide points to v2, while eval README also points to deterministic v3; current baseline selection is inconsistent."
+    },
+    {
+      "id": "guide-preflight-reuses-formal-answer",
+      "severity": "medium-if-agent-receives-guide-or-same-preflight-context",
+      "source_url": "https://github.com/openbkn-ai/bkn-samples/blob/f4008399a4b922b5a5c8273a0662b7be18950b3e/samples/supply_ontology_hand/bkn-eval/体验评测指南.md#L18",
+      "evidence": "Preflight calls standard leadtime606-000989 and states14days, directly overlapping F-07; also supplies BOM product382-000005.",
+      "explanation": "Keep guide/preflight and benchmark README evaluator-only; use unrelated technical probes and fresh sessions. Guide explicitly forbids A/B reading answer sets, but giving the whole guide/README would expose answers or historic metrics."
+    },
+    {
+      "id": "repository-answer-and-history-coexist",
+      "severity": "medium-if-whole-repository-mounted",
+      "source_url": "https://github.com/openbkn-ai/bkn-samples/blob/f4008399a4b922b5a5c8273a0662b7be18950b3e/samples/supply_ontology_hand/bkn-eval/README.md",
+      "explanation": "Source repo stores answer sets, gold facts, historical answer sheets and scores next to questions. Expected for maintainers; unsafe to mount entire repo/README into the evaluated-agent context. Runtime tar itself does not include bkn-eval."
+    },
+    {
+      "id": "published014-is021",
+      "severity": "compatibility-boundary",
+      "evidence": {
+        "architectures": [
+          "amd64",
+          "arm64"
+        ],
+        "capabilities": [
+          "vega.catalog",
+          "knowledge-network.import.kn-json",
+          "execution.function",
+          "execution.skill",
+          "sample.experience-set",
+          "database.shared"
+        ],
+        "installationProfiles": [
+          "openbkn.ai/sample-install.v1"
+        ],
+        "platformVersion": ">=0.2.1 <0.3.0",
+        "requiredExtensions": []
+      },
+      "explanation": "Official0.1.14 requires >=0.2.1 <0.3.0 plus sample.experience-set/database.shared. Cannot replace020-compatible candidate with latest published package without violating platform baseline."
+    }
+  ],
+  "branch020": {
+    "sha": "e2db2c7b902a21c372ca4df67cdad1643d9630bd",
+    "message": "fix(installer): preserve in-cluster kubectl configuration with bounded execution (#172)\n\nCo-authored-by: leecky <leecky@leeckydeMacBook-Air.local>",
+    "url": "https://github.com/openbkn-ai/bkn-samples/commit/e2db2c7b902a21c372ca4df67cdad1643d9630bd"
+  },
+  "main": {
+    "sha": "f4008399a4b922b5a5c8273a0662b7be18950b3e",
+    "message": "fix(supply): publish execution guidance and align business experience cards (#210)\n\n* fix(supply): publish execution guidance and prepare blind exam questions\n\n* fix(supply): describe shared demand array items as objects\n\n* docs(supply): align business experience guidance with next sample releases\n\n* docs(supply): clarify English blind paper cleanup scope",
+    "url": "https://github.com/openbkn-ai/bkn-samples/commit/f4008399a4b922b5a5c8273a0662b7be18950b3e"
+  },
+  "branch_comparison": {
+    "status": "diverged",
+    "ahead_by": 72,
+    "behind_by": 17,
+    "total_commits": 72,
+    "html_url": "https://github.com/openbkn-ai/bkn-samples/compare/e2db2c7b902a21c372ca4df67cdad1643d9630bd...f4008399a4b922b5a5c8273a0662b7be18950b3e"
+  },
+  "pr_target_assessment": "release/0.2.0 is the appropriate existing maintenance PR target for an020-only fix. Create/update against its current e2db2c7b902a21c372ca4df67cdad1643d9630bd HEAD and selectively carry the020-compatible changes. Main is f4008399a4b922b5a5c8273a0662b7be18950b3e and has021 experience/shared-DB changes; branch histories diverged (main72ahead,17behind). Do not overwrite main with old020 sample or assume candidate worktree base already includes17 maintenance-only commits. PR readiness still requires rebase/merge and validation against target.",
+  "local_evidence_directory": "/Users/leecky/openbkn/.local-envs/bkn-020-supply/repro-015-r4/published-source-014"
+}

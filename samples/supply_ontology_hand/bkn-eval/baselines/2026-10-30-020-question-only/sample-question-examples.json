@@ -1,0 +1,69 @@
+{
+  "manufacturing": {
+    "path": "samples/manufacturing-industry-zh-cn/bkn-eval/questions.json",
+    "count": 100,
+    "example": {
+      "id": "MFG-001",
+      "level": "easy_basic",
+      "category": "business_lookup",
+      "question_en": "What manufacturing site is used by the sample?",
+      "question_zh_cn": "样例使用哪个制造基地？",
+      "expected_answer": "SITE-SZ-01"
+    }
+  },
+  "financial": {
+    "path": "samples/financial-fibo-zh-cn/bkn-eval/questions.json",
+    "count": 100,
+    "example": {
+      "id": "FIN-001",
+      "scenario_id": "S01",
+      "level": "easy_basic",
+      "question": "INS-001 的发行方编号和名称是什么？",
+      "as_of_date": "2027-02-28",
+      "evidence_tables": [
+        "financial_instruments",
+        "legal_entities"
+      ],
+      "required_relations": [
+        "instrument_to_issuer"
+      ],
+      "evidence_views": [],
+      "evidence_sql": "SELECT i.instrument_id,i.name,i.issuer_id,e.name AS issuer_name FROM financial_instruments i JOIN legal_entities e ON i.issuer_id=e.entity_id WHERE i.instrument_id='INS-001'",
+      "answer_format": "ordered_rows",
+      "numeric_tolerance": 1e-06
+    }
+  },
+  "energy": {
+    "path": "samples/energy-saref4ener-zh-cn/bkn-eval/questions.json",
+    "count": 100,
+    "example": {
+      "id": "ENE-001",
+      "question": "业务观察日为2027-02-28、知识截止日为2027-02-28，针对EVT-001，当前申报资源按负荷与设备约束逐台能承诺多少功率？请列出具体结果、单位及相关来源，说明未知与零的区别。",
+      "scenario_id": "S01",
+      "difficulty": "easy",
+      "scope": {
+        "event_ids": [
+          "EVT-001"
+        ],
+        "as_of_date": "2027-02-28",
+        "knowledge_date": "2027-02-28"
+      },
+      "output_contract": {
+        "fields": [
+          "event_id",
+          "device_id",
+          "site_id",
+          "eligible_kw"
+        ],
+        "filter": {},
+        "units": {
+          "event_id": "identifier/code",
+          "device_id": "identifier/code",
+          "site_id": "identifier/code",
+          "eligible_kw": "kW"
+        },
+        "precision": "exact six-decimal quantities; exact two-decimal money; null remains unknown"
+      }
+    }
+  }
+}

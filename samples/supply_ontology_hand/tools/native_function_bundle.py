@@ -35,6 +35,7 @@ def supply_function(
     demand_end: str | None = None, demand_qty: float | None = None,
     business_date: str | None = None, report_grain: str | None = None,
     page_size: int | None = None, offset: int | None = None,
+    demand_mode: str | None = None,
 ) -> dict:
     """Run the fixed operation with facts loaded by the Function itself."""
     params = {key: value for key, value in locals().items() if value is not None}

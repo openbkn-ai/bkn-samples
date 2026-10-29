@@ -1,0 +1,659 @@
+{
+  "status": "completed_candidate_not_ready_for_publication",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "history": "fresh fork_none; one continuous agent session, sequential50 questions",
+  "question_count": 50,
+  "answered": 50,
+  "passed": 43,
+  "failed": 7,
+  "accuracy": 0.86,
+  "required_claims_only_passed": 44,
+  "required_claims_only_accuracy": 0.88,
+  "scoring": "Full-answer accuracy requires required claims and no explicit contradictory business facts. S-08 main conclusion passes but erroneous extra shortage fails full answer.",
+  "groups": {
+    "M": {
+      "passed": 15,
+      "total": 15
+    },
+    "F": {
+      "passed": 12,
+      "total": 15
+    },
+    "R": {
+      "passed": 9,
+      "total": 9
+    },
+    "S": {
+      "passed": 7,
+      "total": 11
+    }
+  },
+  "failure_categories": {
+    "agent_scope": 4,
+    "sample_backward_inconsistency": 2,
+    "agent_reasoning": 1
+  },
+  "online_calls": 98,
+  "questions_with_online_calls": 49,
+  "given_premise_only": "S-06",
+  "initial_cli_failures_recovered": 3,
+  "provenance": "tester attested only questions.yaml, own outputs and live CLI/schema/results; no reference answers/CSV/reports/parent directories read",
+  "protocol_caveats": [
+    "The first r1 was invalidated before business question execution because the harness blocked standard help. It has no accuracy score.",
+    "The effective r2 used fresh history after help/network preflight.",
+    "Parent follow-ups only requested completion; no business hints or grading feedback.",
+    "Read restrictions were instruction-based in the shared workspace, not OS file isolation."
+  ],
+  "question_sha256": "ca9391f6a03471ea5c51b8de694cb1e2b2b21a9cecdf4003fc189307ab828eb0",
+  "gold_sha256": "40e474f55dd9af7250ec721819ddfff7500b758c1a510fd8c761217ca0936fa0",
+  "answer_locks": {
+    "answers.jsonl": "e6bc39324df122688eaac591b983462553aff810c1b32ab3fe981f89077fee67",
+    "calls.jsonl": "b21d2c7246c8e53e7bfa6fa2837cec478ac5e0771d6970418cdd1007ec0b19ff",
+    "FINAL.md": "5c92928e2e05d74a69fcfd7ae84ca028d35d4fdf67879abb1deccb899274369c"
+  },
+  "package_sha256": "55cdbc82ab3dbaf96588ade71832a3354bbddfe154a6b26cbc13d5f0a618b067",
+  "platform": "0.2.0 at localhost:8082",
+  "rows": [
+    {
+      "id": "M-01",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "30 种",
+      "actual": "当前产品主数据共 30 种。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "53179e88acf2"
+      ]
+    },
+    {
+      "id": "M-02",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "3497 种",
+      "actual": "当前物料主数据共 3497 种。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "0d23e752c8b3"
+      ]
+    },
+    {
+      "id": "M-03",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "230 家",
+      "actual": "当前供应商档案共 230 家。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "4734923a9eb2"
+      ]
+    },
+    {
+      "id": "M-04",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "800 张",
+      "actual": "当前销售订单共 800 张。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "81251a848109"
+      ]
+    },
+    {
+      "id": "M-05",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "29 个仓库",
+      "actual": "当前库存记录涉及 29 个不同仓库。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "59b97f35203d"
+      ]
+    },
+    {
+      "id": "M-06",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "534 套（三个成品仓）",
+      "actual": "三个成品仓合计可用库存为 534 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "e970d99180fd"
+      ]
+    },
+    {
+      "id": "M-07",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "56340 套",
+      "actual": "当前未关闭（正常）预测需求合计为 56,340 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "360fcf00f540"
+      ]
+    },
+    {
+      "id": "M-08",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "90 条未关闭预测明细；另有 26 个 billno，不是本题计数对象。",
+      "actual": "当前未关闭预测明细共 90 条。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "46ada24facd0"
+      ]
+    },
+    {
+      "id": "M-09",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "16 张",
+      "actual": "当前处于执行中的销售订单共 16 张。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "353f7e7e22d4"
+      ]
+    },
+    {
+      "id": "M-10",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "签约 1081、发货 1066、未发货 15 套",
+      "actual": "产品 382-000005 累计签约 1,081 套，已发货 1,066 套，尚有 15 套未发货。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "5a53c73be668"
+      ]
+    },
+    {
+      "id": "M-11",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "6 条预测明细，合计 2605 套",
+      "actual": "当前未关闭预测有 6 条明细，合计 2,605 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "a04d6de5d49e",
+        "b9984bf3f39b"
+      ]
+    },
+    {
+      "id": "M-12",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "12 条预测明细，合计 20000 套",
+      "actual": "当前未关闭预测有 12 条明细，合计 20,000 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "1770686fcebd",
+        "b849f861e56e"
+      ]
+    },
+    {
+      "id": "M-13",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "3149 种",
+      "actual": "外购物料共 3,149 种。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "1a6a705bfa81"
+      ]
+    },
+    {
+      "id": "M-14",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "233 种",
+      "actual": "自制物料共 233 种。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "cc3bc57e8cd5"
+      ]
+    },
+    {
+      "id": "M-15",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "51 家",
+      "actual": "采购员杨强云负责维护 51 家供应商档案。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "7700107040ea"
+      ]
+    },
+    {
+      "id": "F-01",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "一级主料 9 种：468-000493、468-000530、528-000036、606-000989、606-000990、791-000007、791-000013、791-000015、994-000550",
+      "actual": "一级主料共9种：791-000013 YN406预组装包(拖拉机)、606-000989 YN406包装外箱_V2、606-000990 YN406珍珠棉内托_V2、528-000036 YS221A接收机组件_国内、791-000007 YN406B方向盘组件（拖拉机）、994-000550 406电源+电机+接收机连接线、468-000493 YN406说明书（中文）、468-000530 导航车贴(60*15cm)、791-000015 YN403显示终端整机_预装组件_拖拉机。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "515e8405c1e1"
+      ]
+    },
+    {
+      "id": "F-02",
+      "passed": false,
+      "required_claims_pass": false,
+      "category": "agent_scope",
+      "expected": "38种（全层主料）",
+      "actual": "BOM 共同物料为 0 种。",
+      "reason": "传depth=1，只查询一级，返回0；将一级结果当成全层答案。",
+      "evidence_call_ids": [
+        "f59a48e0ce25"
+      ]
+    },
+    {
+      "id": "F-03",
+      "passed": false,
+      "required_claims_pass": false,
+      "category": "agent_scope",
+      "expected": "17种（全层主料）",
+      "actual": "三者共同 BOM 物料为 0 种。",
+      "reason": "传depth=1，三产品全层共同料被错误回答为0。",
+      "evidence_call_ids": [
+        "f5af3a5cbfd8"
+      ]
+    },
+    {
+      "id": "F-04",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "568 套 = 成品 534 + 新增可产 34",
+      "actual": "当前最多可售 568 套（成品库存 534 套，可理论生产 34 套）。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "1cb3f315b320"
+      ]
+    },
+    {
+      "id": "F-05",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "3920 套 = 成品 3800 + 新增可产 120",
+      "actual": "当前最多可售 3,920 套（成品库存 3,800 套，可理论生产 120 套）。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "fb72c2bf384b"
+      ]
+    },
+    {
+      "id": "F-06",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "不齐套（新增生产 50 套，不用成品覆盖）。",
+      "actual": "不齐套；缺 165-003886 接收机可调节底座 32 个。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "0d850e78e383"
+      ]
+    },
+    {
+      "id": "F-07",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "14 天",
+      "actual": "标准采购交期为 14 天。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "ab12acd2d854"
+      ]
+    },
+    {
+      "id": "F-08",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "新增可产 34 套",
+      "actual": "不启用替代料、按生产可用仓计算，理论上还能生产 34 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "bafd55416af3"
+      ]
+    },
+    {
+      "id": "F-09",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "新增可产 120 套",
+      "actual": "理论上还能生产 120 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "7ec2a5a36825"
+      ]
+    },
+    {
+      "id": "F-10",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "新生产 60 套不齐套，缺 1 种物料：994-000645 缺 40；本产品成品为 0，供货口径同样缺 40。",
+      "actual": "不齐套，缺 1 种物料：994-000645 YC400电源线（屏蔽层版），净缺 40 个。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "f012f3e57b0d"
+      ]
+    },
+    {
+      "id": "F-11",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "382-000005 的 50 套由三仓成品覆盖；P61-000351 的 60 套不齐，994-000645 缺 40。",
+      "actual": "按给定顺序，382-000005 的 50 套可以满足；P61-000351 的 60 套不能满足，994-000645 尚缺 40 个。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "f45232f486ca"
+      ]
+    },
+    {
+      "id": "F-12",
+      "passed": false,
+      "required_claims_pass": false,
+      "category": "agent_scope",
+      "expected": "26种（全层主料）",
+      "actual": "共同 BOM 物料为 0 种。",
+      "reason": "传depth=1，两个产品全层共同料被错误回答为0。",
+      "evidence_call_ids": [
+        "743dd795f4fc"
+      ]
+    },
+    {
+      "id": "F-13",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "新增可产 34 套",
+      "actual": "最多能生产 34 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "6b79c80769aa"
+      ]
+    },
+    {
+      "id": "F-14",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "完整齐套倒排树共有 77 个节点（根节点 1 + 主料节点 76）。须使用预测 ID 0000023181 和 report_grain=full_tree。",
+      "actual": "完整倒排结果树共有 77 个节点。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "20df10aa2623"
+      ]
+    },
+    {
+      "id": "F-15",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "878 套 = 成品 534 + 允许替代后的新增可产 344",
+      "actual": "允许使用替代料时，模型计算最多可供 878 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "0014b04100ab"
+      ]
+    },
+    {
+      "id": "R-01",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "16 种主料",
+      "actual": "一级主料共 16 种。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "4c863bb338f3"
+      ]
+    },
+    {
+      "id": "R-02",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "5 种主料",
+      "actual": "一级主料共 5 种。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "7652f0eee406"
+      ]
+    },
+    {
+      "id": "R-03",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "76 种主料",
+      "actual": "完整主料分支共涉及 76 种物料。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "07cc574639e8"
+      ]
+    },
+    {
+      "id": "R-04",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "333 种主料",
+      "actual": "完整主料分支共涉及 333 种物料。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "3692d3b5f2bb"
+      ]
+    },
+    {
+      "id": "R-05",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "P61-000328、P61-000331、P61-000351",
+      "actual": "使用该物料的产品有 P61-000328、P61-000331、P61-000351。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "29ef3371f357"
+      ]
+    },
+    {
+      "id": "R-06",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "382-000005、382-000006",
+      "actual": "使用该物料的产品有 382-000005、382-000006。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "09d432b0b055"
+      ]
+    },
+    {
+      "id": "R-07",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "含替代用途时为 30 种产品；应在公共规则声明反查包含替代用途。",
+      "actual": "共被 30 种产品使用。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "9b7aa1b19e7d"
+      ]
+    },
+    {
+      "id": "R-08",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "468-000493、606-000989、606-000990、994-000550，共 4 种",
+      "actual": "共同一级主料有 4 种：468-000493、606-000989、606-000990、994-000550。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "f9c1a72ea74e"
+      ]
+    },
+    {
+      "id": "R-09",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "替代料 356-000356，生产七仓可用库存 500",
+      "actual": "可用替代物料为 356-000356 天线底座MMCX-KE-7536，生产可用仓库存 500 个。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "5cc7f3bfdd70"
+      ]
+    },
+    {
+      "id": "S-01",
+      "passed": false,
+      "required_claims_pass": false,
+      "category": "sample_backward_inconsistency",
+      "expected": "标准模型下不能按期；当前994-000645缺40，采购35天超过11天窗口",
+      "actual": "不能按时交付。模型给出的最早可用日期为 2027-09-21，晚于要求日期；存在多项缺料，关键物料 321-000569 缺 240 个。",
+      "reason": "Agent忠实转述倒排输出的2027-09-21与321-000569缺240；该缺口/日期不符合逐层库存净算。不能因最终否定交期结论碰巧一致而通过原因解释。",
+      "evidence_call_ids": [
+        "f029a6ce5c9a"
+      ]
+    },
+    {
+      "id": "S-02",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "当前数量能力 3920 套（3800 + 120）；这不等于交期承诺。",
+      "actual": "当前模型可售能力为 3,920 套（成品 3,800 套、理论可产 120 套）。这只是数量能力，不等于交期承诺。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "3b6575e03be1"
+      ]
+    },
+    {
+      "id": "S-03",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "作为客户新增供货需求，50 套由三仓成品 534 覆盖；无需新增制造，无组件补货缺口。若客户要求必须新生产，应另算，不沿用旧 35 条缺口。",
+      "actual": "可以齐套，当前成品库存可分配 50 套，物料缺口为零。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "d4e59a586d84"
+      ]
+    },
+    {
+      "id": "S-04",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "供货口径：382 的 50 套由成品覆盖；P61 的 60 套不齐，994-000645 缺 40；当前数量不足以同时完全满足。",
+      "actual": "不能同时齐套承接。按题目顺序，382-000005 的 50 套可满足；P61-000351 的 60 套缺 994-000645 共 40 个。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "fa4f0e306cf3"
+      ]
+    },
+    {
+      "id": "S-05",
+      "passed": false,
+      "required_claims_pass": false,
+      "category": "agent_scope",
+      "expected": "存在共同料；无数量不能判断能否同时承接",
+      "actual": "两者一级 BOM 没有共同物料。由于需求数量尚未给出，目前仍无法判断两单能否同时承接。",
+      "reason": "虽正确指出缺需求数量，但用一级交集0断言无共同物料，未回答全层共用关系。",
+      "evidence_call_ids": [
+        "491592562652"
+      ]
+    },
+    {
+      "id": "S-06",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "建议采购 240 个；300 比题干给定净缺多 60。保留“缺 240”这一给定前提。",
+      "actual": "建议采购 240 个即可；计划的 300 个比当前缺口多 60 个。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": []
+    },
+    {
+      "id": "S-07",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "可以。按题目已确认的分配、质检及发运条件，三仓成品 534 足够覆盖 50 套，业务日早于交货日。",
+      "actual": "可以按时交付。模型判断可按 2026-08-25 起供，满足 2026-09-05 的要求。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "d099cf303a9f"
+      ]
+    },
+    {
+      "id": "S-08",
+      "passed": false,
+      "required_claims_pass": true,
+      "category": "sample_backward_inconsistency",
+      "expected": "按题设35天采购周期大于16天窗口，不能按期；不要额外断言当前缺240",
+      "actual": "不能按时交付。从 2026-08-25 到 2026-09-10 只有 16 天，少于题设 35 天采购交期；模型也显示 321-000569 缺 240 个。",
+      "reason": "35>16的必答判断正确；但额外引用倒排输出321-000569缺240作为事实。该数量不是题设给定，也与当前净算不一致。完整答复按预先规则判不通过，必答项单独标通过。",
+      "evidence_call_ids": [
+        "d59444a91535"
+      ]
+    },
+    {
+      "id": "S-09",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "满足 3850 套；当前数量能力 3920，余量 70。",
+      "actual": "满足。当前可售能力为 3,920 套，比需求多 70 套。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "d1a0eb0aa10c"
+      ]
+    },
+    {
+      "id": "S-10",
+      "passed": false,
+      "required_claims_pass": false,
+      "category": "agent_reasoning",
+      "expected": "满足3851套，能力3920，余69套",
+      "actual": "不满足。当前可售能力为 3,920 套，较需求少 1 套。",
+      "reason": "工具返回3920正确，Agent仍答不满足、少1，比较与差额均错误，且答复自身矛盾。",
+      "evidence_call_ids": [
+        "364eac6d1c7b"
+      ]
+    },
+    {
+      "id": "S-11",
+      "passed": true,
+      "required_claims_pass": true,
+      "category": "pass",
+      "expected": "供货口径：P61 的 60 套缺 994-000645 共 40；U151 的 50 套由成品覆盖。",
+      "actual": "不能同时齐套。P61-000351 的 60 套缺 994-000645 共 40 个；U00-000151 的 50 套可以满足。",
+      "reason": "与冻结必答项一致，未发现矛盾业务事实。",
+      "evidence_call_ids": [
+        "163d169d2b7b"
+      ]
+    }
+  ]
+}

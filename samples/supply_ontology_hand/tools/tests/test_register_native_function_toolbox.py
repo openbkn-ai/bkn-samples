@@ -28,3 +28,21 @@ def test_existing_native_toolbox_updates_every_business_named_function(monkeypat
     updates = [call for call in calls if call[:2] == ["call", "/api/agent-operator-integration/v1/tool-box/box-1/tool/tool-bom_list"]]
     assert updates
     assert "supply_chain_compute" not in updates[0][5]
+
+
+def test_shared_contention_declares_object_items_in_020_function_metadata():
+    """020 defaults an array without sub_parameters to string items."""
+    from register_native_function_toolbox import _tool_inputs
+
+    payload = _tool_inputs()["shared_contention"]
+    demands = next(item for item in payload["inputs"] if item["name"] == "demands")
+    assert demands["type"] == "array" and demands["required"] is True
+    assert len(demands.get("sub_parameters", [])) == 1
+    item = demands["sub_parameters"][0]
+    assert item["type"] == "object"
+    fields = {field["name"]: field for field in item["sub_parameters"]}
+    assert set(fields) == {"product", "qty"}
+    assert fields["product"]["type"] == "string"
+    assert fields["qty"]["type"] == "number"
+    assert all(field["required"] is True for field in fields.values())
+    assert all(field["description"] for field in fields.values())
