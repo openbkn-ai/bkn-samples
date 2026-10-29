@@ -1,0 +1,51 @@
+id,question,bkn_main_supported,bkn_full_supported,bkn_classification,db_baseline_main_supported,db_baseline_classification,db_not_new_execution
+M-01,当前成品主数据有多少种？,True,True,supported,True,supported,True
+M-02,当前物料主数据有多少种？,True,True,supported,True,supported,True
+M-03,当前供应商档案有多少家？,True,True,supported,True,supported,True
+M-04,当前销售订单共有多少张？,True,True,supported,True,supported,True
+M-05,库存记录中一共出现过多少个仓库？,True,True,supported,True,supported,True
+M-06,产品 382-000005 在三个成品仓的可用库存是多少？,True,True,supported,True,supported,True
+M-07,当前未关闭预测单的需求数量合计是多少？,True,True,supported,True,supported,True
+M-08,当前还有多少张预测单未关闭？,True,True,supported,True,reasonable_semantic_difference,True
+M-09,当前处于执行中的销售订单有多少张？,True,True,supported,True,supported,True
+M-10,产品 382-000005 已签约多少套、已发货多少套，还有多少套未发货？,True,True,supported,True,supported,True
+M-11,产品 382-000005 当前未关闭的需求预测有多少张、合计多少套？,True,True,supported,True,supported,True
+M-12,产品 U00-000080 当前未关闭的需求预测有多少张、合计多少套？,True,True,supported,True,supported,True
+M-13,当前物料中，外购物料有多少种？,True,True,supported,True,supported,True
+M-14,当前物料中，自制物料有多少种？,True,True,supported,True,supported,True
+M-15,采购员杨强云负责维护多少家供应商档案？,True,True,supported,True,supported,True
+F-01,请列出产品 382-000005 的一级主料，不需要库存信息。,True,True,supported,True,supported,True
+F-02,产品 382-000005 与 P61-000351 的 BOM 共同物料有多少种？,True,True,supported,True,reasonable_semantic_difference,True
+F-03,产品 382-000005、P61-000351 与 U00-000151 三者共同的 BOM 物料有多少种？,True,True,supported,True,reasonable_semantic_difference,True
+F-04,产品 382-000005 在不启用替代料时，现在最多能卖多少？,True,True,supported,True,reasonable_semantic_difference,True
+F-05,产品 U00-000151 在不启用替代料时，现在最多能卖多少？,True,True,supported,True,reasonable_semantic_difference,True
+F-06,产品 382-000005 要 50 套，在不启用替代料时齐不齐？,True,True,reasonable_semantic_difference,True,reasonable_semantic_difference,True
+F-07,外购件 606-000989 的标准采购交期是多少天？,True,True,supported,True,supported,True
+F-08,产品 382-000005 不启用替代料，在生产可用仓中理论上还能生产多少？,True,True,supported,False,factual_or_task_error,True
+F-09,产品 U00-000151 不启用替代料，在生产可用仓中理论上还能生产多少？,True,True,supported,True,supported,True
+F-10,产品 P61-000351 要 60 套，在不启用替代料时齐不齐？若不齐，缺几种物料？,True,True,supported,True,supported,True
+F-11,先承接 382-000005 的 50 套、再承接 P61-000351 的 60 套，不启用替代料；两单各自能否齐套？,True,True,supported,True,supported,True
+F-12,产品 P61-000351 与 U00-000151 的 BOM 共同物料有多少种？,True,True,supported,True,reasonable_semantic_difference,True
+F-13,产品 382-000005 不采购、不计在途且不启用替代料，生产可用仓最多能生产多少？,True,True,supported,True,supported,True
+F-14,对 U00-000080 的预测单 0000023181 做完整齐套倒排，结果树中共有多少个节点？,True,True,supported,False,factual_or_task_error,True
+F-15,客户允许使用替代料。产品 382-000005 现在最多可以供多少套？,True,True,supported,False,factual_or_task_error,True
+R-01,产品 P61-000351 的一级主料有多少种？,True,True,supported,True,supported,True
+R-02,产品 U00-000080 的一级主料有多少种？,True,True,supported,True,supported,True
+R-03,生产产品 U00-000080 的完整物料清单一共涉及多少种物料？,True,False,supplementary_statistical_scope_error,True,reasonable_semantic_difference,True
+R-04,生产产品 382-000005 的完整物料清单一共涉及多少种物料？,True,False,supplementary_statistical_scope_error,True,reasonable_semantic_difference,True
+R-05,物料 321-000569 被哪些产品使用？,True,True,supported,True,supported,True
+R-06,物料 606-000989 被哪些产品使用？,True,True,supported,True,supported,True
+R-07,物料 725-000226 被多少种产品使用？,True,True,supported,True,supported,True
+R-08,产品 382-000005 与 382-000006 的一级主料中，有哪些是共同的？,True,True,supported,True,supported,True
+R-09,产品 382-000005 中，天线底座 356-000061 没有库存时，可以使用什么替代物料？可用库存是多少？,True,True,supported,True,reasonable_semantic_difference,True
+S-01,客户需要 P61-000351 共 60 套，要求 2026-09-05 交货，不能使用替代料。请回复客户能否按时交付，并说明原因。,True,True,supported,True,reasonable_semantic_difference,True
+S-02,客户要产品 U00-000151，先不启用替代料。请给出当前可售能力，并明确这是否等于交期承诺。,True,True,supported,True,reasonable_semantic_difference,True
+S-03,客户新增产品 382-000005 的 50 套需求，不能使用替代料。请判断物料是否齐套，并列出缺料情况。,True,True,supported,True,factual_or_task_error,True
+S-04,两个客户同时新增需求：382-000005 共 50 套、P61-000351 共 60 套，均不能使用替代料。请判断是否可以同时承接，并说明各自的缺料情况。,True,True,supported,False,factual_or_task_error,True
+S-05,382-000005 与 P61-000351 是否使用共同物料？两个客户还没有给出需求数量；现在能否判断两单能否同时承接？,True,True,supported,True,supported,True
+S-06,P61-000351 的 60 套需求中，物料 321-000569 缺 240。采购部门计划采购 300 个；仅从当前缺料看，建议采购多少个？,True,True,supported,True,factual_or_task_error,True
+S-07,客户需要 382-000005 共 50 套，要求 2026-09-05 交货。可以用替代料，请直接回复客户能否按时交付。,,,delivery_conditions_disclosed_but_unconfirmed,,factual_or_task_error,True
+S-08,客户需要 P61-000351 共 60 套，要求 2026-09-10 交货，不能使用替代料。关键缺料 321-000569 的标准采购交期为 35 天。请判断能否按时交付。,True,False,unsupported_cross_question_premise,True,factual_or_task_error,True
+S-09,客户需要 U00-000151 共 3850 套，不能使用替代料。请判断当前供货能力是否满足该数量。,True,True,supported,True,reasonable_semantic_difference,True
+S-10,客户需要 U00-000151 共 3851 套，不能使用替代料。请判断当前供货能力是否满足该数量，并说明差额。,True,True,supported,True,reasonable_semantic_difference,True
+S-11,两个客户同时新增需求：P61-000351 共 60 套、U00-000151 共 50 套，均不能使用替代料。请判断两单各自是否齐套，并说明缺料情况。,True,True,supported,False,factual_or_task_error,True

@@ -76,7 +76,7 @@ class SupplyVerifyTest(unittest.TestCase):
         self.assertFalse(VERIFY.capability_ready(run))
         self.assertFalse(VERIFY.skills_ready(run))
 
-    def test_forecast_metric_expectations_match_locked_csv(self):
+    def test_forecast_evaluator_expectations_match_locked_csv_without_runtime_answers(self):
         import csv
         import json
         from decimal import Decimal
@@ -84,7 +84,9 @@ class SupplyVerifyTest(unittest.TestCase):
         with (VERIFY.SAMPLE_DIR / "data/erp_mds_forecast.csv").open() as source:
             rows = list(csv.DictReader(source))
         cases = {case["id"]: case for case in json.loads(
-            (VERIFY.SAMPLE_DIR / "tools/assets/metrics-query-examples.json").read_text())["cases"]}
+            (VERIFY.SAMPLE_DIR / "bkn-eval/fixtures/metric-verification/metrics-query-examples.json").read_text())["cases"]}
+        runtime_cases = json.loads((VERIFY.SAMPLE_DIR / "tools/assets/metrics-query-examples.json").read_text())["cases"]
+        self.assertTrue(all("expected_value" not in case for case in runtime_cases))
         self.assertEqual(sum(Decimal(row["qty"]) for row in rows),
                          cases["forecast_qty_all"]["expected_value"])
         self.assertEqual(sum(row["closestatus_title"] != "已关闭" for row in rows),
