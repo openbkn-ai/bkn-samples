@@ -1,0 +1,47 @@
+audience: evaluator_only_do_not_mount_to_tested_agents
+paper: customer_original_50_question_texts_unchanged
+platform: official0.2.0
+sample_candidate: 0.1.16
+expected_bkn_business_semantics:
+  primary_material: alt_priority=0；替代组中的 priority=0 也是主料。结构题默认只含主料，物料反查题包含替代用途。 结构统计按快照登记的主料行去重；齐套制造只展开本次选定分支。
+  counting: 预测按不同明细 id 计条数，不按 billno 计单据头数；销售订单按 sales_order_id 去重。物料种数按编码去重。
+  warehouses:
+    finished_goods:
+    - 苏州成品仓
+    - 乌鲁木齐成品仓
+    - 哈尔滨成品仓
+    production_available:
+    - 苏州半成品仓
+    - 苏州成品仓
+    - 苏州电子原料仓
+    - 苏州无人机原料仓
+    - 苏州装配原料仓
+    - 乌鲁木齐成品仓
+    - 哈尔滨成品仓
+  inventory: 使用可用数量，不二次扣除已反映在可用量中的预留；先抵扣半成品，再只对其残余量展开下层；共享库存只能使用一次。
+  demand_mode: F-06、F-10 是必须新增生产；F-11、S 系列客户需求按供货，先抵扣三仓成品。调用齐套/争用函数时分别传 demand_mode=production
+    / fulfillment。
+  purchase_orders: 理论可产/可售不含 PO。齐套数量分析保留未关闭 PO 的 max(0,qty-actqty)，PR/MRP 不是可用供给；该数量分析不保证到期可用，日期题需另外判断。
+  shared_pool: 多需求按题目顺序，库存和 PO 池按料号共享，先承接需求先扣减；后单不得复用。
+  alternates: 未明确允许时不启用。允许时按替代组位置选择一项，按各自单耗归一化比较覆盖量，同覆盖优先主料，再按原始顺序；不混用一个位置的多候选库存。
+  date: 固定业务日 2026-08-25，以自然日计算标准交期。交期题在题设无加急/额外供给的标准模型下判断；数量能力不等于真实交付承诺。
+  given_premises: S-06 的缺 240、S-08 的关键缺料及 35 天为题设前提，不用新净算结果悄悄覆盖。
+  scoring: 只把题目要求作为必答项；F-06 不强制缺口种数。辅助证据不得因未额外报告而扣分；报告矛盾数值仍须指出。F-14 保持按原预测 ID 的 full_tree
+    完整倒排。
+evaluation:
+  freeze_before_test: true
+  score_after_all_answers_frozen: true
+  separate_fields:
+  - required_answer_match_to_bkn_semantics
+  - factual_errors
+  - semantic_difference_supported_by_database
+  - insufficient_information
+  - protocol_violations
+  do_not_force_bkn_100_percent: true
+  do_not_mark_reasonable_ambiguity_as_arithmetic_error: true
+original_paper_ambiguities:
+  M-08/M-11/M-12: 张可能指单据头billno，旧客户答案实际按明细。头/行不同须分别核查。
+  F-06/F-10: 要多少套未明确生产或供货，需核查原回答选择的解释。
+  F-11: 承接顺序给定；供货/生产仍需由语义来源解释。
+  S-07: 实际分配、质检、发运条件未声明；库存数量覆盖不能无条件保证实际到期交付。
+  S-08: 原题给35天采购前提；不要强行重算替换前提，也不要把假定缺料当当前净缺。

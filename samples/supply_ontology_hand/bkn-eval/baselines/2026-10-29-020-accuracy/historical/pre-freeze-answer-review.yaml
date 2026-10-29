@@ -1,0 +1,365 @@
+status: review_draft_not_released_gold
+platform: 0.2.0
+package_baseline: 0.1.4
+package_sha256: cb0d3f01568c490dca22fdd4ff6273dc83804f6726a3c5c8872e4eb670a14ad0
+business_date: '2026-08-25'
+scope: 原 50 题不删题、不替换场景；优先校准答案和评分，代码仅最小修复。
+answer_review:
+- id: M-01
+  question: 当前成品主数据有多少种？
+  old_answer: 当前成品主数据共有 30 种。
+  reviewed_answer: 30 种
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-02
+  question: 当前物料主数据有多少种？
+  old_answer: 当前物料主数据共有 3497 种。
+  reviewed_answer: 3497 种
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-03
+  question: 当前供应商档案有多少家？
+  old_answer: 当前供应商档案共有 230 家。
+  reviewed_answer: 230 家
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-04
+  question: 当前销售订单共有多少张？
+  old_answer: 当前销售订单共有 800 张。
+  reviewed_answer: 800 张
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-05
+  question: 库存记录中一共出现过多少个仓库？
+  old_answer: 库存记录中共出现 29 个仓库。
+  reviewed_answer: 29 个仓库
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-06
+  question: 产品 382-000005 在三个成品仓的可用库存是多少？
+  old_answer: 产品 382-000005 在三个成品仓的可用库存为 534。
+  reviewed_answer: 534 套（三个成品仓）
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-07
+  question: 当前未关闭预测单的需求数量合计是多少？
+  old_answer: 当前未关闭预测单的需求数量合计为 46840。
+  reviewed_answer: 56340 套
+  change_reason: 数据快照变化
+  evidence: 137 条总记录中排除 47 条已关闭，90 条 qty 合计 56340
+  status: 已核定
+- id: M-08
+  question: 当前还有多少张预测单未关闭？
+  old_answer: 当前未关闭预测单共有 87 张。
+  reviewed_answer: 按明细 ID 为 90 条；按 billno 为 26 张单据。建议将题目“多少张预测单”明确为“多少条预测明细”。
+  change_reason: 计数对象不清 + 快照变化
+  evidence: CSV 明细 id / billno 两种独立去重计数
+  status: 待口径冻结
+- id: M-09
+  question: 当前处于执行中的销售订单有多少张？
+  old_answer: 当前处于执行中的销售订单共有 16 张。
+  reviewed_answer: 16 张
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-10
+  question: 产品 382-000005 已签约多少套、已发货多少套，还有多少套未发货？
+  old_answer: 产品 382-000005 已签约 1081 套，已发货 1066 套，未发货 15 套。
+  reviewed_answer: 签约 1081、发货 1066、未发货 15 套
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-11
+  question: 产品 382-000005 当前未关闭的需求预测有多少张、合计多少套？
+  old_answer: 产品 382-000005 当前未关闭的需求预测有 6 张，合计 2605 套。
+  reviewed_answer: 6 条预测明细，合计 2605 套
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-12
+  question: 产品 U00-000080 当前未关闭的需求预测有多少张、合计多少套？
+  old_answer: 产品 U00-000080 当前未关闭的需求预测有 9 张，合计 10500 套。
+  reviewed_answer: 12 条预测明细，合计 20000 套
+  change_reason: 数据快照变化
+  evidence: 三条新增预测合计 9500 套；保留完整数据
+  status: 已核定
+- id: M-13
+  question: 当前物料中，外购物料有多少种？
+  old_answer: 当前外购物料共有 3149 种。
+  reviewed_answer: 3149 种
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-14
+  question: 当前物料中，自制物料有多少种？
+  old_answer: 当前自制物料共有 233 种。
+  reviewed_answer: 233 种
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: M-15
+  question: 采购员杨强云负责维护多少家供应商档案？
+  old_answer: 采购员杨强云负责维护 51 家供应商档案。
+  reviewed_answer: 51 家
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: F-01
+  question: 请列出产品 382-000005 的一级主料，不需要库存信息。
+  old_answer: 一级主料共 9 种：791-000013、606-000989、606-000990、528-000036、791-000007、994-000550、468-000493、468-000530、791-000015。
+  reviewed_answer: 一级主料 9 种：468-000493、468-000530、528-000036、606-000989、606-000990、791-000007、791-000013、791-000015、994-000550
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: F-02
+  question: 产品 382-000005 与 P61-000351 的 BOM 共同物料有多少种？
+  old_answer: 两个产品共同的 BOM 物料有 28 种。
+  reviewed_answer: 38 种共同主料
+  change_reason: 旧答案与模型定义冲突
+  evidence: alt_priority=0；按物料编码去重后求交集
+  status: 已核定
+- id: F-03
+  question: 产品 382-000005、P61-000351 与 U00-000151 三者共同的 BOM 物料有多少种？
+  old_answer: 三个产品共同的 BOM 物料有 11 种。
+  reviewed_answer: 17 种共同主料
+  change_reason: 旧答案与模型定义冲突
+  evidence: alt_priority=0；按物料编码去重后求交集
+  status: 已核定
+- id: F-04
+  question: 产品 382-000005 在不启用替代料时，现在最多能卖多少？
+  old_answer: 不启用替代料时，当前最多可售 534；其中成品库存 534，理论可产 0，不计在途。
+  reviewed_answer: 568 套 = 成品 534 + 新增可产 34
+  change_reason: 旧算法遗漏半成品抵扣
+  evidence: 独立 Decimal CSV oracle，生产七仓；N/N+1 边界及硬上界证书
+  status: 已核定
+- id: F-05
+  question: 产品 U00-000151 在不启用替代料时，现在最多能卖多少？
+  old_answer: 不启用替代料时，当前最多可售 3850；其中成品库存 3800，理论可产 50，不计在途。
+  reviewed_answer: 3920 套 = 成品 3800 + 新增可产 120
+  change_reason: 旧算法遗漏半成品抵扣
+  evidence: 独立 Decimal CSV oracle，生产七仓；N/N+1 边界及硬上界证书
+  status: 已核定
+- id: F-06
+  question: 产品 382-000005 要 50 套，在不启用替代料时齐不齐？
+  old_answer: 不齐套。按 50 套核算共有 35 条物料缺口，净需求包含未关闭采购订单在途。
+  reviewed_answer: 若指新生产 50 套：不齐套；辅助证据为 165-003886 缺 32。若指客户供货 50 套：三仓成品 534 已覆盖，无需新增制造。题目只问齐不齐，缺口种数不应成为必答项。
+  change_reason: 供货/生产歧义 + 评分超出题目
+  evidence: 独立逐层抵扣，生产口径保留未关闭 PO 数量；供货先抵扣成品
+  status: 待口径冻结
+- id: F-07
+  question: 外购件 606-000989 的标准采购交期是多少天？
+  old_answer: 标准采购交期为 14 天。
+  reviewed_answer: 14 天
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: F-08
+  question: 产品 382-000005 不启用替代料，在生产可用仓中理论上还能生产多少？
+  old_answer: 不启用替代料时，在生产可用仓的理论可产为 0。
+  reviewed_answer: 新增可产 34 套
+  change_reason: 旧算法遗漏半成品抵扣
+  evidence: 独立原始 CSV oracle；不计成品、PO、替代料
+  status: 已核定
+- id: F-09
+  question: 产品 U00-000151 不启用替代料，在生产可用仓中理论上还能生产多少？
+  old_answer: 不启用替代料时，在生产可用仓的理论可产为 50。
+  reviewed_answer: 新增可产 120 套
+  change_reason: 旧算法遗漏半成品抵扣
+  evidence: 独立原始 CSV oracle；不计成品、PO、替代料
+  status: 已核定
+- id: F-10
+  question: 产品 P61-000351 要 60 套，在不启用替代料时齐不齐？若不齐，缺几种物料？
+  old_answer: 不齐套，共缺 1 种物料；物料 321-000569 净缺 240。
+  reviewed_answer: 新生产 60 套不齐套，缺 1 种物料：994-000645 缺 40；本产品成品为 0，供货口径同样缺 40。
+  change_reason: 旧缺料答案错误
+  evidence: 独立 CSV 逐层抵扣半成品及未关闭 PO；321-000569 不再是此计算的缺口
+  status: 已核定
+- id: F-11
+  question: 先承接 382-000005 的 50 套、再承接 P61-000351 的 60 套，不启用替代料；两单各自能否齐套？
+  old_answer: 两单都不能齐套。按给定顺序扣减后，382-000005 有 35 条缺口，P61-000351 有 1 条缺口。
+  reviewed_answer: 若按客户供货：382 的 50 套由成品覆盖，P61 的 60 套缺 994-000645 共 40。若按新生产：382 缺
+    165-003886 共 32，P61 缺 994-000645 共 40。
+  change_reason: 供货/生产歧义 + 旧算法缺陷
+  evidence: 独立顺序共享池复算；承接通常应先抵扣成品
+  status: 待口径冻结
+- id: F-12
+  question: 产品 P61-000351 与 U00-000151 的 BOM 共同物料有多少种？
+  old_answer: 两个产品共同的 BOM 物料有 18 种。
+  reviewed_answer: 26 种共同主料
+  change_reason: 旧答案与模型定义冲突
+  evidence: alt_priority=0；按物料编码去重后求交集
+  status: 已核定
+- id: F-13
+  question: 产品 382-000005 不采购、不计在途且不启用替代料，生产可用仓最多能生产多少？
+  old_answer: 不采购、不计在途且不启用替代料时，最多可生产 0。
+  reviewed_answer: 新增可产 34 套
+  change_reason: 旧算法遗漏半成品抵扣
+  evidence: 独立原始 CSV oracle；不计成品、PO、替代料
+  status: 已核定
+- id: F-14
+  question: 对 U00-000080 的预测单 0000023181 做完整齐套倒排，结果树中共有多少个节点？
+  old_answer: 完整齐套倒排结果树共有 57 个节点。
+  reviewed_answer: 主料完整结构为 77 节点（根 1 + 主料节点 76）；应在 020 修复 ID 精确加载后，用原预测单完整倒排验证，不能改为静态结构题。
+  change_reason: 主料答案变化 + ID 加载缺陷
+  evidence: 独立 CSV 完整结构；完整倒排在线回归未完成，暂不作为已验收金标
+  status: 待在线验证
+- id: F-15
+  question: 客户允许使用替代料。产品 382-000005 现在最多可以供多少套？
+  old_answer: 当前最多可以供 534 套；其中成品库存 534 套，允许替代料也不会增加可供数量，因为理论可产仍为 0。
+  reviewed_answer: 878 套 = 成品 534 + 允许替代后的新增可产 344
+  change_reason: 主料/净算改变旧答案
+  evidence: 独立 CSV oracle；不可替代一级叶子 606-000989 库存 344 构成硬上界，344 可行、345 不可行
+  status: 已核定
+- id: R-01
+  question: 产品 P61-000351 的一级主料有多少种？
+  old_answer: 产品 P61-000351 的一级主料有 14 种。
+  reviewed_answer: 16 种主料
+  change_reason: 主料角色校准
+  evidence: alt_priority=0；按物料编码去重
+  status: 已核定
+- id: R-02
+  question: 产品 U00-000080 的一级主料有多少种？
+  old_answer: 产品 U00-000080 的一级主料有 5 种。
+  reviewed_answer: 5 种主料
+  change_reason: 旧答案复核成立
+  evidence: alt_priority=0；按物料编码去重
+  status: 已核定
+- id: R-03
+  question: 生产产品 U00-000080 的完整物料清单一共涉及多少种物料？
+  old_answer: 生产产品 U00-000080 的完整物料清单涉及 56 种物料。
+  reviewed_answer: 76 种主料
+  change_reason: 主料角色校准
+  evidence: alt_priority=0；按物料编码去重
+  status: 已核定
+- id: R-04
+  question: 生产产品 382-000005 的完整物料清单一共涉及多少种物料？
+  old_answer: 生产产品 382-000005 的完整物料清单涉及 272 种物料。
+  reviewed_answer: 333 种主料
+  change_reason: 主料角色校准
+  evidence: alt_priority=0；按物料编码去重
+  status: 已核定
+- id: R-05
+  question: 物料 321-000569 被哪些产品使用？
+  old_answer: 物料 321-000569 被 P61-000328、P61-000331、P61-000351 三个产品使用。
+  reviewed_answer: P61-000328、P61-000331、P61-000351
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: R-06
+  question: 物料 606-000989 被哪些产品使用？
+  old_answer: 物料 606-000989 被产品 382-000005 和 382-000006 使用。
+  reviewed_answer: 382-000005、382-000006
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: R-07
+  question: 物料 725-000226 被多少种产品使用？
+  old_answer: 物料 725-000226 被 30 种产品使用。
+  reviewed_answer: 含替代用途时为 30 种产品；应在公共规则声明反查包含替代用途。
+  change_reason: 旧答案成立，需明确范围
+  evidence: CSV 按 material_code=725-000226 反查根产品去重
+  status: 已核定
+- id: R-08
+  question: 产品 382-000005 与 382-000006 的一级主料中，有哪些是共同的？
+  old_answer: 有 4 种：468-000493、606-000989、606-000990、994-000550。
+  reviewed_answer: 468-000493、606-000989、606-000990、994-000550，共 4 种
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: R-09
+  question: 产品 382-000005 中，天线底座 356-000061 没有库存时，可以使用什么替代物料？可用库存是多少？
+  old_answer: 可使用替代物料 356-000356；其可用库存为 500。
+  reviewed_answer: 替代料 356-000356，生产七仓可用库存 500
+  change_reason: 旧答案复核成立
+  evidence: 固定原包 CSV 独立复算
+  status: 已核定
+- id: S-01
+  question: 客户需要 P61-000351 共 60 套，要求 2026-09-05 交货，不能使用替代料。请回复客户能否按时交付，并说明原因。
+  old_answer: 不能按时交付。P61-000351 的 60 套需求在不使用替代料时不齐套，物料 321-000569 净缺 240；因此不能对 2026-09-05
+    作出按时交付承诺。
+  reviewed_answer: 当前不齐套，缺 994-000645 共 40，其标准采购交期 35 天，超过 2026-08-25 至 09-05 的 11
+    天；按无加急/额外供应的标准交期模型不能满足。不得声称是 321-000569 缺 240。
+  change_reason: 旧缺料证据错误，结论须限定模型条件
+  evidence: 独立缺口 + CSV 标准采购交期；客户实际可交期尚需排程条件
+  status: 已核定
+- id: S-02
+  question: 客户要产品 U00-000151，先不启用替代料。请给出当前可售能力，并明确这是否等于交期承诺。
+  old_answer: 当前可售能力为 3850，但这不等于可以作出交期承诺。
+  reviewed_answer: 当前数量能力 3920 套（3800 + 120）；这不等于交期承诺。
+  change_reason: 旧可产答案错误
+  evidence: 独立可产量证书；交期需另行评估
+  status: 已核定
+- id: S-03
+  question: 客户新增产品 382-000005 的 50 套需求，不能使用替代料。请判断物料是否齐套，并列出缺料情况。
+  old_answer: 不齐套，共有 35 条缺口；净需求纳入未关闭采购订单在途。
+  reviewed_answer: 作为客户新增供货需求，50 套由三仓成品 534 覆盖；无需新增制造，无组件补货缺口。若客户要求必须新生产，应另算，不沿用旧
+    35 条缺口。
+  change_reason: 供货口径澄清 + 旧算法缺陷
+  evidence: 成品库存独立求和；制造仅对残余需求展开
+  status: 已核定
+- id: S-04
+  question: 两个客户同时新增需求：382-000005 共 50 套、P61-000351 共 60 套，均不能使用替代料。请判断是否可以同时承接，并说明各自的缺料情况。
+  old_answer: 两单不能同时承接；按题目列示顺序核算，382-000005 有 35 条缺口，P61-000351 有 1 条缺口。
+  reviewed_answer: 供货口径：382 的 50 套由成品覆盖；P61 的 60 套不齐，994-000645 缺 40；当前数量不足以同时完全满足。
+  change_reason: 供货口径澄清 + 旧缺料答案错误
+  evidence: 独立顺序共享池，先用各产品成品
+  status: 已核定
+- id: S-05
+  question: 382-000005 与 P61-000351 是否使用共同物料？两个客户还没有给出需求数量；现在能否判断两单能否同时承接？
+  old_answer: 两个产品有 28 种共同物料；未给需求量时，不能判断两单能否一起承接。
+  reviewed_answer: 有共同主料 38 种；没有需求数量，不能判断是否可同时承接。
+  change_reason: 共同料旧数错误，业务结论成立
+  evidence: 独立主料编码交集；结构共用不等于库存争用
+  status: 已核定
+- id: S-06
+  question: P61-000351 的 60 套需求中，物料 321-000569 缺 240。采购部门计划采购 300 个；仅从当前缺料看，建议采购多少个？
+  old_answer: 仅从当前缺料看，建议采购 240 个。采购 300 个比净缺多 60 个；没有 MOQ、安全库存或其他需求依据时，这 60 个不应计入缺料补充数量。
+  reviewed_answer: 建议采购 240 个；300 比题干给定净缺多 60。保留“缺 240”这一给定前提。
+  change_reason: 旧答案成立，禁止把另算缺口替换题设
+  evidence: 条件推理题；不以更新后的库存净算推翻题干
+  status: 已核定
+- id: S-07
+  question: 客户需要 382-000005 共 50 套，要求 2026-09-05 交货。可以用替代料，请直接回复客户能否按时交付。
+  old_answer: 可以按时交付。以 2026-08-25 的冻结快照为基线，382-000005 在三个成品仓的可用库存为 534 套，已覆盖客户所需的
+    50 套；无需动用替代料，交付后剩余 484 套。
+  reviewed_answer: 库存数量足够覆盖 50 套。若评估模型供货能力且分配、质量、发运等条件满足，可按期供货；原题未声明这些条件时，不以无条件“按时交付”作为唯一金标。
+  change_reason: 承诺边界过强
+  evidence: 三仓成品 534 仅直接证明数量覆盖；业务日期与交货日固定
+  status: 待口径冻结
+- id: S-08
+  question: 客户需要 P61-000351 共 60 套，要求 2026-09-10 交货，不能使用替代料。关键缺料 321-000569 的标准采购交期为
+    35 天。请判断能否按时交付。
+  old_answer: 不能按时交付。以 2026-08-25 为基线，321-000569 的标准采购交期为 35 天，最早到货日为 2026-09-29，比
+    2026-09-10 晚 19 天；且该物料净缺 240。
+  reviewed_answer: 按题干给定关键料需采购且标准交期 35 天，不能满足 2026-08-25 至 09-10 的 16 天；须明确该关键缺料是场景给定条件。当前
+    CSV 重算缺料实际是 994-000645 共 40，其采购交期也为 35 天。
+  change_reason: 题设前提与当前净算结果分开
+  evidence: 独立缺口与交期；不悄悄改写原业务情境
+  status: 待口径冻结
+- id: S-09
+  question: 客户需要 U00-000151 共 3850 套，不能使用替代料。请判断当前供货能力是否满足该数量。
+  old_answer: 满足。当前最多可供 3850 套，正好覆盖客户所需的 3850 套；其中成品库存 3800 套，理论可产 50 套。
+  reviewed_answer: 满足 3850 套；当前数量能力 3920，余量 70。
+  change_reason: 旧答案边界更新
+  evidence: 独立可产量证书
+  status: 已核定
+- id: S-10
+  question: 客户需要 U00-000151 共 3851 套，不能使用替代料。请判断当前供货能力是否满足该数量，并说明差额。
+  old_answer: 不满足。当前最多可供 3850 套，客户需求 3851 套，差 1 套。
+  reviewed_answer: 满足 3851 套；当前数量能力 3920，余量 69。旧“不满足、差 1”需要改正。
+  change_reason: 旧可产算法导致错误结论
+  evidence: 独立可产量证书
+  status: 已核定
+- id: S-11
+  question: 两个客户同时新增需求：P61-000351 共 60 套、U00-000151 共 50 套，均不能使用替代料。请判断两单各自是否齐套，并说明缺料情况。
+  old_answer: P61-000351 的 60 套不齐套，唯一缺料为 321-000569、净缺 240；U00-000151 的 50 套齐套，没有缺料。
+  reviewed_answer: 供货口径：P61 的 60 套缺 994-000645 共 40；U151 的 50 套由成品覆盖。
+  change_reason: 供货口径澄清 + 旧缺料答案错误
+  evidence: 独立共享池；两种产品成品先抵扣
+  status: 已核定

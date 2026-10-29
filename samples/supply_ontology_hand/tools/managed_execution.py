@@ -243,6 +243,16 @@ def _load_dataset_rows(
                 max_rows=remaining,
             )
         )
+    # Exact string identity wins. A single legacy numeric-key retry is allowed
+    # only after no exact row was returned; never combine both result sets.
+    forecast_id = str(params.get("forecast_id") or "").strip()
+    if dataset == "forecast" and forecast_id:
+        canonical = _canonical_document_id(forecast_id)
+        if not collected and canonical != forecast_id:
+            collected = _query_rows(query_object_instance, object_type_id,
+                                    _equal_condition("id", canonical))
+        if not collected and operation == "backward_plan":
+            raise ValueError(f"预测单不存在：{forecast_id}")
     return collected
 
 
@@ -356,7 +366,7 @@ def _is_main_bom_row(row: Mapping[str, Any]) -> bool:
         priority = int(row.get("alt_priority") or 0)
     except (TypeError, ValueError):
         priority = 0
-    return priority == 0 and str(row.get("alt_method") or "").strip() != "替代"
+    return priority == 0
 
 
 def _include_substitute_branch(operation: str, params: Mapping[str, Any]) -> bool:
@@ -394,7 +404,7 @@ def _dataset_conditions(
     if dataset == "forecast":
         forecast_id = str(params.get("forecast_id") or "").strip()
         if forecast_id:
-            return (_equal_condition("id", _canonical_document_id(forecast_id)),)
+            return (_equal_condition("id", forecast_id),)
         product_code = str(params.get("product_code") or params.get("product") or "").strip()
         if product_code:
             return (_equal_condition("material_number", product_code),)
@@ -429,12 +439,11 @@ def _scoped_dataset_condition(
     conditions: list[dict[str, Any]] = [material_condition]
     if dataset == "inventory" and operation in {"kitting_net_demand", "backward_plan"}:
         warehouses = resolve_warehouse_scope(params.get("warehouse_scope", "production_available"))
-        conditions.extend(
-            [
-                _in_condition("warehouse", warehouses),
-                _equal_condition("stock_status", "可用"),
-            ]
-        )
+        if (operation == "backward_plan" or params.get("demand_mode") == "fulfillment") and warehouses:
+            warehouses = sorted(set(warehouses) | set(resolve_warehouse_scope("finished_goods")))
+        if warehouses:
+            conditions.append(_in_condition("warehouse", warehouses))
+        conditions.append(_equal_condition("stock_status", "可用"))
     if dataset in {"purchase_order", "purchase_request"} and operation in {"kitting_net_demand", "backward_plan"}:
         conditions.append(_not_equal_condition("rowclosestatus_title", "已关闭"))
     if dataset == "mrp" and operation == "backward_plan":
@@ -551,6 +560,7 @@ def execute_from_bkn_rows(
             warehouse_scope=scope,
             substitute_enabled=substitute,
             report_grain=params.get("report_grain", "summary"),
+            demand_mode=params.get("demand_mode", "production"),
         )
     if operation == "shared_contention":
         return shared_contention(
@@ -559,6 +569,7 @@ def execute_from_bkn_rows(
             warehouse_scope=scope,
             substitute_enabled=substitute,
             report_grain=params.get("report_grain", "summary"),
+            demand_mode=params.get("demand_mode", "production"),
         )
     if operation == "max_build_without_po":
         return max_build_without_po(

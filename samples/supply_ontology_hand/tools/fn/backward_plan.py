@@ -8,8 +8,11 @@ skills/production-schedule-backward-planning/references/business-rules.md）。
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
+import math
 
-from .bom import children_by_parent, product_bom_rows
+from dataclasses import replace
+from .allocation import finite_quantity, net_requirements
+from .bom import product_bom_rows
 from .errors import CannotCompute
 from .inventory import (
     available_qty,
@@ -90,7 +93,7 @@ def _validated_request(
             raise CannotCompute(f"预测单不存在：{plan_id}")
         forecast_product = str(row.get("material_number") or "").strip()
         forecast_due = _parse_day(row.get("enddate"), f"预测单 {plan_id} 截止日")
-        forecast_qty = _f(row.get("qty"), 0.0)
+        forecast_qty = finite_quantity(row.get("qty"), "预测需求量", positive=True)
         if code and forecast_product != code:
             raise CannotCompute(
                 f"预测单 {plan_id} 的产品为 {forecast_product}，与请求 {code} 不一致"
@@ -108,7 +111,7 @@ def _validated_request(
         qty = float(demand_qty)
     except (TypeError, ValueError):
         raise CannotCompute(f"需求量不是数字：{demand_qty}") from None
-    if qty <= 0:
+    if not math.isfinite(qty) or qty <= 0:
         raise CannotCompute(f"需求量必须为正数：{demand_qty}")
     return code, plan_id or None, due, qty
 
@@ -122,351 +125,169 @@ def _find_forecast(snap: Snapshot, requested_id: str) -> dict | None:
     return snap.forecast_by_id.get(canonical)
 
 
-def _walk(
-    snap: Snapshot,
-    product: str,
-    *,
-    demand_qty: float,
-    demand_end: date,
-    warehouse_scope,
-    warnings: list[str],
-) -> list[dict]:
-    """主料倒排树，前序展开；环路跳过并留 warning，超过 MAX_NODES 拒绝。"""
-    tree = children_by_parent(snap, product, include_substitute=False)
-    nodes: list[dict] = []
-    # 迭代前序展开，避免深 BOM 递归爆栈；on_path 只保存当前路径，出栈即回收。
-    on_path: set[str] = set()
-    # (料号, 父料号, 层级, 路径累计单耗, 到位日, 父节点下标)
-    stack: list[tuple] = [(product, "", 0, 1.0, demand_end, None)]
-    while stack:
-        entry = stack.pop()
-        if entry[0] is _PATH_EXIT:
-            on_path.discard(entry[1])
-            continue
-        code, parent, level, usage, end, parent_index = entry
-        lead_time = leadtime_days(snap, code)
-        available = available_qty(snap, code, warehouse_scope)
-        in_transit = in_transit_qty(snap, code)
-        mrp = has_mrp(snap, code)
-        satisfied = not mrp and (available + in_transit) > 0
-        gantt_days = 1 if satisfied else max(lead_time, 1)
-        # L0 按标准提前期倒排，子件按甘特条长倒排（fixtures/backward_plan/README.md）
-        start = end - timedelta(days=lead_time if level == 0 else gantt_days)
-        gross = demand_qty * usage
-        nodes.append(
-            {
-                "material_code": code,
-                "parent_material_code": parent,
-                "bom_level": level,
-                "usage_per_unit": usage,
-                "gross_requirement": gross,
-                "start_date": start.isoformat(),
-                "end_date": end.isoformat(),
-                "lead_time_days": lead_time,
-                "available_qty": available,
-                "in_transit_qty": in_transit,
-                "supply_status": "",
-                "delay_class": "",
-                "delay_days": 0,
-                "evidence": {},
-                "_start": start,
-                "_end": end,
-                "_gantt_days": gantt_days,
-                "_has_mrp": mrp,
-                "_parent_index": parent_index,
-            }
-        )
-        if len(nodes) > MAX_NODES:
-            raise CannotCompute(f"倒排树节点超过上限 {MAX_NODES}，请缩小范围后重算")
-        index = len(nodes) - 1
-        on_path.add(code)
-        children = []
-        for row in tree.get(code, []):
-            child = (row.get("material_code") or "").strip()
-            if not child:
-                continue
-            if child in on_path:
-                warnings.append(f"跳过 BOM 环路：{code} → {child}")
-                continue
-            children.append(
-                (
-                    child,
-                    code,
-                    level + 1,
-                    usage * _f(row.get("standard_usage"), 1.0),
-                    start - timedelta(days=1),
-                    index,
-                )
-            )
-        stack.append((_PATH_EXIT, code))
-        stack.extend(reversed(children))
-    return nodes
+
+def _allocated_receipts(snap, code, quantity, pools, today):
+    """Reserve dated PO remainders once, in future-date order; old dates are uncertain."""
+    if code not in pools:
+        rows = []
+        for row in po_open_rows(snap, code):
+            days = _po_deliver_dates([row])
+            day = days[0] if days else None
+            remaining = max(0.0, finite_quantity(row.get("qty", 0), "采购数量") -
+                            finite_quantity(row.get("actqty", 0), "采购已收数量"))
+            rows.append([day, remaining, row])
+        rows.sort(key=lambda x: (x[0] is None or x[0] < today, x[0] or date.max))
+        pools[code] = rows
+    used = []
+    for entry in pools[code]:
+        take = min(quantity, entry[1])
+        if take > 0:
+            used.append({**entry[2], "qty": take, "actqty": 0})
+            entry[1] -= take
+            quantity -= take
+    return used
 
 
-def _mark_child_shortage(nodes: list[dict]) -> list[bool]:
-    """前序遍历保证子节点在父节点之后，反向一次即可自下而上聚合缺口。"""
-    short_below = [False] * len(nodes)
-    for index in range(len(nodes) - 1, -1, -1):
-        item = nodes[index]
-        parent_index = item["_parent_index"]
-        if parent_index is None:
-            continue
-        supply = item["available_qty"] + item["in_transit_qty"]
-        if short_below[index] or supply < item["gross_requirement"]:
-            short_below[parent_index] = True
-    return short_below
+def backward_plan(snap: Snapshot, product: str | None = None, *,
+                  forecast_id: str | None = None, demand_end: str | None = None,
+                  demand_qty=None, business_date: str | None = None,
+                  warehouse_scope="production_available", substitute_enabled: bool,
+                  report_grain: str = "summary") -> dict:
+    """Customer supply plan: net finished goods, then net each component position.
 
-
-def _classify_delay(
-    item: dict,
-    *,
-    today: date,
-    material_attr: str,
-    po_rows: list[dict],
-) -> tuple[str, int, date | None]:
-    latest_po = max(_po_deliver_dates(po_rows), default=None)
-    if item["bom_level"] == 0:
-        return "", 0, latest_po
-    if (
-        material_attr in PURCHASED_ATTRS
-        and not po_rows
-        and item["_start"] < today
-        and item["available_qty"] < item["gross_requirement"]
-    ):
-        arrival = today + timedelta(days=item["lead_time_days"])
-        delay = max(0, (arrival - item["_end"]).days)
-        if delay > 0:
-            return "A", delay, latest_po
-    if latest_po and latest_po > item["_end"]:
-        return "B", (latest_po - item["_end"]).days, latest_po
-    return "", 0, latest_po
-
-
-def _keep_largest(bucket: dict[str, dict], entry: dict) -> None:
-    current = bucket.get(entry["material_code"])
-    if current is None or entry["delay_days"] > current["delay_days"]:
-        bucket[entry["material_code"]] = entry
-
-
-def _sorted_delays(bucket: dict[str, dict]) -> list[dict]:
-    return sorted(
-        bucket.values(), key=lambda row: (-row["delay_days"], row["material_code"])
-    )
-
-
-def backward_plan(
-    snap: Snapshot,
-    product: str | None = None,
-    *,
-    forecast_id: str | None = None,
-    demand_end: str | None = None,
-    demand_qty=None,
-    business_date: str | None = None,
-    warehouse_scope: str | list[str] | None = "production_available",
-    substitute_enabled: bool,
-    report_grain: str = "summary",
-) -> dict:
-    """按一张预测单倒排单个产品的主料齐套计划。
-
-    节点上限固定为 MAX_NODES，不作为调用参数暴露；替代料策略必须显式确认，
-    但只回显，不改变主料倒排树。
+    Dates are conditional planning estimates. Unreceived POs with absent or
+    overdue dates never become a confirmed customer arrival date.
     """
-    code, plan_id, due, qty = _validated_request(
-        snap,
-        product,
-        forecast_id,
-        demand_end,
-        demand_qty,
-        substitute_enabled,
-        report_grain,
-    )
-    if not product_bom_rows(snap, code):
-        raise CannotCompute(f"无 BOM：{code}")
-    effective_business_date = (
-        DEFAULT_BUSINESS_DATE if business_date is None else business_date
-    )
-    today = _parse_day(effective_business_date, "业务日期")
-    warehouse_filter = resolve_warehouse_scope(warehouse_scope)
-    finished_goods_filter = resolve_warehouse_scope("finished_goods")
-    finished_goods_qty = available_qty(snap, code, "finished_goods")
-
-    # This function is used for a customer delivery commitment as well as a
-    # production-plan diagnosis.  A finished-goods shipment must never be
-    # rejected merely because a hypothetical new manufacturing run is late.
-    if finished_goods_qty >= qty:
-        return {
-            "product_code": code,
-            "forecast_id": plan_id,
-            "demand_qty": qty,
-            "demand_end": due.isoformat(),
-            "business_date": today.isoformat(),
-            "today": today.isoformat(),
-            "warehouse_scope": warehouse_scope if isinstance(warehouse_scope, str) else "custom",
-            "warehouse_filter": warehouse_filter,
-            "finished_goods_filter": finished_goods_filter,
-            "finished_goods_qty": finished_goods_qty,
-            "remaining_finished_goods_qty": finished_goods_qty - qty,
-            "fulfillment_mode": "finished_goods",
-            "production_plan_required": False,
-            "customer_earliest_available_date": today.isoformat(),
-            "customer_late_days": 0,
-            "substitute_enabled": substitute_enabled,
-            "report_grain": report_grain,
-            "can_deliver_on_time": True,
-            "max_delay_days": 0,
-            "delay_a": [],
-            "delay_b": [],
-            "nodes": [],
-            "node_count_total": 0,
-            "gaps": [],
-            "supply_status_summary": {status: 0 for status in SUPPLY_STATUSES},
-            "warnings": ["成品现货已覆盖需求，未启动制造倒排。"],
-        }
-
-    warnings: list[str] = []
-    if substitute_enabled:
-        warnings.append("替代料策略已确认为启用：主树仍只用主料 BOM，替代仅供后续判定")
-    nodes = _walk(
-        snap,
-        code,
-        demand_qty=qty,
-        demand_end=due,
-        warehouse_scope=warehouse_scope,
-        warnings=warnings,
-    )
-
-    short_below = _mark_child_shortage(nodes)
+    code, plan_id, due, qty = _validated_request(snap, product, forecast_id,
+        demand_end, demand_qty, substitute_enabled, report_grain)
+    today = _parse_day(DEFAULT_BUSINESS_DATE if business_date is None else business_date, "业务日期")
+    net = net_requirements(snap, code, qty, scope=warehouse_scope,
+        substitute_enabled=substitute_enabled, include_finished_goods=True,
+        finished_goods_scope="finished_goods", include_in_transit=True,
+        expand_covered_branches=True, max_nodes=MAX_NODES)
+    fg = net["finished_goods_qty"]
+    base = dict(product_code=code, forecast_id=plan_id, demand_qty=qty,
+        demand_end=due.isoformat(), business_date=today.isoformat(), today=today.isoformat(),
+        warehouse_scope=warehouse_scope if isinstance(warehouse_scope, str) else "custom",
+        warehouse_filter=resolve_warehouse_scope(warehouse_scope),
+        finished_goods_filter=resolve_warehouse_scope("finished_goods"),
+        finished_goods_qty=fg, remaining_finished_goods_qty=max(0., fg-qty),
+        root_net_demand=net["root_net_demand"], substitute_enabled=substitute_enabled,
+        report_grain=report_grain)
     summary = {status: 0 for status in SUPPLY_STATUSES}
-    delay_a: dict[str, dict] = {}
-    delay_b: dict[str, dict] = {}
-    gaps: list[dict] = []
-    for index, item in enumerate(nodes):
-        material_row = snap.materials.get(item["material_code"]) or {}
-        material_attr = (material_row.get("materialattr") or "").strip()
-        po_rows = po_open_rows(snap, item["material_code"])
-        open_pr = pr_open_qty(snap, item["material_code"])
-        supply = item["available_qty"] + item["in_transit_qty"]
-        shortage = max(0.0, item["gross_requirement"] - supply)
-        status = supply_status(
-            snap,
-            item["material_code"],
-            due_date=item["_end"],
-            gross_requirement=item["gross_requirement"],
-            warehouse_scope=warehouse_scope,
-            today=today,
-            child_short=short_below[index],
-        )["status"]
-        delay_class, delay_days, latest_po = _classify_delay(
-            item,
-            today=today,
-            material_attr=material_attr,
-            po_rows=po_rows,
-        )
-        item["supply_status"] = status
-        item["delay_class"] = delay_class
-        item["delay_days"] = delay_days
-        item["evidence"] = {
-            "material_attr": material_attr,
-            "usage_per_unit": item["usage_per_unit"],
-            "gross_requirement": item["gross_requirement"],
-            "available_qty": item["available_qty"],
-            "in_transit_qty": item["in_transit_qty"],
-            "supply_qty": supply,
-            "shortage_qty": shortage,
-            "open_pr_qty": open_pr,
-            "open_po_count": len(po_rows),
-            "latest_po_deliver_date": latest_po.isoformat() if latest_po else "",
-            "has_open_mrp": item["_has_mrp"],
-            "lead_time_days": item["lead_time_days"],
-            "gantt_days": item["_gantt_days"],
-            "child_short": short_below[index],
-        }
-        summary[status] = summary.get(status, 0) + 1
-        if shortage > 0:
-            gaps.append(
-                {
-                    "material_code": item["material_code"],
-                    "parent_material_code": item["parent_material_code"],
-                    "bom_level": item["bom_level"],
-                    "end_date": item["end_date"],
-                    "gross_requirement": item["gross_requirement"],
-                    "available_qty": item["available_qty"],
-                    "in_transit_qty": item["in_transit_qty"],
-                    "shortage_qty": shortage,
-                    "supply_status": status,
-                }
-            )
-        if delay_class:
-            entry = {
-                "material_code": item["material_code"],
-                "parent_material_code": item["parent_material_code"],
-                "bom_level": item["bom_level"],
-                "delay_class": delay_class,
-                "delay_days": delay_days,
-                "end_date": item["end_date"],
-                "start_date": item["start_date"],
-                "lead_time_days": item["lead_time_days"],
-                "supply_status": status,
-                "evidence": dict(item["evidence"]),
-            }
-            _keep_largest(delay_a if delay_class == "A" else delay_b, entry)
-
+    if net["root_net_demand"] == 0:
+        late = max(0, (today-due).days)
+        return {**base, "fulfillment_mode":"finished_goods", "production_plan_required":False,
+            "customer_earliest_available_date":today.isoformat(), "customer_late_days":late,
+            "can_deliver_on_time":late == 0, "max_delay_days":late, "delay_a":[], "delay_b":[],
+            "nodes":[], "node_count_total":0, "gaps":[], "supply_status_summary":summary,
+            "uncertain_supply_items":[], "warnings":["成品现货已覆盖需求，未启动制造倒排。"]}
+    root = dict(material_code=code, parent_material_code="", bom_level=0,
+        cumulative_usage=1., gross_requirement=qty, available_qty=fg,
+        inventory_allocated_qty=net["finished_goods_allocated_qty"], in_transit_qty=0.,
+        po_allocated_qty=0., net_requirement=net["root_net_demand"], is_leaf=False,
+        parent_index=None)
+    traces = [root] + [dict(line, parent_index=0 if line["parent_index"] is None
+                           else line["parent_index"]+1) for line in net["lines"]]
+    nodes, receipt_pools = [], {}
+    for trace in traces:
+        material = trace["material_code"]
+        lt = leadtime_days(snap, material)
+        parent = trace["parent_index"]
+        end = due if parent is None else nodes[parent]["_start"] - timedelta(days=1)
+        # One-day stock handling only when the complete position is covered.
+        gantt = 1 if trace["net_requirement"] <= 1e-9 else max(lt, 1)
+        start = end - timedelta(days=lt if parent is None else gantt)
+        used = _allocated_receipts(snap, material, trace["po_allocated_qty"], receipt_pools, today)
+        nodes.append({**trace, "usage_per_unit":trace["cumulative_usage"],
+            "start_date":start.isoformat(), "end_date":end.isoformat(),
+            "lead_time_days":lt, "_start":start, "_end":end, "_gantt_days":gantt,
+            "_used_po":used, "_has_mrp":has_mrp(snap, material)})
+    children = [[] for _ in nodes]
+    for i, item in enumerate(nodes):
+        if item["parent_index"] is not None:
+            children[item["parent_index"]].append(i)
+    ready = [today for _ in nodes]
+    lower_ready = [today for _ in nodes]
+    short_below = [False for _ in nodes]
+    uncertain, gaps, delay_a, delay_b = [], [], {}, {}
+    for i in range(len(nodes)-1, -1, -1):
+        item = nodes[i]
+        material = item["material_code"]
+        residual = item["net_requirement"]
+        short_below[i] = any(short_below[j] or
+            (nodes[j]["is_leaf"] and nodes[j]["net_requirement"] > 1e-9) for j in children[i])
+        dates = [today]
+        unknown = False
+        for row in item["_used_po"]:
+            ds = _po_deliver_dates([row])
+            if not ds or ds[0] < today:
+                unknown = True
+                uncertain.append({"material_code":material, "quantity":row["qty"],
+                    "deliverdate":row.get("deliverdate"), "reason":"未收货采购日期缺失或已过期，需确认实际到货日"})
+            else:
+                dates.append(ds[0])
+        if residual > 1e-9:
+            if children[i]:
+                if any(ready[j] is None for j in children[i] if nodes[j]["gross_requirement"] > 0):
+                    unknown = True
+                relevant = [lower_ready[j] for j in children[i]
+                            if nodes[j]["gross_requirement"] > 0]
+                dates.append(max(relevant, default=today) + timedelta(days=max(item["lead_time_days"],1)+1))
+            else:
+                dates.append(today + timedelta(days=max(item["lead_time_days"],1)))
+        lower_ready[i] = max(dates)
+        ready[i] = None if unknown else lower_ready[i]
+        attr = str((snap.materials.get(material) or {}).get("materialattr") or "").strip()
+        # Status gets this position's allocated pool, never the original global stock again.
+        local = replace(snap, inv_by_material={material:[{"available_inventory_qty":item["inventory_allocated_qty"]}]},
+                        po_by_material={material:item["_used_po"]})
+        status = supply_status(local, material, due_date=item["_end"],
+            gross_requirement=item["gross_requirement"], warehouse_scope="all",
+            today=today, child_short=short_below[i])["status"]
+        shortage = residual if item["is_leaf"] else 0.
+        candidates = []
+        if i and shortage > 1e-9 and attr in PURCHASED_ATTRS:
+            late = max(0, (today+timedelta(days=max(item["lead_time_days"],1))-item["_end"]).days)
+            if late: candidates.append((late,"A"))
+        allocated_dates = _po_deliver_dates(item["_used_po"])
+        latest = max((d for d in allocated_dates if d >= today), default=None)
+        if i and latest and latest > item["_end"]:
+            candidates.append(((latest-item["_end"]).days,"B"))
+        days, cls = max(candidates, default=(0,""))
+        item.update(supply_status=status, delay_class=cls, delay_days=days,
+            evidence=dict(material_attr=attr, usage_per_unit=item["usage_per_unit"],
+                gross_requirement=item["gross_requirement"], available_qty=item["available_qty"],
+                in_transit_qty=item["in_transit_qty"],
+                supply_qty=item["inventory_allocated_qty"]+item["po_allocated_qty"],
+                shortage_qty=shortage, manufacturing_qty=residual if not item["is_leaf"] else 0.,
+                open_pr_qty=pr_open_qty(snap,material), open_po_count=len(item["_used_po"]),
+                latest_po_deliver_date=latest.isoformat() if latest else "",
+                has_open_mrp=item["_has_mrp"], lead_time_days=item["lead_time_days"],
+                gantt_days=item["_gantt_days"], child_short=short_below[i]))
+        summary[status] += 1
+        if shortage > 1e-9:
+            gaps.append({key:item[key] for key in ("material_code","parent_material_code","bom_level",
+                "end_date","gross_requirement","available_qty","in_transit_qty","supply_status")} | {"shortage_qty":shortage})
+        if cls:
+            entry = {key:item[key] for key in ("material_code","parent_material_code","bom_level",
+                "delay_class","delay_days","end_date","start_date","lead_time_days","supply_status","evidence")}
+            bucket = delay_a if cls == "A" else delay_b
+            if material not in bucket or bucket[material]["delay_days"] < days: bucket[material] = entry
+    earliest = ready[0]
+    late = max(0,(earliest-due).days) if earliest is not None else None
+    can_deliver = earliest <= due if earliest is not None else (False if lower_ready[0] > due else None)
+    max_delay = max([v["delay_days"] for v in [*delay_a.values(),*delay_b.values()]],default=0)
+    reported = nodes if report_grain == "full_tree" else [n for n in nodes if n["bom_level"] == 0 or
+        n["delay_class"] or n["supply_status"] in RISK_STATUSES or n["evidence"]["shortage_qty"] > 0]
     for item in nodes:
-        for key in ("_start", "_end", "_gantt_days", "_has_mrp", "_parent_index"):
-            item.pop(key)
-
-    max_delay_days = max(
-        [row["delay_days"] for row in (*delay_a.values(), *delay_b.values())],
-        default=0,
-    )
-    customer_readiness = []
-    for gap in gaps:
-        material_code = gap["material_code"]
-        open_po_dates = [day for day in _po_deliver_dates(po_open_rows(snap, material_code)) if day >= today]
-        if open_po_dates:
-            customer_readiness.append(min(open_po_dates))
-        else:
-            customer_readiness.append(
-                today + timedelta(days=leadtime_days(snap, material_code))
-            )
-    customer_earliest = max(customer_readiness, default=today)
-    customer_late_days = max(0, (customer_earliest - due).days)
-    if report_grain == "full_tree":
-        reported = list(nodes)
-    else:
-        reported = [
-            item
-            for item in nodes
-            if item["bom_level"] == 0
-            or item["delay_class"]
-            or item["supply_status"] in RISK_STATUSES
-            or item["evidence"]["shortage_qty"] > 0
-        ]
-    return {
-        "product_code": code,
-        "forecast_id": plan_id,
-        "demand_qty": qty,
-        "demand_end": due.isoformat(),
-        "business_date": today.isoformat(),
-        "today": today.isoformat(),
-        "warehouse_scope": warehouse_scope if isinstance(warehouse_scope, str) else "custom",
-        "warehouse_filter": warehouse_filter,
-        "finished_goods_filter": finished_goods_filter,
-        "finished_goods_qty": finished_goods_qty,
-        "remaining_finished_goods_qty": max(0.0, finished_goods_qty - qty),
-        "fulfillment_mode": "production_plan",
-        "production_plan_required": True,
-        "customer_earliest_available_date": customer_earliest.isoformat(),
-        "customer_late_days": customer_late_days,
-        "substitute_enabled": substitute_enabled,
-        "report_grain": report_grain,
-        "can_deliver_on_time": max_delay_days == 0,
-        "max_delay_days": max_delay_days,
-        "delay_a": _sorted_delays(delay_a),
-        "delay_b": _sorted_delays(delay_b),
-        "nodes": reported,
-        "node_count_total": len(nodes),
-        "gaps": gaps,
-        "supply_status_summary": summary,
-        "warnings": warnings,
-    }
+        for key in tuple(item):
+            if key.startswith("_"): item.pop(key)
+    return {**base, "fulfillment_mode":"production_plan", "production_plan_required":True,
+        "customer_earliest_available_date":earliest.isoformat() if earliest is not None else None,
+        "customer_late_days":late, "customer_earliest_lower_bound":lower_ready[0].isoformat(), "can_deliver_on_time":can_deliver, "max_delay_days":max_delay,
+        "delay_a":sorted(delay_a.values(),key=lambda r:(-r["delay_days"],r["material_code"])),
+        "delay_b":sorted(delay_b.values(),key=lambda r:(-r["delay_days"],r["material_code"])),
+        "nodes":reported,"node_count_total":len(nodes),"gaps":list(reversed(gaps)),
+        "supply_status_summary":summary, "uncertain_supply_items":uncertain,
+        "warnings":["到货与制造日期为标准提前期模型估算；分配、产能、质检和发运条件需业务确认。"]}

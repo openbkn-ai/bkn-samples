@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import math
 import sys
 import tempfile
 from pathlib import Path
@@ -348,10 +349,12 @@ def verify_metrics(
             "actual": actual,
             "expected": expected,
         }
-        if expected is None or values_close(actual, expected):
+        if (isinstance(actual, (int, float)) and not isinstance(actual, bool)
+                and math.isfinite(actual)
+                and (expected is None or values_close(actual, expected))):
             report["passed"].append(row)
         else:
-            row["error"] = "value mismatch"
+            row["error"] = "missing/non-finite numeric result" if actual is None or not isinstance(actual, (int, float)) or isinstance(actual, bool) or not math.isfinite(actual) else "value mismatch"
             report["failed"].append(row)
     return report
 

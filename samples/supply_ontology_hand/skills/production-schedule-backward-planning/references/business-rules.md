@@ -1,73 +1,33 @@
 # 业务规则：生产计划倒排 · 齐套诊断
 
-本文件是 S1 包内的倒排、供应状态和 A/B 延迟口径。已发布的生产计划齐套倒排函数按本口径自行读取知识网络并计算；Agent 不在本地复算。
+函数读取请求级知识网络快照。Agent 解释返回值，不在本地重建算法。
 
-输入粒度：一个产品 + 一张需求预测。
+## 数量与范围
 
-## 1. 倒排时间
+客户供货先抵扣三成品仓可用成品，再对剩余制造需求逐层抵扣七生产可用仓中的半成品、组件和叶子料。仅库存状态为空或“可用”可参与；不再次扣减展示用的预留数量。主料为 `alt_priority=0`，不按 `alt_method` 排除。替代策略必须明确：启用时按同位置可覆盖父件数量选择一个候选，平手优先主料，不承诺全局最优。
 
-日历日；日期 `YYYY-MM-DD`。
+库存与未关闭 PO 的 `max(0, qty-actqty)` 在同一需求树内只分配一次；PR 不计供给。子件毛需求按父件抵扣后的剩余制造量乘位置单耗。`gaps` 只列实际未覆盖的叶子料，半成品制造量单列，不重复计为采购缺口。
 
-| 步骤 | 公式 |
-|------|------|
-| L0 end | `demand_end` |
-| L0 start | `demand_end - product_fixedleadtime`（天） |
-| 子件 end | `parent.start - 1` 天 |
-| 标准提前期 | 外购/委外：`purchase_fixedleadtime`；自制：`product_fixedleadtime`；缺失按 0，条长再用 `max(., 1)` |
-| 供应合计 | `available_inventory_qty + in_transit_qty`（有效仓口径） |
-| 是否已满足（条长启发式） | `!hasMRP && supply > 0` |
-| 甘特条长 | 已满足 → 1；否则 `max(standardLeadtime, 1)` |
-| 子件 start | `child_end - ganttLeadtime` |
+`full_tree` 保留所选分支的结构，包括已被半成品覆盖而毛需求为零的下层；这些零需求节点不参与缺料和延期。循环 BOM 拒绝计算；上限 5000 节点。
 
-BOM：默认主料（`alt_priority == 0` 且 `alt_method != 替代`）；按 `parent_material_code` 建树；环路跳过；上限 5000 节点。
+## 倒排窗口与日期
 
-在途只计未关闭 PO：`max(0, qty − actqty)`。PR 未清只进 10 档，不进供给量。
+均为日历日。L0 end 为需求截止日，L0 start 为截止日减产品标准提前期；子件 end 为父件 start 减一天。子件标准提前期取外购/委外采购提前期或自制生产提前期；完整位置已有供给覆盖时甘特条长为一天，否则 `max(标准提前期,1)`。
 
-## 2. 供应状态（顺序匹配，S1 内部）
+日期只使用本次实际分配的 PO，未来到货日期按先到先用分配；未用的远期 PO 不造成延期。未收货 PO 日期缺失或早于业务日，属于不确定到货，记录 `uncertain_supply_items`，不得把旧承诺日当作已收到。
 
-无到位日 → `unknown`，不要判档。
+正向最早可用日：库存以业务日可用；实际使用的未来 PO 按其日期；未覆盖叶子料以业务日加标准提前期（至少一天）估算；剩余自制部分以所需子件最晚到位日加一天交接及自身制造提前期（至少一天）估算。完全由现货覆盖的分支不展开制造时间。
 
-```
-supply = available + in_transit
-if supply >= grossRequirement → sufficient
+若存在实际所需但到货未确认的 PO，`customer_earliest_available_date=null`。`customer_earliest_lower_bound` 保留已知约束；已知下界已超过截止日则 `can_deliver_on_time=false`，否则为 `null` 待确认。全部日期已知时按客户最早可用日与截止日比较。现货也不能回溯满足早于业务日的交期。
 
-if 外购 or 委外:
-  if !hasMRP → anomaly
-  if has_po and poDeliverDate:
-    if poDeliverDate <= business_date → po_overdue
-    if poDeliverDate > endDate → deadline_risk
-  if not has_po:
-    if standardLeadtime > days_until(endDate) → deadline_risk
-  if no_pr → no_pr
-  if has_pr and no_po → no_po
-  → po_in_transit
+## 供应状态及延迟证据
 
-if 自制:
-  if hasShortage → child_short
-  if !hasMRP → unscheduled
-  → plan_gap
-```
+“sufficient”仅表示本位置库存加业务日至到位日之间的 PO 足量。晚到、已过期、日期缺失的采购量不能直接算作按时供给。供应状态仍保留既有十档及 unknown；MRP、PR 参与诊断，不增加供给。
 
-| 等级 | 状态 |
-|------|------|
-| danger | anomaly, deadline_risk, po_overdue |
-| warning | no_pr, no_po, child_short |
-| info | unscheduled, plan_gap, po_in_transit |
-| normal | sufficient |
+A 类：实际未覆盖外购/委外叶子料按标准采购提前期估算晚于其到位日；B 类：实际分配的未来 PO 晚于其到位日。同一节点取较大延迟分类，同料号按分类保留最大值。`max_delay_days` 是内部物料延迟证据，客户交付判断使用正向最早日期及其不确定性，不能只用“无 A/B”宣称能交付。
 
-## 3. A/B 延迟
+## 解释边界
 
-仅 `bom_level > 0`；同料号保留最大延迟。
+这些是标准提前期模型估算，仍需确认实际产能、分配、质检和发运条件。题设给定缺口或交期时按该题前提作答，不添加另一个场景的缺口。数量覆盖问题走齐套或可售函数；本次只输出分析和人工建议，不创建采购或 ERP 记录。
 
-**A 类**：外购/委外；`start < business_date`；无 PO；库存不满足；`delayDays = max(0, (business_date + LT) − end)`。
-
-**B 类**：有 PO 且 `poDeliverDate > end`。
-
-产品级：`maxDelayDays = max(A∪B)`；`canDeliverOnTime = (maxDelayDays == 0)`。
-
-## 4. 边界
-
-- 倒排树、A/B、10 档 → 本 Skill
-- 盘子规模 / 库存合计 → Metric
-- 现在能卖多少 → S2（不要在本 Skill 算合计可售）
-- 后续处置仅输出人工建议；本版本不创建监控、采购申请、采购订单或 ERP 记录
+节点 `start_date` / `end_date` 表示满足目标交期所需的倒排计划，不能解释为从业务日开始采购后的实际到货预测。客户最早可用日使用 `customer_earliest_available_date`；未确认供应时可为空，`customer_earliest_lower_bound` 仅为已知下限。数量覆盖及标准模型的 `true` 均不替代分配、质检、产能和发运确认。

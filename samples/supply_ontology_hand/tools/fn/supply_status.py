@@ -48,7 +48,11 @@ def supply_status(
     today = today or date.today()
     avail = available_qty(snap, code, warehouse_scope)
     transit = in_transit_qty(snap, code)
-    supply = avail + transit
+    po_rows = po_open_rows(snap, code)
+    timely_transit = sum(max(0.0, float(r.get("qty") or 0) - float(r.get("actqty") or 0))
+                        for r in po_rows if (d := _parse_date(r.get("deliverdate"))) is not None
+                        and today <= d <= due)
+    supply = avail + timely_transit
     gross = float(gross_requirement or 0)
     if supply >= gross and gross >= 0:
         return {"material_code": code, "status": "sufficient", "supply": supply, "gross": gross}

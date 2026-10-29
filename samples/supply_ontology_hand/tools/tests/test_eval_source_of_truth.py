@@ -56,3 +56,22 @@ def test_bkn_eval_covers_every_registered_skill():
 
     assert used <= registered
     assert registered <= used
+
+
+def test_evaluated_paper_contains_only_original_questions_and_business_date():
+    questions = yaml.safe_load((EVAL_DATASETS / "sample-question-set-v1.yaml").read_text())
+    original = yaml.safe_load((PACKAGE / "bkn-eval/baselines/2026-10-29-020-accuracy/historical/customer-question-set-v1.yaml").read_text())
+    assert set(questions) == {"business_date", "questions"}
+    assert questions["questions"] == original["questions"]
+    assert all(set(item) == {"id", "question"} for item in questions["questions"])
+
+
+def test_published_skills_do_not_contain_evaluator_scoring_instructions():
+    import re
+
+    for path in (PACKAGE / "skills").rglob("*.md"):
+        text = path.read_text()
+        assert "评分" not in text, path
+        assert "金标" not in text, path
+        assert "题目未要求" not in text, path
+        assert not re.search(r"\b[MFRS]-\d{2}\b", text), path

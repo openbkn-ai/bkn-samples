@@ -90,7 +90,9 @@ def test_native_tool_inputs_expose_one_discoverable_tool_per_operation():
     assert "report_grain" in contention_inputs
 
     contention = {item["name"]: item for item in payloads["shared_contention"]["inputs"]}
-    assert '{"product":"382-000005","qty":50}' in contention["demands"]["description"]
+    assert 'product' in contention['demands']['description']
+    assert 'qty' in contention['demands']['description']
+    assert '382-000005' not in contention['demands']['description']
     assert contention["substitute_enabled"]["required"] is True
 
     backward = {item["name"]: item for item in payloads["backward_plan"]["inputs"]}

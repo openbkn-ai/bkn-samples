@@ -58,8 +58,8 @@ def test_bom_list_382_l1(snap):
 def test_bom_list_382_counts(snap):
     out = bom_list(snap, "382-000005", depth=None, include_substitute=False)
     assert out["rows_incl_root"] == 507
-    assert out["line_count"] == 313
-    assert out["unique_child_count"] == 272
+    assert out["line_count"] == 399
+    assert out["unique_child_count"] == 333
     assert out["max_level"] == 5
     assert "lines" not in out
     assert out["report_grain"] == "summary"
@@ -110,7 +110,7 @@ def test_material_where_used_returns_affected_root_products(snap):
 
 def test_bom_shared_382_p61(snap):
     out = bom_shared_list(snap, ["382-000005", "P61-000351"], include_substitute=False)
-    assert out["shared_count"] == 28
+    assert out["shared_count"] == 38
     assert "356-000081" in out["shared_codes"]
 
 
@@ -118,7 +118,7 @@ def test_bom_shared_three_products(snap):
     out = bom_shared_list(
         snap, ["382-000005", "P61-000351", "U00-000151"], include_substitute=False
     )
-    assert out["shared_count"] == 11
+    assert out["shared_count"] == 17
 
 
 def test_bom_shared_one_product(snap):
@@ -157,9 +157,9 @@ def test_leadtime(snap):
 def test_theoretical_and_sellable_382_no_sub(snap):
     th = theoretical_build(snap, "382-000005", substitute_enabled=False)
     sell = total_sellable(snap, "382-000005", substitute_enabled=False)
-    assert th["theoretical_build_qty"] == 0
+    assert th["theoretical_build_qty"] == 34
     assert sell["fg_qty"] == pytest.approx(534, rel=0, abs=0.01)
-    assert sell["total_sellable_qty"] == pytest.approx(534, rel=0, abs=0.01)
+    assert sell["total_sellable_qty"] == pytest.approx(568, rel=0, abs=0.01)
     assert "in_transit" not in sell or sell.get("include_in_transit") is False
 
 
@@ -216,7 +216,8 @@ def test_kitting_382_50_not_s1(snap):
     out = kitting_net_demand(snap, "382-000005", qty=50, substitute_enabled=False)
     assert out["kitting_ok"] is False
     l1s = {g.get("l1_parent") for g in out["gaps"]} | {g["material_code"] for g in out["gaps"]}
-    assert "791-000007" in l1s or "791-000015" in l1s
+    assert "165-003886" in l1s
+    assert out["gaps"][0]["net_requirement"] == 32
     assert "delay_a" not in out
     assert "supply_status" not in out
     assert all(

@@ -1,5 +1,7 @@
 # Offline sample installation
 
+For the unchanged original official020 service, see [the separate supply compatibility release](original-020-supply-publication.md). The shared-runtime procedure below requires the later patch.
+
 The shared sample database patch for OpenBKN 0.2.0 separates the database server from sample content. Online and offline installations use one product-provisioned sample MariaDB server. Each sample has its own database and account; OpenBKN system databases are separate.
 
 ## User flow
