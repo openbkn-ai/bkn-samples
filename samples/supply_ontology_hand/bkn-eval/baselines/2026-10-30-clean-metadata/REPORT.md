@@ -97,7 +97,7 @@
 |S-04|支持|支持|factual_or_task_error|
 |S-05|支持|支持|支持|
 |S-06|支持|支持|支持|
-|S-07|条件未确认|delivery_conditions_disclosed_but_unconfirmed|factual_or_task_error|
+|S-07|条件未确认|delivery_conditions_disclosed_but_unconfirmed|条件未确认|
 |S-08|支持|unsupported_cross_question_premise|支持|
 |S-09|支持|支持|支持|
 |S-10|支持|支持|支持|
