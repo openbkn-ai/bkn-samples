@@ -12,8 +12,11 @@ from installer.state_store import write_json
 from installer.studio_api import ApiError
 
 ROOT = Path(__file__).resolve().parents[2]
-ENTRY = next(e for e in json.loads((ROOT / 'catalog.json').read_text())['spec']['entries']
-             if e['manifest']['digest'] == 'sha256:147cfecf87311bcdd0cb09bb88490c630e20aac7dbab8fc0441958258b46d281')
+ENTRY = copy.deepcopy(next(e for e in json.loads((ROOT / 'catalog.json').read_text())['spec']['entries']
+             if e['manifest']['digest'] == 'sha256:147cfecf87311bcdd0cb09bb88490c630e20aac7dbab8fc0441958258b46d281'))
+# Exercise SDK compatibility independently of the live release retirement policy.
+ENTRY['releaseStatus'] = 'published'
+ENTRY.pop('withdrawalReason', None)
 
 
 class ExecutorCompatibilityTest(unittest.TestCase):
@@ -80,6 +83,27 @@ class ExecutorCompatibilityTest(unittest.TestCase):
             self.assertFalse(card['installable'])
             self.assertTrue(card['canUninstall'])
             self.assertEqual(file.read_bytes(),before)
+
+    def test_withdrawn_legacy_release_blocks_install_but_keeps_owned_uninstall(self):
+        entry = copy.deepcopy(ENTRY)
+        entry['releaseStatus'] = 'withdrawn'
+        entry['withdrawalReason'] = 'Replaced by a corrected archive'
+        with tempfile.TemporaryDirectory() as d, patch('installer.executor_compatibility.cli_capabilities') as probe:
+            state = Path(d); runtime = self.runtime(state)
+            receipt = {'id': 'existing', 'sample': entry['sampleId'], 'version': entry['version'],
+                       'status': 'installed', 'stages': {}, 'resources': {'knowledgeNetworkId': 'owned-kn',
+                       'ownedExecution': {'toolboxes': [], 'skills': []}},
+                       'remoteRelease': {'entry': entry}}
+            file = state / (entry['sampleId'] + '.json'); write_json(file, receipt); before = file.read_bytes()
+            card = merge_remote({'samples': []}, [entry], state, 'admin', runtime)['samples'][0]
+            self.assertFalse(card['installable'])
+            self.assertTrue(card['canUninstall'])
+            self.assertEqual(card['status'], 'installed')
+            with self.assertRaises(ApiError) as error:
+                runtime.prepare(entry)
+            self.assertIn('withdrawn', error.exception.message)
+            self.assertEqual(file.read_bytes(), before)
+            probe.assert_not_called()
 
     def test_probe_uses_executor_path_clean_environment_and_bounded_local_command(self):
         valid = "Usage: openbkn bkn metric [options] [command]\nCommands:\n  list <kn>\n  create <kn>\n  query <kn> <id>\n"
