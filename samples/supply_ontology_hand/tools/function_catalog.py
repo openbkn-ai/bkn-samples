@@ -62,12 +62,12 @@ FUNCTION_CATALOG = {
     "kitting_net_demand": _spec(
         "要X套净需求与齐套",
         "kitting_net_demand",
-        "适用场景：判断指定数量是否齐套并找出缺料。输入：产品编码、需求套数、替代料策略，可选仓范围；demand_mode=production（默认）新增生产，fulfillment 客户供货先抵扣三仓成品。已给需求数量时优先直接读取 kitting_ok 作满足判断，避免用可售总量自行比较造成结论与数值矛盾。结果：默认返回齐套结论、全部缺料清单及每项按当前需求快照建议补货量；传 report_grain=full 才返回全部物料明细。",
+        "适用场景：判断指定数量是否齐套并找出缺料。输入：产品编码、需求套数、替代料策略，可选仓范围；承接客户供货使用 demand_mode=fulfillment，先抵扣三仓成品；明确必须新增生产使用 production（兼容默认），不抵扣成品。业务意图不明确时说明假设或澄清。已给需求数量时优先直接读取 kitting_ok 作满足判断，避免用可售总量自行比较造成结论与数值矛盾。结果：默认返回齐套结论、全部缺料清单及每项按当前需求快照建议补货量；传 report_grain=full 才返回全部物料明细。",
     ),
     "shared_contention": _spec(
         "共用料与多需求争用",
         "shared_contention",
-        "适用场景：判断多条需求同时承接时的共用物料争用。输入：至少两条产品与数量需求，数组顺序代表扣减优先级；demand_mode=production（默认）新增生产，fulfillment 客户供货先抵扣三仓成品。结果：默认返回逐单满足状态和缺料清单；传 report_grain=full 才返回逐料分配和完整剩余池。",
+        "适用场景：判断多条需求同时承接时的共用物料争用。输入：至少两条产品与数量需求，数组顺序代表扣减优先级；承接客户供货使用 demand_mode=fulfillment，先抵扣三仓成品；明确必须新增生产使用 production（兼容默认），不抵扣成品。业务意图不明确时说明假设或澄清。结果：默认返回逐单满足状态和缺料清单；传 report_grain=full 才返回逐料分配和完整剩余池。",
         use_when="多个产品有明确数量，需要判断能否同时承接时使用。",
         do_not_use_when="只有一个产品，或数量缺失而只需比较结构时不要使用。",
         minimum_business_inputs=["demands", "substitute_enabled"],
@@ -95,7 +95,7 @@ FUNCTION_CATALOG = {
     "backward_plan": _spec(
         "生产计划齐套倒排",
         "backward_plan",
-        "适用场景：核查已有预测单或新客户需求能否按截止日交付。输入：已有预测单时只需预测单号和替代料策略；新增需求提供产品、数量、截止日和替代料策略。结果：先给成品直发或生产计划模式，逐层抵扣已有半成品并共享库存及采购剩余量；缺料仅指实际未覆盖叶子料。客户最早可用日遇到未确认采购到货日可为空，can_deliver_on_time 可为 null（待确认），不得把标准提前期估算当成承诺；Sample 默认业务日期为 2026-08-25。",
+        "适用场景：交期倒排。输入：预测单时只需预测单号和替代料策略；新需求给产品/数量/截止日；完整树 report_grain=full_tree，摘要 summary。结果：净算库存/采购。start_date/end_date 是倒排计划，不是实际到货预测；最早供货看 customer_earliest_available_date（未知可空）或 customer_earliest_lower_bound。Sample 默认业务日期为 2026-08-25。模型结果不替代分配、产能、质检和发运确认。",
         use_when="成品现货不足，或需要生产排程、采购到货风险和延期解释时使用。",
         do_not_use_when="成品现货已覆盖客户数量、可直接发货时不要用制造倒排否定直发结论。",
         minimum_business_inputs=["product", "demand_qty", "demand_end", "substitute_enabled"],

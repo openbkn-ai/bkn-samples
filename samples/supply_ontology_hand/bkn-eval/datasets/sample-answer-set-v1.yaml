@@ -1,5 +1,5 @@
 schema_version: 1.4-020
-set_id: supply-020-answer-0.1.16
+set_id: supply-020-answer-0.1.16-clean-metadata
 snapshot_date: '2026-08-13'
 business_date: '2026-08-25'
 audience: evaluator_only
@@ -155,6 +155,9 @@ answers:
   verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
   required_answer:
     value: 90
+  accepted_interpretations:
+    detail_ids: 90
+    billno_headers: 26
 - id: M-09
   answer: 16 张
   basis:
@@ -411,7 +414,7 @@ answers:
   required_answer:
     value: 3920
 - id: F-06
-  answer: 不齐套（新增生产 50 套，不用成品覆盖）。
+  answer: 新增生产50套时不齐（165-003886缺32）；客户供货50套时三仓成品534覆盖。原题未明确生产或供货，需说明所采用解释。
   basis:
     objects:
     - 产品
@@ -440,6 +443,11 @@ answers:
   demand_mode: production
   required_answer:
     kitting_ok: false
+  accepted_interpretations:
+    production:
+      kitting_ok: false
+    fulfillment:
+      kitting_ok: true
 - id: F-07
   answer: 14 天
   basis:
@@ -569,6 +577,9 @@ answers:
   required_answer:
     382-000005: finished_goods_cover
     P61-000351: not_covered
+  accepted_interpretations:
+    fulfillment: 382成品覆盖；P61缺994-000645共40
+    production: 两单均不齐；382缺165-003886共32，P61缺994-000645共40；须说明新增生产解释
 - id: F-12
   answer: 26 种共同主料
   basis:
@@ -804,7 +815,7 @@ answers:
     - 382-000005
     - 382-000006
 - id: R-07
-  answer: 含替代用途时为 30 种产品；应在公共规则声明反查包含替代用途。
+  answer: 反查包含替代用途时为30种产品；应在答复中说明所用范围。
   basis:
     objects:
     - 产品
@@ -1052,7 +1063,7 @@ answers:
     given_shortage: 240
     recommended_purchase_qty: 240
 - id: S-07
-  answer: 可以。按题目已确认的分配、质检及发运条件，三仓成品 534 足够覆盖 50 套，业务日早于交货日。
+  answer: 三仓成品534覆盖50套，标准模型具备数量供货能力；原题未确认分配、质检、产能和发运条件，不能仅据库存无条件承诺实际按期交付。可在条件确认后答复按现货供货。
   basis:
     objects:
     - 产品
@@ -1069,10 +1080,11 @@ answers:
     actions: []
     sequence: *id046
     evidence: 三仓成品 534 仅直接证明数量覆盖；业务日期与交货日固定
-  change_reason: 承诺边界过强
+  change_reason: 原题并未给出分配、质检和发运已确认；纠正旧参考答案虚构给定条件
   verification: deterministic_020_values_and_explicit_business_rules_verified; not_agent_evaluation
   required_answer:
-    on_time_under_given_conditions: true
+    quantity_covered: true
+    actual_delivery_commitment: requires_confirmation
 - id: S-08
   answer: 不能。按题设给定关键料必须新购、标准采购交期 35 天，从 2026-08-25 到 09-10 仅 16 天，无加急或其他供应时不能满足。
   basis:
@@ -1189,9 +1201,9 @@ answers:
       shortage_code: 994-000645
       shortage_qty: 40
     U00-000151: finished_goods_cover
-status: candidate_deterministic_020_verified_not_published
+status: revised_evaluator_reference_pending_new_clean_metadata_trial
 grading_policy:
   required: required_answer 是题目必答语义或数值；接受等价自然语言表达，不要求字段名或字面匹配。
   supporting: answer/basis/supporting_evidence 的补充数字用于复核，不自动提升为必答项；额外错误或矛盾仍应指出。
-  scope: 答案仅适用于候选题集明确的业务规则；不得用新规则回填历史成绩。
+  scope: BKN参考口径与原题合理解释分开记录；不得假定原题给出了额外业务条件。历史冻结金标和成绩保持原样。
 grading_scope: 仅评估者。数值为BKN模型口径参考；客户原题的合理多义解释和信息不足按evaluator-policy单列，不预设BKN100%。

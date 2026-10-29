@@ -116,6 +116,17 @@
         "requiredExtensions": []
       },
       "explanation": "Official0.1.14 requires >=0.2.1 <0.3.0 plus sample.experience-set/database.shared. Cannot replace020-compatible candidate with latest published package without violating platform baseline."
+    },
+    {
+      "id": "runtime-metric-static-result-assets",
+      "severity": "maintainer_or_runtime_file_access_isolation",
+      "path": "tools/assets/metrics-create.json and metrics-query-examples.json",
+      "evidence": {
+        "csv_snapshot_present": true,
+        "query_expected_values": 16,
+        "published_metric_comments_contain_snapshot_answers": false
+      },
+      "explanation": "Official0210.1.14 no longer has the six numeric snapshot metric comments seen in original020 candidate, but still contains csv_snapshot and16 expected query results in runtime assets. Presence is not proof that an answering agent read those files."
     }
   ],
   "branch020": {

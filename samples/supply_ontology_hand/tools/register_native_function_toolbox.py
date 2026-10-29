@@ -31,9 +31,9 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     substitute = _input("substitute_enabled", "boolean", "是否启用替代料；需要替代判断时必须明确。")
     substitute_required = _input("substitute_enabled", "boolean", "是否启用替代料；必须明确传 true 或 false。", required=True)
     scope = _input("warehouse_scope", "string", "仓范围预设或明确仓库列表。")
-    demand_mode = _input("demand_mode", "string", "production（默认）：新增生产，不抵扣成品；fulfillment：客户供货，先抵扣三仓成品。")
+    demand_mode = _input("demand_mode", "string", "fulfillment：承接客户供货需求，先抵扣三仓成品；production（兼容默认）：明确必须新增生产时使用，不抵扣成品。按业务意图显式选择；无法区分时说明假设或澄清。")
     demands = {
-        **_input("demands", "array", '至少两条对象需求，格式 [{"product":"382-000005","qty":50},{"product":"P61-000351","qty":60}]；数组顺序即扣减优先级。', required=True),
+        **_input("demands", "array", '至少两条对象需求，每项包含 product（产品编码）和 qty（需求数量）；数组顺序即扣减优先级。', required=True),
         # 020 defaults arrays without sub_parameters to string items. Declare
         # the item object so discovery agrees with the runtime's input contract.
         "sub_parameters": [{
@@ -58,7 +58,7 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
         "leadtime_days": [_input("material_code", "string", "物料编码。", required=True)],
         "supply_status": [_input("material_code", "string", "物料编码。", required=True), _input("due_date", "string", "到位日或交货日。"), _input("gross_requirement", "number", "毛需求数量。"), scope, _input("child_short", "boolean", "是否已有子件短缺。")],
         "open_forecast_count": [_input("product_code", "string", "可选产品编码；不传统计全部未关闭预测单。"), _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回预测单 ID 列表。")],
-        "backward_plan": [_input("product", "string", "新增需求的产品编码；预测单模式可不传。"), _input("forecast_id", "string", "已有预测单 id；允许前导零，例如 0000023181。传入后函数自动读取产品、数量和截止日。"), _input("demand_end", "string", "新增需求的交付截止日 YYYY-MM-DD；预测单模式可不传。"), _input("demand_qty", "number", "新增需求数量；预测单模式可不传。"), _input("business_date", "string", "业务基准日；不传使用样例默认 2026-08-25。"), scope, substitute_required, _input("report_grain", "string", "报告粒度，默认 summary。")],
+        "backward_plan": [_input("product", "string", "新增需求的产品编码；预测单模式可不传。"), _input("forecast_id", "string", "已有预测单 id，必须保留原始前导零，不得转成数值。传入后函数自动读取产品、数量和截止日。"), _input("demand_end", "string", "新增需求的交付截止日 YYYY-MM-DD；预测单模式可不传。"), _input("demand_qty", "number", "新增需求数量；预测单模式可不传。"), _input("business_date", "string", "业务基准日；不传使用样例默认 2026-08-25。"), scope, substitute_required, _input("report_grain", "string", "报告粒度仅支持 summary（默认摘要）和 full_tree（完整倒排结果树）；完整树使用 full_tree。")],
     }
     return cases[operation]
 

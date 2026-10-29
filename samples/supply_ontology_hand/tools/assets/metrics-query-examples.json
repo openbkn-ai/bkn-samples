@@ -1,5 +1,5 @@
 {
-  "comment": "可直接作为 openbkn bkn metric query --body 的查询体。metric_id 由脚本按 metric_name 解析。仓预设已在各 case 展开，不要对 analysis_dimensions 做全量分组验收（平台约只回 20 组）。",
+  "comment": "安装连通性查询探针，不含冻结期望值或答案。数值正确性必须使用维护者独立数据库复算及源仓库bkn-eval/fixtures/metric-verification另行验证。",
   "kn_id": "supply_ontology_hand",
   "warehouse_scope_presets": {
     "production_available": [
@@ -23,15 +23,13 @@
       "id": "product_count",
       "metric_name": "产品总数",
       "title": "成品种数",
-      "body": {},
-      "expected_value": 30
+      "body": {}
     },
     {
       "id": "material_count",
       "metric_name": "物料总数",
       "title": "物料种数",
-      "body": {},
-      "expected_value": 3497
+      "body": {}
     },
     {
       "id": "material_purchased",
@@ -43,15 +41,13 @@
           "operation": "==",
           "value": "外购"
         }
-      },
-      "expected_value": 3149
+      }
     },
     {
       "id": "supplier_count",
       "metric_name": "供应商总数",
       "title": "供应商家数",
-      "body": {},
-      "expected_value": 230
+      "body": {}
     },
     {
       "id": "supplier_yang",
@@ -63,15 +59,13 @@
           "operation": "==",
           "value": "杨强云"
         }
-      },
-      "expected_value": 51
+      }
     },
     {
       "id": "salesorder_count",
       "metric_name": "销售订单数",
       "title": "销售订单张数",
-      "body": {},
-      "expected_value": 800
+      "body": {}
     },
     {
       "id": "salesorder_382",
@@ -83,15 +77,13 @@
           "operation": "==",
           "value": "382-000005"
         }
-      },
-      "expected_value": 40
+      }
     },
     {
       "id": "warehouse_count",
       "metric_name": "仓库数",
       "title": "库存出现过的仓库去重",
-      "body": {},
-      "expected_value": 29
+      "body": {}
     },
     {
       "id": "inv_382_fg",
@@ -118,7 +110,6 @@
           ]
         }
       },
-      "expected_value": 534,
       "note": "平台支持 and + sub_conditions 时用本 body；若报 UnsupportConditionOperation，分次查询再交。"
     },
     {
@@ -149,16 +140,13 @@
             }
           ]
         }
-      },
-      "expected_value": 1000
+      }
     },
     {
       "id": "forecast_qty_all",
       "metric_name": "预测需求量合计",
       "title": "预测数量全量",
-      "body": {},
-      "expected_value": 115922,
-      "note": "当前锁定 CSV：正常预测 56340 + 已关闭预测 59582 = 115922。"
+      "body": {}
     },
     {
       "id": "forecast_382_open_qty",
@@ -180,8 +168,7 @@
             }
           ]
         }
-      },
-      "expected_value": 2605
+      }
     },
     {
       "id": "open_forecast_count",
@@ -193,9 +180,7 @@
           "operation": "!=",
           "value": "已关闭"
         }
-      },
-      "expected_value": 90,
-      "note": "当前锁定 CSV：正常预测单 90 张。查询显式传 closestatus_title != 已关闭。"
+      }
     }
   ]
 }

@@ -20,7 +20,7 @@ PACK = Path(__file__).resolve().parents[2]
 PAYLOADS = PACK / "tools" / "assets"
 METRICS_FILE = PAYLOADS / "metrics-create.json"
 LP_FILE = PAYLOADS / "logic-properties.json"
-QUERY_FILE = PAYLOADS / "metrics-query-examples.json"
+QUERY_FILE = PACK / "bkn-eval/fixtures/metric-verification/metrics-query-examples.json"
 
 
 def test_extract_entries_from_wrapper():

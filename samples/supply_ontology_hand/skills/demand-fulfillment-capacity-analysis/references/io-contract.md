@@ -1,18 +1,15 @@
 # 输入输出契约：产品可售能力（S2）
 
-使用已发布的 **合计可售** 函数。函数自行读取 BKN 中的 BOM 与库存，Skill 不重写可售公式。
+使用已发布的 **合计可售** 函数。函数自行读取 BKN 中的 BOM 与库存，Skill 不重写可售公式。本契约描述字段和含义，不提供固定产品的结果样例。
 
 ## user_input
 
-```json
-{
-  "knowledge_network_id": "supply_ontology_hand",
-  "product_query": "382-000005",
-  "substitute_enabled": false
-}
-```
-
-`substitute_enabled` 缺省时必须先问。
+| 字段 | 类型与含义 |
+|---|---|
+| knowledge_network_id | 当前知识网络标识 |
+| product_query | 用户给出的产品名称或编码，须解析成唯一编码 |
+| substitute_enabled | 用户明确的布尔值；缺省时先确认 |
+| production_scope / finished_goods_scope | 可选生产仓与成品仓范围 |
 
 ## 函数调用合同
 
@@ -22,26 +19,14 @@ Agent 只解释函数返回值：需要了解生产瓶颈时调用 **理论可�
 
 ## analysis_result
 
-```json
-{
-  "knowledge_network_id": "supply_ontology_hand",
-  "product_code": "382-000005",
-  "fg_qty": 534,
-  "theoretical_build_qty": 0,
-  "total_sellable_qty": 534,
-  "substitute_enabled": false,
-  "finished_goods_filter": ["苏州成品仓", "乌鲁木齐成品仓", "哈尔滨成品仓"],
-  "production_filter": [
-    "苏州半成品仓",
-    "苏州成品仓",
-    "苏州电子原料仓",
-    "苏州无人机原料仓",
-    "苏州装配原料仓",
-    "乌鲁木齐成品仓",
-    "哈尔滨成品仓"
-  ],
-  "include_in_transit": false
-}
-```
+| 字段 | 类型与含义 |
+|---|---|
+| product_code | 实际解析的产品编码 |
+| fg_qty | 数值，成品仓可用数量 |
+| theoretical_build_qty | 数值，现有物料支持的新增制造量 |
+| total_sellable_qty | 数值，函数计算的成品与新增制造合计 |
+| substitute_enabled | 实际采用的布尔策略 |
+| finished_goods_filter / production_filter | 字符串数组，函数实际使用的仓范围 |
+| include_in_transit | 布尔值，本能力不计在途 |
 
-字段名必须与函数出参一致。仓范围使用函数实际返回的 `finished_goods_filter`、`production_filter`，不得由 Agent 猜测。报告须声明：不是交期承诺；不得把 `total_sellable_qty` 表述为某日可交数量。
+字段名必须与函数出参一致。不得由 Agent 猜测仓范围或填入文档样例数值。报告须声明：不是交期承诺；不得把 `total_sellable_qty` 表述为某日可交数量。

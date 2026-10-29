@@ -1,5 +1,5 @@
 {
-  "comment": "供给 tools/power_layer.py create 或 openbkn bkn metric create --body-file。多余字段会被平台忽略，脚本只取 entries。仓预设与验收 query 见 metrics-query-examples.json；对象逻辑属性见 logic-properties.json。未关闭预测单数的定义 condition 当前会被平台丢弃，查询时必须再带关闭状态。",
+  "comment": "供给 tools/power_layer.py create 或 openbkn bkn metric create --body-file。脚本只取 entries。仓预设与不含参考结果的安装探针见 metrics-query-examples.json；对象逻辑属性见 logic-properties.json。未关闭预测计数查询须显式带关闭状态过滤。",
   "kn_id": "supply_ontology_hand",
   "warehouse_scope_presets": {
     "production_available": [
@@ -18,30 +18,10 @@
     ],
     "all": []
   },
-  "csv_snapshot": {
-    "product_count": 30,
-    "material_count": 3497,
-    "material_attr": {
-      "外购": 3149,
-      "自制": 233,
-      "委外": 114,
-      "虚拟": 1
-    },
-    "supplier_count": 230,
-    "purchaser_yang": 51,
-    "salesorder_count": 800,
-    "salesorder_382": 40,
-    "warehouse_distinct": 29,
-    "forecast_open_count": 90,
-    "forecast_qty_all": 115922,
-    "forecast_qty_open": 56340,
-    "inv_382_fg": 534,
-    "inv_791_000013_prod": 1000
-  },
   "entries": [
     {
       "name": "产品总数",
-      "comment": "count(material_number)。样例快照 30。",
+      "comment": "count(material_number)。",
       "tags": [
         "p0",
         "scale",
@@ -61,7 +41,7 @@
     },
     {
       "name": "物料总数",
-      "comment": "count(material_code)。可按 materialattr / group_name 过滤或分组。快照 3497。",
+      "comment": "count(material_code)。可按 materialattr / group_name 过滤或分组。",
       "tags": [
         "p0",
         "scale",
@@ -91,7 +71,7 @@
     },
     {
       "name": "供应商总数",
-      "comment": "count(supplier_code)。可按 purchaserid_name 过滤。快照 230。",
+      "comment": "count(supplier_code)。可按 purchaserid_name 过滤。",
       "tags": [
         "p0",
         "scale",
@@ -117,7 +97,7 @@
     },
     {
       "name": "销售订单数",
-      "comment": "count(sales_order_id)。可按 product_code / order_status 过滤或分组。快照 800。",
+      "comment": "count(sales_order_id)。可按 product_code / order_status 过滤或分组。",
       "tags": [
         "p0",
         "scale",
@@ -147,7 +127,7 @@
     },
     {
       "name": "仓库数",
-      "comment": "库存记录 warehouse 去重。快照 29。生产可用仓是 7 个预设，不是本指标。",
+      "comment": "库存记录 warehouse 去重。生产可用仓是 7 个预设，不是本指标。",
       "tags": [
         "p0",
         "scale",
@@ -237,7 +217,7 @@
     },
     {
       "name": "未关闭预测单数",
-      "comment": "意图：count(id) 且 closestatus_title != 已关闭。定义态 condition 当前会被丢弃；查询时必须再带该过滤。快照 90。",
+      "comment": "意图：count(id) 且 closestatus_title != 已关闭。定义态 condition 当前会被丢弃；查询时必须再带该过滤。",
       "tags": [
         "p0",
         "planning",
