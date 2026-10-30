@@ -10,7 +10,7 @@ questions:
   scenario: S01
   difficulty: basic
   role: PMC
-  question: How many finished-goods models do we currently sell (listed), and across how many product lines?
+  question: How many finished-goods models are currently on sale (listed), and across how many product lines?
   output_contract: model count, product line count
 - id: Q-02
   scenario: S01
@@ -46,7 +46,7 @@ questions:
   scenario: S08
   difficulty: basic
   role: Purchasing
-  question: How many purchase order lines are still waiting for goods? Closed and terminated lines don't count.
+  question: How many purchase order lines are not yet fully received? Closed and terminated lines don't count.
   output_contract: line count
 - id: Q-08
   scenario: S10
@@ -76,7 +76,7 @@ questions:
   scenario: S08
   difficulty: medium
   role: Purchasing
-  question: Which supplier has the most overdue purchase lines? How many lines, and how much do they still owe us?
+  question: Which supplier has the most overdue purchase lines? How many overdue lines, and how much is still outstanding on them?
   output_contract: supplier name, line count, open quantity
 - id: Q-13
   scenario: S08
@@ -94,13 +94,13 @@ questions:
   scenario: S04
   difficulty: medium
   role: PMC
-  question: How many main-part materials do the two YN580 agricultural drones (367-000130 and 367-000131) have in common?
+  question: How many main parts do the two YN580 agricultural drones (367-000130 and 367-000131) have in common?
   output_contract: shared material count (main parts at all levels, no alternates)
 - id: Q-16
   scenario: S05
   difficulty: medium
   role: PMC
-  question: Which stock has been judged defective and cannot go into production? What is the total quantity?
+  question: Which materials have stock judged defective that can't go into production? What is the total quantity?
   output_contract: full list of material codes, total quantity
 - id: Q-17
   scenario: S10
@@ -112,7 +112,7 @@ questions:
   scenario: S03
   difficulty: medium
   role: PMC
-  question: Among the open forecasts, which product has the largest forecast quantity? How many times its current finished-goods stock is that?
+  question: Among the open forecasts, which product has the largest forecast quantity? What multiple of its current finished-goods stock is that?
   output_contract: product code, forecast quantity, finished-goods stock, ratio (1 decimal)
 - id: Q-19
   scenario: S08
@@ -148,7 +148,7 @@ questions:
   scenario: S02
   difficulty: complex
   role: PMC
-  question: Of the products where finished goods can't cover the backlog, which can't be built from current stock either? How many units short is each?
+  question: Of the products where finished goods can't cover the backlog, which still can't be covered even by building from current stock? How many units short is each?
   output_contract: full product list with final gaps
 - id: Q-25
   scenario: S06
@@ -174,7 +174,7 @@ questions:
   scenario: S06
   difficulty: complex
   role: PMC
-  question: A customer wants another 30 units of 526-000006. How many can we accept right now?
+  question: A customer wants another 30 units of 526-000006. What is the most we can accept right now?
   output_contract: units accepted
 - id: Q-29
   scenario: S06
@@ -205,7 +205,7 @@ questions:
   scenario: S09
   difficulty: complex
   role: Purchasing
-  question: With alternates allowed, how many more units of 382-000005 can we build at most? Which material is the bottleneck, and does it have any open purchase order?
+  question: With alternates allowed, how many units of 382-000005 can we still build at most? Which material is the bottleneck, and does it have any open purchase order?
   output_contract: buildable units, bottleneck material, its stock, open purchase order or not
 - id: Q-34
   scenario: S10
@@ -230,7 +230,7 @@ questions:
   scenario: S02
   difficulty: basic
   role: PMC
-  question: For 382-000005, how many units have been signed, shipped and are still owed to date?
+  question: For 382-000005, how many units are on signed sales orders to date, how many have shipped, and how many are still owed?
   output_contract: signed, shipped, owed units
 - id: Q-38
   scenario: S05
@@ -284,7 +284,7 @@ questions:
   scenario: S09
   difficulty: complex
   role: PMC
-  question: How many more units of vehicle terminal U00-000080 can current stock build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
+  question: How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
   output_contract: buildable from stock, blocking material, buildable with overdue purchases chased
 - id: Q-47
   scenario: S07
@@ -304,7 +304,7 @@ questions:
   scenario: S06
   difficulty: complex
   role: PMC
-  question: For the products whose backlog can't be covered, how many more units would purchases arriving on schedule before the end of September let each of them build?
+  question: For the products whose backlog can't be covered, how many more units would purchases due by the end of September let each of them build?
   output_contract: extra units per product
 - id: Q-50
   scenario: S08

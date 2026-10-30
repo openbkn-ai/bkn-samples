@@ -82,11 +82,14 @@ def pool(scope='all'):
     return result
 
 
+EVERY_OPEN_LINE = '9999-12-31'  # need_by that admits every on-schedule open line
+
+
 def pool_with_po(need_by=None, chase_overdue=False):
-    """Stock plus in-transit: lines due from today to `need_by`, and overdue lines only when chased back."""
+    """Stock plus in-transit: lines due from today to `need_by` (none without it), and overdue lines only when chased back."""
     result = pool()
     for r in OPEN_PO:
-        due = r['deliverdate'] >= BUSINESS_DATE and (need_by is None or r['deliverdate'] <= need_by)
+        due = need_by is not None and BUSINESS_DATE <= r['deliverdate'] <= need_by
         if due or (chase_overdue and r['deliverdate'] < BUSINESS_DATE):
             result[r['material_number']] += open_qty(r)
     return result
@@ -415,7 +418,7 @@ first_gap = allocate('U00-000080', stock_only + 1, pool(), finished=False)['gaps
 q('Q-46', 'S09', '复杂', 'PMC', 'U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果逾期没到的采购都能催回来，最多能做多少套？',
   dict(stock_only_buildable=stock_only, first_blocking_materials=sorted(first_gap),
        with_overdue_po_chased=chased), '现有库存可做、卡住的物料、催回逾期在途后可做')
-stocks = pool_with_po(chase_overdue=True)
+stocks = pool_with_po(need_by=EVERY_OPEN_LINE, chase_overdue=True)
 for r in BACKLOG_ORDERS:
     if r['product_code'] == 'P61-000351':
         allocate('P61-000351', unshipped(r), stocks)
@@ -438,7 +441,7 @@ q('Q-50', 'S08', '复杂', '采购', 'YN580 367-000130 欠单的缺料里，哪�
   dict(materials={i['material_code']: dict(shortage_qty=i['shortage_qty'], open_po_qty=i['open_po_qty'],
                                            enough=i['open_po_qty'] >= i['shortage_qty']) for i in with_po},
        # chasing every open line also refills upstream assemblies, so the remaining gaps come from netting again
-       still_short_after_chasing=sorted(allocate('367-000130', BACKLOG['367-000130'], pool_with_po(chase_overdue=True))['gaps'])),
+       still_short_after_chasing=sorted(allocate('367-000130', BACKLOG['367-000130'], pool_with_po(need_by=EVERY_OPEN_LINE, chase_overdue=True))['gaps'])),
   '可催物料清单（缺量、在途量、是否够）、全部催回后仍缺的物料')
 
 

@@ -2,7 +2,7 @@
 
 ## Goals and users
 
-A manufacturer of BeiDou navigation autopilots, vehicle terminals, agricultural drones and smart monitoring systems wants planners and buyers to get delivery and material answers by asking in plain business language. There are two core users:
+A manufacturer of BeiDou navigation autopilots, vehicle terminals, agricultural drones and smart detection systems wants planners and buyers to get delivery and material answers by asking in plain business language. There are two core users:
 
 - **PMC production planning manager**: when backlog owed to customers can be cleared; whether a new order can be accepted and how much; whether materials cover a work order; how much to prepare for forecasts.
 - **Purchasing manager**: which materials block production; which open purchases to expedite and with which supplier; which materials have nothing on order and must be ordered now, and the earliest arrival.

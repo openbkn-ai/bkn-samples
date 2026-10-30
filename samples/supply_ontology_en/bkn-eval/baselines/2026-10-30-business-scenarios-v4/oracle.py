@@ -82,11 +82,14 @@ def pool(scope='all'):
     return result
 
 
+EVERY_OPEN_LINE = '9999-12-31'  # need_by that admits every on-schedule open line
+
+
 def pool_with_po(need_by=None, chase_overdue=False):
-    """Stock plus in-transit: lines due from today to `need_by`, and overdue lines only when chased back."""
+    """Stock plus in-transit: lines due from today to `need_by` (none without it), and overdue lines only when chased back."""
     result = pool()
     for r in OPEN_PO:
-        due = r['deliverdate'] >= BUSINESS_DATE and (need_by is None or r['deliverdate'] <= need_by)
+        due = need_by is not None and BUSINESS_DATE <= r['deliverdate'] <= need_by
         if due or (chase_overdue and r['deliverdate'] < BUSINESS_DATE):
             result[r['material_number']] += open_qty(r)
     return result
@@ -220,7 +223,7 @@ def q(qid, scenario, level, role, question, expected, contract):
 
 
 on_sale = [p for p in PRODUCTS if MAT[p]['product_status'] == 'Listed']
-q('Q-01', 'S01', 'basic', 'PMC', 'How many finished-goods models do we currently sell (listed), and across how many product lines?',
+q('Q-01', 'S01', 'basic', 'PMC', 'How many finished-goods models are currently on sale (listed), and across how many product lines?',
   dict(on_sale_models=len(on_sale), product_lines=len({PRODUCTS[p]['huid_productline_name'] for p in on_sale})),
   'model count, product line count')
 q('Q-02', 'S01', 'basic', 'Purchasing', 'What is the standard purchasing lead time for bought-in part 606-000989, in days?',
@@ -234,7 +237,7 @@ q('Q-05', 'S02', 'basic', 'PMC', 'How many sales orders are not fully shipped ye
   dict(orders=len(BACKLOG_ORDERS), unshipped_qty=sum(BACKLOG.values())), 'order count, units owed')
 q('Q-06', 'S03', 'basic', 'PMC', 'How many demand forecasts are still open, and how many units do they add up to?',
   dict(count=len(OPEN_FORECASTS), qty=num(sum((D(r['qty']) for r in OPEN_FORECASTS), D(0)))), 'forecast count, units')
-q('Q-07', 'S08', 'basic', 'Purchasing', "How many purchase order lines are still waiting for goods? Closed and terminated lines don't count.",
+q('Q-07', 'S08', 'basic', 'Purchasing', "How many purchase order lines are not yet fully received? Closed and terminated lines don't count.",
   dict(lines=len(OPEN_PO)), 'line count')
 q('Q-08', 'S10', 'basic', 'PMC', 'How many MRP planned orders have been calculated but not released yet?',
   dict(count=sum(r['dropstatus_title'] == 'Not Released' for r in MRP.values())), 'order count')
@@ -253,7 +256,7 @@ q('Q-10', 'S02', 'medium', 'PMC', "Which of Cypressridge Agri's orders are not f
 q('Q-11', 'S08', 'medium', 'Purchasing', 'How many purchase lines are past their due date and still not fully received? How many suppliers do they involve?',
   dict(lines=len(OVERDUE_PO), suppliers=len({r['supplier_number'] for r in OVERDUE_PO})), 'line count, supplier count')
 top_supplier, top_lines = Counter(r['supplier_number'] for r in OVERDUE_PO).most_common(1)[0]
-q('Q-12', 'S08', 'medium', 'Purchasing', 'Which supplier has the most overdue purchase lines? How many lines, and how much do they still owe us?',
+q('Q-12', 'S08', 'medium', 'Purchasing', 'Which supplier has the most overdue purchase lines? How many overdue lines, and how much is still outstanding on them?',
   dict(supplier=SUPPLIERS[top_supplier]['supplier_name'], lines=top_lines,
        open_qty=num(sum((open_qty(r) for r in OVERDUE_PO if r['supplier_number'] == top_supplier), D(0)))),
   'supplier name, line count, open quantity')
@@ -265,10 +268,10 @@ q('Q-13', 'S08', 'medium', 'Purchasing', 'Of the suppliers Alex Reed is responsi
 q('Q-14', 'S04', 'medium', 'PMC', 'Which finished products use seal ring 165-002537?',
   dict(product_codes=where_used('165-002537')), 'full list of product codes')
 common = sorted(set(structure('367-000130')) & set(structure('367-000131')))
-q('Q-15', 'S04', 'medium', 'PMC', 'How many main-part materials do the two YN580 agricultural drones (367-000130 and 367-000131) have in common?',
+q('Q-15', 'S04', 'medium', 'PMC', 'How many main parts do the two YN580 agricultural drones (367-000130 and 367-000131) have in common?',
   dict(shared_count=len(common)), 'shared material count (main parts at all levels, no alternates)')
 bad = [r for r in INVENTORY if r['stock_status'] == 'Defective']
-q('Q-16', 'S05', 'medium', 'PMC', 'Which stock has been judged defective and cannot go into production? What is the total quantity?',
+q('Q-16', 'S05', 'medium', 'PMC', "Which materials have stock judged defective that can't go into production? What is the total quantity?",
   dict(material_codes=sorted({r['material_code'] for r in bad}),
        qty=num(sum((D(r['inventory_qty']) for r in bad), D(0)))), 'full list of material codes, total quantity')
 open_wo = [r for r in WORK_ORDERS if r['taskstatus_title'] != 'Complete']
@@ -279,7 +282,7 @@ fc_by = defaultdict(D)
 for r in OPEN_FORECASTS:
     fc_by[r['material_number']] += D(r['qty'])
 top_fc = max(fc_by, key=fc_by.get)
-q('Q-18', 'S03', 'medium', 'PMC', 'Among the open forecasts, which product has the largest forecast quantity? How many times its current finished-goods stock is that?',
+q('Q-18', 'S03', 'medium', 'PMC', 'Among the open forecasts, which product has the largest forecast quantity? What multiple of its current finished-goods stock is that?',
   dict(product_code=top_fc, forecast_qty=num(fc_by[top_fc]), fg_qty=num(pool()[top_fc]),
        ratio=round(float(fc_by[top_fc] / pool()[top_fc]), 1)), 'product code, forecast quantity, finished-goods stock, ratio (1 decimal)')
 window = [r for r in OPEN_PO if BUSINESS_DATE < r['deliverdate'] <= days_after(BUSINESS_DATE, 30)]
@@ -305,7 +308,7 @@ for p, gap in short.items():
     build = capacity(p, pool)
     if build < gap:
         stuck[p] = gap - build
-q('Q-24', 'S02', 'complex', 'PMC', "Of the products where finished goods can't cover the backlog, which can't be built from current stock either? How many units short is each?",
+q('Q-24', 'S02', 'complex', 'PMC', "Of the products where finished goods can't cover the backlog, which still can't be covered even by building from current stock? How many units short is each?",
   dict(products=stuck), 'full product list with final gaps')
 result, items = blockers('367-000097', BACKLOG['367-000097'])
 q('Q-25', 'S06', 'complex', 'PMC', "For the 625 agricultural drone 367-000097, how many backlog units can't be covered? Which materials block it? Which can we expedite from open purchase orders, which need a new order, and what is the earliest date everything is in?",
@@ -332,7 +335,7 @@ remaining = BACKLOG['526-000006'] - num(fg['526-000006'])
 q('Q-27', 'S07', 'complex', 'PMC', "If we ship the 526-000006 backlog from stock on hand in promised-date order, which orders can't be filled? Can the shortfall be built from current stock?",
   dict(unmet_orders=unmet, remaining_qty=remaining,
        can_build=capacity('526-000006', pool) >= remaining), 'unfilled order numbers, shortfall, whether it can be built')
-q('Q-28', 'S06', 'complex', 'PMC', 'A customer wants another 30 units of 526-000006. How many can we accept right now?',
+q('Q-28', 'S06', 'complex', 'PMC', 'A customer wants another 30 units of 526-000006. What is the most we can accept right now?',
   dict(accept_qty=min(30, atp('526-000006')['available_to_promise']), **atp('526-000006')), 'units accepted')
 plain, alt = atp('382-000005'), atp('382-000005', alternatives=True)
 q('Q-29', 'S06', 'complex', 'PMC', 'A customer wants 900 units of 382-000005. Can stock on hand plus what we can build from current stock cover it? What if alternates are allowed?',
@@ -356,7 +359,7 @@ q('Q-32', 'S04', 'complex', 'PMC', "Which finished products use SMD crystal 527-
   dict(product_codes=users,
        must_build={p: BACKLOG[p] - num(fg[p]) for p in users if BACKLOG[p] > fg[p]}),
   'full product list, products that must build and units')
-q('Q-33', 'S09', 'complex', 'Purchasing', 'With alternates allowed, how many more units of 382-000005 can we build at most? Which material is the bottleneck, and does it have any open purchase order?',
+q('Q-33', 'S09', 'complex', 'Purchasing', 'With alternates allowed, how many units of 382-000005 can we still build at most? Which material is the bottleneck, and does it have any open purchase order?',
   dict(buildable_qty=capacity('382-000005', pool, alternatives=True), limiting_material='606-000989',
        limiting_stock=num(pool()['606-000989']), has_open_po=bool(po_lines('606-000989'))),
   'buildable units, bottleneck material, its stock, open purchase order or not')
@@ -380,7 +383,7 @@ q('Q-35', 'S10', 'complex', 'Purchasing', 'Purchase order 02-KSHA-CGDD-260402-01
 q('Q-36', 'S01', 'basic', 'Purchasing', 'How many suppliers do we have on file in total?',
   dict(suppliers=len(SUPPLIERS)), 'supplier count')
 rows382 = [r for r in SALES if r['product_code'] == '382-000005']
-q('Q-37', 'S02', 'basic', 'PMC', 'For 382-000005, how many units have been signed, shipped and are still owed to date?',
+q('Q-37', 'S02', 'basic', 'PMC', 'For 382-000005, how many units are on signed sales orders to date, how many have shipped, and how many are still owed?',
   dict(signed=sum(int(r['signing_quantity']) for r in rows382), shipped=sum(int(r['shipping_quantity']) for r in rows382),
        unshipped=BACKLOG['382-000005']), 'signed, shipped, owed units')
 q('Q-38', 'S05', 'basic', 'Purchasing', 'How much available stock of material 321-000569 is there across the company right now?',
@@ -412,10 +415,10 @@ q('Q-45', 'S03', 'medium', 'PMC', 'Among products with open forecasts, which hav
 stock_only = capacity('U00-000080', pool)
 chased = capacity('U00-000080', lambda: pool_with_po(chase_overdue=True))
 first_gap = allocate('U00-000080', stock_only + 1, pool(), finished=False)['gaps']
-q('Q-46', 'S09', 'complex', 'PMC', 'How many more units of vehicle terminal U00-000080 can current stock build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?',
+q('Q-46', 'S09', 'complex', 'PMC', 'How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?',
   dict(stock_only_buildable=stock_only, first_blocking_materials=sorted(first_gap),
        with_overdue_po_chased=chased), 'buildable from stock, blocking material, buildable with overdue purchases chased')
-stocks = pool_with_po(chase_overdue=True)
+stocks = pool_with_po(need_by=EVERY_OPEN_LINE, chase_overdue=True)
 for r in BACKLOG_ORDERS:
     if r['product_code'] == 'P61-000351':
         allocate('P61-000351', unshipped(r), stocks)
@@ -430,7 +433,7 @@ q('Q-48', 'S09', 'complex', 'PMC', 'For class-D audio amplifier 972-000677, we n
   dict(by_2026_09_05=enough(500, '2026-09-05'), by_2026_09_15=enough(5000, '2026-09-15')),
   'available quantity, coverage and gap at each date')
 gain = {p: capacity(p, lambda: pool_with_po(need_by='2026-09-30')) - capacity(p, pool) for p in sorted(stuck)}
-q('Q-49', 'S06', 'complex', 'PMC', "For the products whose backlog can't be covered, how many more units would purchases arriving on schedule before the end of September let each of them build?",
+q('Q-49', 'S06', 'complex', 'PMC', "For the products whose backlog can't be covered, how many more units would purchases due by the end of September let each of them build?",
   dict(extra_buildable=gain), 'extra units per product')
 result, items = blockers('367-000130', BACKLOG['367-000130'])
 with_po = [i for i in items if i['open_po']]
@@ -438,7 +441,7 @@ q('Q-50', 'S08', 'complex', 'Purchasing', 'Among the short materials for the YN5
   dict(materials={i['material_code']: dict(shortage_qty=i['shortage_qty'], open_po_qty=i['open_po_qty'],
                                            enough=i['open_po_qty'] >= i['shortage_qty']) for i in with_po},
        # chasing every open line also refills upstream assemblies, so the remaining gaps come from netting again
-       still_short_after_chasing=sorted(allocate('367-000130', BACKLOG['367-000130'], pool_with_po(chase_overdue=True))['gaps'])),
+       still_short_after_chasing=sorted(allocate('367-000130', BACKLOG['367-000130'], pool_with_po(need_by=EVERY_OPEN_LINE, chase_overdue=True))['gaps'])),
   'expeditable materials (shortage, open quantity, enough or not), materials still short after chasing everything')
 
 

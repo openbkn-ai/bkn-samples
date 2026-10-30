@@ -6,7 +6,7 @@ prd: docs/PRD.en-US.md
 generation_method: independent raw CSV Decimal oracle (oracle.py)
 answers:
 - id: Q-01
-  question: How many finished-goods models do we currently sell (listed), and across how many product lines?
+  question: How many finished-goods models are currently on sale (listed), and across how many product lines?
   expected:
     on_sale_models: 28
     product_lines: 7
@@ -45,7 +45,7 @@ answers:
     qty: 56340
   answer: '{"count": 90, "qty": 56340}'
 - id: Q-07
-  question: How many purchase order lines are still waiting for goods? Closed and terminated lines don't count.
+  question: How many purchase order lines are not yet fully received? Closed and terminated lines don't count.
   expected:
     lines: 517
   answer: '{"lines": 517}'
@@ -81,7 +81,7 @@ answers:
     suppliers: 133
   answer: '{"lines": 483, "suppliers": 133}'
 - id: Q-12
-  question: Which supplier has the most overdue purchase lines? How many lines, and how much do they still owe us?
+  question: Which supplier has the most overdue purchase lines? How many overdue lines, and how much is still outstanding on them?
   expected:
     supplier: Ashvale Components
     lines: 50
@@ -104,12 +104,12 @@ answers:
     - 367-000131
   answer: '{"product_codes": ["367-000061", "367-000097", "367-000102", "367-000130", "367-000131"]}'
 - id: Q-15
-  question: How many main-part materials do the two YN580 agricultural drones (367-000130 and 367-000131) have in common?
+  question: How many main parts do the two YN580 agricultural drones (367-000130 and 367-000131) have in common?
   expected:
     shared_count: 1017
   answer: '{"shared_count": 1017}'
 - id: Q-16
-  question: Which stock has been judged defective and cannot go into production? What is the total quantity?
+  question: Which materials have stock judged defective that can't go into production? What is the total quantity?
   expected:
     material_codes:
     - 165-001319
@@ -127,7 +127,7 @@ answers:
     remaining_qty: 6336
   answer: '{"work_orders": 23, "remaining_qty": 6336}'
 - id: Q-18
-  question: Among the open forecasts, which product has the largest forecast quantity? How many times its current finished-goods stock is that?
+  question: Among the open forecasts, which product has the largest forecast quantity? What multiple of its current finished-goods stock is that?
   expected:
     product_code: U00-000080
     forecast_qty: 20000
@@ -172,7 +172,7 @@ answers:
       P61-000351: 12
   answer: '{"products": {"367-000097": 4, "367-000102": 9, "367-000130": 21, "367-000131": 15, "526-000006": 3, "590-000100": 18, "734-000001": 1, "P61-000351": 12}}'
 - id: Q-24
-  question: Of the products where finished goods can't cover the backlog, which can't be built from current stock either? How many units short is each?
+  question: Of the products where finished goods can't cover the backlog, which still can't be covered even by building from current stock? How many units short is each?
   expected:
     products:
       367-000097: 4
@@ -227,7 +227,7 @@ answers:
     can_build: true
   answer: '{"unmet_orders": ["SO0000592", "SO0000096"], "remaining_qty": 3, "can_build": true}'
 - id: Q-28
-  question: A customer wants another 30 units of 526-000006. How many can we accept right now?
+  question: A customer wants another 30 units of 526-000006. What is the most we can accept right now?
   expected:
     accept_qty: 8
     fg_qty: 30
@@ -291,7 +291,7 @@ answers:
   answer: '{"product_codes": ["367-000061", "367-000097", "367-000102", "367-000130", "367-000131", "590-000064", "590-000072", "590-000073", "590-000074", "590-000075", "590-000100"], "must_build": {"367-000097":
     4, "367-000102": 9, "367-000130": 21, "367-000131": 15, "590-000100": 18}}'
 - id: Q-33
-  question: With alternates allowed, how many more units of 382-000005 can we build at most? Which material is the bottleneck, and does it have any open purchase order?
+  question: With alternates allowed, how many units of 382-000005 can we still build at most? Which material is the bottleneck, and does it have any open purchase order?
   expected:
     buildable_qty: 344
     limiting_material: 606-000989
@@ -321,7 +321,7 @@ answers:
     suppliers: 230
   answer: '{"suppliers": 230}'
 - id: Q-37
-  question: For 382-000005, how many units have been signed, shipped and are still owed to date?
+  question: For 382-000005, how many units are on signed sales orders to date, how many have shipped, and how many are still owed?
   expected:
     signed: 1081
     shipped: 1066
@@ -394,7 +394,7 @@ answers:
     - P61-000351
   answer: '{"product_codes": ["367-000102", "367-000130", "367-000131", "734-000003", "P61-000351"]}'
 - id: Q-46
-  question: How many more units of vehicle terminal U00-000080 can current stock build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
+  question: How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
   expected:
     stock_only_buildable: 141
     first_blocking_materials:
@@ -423,7 +423,7 @@ answers:
       short: 0
   answer: '{"by_2026_09_05": {"available": 65, "covered": false, "short": 435}, "by_2026_09_15": {"available": 12515, "covered": true, "short": 0}}'
 - id: Q-49
-  question: For the products whose backlog can't be covered, how many more units would purchases arriving on schedule before the end of September let each of them build?
+  question: For the products whose backlog can't be covered, how many more units would purchases due by the end of September let each of them build?
   expected:
     extra_buildable:
       367-000097: 0

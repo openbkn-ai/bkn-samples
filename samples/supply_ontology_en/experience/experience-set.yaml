@@ -113,7 +113,7 @@ spec:
   - id: Q-12
     title: Which supplier to chase first
     explanation: Total overdue lines and open quantities by supplier to find the one to chase first.
-    question: Which supplier has the most overdue purchase lines? How many lines, and how much do they still owe us?
+    question: Which supplier has the most overdue purchase lines? How many overdue lines, and how much is still outstanding on them?
     answer: 'Ashvale Components has the most overdue lines: 50 lines not received, 2844000 units still owed.'
     expected:
       supplier: Ashvale Components
@@ -180,7 +180,7 @@ spec:
   - id: Q-24
     title: Backlog production cannot cover
     explanation: For the part stock on hand cannot cover, net the BOM level by level to see what current stock can build; what remains is the real gap.
-    question: Of the products where finished goods can't cover the backlog, which can't be built from current stock either? How many units short is each?
+    question: Of the products where finished goods can't cover the backlog, which still can't be covered even by building from current stock? How many units short is each?
     answer: '5 products cannot be covered by stock on hand or current stock: 367-000097 short 4, 367-000102 short 9, 367-000130 short 21, 367-000131 short 15, 734-000001 short 1.'
     expected:
       products:
@@ -207,7 +207,7 @@ spec:
   - id: Q-28
     title: How much more we can accept
     explanation: Available to promise = finished-goods stock + what current stock can build − signed backlog, protecting owed orders first.
-    question: A customer wants another 30 units of 526-000006. How many can we accept right now?
+    question: A customer wants another 30 units of 526-000006. What is the most we can accept right now?
     answer: 'We can accept 8 at most: 526-000006 has 30 units of finished goods and current stock can build 11 more; after the 33 units of signed backlog, 8 can be promised.'
     expected:
       accept_qty: 8
@@ -241,7 +241,7 @@ spec:
   - id: Q-46
     title: What chasing purchases adds
     explanation: Work out what current stock can build and which material blocks it, then assume every overdue purchase is chased in and compare.
-    question: How many more units of vehicle terminal U00-000080 can current stock build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
+    question: How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
     answer: Current stock can build 141 more units of U00-000080, and one more is blocked by 994-000328; if every overdue purchase were chased in, it could build 2972.
     expected:
       stock_only_buildable: 141
