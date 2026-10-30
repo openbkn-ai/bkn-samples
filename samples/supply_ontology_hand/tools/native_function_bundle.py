@@ -1,8 +1,8 @@
 """Build the self-contained OpenBKN native Function payload.
 
 The Foundry Function Runtime executes an ``@tool`` entrypoint in an isolated
-sandbox.  This builder packages the existing pure calculation modules and lets
-the official ``sandbox_sdk.bkn`` acquire required BKN facts internally.
+sandbox. This builder packages the planning calculations and lets the official
+``sandbox_sdk.bkn`` read the facts each call needs.
 """
 
 from __future__ import annotations
@@ -15,86 +15,41 @@ from pathlib import Path
 
 
 TOOLS = Path(__file__).resolve().parent
-PACKAGE_PATHS = (TOOLS / "fn", TOOLS / "context")
 
 
 ENTRY_SOURCE = r'''
 from sandbox_sdk import bkn, tool
 from managed_execution import KN_ID, execute_from_bkn_rows, load_bkn_rows
-from datetime import datetime, timezone
 
 @tool
 def supply_function(
-    product: str | None = None, products: list | None = None,
-    depth: int | None = None, include_substitute: bool | None = None,
-    warehouse_scope: str | None = None, substitute_enabled: bool | None = None,
-    production_scope: str | None = None, finished_goods_scope: str | None = None,
-    qty: float | None = None, demands: list | None = None,
-    demand_purpose: str | None = None,
-    material_code: str | None = None, due_date: str | None = None,
-    gross_requirement: float | None = None, child_short: bool | None = None,
-    product_code: str | None = None, forecast_id: str | None = None,
-    demand_end: str | None = None, demand_qty: float | None = None,
-    business_date: str | None = None, report_grain: str | None = None,
-    page_size: int | None = None, offset: int | None = None,
+    product: str | None = None, demands: list | None = None,
+    substitute_enabled: bool | None = None, warehouse_scope: str | None = None,
+    need_by: str | None = None, chase_overdue_po: bool | None = None,
+    reserve_signed_backlog: bool | None = None, use_finished_goods: bool | None = None,
+    business_date: str | None = None,
 ) -> dict:
-    """Run the fixed operation with facts loaded by the Function itself."""
+    """Run the fixed calculation with facts the Function reads itself."""
     params = {key: value for key, value in locals().items() if value is not None}
-    started_at = datetime.now(timezone.utc).isoformat()
     rows = load_bkn_rows(_FIXED_OPERATION, bkn.query_object_instance, params)
-    completed_at = datetime.now(timezone.utc).isoformat()
     result = execute_from_bkn_rows(_FIXED_OPERATION, rows, params)
-    if _FIXED_OPERATION == "material_coverage":
-        evidence = result
-        evidence["provenance"].update(query_started_at=started_at, data_collected_at=completed_at)
-    result["data_source"] = {
-        "knowledge_network_id": KN_ID,
-        "loaded_datasets": list(rows),
-    }
+    result["data_source"] = {"knowledge_network_id": KN_ID,
+                             "loaded_rows": {name: len(items) for name, items in rows.items()}}
     return result
-'''
-
-
-DRAFT_ENTRY_SOURCE = r'''
-from sandbox_sdk import tool
-from fn.material_assurance import replenishment_draft
-
-@tool
-def supply_function(coverage: dict) -> dict:
-    """Create an unpersisted proposal from supplied evidence, without BKN reads."""
-    result = replenishment_draft(coverage)
-    result["data_source"] = {"kind": "supplied-coverage", "requeried": False}
-    return result
-'''
-
-
-RULE_ENTRY_SOURCE = r'''
-from sandbox_sdk import bkn, tool
-from shortage_rule_runtime import run
-
-@tool
-def supply_function(event_source: dict, window_start: str, window_end: str) -> dict:
-    """Read verified demand events and return proposals; Workshop performs writes."""
-    return run(bkn.query_object_instance, bkn.query_instance_subgraph,
-               event_source, window_start, window_end)
 '''
 
 
 def _archive_source() -> str:
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
-        for package in PACKAGE_PATHS:
-            for file_path in sorted(package.rglob("*.py")):
-                archive.write(file_path, file_path.relative_to(TOOLS))
+        for file_path in sorted((TOOLS / "fn").rglob("*.py")):
+            archive.write(file_path, file_path.relative_to(TOOLS))
         archive.write(TOOLS / "managed_execution.py", "managed_execution.py")
-        archive.write(TOOLS / "shortage_rule_runtime.py", "shortage_rule_runtime.py")
     return base64.b64encode(buffer.getvalue()).decode("ascii")
 
 
-def build_native_function_code(*, fixed_operation: str | None = None) -> str:
-    """Return Foundry-compatible Function code, optionally fixed to one operation."""
-    encoded = _archive_source()
-    fixed = repr(fixed_operation)
+def build_native_function_code(*, fixed_operation: str) -> str:
+    """Return Foundry-compatible Function code fixed to one operation."""
     bootstrap = textwrap.dedent(
         f'''\
         import base64
@@ -103,12 +58,12 @@ def build_native_function_code(*, fixed_operation: str | None = None) -> str:
         import tempfile
         import zipfile
 
-        _SUPPLY_SOURCE = {encoded!r}
-        _FIXED_OPERATION = {fixed}
+        _SUPPLY_SOURCE = {_archive_source()!r}
+        _FIXED_OPERATION = {fixed_operation!r}
         root = tempfile.mkdtemp(prefix="supply_native_function_")
         with zipfile.ZipFile(io.BytesIO(base64.b64decode(_SUPPLY_SOURCE))) as archive:
             archive.extractall(root)
         sys.path.insert(0, root)
         '''
     )
-    return bootstrap + "\n" + textwrap.dedent(RULE_ENTRY_SOURCE if fixed_operation == "shortage_rule" else DRAFT_ENTRY_SOURCE if fixed_operation == "replenishment_draft" else ENTRY_SOURCE).lstrip()
+    return bootstrap + "\n" + textwrap.dedent(ENTRY_SOURCE).lstrip()

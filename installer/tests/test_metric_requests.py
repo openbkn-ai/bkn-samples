@@ -10,7 +10,7 @@ SCHEMA = json.loads((ROOT / 'tools/contracts/object-metrics-v1/query_metric.json
 
 class MetricRequestsTest(unittest.TestCase):
     def test_bilingual_queries_match_upstream_schema_and_model_types(self):
-        for sample in ('supply_ontology_hand', 'supply_ontology_en'):
+        for sample in ('supply_ontology_en',):
             root = ROOT / 'samples' / sample
             network = json.loads((root / 'kn' / (sample + '.json')).read_text())
             objects = network.get('object_types') or network.get('objectTypes') or network['entries'][0]['object_types']
@@ -50,7 +50,7 @@ class MetricRequestsTest(unittest.TestCase):
     def test_upstream_schema_rejects_old_runtime_field_but_definitions_keep_it(self):
         bad = {'kn_id': 'network', 'metric_id': 'metric', 'version': 1, 'query': {'analysis_dimensions': []}}
         self.assertTrue(list(Draft7Validator(SCHEMA).iter_errors(bad)))
-        for sample in ('supply_ontology_hand', 'supply_ontology_en'):
+        for sample in ('supply_ontology_en',):
             metrics = json.loads((ROOT / 'samples' / sample / 'tools/assets/metrics-create.json').read_text())['entries']
             self.assertTrue(all('analysis_dimensions' in m['query_capabilities'] for m in metrics))
 

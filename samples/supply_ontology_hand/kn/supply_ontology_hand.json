@@ -6,7 +6,7 @@
     "手工版",
     "生态伙伴"
   ],
-  "comment": "面向生态伙伴与客户的供应链本体体验网络。覆盖从需求预测到采购执行、库存齐套与生产安排的完整业务链路：产品需求预测 → 产品BOM → 物料需求计划 → 采购申请 → 采购订单 → 库存齐套 → 工厂生产计划；并支持销售订单与产品的关联分析。组织与仓库名称已按体验场景统一配置，便于直接联查与演示。",
+  "comment": "面向生态伙伴与客户的供应链本体体验网络，覆盖销售订单、需求预测、产品BOM、物料需求计划、采购申请、采购订单、库存和生产工单。业务日期为 2026-08-25，“现在、今天、当前”都指这一天；数据快照日期为 2026-08-13。组织与仓库名称已按体验场景统一配置，便于直接联查。",
   "icon": "icon-dip-graph",
   "color": "#52C41A",
   "detail": "---\ntype: network\nid: supply_ontology_hand\nname: 供应链本体知识网络-手工版\ntags: ['体验版', '手工版', '生态伙伴']\nbranch: main\n---\n\n# 供应链本体知识网络-手工版\n\n面向生态伙伴与客户的供应链本体体验网络。覆盖从需求预测到采购执行、库存齐套与生产安排的完整业务链路：产品需求预测 → 产品BOM → 物料需求计划 → 采购申请 → 采购订单 → 库存齐套 → 工厂生产计划；并支持销售订单与产品的关联分析。组织与仓库名称已按体验场景统一配置，便于直接联查与演示。\n\n## 可体验的业务能力\n\n- 看清产品需求与预测\n- 沿 BOM 展开物料结构\n- 跟踪 MRP、采购申请与采购订单\n- 核查库存齐套与生产计划\n- 从销售订单追溯到产品\n",
@@ -333,7 +333,7 @@
       "tags": [
         "已审核"
       ],
-      "comment": "定义产品的物料清单结构，\n1. BOM结构：多层树形结构：产品 → L1子件 → L2子件 → ... → 最底层原材料；物料类型含自制、委外、外购。 \n2. BOM 分析默认使用 alt_priority == 0 的主料；\n3. BOM 替代料模型：\n1） BOM 中同一父件下的子件满足以下条件时，判定为同一替代组：\n  - alt_method = '替代'\n  - parent_material_code 相同（为空时使用 bom_material_code）\n  - alt_group_no 相同且非空\n2） 组内角色定义：\n  - alt_priority = 0 → 主料\n  - alt_priority > 0 → 替代料（priority 越小越优先）",
+      "comment": "定义产品的物料清单结构，\n1. BOM结构：多层树形结构：产品 → L1子件 → L2子件 → ... → 最底层原材料；物料类型含自制、委外、外购。 \n2. BOM 分析默认使用 alt_priority == 0 的主料；\n3. BOM 替代料模型：\n1） BOM 中同一父件下的子件满足以下条件时，判定为同一替代组：\n  - alt_method = '替代'\n  - parent_material_code 相同（为空时使用 bom_material_code）\n  - alt_group_no 相同且非空\n2） 组内角色定义：\n  - alt_priority = 0 → 主料\n  - alt_priority > 0 → 替代料（priority 越小越优先）\n4. 生产可做数量：先用成品库存，不够的部分逐层展开；每层先扣该组件的库存，只对净缺部分继续展开，最后无法再展开的物料缺口才是缺料。多张需求共用一个库存池。默认不用替代料，用户允许时才用。",
       "icon": "icon-dip-suanziguanli",
       "color": "#0e5fc5",
       "branch": "main",
@@ -636,7 +636,7 @@
           "name": "closestatus_title",
           "display_name": "关闭状态",
           "type": "text",
-          "comment": "",
+          "comment": "关闭状态：正常或已关闭。",
           "mapped_field": {
             "name": "closestatus_title",
             "type": "text",
@@ -681,7 +681,7 @@
       "tags": [
         "已审核"
       ],
-      "comment": "业务端（产品经理）基于销售需求、市场预判制定的基础需求数据源，是偏 “预判性” 的原始单据，核心记录产品、预测数量、对应月份 / 时间节点等基础信息，是“最上游单据”。每个月预测未来3个月的需求数据，每个产品都是滚动预测，滚动排产。从产品需求预测到物料需求计划（MRP），正式投放后，发起采购申请，通过后形成采购订单，当成品物料齐套后，安排生产工单，生产完成，则产品需求计划（产品需求预测单）完成。所以，当前产品需求预测单等同于产品需求计划。",
+      "comment": "业务端（产品经理）基于销售需求、市场预判制定的基础需求数据源，是偏 “预判性” 的原始单据，核心记录产品、预测数量、对应月份 / 时间节点等基础信息，是“最上游单据”。每个月预测未来3个月的需求数据，每个产品都是滚动预测，滚动排产。从产品需求预测到物料需求计划（MRP），正式投放后，发起采购申请，通过后形成采购订单，当成品物料齐套后，安排生产工单，生产完成，则产品需求计划（产品需求预测单）完成。所以，当前产品需求预测单等同于产品需求计划。 关闭状态不是“已关闭”的预测为未关闭预测。一张预测单（billno）可以包含多个产品。预测满足排在已签约欠货之后。",
       "icon": "icon-jingquezhunque",
       "color": "#52C41A",
       "branch": "main"
@@ -1007,7 +1007,7 @@
           "name": "stock_status",
           "display_name": "库存状态",
           "type": "string",
-          "comment": "可用或者其他状态",
+          "comment": "“可用”可投产和发货；“不良”不能使用。",
           "mapped_field": {
             "name": "stock_status",
             "type": "string",
@@ -1088,7 +1088,7 @@
       "tags": [
         "已审核"
       ],
-      "comment": "实时记录物料在各仓库及仓位的库存数量、状态与批次信息。\n1. 生产可用库存\n定义：仅统计「有效仓库」内、状态为「可用」的库存数量。\n有效仓库范围：苏州半成品仓、苏州成品仓、苏州电子原料仓、苏州无人机原料仓、苏州装配原料仓、乌鲁木齐成品仓、哈尔滨成品仓。\n2. 全仓可用库存\n定义：统计全部仓库内、状态为「可用」的库存数量。\n仓库范围：系统内全部仓库。",
+      "comment": "实时记录物料在各仓库及仓位的库存数量、状态与批次信息。可用库存只算库存状态为“可用”的 available_inventory_qty，默认统计全公司所有仓；“不良”库存不能投产、不能发货。“成品仓”指苏州成品仓、乌鲁木齐成品仓、哈尔滨成品仓；“苏州工厂生产七仓”指苏州半成品仓、苏州成品仓、苏州电子原料仓、苏州无人机原料仓、苏州装配原料仓、乌鲁木齐成品仓、哈尔滨成品仓。",
       "icon": "icon-dip-suanziguanli",
       "color": "#0e5fc5",
       "branch": "main"
@@ -1326,7 +1326,7 @@
           "name": "purchase_fixedleadtime",
           "display_name": "采购固定提前期",
           "type": "decimal",
-          "comment": "采购交货提前期 (天)",
+          "comment": "采购提前期（天）。今天下单的最早到货日 = 业务日期 + 提前期。",
           "mapped_field": {
             "name": "purchase_fixedleadtime",
             "type": "decimal",
@@ -1392,355 +1392,6 @@
       "comment": "记录物料的基础信息，包括编码、名称、规格型号、属性（自制/外购）及单位等及相关参数。",
       "icon": "icon-dip-suanziguanli",
       "color": "#0e5fc5",
-      "branch": "main",
-      "logic_properties": []
-    },
-    {
-      "id": "supply_ontology_hand_mon_task",
-      "name": "监控任务",
-      "data_properties": [
-        {
-          "name": "task_id",
-          "display_name": "任务主键",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "task_id",
-            "type": "string",
-            "display_name": "task_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "product_code",
-          "display_name": "被监控产品",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "product_code",
-            "type": "string",
-            "display_name": "product_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "forecast_id",
-          "display_name": "被监控需求预测",
-          "type": "string",
-          "comment": "一个任务只对应一张需求预测单",
-          "mapped_field": {
-            "name": "forecast_id",
-            "type": "string",
-            "display_name": "forecast_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "forecast_qty",
-          "display_name": "预测数量基线",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "forecast_qty",
-            "type": "decimal",
-            "display_name": "forecast_qty"
-          }
-        },
-        {
-          "name": "demand_end",
-          "display_name": "需求截止日基线",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "demand_end",
-            "type": "date",
-            "display_name": "demand_end"
-          }
-        },
-        {
-          "name": "warehouse_scope",
-          "display_name": "仓范围",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "warehouse_scope",
-            "type": "string",
-            "display_name": "warehouse_scope"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "substitute_enabled",
-          "display_name": "替代策略",
-          "type": "integer",
-          "comment": "1 启用替代，0 不启用",
-          "mapped_field": {
-            "name": "substitute_enabled",
-            "type": "integer",
-            "display_name": "substitute_enabled"
-          }
-        },
-        {
-          "name": "kitting_status",
-          "display_name": "当前齐套状态",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "kitting_status",
-            "type": "string",
-            "display_name": "kitting_status"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "can_deliver_on_time",
-          "display_name": "当前是否可按期",
-          "type": "integer",
-          "comment": "1 可按期，0 不可按期",
-          "mapped_field": {
-            "name": "can_deliver_on_time",
-            "type": "integer",
-            "display_name": "can_deliver_on_time"
-          }
-        },
-        {
-          "name": "max_delay_days",
-          "display_name": "当前最大延迟",
-          "type": "integer",
-          "comment": "",
-          "mapped_field": {
-            "name": "max_delay_days",
-            "type": "integer",
-            "display_name": "max_delay_days"
-          }
-        },
-        {
-          "name": "planned_start",
-          "display_name": "倒排生产开始日",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "planned_start",
-            "type": "date",
-            "display_name": "planned_start"
-          }
-        },
-        {
-          "name": "planned_end",
-          "display_name": "需求截止日",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "planned_end",
-            "type": "date",
-            "display_name": "planned_end"
-          }
-        },
-        {
-          "name": "snapshot_id",
-          "display_name": "最近快照",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "snapshot_id",
-            "type": "string",
-            "display_name": "snapshot_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "task_status",
-          "display_name": "任务状态",
-          "type": "string",
-          "comment": "watching / risk / ready / completed / closed",
-          "mapped_field": {
-            "name": "task_status",
-            "type": "string",
-            "display_name": "task_status"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "check_interval",
-          "display_name": "检查频率分钟",
-          "type": "integer",
-          "comment": "",
-          "mapped_field": {
-            "name": "check_interval",
-            "type": "integer",
-            "display_name": "check_interval"
-          }
-        },
-        {
-          "name": "next_check_at",
-          "display_name": "下次检查时间",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "next_check_at",
-            "type": "datetime",
-            "display_name": "next_check_at"
-          }
-        },
-        {
-          "name": "last_checked_at",
-          "display_name": "最近检查时间",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "last_checked_at",
-            "type": "datetime",
-            "display_name": "last_checked_at"
-          }
-        },
-        {
-          "name": "created_by",
-          "display_name": "创建人",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "created_by",
-            "type": "string",
-            "display_name": "created_by"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "created_at",
-          "display_name": "创建时间",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "created_at",
-            "type": "datetime",
-            "display_name": "created_at"
-          }
-        },
-        {
-          "name": "closed_at",
-          "display_name": "关闭时间",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "closed_at",
-            "type": "datetime",
-            "display_name": "closed_at"
-          }
-        }
-      ],
-      "primary_keys": [
-        "task_id"
-      ],
-      "display_key": "task_id",
-      "incremental_key": "",
-      "tags": [],
-      "comment": "生产计划倒排监控任务：一个任务只对应一个产品与一张需求预测单，物料是履约证据。",
-      "icon": "icon-daibanshixiang",
-      "color": "#FF4D4F",
       "branch": "main",
       "logic_properties": []
     },
@@ -2107,7 +1758,7 @@
           "name": "xkquainwaqty",
           "display_name": "合格品入库数量",
           "type": "decimal",
-          "comment": "",
+          "comment": "合格品已入库数量；qty − xkquainwaqty 为还没入库的数量。",
           "mapped_field": {
             "name": "xkquainwaqty",
             "type": "decimal",
@@ -3124,7 +2775,7 @@
           "name": "deliverdate",
           "display_name": "预计交货日期",
           "type": "date",
-          "comment": "预计交货日期，取用的标准交货时间。采购员可在ERP更新供应商反馈的交货时间。",
+          "comment": "交货日期。早于业务日期且未到齐即为逾期在途。",
           "mapped_field": {
             "name": "deliverdate",
             "type": "date",
@@ -3226,7 +2877,7 @@
           "name": "actqty",
           "display_name": "实际入库数量",
           "type": "decimal",
-          "comment": "实际入库数量（入库数量 - 退库数量）",
+          "comment": "实际入库数量（入库数量 − 退库数量）；qty − actqty 为未到数量。",
           "mapped_field": {
             "name": "actqty",
             "type": "decimal",
@@ -3317,7 +2968,7 @@
           "name": "rowclosestatus_title",
           "display_name": "关闭状态",
           "type": "string",
-          "comment": "",
+          "comment": "行关闭状态：正常或已关闭。",
           "mapped_field": {
             "name": "rowclosestatus_title",
             "type": "string",
@@ -3357,7 +3008,7 @@
           "name": "rowterminatestatus_title",
           "display_name": "终止状态",
           "type": "string",
-          "comment": "",
+          "comment": "行终止状态：正常或已终止。",
           "mapped_field": {
             "name": "rowterminatestatus_title",
             "type": "string",
@@ -3403,7 +3054,7 @@
       "tags": [
         "已审核"
       ],
-      "comment": "发给供应商的正式采购订单。",
+      "comment": "发给供应商的正式采购订单，一行一个物料。在途 = 关闭状态和终止状态都是“正常”，且 qty − actqty > 0。交期不早于业务日期的在途按交期计入供给；交期早于业务日期的是逾期在途，交期已失信，要催货但不算确定能到。",
       "icon": "icon-dip-suanziguanli",
       "color": "#52C41A",
       "branch": "main"
@@ -4137,7 +3788,7 @@
           "name": "signing_quantity",
           "display_name": "签约数量",
           "type": "integer",
-          "comment": "",
+          "comment": "签约数量（套）。",
           "mapped_field": {
             "name": "signing_quantity",
             "type": "integer",
@@ -4187,7 +3838,7 @@
           "name": "promised_delivery_date",
           "display_name": "承诺交期时间",
           "type": "date",
-          "comment": "",
+          "comment": "承诺交期，早于业务日期且仍有欠货即为逾期。",
           "mapped_field": {
             "name": "promised_delivery_date",
             "type": "date",
@@ -4212,7 +3863,7 @@
           "name": "shipping_quantity",
           "display_name": "交付数量",
           "type": "float",
-          "comment": "",
+          "comment": "已发货数量（套）；签约数量减去它就是欠货数量。",
           "mapped_field": {
             "name": "shipping_quantity",
             "type": "float",
@@ -4287,7 +3938,7 @@
           "name": "salesperson",
           "display_name": "业务员",
           "type": "string",
-          "comment": "",
+          "comment": "负责该订单的销售员。",
           "mapped_field": {
             "name": "salesperson",
             "type": "string",
@@ -4318,7 +3969,7 @@
         "已审核",
         "老数据"
       ],
-      "comment": "记录销售签约与交付信息。产品编码与「产品」对象一致，可直接关联查询；并包含客户、签约数量、承诺交期与交付情况等业务字段，便于体验订单履约分析。",
+      "comment": "记录销售签约与交付信息，产品编码与「产品」对象一致。欠货 = 签约数量 − 已发货数量 > 0；承诺交期早于业务日期的欠货为逾期。多张欠单按承诺交期先后、再按订单号补发。可承诺量要先扣除该产品的已签约欠货。",
       "icon": "icon-dip-suanziguanli",
       "color": "#0e5fc5",
       "branch": "main",
@@ -4469,658 +4120,6 @@
       "logic_properties": []
     },
     {
-      "id": "supply_ontology_hand_pr_decision",
-      "name": "采购申请决策",
-      "data_properties": [
-        {
-          "name": "decision_id",
-          "display_name": "决策行主键",
-          "type": "string",
-          "comment": "采购申请决策记录主键，不是 ERP 采购申请单号",
-          "mapped_field": {
-            "name": "decision_id",
-            "type": "string",
-            "display_name": "decision_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "decision_batch_id",
-          "display_name": "同批建议分组",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "decision_batch_id",
-            "type": "string",
-            "display_name": "decision_batch_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "forecast_id",
-          "display_name": "来源需求预测",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "forecast_id",
-            "type": "string",
-            "display_name": "forecast_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "product_code",
-          "display_name": "来源产品",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "product_code",
-            "type": "string",
-            "display_name": "product_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "material_code",
-          "display_name": "建议采购物料",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "material_code",
-            "type": "string",
-            "display_name": "material_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "recommended_qty",
-          "display_name": "建议数量",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "recommended_qty",
-            "type": "decimal",
-            "display_name": "recommended_qty"
-          }
-        },
-        {
-          "name": "required_date",
-          "display_name": "要求到位日",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "required_date",
-            "type": "date",
-            "display_name": "required_date"
-          }
-        },
-        {
-          "name": "warehouse_scope",
-          "display_name": "仓范围",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "warehouse_scope",
-            "type": "string",
-            "display_name": "warehouse_scope"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "substitute_enabled",
-          "display_name": "替代策略",
-          "type": "integer",
-          "comment": "1 启用替代，0 不启用",
-          "mapped_field": {
-            "name": "substitute_enabled",
-            "type": "integer",
-            "display_name": "substitute_enabled"
-          }
-        },
-        {
-          "name": "reason_code",
-          "display_name": "缺口原因",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "reason_code",
-            "type": "string",
-            "display_name": "reason_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "snapshot_id",
-          "display_name": "计算快照",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "snapshot_id",
-            "type": "string",
-            "display_name": "snapshot_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "interaction_id",
-          "display_name": "OpenBKN Interaction",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "interaction_id",
-            "type": "string",
-            "display_name": "interaction_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "status",
-          "display_name": "状态",
-          "type": "string",
-          "comment": "approved / rejected / cancelled",
-          "mapped_field": {
-            "name": "status",
-            "type": "string",
-            "display_name": "status"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "approved_by",
-          "display_name": "批准人",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "approved_by",
-            "type": "string",
-            "display_name": "approved_by"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "approved_at",
-          "display_name": "批准时间",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "approved_at",
-            "type": "datetime",
-            "display_name": "approved_at"
-          }
-        },
-        {
-          "name": "created_at",
-          "display_name": "创建时间",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "created_at",
-            "type": "datetime",
-            "display_name": "created_at"
-          }
-        },
-        {
-          "name": "idempotency_key",
-          "display_name": "幂等键",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "idempotency_key",
-            "type": "string",
-            "display_name": "idempotency_key"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        }
-      ],
-      "primary_keys": [
-        "decision_id"
-      ],
-      "display_key": "decision_id",
-      "incremental_key": "",
-      "tags": [],
-      "comment": "人工批准后的采购建议决策记录。不是 ERP 采购申请，本期不调用 ERP。",
-      "icon": "icon-caigou",
-      "color": "#2F54EB",
-      "branch": "main",
-      "logic_properties": []
-    },
-    {
-      "id": "supply_ontology_hand_mon_item",
-      "name": "监控证据明细",
-      "data_properties": [
-        {
-          "name": "item_id",
-          "display_name": "明细主键",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "item_id",
-            "type": "string",
-            "display_name": "item_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "task_id",
-          "display_name": "监控任务",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "task_id",
-            "type": "string",
-            "display_name": "task_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "material_code",
-          "display_name": "BOM 物料",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "material_code",
-            "type": "string",
-            "display_name": "material_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "bom_level",
-          "display_name": "BOM 层级",
-          "type": "integer",
-          "comment": "",
-          "mapped_field": {
-            "name": "bom_level",
-            "type": "integer",
-            "display_name": "bom_level"
-          }
-        },
-        {
-          "name": "l1_parent",
-          "display_name": "一层父件",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "l1_parent",
-            "type": "string",
-            "display_name": "l1_parent"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "gross_requirement",
-          "display_name": "毛需求",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "gross_requirement",
-            "type": "decimal",
-            "display_name": "gross_requirement"
-          }
-        },
-        {
-          "name": "required_date",
-          "display_name": "要求到位日",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "required_date",
-            "type": "date",
-            "display_name": "required_date"
-          }
-        },
-        {
-          "name": "available_qty",
-          "display_name": "当前可用",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "available_qty",
-            "type": "decimal",
-            "display_name": "available_qty"
-          }
-        },
-        {
-          "name": "in_transit_qty",
-          "display_name": "当前在途",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "in_transit_qty",
-            "type": "decimal",
-            "display_name": "in_transit_qty"
-          }
-        },
-        {
-          "name": "expected_arrival",
-          "display_name": "预计到货日",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "expected_arrival",
-            "type": "date",
-            "display_name": "expected_arrival"
-          }
-        },
-        {
-          "name": "net_shortage",
-          "display_name": "当前净缺口",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "net_shortage",
-            "type": "decimal",
-            "display_name": "net_shortage"
-          }
-        },
-        {
-          "name": "delay_class",
-          "display_name": "延迟分级",
-          "type": "string",
-          "comment": "A / B / none",
-          "mapped_field": {
-            "name": "delay_class",
-            "type": "string",
-            "display_name": "delay_class"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "supply_status",
-          "display_name": "供应状态",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "supply_status",
-            "type": "string",
-            "display_name": "supply_status"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "snapshot_id",
-          "display_name": "最近快照",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "snapshot_id",
-            "type": "string",
-            "display_name": "snapshot_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "updated_at",
-          "display_name": "更新时间",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "updated_at",
-            "type": "datetime",
-            "display_name": "updated_at"
-          }
-        }
-      ],
-      "primary_keys": [
-        "item_id"
-      ],
-      "display_key": "item_id",
-      "incremental_key": "",
-      "tags": [],
-      "comment": "监控任务对应的 BOM 供应证据，不是监控目标。",
-      "icon": "icon-zhengju",
-      "color": "#13C2C2",
-      "branch": "main",
-      "logic_properties": []
-    },
-    {
       "id": "skills",
       "name": "Skills",
       "data_properties": [
@@ -5200,30 +4199,6 @@
         "已审核"
       ],
       "comment": "生产计划按照需求预测单来生产。",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_mon2fcst",
-      "name": "监控任务依据需求预测",
-      "source_object_type_id": "supply_ontology_hand_mon_task",
-      "target_object_type_id": "supply_ontology_hand_forecast",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "forecast_id",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "id",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "监控任务依据一张需求预测单。映射为 forecast_id → id，不再误用产品编码。",
       "icon": "",
       "color": "",
       "branch": "main"
@@ -5573,503 +4548,7 @@
       "icon": "",
       "color": "",
       "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_mon2prod",
-      "name": "监控任务监控产品",
-      "source_object_type_id": "supply_ontology_hand_mon_task",
-      "target_object_type_id": "supply_ontology_hand_product",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "product_code",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "material_number",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "监控任务监控一个产品。产品主键是 material_number。",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_mon2item",
-      "name": "监控任务包含证据明细",
-      "source_object_type_id": "supply_ontology_hand_mon_task",
-      "target_object_type_id": "supply_ontology_hand_mon_item",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "task_id",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "task_id",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "监控任务包含 BOM 供应证据明细。",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_monitem2mat",
-      "name": "监控证据引用物料",
-      "source_object_type_id": "supply_ontology_hand_mon_item",
-      "target_object_type_id": "supply_ontology_hand_material",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "material_code",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "material_code",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "证据明细引用物料，物料是履约证据而不是监控目标。",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_prdec2prod",
-      "name": "采购申请决策针对产品",
-      "source_object_type_id": "supply_ontology_hand_pr_decision",
-      "target_object_type_id": "supply_ontology_hand_product",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "product_code",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "material_number",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "采购申请决策针对来源产品。",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_prdec2fcst",
-      "name": "采购申请决策来源于需求预测",
-      "source_object_type_id": "supply_ontology_hand_pr_decision",
-      "target_object_type_id": "supply_ontology_hand_forecast",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "forecast_id",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "id",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "采购申请决策来源于一张需求预测单。",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_prdec2mat",
-      "name": "采购申请决策建议采购物料",
-      "source_object_type_id": "supply_ontology_hand_pr_decision",
-      "target_object_type_id": "supply_ontology_hand_material",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "material_code",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "material_code",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "采购申请决策建议采购的物料。本期只写决策记录，不调用 ERP。",
-      "icon": "",
-      "color": "",
-      "branch": "main"
     }
   ],
-  "action_types": [
-    {
-      "id": "supply_ontology_hand_act_mon",
-      "name": "创建计划协同监控任务",
-      "action_type": "add",
-      "object_type_id": "supply_ontology_hand_mon_task",
-      "condition": {
-        "object_type_id": "supply_ontology_hand_mon_task",
-        "field": "task_id",
-        "operation": "==",
-        "value": ""
-      },
-      "affect": {
-        "object_type_id": "supply_ontology_hand_mon_task",
-        "object_type": {
-          "id": "supply_ontology_hand_mon_task",
-          "name": "监控任务",
-          "branch": "main",
-          "icon": "",
-          "color": ""
-        }
-      },
-      "action_source": {
-        "type": "tool",
-        "box_id": "",
-        "tool_id": ""
-      },
-      "parameters": [
-        {
-          "name": "Authorization",
-          "type": "string",
-          "source": "Header",
-          "operation": "",
-          "value_from": "const",
-          "value": ""
-        },
-        {
-          "name": "created_at",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "created_by",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "demand_end",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "demand_quantity",
-          "type": "number",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "demand_start",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "description_entries",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "ended_at",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "product_code",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "product_name",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "production_end",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "production_quantity",
-          "type": "number",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "production_start",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "task_id",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "task_name",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "task_status",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "updated_at",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        }
-      ],
-      "schedule": {
-        "type": "",
-        "expression": ""
-      },
-      "tags": [],
-      "comment": "用户或者智能体发起计划协同的监控任务。",
-      "icon": "",
-      "color": "#52C41A",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_act_po",
-      "name": "发起PO",
-      "action_type": "add",
-      "object_type_id": "supply_ontology_hand_mrp",
-      "condition": {
-        "object_type_id": "supply_ontology_hand_mrp",
-        "field": "materialplanid_number",
-        "operation": "=="
-      },
-      "affect": {
-        "object_type_id": "supply_ontology_hand_po",
-        "object_type": {
-          "id": "supply_ontology_hand_po",
-          "name": "采购订单",
-          "branch": "main",
-          "icon": "",
-          "color": ""
-        },
-        "comment": "基于物料需求计划发起一个物料采购订单申请，从而产生一个物料采购订单。"
-      },
-      "action_source": {
-        "type": "tool",
-        "box_id": "",
-        "tool_id": ""
-      },
-      "parameters": [
-        {
-          "name": "origin",
-          "type": "string",
-          "source": "Header",
-          "operation": "",
-          "value_from": "const",
-          "value": "supply_chain_brain"
-        },
-        {
-          "name": "timestamp",
-          "type": "integer",
-          "source": "Header",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "sign",
-          "type": "string",
-          "source": "Header",
-          "operation": "",
-          "value_from": "const",
-          "value": "8685546a07e7fbb7761418534aaa9627"
-        },
-        {
-          "name": "nonce",
-          "type": "string",
-          "source": "Header",
-          "operation": "",
-          "value_from": "const",
-          "value": "supplyCB"
-        },
-        {
-          "name": "billentry",
-          "type": "array",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "bizuser_number",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "huid_cglx",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "org_number",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        }
-      ],
-      "schedule": {
-        "type": "",
-        "expression": ""
-      },
-      "tags": [],
-      "comment": "根据计划倒排，物料交期周期，在交期周期前2天要完成PO，以便供应商将物料在交期范围准时到货。",
-      "icon": "",
-      "color": "#0e5fc5",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_act_mon_close",
-      "name": "Close Monitoring Task",
-      "action_type": "modify",
-      "object_type_id": "supply_ontology_hand_mon_task",
-      "impact_contracts": [
-        {
-          "object_type_id": "supply_ontology_hand_mon_task",
-          "expected_operation": "modify",
-          "description": "Set task_status to closed without deleting history."
-        }
-      ],
-      "action_source": {
-        "type": "tool",
-        "box_id": "",
-        "tool_id": ""
-      },
-      "parameters": [
-        {
-          "name": "proposal",
-          "type": "object",
-          "source": "Body",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "approval_token",
-          "type": "string",
-          "source": "Body",
-          "value_from": "input",
-          "value": null
-        }
-      ],
-      "schedule": {
-        "type": "",
-        "expression": ""
-      },
-      "tags": [
-        "requires_confirmation",
-        "monitoring"
-      ],
-      "comment": "Close a monitoring task after explicit human approval.",
-      "icon": "",
-      "color": "#52C41A",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_hand_act_replen_draft",
-      "name": "生成补货草稿",
-      "action_type": "add",
-      "object_type_id": "supply_ontology_hand_product",
-      "action_source": {
-        "type": "tool",
-        "box_id": "",
-        "tool_id": ""
-      },
-      "parameters": [
-        {
-          "name": "coverage",
-          "type": "object",
-          "source": "Body",
-          "value_from": "input"
-        }
-      ],
-      "schedule": {
-        "type": "",
-        "expression": ""
-      },
-      "tags": [
-        "draft_only",
-        "no_business_write"
-      ],
-      "comment": "Return a proposal from supplied coverage. Structure validation only, no fact re-query, persistence, purchase order, business write or scheduling.",
-      "branch": "main"
-    }
-  ]
+  "action_types": []
 }

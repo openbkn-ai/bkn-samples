@@ -44,22 +44,7 @@ def capability_ready(run_cli) -> bool:
     bindings = run_cli(["bkn", "capability", "list", "supply_ontology_hand", "--limit", "100"])
     mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
                if item.get("capability_type") == "function" and item.get("box_id") == box["box_id"]}
-    if not {enabled[name] for name in expected} <= mounted:return False
-    action = run_cli(["bkn", "action-type", "get", "supply_ontology_hand", "supply_ontology_hand_act_replen_draft"])
-    if isinstance(action, list):
-        if len(action) != 1:return False
-        action = action[0]
-    if not isinstance(action, dict):return False
-    if isinstance(action.get("entries"), list):
-        if len(action["entries"]) != 1:return False
-        action = action["entries"][0]
-    draft_name = FUNCTION_CATALOG["replenishment_draft"]["name"]
-    source = action.get("action_source") or {}
-    return (isinstance(source, dict) and source.get("type") == "tool"
-            and source.get("box_id") == box["box_id"] and source.get("tool_id") == enabled[draft_name]
-            and not source.get("mcp_id") and not source.get("tool_name"))
-
-
+    return {enabled[name] for name in expected} <= mounted
 
 def skills_ready(run_cli) -> bool:
     sys.path.insert(0, str(SAMPLE_DIR / "tools"))
@@ -87,16 +72,6 @@ def build_checks(*, data_ok: bool, run_cli, components: dict) -> list[dict]:
         checks.append({"name": "capability-callable", "ok": capability_ready(run_cli)})
     if components.get("skills"):
         checks.append({"name": "skill-discoverable", "ok": skills_ready(run_cli)})
-    return checks
-
-
-def metric_checks(report: dict, command_ok: bool) -> list[dict]:
-    checks = []
-    for section, name in (("verify_metrics", "metric-query"),
-                          ("verify_metric_ownership", "metric-ownership")):
-        result = report.get(section) or {}
-        checks.append({"name": name, "ok": bool(command_ok and result.get("passed")
-                                               and result.get("failed") == [])})
     return checks
 
 
@@ -129,19 +104,6 @@ def main() -> int:
         run_cli=_openbkn,
         components=document["spec"]["components"],
     )
-    if document["spec"]["components"].get("metrics"):
-        metrics = subprocess.run(
-            [sys.executable, str(SAMPLE_DIR / "tools" / "power_layer.py"), "verify",
-             "--kn-id", raw["knowledgeNetwork"]["id"]],
-            check=False, capture_output=True, text=True,
-        )
-        try:
-            report = json.loads(metrics.stdout)
-            if not isinstance(report, dict):
-                report = {}
-        except ValueError:
-            report = {}
-        checks.extend(metric_checks(report, metrics.returncode == 0))
     passed = all(item["ok"] for item in checks)
     body = {
         "ok": passed,

@@ -1,125 +1,58 @@
-"""Contracts for run_code-managed supply calculation execution."""
+"""The native Functions read only the facts a question needs and run the planning calculation."""
 
 import pytest
 
-from fn.contracts import OPERATION_CONTRACTS
-from support_bkn_rows import bkn_rows
+from managed_execution import execute_from_bkn_rows, load_bkn_rows
+from fn import CannotCompute
+from support_bkn_rows import FakeObjectQuery
 
 
-def test_every_operation_has_a_bkn_managed_query_plan():
-    from managed_execution import managed_query_plan
-
-    for operation, datasets in OPERATION_CONTRACTS.items():
-        plan = managed_query_plan(operation)
-
-        assert plan.operation == operation
-        assert set(plan.datasets) == set(datasets)
-        assert {item.dataset for item in plan.requirements} == set(datasets)
-        assert all(item.object_type_id.startswith("supply_ontology_hand_") for item in plan.requirements)
+def run(operation, params):
+    query = FakeObjectQuery()
+    rows = load_bkn_rows(operation, query, params)
+    return query, rows, execute_from_bkn_rows(operation, rows, params)
 
 
-def test_managed_query_plan_has_no_caller_owned_context_payload():
-    from managed_execution import managed_query_plan
-
-    plan = managed_query_plan("backward_plan")
-
-    assert not hasattr(plan, "resolved_context")
-    assert not hasattr(plan, "snapshot_id")
-    assert plan.execution_host == "native_function_sandbox"
+def object_types(query):
+    return {call["ot_id"].removeprefix("supply_ontology_hand_") for call in query.calls}
 
 
-def test_backward_plan_plan_declares_its_complete_bkn_fact_set():
-    from managed_execution import managed_query_plan
-
-    plan = managed_query_plan("backward_plan")
-
-    assert [item.dataset for item in plan.requirements] == [
-        "forecast",
-        "bom",
-        "material",
-        "inventory",
-        "purchase_order",
-        "purchase_request",
-        "mrp",
-    ]
+def test_capacity_reads_bom_stock_and_backlog_but_no_purchase_orders():
+    query, rows, result = run("build_capacity", {"product": "526-000006"})
+    assert object_types(query) == {"bom", "inventory", "salesorder"}
+    assert all(r["stock_status"] == "可用" for r in rows["inventory"])
+    assert result["available_to_promise"] == 8
 
 
-def test_managed_execution_runs_backward_plan_from_internal_bkn_rows():
-    from managed_execution import execute_from_bkn_rows
-
-    result = execute_from_bkn_rows(
-        "backward_plan",
-        bkn_rows(),
-        {
-            "product": "U00-000080",
-            "forecast_id": "0000023181",
-            "demand_end": "2026-05-31",
-            "demand_qty": 3000,
-            "substitute_enabled": False,
-        },
-    )
-
-    assert result["business_date"] == "2026-08-25"
-    assert result["max_delay_days"] == 111
+def test_purchase_orders_are_read_only_when_in_transit_is_asked_for():
+    query, rows, result = run("build_capacity", {"product": "U00-000080", "chase_overdue_po": True})
+    assert "po" in object_types(query)
+    assert result["buildable_qty"] == 2972
 
 
-def test_forecast_mode_needs_no_agent_copied_product_quantity_or_due_date():
-    from managed_execution import execute_from_bkn_rows
-
-    result = execute_from_bkn_rows(
-        "backward_plan",
-        bkn_rows(),
-        {"forecast_id": "0000023181", "substitute_enabled": False},
-    )
-
-    assert result["product_code"] == "U00-000080"
-    assert result["demand_qty"] == 3000
-    assert result["demand_end"] == "2026-05-31"
+def test_coverage_reads_sales_orders_only_to_reserve_backlog():
+    query, _, result = run("demand_coverage", {"demands": [{"product": "367-000097", "qty": 13}]})
+    assert object_types(query) == {"bom", "inventory"}
+    assert result["demands"][0]["manufacture_qty"] == 4
+    query, _, _ = run("demand_coverage", {"demands": [{"product": "P61-000351", "qty": 60}], "reserve_signed_backlog": True})
+    assert "salesorder" in object_types(query)
 
 
-def test_managed_execution_runs_bom_list_from_internal_bkn_rows():
-    from managed_execution import execute_from_bkn_rows
-
-    result = execute_from_bkn_rows(
-        "bom_list",
-        bkn_rows(),
-        {"product": "382-000005", "depth": 1, "include_substitute": False},
-    )
-
-    assert result["product_code"] == "382-000005"
-    assert result["l1_main_count"] == 9
+def test_warehouse_scope_is_filtered_on_the_server():
+    query, _, result = run("build_capacity", {"product": "382-000005", "warehouse_scope": "production_available"})
+    inventory = next(c for c in query.calls if c["ot_id"].endswith("_inventory"))
+    assert any(item.get("field") == "warehouse" for item in inventory["condition"]["sub_conditions"])
+    assert result["buildable_qty"] == 34
 
 
-def test_shared_contention_rejects_string_demands_before_querying_bkn():
-    from managed_execution import load_bkn_rows
-
-    def must_not_query(**_kwargs):
-        raise AssertionError("invalid demands must not trigger a BKN query")
-
-    with pytest.raises(ValueError, match="demands"):
-        load_bkn_rows(
-            "shared_contention",
-            must_not_query,
-            {
-                "demands": ["382-000005:50", "P61-000351:60"],
-                "substitute_enabled": False,
-            },
-        )
-
-
-def test_backward_plan_rejects_missing_product_before_querying_bkn():
-    from managed_execution import load_bkn_rows
-
-    def must_not_query(**_kwargs):
-        raise AssertionError("invalid backward plan must not trigger a BKN query")
-
-    with pytest.raises(ValueError, match="product"):
-        load_bkn_rows(
-            "backward_plan",
-            must_not_query,
-            {
-                "demand_qty": 3000,
-                "demand_end": "2026-05-31",
-                "substitute_enabled": False,
-            },
-        )
+@pytest.mark.parametrize("operation, params", [
+    ("build_capacity", {}),
+    ("demand_coverage", {"demands": []}),
+    ("demand_coverage", {"demands": [{"product": "382-000005"}]}),
+    ("bom_list", {"product": "382-000005"}),
+])
+def test_incomplete_requests_are_refused_before_reading(operation, params):
+    query = FakeObjectQuery()
+    with pytest.raises(CannotCompute):
+        load_bkn_rows(operation, query, params)
+    assert query.calls == []
