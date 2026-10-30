@@ -12,13 +12,9 @@ import yaml
 
 
 def verify_bkn_eval(root: Path) -> dict[str, Any]:
-    datasets = root / "bkn-eval" / "datasets"
-    questions = yaml.safe_load(
-        (datasets / "sample-question-set-v1.yaml").read_text(encoding="utf-8")
-    )
-    answers = yaml.safe_load(
-        (datasets / "sample-answer-set-v1.yaml").read_text(encoding="utf-8")
-    )
+    baseline = root / "bkn-eval" / "baselines" / "2026-10-30-business-scenarios-v4"
+    questions = yaml.safe_load((baseline / "question-set-v4.yaml").read_text(encoding="utf-8"))
+    answers = yaml.safe_load((baseline / "answer-set-v4.yaml").read_text(encoding="utf-8"))
     question_ids = {item["id"] for item in questions["questions"]}
     answer_ids = {item["id"] for item in answers["answers"]}
     return {
@@ -34,11 +30,10 @@ def verify(pack: str | Path, *, run_tests: bool = True) -> dict[str, Any]:
         root / "README.md",
         root / "docs/openbkn-hand-import-guide_cn.md",
         root / "docs/faq.md",
-        root / "bkn-eval/体验评测指南.md",
+        root / "docs/PRD.zh-CN.md",
         root / "tools/register_native_function_toolbox.py",
         root / "tools/register_skills.py",
         root / "tools/fn",
-        root / "tools/assets/metrics-create.json",
     ]
     documentation_passed = all(path.exists() for path in required)
     test_process = None

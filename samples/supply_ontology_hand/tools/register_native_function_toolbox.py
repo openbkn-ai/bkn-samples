@@ -19,7 +19,6 @@ from native_function_bundle import build_native_function_code
 
 
 API = "/api/agent-operator-integration/v1"
-LEGACY_TOOL_NAME = "supply_chain_compute"
 
 
 def _input(name: str, type_: str, description: str, *, required: bool = False) -> dict[str, Any]:
@@ -28,39 +27,26 @@ def _input(name: str, type_: str, description: str, *, required: bool = False) -
 
 def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     product = _input("product", "string", "产品编码。", required=True)
-    substitute = _input("substitute_enabled", "boolean", "是否启用替代料；需要替代判断时必须明确。")
-    substitute_required = _input("substitute_enabled", "boolean", "是否启用替代料；必须明确传 true 或 false。", required=True)
-    scope = _input("warehouse_scope", "string", "仓范围预设或明确仓库列表。")
-    assurance = [product, _input("qty", "number", "Positive integer demand quantity.", required=True),
-                 _input("demand_purpose", "string", "customer_delivery or new_production; required and never inferred.", required=True), _input("warehouse_scope", "string", "all (default), production_available or finished_goods.")]
-    demands = _input("demands", "array", '至少两条对象需求，格式 [{"product":"382-000005","qty":50},{"product":"P61-000351","qty":60}]；数组顺序即扣减优先级。', required=True)
+    common = [
+        _input("substitute_enabled", "boolean", "是否允许替代料；默认 false，用户允许时才传 true。"),
+        _input("warehouse_scope", "string", "仓范围：all（默认，全公司）、finished_goods（三个成品仓）、production_available（苏州工厂生产七仓）。"),
+        _input("need_by", "string", "需求日期 YYYY-MM-DD；传入后计入业务日期至该日（含）按交期到货的在途。不传只用现有库存。"),
+        _input("chase_overdue_po", "boolean", "是否假设逾期在途都能催回来并计入；默认 false。"),
+        _input("business_date", "string", "业务日期；默认 2026-08-25。"),
+    ]
+    if operation == "build_capacity":
+        products = _input("products", "array", '产品编码列表，如 ["382-000005"]；多个产品各自独立计算，不共用库存。', required=True)
+        products["sub_parameters"] = [{"name": "items", "type": "string", "required": True, "description": "产品编码。"}]
+        return [products, *common]
+    demands = _input("demands", "array", '需求列表，格式 [{"product":"382-000005","qty":50}]；数组顺序即扣减先后。', required=True)
     demands["sub_parameters"] = [{
         "name": "items", "type": "object", "required": True,
-        "description": '一条需求，按数组顺序确定分配优先级。',
-        "sub_parameters": [product, _input("qty", "number", '需求产品套数。', required=True)],
+        "description": "一条需求。",
+        "sub_parameters": [product, _input("qty", "number", "需求套数。", required=True)],
     }]
-    cases = {
-        "shortage_rule": [_input("event_source", "object", "Resolved event object/relation IDs, demand/shortage event types and verified/processing/closed lifecycle codes (sample adapter v1).", required=True),
-                          _input("window_start", "string", "Inclusive RFC3339 boundary with explicit timezone; fixed across retries.", required=True),
-                          _input("window_end", "string", "Exclusive RFC3339 boundary with explicit timezone; fixed across retries.", required=True)],
-        "material_coverage": assurance,
-        "replenishment_draft": [_input("coverage", "object", "Complete material_coverage result; structure is checked but facts are not requeried. Draft only, no persistence or business writes.", required=True)],
-        "bom_list": [product, _input("depth", "number", "展开层数；不传为一层。"), _input("include_substitute", "boolean", "是否包含替代料行。"), _input("report_grain", "string", "结果粒度；默认 summary 返回结构统计和一级主料，传 full 才返回明细。"), _input("page_size", "number", "full 明细的单页行数，1 到 500。"), _input("offset", "number", "full 明细的起始偏移量，默认 0。")],
-        "bom_shared_list": [_input("products", "array", "至少两个产品编码。", required=True), _input("depth", "number", "展开层数；不传为全层。"), _input("include_substitute", "boolean", "是否包含替代料行。")],
-        "material_where_used": [_input("material_code", "string", "物料编码。", required=True), _input("include_substitute", "boolean", "是否将替代料分支计入受影响产品；默认 true。"), _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回命中 BOM 路径。")],
-        "layered_inventory": [product, _input("depth", "number", "展开层数；不传为一层。"), scope, _input("include_substitute", "boolean", "是否包含替代料行。")],
-        "substitute_status": [_input("product", "string", "产品编码；与物料编码二选一。"), _input("material_code", "string", "物料编码；与产品编码二选一。"), scope, substitute],
-        "theoretical_build": [product, scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料约束。")],
-        "total_sellable": [product, _input("production_scope", "string", "生产仓范围。"), _input("finished_goods_scope", "string", "成品仓范围。"), substitute],
-        "kitting_net_demand": [product, _input("qty", "number", "需求套数。", required=True), scope, substitute, _input("report_grain", "string", "summary 已包含完整 gaps、净缺料与建议补货数量；full 另外返回全部逐层 lines，不必为缺料数量重复执行。")],
-        "shared_contention": [demands, scope, substitute_required, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回逐料分配和完整剩余池。")],
-        "max_build_without_po": [product, scope, substitute, _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回全部物料约束。")],
-        "leadtime_days": [_input("material_code", "string", "物料编码。", required=True)],
-        "supply_status": [_input("material_code", "string", "物料编码。", required=True), _input("due_date", "string", "到位日或交货日。"), _input("gross_requirement", "number", "毛需求数量。"), scope, _input("child_short", "boolean", "是否已有子件短缺。")],
-        "open_forecast_count": [_input("product_code", "string", "可选产品编码；不传统计全部未关闭预测单。"), _input("report_grain", "string", "结果粒度；默认 summary，传 full 返回预测单 ID 列表。")],
-        "backward_plan": [_input("product", "string", "新增需求的产品编码；预测单模式可不传。"), _input("forecast_id", "string", "已有预测单 id；允许前导零，例如 0000023181。传入后函数自动读取产品、数量和截止日。"), _input("demand_end", "string", "新增需求的交付截止日 YYYY-MM-DD；预测单模式可不传。"), _input("demand_qty", "number", "新增需求数量；预测单模式可不传。"), _input("business_date", "string", "业务基准日；不传使用样例默认 2026-08-25。"), scope, substitute_required, _input("report_grain", "string", "报告粒度，默认 summary。")],
-    }
-    return cases[operation]
+    return [demands, *common,
+            _input("reserve_signed_backlog", "boolean", "是否先按承诺交期扣掉这些产品的已签约欠货；评估新单且要先保欠货时传 true，评估欠单本身时不传。"),
+            _input("use_finished_goods", "boolean", "是否先用成品库存；默认 true，排生产工单时传 false。")]
 
 
 def _call(args: list[str]) -> Any:
@@ -89,7 +75,7 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
                 "name": "result",
                 "type": "object",
                 "required": True,
-                "description": ("Draft from supplied coverage: structure checked, not requeried or persisted." if operation == "replenishment_draft" else "计算结果、业务依据和函数自行读取的数据来源。"),
+                "description": "计算结果、业务依据和函数自行读取的数据量。",
             }
         ],
         }
@@ -174,15 +160,15 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
         tool_ids[operation] = tool_id
     if box.get("status") != "published":
         _call(["toolbox", "publish", box_id])
-    legacy = _find_tool(box_id, LEGACY_TOOL_NAME)
-    if legacy and legacy.get("status") != "disabled":
-        _call(["tool", "disable", "--toolbox", box_id, legacy["tool_id"]])
+    current = {item["name"] for item in tool_inputs.values()}
+    retired = [item for item in _call(["tool", "list", "--toolbox", box_id, "--all"]).get("tools", [])
+               if item.get("name") not in current and item.get("status") != "disabled"]
+    for item in retired:
+        _call(["tool", "disable", "--toolbox", box_id, item["tool_id"]])
     if kn_id:
-        from bind_draft_action import bind_draft_action
-        bind_draft_action(_call, kn_id, box_id, tool_ids["replenishment_draft"])
         _call(["bkn", "capability", "attach", kn_id, "--box", box_id,
                "--tool", ",".join(tool_ids.values())])
-    return {**preview, "box_id": box_id, "tool_ids": tool_ids, "legacy_tool_disabled": bool(legacy)}
+    return {**preview, "box_id": box_id, "tool_ids": tool_ids, "retired_tools": [item["name"] for item in retired]}
 
 
 def main() -> int:

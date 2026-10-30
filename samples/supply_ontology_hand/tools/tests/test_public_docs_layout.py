@@ -12,10 +12,8 @@ def test_public_docs_have_one_short_entry_path():
     }
 
     assert public_markdown == {
-        "shortage-rule.md",
-        "material-assurance.md",
+        "PRD.zh-CN.md",
         "faq.md",
-            "function-review-followup-2026-10-12.zh-CN.md",
         "openbkn-hand-import-guide_cn.md",
     }
     assert not (DOCS / "payloads").exists()

@@ -59,9 +59,7 @@ jobs:
           python -m pip install "pytest>=8,<10" -r samples/supply_ontology_hand/tools/requirements.txt
           PYTHONPATH=samples/supply_ontology_hand/tools python -m pytest samples/supply_ontology_hand/tools/tests -q
           PYTHONPATH=samples/supply_ontology_en/tools python -m pytest samples/supply_ontology_en/tools/tests -q
-          python tools/acceptance/material_assurance.py --language zh-CN --output /tmp/material-assurance-zh.json
           python tools/acceptance/material_assurance.py --language en-US --output /tmp/material-assurance-en.json
-          python tools/acceptance/shortage_rule.py --language zh-CN --output /tmp/shortage-rule-zh.json
           python tools/acceptance/shortage_rule.py --language en-US --output /tmp/shortage-rule-en.json
       - name: Validate bilingual FIBO financial semantics and frozen answers
         run: |

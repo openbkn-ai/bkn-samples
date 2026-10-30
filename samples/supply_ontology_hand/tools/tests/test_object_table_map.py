@@ -16,7 +16,6 @@ REQUIRED_OT = {
     "supply_ontology_hand_po",
     "supply_ontology_hand_mps",
     "supply_ontology_hand_salesorder",
-    "supply_ontology_hand_mon_task",
 }
 
 

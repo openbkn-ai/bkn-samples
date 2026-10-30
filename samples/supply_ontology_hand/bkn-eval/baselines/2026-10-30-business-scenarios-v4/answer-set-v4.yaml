@@ -1,0 +1,451 @@
+schema_version: '4.0'
+set_id: supply-business-scenarios-v4
+business_date: '2026-08-25'
+source_snapshot_date: '2026-08-13'
+prd: docs/PRD.zh-CN.md
+generation_method: independent raw CSV Decimal oracle (oracle.py)
+answers:
+- id: Q-01
+  question: 我们现在在售（已上架）的成品型号有几个？分在几条产品线？
+  expected:
+    on_sale_models: 28
+    product_lines: 7
+  answer: '{"on_sale_models": 28, "product_lines": 7}'
+- id: Q-02
+  question: 外购件 606-000989 的标准采购提前期是几天？
+  expected:
+    purchase_lead_days: 14
+  answer: '{"purchase_lead_days": 14}'
+- id: Q-03
+  question: 车载终端 U00-000080 总装时直接投入的一级物料有几种？列出物料编码。
+  expected:
+    count: 5
+    material_codes:
+    - 606-000216
+    - 606-000217
+    - 606-000218
+    - 815-000002
+    - 849-000655
+  answer: '{"count": 5, "material_codes": ["606-000216", "606-000217", "606-000218", "815-000002", "849-000655"]}'
+- id: Q-04
+  question: 382-000005 北斗导航农机驾驶仪在三个成品仓里还有多少可用库存？
+  expected:
+    qty: 534
+  answer: '{"qty": 534}'
+- id: Q-05
+  question: 现在还有多少张销售订单没发完货？一共还欠客户多少套？
+  expected:
+    orders: 192
+    unshipped_qty: 470
+  answer: '{"orders": 192, "unshipped_qty": 470}'
+- id: Q-06
+  question: 手上还挂着多少张没关闭的需求预测？合计多少套？
+  expected:
+    count: 90
+    qty: 56340
+  answer: '{"count": 90, "qty": 56340}'
+- id: Q-07
+  question: 现在还有多少条采购订单行没收完货？已关闭、已终止的不算。
+  expected:
+    lines: 517
+  answer: '{"lines": 517}'
+- id: Q-08
+  question: MRP 算出来但还没投放的计划订单有多少张？
+  expected:
+    count: 262
+  answer: '{"count": 262}'
+- id: Q-09
+  question: 欠货的订单里有多少张已经过了承诺交期？拖得最久的是哪张单，拖了多少天？
+  expected:
+    overdue_orders: 192
+    oldest_order: SO0000538
+    days_late: 162
+  answer: '{"overdue_orders": 192, "oldest_order": "SO0000538", "days_late": 162}'
+- id: Q-10
+  question: 武汉农兴农业科技有限公司还有哪些订单没发完？一共欠他们多少套？
+  expected:
+    orders:
+    - SO0000064
+    - SO0000124
+    - SO0000184
+    - SO0000484
+    - SO0000544
+    - SO0000604
+    - SO0000784
+    unshipped_qty: 20
+  answer: '{"orders": ["SO0000064", "SO0000124", "SO0000184", "SO0000484", "SO0000544", "SO0000604", "SO0000784"], "unshipped_qty": 20}'
+- id: Q-11
+  question: 已经过了交期还没到齐的采购行有多少？涉及多少家供应商？
+  expected:
+    lines: 483
+    suppliers: 133
+  answer: '{"lines": 483, "suppliers": 133}'
+- id: Q-12
+  question: 逾期没到货的采购行最多的是哪家供应商？共多少行、还欠我们多少数量？
+  expected:
+    supplier: 俅门信和达电子有限公司
+    lines: 50
+    open_qty: 2844000
+  answer: '{"supplier": "俅门信和达电子有限公司", "lines": 50, "open_qty": 2844000}'
+- id: Q-13
+  question: 杨强云负责的供应商里，有几家现在有逾期未到的采购行？
+  expected:
+    suppliers: 51
+    with_overdue: 25
+  answer: '{"suppliers": 51, "with_overdue": 25}'
+- id: Q-14
+  question: 密封圈 165-002537 用在哪些成品上？
+  expected:
+    product_codes:
+    - 367-000061
+    - 367-000097
+    - 367-000102
+    - 367-000130
+    - 367-000131
+  answer: '{"product_codes": ["367-000061", "367-000097", "367-000102", "367-000130", "367-000131"]}'
+- id: Q-15
+  question: 两款 YN580 农业无人飞机（367-000130、367-000131）有多少种主料是通用的？
+  expected:
+    shared_count: 1017
+  answer: '{"shared_count": 1017}'
+- id: Q-16
+  question: 有哪些库存被判为不良、不能投产？合计多少数量？
+  expected:
+    material_codes:
+    - 165-001319
+    - 165-001321
+    - 165-001528
+    - 165-001894
+    - 165-002251
+    - 849-000744
+    qty: 407
+  answer: '{"material_codes": ["165-001319", "165-001321", "165-001528", "165-001894", "165-002251", "849-000744"], "qty": 407}'
+- id: Q-17
+  question: 还没完工的生产工单有多少张？合计还有多少套没入库？
+  expected:
+    work_orders: 23
+    remaining_qty: 6336
+  answer: '{"work_orders": 23, "remaining_qty": 6336}'
+- id: Q-18
+  question: 没关闭的预测里，哪个产品的预测量最大？是它现有成品库存的多少倍？
+  expected:
+    product_code: U00-000080
+    forecast_qty: 20000
+    fg_qty: 61
+    ratio: 327.9
+  answer: '{"product_code": "U00-000080", "forecast_qty": 20000, "fg_qty": 61, "ratio": 327.9}'
+- id: Q-19
+  question: 接下来 30 天内按交期应到货的采购行有几行？来自几家供应商？
+  expected:
+    lines: 31
+    suppliers: 23
+  answer: '{"lines": 31, "suppliers": 23}'
+- id: Q-20
+  question: 贴片无源晶振 527-000017 今天下单的话，最早哪天能到？
+  expected:
+    arrival_date: '2026-11-03'
+  answer: '{"arrival_date": "2026-11-03"}'
+- id: Q-21
+  question: 客户要 50 套 382-000005，能直接用现有成品发吗？发完以后还能再承诺多少套现货？
+  expected:
+    can_ship: true
+    remaining_promisable_fg: 751
+  answer: '{"can_ship": true, "remaining_promisable_fg": 751}'
+- id: Q-22
+  question: 只用苏州工厂生产七仓的料，最多能做多少套 382-000005？比用全公司库存少做多少？
+  expected:
+    plant_buildable: 34
+    company_buildable: 51
+    difference: 17
+  answer: '{"plant_buildable": 34, "company_buildable": 51, "difference": 17}'
+- id: Q-23
+  question: 哪些产品的欠货已经超过了成品现货？各差多少套？
+  expected:
+    products:
+      367-000097: 4
+      367-000102: 9
+      367-000130: 21
+      367-000131: 15
+      526-000006: 3
+      590-000100: 18
+      734-000001: 1
+      P61-000351: 12
+  answer: '{"products": {"367-000097": 4, "367-000102": 9, "367-000130": 21, "367-000131": 15, "526-000006": 3, "590-000100": 18, "734-000001": 1, "P61-000351": 12}}'
+- id: Q-24
+  question: 现货补完欠货后还不够的产品里，哪些靠现有库存也生产不出来？还差多少套？
+  expected:
+    products:
+      367-000097: 4
+      367-000102: 9
+      367-000130: 21
+      367-000131: 15
+      734-000001: 1
+  answer: '{"products": {"367-000097": 4, "367-000102": 9, "367-000130": 21, "367-000131": 15, "734-000001": 1}}'
+- id: Q-25
+  question: 625 农业无人飞机 367-000097 的欠单还差几套补不上？卡在哪些料？哪些可以催在途，哪些得新下单、最早哪天到？
+  expected:
+    short_sets: 4
+    blocking_materials:
+      165-002619: 4
+      606-000691: 4
+      606-000692: 4
+    chase_open_po:
+    - 606-000692
+    new_order_needed:
+    - 165-002619
+    - 606-000691
+    earliest_new_order_arrival: '2026-09-08'
+  answer: '{"short_sets": 4, "blocking_materials": {"165-002619": 4, "606-000691": 4, "606-000692": 4}, "chase_open_po": ["606-000692"], "new_order_needed": ["165-002619", "606-000691"], "earliest_new_order_arrival":
+    "2026-09-08"}'
+- id: Q-26
+  question: 要补齐 YN580 农业无人飞机 367-000130 的欠单，哪些缺料完全没有在途、必须马上下单？其中最慢的是哪颗料、最早哪天到？
+  expected:
+    no_open_po:
+    - 165-002076
+    - 165-003483
+    - 165-003484
+    - 165-003486
+    - 501-000002
+    - 527-000017
+    - 606-001069
+    - 606-001070
+    - 795-000761
+    - 795-000776
+    slowest_material: 527-000017
+    arrival_date: '2026-11-03'
+  answer: '{"no_open_po": ["165-002076", "165-003483", "165-003484", "165-003486", "501-000002", "527-000017", "606-001069", "606-001070", "795-000761", "795-000776"], "slowest_material": "527-000017",
+    "arrival_date": "2026-11-03"}'
+- id: Q-27
+  question: 526-000006 的欠单按承诺交期先后用现货补发，哪几张单补不上？差的部分能不能用现有库存生产出来？
+  expected:
+    unmet_orders:
+    - SO0000592
+    - SO0000096
+    remaining_qty: 3
+    can_build: true
+  answer: '{"unmet_orders": ["SO0000592", "SO0000096"], "remaining_qty": 3, "can_build": true}'
+- id: Q-28
+  question: 客户想再订 30 套 526-000006，现在最多能接多少套？
+  expected:
+    accept_qty: 8
+    fg_qty: 30
+    buildable_qty: 11
+    backlog_qty: 33
+    available_to_promise: 8
+  answer: '{"accept_qty": 8, "fg_qty": 30, "buildable_qty": 11, "backlog_qty": 33, "available_to_promise": 8}'
+- id: Q-29
+  question: 客户要 900 套 382-000005，现货加上用现有库存生产能满足吗？如果允许用替代料呢？
+  expected:
+    without_substitutes:
+      can_accept: false
+      promisable: 852
+    with_substitutes:
+      can_accept: true
+      promisable: 1145
+  answer: '{"without_substitutes": {"can_accept": false, "promisable": 852}, "with_substitutes": {"can_accept": true, "promisable": 1145}}'
+- id: Q-30
+  question: P61-000351 没关闭的预测有多少套？先保已签单的欠货，现有库存还能支撑多少套预测？缺口多少？
+  expected:
+    forecast_qty: 600
+    backlog_qty: 12
+    supported_qty: 7
+    gap_qty: 593
+  answer: '{"forecast_qty": 600, "backlog_qty": 12, "supported_qty": 7, "gap_qty": 593}'
+- id: Q-31
+  question: 两个新单一起来：P61-000351 要 60 套、U00-000151 要 50 套。先保这两个产品的欠货，现有库存能同时接下吗？缺什么料、各缺多少？
+  expected:
+    P61_000351:
+      covered: false
+      shortages:
+        606-000069: 53
+        606-000071: 42
+        994-000645: 32
+    U00_000151:
+      covered: true
+      shortages: {}
+  answer: '{"P61_000351": {"covered": false, "shortages": {"606-000069": 53, "606-000071": 42, "994-000645": 32}}, "U00_000151": {"covered": true, "shortages": {}}}'
+- id: Q-32
+  question: 贴片无源晶振 527-000017 用在哪些成品上？这些成品里，哪些的欠货光靠现货补不齐、必须生产，会被这颗料直接影响？各要生产多少套？
+  expected:
+    product_codes:
+    - 367-000061
+    - 367-000097
+    - 367-000102
+    - 367-000130
+    - 367-000131
+    - 590-000064
+    - 590-000072
+    - 590-000073
+    - 590-000074
+    - 590-000075
+    - 590-000100
+    must_build:
+      367-000097: 4
+      367-000102: 9
+      367-000130: 21
+      367-000131: 15
+      590-000100: 18
+  answer: '{"product_codes": ["367-000061", "367-000097", "367-000102", "367-000130", "367-000131", "590-000064", "590-000072", "590-000073", "590-000074", "590-000075", "590-000100"], "must_build": {"367-000097":
+    4, "367-000102": 9, "367-000130": 21, "367-000131": 15, "590-000100": 18}}'
+- id: Q-33
+  question: 382-000005 允许用替代料时最多还能做多少套？是哪颗料卡住的？这颗料有没有在途？
+  expected:
+    buildable_qty: 344
+    limiting_material: 606-000989
+    limiting_stock: 344
+    has_open_po: false
+  answer: '{"buildable_qty": 344, "limiting_material": "606-000989", "limiting_stock": 344, "has_open_po": false}'
+- id: Q-34
+  question: 下周想再排一张 100 套的 YN580 367-000131 生产工单，现有库存够不够？不够的话缺几种料、缺得最多的是哪颗？
+  expected:
+    covered: false
+    shortage_material_count: 16
+    largest_shortage: 606-001059
+  answer: '{"covered": false, "shortage_material_count": 16, "largest_shortage": "606-001059"}'
+- id: Q-35
+  question: 采购订单 02-KSHA-CGDD-260402-012958 里 849-000904 这一行是从哪张请购单来的？请购又是哪张 MRP 计划订单生成的？最终是为哪张需求预测、哪个产品备的料？
+  expected:
+    purchase_request: CGSQ-260331-000026
+    mrp_plan_order: JHJY-20260331-00045866
+    forecast: YCD2026020500000045
+    product_codes:
+    - P69-000060
+  answer: '{"purchase_request": "CGSQ-260331-000026", "mrp_plan_order": "JHJY-20260331-00045866", "forecast": "YCD2026020500000045", "product_codes": ["P69-000060"]}'
+- id: Q-36
+  question: 我们现在一共有多少家供应商建了档？
+  expected:
+    suppliers: 230
+  answer: '{"suppliers": 230}'
+- id: Q-37
+  question: 382-000005 到现在一共签了多少套、发了多少套、还欠多少套？
+  expected:
+    signed: 1081
+    shipped: 1066
+    unshipped: 15
+  answer: '{"signed": 1081, "shipped": 1066, "unshipped": 15}'
+- id: Q-38
+  question: 物料 321-000569 现在全公司还有多少可用库存？
+  expected:
+    qty: 40
+  answer: '{"qty": 40}'
+- id: Q-39
+  question: 现在还在执行中的销售订单有几张？
+  expected:
+    orders: 16
+  answer: '{"orders": 16}'
+- id: Q-40
+  question: 今天按交期应该到货的采购有哪些？是哪家供应商、什么料、还差多少没到？
+  expected:
+    lines:
+    - po: 01-HDKJ-CGDD-260729-016176
+      supplier: 昆山诚意智能科技有限公司
+      material_code: 606-001059
+      open_qty: 800
+  answer: '{"lines": [{"po": "01-HDKJ-CGDD-260729-016176", "supplier": "昆山诚意智能科技有限公司", "material_code": "606-001059", "open_qty": 800}]}'
+- id: Q-41
+  question: 9 月份按交期要到货的采购行有多少行？来自几家供应商？
+  expected:
+    lines: 28
+    suppliers: 20
+  answer: '{"lines": 28, "suppliers": 20}'
+- id: Q-42
+  question: 欠货最多的三个产品是哪几个？各欠多少套？
+  expected:
+    products:
+      526-000005: 41
+      590-000072: 39
+      526-000006: 33
+  answer: '{"products": {"526-000005": 41, "590-000072": 39, "526-000006": 33}}'
+- id: Q-43
+  question: 销售员路霞手上还有多少张单没发完？一共欠多少套？其中多少张已经逾期？
+  expected:
+    orders: 71
+    unshipped_qty: 181
+    overdue: 71
+  answer: '{"orders": 71, "unshipped_qty": 181, "overdue": 71}'
+- id: Q-44
+  question: 纸护角 606-001059 还有哪些采购没到？哪些已经逾期？
+  expected:
+    lines:
+    - po: 01-HDKJ-CGDD-260706-015729
+      supplier: 昆山诚意智能科技有限公司
+      open_qty: 8
+      deliver_date: '2026-07-06'
+      overdue: true
+    - po: 01-HDKJ-CGDD-260729-016176
+      supplier: 昆山诚意智能科技有限公司
+      open_qty: 800
+      deliver_date: '2026-08-25'
+      overdue: false
+  answer: '{"lines": [{"po": "01-HDKJ-CGDD-260706-015729", "supplier": "昆山诚意智能科技有限公司", "open_qty": 8, "deliver_date": "2026-07-06", "overdue": true}, {"po": "01-HDKJ-CGDD-260729-016176", "supplier": "昆山诚意智能科技有限公司",
+    "open_qty": 800, "deliver_date": "2026-08-25", "overdue": false}]}'
+- id: Q-45
+  question: 有未关闭预测的产品里，哪些现在一套成品库存都没有？
+  expected:
+    product_codes:
+    - 367-000102
+    - 367-000130
+    - 367-000131
+    - 734-000003
+    - P61-000351
+  answer: '{"product_codes": ["367-000102", "367-000130", "367-000131", "734-000003", "P61-000351"]}'
+- id: Q-46
+  question: U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果逾期没到的采购都能催回来，最多能做多少套？
+  expected:
+    stock_only_buildable: 141
+    first_blocking_materials:
+    - 994-000328
+    with_overdue_po_chased: 2972
+  answer: '{"stock_only_buildable": 141, "first_blocking_materials": ["994-000328"], "with_overdue_po_chased": 2972}'
+- id: Q-47
+  question: P61-000351 新来 60 套的单。先保它的欠货，如果所有没到的采购（包括逾期的）都能催回来，料够不够？还缺什么、缺多少？
+  expected:
+    covered: false
+    shortages:
+      994-000645: 32
+  answer: '{"covered": false, "shortages": {"994-000645": 32}}'
+- id: Q-48
+  question: D 类音频功放 972-000677，9 月 5 日前要投 500 个、9 月 15 日前累计要投 5000 个。库存加上按期到货的在途，两个时间点分别够不够？
+  expected:
+    by_2026_09_05:
+      available: 65
+      covered: false
+      short: 435
+    by_2026_09_15:
+      available: 12515
+      covered: true
+      short: 0
+  answer: '{"by_2026_09_05": {"available": 65, "covered": false, "short": 435}, "by_2026_09_15": {"available": 12515, "covered": true, "short": 0}}'
+- id: Q-49
+  question: 9 月底前按期到货的在途采购，能让欠货补不上的那几个产品各多做出几套？
+  expected:
+    extra_buildable:
+      367-000097: 0
+      367-000102: 0
+      367-000130: 0
+      367-000131: 0
+      734-000001: 0
+  answer: '{"extra_buildable": {"367-000097": 0, "367-000102": 0, "367-000130": 0, "367-000131": 0, "734-000001": 0}}'
+- id: Q-50
+  question: YN580 367-000130 欠单的缺料里，哪些有没到的采购可以催？把这些采购全催回来，够不够补上缺口？
+  expected:
+    materials:
+      165-002537:
+        shortage_qty: 80
+        open_po_qty: 560
+        enough: true
+      606-001059:
+        shortage_qty: 84
+        open_po_qty: 808
+        enough: true
+    still_short_after_chasing:
+    - 165-002076
+    - 165-003483
+    - 165-003484
+    - 165-003486
+    - 606-001069
+    - 606-001070
+    - 795-000761
+    - 795-000776
+  answer: '{"materials": {"165-002537": {"shortage_qty": 80, "open_po_qty": 560, "enough": true}, "606-001059": {"shortage_qty": 84, "open_po_qty": 808, "enough": true}}, "still_short_after_chasing": ["165-002076",
+    "165-003483", "165-003484", "165-003486", "606-001069", "606-001070", "795-000761", "795-000776"]}'

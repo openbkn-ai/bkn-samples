@@ -8,9 +8,6 @@ def test_register_skills_dry_run_discovers_the_local_business_skills():
 
     assert result["mode"] == "dry_run"
     assert [item["name"] for item in result["skills"]] == [
-        "demand-fulfillment-capacity-analysis",
-        "demand-fulfillment-requirement-coverage-analysis",
-        "demand-fulfillment-risk-summary",
-        "production-schedule-backward-planning",
-        "sales-signing-calendar-month-analysis",
+        "pmc-supply-planning",
+        "procurement-follow-up",
     ]
