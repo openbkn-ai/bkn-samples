@@ -29,7 +29,7 @@ description: >
 ## 什么时候调用函数
 
 - **产品可做数量与可承诺量**（`build_capacity`）：某产品现在最多还能做多少、可承诺多少、还能接多少新单、被哪颗料卡住；允许替代料、只用某几个仓、某日前在途到货、逾期在途催回后能多做多少。`products` 传产品编码列表，各产品独立计算；几个产品要一起看时一次传完，不要逐个调用。
-  - 哪些产品的欠货靠现货和生产都补不上：先用 Cypher 找出欠货超过成品库存的产品，再把这些产品一次传给本函数，`available_to_promise < 0` 的就是补不上的，差额是其绝对值。
+  - 哪些产品的欠货靠现货和生产都补不上：先用 Cypher 找出欠货超过成品库存的产品，再把这些产品一次传给本函数，`finished_goods_qty + buildable_qty < signed_backlog_qty` 的就是补不上的，差额是 `signed_backlog_qty − finished_goods_qty − buildable_qty`（`available_to_promise` 最小为 0，不能用来判断）。
   - 某日前在途能让这些产品多做多少：同一批产品再传 `need_by` 调一次，两次 `buildable_qty` 相减。
 - **需求齐套与缺料**（`demand_coverage`）：一张或几张需求够不够、缺哪些料、各缺多少。
   - 评估欠单本身：不传 `reserve_signed_backlog`。
