@@ -8,7 +8,7 @@
 ## 配置
 
 1. 人工审阅引入变更，将规则、脚本和工作流合入 main。自动入口使用 `pull_request_target`，首次引入 PR 不会采用 PR 内新增的审核工作流；没有 `sample-ai-review` 状态代表尚未完成 AI 审核。首次启用的人工审核与合并由维护者决定。工作流安装后再用新 PR 或 main 上的手动入口验证；若可信规则或脚本缺失，会明确报告未完成，不回退运行 PR 文件。
-2. 设置仓库 Actions Secret `DEEPSEEK_API_KEY`。不提交 key 文件，不使用 Claude OAuth token。模型与复核请求发往 DeepSeek；关闭 Action 的额外行内评论分类，避免该阶段使用 Anthropic 默认地址。
+2. 设置仓库 Actions Secret `CLAUDE_CODE_OAUTH_TOKEN`，不提交凭据文件。review 使用 Opus 5.5（effort high），verify 使用 Opus 5.5（effort xhigh），与 openbkn-ai 其他仓库一致；关闭 Action 的额外行内评论分类。工作流文件名、`deepseek-sample-state` 状态块与 `@deepseek` 口令沿用旧名，以保持既有检查与评审状态。
 3. 如需 AI 审核作为强制门槛，要求提交状态 `sample-ai-review` 通过，并启用新提交后的旧批准失效。不要要求原生 `verdict` job 作为审核门槛：评论与手动运行的 job 属于 main，而统一状态显式绑定被审核的 PR head SHA。先完成真实运行，使该状态出现在 GitHub 可选检查列表中，再配置保护。
 4. 允许 GitHub Actions 创建/批准 PR，或配置 `REVIEW_APP_ID`、`REVIEW_APP_LOGIN` variables 和 `REVIEW_APP_PRIVATE_KEY` Secret。`REVIEW_APP_LOGIN` 是审核 App 的完整 bot 登录名（如 `my-reviewer[bot]`），用于验证历史状态的作者；配置 App 时必须填写。没有 App 时使用 workflow token；批准被平台拒绝会改贴评论，明确没有 APPROVED 状态。
 
@@ -16,7 +16,7 @@
 
 自动入口来自 main 的 `pull_request_target`；顶层 `issue_comment` 同样采用默认分支，手动入口只支持选择 main。不使用 PR 行内评论事件触发工作流，行内意见及作者解释仍会读取；请在 PR 顶层评论中写 `/review`、`@deepseek` 或 `@claude`。全部入口只支持以 main 为目标的同仓非 draft PR。
 
-review/verify 使用只读 GitHub token；可信 plan 脚本只能发布 pending 状态，verdict 的确定性脚本发布最终状态与 PR 表态。API key 只传给模型 Action。PR 内容始终只作为 Git 对象读取，不签出或运行；不加载 PR 中的 hook、工具或审核脚本。外部 fork、draft、关闭 PR 和不具权限的评论触发均不调用模型。新提交自动复评，不沿用旧提交的批准。
+review/verify 使用只读 GitHub token；可信 plan 脚本只能发布 pending 状态，verdict 的确定性脚本发布最终状态与 PR 表态。模型凭据只传给模型 Action。PR 内容始终只作为 Git 对象读取，不签出或运行；不加载 PR 中的 hook、工具或审核脚本。外部 fork、draft、关闭 PR 和不具权限的评论触发均不调用模型。新提交自动复评，不沿用旧提交的批准。
 
 plan 确定目标 SHA 后先发布 `sample-ai-review: pending`，防止同一提交复评时沿用旧成功。verdict 使用 `always()` 汇总并发布 success/failure/error：计划失败、取消或结果缺失不能写 success；若计划未能获得目标提交或运行被强制取消，状态保持缺失或 pending，同样不满足门槛。无需审核的普通评论事件不调用模型或改变提交状态。不能把 skipped 的审核 job 视为批准。
 
