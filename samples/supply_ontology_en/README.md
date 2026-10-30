@@ -21,8 +21,8 @@ Anything Cypher can answer has no function; functions are kept only for calculat
 
 - **Cypher queries**: master data, stock totals, backlog and overdue orders, forecasts, open and overdue purchases, BOM lists (one query from the product returns the whole BOM, filtered by level and parent), where-used, common parts and document trace. The platform does not support variable-length paths or `UNWIND`; the Skills give the patterns to use instead.
 - **Native functions**:
-  - Buildable quantity and available to promise: nets the BOM level by level by the PRD rules, can add open purchases due by a date, and returns buildable quantity, available to promise and the blocking materials for one or several products.
-  - Demand coverage and shortages: evaluates several demands in order against one shared stock pool and returns coverage and the shortage list.
+  - `Buildable_Quantity_and_ATP` (buildable quantity and available to promise): nets the BOM level by level by the PRD rules, can add open purchases due by a date, and returns buildable quantity, available to promise and the blocking materials for one or several products.
+  - `Demand_Coverage_and_Shortages`: evaluates several demands in order against one shared stock pool and returns coverage and the shortage list.
 - **Skills**: organized for the two users, PMC planning and purchase follow-up, stating the business rules, when to use Cypher, when to call a function, and how to answer.
 
 ## Experience cards

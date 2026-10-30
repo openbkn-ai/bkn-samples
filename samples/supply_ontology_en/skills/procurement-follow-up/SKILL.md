@@ -26,8 +26,8 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 
 ## When to call a function
 
-- To know which materials a product's backlog, new order or work order is short of and by how much, call **Demand coverage and shortages** (`demand_coverage`), then use Cypher for those materials' open purchases and lead times. Omit `reserve_signed_backlog` when evaluating the backlog itself; pass `true` for a new order that must protect backlog; pass `chase_overdue_po=true` when assuming overdue purchases are chased in.
-- To know how many units a product can build, which material blocks it, or how many more chasing overdue purchases would allow, call **Buildable quantity and available to promise** (`build_capacity`) with `products` as a list of product codes, all in one call.
+- To know which materials a product's backlog, new order or work order is short of and by how much, call **Demand_Coverage_and_Shortages** (`demand_coverage`), then use Cypher for those materials' open purchases and lead times. Omit `reserve_signed_backlog` when evaluating the backlog itself; pass `true` for a new order that must protect backlog; pass `chase_overdue_po=true` when assuming overdue purchases are chased in.
+- To know how many units a product can build, which material blocks it, or how many more chasing overdue purchases would allow, call **Buildable_Quantity_and_ATP** (`build_capacity`) with `products` as a list of product codes, all in one call.
 - Use Cypher, not a function, for open purchases, overdue lines, suppliers, buyers, lead times, arrival dates and document trace.
 
 ## Cypher patterns

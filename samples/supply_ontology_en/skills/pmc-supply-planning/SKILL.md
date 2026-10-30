@@ -28,10 +28,10 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 
 ## When to call a function
 
-- **Buildable quantity and available to promise** (`build_capacity`): how many units a product can still build, how much it can promise, how much more it can accept, which material blocks it; with alternates, a warehouse scope, open purchases due by a date, or overdue purchases chased in. Pass `products` as a list of product codes; each is calculated on its own. When several products are needed, pass them in one call instead of calling once per product.
+- **Buildable_Quantity_and_ATP** (`build_capacity`): how many units a product can still build, how much it can promise, how much more it can accept, which material blocks it; with alternates, a warehouse scope, open purchases due by a date, or overdue purchases chased in. Pass `products` as a list of product codes; each is calculated on its own. When several products are needed, pass them in one call instead of calling once per product.
   - Which products' backlog neither stock on hand nor production can cover: first use Cypher to find products whose backlog exceeds finished-goods stock, then pass them all to this function in one call. A product is uncovered when `finished_goods_qty + buildable_qty < signed_backlog_qty`, and the gap is `signed_backlog_qty − finished_goods_qty − buildable_qty` (`available_to_promise` never goes below 0, so do not use it for this).
   - How many more units open purchases due by a date allow: call again for the same products with `need_by` and subtract the two `buildable_qty` values.
-- **Demand coverage and shortages** (`demand_coverage`): whether one or more demands are covered, what is short and by how much.
+- **Demand_Coverage_and_Shortages** (`demand_coverage`): whether one or more demands are covered, what is short and by how much.
   - Evaluating the backlog itself: omit `reserve_signed_backlog`.
   - New orders that must protect backlog: `reserve_signed_backlog=true`.
   - Planning a work order without touching finished goods: `use_finished_goods=false`.

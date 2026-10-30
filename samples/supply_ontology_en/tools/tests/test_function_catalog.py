@@ -38,3 +38,14 @@ def test_bundled_function_runs_with_the_sandbox_reader(monkeypatch):
     result = namespace["supply_function"](products=["526-000006"])
     assert result["products"][0]["available_to_promise"] == 8
     assert result["data_source"]["loaded_rows"]["sales_order"] > 0
+
+
+def test_tool_names_and_descriptions_fit_the_platform_limits():
+    # Toolbox names and descriptions must satisfy the operator-integration validator:
+    # word characters or Chinese only, at most 50 characters; descriptions at most 255.
+    import re
+    from function_catalog import native_tool_description
+    assert len(native_tool_description()) <= 255
+    for spec in FUNCTION_CATALOG.values():
+        assert re.fullmatch(r"[\w\u4e00-\u9fff]{1,50}", spec["name"]), spec["name"]
+        assert len(spec["description"]) <= 255, spec["name"]

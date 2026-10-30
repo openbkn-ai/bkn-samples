@@ -24,12 +24,11 @@ def _spec(name: str, operation: str, description: str, *, use_when: str, do_not_
 
 FUNCTION_CATALOG = {
     "build_capacity": _spec(
-        "Buildable quantity and available to promise",
+        "Buildable_Quantity_and_ATP",
         "build_capacity",
-        "Nets the BOM level by level and returns, for each product on its own: finished-goods stock, the most units "
-        "current stock can still build, signed backlog, available to promise (finished goods + buildable − backlog) "
-        "and the materials that block one more unit. Defaults: current Available stock, all warehouses, no alternates. "
-        "need_by adds open purchase lines due by that date; chase_overdue_po=true adds overdue open lines.",
+        "Per product, nets the BOM level by level and returns finished goods, the most units current stock can build, "
+        "signed backlog, available to promise and blocking materials. need_by adds purchases due by that date; "
+        "chase_overdue_po adds overdue ones.",
         use_when="How many units of one or more products can be built or promised now, how much more can be accepted, "
                  "which material blocks them, or how many more units open purchase lines due by a date would allow. "
                  "Pass several products in one call instead of calling once per product.",
@@ -37,12 +36,11 @@ FUNCTION_CATALOG = {
         minimum_business_inputs=["products"],
     ),
     "demand_coverage": _spec(
-        "Demand coverage and shortages",
+        "Demand_Coverage_and_Shortages",
         "demand_coverage",
-        "Evaluates demands in array order against one shared stock pool: finished goods first, then BOM netting level "
-        "by level. Returns whether each demand is covered, the units to manufacture and the bottom-level shortages. "
-        "reserve_signed_backlog=true first reserves these products' signed backlog by promised date; "
-        "use_finished_goods=false plans a work order without finished goods. In-transit and alternate options match the buildable-quantity function.",
+        "Evaluates demands in order on one shared stock pool: finished goods first, then BOM netting. "
+        "Returns coverage, units to build and bottom-level shortages. reserve_signed_backlog protects backlog first; "
+        "use_finished_goods=false plans a work order.",
         use_when="Whether one or more demands (new orders, backlog, planned work orders) are covered, what is short and by how much, or how competing orders share stock.",
         do_not_use_when="Use the buildable-quantity function when only the maximum buildable quantity is asked.",
         minimum_business_inputs=["demands"],
