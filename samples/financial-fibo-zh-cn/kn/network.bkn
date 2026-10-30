@@ -26,7 +26,7 @@ branch: main
 回答方式：
 - 月末的估值、持仓、发行方敞口（及 exposure_contributions 构成）、交易对手敞口和限额评估是已记录快照，与按原始记录重算的结果一致，用 Cypher 直接读取。
 - 问非月末日期、问更早某天当时已知的情况，或要从原始成交和交收事件解释状态时，调用 settlement_asof、valuation_asof 或 limit_assessment_asof。
-- Cypher 支持关联、WITH、CASE、聚合和 ORDER BY，不支持变长路径和 UNWIND。日期是 YYYY-MM-DD 字符串，可直接比较；数值可能以字符串返回，按 Decimal 计算。中文网络的状态等取值使用属性描述里的中文枚举。
+- Cypher 支持关联、聚合（count、count DISTINCT、sum）和 ORDER BY。为兼容 OpenBKN 0.2.1，不用 WITH、CASE、coalesce 等函数、关系变量、返回整个节点、属性与属性比较、变长路径和 UNWIND；把需要的值查出来，在回答里比较。日期是 YYYY-MM-DD 字符串，可直接比较；数值可能以字符串返回，按 Decimal 计算。中文网络的状态等取值使用属性描述里的中文枚举。
 
 ## Network Overview
 

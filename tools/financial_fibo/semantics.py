@@ -101,7 +101,7 @@ ANALYSIS_CONTRACT=(
 How to answer:
 - Month-end valuations, positions, issuer exposures (with exposure_contributions), counterparty exposures and limit assessments are recorded snapshots that match recomputation from the original records; read them with Cypher.
 - For a date that is not a month end, for what was known on an earlier day, or to explain a status from the original trades and events, call settlement_asof, valuation_asof or limit_assessment_asof.
-- Cypher supports joins, WITH, CASE, aggregation and ORDER BY; it does not support variable-length paths or UNWIND. Dates are YYYY-MM-DD strings and compare as text; numbers may arrive as strings, so use Decimal arithmetic.
+- Cypher supports joins, aggregation (count, count DISTINCT, sum) and ORDER BY. To stay compatible with OpenBKN 0.2.1, do not use WITH, CASE, functions such as coalesce, relationship variables, whole-node returns, property-to-property comparisons, variable-length paths or UNWIND; return the needed values and compare them in the answer. Dates are YYYY-MM-DD strings and compare as text; numbers may arrive as strings, so use Decimal arithmetic.
 """,
 """业务口径（默认规则；使用者明确提出别的条件时以使用者为准）：
 - 业务日期为 2027-02-28，“现在”“今天”指这一天。十一月至二月是实际数据（view_kind 为实际），三月是今天已知的计划（view_kind 为计划）。月末指 2026-11-30、12-31、2027-01-31、02-28 及计划的 03-31 快照。计划数据不能说成已经发生。
@@ -118,5 +118,5 @@ How to answer:
 回答方式：
 - 月末的估值、持仓、发行方敞口（及 exposure_contributions 构成）、交易对手敞口和限额评估是已记录快照，与按原始记录重算的结果一致，用 Cypher 直接读取。
 - 问非月末日期、问更早某天当时已知的情况，或要从原始成交和交收事件解释状态时，调用 settlement_asof、valuation_asof 或 limit_assessment_asof。
-- Cypher 支持关联、WITH、CASE、聚合和 ORDER BY，不支持变长路径和 UNWIND。日期是 YYYY-MM-DD 字符串，可直接比较；数值可能以字符串返回，按 Decimal 计算。中文网络的状态等取值使用属性描述里的中文枚举。
+- Cypher 支持关联、聚合（count、count DISTINCT、sum）和 ORDER BY。为兼容 OpenBKN 0.2.1，不用 WITH、CASE、coalesce 等函数、关系变量、返回整个节点、属性与属性比较、变长路径和 UNWIND；把需要的值查出来，在回答里比较。日期是 YYYY-MM-DD 字符串，可直接比较；数值可能以字符串返回，按 Decimal 计算。中文网络的状态等取值使用属性描述里的中文枚举。
 """)

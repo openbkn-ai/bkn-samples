@@ -17,14 +17,6 @@ spec:
       instructions: 304
     surfaces:
     - agent
-    - query
-    cypher:
-      query: |-
-        MATCH (e:settlement_events)-[:settle_event_to_settle_instr]->(i:settlement_instructions)
-        WHERE e.view_kind = 'actual' AND e.event_date <= '2027-02-28'
-        WITH i, sum(e.settled_quantity) AS done
-        WHERE done < i.required_quantity
-        RETURN count(*) AS instructions
   - id: Q-07
     title: Why settlements failed
     explanation: Look at the status and failure reason of each instruction's latest settlement event.
@@ -47,13 +39,8 @@ spec:
       bonds: 4
     surfaces:
     - agent
-    - query
     - graph
     cypher:
-      query: |-
-        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (o)-[:opening_to_instrument]->(f:financial_instruments)
-        WHERE a.portfolio_id = 'PF-001' AND v.as_of_date = '2027-02-28' AND v.view_kind = 'actual'
-        RETURN count(*) AS securities, sum(CASE WHEN f.asset_class = 'bond' THEN 1 ELSE 0 END) AS bonds
       graph: |-
         MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (o)-[:opening_to_instrument]->(f:financial_instruments)
         WHERE a.portfolio_id = 'PF-001' AND v.as_of_date = '2027-02-28' AND v.view_kind = 'actual'
