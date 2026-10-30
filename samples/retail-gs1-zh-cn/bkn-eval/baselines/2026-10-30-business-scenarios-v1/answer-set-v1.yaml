@@ -314,9 +314,12 @@ answers:
   question: 有没有被重复记录的出入库事件？涉及哪个批次？会不会被算两次？
   expected:
     events:
-    - EV-00875
-    lots:
-    - LOT-042-C
+      EV-00875:
+        lot_id: LOT-042-C
+        copies: identical
+      EV-00897:
+        lot_id: LOT-043-C
+        copies: conflicting
     counted_twice: false
 - id: Q-43
   question: 有没有到货了却找不到发货记录的调拨？

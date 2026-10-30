@@ -314,9 +314,12 @@ answers:
   question: Is any stock movement recorded twice? Which lot does it involve, and is it counted twice?
   expected:
     events:
-    - EV-00875
-    lots:
-    - LOT-042-C
+      EV-00875:
+        lot_id: LOT-042-C
+        copies: identical
+      EV-00897:
+        lot_id: LOT-043-C
+        copies: conflicting
     counted_twice: false
 - id: Q-43
   question: Are there transfers that arrived without a matching dispatch?

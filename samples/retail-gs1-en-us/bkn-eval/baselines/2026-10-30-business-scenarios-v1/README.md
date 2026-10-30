@@ -28,3 +28,9 @@ python3 samples/retail-gs1-en-us/bkn-eval/baselines/2026-10-30-business-scenario
 ## Exceptions in the data
 
 On the business date there are 400 lot-location positions: the stock of 4 cannot be determined (conflicting event copies, an arrival without dispatch leading to negative stock, negative stock), 157 carry quarantine, 189 are blocked by recalls and 100 hold expired stock. 4 lots failed inspection and 3 are awaiting it. Allocating current stock to the 100 open order lines covers 47 in full, 45 in part and 8 not at all; all 50 product-warehouse pairs need March replenishment. 49 recalls are open and REC-050 is closed; REC-048 reaches another product through a transformation. There is also one event recorded twice, one reversed sale and one sale recorded only on March 2. Inventory and recall coverage on the business date have recorded snapshots; other dates, what was known on a day, allocation, replenishment and recall closure need calculation from the source events.
+
+## Runs
+
+| Agent | Result | Record |
+|---|---|---|
+| External MCP agent (can call the sample functions), one round | 50/50 | [runs/2026-10-30-mcp-agent-r1](runs/2026-10-30-mcp-agent-r1/README.md) |

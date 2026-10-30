@@ -218,11 +218,12 @@ q('Q-41', 'S10', 'complex', 'WH', '现在有哪些批次库位的库存算不清
                                      | {'conflicting_event' for d in DIAG if d['code'] == 'conflicting_event'
                                         and any(m['event_id'] == d['event_id'] and m['lot_id'] == a for m in T['movements'])}) for a, b in unk}),
   '批次@地点及原因代码', 'lot@location with reason codes')
-dup = [d for d in DIAG if d['code'] == 'duplicate_event']
 q('Q-42', 'S10', 'medium', 'WH', '有没有被重复记录的出入库事件？涉及哪个批次？会不会被算两次？',
   'Is any stock movement recorded twice? Which lot does it involve, and is it counted twice?',
-  dict(events=[d['event_id'] for d in dup], lots=sorted({m['lot_id'] for m in T['movements'] if m['event_id'] in {d['event_id'] for d in dup}}), counted_twice=False),
-  '事件编号、批次、是否重复计算', 'event ids, lots, counted twice or not')
+  dict(events={d['event_id']: dict(lot_id=next(m['lot_id'] for m in T['movements'] if m['event_id'] == d['event_id']),
+                                    copies='identical' if d['code'] == 'duplicate_event' else 'conflicting')
+              for d in DIAG if d['code'] in ('duplicate_event', 'conflicting_event')}, counted_twice=False),
+  '事件编号、批次、副本一致还是冲突、是否重复计算', 'event ids, lots, identical or conflicting copies, counted twice or not')
 miss = sorted(d['transfer_id'] for d in DIAG if d['code'] == 'missing_or_insufficient_dispatch')
 q('Q-43', 'S10', 'medium', 'WH', '有没有到货了却找不到发货记录的调拨？', 'Are there transfers that arrived without a matching dispatch?',
   dict(transfers=miss), '调拨编号清单', 'transfer ids')
