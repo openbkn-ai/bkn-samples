@@ -1,0 +1,256 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: zh-CN
+  source:
+    answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v1/answer-set-v1.yaml
+    setId: fibo-business-scenarios-v1
+spec:
+  businessDate: '2027-02-28'
+  cases:
+  - id: Q-06
+    title: 还有多少没交收完
+    explanation: 按指令累加逐笔交收数量，和应交收数量比较。
+    question: 到今天为止，还有多少笔结算指令没有交收完？
+    answer: 到今天还有 304 条结算指令没有交收完。
+    expected:
+      instructions: 304
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (e:settlement_events)-[:settle_event_to_settle_instr]->(i:settlement_instructions)
+        WHERE e.view_kind = '实际' AND e.event_date <= '2027-02-28'
+        WITH i, sum(e.settled_quantity) AS done
+        WHERE done < i.required_quantity
+        RETURN count(*) AS instructions
+  - id: Q-07
+    title: 交收为什么失败
+    explanation: 看每条指令最近一个交收事件的状态和失败原因。
+    question: 现在结算失败的指令有多少笔？失败原因各有多少笔？
+    answer: 现在有 144 条指令结算失败：金额不匹配 80 条，证券不足 64 条。
+    expected:
+      failed: 144
+      reasons:
+        金额不匹配: 80
+        证券不足: 64
+    surfaces:
+    - agent
+  - id: Q-04
+    title: 组合持有什么
+    explanation: 沿组合 → 账户 → 期初持仓 → 月末持仓 → 估值，数一数二月底的持仓。
+    question: PF-001 二月底持有几只证券？其中几只是债券？
+    answer: PF-001 二月底持有 8 只证券，其中 4 只是债券。
+    expected:
+      securities: 8
+      bonds: 4
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (o)-[:opening_to_instrument]->(f:financial_instruments)
+        WHERE a.portfolio_id = 'PF-001' AND v.as_of_date = '2027-02-28' AND v.view_kind = '实际'
+        RETURN count(*) AS securities, sum(CASE WHEN f.asset_class = '债券' THEN 1 ELSE 0 END) AS bonds
+      graph: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (o)-[:opening_to_instrument]->(f:financial_instruments)
+        WHERE a.portfolio_id = 'PF-001' AND v.as_of_date = '2027-02-28' AND v.view_kind = '实际'
+  - id: Q-13
+    title: 哪些估值算不出来
+    explanation: 价格陈旧、未批准或缺失时估值受阻，市值未知而不是零。
+    question: 二月底有多少条持仓估值算不出市值？原因各有多少条？
+    answer: 二月底有 96 条估值算不出市值：价格缺失 32 条、价格未批准 32 条、价格陈旧 32 条。
+    expected:
+      valuations: 96
+      reasons:
+        价格缺失: 32
+        价格未批准: 32
+        价格陈旧: 32
+    surfaces:
+    - agent
+  - id: Q-18
+    title: 组合值多少钱
+    explanation: 二月底各持仓美元市值相加；有估值受阻时组合总市值未知。
+    question: PF-001 二月底的组合总市值是多少美元？
+    answer: PF-001 二月底组合总市值 71364.79 美元。
+    expected:
+      market_value_usd: 71364.79
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts)
+        WHERE a.portfolio_id = 'PF-001' AND v.as_of_date = '2027-02-28' AND v.view_kind = '实际'
+        RETURN sum(v.market_value_base) AS market_value_usd
+  - id: Q-19
+    title: 市值怎么算出来
+    explanation: 数量 × 价格 × 计价乘数得到本币市值，再乘汇率得到美元市值，每步到分。
+    question: PF-001 持有的 INS-002 债券二月底市值是怎么算出来的？给出数量、价格、计价乘数、汇率、本币市值和美元市值。
+    answer: INS-002 债券：61154 面值单位 × 100 × 0.01 = 本币 61154；× 汇率 0.1394 = 8524.87 美元。
+    expected:
+      quantity: 61154
+      price: 100
+      multiplier: 0.01
+      fx_rate: 0.1394
+      market_value_local: 61154
+      market_value_usd: 8524.87
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (v)-[:valuation_to_price]->(px:market_prices), (v)-[:valuation_to_fx]->(fx:fx_rates), (o)-[:opening_to_instrument]->(f:financial_instruments)
+        WHERE a.portfolio_id = 'PF-001' AND o.instrument_id = 'INS-002' AND v.as_of_date = '2027-02-28'
+        RETURN p.trade_basis_quantity AS quantity, px.price AS price, f.price_multiplier AS multiplier, fx.rate AS fx_rate, v.market_value_local AS market_value_local, v.market_value_base AS market_value_usd
+      graph: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (v)-[:valuation_to_price]->(px:market_prices), (v)-[:valuation_to_fx]->(fx:fx_rates)
+        WHERE a.portfolio_id = 'PF-001' AND o.instrument_id = 'INS-002' AND v.as_of_date = '2027-02-28'
+  - id: Q-21
+    title: 价格为什么不能用
+    explanation: 价格日期距估值日期超过 3 个自然日就是陈旧价格，不能顶替使用。
+    question: INS-069 二月底为什么不能用来估值？最近那笔已批准价格是哪天的、多少钱？
+    answer: INS-069 二月底估值用不了：最近的已批准价格是 2027-02-18 的 26.4 USD，属于价格陈旧。
+    expected:
+      issue: 价格陈旧
+      latest_price_date: '2027-02-18'
+      latest_price: 26.4
+      currency: USD
+    surfaces:
+    - agent
+  - id: Q-25
+    title: 对谁最集中
+    explanation: 读二月底发行方敞口的占比，并找到适用的发行方限额。
+    question: PF-041 二月底对哪家发行方最集中？占比多少？限额是多少？
+    answer: PF-041 对 ISS-041（青禾公用事业控股有限公司）最集中，占比 0.608018，限额 0.3。
+    expected:
+      issuer_id: ISS-041
+      issuer: 青禾公用事业控股有限公司
+      ratio: 0.608018
+      limit: 0.3
+    surfaces:
+    - agent
+  - id: Q-28
+    title: 超限由什么构成
+    explanation: 沿敞口构成追到估值、持仓和证券，看每只证券贡献多少。
+    question: PF-041 对 ISS-041 超限，是由哪些持仓构成的？各多少美元？组合总额是多少？
+    answer: PF-041 对 ISS-041 的 82799.04 美元由 INS-081（44269.4）和 INS-082（38529.64）构成，组合总额 136178.6，占比 0.608018。
+    expected:
+      holdings:
+        INS-081: 44269.4
+        INS-082: 38529.64
+      exposure_usd: 82799.04
+      portfolio_total_usd: 136178.6
+      ratio: 0.608018
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (c:exposure_contributions)-[:contribution_to_issuer_exp]->(x:issuer_exposures), (c)-[:contribution_to_valuation]->(v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)
+        WHERE x.exposure_id = 'IE-041-3-4'
+  - id: Q-30
+    title: 对手应收超限
+    explanation: 读二月底限额评估中未结算应收金额口径的超限记录。
+    question: 二月底有多少个组合的交易对手未结算卖出应收超限？
+    answer: 二月底有 12 个组合的交易对手未结算卖出应收超限。
+    expected:
+      portfolios: 12
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (a:limit_assessments)-[:assessment_to_limit]->(l:mandate_limits)
+        WHERE a.as_of_date = '2027-02-28' AND l.measure = '未结算应收金额' AND a.assessment_status = '超限'
+        RETURN count(DISTINCT l.portfolio_id) AS portfolios
+  - id: Q-32
+    title: 应收超限追到交易
+    explanation: 对手应收 = 未交收卖出剩余数量 × 成交价 × 乘数 × 汇率，先求和再到分，不用买入抵减。
+    question: PF-046 对 CP-046 的未结算卖出应收超限了，是哪些卖出没交收造成的？各剩多少数量？合计多少美元、超出多少？
+    answer: PF-046 对 CP-046 的应收 2002.41 美元来自 4 笔失败的卖出：SI-046-2-4 剩 3632、SI-046-4-4 剩 450、SI-046-6-4 剩 3492、SI-046-8-4 剩 3632；限额 500，超出 1502.41。
+    expected:
+      instructions:
+        SI-046-2-4: 3632
+        SI-046-4-4: 450
+        SI-046-6-4: 3492
+        SI-046-8-4: 3632
+      receivable_usd: 2002.41
+      limit_usd: 500
+      excess_usd: 1502.41
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (e:settlement_events)-[:settle_event_to_settle_instr]->(i:settlement_instructions)-[:settle_instr_to_trade]->(t:securities_transactions)-[:trade_to_order]->(o:trade_orders)
+        WHERE o.counterparty_id = 'CP-046' AND e.event_status = '结算失败' AND e.event_date <= '2027-02-28'
+  - id: Q-34
+    title: 哪些限额还没生效
+    explanation: 限额版本的生效日期晚于期初的，就是之后才生效的新限额。
+    question: 有多少条限额是还没生效、之后才开始生效的？涉及多少个组合？
+    answer: 有 32 条限额之后才生效，涉及 8 个组合。
+    expected:
+      limits: 32
+      portfolios: 8
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (l:mandate_limits)
+        WHERE l.effective_from_date > '2026-11-01'
+        RETURN count(*) AS limits, count(DISTINCT l.portfolio_id) AS portfolios
+  - id: Q-36
+    title: 计划月份的新超限
+    explanation: 对比三月计划和二月实际的限额评估，找出只在计划里超限的组合。
+    question: 按三月计划，哪些组合会出现超限而二月实际并没有超限？
+    answer: 三月计划里新出现超限的组合有 8 个：PF-049、PF-050、PF-099、PF-100、PF-149、PF-150、PF-199、PF-200。
+    expected:
+      portfolios:
+      - PF-049
+      - PF-050
+      - PF-099
+      - PF-100
+      - PF-149
+      - PF-150
+      - PF-199
+      - PF-200
+    surfaces:
+    - agent
+  - id: Q-40
+    title: 回到 2 月 15 日看
+    explanation: 只用 2 月 15 日当天已知的成交和交收事件重算交收状态。
+    question: 站在 2 月 15 日、只用当天已经知道的信息，PF-029 有哪些指令没交收完？哪些已经逾期、哪些已经失败？
+    answer: 站在 2 月 15 日，PF-029 有 3 条指令没交收完：SI-029-4-4 已结算失败且逾期，SI-029-6-4 和 SI-029-7-4 待结算、未逾期。
+    expected:
+      instructions:
+        SI-029-4-4:
+          status: 结算失败
+          overdue: true
+        SI-029-6-4:
+          status: 待结算
+          overdue: false
+        SI-029-7-4:
+          status: 待结算
+          overdue: false
+    surfaces:
+    - agent
+  - id: Q-29
+    title: 判断不了时还能确认什么
+    explanation: 有估值受阻时组合分母未知，但持仓都已估值的发行方金额仍可确认。
+    question: PF-035 二月底的发行方集中度为什么判断不了？哪些发行方的美元金额仍然能确认、各多少？
+    answer: PF-035 的 INS-069 价格陈旧，ISS-035 金额未知，所以集中度判断不了；ISS-002 16738.19、ISS-014 17667.58、ISS-042 17608.8 美元仍可确认。
+    expected:
+      blocked_security: INS-069
+      reason: 价格陈旧
+      unknown_issuer: ISS-035
+      known_issuers:
+        ISS-002: 16738.19
+        ISS-014: 17667.58
+        ISS-042: 17608.8
+    surfaces:
+    - agent

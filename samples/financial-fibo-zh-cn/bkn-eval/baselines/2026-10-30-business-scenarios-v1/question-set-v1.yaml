@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: fibo-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: 基础
+  role: 投资组合经理
+  question: 我们现在一共管理多少个投资组合？由多少家资产管理人负责？
+  output_contract: 组合数、资产管理人数
+- id: Q-02
+  scenario: S01
+  difficulty: 基础
+  role: 基金会计
+  question: INS-002 这只债券是哪家公司发的？什么时候到期？按什么口径报价？
+  output_contract: 发行方编号与名称、到期日、报价口径
+- id: Q-03
+  scenario: S01
+  difficulty: 基础
+  role: 投资组合经理
+  question: PF-001 是哪家资产管理人在管？基础货币和投资授权是什么？
+  output_contract: 管理人编号与名称、基础货币、投资授权
+- id: Q-04
+  scenario: S01
+  difficulty: 基础
+  role: 投资组合经理
+  question: PF-001 二月底持有几只证券？其中几只是债券？
+  output_contract: 证券数、债券数
+- id: Q-05
+  scenario: S02
+  difficulty: 基础
+  role: 中台运营
+  question: 二月份一共成交了多少笔？买入和卖出各多少笔？
+  output_contract: 成交笔数、买入笔数、卖出笔数
+- id: Q-06
+  scenario: S02
+  difficulty: 基础
+  role: 中台运营
+  question: 到今天为止，还有多少笔结算指令没有交收完？
+  output_contract: 指令笔数
+- id: Q-07
+  scenario: S02
+  difficulty: 基础
+  role: 中台运营
+  question: 现在结算失败的指令有多少笔？失败原因各有多少笔？
+  output_contract: 失败笔数、按原因的笔数
+- id: Q-08
+  scenario: S02
+  difficulty: 中等
+  role: 中台运营
+  question: 没交收完的指令里，有多少笔已经过了应交收日？按失败、部分交收各多少？还没到期的又有多少笔、最早哪天到期？
+  output_contract: 逾期笔数、其中失败与部分交收、未到期笔数、最早到期日
+- id: Q-09
+  scenario: S02
+  difficulty: 中等
+  role: 中台运营
+  question: 逾期没交收的指令涉及多少家交易对手、多少个组合？
+  output_contract: 交易对手数、组合数
+- id: Q-10
+  scenario: S02
+  difficulty: 中等
+  role: 中台运营
+  question: 因为券不够而交收失败的指令，涉及哪些组合？
+  output_contract: 完整组合编号清单
+- id: Q-11
+  scenario: S02
+  difficulty: 中等
+  role: 中台运营
+  question: PF-019 还有哪些卖出没交收？各是什么证券、还差多少数量、哪天到期？
+  output_contract: 完整指令清单（指令、证券、剩余数量、到期日）
+- id: Q-12
+  scenario: S02
+  difficulty: 中等
+  role: 中台运营
+  question: PF-020 有哪些卖出只交收了一部分？各还剩多少没交收？
+  output_contract: 指令及剩余数量
+- id: Q-13
+  scenario: S03
+  difficulty: 基础
+  role: 基金会计
+  question: 二月底有多少条持仓估值算不出市值？原因各有多少条？
+  output_contract: 估值条数、按原因的条数
+- id: Q-14
+  scenario: S03
+  difficulty: 基础
+  role: 基金会计
+  question: 二月底估值用的欧元兑美元汇率是多少？哪天发布的？
+  output_contract: 汇率、发布日期
+- id: Q-15
+  scenario: S03
+  difficulty: 基础
+  role: 基金会计
+  question: INS-001 二月底估值用的价格是多少？哪天的价格？批准了吗？
+  output_contract: 价格、币种、价格日期、是否已批准
+- id: Q-16
+  scenario: S03
+  difficulty: 中等
+  role: 基金会计
+  question: 二月底哪些证券的价格不能用来估值？分别是什么问题？
+  output_contract: 证券编号及问题
+- id: Q-17
+  scenario: S03
+  difficulty: 中等
+  role: 基金会计
+  question: 这些价格问题一共影响了多少个组合的二月底估值？
+  output_contract: 组合数
+- id: Q-18
+  scenario: S03
+  difficulty: 中等
+  role: 投资组合经理
+  question: PF-001 二月底的组合总市值是多少美元？
+  output_contract: 美元市值
+- id: Q-19
+  scenario: S03
+  difficulty: 中等
+  role: 基金会计
+  question: PF-001 持有的 INS-002 债券二月底市值是怎么算出来的？给出数量、价格、计价乘数、汇率、本币市值和美元市值。
+  output_contract: 数量、价格、乘数、汇率、本币市值、美元市值
+- id: Q-20
+  scenario: S03
+  difficulty: 中等
+  role: 投资组合经理
+  question: 二月底估值完整的组合里，美元市值最大的三个是哪几个？各多少？
+  output_contract: 组合编号及美元市值，从大到小
+- id: Q-21
+  scenario: S03
+  difficulty: 中等
+  role: 基金会计
+  question: INS-069 二月底为什么不能用来估值？最近那笔已批准价格是哪天的、多少钱？
+  output_contract: 原因、最近价格日期、价格、币种
+- id: Q-22
+  scenario: S04
+  difficulty: 中等
+  role: 基金会计
+  question: PF-001 持有的 INS-001 二月底持仓成本比一月底变了多少？是哪笔交易带来的？
+  output_contract: 一月底成本、二月底成本、变化、交易编号
+- id: Q-23
+  scenario: S04
+  difficulty: 中等
+  role: 基金会计
+  question: PF-001 二月份哪些持仓有已实现损益？各多少（按本币）？
+  output_contract: 证券及本币已实现损益
+- id: Q-24
+  scenario: S04
+  difficulty: 复杂
+  role: 中台运营
+  question: PF-029 的交收失败让二月底哪些持仓的交易口径和已交收口径对不上？各差多少？
+  output_contract: 证券及数量差（交易口径减已交收口径）
+- id: Q-25
+  scenario: S05
+  difficulty: 中等
+  role: 风控合规
+  question: PF-041 二月底对哪家发行方最集中？占比多少？限额是多少？
+  output_contract: 发行方编号与名称、占比、限额
+- id: Q-26
+  scenario: S05
+  difficulty: 中等
+  role: 风控合规
+  question: 二月底有多少个组合的发行方集中度超限？超得最多的是哪个组合、哪家发行方、超出多少？
+  output_contract: 超限组合数、超出最多的组合与发行方、超出比例
+- id: Q-27
+  scenario: S05
+  difficulty: 中等
+  role: 风控合规
+  question: 二月底有多少个组合的发行方集中度判断不了？为什么？
+  output_contract: 组合数、是否都因组合内有估值受阻的证券
+- id: Q-28
+  scenario: S05
+  difficulty: 复杂
+  role: 风控合规
+  question: PF-041 对 ISS-041 超限，是由哪些持仓构成的？各多少美元？组合总额是多少？
+  output_contract: 持仓证券及美元金额、发行方合计、组合总额、占比
+- id: Q-29
+  scenario: S05
+  difficulty: 复杂
+  role: 风控合规
+  question: PF-035 二月底的发行方集中度为什么判断不了？哪些发行方的美元金额仍然能确认、各多少？
+  output_contract: 受阻证券、原因、金额未知的发行方、可确认的发行方金额
+- id: Q-30
+  scenario: S06
+  difficulty: 基础
+  role: 风控合规
+  question: 二月底有多少个组合的交易对手未结算卖出应收超限？
+  output_contract: 组合数
+- id: Q-31
+  scenario: S06
+  difficulty: 中等
+  role: 风控合规
+  question: 二月底哪家交易对手欠我们的未结算卖出款最多？合计多少美元？
+  output_contract: 交易对手编号与名称、美元金额
+- id: Q-32
+  scenario: S06
+  difficulty: 复杂
+  role: 风控合规
+  question: PF-046 对 CP-046 的未结算卖出应收超限了，是哪些卖出没交收造成的？各剩多少数量？合计多少美元、超出多少？
+  output_contract: 指令及剩余数量、应收合计、限额、超出金额
+- id: Q-33
+  scenario: S06
+  difficulty: 复杂
+  role: 风控合规
+  question: PF-046 对 CP-046 的应收里，有没有用它同期的买入来抵减？如果那几笔失败的卖出今天全部交收完，还会超限吗？
+  output_contract: 是否抵减、交收后是否仍超限
+- id: Q-34
+  scenario: S07
+  difficulty: 基础
+  role: 风控合规
+  question: 有多少条限额是还没生效、之后才开始生效的？涉及多少个组合？
+  output_contract: 限额条数、组合数
+- id: Q-35
+  scenario: S07
+  difficulty: 中等
+  role: 风控合规
+  question: PF-049 的发行方限额接下来会怎么变？什么时候生效？今天用的还是哪个限额？
+  output_contract: 新限额、生效日、涉及发行方、当前限额
+- id: Q-36
+  scenario: S07
+  difficulty: 复杂
+  role: 投资组合经理
+  question: 按三月计划，哪些组合会出现超限而二月实际并没有超限？
+  output_contract: 完整组合编号清单
+- id: Q-37
+  scenario: S07
+  difficulty: 复杂
+  role: 投资组合经理
+  question: PF-050 三月计划里哪些发行方会超限？各超出多少？它们二月实际的占比和适用限额是多少？
+  output_contract: 各发行方三月占比、限额、超出；二月占比与限额
+- id: Q-38
+  scenario: S07
+  difficulty: 复杂
+  role: 风控合规
+  question: 二月实际对手应收超限的组合，到三月计划里还有哪些仍然超限？
+  output_contract: 完整组合编号清单
+- id: Q-39
+  scenario: S07
+  difficulty: 中等
+  role: 投资组合经理
+  question: 按三月计划，PF-050 月底市值会是多少美元？比二月实际多多少？
+  output_contract: 三月计划市值、二月实际市值、变化
+- id: Q-40
+  scenario: S08
+  difficulty: 复杂
+  role: 中台运营
+  question: 站在 2 月 15 日、只用当天已经知道的信息，PF-029 有哪些指令没交收完？哪些已经逾期、哪些已经失败？
+  output_contract: 指令及状态、是否逾期
+- id: Q-41
+  scenario: S08
+  difficulty: 复杂
+  role: 中台运营
+  question: 2 月 20 日那天看，PF-020 还有哪些卖出没交收完、各剩多少？到今天又多交收了多少？
+  output_contract: 2 月 20 日各指令剩余数量、此后新交收数量
+- id: Q-42
+  scenario: S08
+  difficulty: 复杂
+  role: 中台运营
+  question: 如果按 2 月 15 日当天掌握的信息，全公司有多少笔指令没交收完？其中多少笔已经失败？
+  output_contract: 未完成笔数、失败笔数
+- id: Q-43
+  scenario: S08
+  difficulty: 复杂
+  role: 风控合规
+  question: 按 2 月 15 日掌握的信息，PF-029 对 CP-029 的未结算卖出应收是多少美元？今天又是多少？
+  output_contract: 2 月 15 日应收、今天应收
+- id: Q-44
+  scenario: S08
+  difficulty: 复杂
+  role: 风控合规
+  question: PF-029 交收失败的卖出涉及哪些发行方的证券？这些失败加起来让对 CP-029 的应收是多少美元？
+  output_contract: 发行方清单、应收金额
+- id: Q-45
+  scenario: S08
+  difficulty: 复杂
+  role: 基金会计
+  question: PF-035 估值受阻的那只证券属于哪家发行方？如果这只证券有了合格价格，组合里还有别的估值缺口吗？
+  output_contract: 证券、发行方、其余缺口数
+- id: Q-46
+  scenario: S08
+  difficulty: 复杂
+  role: 风控合规
+  question: PF-041 对 ISS-041 的集中度从十一月到二月每个月底各是多少？哪个月开始超限？
+  output_contract: 各月底占比、开始超限的月份
+- id: Q-47
+  scenario: S04
+  difficulty: 复杂
+  role: 基金会计
+  question: 二月月结时，PF-046 二月份的成交按币种，买卖相抵后的成交总额各是多少？还有多少卖出名义金额没交收？
+  output_contract: 各币种带符号成交总额、未交收卖出名义金额（本币）
+- id: Q-48
+  scenario: S06
+  difficulty: 中等
+  role: 风控合规
+  question: PF-019 对 CP-019 现在的未结算卖出应收是多少美元？这些卖出都还没到期吗？
+  output_contract: 应收金额、是否全部未到期
+- id: Q-49
+  scenario: S03
+  difficulty: 复杂
+  role: 基金会计
+  question: PF-020 二月底哪只证券估值受阻？原因是什么？组合里其他证券的美元市值合计是多少？
+  output_contract: 证券、原因、其余证券美元市值合计
+- id: Q-50
+  scenario: S07
+  difficulty: 复杂
+  role: 风控合规
+  question: 2 月 28 日才批准的新限额里，有没有今天就该按新限额评估的？PF-049 今天的集中度按适用限额判断是什么结论？
+  output_contract: 是否今天适用、PF-049 今天结论

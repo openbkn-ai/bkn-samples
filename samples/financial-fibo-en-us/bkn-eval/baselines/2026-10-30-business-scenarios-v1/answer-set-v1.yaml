@@ -1,0 +1,425 @@
+schema_version: '1.0'
+set_id: fibo-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+generation_method: independent raw CSV Decimal oracle (oracle.py)
+answers:
+- id: Q-01
+  question: How many portfolios do we manage, and how many asset managers run them?
+  expected:
+    portfolios: 200
+    managers: 50
+- id: Q-02
+  question: Who issued bond INS-002, when does it mature, and how is it quoted?
+  expected:
+    issuer_id: ISS-001
+    issuer: Alder Technology Holdings
+    maturity_date: '2030-06-30'
+    price_basis: dirty_per_100
+- id: Q-03
+  question: Which asset manager runs PF-001, and what are its base currency and mandate?
+  expected:
+    manager_id: MGR-001
+    manager: Alder Technology Asset Management
+    base_currency: USD
+    mandate: long_only
+- id: Q-04
+  question: How many securities does PF-001 hold at the end of February, and how many of them are bonds?
+  expected:
+    securities: 8
+    bonds: 4
+- id: Q-05
+  question: How many trades were executed in February, and how many were buys and sells?
+  expected:
+    trades: 1600
+    buys: 200
+    sells: 1400
+- id: Q-06
+  question: As of today, how many settlement instructions are not fully settled?
+  expected:
+    instructions: 304
+- id: Q-07
+  question: How many settlement instructions are currently failed, and how many fall under each failure reason?
+  expected:
+    failed: 144
+    reasons:
+      cash_mismatch: 80
+      insufficient_securities: 64
+- id: Q-08
+  question: Of the instructions not fully settled, how many are past their due date, split into failed and partially settled? How many are not yet due, and when is the earliest due date?
+  expected:
+    overdue: 224
+    overdue_failed: 144
+    overdue_partial: 80
+    not_due: 80
+    earliest_due: '2027-03-02'
+- id: Q-09
+  question: How many counterparties and how many portfolios do the overdue unsettled instructions involve?
+  expected:
+    counterparties: 14
+    portfolios: 56
+- id: Q-10
+  question: Which portfolios have settlements that failed because of insufficient securities?
+  expected:
+    portfolios:
+    - PF-029
+    - PF-031
+    - PF-033
+    - PF-047
+    - PF-079
+    - PF-081
+    - PF-083
+    - PF-097
+    - PF-129
+    - PF-131
+    - PF-133
+    - PF-147
+    - PF-179
+    - PF-181
+    - PF-183
+    - PF-197
+- id: Q-11
+  question: Which PF-019 sales are not yet settled? Give the security, remaining quantity and due date for each.
+  expected:
+    instructions:
+    - instruction: SI-019-2-4
+      instrument: INS-038
+      remaining: 3560
+      due_date: '2027-03-02'
+    - instruction: SI-019-4-4
+      instrument: INS-052
+      remaining: 494
+      due_date: '2027-03-02'
+    - instruction: SI-019-6-4
+      instrument: INS-072
+      remaining: 468
+      due_date: '2027-03-02'
+    - instruction: SI-019-8-4
+      instrument: INS-096
+      remaining: 454
+      due_date: '2027-03-02'
+- id: Q-12
+  question: Which PF-020 sales are only partly settled, and how much is still outstanding on each?
+  expected:
+    instructions:
+      SI-020-2-4: 242
+      SI-020-4-4: 227
+      SI-020-6-4: 1763
+      SI-020-8-4: 1835
+- id: Q-13
+  question: How many position valuations at the end of February have no market value, and how many fall under each reason?
+  expected:
+    valuations: 96
+    reasons:
+      missing: 32
+      price_unapproved: 32
+      stale: 32
+- id: Q-14
+  question: What EUR-to-USD rate is used for the end-of-February valuation, and when was it published?
+  expected:
+    rate: 1.073
+    published_date: '2027-02-26'
+- id: Q-15
+  question: What price is used to value INS-001 at the end of February, which date is it from, and is it approved?
+  expected:
+    price: 18.6
+    currency: CNY
+    price_date: '2027-02-26'
+    approved: true
+- id: Q-16
+  question: Which securities have no usable price for the end-of-February valuation, and what is wrong with each?
+  expected:
+    securities:
+      INS-069: stale
+      INS-071: price_unapproved
+      INS-073: missing
+      INS-075: stale
+      INS-077: price_unapproved
+      INS-079: missing
+- id: Q-17
+  question: How many portfolios have an end-of-February valuation affected by these price problems?
+  expected:
+    portfolios: 96
+- id: Q-18
+  question: What is the total market value of PF-001 at the end of February, in USD?
+  expected:
+    market_value_usd: 71364.79
+- id: Q-19
+  question: How is the end-of-February market value of the INS-002 bond held by PF-001 calculated? Give the quantity, price, price multiplier, FX rate, local market value and USD market value.
+  expected:
+    quantity: 61154
+    price: 100
+    multiplier: 0.01
+    fx_rate: 0.1394
+    market_value_local: 61154
+    market_value_usd: 8524.87
+- id: Q-20
+  question: Among portfolios whose end-of-February valuation is complete, which three have the largest USD market value, and how much each?
+  expected:
+    portfolios:
+      PF-195: 229889.15
+      PF-193: 226172.07
+      PF-194: 224792.51
+- id: Q-21
+  question: Why can INS-069 not be used for the end-of-February valuation? What date and price is its latest approved price?
+  expected:
+    issue: stale
+    latest_price_date: '2027-02-18'
+    latest_price: 26.4
+    currency: USD
+- id: Q-22
+  question: How much did the cost of PF-001's INS-001 holding change from end of January to end of February, and which trade caused it?
+  expected:
+    cost_jan: 75383.14
+    cost_feb: 78545.14
+    change: 3162
+    trades:
+    - TR-001-1-4
+- id: Q-23
+  question: Which PF-001 holdings have realized P&L in February, and how much each, in local currency?
+  expected:
+    positions:
+      INS-016:
+        realized_pnl: 3.75
+        currency: USD
+      INS-036:
+        realized_pnl: -3.54
+        currency: EUR
+      INS-059:
+        realized_pnl: 38.4
+        currency: EUR
+      INS-060:
+        realized_pnl: -3.44
+        currency: EUR
+- id: Q-24
+  question: Because of PF-029's failed settlements, which holdings at the end of February differ between trade-date and settled quantity, and by how much?
+  expected:
+    positions:
+      INS-016: -500
+      INS-058: -500
+      INS-072: -468
+      INS-092: -3632
+- id: Q-25
+  question: Which issuer is PF-041 most concentrated in at the end of February, at what share, and what is the limit?
+  expected:
+    issuer_id: ISS-041
+    issuer: Alder Utilities Holdings
+    ratio: 0.608018
+    limit: 0.3
+- id: Q-26
+  question: How many portfolios breach an issuer concentration limit at the end of February? Which portfolio and issuer exceed it the most, and by how much?
+  expected:
+    portfolios: 20
+    worst_portfolio: PF-194
+    worst_issuer: ISS-044
+    excess: 0.34117
+- id: Q-27
+  question: How many portfolios cannot be judged on issuer concentration at the end of February, and why?
+  expected:
+    portfolios: 96
+    all_have_blocked_valuation: true
+- id: Q-28
+  question: PF-041 breaches its ISS-041 limit. Which holdings make up that exposure, how much is each in USD, and what is the portfolio total?
+  expected:
+    holdings:
+      INS-081: 44269.4
+      INS-082: 38529.64
+    exposure_usd: 82799.04
+    portfolio_total_usd: 136178.6
+    ratio: 0.608018
+- id: Q-29
+  question: Why can PF-035's issuer concentration not be judged at the end of February? Which issuers' USD amounts can still be confirmed, and how much each?
+  expected:
+    blocked_security: INS-069
+    reason: stale
+    unknown_issuer: ISS-035
+    known_issuers:
+      ISS-002: 16738.19
+      ISS-014: 17667.58
+      ISS-042: 17608.8
+- id: Q-30
+  question: How many portfolios breach a counterparty unsettled-sale receivable limit at the end of February?
+  expected:
+    portfolios: 12
+- id: Q-31
+  question: Which counterparty owes us the most on unsettled sales at the end of February, and how much in total in USD?
+  expected:
+    counterparty_id: CP-047
+    counterparty: Grove Utilities Securities
+    receivable_usd: 10459.8
+- id: Q-32
+  question: PF-046's unsettled-sale receivable from CP-046 is over its limit. Which unsettled sales cause it, how much quantity remains on each, and what are the USD total and the excess?
+  expected:
+    instructions:
+      SI-046-2-4: 3632
+      SI-046-4-4: 450
+      SI-046-6-4: 3492
+      SI-046-8-4: 3632
+    receivable_usd: 2002.41
+    limit_usd: 500
+    excess_usd: 1502.41
+- id: Q-33
+  question: Is PF-046's receivable from CP-046 reduced by its purchases from the same counterparty? If the failed sales all settled today, would it still breach?
+  expected:
+    netted_with_buys: false
+    breach_if_settled: false
+- id: Q-34
+  question: How many limits only take effect later, and how many portfolios do they cover?
+  expected:
+    limits: 32
+    portfolios: 8
+- id: Q-35
+  question: How will PF-049's issuer limits change, from when, and which limit applies today?
+  expected:
+    new_limit: 0.2
+    effective_from: '2027-03-15'
+    issuers:
+    - ISS-006
+    - ISS-016
+    - ISS-028
+    - ISS-049
+    current_limit: 0.8
+- id: Q-36
+  question: Under the March plan, which portfolios will breach a limit that they do not breach in February actuals?
+  expected:
+    portfolios:
+    - PF-049
+    - PF-050
+    - PF-099
+    - PF-100
+    - PF-149
+    - PF-150
+    - PF-199
+    - PF-200
+- id: Q-37
+  question: Which issuers will PF-050 breach under the March plan, and by how much? What are their February actual shares and the limits applying then?
+  expected:
+    march:
+      ISS-007:
+        share: 0.243924
+        limit: 0.2
+        excess: 0.043924
+      ISS-017:
+        share: 0.228119
+        limit: 0.2
+        excess: 0.028119
+      ISS-029:
+        share: 0.241992
+        limit: 0.2
+        excess: 0.041992
+      ISS-050:
+        share: 0.285965
+        limit: 0.2
+        excess: 0.085965
+    february:
+      ISS-007:
+        share: 0.242637
+        limit: 0.8
+      ISS-017:
+        share: 0.231968
+        limit: 0.8
+      ISS-029:
+        share: 0.242454
+        limit: 0.8
+      ISS-050:
+        share: 0.282941
+        limit: 0.8
+- id: Q-38
+  question: Of the portfolios over a counterparty receivable limit in February actuals, which are still over it under the March plan?
+  expected:
+    portfolios:
+    - PF-048
+    - PF-098
+    - PF-148
+    - PF-198
+- id: Q-39
+  question: Under the March plan, what will PF-050's month-end market value be in USD, and how much higher is it than February actual?
+  expected:
+    march_plan_usd: 70706.89
+    february_actual_usd: 72062.18
+    change: -1355.29
+- id: Q-40
+  question: Standing on February 15 and using only what was known that day, which PF-029 instructions were not fully settled? Which were overdue and which had failed?
+  expected:
+    instructions:
+      SI-029-4-4:
+        status: failed
+        overdue: true
+      SI-029-6-4:
+        status: pending
+        overdue: false
+      SI-029-7-4:
+        status: pending
+        overdue: false
+- id: Q-41
+  question: As seen on February 20, which PF-020 sales were not fully settled and how much remained on each? How much more has settled since then?
+  expected:
+    feb20:
+      SI-020-4-4: 227
+      SI-020-6-4: 1763
+      SI-020-8-4: 3670
+    settled_since:
+      SI-020-4-4: 0
+      SI-020-6-4: 0
+      SI-020-8-4: 1835
+- id: Q-42
+  question: Based on what was known on February 15, how many instructions across the company were not fully settled, and how many had failed?
+  expected:
+    instructions: 436
+    failed: 36
+- id: Q-43
+  question: Based on what was known on February 15, what was PF-029's unsettled-sale receivable from CP-029 in USD, and what is it today?
+  expected:
+    feb15_usd: 1481.27
+    today_usd: 2007.14
+- id: Q-44
+  question: Which issuers' securities are in PF-029's failed sales, and what receivable from CP-029 do these failures add up to in USD?
+  expected:
+    issuers:
+    - ISS-008
+    - ISS-029
+    - ISS-036
+    - ISS-046
+    receivable_usd: 2007.14
+- id: Q-45
+  question: Which issuer does PF-035's blocked security belong to? If it got an eligible price, would any other valuation gap remain in the portfolio?
+  expected:
+    security: INS-069
+    issuer_id: ISS-035
+    issuer: Elm Consumer Holdings
+    other_gaps: 0
+- id: Q-46
+  question: What was PF-041's concentration in ISS-041 at each month end from November to February, and from which month was it over the limit?
+  expected:
+    shares:
+      '2026-11-30': 0.603944
+      '2026-12-31': 0.609748
+      '2027-01-31': 0.601937
+      '2027-02-28': 0.608018
+    first_breach: '2026-11-30'
+- id: Q-47
+  question: For month-end close, what is PF-046's February traded amount by currency with buys positive and sells negative, and how much sale notional is still unsettled?
+  expected:
+    currencies:
+      CNY:
+        signed_gross: -15062.52
+        open_sell_notional: 10788.12
+      EUR:
+        signed_gross: -914.63
+        open_sell_notional: 464.63
+- id: Q-48
+  question: What is PF-019's unsettled-sale receivable from CP-019 now in USD, and are all of those sales still not due?
+  expected:
+    receivable_usd: 2000.37
+    all_not_due: true
+- id: Q-49
+  question: Which PF-020 security has a blocked valuation at the end of February, why, and what is the total USD market value of its other securities?
+  expected:
+    security: INS-073
+    reason: missing
+    others_usd: 64340.9
+- id: Q-50
+  question: Among the new limits approved on February 28, should any already be applied today? What is PF-049's concentration verdict today under the applicable limits?
+  expected:
+    apply_today: false
+    pf049_today: within

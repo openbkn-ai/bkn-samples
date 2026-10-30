@@ -7,16 +7,17 @@
     "aliases": [],
     "displayName": "金融投资组合运营（中文）",
     "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
-    "version": "0.2.6"
+    "version": "0.2.7"
   },
   "spec": {
     "studio": {
       "licenseNote": "MIT · Synthetic demonstration data / 虚构演示数据",
       "questions": [
-        "INS-001 的发行方编号和名称是什么？",
-        "INS-002 使用什么资产类别与报价口径？",
-        "PF-049 的名称和本位币是什么？"
-      ]
+        "到今天为止，还有多少笔结算指令没有交收完？",
+        "PF-046 对 CP-046 的未结算卖出应收超限了，是哪些卖出没交收造成的？",
+        "按三月计划，哪些组合会出现超限而二月实际并没有超限？"
+      ],
+      "experienceSet": "experience/experience-set.yaml"
     },
     "database": {
       "engine": "mariadb",
@@ -37,7 +38,7 @@
     "components": {
       "objects": true,
       "relations": true,
-      "metrics": true,
+      "metrics": false,
       "functions": true,
       "skills": true
     },

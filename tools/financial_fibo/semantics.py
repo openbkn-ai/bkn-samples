@@ -86,29 +86,37 @@ def field_description(table,field,zh,schema):
 
 
 ANALYSIS_CONTRACT=(
-"""Business analysis contract (applies to every question, not precomputed answers):
-- Current means the observation-date snapshot, not the sum of historical snapshots. All-actual history is a different explicitly requested scope. Select actual/planned and known_date consistently; forecast facts cannot enter actual results.
-- Day-only dates may be transported as ISO midnight strings. Normalize to YYYY-MM-DD/date before local comparison. Decimal fields may arrive as strings; use Decimal(str(value)). Controlled values are localized: use the allowed values in property descriptions, never assume English statuses in a Chinese network.
-- A settlement event is incremental. Keep event_date <= business date and known_date <= knowledge date and sum transfers per instruction. Invalid quantities or tied ordering are unknown; a full transfer is settled even after a zero acknowledgement; otherwise latest failure takes precedence, then partial or pending according to transferred quantity. Do not add an acknowledgement again or count history rows as instructions. Monthly contractual/receivable analysis uses each trade month's last day, knowledge <= min(observation date, month end); only future months permit planned events known at observation.
-- Trade translation selects the actual USD fixing with latest as_of_date among rows whose as_of_date, published_date and known_date are <= the trade date. Translate booked gross_amount without further per-trade FX rounding, then round the grouped sum half-up to 2dp. Fixing age means trade_date minus published_date. Reconstructed valuation selects the unique eligible snapshot-date FX from raw rates; recorded fx_id is diagnostic, not an input to reconstruction. Never mix those two FX selection rules.
-- Booked contract consideration gross_amount = ROUND_HALF_UP(quantity * execution_price * price_multiplier, 2) in local currency. Actual contractual-amount reports must sum this recorded amount, not reverse its per-trade booking rounding. Unrounded FX translation means gross_amount * rate before rounding the group sum. Monthly cohort open-sell notionals are instead quantity-based local amounts unless USD is explicitly requested. Equity factor is 1; per-100-face dirty bond factor is 0.01. Snapshot local market value is rounded to 2dp before FX; base value then rounds to 2dp. Current-snapshot market value is not cash, NAV or total return.
-- Portfolio quantity reconciles when trade_basis - settled_basis - unsettled_delta = 0. A nonzero unsettled delta is not a reconciliation failure. Buy/sell directions and instrument units matter; never add shares and face units as a business quantity. Same-day buy/sell ordering ambiguity blocks cost and P&L, not independently conserved quantities or qualified market values. USD conversion uses the identity1 without requiring an external USD/USD row; an implicit identity has null fx_id, never a fabricated source ID. A blocked row can retain independently known values.
-- A portfolio market value requires a known market value for every position; proved zero quantities need no price or FX. Missing values remain null. Reconstructed issuer amounts use issuer-local completeness: preserve a known amount even when another issuer blocks the full denominator. A missing opening blocks its identifiable issuer and the full denominator; unassigned missing coverage blocks every issuer amount. A proved zero total stays zero, but its ratio is undefined. Only a complete set of ratios with a positive full denominator sums to one. Do not assume two issuers after joining instrument pairs.
-- Receivable is nonnetted open sell quantity * execution quote * multiplier * as-of USD rate. Accumulate unrounded contributions then round the total; displayed rounded lines may have a rounding residual. Use explicit limit validity/approval/known dates; unknown is not within-limit, equality does not breach.
-- Follow relation source -> target as declared in mapping rules. Cypher supports joins/grouping/aggregates but not WITH, CASE, date functions or arbitrary SQL. Use the published functions for settlement, ledger/valuation and limit reconstruction; use run_code to project or aggregate their returned rows or perform a specifically requested source audit. Do not duplicate a complete published calculation. Use nonreserved parameter names such as $start_date/$end_date, never an unescaped $end. If property-to-property comparison is unsupported, project bounded source fields and compare returned facts in memory. Tool results are query_object_instance.datas or run_cypher.entries; use documented pagination and explicit limits.
-- Read declared properties and allowed values before filtering. A code prefix is not its identifier scheme; actual/planned view is not executed/planned trade status. Raw source values follow the network language. Native side and status_code are stable machine codes, including buy/sell, and must not be translated inside typed result fields. Follow published field ownership, display precision and complete controlled-value contracts; do not invent enum values or replace a stored reason with free prose.
-- Answer the requested measure and scope only. Use recorded objects/metrics for recorded-snapshot questions. Each run_code may call one native function, optionally with additional_observations: at most11 extra scopes plus the base, a fixed set of at most20 portfolios and a3MiB complete result. Scalar calls retain up to200 portfolios. Reuse sources only within that call, keep each observation's scope/evidence/issues separate, and split requests when needed. Check errors, nonnull results and completeness before projection. Print only requested rows, summaries and relevant evidence, using an allowed compact table for full lists; never truncate required rows or dump the entire native batch. Compare bounded returned results across calls rather than putting several broad native calls in one run_code.
+"""Business rules (defaults; a user's explicit condition wins):
+- The business date is 2027-02-28; "now" and "today" mean this date. November to February are actual (view_kind actual); March is the plan known today (view_kind planned). Month end means the snapshot dated 2026-11-30, 12-31, 2027-01-31, 02-28 or the planned 03-31. Never present plan data as something that has happened.
+- "The situation on a day" counts only records dated on or before that day whose known_date is on or before that day.
+- Settlement events are incremental: sum settled_quantity per instruction. Settled when the total equals required_quantity; otherwise failed if the latest event (event_date, event_sequence) failed, partially settled if some quantity settled, pending if none. Outstanding past due_date is overdue, reported separately from failed.
+- Positions carry trade-basis and settled-basis quantities; unsettled_delta is their difference. Cost is weighted average; realized P&L is in local currency.
+- A valuation needs an approved price at most 3 calendar days older than the valuation date, and the single FX rate from the security currency to USD for that day. Stale, unapproved or missing prices block the valuation; no older price is substituted.
+- Local market value = quantity × price × price_multiplier (1 for equities, 0.01 for bonds quoted dirty per 100 face), rounded half up to the cent; USD value = local value × FX rate, rounded to the cent.
+- Unknown is not zero. One unknown valuation makes the portfolio total and every issuer concentration unknown; issuer amounts whose holdings are all valued stay confirmed.
+- Issuer concentration = issuer USD value ÷ portfolio USD value of all securities, 6 decimals. Counterparty unsettled-sale receivable = Σ remaining sale quantity × execution price × multiplier × that day's FX, rounded after summing; purchases never offset it.
+- The applicable limit is approved by the day, effective on it and unique; a new limit applies only from effective_from_date. Greater than the limit is a breach, equal is within; excess = observed − limit.
+- Month-end reconciliation groups trades by trade month and local currency, buys positive and sells negative, with unsettled sale notional shown separately.
+
+How to answer:
+- Month-end valuations, positions, issuer exposures (with exposure_contributions), counterparty exposures and limit assessments are recorded snapshots that match recomputation from the original records; read them with Cypher.
+- For a date that is not a month end, for what was known on an earlier day, or to explain a status from the original trades and events, call settlement_asof, valuation_asof or limit_assessment_asof.
+- Cypher supports joins, WITH, CASE, aggregation and ORDER BY; it does not support variable-length paths or UNWIND. Dates are YYYY-MM-DD strings and compare as text; numbers may arrive as strings, so use Decimal arithmetic.
 """,
-"""通用业务分析口径（适用于全部业务问题，不含预计算答案）：
-- “当前”指观察日的单个快照，不是历史快照加总；“全部实际历史”是另一种明确范围。统一 actual/planned 对应本地取值和 known_date，预测不得混入实际。
-- 日期可能被接口序列化为零点 ISO 字符串，计算前先归一为 YYYY-MM-DD/date。decimal 字段可能返回字符串，使用 Decimal(str(value))。中文网络必须使用属性描述声明的中文枚举，不能假设英文状态仍可过滤。
-- 结算事件为增量。按业务日期过滤 event_date、按知识日期过滤 known_date，逐指令累计转移量。数量或顺序不可靠时为未知；全额转移即已结算，即使后续仅零数量确认；否则最新失败优先，再按累计量区分部分与待结算；确认消息不得重复算转移量，事件历史行数不等于指令数。按交易月份核对合约/应收时，结算截止为该月末，知识截止为 min(观察日,月末)；只有未来月份允许观察日已知的计划事件。
-- 成交折算：从实际 USD 汇率中选择 as_of_date 最近且 as_of_date、published_date、known_date 均不晚于成交日的记录。用已入账 gross_amount 乘汇率，逐笔折算不再舍入，分组合计后四舍五入两位。定盘日龄为 trade_date 减 published_date。重算估值从原始汇率选择合格且唯一的快照日汇率，已记录 fx_id 仅用于诊断，不作为重算输入；不能混用成交日与快照日汇率。
-- 入账合约金额 gross_amount=ROUND_HALF_UP(数量×成交报价×价格乘数,2)，单位为本币。实际合约金额报告应汇总该入账字段，不能撤销逐笔入账舍入。“未舍入汇率折算”指 gross_amount×汇率在分组合计前不再舍入。月度成交队列的剩余卖出名义金额按剩余数量计算，默认本币，明确要求美元时才折算。股票因子1，债券每百元面值全价因子0.01。快照本币市值先舍入两位，再乘汇率并舍入美元两位；市值不是现金、净值或总投资收益。
-- 数量勾稽检查 trade_basis-settled_basis-unsettled_delta 是否为0，非零未结算差量不等于勾稽失败。需保持买卖符号和工具单位，不得把股数与面值单位混作业务数量。同日买卖顺序不明只阻断依赖顺序的成本和损益，不清空独立已知数量或合格市值。美元换算采用恒等关系1，不要求外部USD/USD行；恒等关系的fx_id为空，不能虚构来源主键。blocked行仍可保留独立已知字段。
-- 完整组合估值要求全部持仓市值可知，已证明零数量无需价格或汇率；未知保持NULL。重算发行方金额按自身构成判断完整性，其他发行方受阻时仍保留本发行方已知金额。缺失期初阻断可定位发行方及全组合分母，无法定位的覆盖缺失则阻断全部发行方金额。已证明零分母保留零，但比例无定义；仅完整且全组合分母为正时，发行方份额才应合计为1。工具两两归属发行方不表示组合只有两个发行方。
-- 未结算应收为非净额未结算卖出数量×成交报价×乘数×截至日美元汇率；未舍入构成加总后舍入，展示行舍入合计可能存在尾差。限额核对需同时考虑有效期、批准与已知日期；无法判定不等于限额内，等于阈值不超限。
-- 按关系映射声明的源→目标连接。Cypher可关联、分组、聚合，但不支持WITH、CASE、日期函数或任意SQL；结算、持仓估值和限额重建优先使用已发布函数；run_code用于投影或汇总函数返回行及明确要求的源事实审计，不重复实现完整函数公式。参数使用$start_date/$end_date等非保留名称，不使用未转义的$end。属性间比较不受支持时，读取有界源字段后在内存中比较已返回事实。query_object_instance取datas，run_cypher取entries；遵循分页并显式设置返回行数上限。
-- 过滤前读取声明属性及允许取值。编码前缀不是标识体系，actual/planned视图不是executed/planned成交状态。原始数据取值遵循网络语言；native的side和status_code为稳定机器码，buy/sell等不得在类型化结果字段中翻译。按公开字段归属、展示精度和完整受控值契约输出，不编造枚举，也不把已记录原因改写成自由说明。
-- 严格回答所问口径和范围；已记录快照使用对应对象或指标。每个run_code只调用一次native，可用additional_observations复用该次源数据：基准加至多11个额外范围、固定至多20组合、完整结果至多3MiB；单范围仍支持至多200组合。每个观察范围独立保留scope、证据与问题，必要时拆分请求。投影前检查错误、非空结果及完整性；只打印所需行、摘要和相关证据，完整清单可用允许的紧凑表，不能截断必需行或打印整个native批次。跨调用比较有界结果，不把多个大范围native调用塞进一个run_code。
+"""业务口径（默认规则；使用者明确提出别的条件时以使用者为准）：
+- 业务日期为 2027-02-28，“现在”“今天”指这一天。十一月至二月是实际数据（view_kind 为实际），三月是今天已知的计划（view_kind 为计划）。月末指 2026-11-30、12-31、2027-01-31、02-28 及计划的 03-31 快照。计划数据不能说成已经发生。
+- “某天的情况”只算日期不晚于当天、且 known_date 不晚于当天的记录。
+- 结算事件是增量，按指令累加 settled_quantity。合计等于 required_quantity 为已结算；否则最近事件（event_date、event_sequence）失败为结算失败，有部分交收为部分结算，没有交收为待结算。超过 due_date 仍未交收完为逾期，与失败分开说明。
+- 持仓有交易口径和已交收口径数量，unsettled_delta 是两者之差。成本按加权平均法；已实现损益按本币。
+- 估值只用已批准、价格日期距估值日期不超过 3 个自然日的价格，以及当天证券币种兑美元的唯一汇率。价格陈旧、未批准或缺失则估值受阻，不能拿更早的价格顶替。
+- 本币市值 = 数量 × 价格 × price_multiplier（股票为 1，债券按每百元面值全价为 0.01），四舍五入到分；美元市值 = 本币市值 × 汇率，再到分。
+- 未知不等于零。组合里只要有一条估值未知，组合总市值和各发行方集中度都未知；持仓都已估值的发行方金额仍可确认。
+- 发行方集中度 = 发行方美元市值 ÷ 组合全部证券美元市值，保留 6 位小数。交易对手未结算卖出应收 = Σ 未交收卖出剩余数量 × 成交价 × 乘数 × 当天汇率，先求和再到分；同一对手的买入不能抵减。
+- 适用限额须在当天已批准、处于有效期内且唯一；新限额从 effective_from_date 起才使用。大于限额为超限，等于不超限；超出部分 = 观察值 − 限额。
+- 月结按成交月份和本币币种汇总，买入为正、卖出为负，未交收卖出名义金额单独列示。
+
+回答方式：
+- 月末的估值、持仓、发行方敞口（及 exposure_contributions 构成）、交易对手敞口和限额评估是已记录快照，与按原始记录重算的结果一致，用 Cypher 直接读取。
+- 问非月末日期、问更早某天当时已知的情况，或要从原始成交和交收事件解释状态时，调用 settlement_asof、valuation_asof 或 limit_assessment_asof。
+- Cypher 支持关联、WITH、CASE、聚合和 ORDER BY，不支持变长路径和 UNWIND。日期是 YYYY-MM-DD 字符串，可直接比较；数值可能以字符串返回，按 Decimal 计算。中文网络的状态等取值使用属性描述里的中文枚举。
 """)

@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: fibo-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: basic
+  role: Portfolio manager
+  question: How many portfolios do we manage, and how many asset managers run them?
+  output_contract: portfolio count, manager count
+- id: Q-02
+  scenario: S01
+  difficulty: basic
+  role: Fund accountant
+  question: Who issued bond INS-002, when does it mature, and how is it quoted?
+  output_contract: issuer id and name, maturity date, quote basis
+- id: Q-03
+  scenario: S01
+  difficulty: basic
+  role: Portfolio manager
+  question: Which asset manager runs PF-001, and what are its base currency and mandate?
+  output_contract: manager id and name, base currency, mandate
+- id: Q-04
+  scenario: S01
+  difficulty: basic
+  role: Portfolio manager
+  question: How many securities does PF-001 hold at the end of February, and how many of them are bonds?
+  output_contract: security count, bond count
+- id: Q-05
+  scenario: S02
+  difficulty: basic
+  role: Middle office
+  question: How many trades were executed in February, and how many were buys and sells?
+  output_contract: trade count, buys, sells
+- id: Q-06
+  scenario: S02
+  difficulty: basic
+  role: Middle office
+  question: As of today, how many settlement instructions are not fully settled?
+  output_contract: instruction count
+- id: Q-07
+  scenario: S02
+  difficulty: basic
+  role: Middle office
+  question: How many settlement instructions are currently failed, and how many fall under each failure reason?
+  output_contract: failed count, count by reason
+- id: Q-08
+  scenario: S02
+  difficulty: medium
+  role: Middle office
+  question: Of the instructions not fully settled, how many are past their due date, split into failed and partially settled? How many are not yet due, and when is the earliest due date?
+  output_contract: overdue count, of which failed and partial, not-due count, earliest due date
+- id: Q-09
+  scenario: S02
+  difficulty: medium
+  role: Middle office
+  question: How many counterparties and how many portfolios do the overdue unsettled instructions involve?
+  output_contract: counterparty count, portfolio count
+- id: Q-10
+  scenario: S02
+  difficulty: medium
+  role: Middle office
+  question: Which portfolios have settlements that failed because of insufficient securities?
+  output_contract: full list of portfolio ids
+- id: Q-11
+  scenario: S02
+  difficulty: medium
+  role: Middle office
+  question: Which PF-019 sales are not yet settled? Give the security, remaining quantity and due date for each.
+  output_contract: full list of instructions (instruction, security, remaining quantity, due date)
+- id: Q-12
+  scenario: S02
+  difficulty: medium
+  role: Middle office
+  question: Which PF-020 sales are only partly settled, and how much is still outstanding on each?
+  output_contract: instructions and remaining quantities
+- id: Q-13
+  scenario: S03
+  difficulty: basic
+  role: Fund accountant
+  question: How many position valuations at the end of February have no market value, and how many fall under each reason?
+  output_contract: valuation count, count by reason
+- id: Q-14
+  scenario: S03
+  difficulty: basic
+  role: Fund accountant
+  question: What EUR-to-USD rate is used for the end-of-February valuation, and when was it published?
+  output_contract: rate, publication date
+- id: Q-15
+  scenario: S03
+  difficulty: basic
+  role: Fund accountant
+  question: What price is used to value INS-001 at the end of February, which date is it from, and is it approved?
+  output_contract: price, currency, price date, approved or not
+- id: Q-16
+  scenario: S03
+  difficulty: medium
+  role: Fund accountant
+  question: Which securities have no usable price for the end-of-February valuation, and what is wrong with each?
+  output_contract: security ids and the issue
+- id: Q-17
+  scenario: S03
+  difficulty: medium
+  role: Fund accountant
+  question: How many portfolios have an end-of-February valuation affected by these price problems?
+  output_contract: portfolio count
+- id: Q-18
+  scenario: S03
+  difficulty: medium
+  role: Portfolio manager
+  question: What is the total market value of PF-001 at the end of February, in USD?
+  output_contract: market value in USD
+- id: Q-19
+  scenario: S03
+  difficulty: medium
+  role: Fund accountant
+  question: How is the end-of-February market value of the INS-002 bond held by PF-001 calculated? Give the quantity, price, price multiplier, FX rate, local market value and USD market value.
+  output_contract: quantity, price, multiplier, FX rate, local and USD market value
+- id: Q-20
+  scenario: S03
+  difficulty: medium
+  role: Portfolio manager
+  question: Among portfolios whose end-of-February valuation is complete, which three have the largest USD market value, and how much each?
+  output_contract: portfolio ids and USD market values, largest first
+- id: Q-21
+  scenario: S03
+  difficulty: medium
+  role: Fund accountant
+  question: Why can INS-069 not be used for the end-of-February valuation? What date and price is its latest approved price?
+  output_contract: issue, latest price date, price, currency
+- id: Q-22
+  scenario: S04
+  difficulty: medium
+  role: Fund accountant
+  question: How much did the cost of PF-001's INS-001 holding change from end of January to end of February, and which trade caused it?
+  output_contract: January cost, February cost, change, trade ids
+- id: Q-23
+  scenario: S04
+  difficulty: medium
+  role: Fund accountant
+  question: Which PF-001 holdings have realized P&L in February, and how much each, in local currency?
+  output_contract: securities and realized P&L in local currency
+- id: Q-24
+  scenario: S04
+  difficulty: complex
+  role: Middle office
+  question: Because of PF-029's failed settlements, which holdings at the end of February differ between trade-date and settled quantity, and by how much?
+  output_contract: securities and quantity difference (trade basis minus settled)
+- id: Q-25
+  scenario: S05
+  difficulty: medium
+  role: Risk and compliance
+  question: Which issuer is PF-041 most concentrated in at the end of February, at what share, and what is the limit?
+  output_contract: issuer id and name, share, limit
+- id: Q-26
+  scenario: S05
+  difficulty: medium
+  role: Risk and compliance
+  question: How many portfolios breach an issuer concentration limit at the end of February? Which portfolio and issuer exceed it the most, and by how much?
+  output_contract: breaching portfolio count, worst portfolio and issuer, excess share
+- id: Q-27
+  scenario: S05
+  difficulty: medium
+  role: Risk and compliance
+  question: How many portfolios cannot be judged on issuer concentration at the end of February, and why?
+  output_contract: portfolio count, whether all are caused by a blocked valuation in the portfolio
+- id: Q-28
+  scenario: S05
+  difficulty: complex
+  role: Risk and compliance
+  question: PF-041 breaches its ISS-041 limit. Which holdings make up that exposure, how much is each in USD, and what is the portfolio total?
+  output_contract: securities and USD amounts, issuer total, portfolio total, share
+- id: Q-29
+  scenario: S05
+  difficulty: complex
+  role: Risk and compliance
+  question: Why can PF-035's issuer concentration not be judged at the end of February? Which issuers' USD amounts can still be confirmed, and how much each?
+  output_contract: blocked security, reason, issuer with unknown amount, confirmed issuer amounts
+- id: Q-30
+  scenario: S06
+  difficulty: basic
+  role: Risk and compliance
+  question: How many portfolios breach a counterparty unsettled-sale receivable limit at the end of February?
+  output_contract: portfolio count
+- id: Q-31
+  scenario: S06
+  difficulty: medium
+  role: Risk and compliance
+  question: Which counterparty owes us the most on unsettled sales at the end of February, and how much in total in USD?
+  output_contract: counterparty id and name, USD amount
+- id: Q-32
+  scenario: S06
+  difficulty: complex
+  role: Risk and compliance
+  question: PF-046's unsettled-sale receivable from CP-046 is over its limit. Which unsettled sales cause it, how much quantity remains on each, and what are the USD total and the excess?
+  output_contract: instructions and remaining quantities, receivable total, limit, excess
+- id: Q-33
+  scenario: S06
+  difficulty: complex
+  role: Risk and compliance
+  question: Is PF-046's receivable from CP-046 reduced by its purchases from the same counterparty? If the failed sales all settled today, would it still breach?
+  output_contract: netted or not, breach after settlement or not
+- id: Q-34
+  scenario: S07
+  difficulty: basic
+  role: Risk and compliance
+  question: How many limits only take effect later, and how many portfolios do they cover?
+  output_contract: limit count, portfolio count
+- id: Q-35
+  scenario: S07
+  difficulty: medium
+  role: Risk and compliance
+  question: How will PF-049's issuer limits change, from when, and which limit applies today?
+  output_contract: new limit, effective date, issuers, current limit
+- id: Q-36
+  scenario: S07
+  difficulty: complex
+  role: Portfolio manager
+  question: Under the March plan, which portfolios will breach a limit that they do not breach in February actuals?
+  output_contract: full list of portfolio ids
+- id: Q-37
+  scenario: S07
+  difficulty: complex
+  role: Portfolio manager
+  question: Which issuers will PF-050 breach under the March plan, and by how much? What are their February actual shares and the limits applying then?
+  output_contract: 'per issuer: March share, limit, excess; February share and limit'
+- id: Q-38
+  scenario: S07
+  difficulty: complex
+  role: Risk and compliance
+  question: Of the portfolios over a counterparty receivable limit in February actuals, which are still over it under the March plan?
+  output_contract: full list of portfolio ids
+- id: Q-39
+  scenario: S07
+  difficulty: medium
+  role: Portfolio manager
+  question: Under the March plan, what will PF-050's month-end market value be in USD, and how much higher is it than February actual?
+  output_contract: March plan value, February actual value, change
+- id: Q-40
+  scenario: S08
+  difficulty: complex
+  role: Middle office
+  question: Standing on February 15 and using only what was known that day, which PF-029 instructions were not fully settled? Which were overdue and which had failed?
+  output_contract: instructions with status and overdue flag
+- id: Q-41
+  scenario: S08
+  difficulty: complex
+  role: Middle office
+  question: As seen on February 20, which PF-020 sales were not fully settled and how much remained on each? How much more has settled since then?
+  output_contract: remaining per instruction on Feb 20, quantity settled since
+- id: Q-42
+  scenario: S08
+  difficulty: complex
+  role: Middle office
+  question: Based on what was known on February 15, how many instructions across the company were not fully settled, and how many had failed?
+  output_contract: unsettled count, failed count
+- id: Q-43
+  scenario: S08
+  difficulty: complex
+  role: Risk and compliance
+  question: Based on what was known on February 15, what was PF-029's unsettled-sale receivable from CP-029 in USD, and what is it today?
+  output_contract: receivable on Feb 15, receivable today
+- id: Q-44
+  scenario: S08
+  difficulty: complex
+  role: Risk and compliance
+  question: Which issuers' securities are in PF-029's failed sales, and what receivable from CP-029 do these failures add up to in USD?
+  output_contract: issuer list, receivable amount
+- id: Q-45
+  scenario: S08
+  difficulty: complex
+  role: Fund accountant
+  question: Which issuer does PF-035's blocked security belong to? If it got an eligible price, would any other valuation gap remain in the portfolio?
+  output_contract: security, issuer, remaining gaps
+- id: Q-46
+  scenario: S08
+  difficulty: complex
+  role: Risk and compliance
+  question: What was PF-041's concentration in ISS-041 at each month end from November to February, and from which month was it over the limit?
+  output_contract: share at each month end, first breaching month
+- id: Q-47
+  scenario: S04
+  difficulty: complex
+  role: Fund accountant
+  question: For month-end close, what is PF-046's February traded amount by currency with buys positive and sells negative, and how much sale notional is still unsettled?
+  output_contract: 'per currency: signed traded amount and unsettled sale notional (local currency)'
+- id: Q-48
+  scenario: S06
+  difficulty: medium
+  role: Risk and compliance
+  question: What is PF-019's unsettled-sale receivable from CP-019 now in USD, and are all of those sales still not due?
+  output_contract: receivable amount, all not yet due or not
+- id: Q-49
+  scenario: S03
+  difficulty: complex
+  role: Fund accountant
+  question: Which PF-020 security has a blocked valuation at the end of February, why, and what is the total USD market value of its other securities?
+  output_contract: security, reason, USD total of the other securities
+- id: Q-50
+  scenario: S07
+  difficulty: complex
+  role: Risk and compliance
+  question: Among the new limits approved on February 28, should any already be applied today? What is PF-049's concentration verdict today under the applicable limits?
+  output_contract: applies today or not, PF-049 verdict today
