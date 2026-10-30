@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: retail-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.zh-CN.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: 基础
+  role: 仓配负责人
+  question: 我们一共经营多少个商品？分在几个品类？
+  output_contract: 商品数、品类数
+- id: Q-02
+  scenario: S01
+  difficulty: 基础
+  role: 仓配负责人
+  question: PRD-001 是哪家供应商供货？一箱几件？发货时至少要留几天保质期？
+  output_contract: 供应商编号与名称、每箱件数、最少剩余保质天数
+- id: Q-03
+  scenario: S01
+  difficulty: 基础
+  role: 仓配负责人
+  question: 我们有多少个仓库、多少家门店？
+  output_contract: 仓库数、门店数
+- id: Q-04
+  scenario: S03
+  difficulty: 中等
+  role: 门店店长
+  question: STORE-001 的货是从哪个仓库调过来的？
+  output_contract: 仓库编号清单
+- id: Q-05
+  scenario: S02
+  difficulty: 基础
+  role: 质量负责人
+  question: 现在有哪些批次质检不合格？哪些还没检完？
+  output_contract: 不合格批次清单、待检批次清单
+- id: Q-06
+  scenario: S02
+  difficulty: 中等
+  role: 质量负责人
+  question: 质检不合格的批次现在还在哪些地方有货？各多少件？
+  output_contract: 批次、地点、在库数量清单
+- id: Q-07
+  scenario: S02
+  difficulty: 基础
+  role: 仓配负责人
+  question: 二月份一共收进了多少个批次的货？
+  output_contract: 批次数
+- id: Q-08
+  scenario: S02
+  difficulty: 中等
+  role: 门店店长
+  question: LOT-013-D 还没检完，现在能卖吗？各地点能用的库存是多少？
+  output_contract: 能否销售、各地点可用量
+- id: Q-09
+  scenario: S04
+  difficulty: 基础
+  role: 仓配负责人
+  question: PRD-001 现在在 WH-001 能用的库存有多少件？
+  output_contract: 可用件数
+- id: Q-10
+  scenario: S04
+  difficulty: 中等
+  role: 仓配负责人
+  question: 现在已经发出、还没到货的在途货一共有多少件？
+  output_contract: 在途件数
+- id: Q-11
+  scenario: S04
+  difficulty: 中等
+  role: 质量负责人
+  question: 现在被隔离、不能用的库存一共多少件？分布在多少个批次库位？
+  output_contract: 隔离件数、批次库位数
+- id: Q-12
+  scenario: S04
+  difficulty: 复杂
+  role: 仓配负责人
+  question: PRD-001 在 WH-001 在库不少，为什么能用的只有这么些？按批次说明。
+  output_contract: 在库合计、可用合计、各批次在库/是否过期/隔离/召回封存/预留/可用
+- id: Q-13
+  scenario: S04
+  difficulty: 基础
+  role: 门店店长
+  question: STORE-001 现在能卖的货有多少件？分在几个批次？
+  output_contract: 可用件数、批次数
+- id: Q-14
+  scenario: S05
+  difficulty: 中等
+  role: 质量负责人
+  question: 现在有多少个批次库位的货已经过期但还在库？合计多少件？
+  output_contract: 批次库位数、件数
+- id: Q-15
+  scenario: S05
+  difficulty: 中等
+  role: 门店店长
+  question: STORE-001 有哪些批次两周内到期、还有货？
+  output_contract: 批次清单
+- id: Q-16
+  scenario: S05
+  difficulty: 基础
+  role: 门店店长
+  question: STORE-001 有哪些批次已经过期但还在架上？
+  output_contract: 批次清单
+- id: Q-17
+  scenario: S06
+  difficulty: 基础
+  role: 仓配负责人
+  question: 现在还有多少张订单没完成？其中有没有已经过了交期的？
+  output_contract: 未完成订单数、逾期订单清单
+- id: Q-18
+  scenario: S06
+  difficulty: 复杂
+  role: 仓配负责人
+  question: 按优先级和交期用现有可用库存给未完成的订单行配货，能全部满足、部分满足和一件都配不到的各有多少行？
+  output_contract: 全部满足、部分满足、配不到、无法判断的行数
+- id: Q-19
+  scenario: S06
+  difficulty: 复杂
+  role: 仓配负责人
+  question: ORD-001-A 能全部发出吗？用哪些批次、各多少件？
+  output_contract: 订购数、可配数、批次及件数
+- id: Q-20
+  scenario: S06
+  difficulty: 复杂
+  role: 仓配负责人
+  question: ORD-049-A 已经过了交期还没发，按要求保质期它还能配到多少件？用哪个批次？
+  output_contract: 订购数、可配数、批次及件数
+- id: Q-21
+  scenario: S06
+  difficulty: 复杂
+  role: 仓配负责人
+  question: 哪些订单行一件都配不到？各缺多少件？
+  output_contract: 订单号及缺货件数
+- id: Q-22
+  scenario: S06
+  difficulty: 复杂
+  role: 仓配负责人
+  question: 按现有库存配货后，未完成订单一共还缺多少件？
+  output_contract: 缺货件数
+- id: Q-23
+  scenario: S07
+  difficulty: 基础
+  role: 仓配负责人
+  question: PRD-001 在 WH-001 三月份的需求预测一共多少件？
+  output_contract: 预测件数
+- id: Q-24
+  scenario: S07
+  difficulty: 复杂
+  role: 仓配负责人
+  question: 按三月预测，PRD-001 在 WH-001 三月份需要补多少件？分别从哪次需求开始缺？
+  output_contract: 补货件数、各需求日期的缺口
+- id: Q-25
+  scenario: S07
+  difficulty: 复杂
+  role: 仓配负责人
+  question: 三月份补货缺口最大的是哪个商品、在哪个仓？要补多少件？
+  output_contract: 商品、仓库、补货件数
+- id: Q-26
+  scenario: S07
+  difficulty: 复杂
+  role: 仓配负责人
+  question: 三月份所有商品按预测一共需要补多少件？涉及多少个商品仓库组合？
+  output_contract: 补货件数、组合数
+- id: Q-27
+  scenario: S07
+  difficulty: 复杂
+  role: 仓配负责人
+  question: PRD-001 在 WH-001 3 月 15 日那次需求为什么只能满足一部分？那时能用的货有多少、缺多少？
+  output_contract: 需求件数、可用供应、缺口
+- id: Q-28
+  scenario: S08
+  difficulty: 基础
+  role: 质量负责人
+  question: 现在有多少个召回在进行？有没有已经关闭的？
+  output_contract: 进行中召回数、已关闭召回清单
+- id: Q-29
+  scenario: S08
+  difficulty: 中等
+  role: 质量负责人
+  question: REC-001 涉及哪些批次？包括拆分出去的。
+  output_contract: 批次清单
+- id: Q-30
+  scenario: S08
+  difficulty: 中等
+  role: 质量负责人
+  question: REC-001 的问题货现在在哪些地方？各有多少件在库？
+  output_contract: 地点及在库件数
+- id: Q-31
+  scenario: S08
+  difficulty: 中等
+  role: 门店店长
+  question: REC-001 的问题货已经卖出去、没退回来的有多少件？在哪家门店卖的？
+  output_contract: 已售未退件数、门店
+- id: Q-32
+  scenario: S08
+  difficulty: 复杂
+  role: 质量负责人
+  question: REC-048 会牵连到哪些批次和商品？为什么会涉及别的商品？
+  output_contract: 批次清单、商品清单、牵连原因（商品转换记录）
+- id: Q-33
+  scenario: S08
+  difficulty: 复杂
+  role: 门店店长
+  question: REC-001 影响哪些订单？
+  output_contract: 订单号清单
+- id: Q-34
+  scenario: S09
+  difficulty: 基础
+  role: 质量负责人
+  question: REC-001 截至今天已经控制住多少件？可控制的一共多少件？控制比例多少？
+  output_contract: 已控制、可控制、比例
+- id: Q-35
+  scenario: S09
+  difficulty: 中等
+  role: 质量负责人
+  question: REC-001 在 WH-001 的控制比例是多少？
+  output_contract: 已控制、可控制、比例
+- id: Q-36
+  scenario: S09
+  difficulty: 中等
+  role: 门店店长
+  question: REC-001 在 STORE-001 还有多少件没控制住？
+  output_contract: 未控制件数
+- id: Q-37
+  scenario: S09
+  difficulty: 中等
+  role: 质量负责人
+  question: 哪些召回的控制比例最低？是多少？
+  output_contract: 召回清单、比例
+- id: Q-38
+  scenario: S09
+  difficulty: 中等
+  role: 质量负责人
+  question: REC-050 已经关闭，现在还要按召回去封存它的批次吗？
+  output_contract: 是否仍需封存
+- id: Q-39
+  scenario: S09
+  difficulty: 复杂
+  role: 质量负责人
+  question: 有没有召回的控制比例算不出来？为什么？
+  output_contract: 召回清单及原因
+- id: Q-40
+  scenario: S09
+  difficulty: 复杂
+  role: 质量负责人
+  question: REC-001 在 WH-001 被召回封存的库存里，有多少件同时还被预隔离了？
+  output_contract: 已隔离件数、仅召回封存件数
+- id: Q-41
+  scenario: S10
+  difficulty: 复杂
+  role: 仓配负责人
+  question: 现在有哪些批次库位的库存算不清楚？各是什么原因？
+  output_contract: 批次@地点及原因代码
+- id: Q-42
+  scenario: S10
+  difficulty: 中等
+  role: 仓配负责人
+  question: 有没有被重复记录的出入库事件？涉及哪个批次？会不会被算两次？
+  output_contract: 事件编号、批次、是否重复计算
+- id: Q-43
+  scenario: S10
+  difficulty: 中等
+  role: 仓配负责人
+  question: 有没有到货了却找不到发货记录的调拨？
+  output_contract: 调拨编号清单
+- id: Q-44
+  scenario: S10
+  difficulty: 中等
+  role: 仓配负责人
+  question: 哪些预留超过了能用的库存？
+  output_contract: 批次@地点清单
+- id: Q-45
+  scenario: S10
+  difficulty: 复杂
+  role: 门店店长
+  question: LOT-044-C 在 STORE-019 有一笔销售被冲正了。冲正后这家店卖出了多少件、还剩多少件在库？
+  output_contract: 被冲正事件、已售件数、在库件数
+- id: Q-46
+  scenario: S10
+  difficulty: 复杂
+  role: 门店店长
+  question: LOT-041-C 在 STORE-016 有一笔 2 月 26 日的销售 3 月 2 日才补录。按今天掌握的信息和按 3 月 5 日掌握的信息，这家店的在库分别是多少？
+  output_contract: 今天口径在库、3 月 5 日口径在库
+- id: Q-47
+  scenario: S10
+  difficulty: 复杂
+  role: 仓配负责人
+  question: 回到 2 月 20 日，按当时掌握的信息，PRD-001 在 WH-001 能用的库存是多少？和今天比差多少？
+  output_contract: 2 月 20 日可用、今天可用、变化
+- id: Q-48
+  scenario: S03
+  difficulty: 中等
+  role: 质量负责人
+  question: LOT-001-B 收货以后都去了哪里？按事件说明数量。
+  output_contract: 事件类型、来源、去向、数量、日期清单
+- id: Q-49
+  scenario: S03
+  difficulty: 中等
+  role: 质量负责人
+  question: LOT-001-B 拆出了哪个子批次？拆了多少件？
+  output_contract: 子批次及件数
+- id: Q-50
+  scenario: S03
+  difficulty: 中等
+  role: 质量负责人
+  question: REC-001 的问题批次一共到过哪些地点？
+  output_contract: 地点清单
