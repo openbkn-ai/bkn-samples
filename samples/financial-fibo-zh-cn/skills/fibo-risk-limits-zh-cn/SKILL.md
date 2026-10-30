@@ -29,7 +29,7 @@ description: >
 
 ## Cypher 写法
 
-对象类型名就是标签。日期是 YYYY-MM-DD 字符串。支持关联、聚合（count、count DISTINCT、sum）和 ORDER BY。为兼容 OpenBKN 0.2.1，不用 WITH、CASE、coalesce 等函数、关系变量、返回整个节点、属性与属性比较、变长路径和 UNWIND；把需要的值查出来，在回答里比较。中文网络的取值是中文：assessment_status 为“限额内、超限、无法判定”，measure 为“发行方集中度、未结算应收金额”，view_kind 为“实际、计划”。
+对象类型名就是标签。日期是 YYYY-MM-DD 字符串。支持 WITH、CASE、聚合，不支持变长路径和 UNWIND。中文网络的取值是中文：assessment_status 为“限额内、超限、无法判定”，measure 为“发行方集中度、未结算应收金额”，view_kind 为“实际、计划”。
 
 - 限额评估：`MATCH (a:limit_assessments)-[:assessment_to_limit]->(l:mandate_limits) WHERE a.as_of_date = '2027-02-28' RETURN l.portfolio_id, l.entity_id, l.measure, l.threshold, a.observed_value, a.assessment_status, a.excess_value`
 - 发行方敞口：`issuer_exposures` 的 `exposure_amount`、`denominator_amount`、`ratio`、`exposure_status`；构成：`MATCH (c:exposure_contributions)-[:contribution_to_issuer_exp]->(x:issuer_exposures), (c)-[:contribution_to_valuation]->(v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions) WHERE x.exposure_id = '<敞口>' RETURN o.instrument_id, c.contribution_amount`

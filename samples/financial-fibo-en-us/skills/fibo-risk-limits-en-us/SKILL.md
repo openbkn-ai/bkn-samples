@@ -31,7 +31,7 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 
 ## Cypher patterns
 
-Object type names are the labels. Dates are YYYY-MM-DD strings. Joins, aggregation (count, count DISTINCT, sum) and ORDER BY are supported. To stay compatible with OpenBKN 0.2.1, do not use WITH, CASE, functions such as coalesce, relationship variables, whole-node returns, property-to-property comparisons, variable-length paths or UNWIND; return the needed values and compare them in the answer. Values are codes: assessment_status within, breach, unknown; measure issuer_ratio, receivable_amount; view_kind actual, planned.
+Object type names are the labels. Dates are YYYY-MM-DD strings. WITH, CASE and aggregation are supported; variable-length paths and UNWIND are not. Values are codes: assessment_status within, breach, unknown; measure issuer_ratio, receivable_amount; view_kind actual, planned.
 
 - Limit assessments: `MATCH (a:limit_assessments)-[:assessment_to_limit]->(l:mandate_limits) WHERE a.as_of_date = '2027-02-28' RETURN l.portfolio_id, l.entity_id, l.measure, l.threshold, a.observed_value, a.assessment_status, a.excess_value`
 - Issuer exposure: `issuer_exposures` with `exposure_amount`, `denominator_amount`, `ratio`, `exposure_status`; contributions: `MATCH (c:exposure_contributions)-[:contribution_to_issuer_exp]->(x:issuer_exposures), (c)-[:contribution_to_valuation]->(v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions) WHERE x.exposure_id = '<exposure>' RETURN o.instrument_id, c.contribution_amount`

@@ -30,9 +30,9 @@ description: >
 
 ## Cypher 写法
 
-对象类型名就是标签，例如 `settlement_events`、`valuation_snapshots`。日期是 YYYY-MM-DD 字符串，可直接比较。支持关联、聚合（count、count DISTINCT、sum）和 ORDER BY。为兼容 OpenBKN 0.2.1，不用 WITH、CASE、coalesce 等函数、关系变量、返回整个节点、属性与属性比较、变长路径和 UNWIND；把需要的值查出来，在回答里比较。中文网络的状态取值是中文，例如 event_status 为“已结算、待结算、部分结算、结算失败”，valuation_status 为“完整、受阻”，view_kind 为“实际、计划”。
+对象类型名就是标签，例如 `settlement_events`、`valuation_snapshots`。日期是 YYYY-MM-DD 字符串，可直接比较。支持 WITH、CASE、聚合，不支持变长路径和 UNWIND。中文网络的状态取值是中文，例如 event_status 为“已结算、待结算、部分结算、结算失败”，valuation_status 为“完整、受阻”，view_kind 为“实际、计划”。
 
-- 某组合各指令的交收进度：`MATCH (e:settlement_events)-[:settle_event_to_settle_instr]->(i:settlement_instructions)-[:settle_instr_to_trade]->(t:securities_transactions)-[:trade_to_order]->(o:trade_orders)-[:order_to_account]->(a:accounts) WHERE a.portfolio_id = '<组合>' AND e.view_kind = '实际' AND e.event_date <= '2027-02-28' RETURN i.instruction_id, i.due_date, i.required_quantity, sum(e.settled_quantity) AS settled ORDER BY i.instruction_id`，应交收数量减已交收合计大于 0 的就是没交收完。全公司或多个组合的统计调用 `settlement_asof`，传全部相关组合。
+- 今天没交收完的指令：`MATCH (e:settlement_events)-[:settle_event_to_settle_instr]->(i:settlement_instructions) WHERE e.view_kind = '实际' AND e.event_date <= '2027-02-28' WITH i, sum(e.settled_quantity) AS done WHERE done < i.required_quantity RETURN i.instruction_id, i.trade_id, i.due_date, i.required_quantity - done AS remaining`
 - 指令所属组合和对手：`(i:settlement_instructions)-[:settle_instr_to_trade]->(t:securities_transactions)-[:trade_to_order]->(o:trade_orders)-[:order_to_account]->(a:accounts)`，`a.portfolio_id`、`o.counterparty_id`、`o.side`。
 - 最近事件和失败原因：对该指令的事件按 `event_date`、`event_sequence` 排序取最后一条，读 `event_status`、`failure_reason`。
 - 月末估值：`MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts) WHERE a.portfolio_id = '<组合>' AND v.as_of_date = '2027-02-28' RETURN o.instrument_id, p.trade_basis_quantity, v.valuation_status, v.reason, v.market_value_local, v.market_value_base`

@@ -26,7 +26,7 @@ Business rules (defaults; a user's explicit condition wins):
 How to answer:
 - Month-end valuations, positions, issuer exposures (with exposure_contributions), counterparty exposures and limit assessments are recorded snapshots that match recomputation from the original records; read them with Cypher.
 - For a date that is not a month end, for what was known on an earlier day, or to explain a status from the original trades and events, call settlement_asof, valuation_asof or limit_assessment_asof.
-- Cypher supports joins, aggregation (count, count DISTINCT, sum) and ORDER BY. To stay compatible with OpenBKN 0.2.1, do not use WITH, CASE, functions such as coalesce, relationship variables, whole-node returns, property-to-property comparisons, variable-length paths or UNWIND; return the needed values and compare them in the answer. Dates are YYYY-MM-DD strings and compare as text; numbers may arrive as strings, so use Decimal arithmetic.
+- Cypher supports joins, WITH, CASE, aggregation and ORDER BY; it does not support variable-length paths or UNWIND. Dates are YYYY-MM-DD strings and compare as text; numbers may arrive as strings, so use Decimal arithmetic.
 
 ## Network Overview
 
