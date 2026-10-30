@@ -86,6 +86,4 @@ Each relation maps a named FK. Empty `price_id` and the inapplicable exposure FK
 
 Lookups, traces and month-end snapshots use Cypher; three functions reconstruct settlement, valuation and mandate decisions from atomic BKN facts; two Skills serve post-trade operations and risk limits. The sample uses no metrics. [Contract](business-capability-contract.md).
 
-Observation batching, component completeness and trade-month/local-currency reconciliation are specified in the [capability contract](business-capability-contract.md); candidate 0.2.4 platform bounds remain unverified.
-
-Multi-observation requests allow at most 20 portfolios and 12 observations including the base; scalar requests retain the 200-portfolio input bound. The guard measures the complete compact JSON serialization as UTF-8 bytes and rejects results above 3 MiB. Native platform preflight observed a 4 MiB result quota; the 3 MiB application guard leaves transport headroom. These input-count bounds do not guarantee that every maximum-size input succeeds: result size depends on records and evidence. On a limit failure reduce portfolios or observations; never truncate required rows or evidence. Actual preflight and the bounded question results are recorded in the [validation report](../../../docs/financial-fibo-183-readiness.zh-CN.md); this source revision is unpublished.
+Component completeness and trade-month/local-currency reconciliation are specified in the [capability contract](business-capability-contract.md).
