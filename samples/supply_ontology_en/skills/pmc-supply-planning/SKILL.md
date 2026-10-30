@@ -1,5 +1,5 @@
 ---
-name: pmc-supply-planning
+name: supply-en-pmc-supply-planning
 description: >
   Use for PMC production-planning questions on knowledge network supply_ontology_en:
   sales backlog and overdue orders, finished-goods stock, forecasts, BOM structure and

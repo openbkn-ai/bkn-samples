@@ -8,6 +8,6 @@ def test_register_skills_dry_run_discovers_the_local_business_skills():
 
     assert result["mode"] == "dry_run"
     assert [item["name"] for item in result["skills"]] == [
-        "pmc-supply-planning",
-        "procurement-follow-up",
+        "supply-en-pmc-supply-planning",
+        "supply-en-procurement-follow-up",
     ]

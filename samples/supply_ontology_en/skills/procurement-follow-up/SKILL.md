@@ -1,5 +1,5 @@
 ---
-name: procurement-follow-up
+name: supply-en-procurement-follow-up
 description: >
   Use for purchasing-manager questions on knowledge network supply_ontology_en: open and
   overdue purchase order lines, deliveries due today or in a period, which suppliers and
