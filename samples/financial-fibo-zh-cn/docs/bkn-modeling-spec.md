@@ -84,7 +84,7 @@
 
 ## 场景能力选择
 
-指标仅表示明确粒度的已记录快照；三个函数读取原始 BKN 事实重算结算、估值与限额；一个 Skill 编排只读调查。 [Contract](business-capability-contract.md).
+查数、追溯和月末快照用 Cypher；三个函数读取原始 BKN 事实重算结算、估值与限额；两个 Skill 分别面向交易后运营和风控限额。样例不使用指标。 [Contract](business-capability-contract.md).
 
 观察范围批量接口、构成完整性与成交月份/本币核对统一见[能力契约](business-capability-contract.md)；候选0.2.4平台边界尚待实测。
 

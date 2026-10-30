@@ -84,7 +84,7 @@ Each relation maps a named FK. Empty `price_id` and the inapplicable exposure FK
 
 ## Capability choice
 
-Two metrics represent recorded snapshots at explicit grain; three functions reconstruct settlement, valuation and mandate decisions from atomic BKN facts; one Skill orchestrates read-only investigation. [Contract](business-capability-contract.md).
+Lookups, traces and month-end snapshots use Cypher; three functions reconstruct settlement, valuation and mandate decisions from atomic BKN facts; two Skills serve post-trade operations and risk limits. The sample uses no metrics. [Contract](business-capability-contract.md).
 
 Observation batching, component completeness and trade-month/local-currency reconciliation are specified in the [capability contract](business-capability-contract.md); candidate 0.2.4 platform bounds remain unverified.
 

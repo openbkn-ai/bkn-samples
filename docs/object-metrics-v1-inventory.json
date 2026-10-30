@@ -1,6 +1,6 @@
 {
   "scope": "Static inventory; target-runtime acceptance pending",
-  "metric_count": 34,
+  "metric_count": 30,
   "metrics": [
     {
       "sample": "supply_ontology_hand",
@@ -1235,66 +1235,6 @@
         "aggregation_registry_version": "1.0",
         "unit_registry_version": "1.0"
       }
-    },
-    {
-      "sample": "financial-fibo-zh-cn",
-      "change": "Keep immutable definition; update consumption examples and validation",
-      "code": "issuer_ratio_recorded",
-      "version": 1,
-      "owner_object_type_id": "issuer_exposures",
-      "metric_type": "atomic",
-      "calculation_scope": "object_instance",
-      "unit_code": "1",
-      "query_capabilities": {
-        "analysis_dimensions": [],
-        "time_dimensions": []
-      },
-      "definition_source": "tools/register_capabilities.py:metric_definitions"
-    },
-    {
-      "sample": "financial-fibo-zh-cn",
-      "change": "Keep immutable definition; update consumption examples and validation",
-      "code": "sell_receivable_recorded_usd",
-      "version": 1,
-      "owner_object_type_id": "counterparty_exposures",
-      "metric_type": "atomic",
-      "calculation_scope": "object_instance",
-      "unit_code": "USD",
-      "query_capabilities": {
-        "analysis_dimensions": [],
-        "time_dimensions": []
-      },
-      "definition_source": "tools/register_capabilities.py:metric_definitions"
-    },
-    {
-      "sample": "financial-fibo-en-us",
-      "change": "Keep immutable definition; update consumption examples and validation",
-      "code": "issuer_ratio_recorded",
-      "version": 1,
-      "owner_object_type_id": "issuer_exposures",
-      "metric_type": "atomic",
-      "calculation_scope": "object_instance",
-      "unit_code": "1",
-      "query_capabilities": {
-        "analysis_dimensions": [],
-        "time_dimensions": []
-      },
-      "definition_source": "tools/register_capabilities.py:metric_definitions"
-    },
-    {
-      "sample": "financial-fibo-en-us",
-      "change": "Keep immutable definition; update consumption examples and validation",
-      "code": "sell_receivable_recorded_usd",
-      "version": 1,
-      "owner_object_type_id": "counterparty_exposures",
-      "metric_type": "atomic",
-      "calculation_scope": "object_instance",
-      "unit_code": "USD",
-      "query_capabilities": {
-        "analysis_dimensions": [],
-        "time_dimensions": []
-      },
-      "definition_source": "tools/register_capabilities.py:metric_definitions"
     },
     {
       "sample": "retail-gs1-zh-cn",

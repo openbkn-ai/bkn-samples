@@ -1,0 +1,425 @@
+schema_version: '1.0'
+set_id: fibo-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+generation_method: independent raw CSV Decimal oracle (oracle.py)
+answers:
+- id: Q-01
+  question: 我们现在一共管理多少个投资组合？由多少家资产管理人负责？
+  expected:
+    portfolios: 200
+    managers: 50
+- id: Q-02
+  question: INS-002 这只债券是哪家公司发的？什么时候到期？按什么口径报价？
+  expected:
+    issuer_id: ISS-001
+    issuer: 青禾科技控股有限公司
+    maturity_date: '2030-06-30'
+    price_basis: 每百元面值全价
+- id: Q-03
+  question: PF-001 是哪家资产管理人在管？基础货币和投资授权是什么？
+  expected:
+    manager_id: MGR-001
+    manager: 青禾科技资产管理有限公司
+    base_currency: USD
+    mandate: 仅多头
+- id: Q-04
+  question: PF-001 二月底持有几只证券？其中几只是债券？
+  expected:
+    securities: 8
+    bonds: 4
+- id: Q-05
+  question: 二月份一共成交了多少笔？买入和卖出各多少笔？
+  expected:
+    trades: 1600
+    buys: 200
+    sells: 1400
+- id: Q-06
+  question: 到今天为止，还有多少笔结算指令没有交收完？
+  expected:
+    instructions: 304
+- id: Q-07
+  question: 现在结算失败的指令有多少笔？失败原因各有多少笔？
+  expected:
+    failed: 144
+    reasons:
+      金额不匹配: 80
+      证券不足: 64
+- id: Q-08
+  question: 没交收完的指令里，有多少笔已经过了应交收日？按失败、部分交收各多少？还没到期的又有多少笔、最早哪天到期？
+  expected:
+    overdue: 224
+    overdue_failed: 144
+    overdue_partial: 80
+    not_due: 80
+    earliest_due: '2027-03-02'
+- id: Q-09
+  question: 逾期没交收的指令涉及多少家交易对手、多少个组合？
+  expected:
+    counterparties: 14
+    portfolios: 56
+- id: Q-10
+  question: 因为券不够而交收失败的指令，涉及哪些组合？
+  expected:
+    portfolios:
+    - PF-029
+    - PF-031
+    - PF-033
+    - PF-047
+    - PF-079
+    - PF-081
+    - PF-083
+    - PF-097
+    - PF-129
+    - PF-131
+    - PF-133
+    - PF-147
+    - PF-179
+    - PF-181
+    - PF-183
+    - PF-197
+- id: Q-11
+  question: PF-019 还有哪些卖出没交收？各是什么证券、还差多少数量、哪天到期？
+  expected:
+    instructions:
+    - instruction: SI-019-2-4
+      instrument: INS-038
+      remaining: 3560
+      due_date: '2027-03-02'
+    - instruction: SI-019-4-4
+      instrument: INS-052
+      remaining: 494
+      due_date: '2027-03-02'
+    - instruction: SI-019-6-4
+      instrument: INS-072
+      remaining: 468
+      due_date: '2027-03-02'
+    - instruction: SI-019-8-4
+      instrument: INS-096
+      remaining: 454
+      due_date: '2027-03-02'
+- id: Q-12
+  question: PF-020 有哪些卖出只交收了一部分？各还剩多少没交收？
+  expected:
+    instructions:
+      SI-020-2-4: 242
+      SI-020-4-4: 227
+      SI-020-6-4: 1763
+      SI-020-8-4: 1835
+- id: Q-13
+  question: 二月底有多少条持仓估值算不出市值？原因各有多少条？
+  expected:
+    valuations: 96
+    reasons:
+      价格缺失: 32
+      价格未批准: 32
+      价格陈旧: 32
+- id: Q-14
+  question: 二月底估值用的欧元兑美元汇率是多少？哪天发布的？
+  expected:
+    rate: 1.073
+    published_date: '2027-02-26'
+- id: Q-15
+  question: INS-001 二月底估值用的价格是多少？哪天的价格？批准了吗？
+  expected:
+    price: 18.6
+    currency: CNY
+    price_date: '2027-02-26'
+    approved: true
+- id: Q-16
+  question: 二月底哪些证券的价格不能用来估值？分别是什么问题？
+  expected:
+    securities:
+      INS-069: 价格陈旧
+      INS-071: 价格未批准
+      INS-073: 价格缺失
+      INS-075: 价格陈旧
+      INS-077: 价格未批准
+      INS-079: 价格缺失
+- id: Q-17
+  question: 这些价格问题一共影响了多少个组合的二月底估值？
+  expected:
+    portfolios: 96
+- id: Q-18
+  question: PF-001 二月底的组合总市值是多少美元？
+  expected:
+    market_value_usd: 71364.79
+- id: Q-19
+  question: PF-001 持有的 INS-002 债券二月底市值是怎么算出来的？给出数量、价格、计价乘数、汇率、本币市值和美元市值。
+  expected:
+    quantity: 61154
+    price: 100
+    multiplier: 0.01
+    fx_rate: 0.1394
+    market_value_local: 61154
+    market_value_usd: 8524.87
+- id: Q-20
+  question: 二月底估值完整的组合里，美元市值最大的三个是哪几个？各多少？
+  expected:
+    portfolios:
+      PF-195: 229889.15
+      PF-193: 226172.07
+      PF-194: 224792.51
+- id: Q-21
+  question: INS-069 二月底为什么不能用来估值？最近那笔已批准价格是哪天的、多少钱？
+  expected:
+    issue: 价格陈旧
+    latest_price_date: '2027-02-18'
+    latest_price: 26.4
+    currency: USD
+- id: Q-22
+  question: PF-001 持有的 INS-001 二月底持仓成本比一月底变了多少？是哪笔交易带来的？
+  expected:
+    cost_jan: 75383.14
+    cost_feb: 78545.14
+    change: 3162
+    trades:
+    - TR-001-1-4
+- id: Q-23
+  question: PF-001 二月份哪些持仓有已实现损益？各多少（按本币）？
+  expected:
+    positions:
+      INS-016:
+        realized_pnl: 3.75
+        currency: USD
+      INS-036:
+        realized_pnl: -3.54
+        currency: EUR
+      INS-059:
+        realized_pnl: 38.4
+        currency: EUR
+      INS-060:
+        realized_pnl: -3.44
+        currency: EUR
+- id: Q-24
+  question: PF-029 的交收失败让二月底哪些持仓的交易口径和已交收口径对不上？各差多少？
+  expected:
+    positions:
+      INS-016: -500
+      INS-058: -500
+      INS-072: -468
+      INS-092: -3632
+- id: Q-25
+  question: PF-041 二月底对哪家发行方最集中？占比多少？限额是多少？
+  expected:
+    issuer_id: ISS-041
+    issuer: 青禾公用事业控股有限公司
+    ratio: 0.608018
+    limit: 0.3
+- id: Q-26
+  question: 二月底有多少个组合的发行方集中度超限？超得最多的是哪个组合、哪家发行方、超出多少？
+  expected:
+    portfolios: 20
+    worst_portfolio: PF-194
+    worst_issuer: ISS-044
+    excess: 0.34117
+- id: Q-27
+  question: 二月底有多少个组合的发行方集中度判断不了？为什么？
+  expected:
+    portfolios: 96
+    all_have_blocked_valuation: true
+- id: Q-28
+  question: PF-041 对 ISS-041 超限，是由哪些持仓构成的？各多少美元？组合总额是多少？
+  expected:
+    holdings:
+      INS-081: 44269.4
+      INS-082: 38529.64
+    exposure_usd: 82799.04
+    portfolio_total_usd: 136178.6
+    ratio: 0.608018
+- id: Q-29
+  question: PF-035 二月底的发行方集中度为什么判断不了？哪些发行方的美元金额仍然能确认、各多少？
+  expected:
+    blocked_security: INS-069
+    reason: 价格陈旧
+    unknown_issuer: ISS-035
+    known_issuers:
+      ISS-002: 16738.19
+      ISS-014: 17667.58
+      ISS-042: 17608.8
+- id: Q-30
+  question: 二月底有多少个组合的交易对手未结算卖出应收超限？
+  expected:
+    portfolios: 12
+- id: Q-31
+  question: 二月底哪家交易对手欠我们的未结算卖出款最多？合计多少美元？
+  expected:
+    counterparty_id: CP-047
+    counterparty: 景辰公用事业证券有限公司
+    receivable_usd: 10459.8
+- id: Q-32
+  question: PF-046 对 CP-046 的未结算卖出应收超限了，是哪些卖出没交收造成的？各剩多少数量？合计多少美元、超出多少？
+  expected:
+    instructions:
+      SI-046-2-4: 3632
+      SI-046-4-4: 450
+      SI-046-6-4: 3492
+      SI-046-8-4: 3632
+    receivable_usd: 2002.41
+    limit_usd: 500
+    excess_usd: 1502.41
+- id: Q-33
+  question: PF-046 对 CP-046 的应收里，有没有用它同期的买入来抵减？如果那几笔失败的卖出今天全部交收完，还会超限吗？
+  expected:
+    netted_with_buys: false
+    breach_if_settled: false
+- id: Q-34
+  question: 有多少条限额是还没生效、之后才开始生效的？涉及多少个组合？
+  expected:
+    limits: 32
+    portfolios: 8
+- id: Q-35
+  question: PF-049 的发行方限额接下来会怎么变？什么时候生效？今天用的还是哪个限额？
+  expected:
+    new_limit: 0.2
+    effective_from: '2027-03-15'
+    issuers:
+    - ISS-006
+    - ISS-016
+    - ISS-028
+    - ISS-049
+    current_limit: 0.8
+- id: Q-36
+  question: 按三月计划，哪些组合会出现超限而二月实际并没有超限？
+  expected:
+    portfolios:
+    - PF-049
+    - PF-050
+    - PF-099
+    - PF-100
+    - PF-149
+    - PF-150
+    - PF-199
+    - PF-200
+- id: Q-37
+  question: PF-050 三月计划里哪些发行方会超限？各超出多少？它们二月实际的占比和适用限额是多少？
+  expected:
+    march:
+      ISS-007:
+        share: 0.243924
+        limit: 0.2
+        excess: 0.043924
+      ISS-017:
+        share: 0.228119
+        limit: 0.2
+        excess: 0.028119
+      ISS-029:
+        share: 0.241992
+        limit: 0.2
+        excess: 0.041992
+      ISS-050:
+        share: 0.285965
+        limit: 0.2
+        excess: 0.085965
+    february:
+      ISS-007:
+        share: 0.242637
+        limit: 0.8
+      ISS-017:
+        share: 0.231968
+        limit: 0.8
+      ISS-029:
+        share: 0.242454
+        limit: 0.8
+      ISS-050:
+        share: 0.282941
+        limit: 0.8
+- id: Q-38
+  question: 二月实际对手应收超限的组合，到三月计划里还有哪些仍然超限？
+  expected:
+    portfolios:
+    - PF-048
+    - PF-098
+    - PF-148
+    - PF-198
+- id: Q-39
+  question: 按三月计划，PF-050 月底市值会是多少美元？比二月实际多多少？
+  expected:
+    march_plan_usd: 70706.89
+    february_actual_usd: 72062.18
+    change: -1355.29
+- id: Q-40
+  question: 站在 2 月 15 日、只用当天已经知道的信息，PF-029 有哪些指令没交收完？哪些已经逾期、哪些已经失败？
+  expected:
+    instructions:
+      SI-029-4-4:
+        status: 结算失败
+        overdue: true
+      SI-029-6-4:
+        status: 待结算
+        overdue: false
+      SI-029-7-4:
+        status: 待结算
+        overdue: false
+- id: Q-41
+  question: 2 月 20 日那天看，PF-020 还有哪些卖出没交收完、各剩多少？到今天又多交收了多少？
+  expected:
+    feb20:
+      SI-020-4-4: 227
+      SI-020-6-4: 1763
+      SI-020-8-4: 3670
+    settled_since:
+      SI-020-4-4: 0
+      SI-020-6-4: 0
+      SI-020-8-4: 1835
+- id: Q-42
+  question: 如果按 2 月 15 日当天掌握的信息，全公司有多少笔指令没交收完？其中多少笔已经失败？
+  expected:
+    instructions: 436
+    failed: 36
+- id: Q-43
+  question: 按 2 月 15 日掌握的信息，PF-029 对 CP-029 的未结算卖出应收是多少美元？今天又是多少？
+  expected:
+    feb15_usd: 1481.27
+    today_usd: 2007.14
+- id: Q-44
+  question: PF-029 交收失败的卖出涉及哪些发行方的证券？这些失败加起来让对 CP-029 的应收是多少美元？
+  expected:
+    issuers:
+    - ISS-008
+    - ISS-029
+    - ISS-036
+    - ISS-046
+    receivable_usd: 2007.14
+- id: Q-45
+  question: PF-035 估值受阻的那只证券属于哪家发行方？如果这只证券有了合格价格，组合里还有别的估值缺口吗？
+  expected:
+    security: INS-069
+    issuer_id: ISS-035
+    issuer: 星桥消费控股有限公司
+    other_gaps: 0
+- id: Q-46
+  question: PF-041 对 ISS-041 的集中度从十一月到二月每个月底各是多少？哪个月开始超限？
+  expected:
+    shares:
+      '2026-11-30': 0.603944
+      '2026-12-31': 0.609748
+      '2027-01-31': 0.601937
+      '2027-02-28': 0.608018
+    first_breach: '2026-11-30'
+- id: Q-47
+  question: 二月月结时，PF-046 二月份的成交按币种，买卖相抵后的成交总额各是多少？还有多少卖出名义金额没交收？
+  expected:
+    currencies:
+      CNY:
+        signed_gross: -15062.52
+        open_sell_notional: 10788.12
+      EUR:
+        signed_gross: -914.63
+        open_sell_notional: 464.63
+- id: Q-48
+  question: PF-019 对 CP-019 现在的未结算卖出应收是多少美元？这些卖出都还没到期吗？
+  expected:
+    receivable_usd: 2000.37
+    all_not_due: true
+- id: Q-49
+  question: PF-020 二月底哪只证券估值受阻？原因是什么？组合里其他证券的美元市值合计是多少？
+  expected:
+    security: INS-073
+    reason: 价格缺失
+    others_usd: 64340.9
+- id: Q-50
+  question: 2 月 28 日才批准的新限额里，有没有今天就该按新限额评估的？PF-049 今天的集中度按适用限额判断是什么结论？
+  expected:
+    apply_today: false
+    pf049_today: 限额内

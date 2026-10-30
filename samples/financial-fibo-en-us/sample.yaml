@@ -7,16 +7,17 @@
     "aliases": [],
     "displayName": "Financial Portfolio Operations (EN)",
     "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
-    "version": "0.2.6"
+    "version": "0.2.7"
   },
   "spec": {
     "studio": {
       "licenseNote": "MIT · Synthetic demonstration data / 虚构演示数据",
       "questions": [
-        "Who issues INS-001, and what is the issuer name?",
-        "What asset class and price basis does INS-002 use?",
-        "What is PF-049’s name and base currency?"
-      ]
+        "As of today, how many settlement instructions are not fully settled?",
+        "PF-046's unsettled-sale receivable from CP-046 is over its limit. Which unsettled sales cause it?",
+        "Under the March plan, which portfolios will breach a limit that they do not breach in February actuals?"
+      ],
+      "experienceSet": "experience/experience-set.yaml"
     },
     "database": {
       "engine": "mariadb",
@@ -37,7 +38,7 @@
     "components": {
       "objects": true,
       "relations": true,
-      "metrics": true,
+      "metrics": false,
       "functions": true,
       "skills": true
     },
