@@ -1,0 +1,111 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.14",
+  "sourceCommit": "f4008399a4b922b5a5c8273a0662b7be18950b3e",
+  "packageDigest": "sha256:dace7919bdb86f34f5edb80201893df6e63a444865c078cab8104e5b4d236049",
+  "platformVersion": "0.2.1",
+  "platformBuild": "recorded 0.2.1-main builds; see public acceptance runtime images",
+  "architectureTested": "arm64",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a482d7260d8a8dd9368ea4fb96b4f5d164052ddb3900126f9fcb9d65f2d625b8",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-supply-chain-7e9438b80a4b49b4b1cd2308bd571b77",
+    "version": "0.1.14",
+    "status": "installed",
+    "attemptId": "61478827c339486a806b215ac5888b26",
+    "startedAt": "2026-10-28T11:30:35.138965Z",
+    "finishedAt": "2026-10-28T11:31:58.230300Z",
+    "installedAt": "2026-10-28T11:31:58.230300Z",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    },
+    "checks": [
+      {
+        "name": "tables-discovered",
+        "ok": true
+      },
+      {
+        "name": "object-query",
+        "ok": true
+      },
+      {
+        "name": "cross-table-query",
+        "ok": true
+      },
+      {
+        "name": "capability-callable",
+        "ok": true
+      },
+      {
+        "name": "skill-discoverable",
+        "ok": true
+      },
+      {
+        "name": "metric-query",
+        "ok": true
+      },
+      {
+        "name": "metric-ownership",
+        "ok": true
+      }
+    ],
+    "packageDigest": "sha256:dace7919bdb86f34f5edb80201893df6e63a444865c078cab8104e5b4d236049",
+    "manifestSha256": "89e0569fbdfee1cd1ede84c42bbd83e687c524c033f73163661fc66d1a50ef37",
+    "resources": {
+      "catalogId": "01a18246-d491-7ed9-aa1b-565ab4754d71",
+      "knowledgeNetworkId": "supply_ontology_hand",
+      "capabilitySummary": "35b918e90177165ccad5922006f081cd46d45bb4745e5a4715c8e71da413c0cb",
+      "ownedExecution": {
+        "toolboxes": [
+          "01a18247-41a5-7a55-88e0-3e1b32470932"
+        ],
+        "skills": [
+          "01a18247-a070-712e-855e-6a38876469c4",
+          "01a18247-a302-74e3-a78c-9d5fcbd76315",
+          "01a18247-a5c8-75c0-9bc1-b9153e7f0740",
+          "01a18247-a802-7045-af34-38018d2400cc",
+          "01a18247-aa18-7240-91df-a88cbe09ad93"
+        ]
+      }
+    },
+    "experienceCaseCount": 23
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables / 78,635 rows in the public fixed-artifact acceptance."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh installation discover/knowledge/verify and object/cross-table queries passed."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "17 function bundles match installed sources; callable functions, discoverable Skills and metric checks passed."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "23 served cases match the package; 14 reference queries and 5 graph patterns passed. No new model accuracy claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.14/acceptance.json",
+  "evidenceDigest": "sha256:81b2cabbde12a0a29b9ebab74ca1dd39498676b8cdbf92c17eae85d48c0e5cc1",
+  "modelQuestionsForThisArtifact": 0,
+  "limits": [
+    "Tested on the recorded local arm64 8081 mainline runtime. No vanilla 0.2.1, AMD64 or cluster-wide network-disconnection certification.",
+    "No CORE-50 exam, accuracy scoring or video editing was performed. Reference Cypher and deterministic function checks are not model accuracy evidence.",
+    "English Studio reference graph rendering passed (19 nodes, 18 edges). The separate graph AI helper remains unpublished in this runtime; its natural-language entry point was not accepted. Cypher generation and Studio smart QA were published with explicit user approval, without changing model, prompts or tool limits.",
+    "Two earlier Chinese attempts hit legacy resources: an old version-tagged catalog, then an existing unowned function toolbox. Those attempts were retained; after explicit user-authorized legacy cleanup the same package completed a new clean installation. The legacy ownership guards were not bypassed or changed.",
+    "Metadata registered on 2026-10-30 from existing public acceptance, not a new platform run. Existing experience answers and 021 question isolation remain scheduled for separate revision."
+  ]
+}
