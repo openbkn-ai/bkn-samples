@@ -1,5 +1,7 @@
 # 供应链分类字段补丁发布验收（2026-10-27）
 
+> 历史验收记录：下列旧 Release 已纳入归档清理，原链接不再作为安装入口。当前版本与保护计划见[发布保留清单](release-retention-20261030.md)。验收时记录的数值与摘要保留。
+
 本次改进位于 bkn-samples，关联 [Foundry #2516](https://github.com/openbkn-ai/bkn-foundry/issues/2516)。没有增加平台分类能力、答案纠正、DSH 特判或第二套交期算法。
 
 ## 固定发布

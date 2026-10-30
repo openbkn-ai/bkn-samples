@@ -1,0 +1,113 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.10",
+  "sourceCommit": "f4008399a4b922b5a5c8273a0662b7be18950b3e",
+  "packageDigest": "sha256:bb4b2ce30211cc4ab3e833c4d1dad3ec67a2a332ca543557ccf0773882561404",
+  "platformVersion": "0.2.1",
+  "platformBuild": "recorded 0.2.1-main builds; see public acceptance runtime images",
+  "architectureTested": "arm64",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a482d7260d8a8dd9368ea4fb96b4f5d164052ddb3900126f9fcb9d65f2d625b8",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-supply-chain-en-a6d9fbbc2a3c45ba9955328ddaeff756",
+    "version": "0.1.10",
+    "status": "installed",
+    "attemptId": "7755d0a4de7c442f88e5314b67ccfd86",
+    "startedAt": "2026-10-28T11:25:18.660215Z",
+    "finishedAt": "2026-10-28T11:27:25.174934Z",
+    "installedAt": "2026-10-28T11:27:25.174934Z",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    },
+    "checks": [
+      {
+        "name": "tables-discovered",
+        "ok": true
+      },
+      {
+        "name": "object-query",
+        "ok": true
+      },
+      {
+        "name": "cross-table-query",
+        "ok": true
+      },
+      {
+        "name": "capability-callable",
+        "ok": true
+      },
+      {
+        "name": "skill-discoverable",
+        "ok": true
+      },
+      {
+        "name": "metric-query",
+        "ok": true
+      },
+      {
+        "name": "metric-ownership",
+        "ok": true
+      }
+    ],
+    "packageDigest": "sha256:bb4b2ce30211cc4ab3e833c4d1dad3ec67a2a332ca543557ccf0773882561404",
+    "manifestSha256": "acfe5807db2a4ff9bb07ff4246fff57480fc9314776ba4805c106429be092b94",
+    "resources": {
+      "catalogId": "01a18241-febd-7487-b889-09a587578928",
+      "knowledgeNetworkId": "supply_ontology_en",
+      "capabilitySummary": "b67fd49b2edf580db717823a80cab453d9e8acb8b416e8cb6dfc02d35f37acf2",
+      "ownedExecution": {
+        "toolboxes": [
+          "01a18242-8c49-7bf9-8452-ca982ac6302b"
+        ],
+        "skills": [
+          "01a18242-f4d3-76dd-83b6-a269c94617b7",
+          "01a18242-f934-7698-a8a0-5a4d9e22efc9",
+          "01a18242-fd1b-700f-8e2f-64eaffe8e83f",
+          "01a18243-00cf-78e0-b6a5-e3526404de17",
+          "01a18243-046e-7b68-9b45-db2c58a9ef6c"
+        ]
+      }
+    },
+    "experienceCaseCount": 23
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables / 78,635 rows in the public fixed-artifact acceptance."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh installation discover/knowledge/verify and object/cross-table queries passed."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "17 function bundles match installed sources; callable functions, discoverable Skills and metric checks passed."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "23 served cases match the package; 14 reference queries and 5 graph patterns passed. No new model accuracy claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.10/acceptance.json",
+  "evidenceDigest": "sha256:611e0bbcb38dc800535d609e0930cdc273e3890460a881c342d884b5c359b840",
+  "modelQuestionsForThisArtifact": 1,
+  "limits": [
+    "Tested on the recorded local arm64 8081 mainline runtime. No vanilla 0.2.1, AMD64 or cluster-wide network-disconnection certification.",
+    "No CORE-50 exam, accuracy scoring or video editing was performed. Reference Cypher and deterministic function checks are not model accuracy evidence.",
+    "English Studio reference graph rendering passed (19 nodes, 18 edges). The separate graph AI helper remains unpublished in this runtime; its natural-language entry point was not accepted. Cypher generation and Studio smart QA were published with explicit user approval, without changing model, prompts or tool limits.",
+    "Metadata registered on 2026-10-30 from existing public acceptance, not a new platform run. Existing experience answers and 021 question isolation remain scheduled for separate revision.",
+    "Public UI acceptance includes one English natural-language query-card smoke question (result 800); it is separate from the unrun CORE-50 accuracy evaluation."
+  ],
+  "modelAccuracyEvaluationQuestions": 0,
+  "modelSmokeQuestions": 1
+}
