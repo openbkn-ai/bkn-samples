@@ -2,7 +2,7 @@
 
 审核规则只有一份：[.github/REVIEW_RULES.md](../../.github/REVIEW_RULES.md)。AI 检查能否安装体验、更新安全、版本真实性和可插拔兼容；只阻断有源码证据且经过独立复核的问题。
 
-工作流参考 [foundry #1985](https://github.com/openbkn-ai/bkn-foundry/pull/1985) 和 [studio #814](https://github.com/openbkn-ai/bkn-studio/pull/814) 的 DeepSeek 后端与四阶段机制。执行器仍是 Claude Code Action，模型为 `deepseek-v4-pro`，接口为 `https://api.deepseek.com/anthropic`。
+工作流参考 [foundry #1985](https://github.com/openbkn-ai/bkn-foundry/pull/1985) 和 [studio #814](https://github.com/openbkn-ai/bkn-studio/pull/814) 的四阶段机制。执行器是 Claude Code Action，模型为 Claude Opus 5.5：review 用 effort `high`，verify 用 effort `xhigh`。
 
 每次以 main 为目标的同仓 PR 开启、重开、转为 ready 或推送新提交都会审；数据、KN JSON、BKN 和 SKILL.md 同样纳入范围。维护者可以在 PR 顶层评论写 `/review`、`@deepseek` 或兼容口令 `@claude` 复评，也可以在 main 手动填 PR 号触发。行内评论作为审核材料读取，不直接触发。
 
@@ -12,7 +12,7 @@
 
 自动入口使用 main 的 `pull_request_target`，规则和脚本从可信默认分支读取；PR 内容仅通过 Git 对象核查，不签出或运行。AI 作业的 GitHub token 只读；可信 plan 发布 pending 状态，最终 job 发布结果与表态。运行期间 head 或 base 改变会丢弃过期结论。首期不自动审 fork 和 draft PR。
 
-首次启用须先由人审阅引入 PR，将规则、脚本和工作流合入 main，并配置 `DEEPSEEK_API_KEY`。首次 PR 不会采用待审分支自己的审核工作流。需要强制门槛时要求提交状态 `sample-ai-review`，并启用新提交后的批准失效。该状态绑定实际审核的 head SHA，自动审核、评论复评与手动入口更新同一状态。GitHub 不允许 Actions 批准时，结果改贴评论，不冒充 APPROVED；也可沿用 reviewer App 的配置。
+首次启用须先由人审阅引入 PR，将规则、脚本和工作流合入 main，并配置 `CLAUDE_CODE_OAUTH_TOKEN`。首次 PR 不会采用待审分支自己的审核工作流。需要强制门槛时要求提交状态 `sample-ai-review`，并启用新提交后的批准失效。该状态绑定实际审核的 head SHA，自动审核、评论复评与手动入口更新同一状态。GitHub 不允许 Actions 批准时，结果改贴评论，不冒充 APPROVED；也可沿用 reviewer App 的配置。
 
 状态缺失、pending、failure 或 error 都不满足审核门槛。不能将原生 verdict job 作为门槛：评论或手动运行的 job 可能关联 main，无法替代 PR head 上的失败检查。
 
