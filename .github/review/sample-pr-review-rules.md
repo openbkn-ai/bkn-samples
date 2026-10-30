@@ -1,13 +1,13 @@
 # AI review for sample pull requests
 
 The concise review policy lives in [.github/REVIEW_RULES.md](../../.github/REVIEW_RULES.md).
-DeepSeek reviews installation correctness, update safety, version integrity and
+The AI reviewer checks installation correctness, update safety, version integrity and
 pluggable compatibility. Only source-backed findings confirmed by an independent
 verification pass request changes. Advisory questions do not block.
 
 The workflow follows Foundry PR #1985 and Studio PR #814: plan, review, verify,
-then a deterministic verdict. It uses Claude Code Action with the DeepSeek
-Anthropic-compatible endpoint and `deepseek-v4-pro`.
+then a deterministic verdict. It uses Claude Code Action with Claude Opus 5.5:
+review runs at effort `high`, verify at `xhigh`.
 
 Each ready, same-repository PR update is reviewed, including data and skill
 Markdown. Maintainers can request another round using `/review`, `@deepseek`, or

@@ -2,6 +2,9 @@ name: DeepSeek Code Review
 
 # Same review/verify/verdict pattern as Foundry #1985 and Studio #814.
 # Include data, KN JSON, BKN and SKILL.md; they are executable/sample inputs.
+# Models: review runs Opus 5.5 at high effort, verify at xhigh (same as the other
+# openbkn-ai repos). The file, state block and @deepseek trigger keep their names
+# so existing checks and open-review state carry over.
 on:
   pull_request_target:
     branches: [main, release/0.2.0]
@@ -107,21 +110,16 @@ jobs:
           git fetch --no-tags origin "$REVIEW_HEAD" "$REVIEW_BASE"
           git cat-file -e "$REVIEW_HEAD^{commit}"
           git cat-file -e "$REVIEW_BASE^{commit}"
-      - name: DeepSeek review
+      - name: Claude review
         uses: anthropics/claude-code-action@84eb76ec613fe073843da03083ad29fc236a03da # v1
-        env:
-          ANTHROPIC_BASE_URL: https://api.deepseek.com/anthropic
-          ANTHROPIC_DEFAULT_OPUS_MODEL: deepseek-v4-pro
-          ANTHROPIC_DEFAULT_SONNET_MODEL: deepseek-flash
-          ANTHROPIC_DEFAULT_HAIKU_MODEL: deepseek-flash
         with:
-          anthropic_api_key: ${{ secrets.DEEPSEEK_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
           classify_inline_comments: "false"
           include_fix_links: "false"
           track_progress: false
           settings: |
-            {"env":{"CLAUDE_CODE_SUBAGENT_MODEL":"deepseek-flash"},"disableAllHooks":true}
+            {"disableAllHooks":true}
           prompt: |
             对 PR 做一次审核。先读 ${{ github.workspace }}/.github/REVIEW_RULES.md，
             再读 ${{ github.workspace }}/review-data/plan.json。
@@ -143,7 +141,8 @@ jobs:
             必须先写 JSON 再收尾。预算快耗尽时收敛；只有未审完可执行源码、配置或工作流时才写 coverage_notes。
             批量 CSV、图片和已按固定摘要校验的静态数据不属于未审源码，不要仅因未逐行复读而阻断。
           claude_args: |
-            --model deepseek-v4-pro
+            --model claude-opus-5-5
+            --effort high
             --max-turns 120
             --allowedTools "Read,Grep,Glob,Write,Bash(git diff:*),Bash(git show:*),Bash(git grep:*),Bash(git log:*)"
       - name: Upload findings
@@ -196,22 +195,17 @@ jobs:
           REVIEW_HEAD: ${{ needs.plan.outputs.head }}
           REVIEW_BASE: ${{ needs.plan.outputs.base }}
         run: git fetch --no-tags origin "$REVIEW_HEAD" "$REVIEW_BASE"
-      - name: DeepSeek verify
+      - name: Claude verify
         if: steps.collect.outputs.count != '0'
         uses: anthropics/claude-code-action@84eb76ec613fe073843da03083ad29fc236a03da # v1
-        env:
-          ANTHROPIC_BASE_URL: https://api.deepseek.com/anthropic
-          ANTHROPIC_DEFAULT_OPUS_MODEL: deepseek-v4-pro
-          ANTHROPIC_DEFAULT_SONNET_MODEL: deepseek-flash
-          ANTHROPIC_DEFAULT_HAIKU_MODEL: deepseek-flash
         with:
-          anthropic_api_key: ${{ secrets.DEEPSEEK_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
           classify_inline_comments: "false"
           include_fix_links: "false"
           track_progress: false
           settings: |
-            {"env":{"CLAUDE_CODE_SUBAGENT_MODEL":"deepseek-flash"},"disableAllHooks":true}
+            {"disableAllHooks":true}
           prompt: |
             独立复核，不添加新问题。读取可信 .github/REVIEW_RULES.md、review-data/plan.json
             和 review-data/blockers.json（包含旧阻塞及本轮新发现）。默认尝试驳回新问题，
@@ -230,7 +224,8 @@ jobs:
             旧文件可能删除或改名，按 plan.files 的 previousPath 和固定版本 diff 核实。
             不复述发现者的自信，不将旧缺陷或未实现的未来协议当本次阻塞。
           claude_args: |
-            --model deepseek-v4-pro
+            --model claude-opus-5-5
+            --effort xhigh
             --max-turns 50
             --allowedTools "Read,Grep,Glob,Write,Bash(git diff:*),Bash(git show:*),Bash(git grep:*),Bash(git log:*)"
       - name: Upload verification
