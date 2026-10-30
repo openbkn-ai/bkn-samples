@@ -100,11 +100,14 @@
   ],
   "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.10/acceptance.json",
   "evidenceDigest": "sha256:611e0bbcb38dc800535d609e0930cdc273e3890460a881c342d884b5c359b840",
-  "modelQuestionsForThisArtifact": 0,
+  "modelQuestionsForThisArtifact": 1,
   "limits": [
     "Tested on the recorded local arm64 8081 mainline runtime. No vanilla 0.2.1, AMD64 or cluster-wide network-disconnection certification.",
     "No CORE-50 exam, accuracy scoring or video editing was performed. Reference Cypher and deterministic function checks are not model accuracy evidence.",
     "English Studio reference graph rendering passed (19 nodes, 18 edges). The separate graph AI helper remains unpublished in this runtime; its natural-language entry point was not accepted. Cypher generation and Studio smart QA were published with explicit user approval, without changing model, prompts or tool limits.",
-    "Metadata registered on 2026-10-30 from existing public acceptance, not a new platform run. Existing experience answers and 021 question isolation remain scheduled for separate revision."
-  ]
+    "Metadata registered on 2026-10-30 from existing public acceptance, not a new platform run. Existing experience answers and 021 question isolation remain scheduled for separate revision.",
+    "Public UI acceptance includes one English natural-language query-card smoke question (result 800); it is separate from the unrun CORE-50 accuracy evaluation."
+  ],
+  "modelAccuracyEvaluationQuestions": 0,
+  "modelSmokeQuestions": 1
 }
