@@ -30,3 +30,9 @@ The English data is a row-by-row translation of the Chinese sample's data, with 
 ## Open purchases in the data
 
 There are 517 open purchase lines, 483 of them overdue. Only 34 are due on or after the business date, and none of those changes any product's buildable quantity. If overdue lines could be chased in, U00-000080 and the P61 series could build noticeably more. The questions test the difference between on-schedule and chase-dependent supply without inventing extra purchase data.
+
+## Runs
+
+| Agent | Result | Record |
+|---|---|---|
+| External MCP agent (can call the sample functions), acceptance target | 50/50, one round | [runs/2026-10-30-mcp-agent-r1](runs/2026-10-30-mcp-agent-r1/README.md) |
