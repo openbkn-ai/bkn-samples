@@ -94,6 +94,6 @@ samples/<directory>/
 - [样例服务部署](docs/sample-service-deployment.md)
 - [设计与文档索引](docs/README.md)
 
-[供应链缺料规则 #190](docs/shortage-rule-190.md)：中文 0.1.11、英文 0.1.7 源码候选；上游事件联调和正式接纳仍待完成。
+[供应链缺料规则 #190](docs/shortage-rule-190.md)：已停用，供应链 0.1.17 与英文版 0.1.11 不再发布。
 
 发布清理及能源／制造业 021 验收、转正状态见[版本保留与转正计划](docs/release-retention-20261030.md)。r1/r2 完整候选包受保护，尚未验收的四包不进入稳定清单。

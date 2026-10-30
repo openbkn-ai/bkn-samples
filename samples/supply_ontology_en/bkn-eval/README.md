@@ -1,5 +1,7 @@
 # BKN-Eval
 
+The current acceptance set is the [v4 business-scenario test set](baselines/2026-10-30-business-scenarios-v4/README.md). The material below describes the earlier frozen baseline and is kept as history.
+
 The candidate paper contains only 50 question IDs and business questions in `datasets/sample-question-set-v1.yaml`. Before the exam, give both candidates only the common time statement in `exam-time-reference.txt`. Expected answers and rule evidence in `datasets/sample-answer-set-v1.yaml` are judge-only. Four calendar-month checks are versioned separately.
 
 The frozen baseline pins the delivered CSV files and deterministic business rules. Its independent Decimal oracle calculates expected outputs directly from these files without importing or calling the evaluated functions.

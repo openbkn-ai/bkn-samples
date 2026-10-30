@@ -12,8 +12,7 @@ def test_public_docs_have_one_short_entry_path():
     }
 
     assert public_markdown == {
-        "shortage-rule.md",
-        "material-assurance.md",
+        "PRD.en-US.md",
         "faq.md",
         "import-guide.en-US.md",
     }

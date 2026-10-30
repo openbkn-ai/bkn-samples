@@ -1,6 +1,6 @@
 # FAQ
 
-**What does this sample include?** Orders, forecasts, BOMs, inventory and procurement data, with a dedicated database, knowledge network, metrics, functions and Skills.
+**What does this sample include?** Orders, forecasts, BOMs, inventory and procurement data, with a knowledge network, two native functions and two Skills. It uses no metrics.
 
 **Are the names real?** No. People and companies are fictional. Geographic names and technical models are retained where relevant.
 
@@ -10,4 +10,4 @@
 
 **Can the agent read the answer set?** The evaluated agent cannot. It uses published MCP data and functions. The separate judge and CSV oracle can read evaluation material.
 
-**How is accuracy verified?** Evaluate the exact installed package through MCP. Require 50/50 core questions and 4/4 calendar checks, with successful calls and complete evidence. Keep execution records locally.
+**How is accuracy verified?** Evaluate the exact installed package through MCP with the [v4 business-scenario test set](../bkn-eval/baselines/2026-10-30-business-scenarios-v4/README.md). Require 50/50, with successful calls and complete evidence.

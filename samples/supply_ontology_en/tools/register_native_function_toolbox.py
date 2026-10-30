@@ -19,7 +19,6 @@ from native_function_bundle import build_native_function_code
 
 
 API = "/api/agent-operator-integration/v1"
-LEGACY_TOOL_NAME = "supply_chain_compute"
 
 
 def _input(name: str, type_: str, description: str, *, required: bool = False) -> dict[str, Any]:
@@ -27,40 +26,27 @@ def _input(name: str, type_: str, description: str, *, required: bool = False) -
 
 
 def _operation_inputs(operation: str) -> list[dict[str, Any]]:
-    product = _input("product", "string", 'Product code.', required=True)
-    substitute = _input("substitute_enabled", "boolean", 'Explicit alternate policy required for alternate analysis.')
-    substitute_required = _input("substitute_enabled", "boolean", 'Explicitly set substitute_enabled to true or false.', required=True)
-    scope = _input("warehouse_scope", "string", 'Warehouse preset or explicit warehouse list.')
-    assurance = [product, _input("qty", "number", "Positive integer demand quantity.", required=True),
-                 _input("demand_purpose", "string", "customer_delivery or new_production; required and never inferred.", required=True), _input("warehouse_scope", "string", "all (default), production_available or finished_goods.")]
-    demands = _input("demands", "array", 'At least two demands, such as [{"product":"382-000005","qty":50},{"product":"P61-000351","qty":60}]. Array order sets allocation priority.', required=True)
+    product = _input("product", "string", "Product code.", required=True)
+    common = [
+        _input("substitute_enabled", "boolean", "Allow alternates; default false, pass true only when the user allows them."),
+        _input("warehouse_scope", "string", "Warehouse scope: all (default, every warehouse), finished_goods (the three finished-goods warehouses), production_available (the seven Suzhou plant production warehouses)."),
+        _input("need_by", "string", "Need-by date YYYY-MM-DD; adds open purchase lines due from the business date through that date. Omit to use current stock only."),
+        _input("chase_overdue_po", "boolean", "Assume every overdue open purchase line is chased back and count it; default false."),
+        _input("business_date", "string", "Business date; default 2026-08-25."),
+    ]
+    if operation == "build_capacity":
+        products = _input("products", "array", 'Product codes, e.g. ["382-000005"]; each product is calculated on its own, without sharing stock.', required=True)
+        products["sub_parameters"] = [{"name": "items", "type": "string", "required": True, "description": "Product code."}]
+        return [products, *common]
+    demands = _input("demands", "array", 'Demands as [{"product":"382-000005","qty":50}]; array order is allocation order.', required=True)
     demands["sub_parameters"] = [{
         "name": "items", "type": "object", "required": True,
-        "description": 'One demand, in allocation priority order.',
-        "sub_parameters": [product, _input("qty", "number", 'Required number of product sets.', required=True)],
+        "description": "One demand.",
+        "sub_parameters": [product, _input("qty", "number", "Units required.", required=True)],
     }]
-    cases = {
-        "shortage_rule": [_input("event_source", "object", "Resolved event object/relation IDs, demand/shortage event types and verified/processing/closed lifecycle codes (sample adapter v1).", required=True),
-                          _input("window_start", "string", "Inclusive RFC3339 boundary with explicit timezone; fixed across retries.", required=True),
-                          _input("window_end", "string", "Exclusive RFC3339 boundary with explicit timezone; fixed across retries.", required=True)],
-        "material_coverage": assurance,
-        "replenishment_draft": [_input("coverage", "object", "Complete material_coverage result; structure is checked but facts are not requeried. Draft only, no persistence or business writes.", required=True)],
-        "bom_list": [product, _input("depth", "number", 'Expansion depth; default one level.'), _input("include_substitute", "boolean", 'Include alternate BOM rows.'), _input("report_grain", "string", 'Report grain; summary gives structure counts and first-level main components; full returns paged details.'), _input("page_size", "number", 'Full-detail page size, from 1 to 500.'), _input("offset", "number", 'Start offset for full details; default 0.')],
-        "bom_shared_list": [_input("products", "array", 'At least two product codes.', required=True), _input("depth", "number", 'Expansion depth; default all levels.'), _input("include_substitute", "boolean", 'Include alternate BOM rows.')],
-        "material_where_used": [_input("material_code", "string", 'Material code.', required=True), _input("include_substitute", "boolean", 'Include alternate branches in affected products; default true.'), _input("report_grain", "string", 'Report grain; summary by default, full for matching BOM paths.')],
-        "layered_inventory": [product, _input("depth", "number", 'Expansion depth; default one level.'), scope, _input("include_substitute", "boolean", 'Include alternate BOM rows.')],
-        "substitute_status": [_input("product", "string", 'Product code; provide this or material_code, not both.'), _input("material_code", "string", 'Material code; provide this or product, not both.'), scope, substitute],
-        "theoretical_build": [product, scope, substitute, _input("report_grain", "string", 'Report grain; summary by default, full for all material constraints.')],
-        "total_sellable": [product, _input("production_scope", "string", 'Production warehouse scope.'), _input("finished_goods_scope", "string", 'Finished goods warehouse scope.'), substitute],
-        "kitting_net_demand": [product, _input("qty", "number", 'Required sets.', required=True), scope, substitute, _input("report_grain", "string", 'summary includes complete gaps and their net/replenishment quantities; full additionally includes all allocation lines. Do not request full merely to obtain shortage quantities.')],
-        "shared_contention": [demands, scope, substitute_required, _input("report_grain", "string", 'Report grain; summary by default, full for per-material allocation and the entire remaining pool.')],
-        "max_build_without_po": [product, scope, substitute, _input("report_grain", "string", 'Report grain; summary by default, full for all material constraints.')],
-        "leadtime_days": [_input("material_code", "string", 'Material code.', required=True)],
-        "supply_status": [_input("material_code", "string", 'Material code.', required=True), _input("due_date", "string", 'Required arrival or delivery date.'), _input("gross_requirement", "number", 'Gross required quantity.'), scope, _input("child_short", "boolean", 'Whether a child material is already short.')],
-        "open_forecast_count": [_input("product_code", "string", 'Optional product code; omit to count all open forecasts.'), _input("report_grain", "string", 'Report grain; summary by default, full for forecast ID lists.')],
-        "backward_plan": [_input("product", "string", 'New demand product code; optional for an existing forecast.'), _input("forecast_id", "string", 'Existing forecast ID, preserving leading zeroes, such as 0000023181. The function reads product, quantity and deadline automatically.'), _input("demand_end", "string", 'New demand deadline in YYYY-MM-DD; optional for an existing forecast.'), _input("demand_qty", "number", 'New demand quantity; optional for an existing forecast.'), _input("business_date", "string", 'Business date; default 2026-08-25.'), scope, substitute_required, _input("report_grain", "string", 'Report grain; default summary.')],
-    }
-    return cases[operation]
+    return [demands, *common,
+            _input("reserve_signed_backlog", "boolean", "Reserve these products' signed backlog by promised date first; pass true for new orders that must protect backlog, omit when evaluating the backlog itself."),
+            _input("use_finished_goods", "boolean", "Use finished goods first; default true, pass false when planning a work order.")]
 
 
 def _call(args: list[str]) -> Any:
@@ -69,7 +55,7 @@ def _call(args: list[str]) -> Any:
     )
     if completed.returncode:
         detail = (completed.stderr or completed.stdout).strip()
-        raise RuntimeError(detail or f"""openbkn call failed (exit code {completed.returncode})""")
+        raise RuntimeError(detail or f"openbkn call failed (exit code {completed.returncode})")
     output = completed.stdout.strip()
     if not output and args[0] == "call" and "-X" in args and args[args.index("-X") + 1] == "PUT":
         return {}
@@ -89,7 +75,7 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
                 "name": "result",
                 "type": "object",
                 "required": True,
-                "description": ('Draft from supplied coverage: structure checked, not requeried or persisted.' if operation == 'replenishment_draft' else 'Result, business evidence and runtime data sources read by the function.'),
+                "description": "Result, business basis and the row counts the function read.",
             }
         ],
         }
@@ -142,7 +128,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
                 json.dumps(
                     {
                         "box_name": box_name,
-                        "box_desc": 'Supply EN functions executed by OpenBKN Function Runtime.',
+                        "box_desc": "Supply EN functions executed by OpenBKN Function Runtime.",
                         "box_category": "data_process",
                         "metadata_type": "function",
                         "source": "custom",
@@ -174,15 +160,15 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
         tool_ids[operation] = tool_id
     if box.get("status") != "published":
         _call(["toolbox", "publish", box_id])
-    legacy = _find_tool(box_id, LEGACY_TOOL_NAME)
-    if legacy and legacy.get("status") != "disabled":
-        _call(["tool", "disable", "--toolbox", box_id, legacy["tool_id"]])
+    current = {item["name"] for item in tool_inputs.values()}
+    retired = [item for item in _call(["tool", "list", "--toolbox", box_id, "--all"]).get("tools", [])
+               if item.get("name") not in current and item.get("status") != "disabled"]
+    for item in retired:
+        _call(["tool", "disable", "--toolbox", box_id, item["tool_id"]])
     if kn_id:
-        from bind_draft_action import bind_draft_action
-        bind_draft_action(_call, kn_id, box_id, tool_ids["replenishment_draft"])
         _call(["bkn", "capability", "attach", kn_id, "--box", box_id,
                "--tool", ",".join(tool_ids.values())])
-    return {**preview, "box_id": box_id, "tool_ids": tool_ids, "legacy_tool_disabled": bool(legacy)}
+    return {**preview, "box_id": box_id, "tool_ids": tool_ids, "retired_tools": [item["name"] for item in retired]}
 
 
 def main() -> int:

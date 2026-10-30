@@ -1,0 +1,314 @@
+schema_version: '4.0'
+set_id: supply-business-scenarios-v4
+business_date: '2026-08-25'
+source_snapshot_date: '2026-08-13'
+prd: docs/PRD.en-US.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: basic
+  role: PMC
+  question: How many finished-goods models do we currently sell (listed), and across how many product lines?
+  output_contract: model count, product line count
+- id: Q-02
+  scenario: S01
+  difficulty: basic
+  role: Purchasing
+  question: What is the standard purchasing lead time for bought-in part 606-000989, in days?
+  output_contract: days
+- id: Q-03
+  scenario: S04
+  difficulty: basic
+  role: PMC
+  question: How many first-level materials go straight into final assembly of vehicle terminal U00-000080? List the material codes.
+  output_contract: count and full list of codes
+- id: Q-04
+  scenario: S05
+  difficulty: basic
+  role: PMC
+  question: How much available stock of 382-000005, the BeiDou navigation farm autopilot, is left in the three finished-goods warehouses?
+  output_contract: quantity (units)
+- id: Q-05
+  scenario: S02
+  difficulty: basic
+  role: PMC
+  question: How many sales orders are not fully shipped yet, and how many units do we still owe customers in total?
+  output_contract: order count, units owed
+- id: Q-06
+  scenario: S03
+  difficulty: basic
+  role: PMC
+  question: How many demand forecasts are still open, and how many units do they add up to?
+  output_contract: forecast count, units
+- id: Q-07
+  scenario: S08
+  difficulty: basic
+  role: Purchasing
+  question: How many purchase order lines are still waiting for goods? Closed and terminated lines don't count.
+  output_contract: line count
+- id: Q-08
+  scenario: S10
+  difficulty: basic
+  role: PMC
+  question: How many MRP planned orders have been calculated but not released yet?
+  output_contract: order count
+- id: Q-09
+  scenario: S02
+  difficulty: medium
+  role: PMC
+  question: Among the orders we still owe, how many are past their promised date? Which one is the most overdue, and by how many days?
+  output_contract: overdue order count, most overdue order, days overdue
+- id: Q-10
+  scenario: S02
+  difficulty: medium
+  role: PMC
+  question: Which of Cypressridge Agri's orders are not fully shipped yet, and how many units do we owe them in total?
+  output_contract: full list of order numbers, units owed
+- id: Q-11
+  scenario: S08
+  difficulty: medium
+  role: Purchasing
+  question: How many purchase lines are past their due date and still not fully received? How many suppliers do they involve?
+  output_contract: line count, supplier count
+- id: Q-12
+  scenario: S08
+  difficulty: medium
+  role: Purchasing
+  question: Which supplier has the most overdue purchase lines? How many lines, and how much do they still owe us?
+  output_contract: supplier name, line count, open quantity
+- id: Q-13
+  scenario: S08
+  difficulty: medium
+  role: Purchasing
+  question: Of the suppliers Alex Reed is responsible for, how many currently have overdue purchase lines?
+  output_contract: suppliers handled, of which with overdue lines
+- id: Q-14
+  scenario: S04
+  difficulty: medium
+  role: PMC
+  question: Which finished products use seal ring 165-002537?
+  output_contract: full list of product codes
+- id: Q-15
+  scenario: S04
+  difficulty: medium
+  role: PMC
+  question: How many main-part materials do the two YN580 agricultural drones (367-000130 and 367-000131) have in common?
+  output_contract: shared material count (main parts at all levels, no alternates)
+- id: Q-16
+  scenario: S05
+  difficulty: medium
+  role: PMC
+  question: Which stock has been judged defective and cannot go into production? What is the total quantity?
+  output_contract: full list of material codes, total quantity
+- id: Q-17
+  scenario: S10
+  difficulty: medium
+  role: PMC
+  question: How many production work orders are not complete yet, and how many units have not been received into stock?
+  output_contract: work order count, units not received
+- id: Q-18
+  scenario: S03
+  difficulty: medium
+  role: PMC
+  question: Among the open forecasts, which product has the largest forecast quantity? How many times its current finished-goods stock is that?
+  output_contract: product code, forecast quantity, finished-goods stock, ratio (1 decimal)
+- id: Q-19
+  scenario: S08
+  difficulty: medium
+  role: Purchasing
+  question: How many purchase lines are due to arrive in the next 30 days, and from how many suppliers?
+  output_contract: line count, supplier count
+- id: Q-20
+  scenario: S09
+  difficulty: medium
+  role: Purchasing
+  question: If we order SMD crystal 527-000017 today, what is the earliest date it can arrive?
+  output_contract: date
+- id: Q-21
+  scenario: S06
+  difficulty: medium
+  role: PMC
+  question: A customer wants 50 units of 382-000005. Can we ship them straight from finished goods? After that, how many more units of stock on hand can we still promise?
+  output_contract: yes/no, remaining promisable stock on hand
+- id: Q-22
+  scenario: S06
+  difficulty: medium
+  role: PMC
+  question: Using only materials in the seven Suzhou plant production warehouses, how many units of 382-000005 can we build at most? How many fewer is that than using stock across the company?
+  output_contract: plant buildable, company buildable, difference
+- id: Q-23
+  scenario: S02
+  difficulty: complex
+  role: PMC
+  question: Which products already owe customers more than we have in finished-goods stock? By how many units each?
+  output_contract: full product list with gaps
+- id: Q-24
+  scenario: S02
+  difficulty: complex
+  role: PMC
+  question: Of the products where finished goods can't cover the backlog, which can't be built from current stock either? How many units short is each?
+  output_contract: full product list with final gaps
+- id: Q-25
+  scenario: S06
+  difficulty: complex
+  role: PMC
+  question: For the 625 agricultural drone 367-000097, how many backlog units can't be covered? Which materials block it? Which can we expedite from open purchase orders, which need a new order, and what
+    is the earliest date everything is in?
+  output_contract: units short, blocking materials and quantities, materials to expedite, materials to order, earliest complete date
+- id: Q-26
+  scenario: S08
+  difficulty: complex
+  role: Purchasing
+  question: To clear the backlog for the YN580 agricultural drone 367-000130, which short materials have no open purchase order at all and must be ordered right away? Which is the slowest, and when is the
+    earliest it can arrive?
+  output_contract: full material list, slowest material, arrival date
+- id: Q-27
+  scenario: S07
+  difficulty: complex
+  role: PMC
+  question: If we ship the 526-000006 backlog from stock on hand in promised-date order, which orders can't be filled? Can the shortfall be built from current stock?
+  output_contract: unfilled order numbers, shortfall, whether it can be built
+- id: Q-28
+  scenario: S06
+  difficulty: complex
+  role: PMC
+  question: A customer wants another 30 units of 526-000006. How many can we accept right now?
+  output_contract: units accepted
+- id: Q-29
+  scenario: S06
+  difficulty: complex
+  role: PMC
+  question: A customer wants 900 units of 382-000005. Can stock on hand plus what we can build from current stock cover it? What if alternates are allowed?
+  output_contract: yes/no and promisable quantity without and with alternates
+- id: Q-30
+  scenario: S03
+  difficulty: complex
+  role: PMC
+  question: How many units of open forecast does P61-000351 have? After protecting the signed backlog, how much of that forecast can current stock support, and what is the gap?
+  output_contract: forecast quantity, backlog, supported quantity, gap
+- id: Q-31
+  scenario: S07
+  difficulty: complex
+  role: PMC
+  question: 'Two new orders arrive together: 60 units of P61-000351 and 50 units of U00-000151. Protecting both products'' backlog first, can current stock take both? What is short, and by how much?'
+  output_contract: coverage per order and full shortage list
+- id: Q-32
+  scenario: S04
+  difficulty: complex
+  role: PMC
+  question: Which finished products use SMD crystal 527-000017? Among them, which have backlog that finished goods can't cover, so they must be built and are directly affected by this part? How many units
+    must each build?
+  output_contract: full product list, products that must build and units
+- id: Q-33
+  scenario: S09
+  difficulty: complex
+  role: Purchasing
+  question: With alternates allowed, how many more units of 382-000005 can we build at most? Which material is the bottleneck, and does it have any open purchase order?
+  output_contract: buildable units, bottleneck material, its stock, open purchase order or not
+- id: Q-34
+  scenario: S10
+  difficulty: complex
+  role: PMC
+  question: Next week we want to schedule another work order for 100 units of YN580 367-000131. Is current stock enough? If not, how many materials are short, and which is short the most?
+  output_contract: can it start, short material count, largest shortage
+- id: Q-35
+  scenario: S10
+  difficulty: complex
+  role: Purchasing
+  question: 'Purchase order 02-KSHA-CGDD-260402-012958, line 849-000904: which purchase requisition did it come from? Which MRP planned order generated that requisition? In the end, which forecast and which
+    product was the material bought for?'
+  output_contract: requisition number, MRP order number, forecast number, product codes
+- id: Q-36
+  scenario: S01
+  difficulty: basic
+  role: Purchasing
+  question: How many suppliers do we have on file in total?
+  output_contract: supplier count
+- id: Q-37
+  scenario: S02
+  difficulty: basic
+  role: PMC
+  question: For 382-000005, how many units have been signed, shipped and are still owed to date?
+  output_contract: signed, shipped, owed units
+- id: Q-38
+  scenario: S05
+  difficulty: basic
+  role: Purchasing
+  question: How much available stock of material 321-000569 is there across the company right now?
+  output_contract: quantity
+- id: Q-39
+  scenario: S02
+  difficulty: basic
+  role: PMC
+  question: How many sales orders are still in progress?
+  output_contract: order count
+- id: Q-40
+  scenario: S08
+  difficulty: medium
+  role: Purchasing
+  question: Which purchases are due to arrive today? From which supplier, which material, and how much is still outstanding?
+  output_contract: full list of purchase lines
+- id: Q-41
+  scenario: S08
+  difficulty: medium
+  role: Purchasing
+  question: How many purchase lines are due to arrive in September, and from how many suppliers?
+  output_contract: line count, supplier count
+- id: Q-42
+  scenario: S02
+  difficulty: medium
+  role: PMC
+  question: Which three products have the biggest backlog, and how many units does each owe?
+  output_contract: product codes and units owed, largest first
+- id: Q-43
+  scenario: S02
+  difficulty: medium
+  role: PMC
+  question: How many orders does salesperson Joel Hayes still have not fully shipped? How many units are owed, and how many of those orders are overdue?
+  output_contract: order count, units owed, overdue order count
+- id: Q-44
+  scenario: S08
+  difficulty: medium
+  role: Purchasing
+  question: Which purchases of cardboard corner protector 606-001059 haven't arrived yet? Which of them are overdue?
+  output_contract: full list of purchase lines (order number, open quantity, due date, overdue or not)
+- id: Q-45
+  scenario: S03
+  difficulty: medium
+  role: PMC
+  question: Among products with open forecasts, which have no finished-goods stock at all right now?
+  output_contract: full list of product codes
+- id: Q-46
+  scenario: S09
+  difficulty: complex
+  role: PMC
+  question: How many more units of vehicle terminal U00-000080 can current stock build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
+  output_contract: buildable from stock, blocking material, buildable with overdue purchases chased
+- id: Q-47
+  scenario: S07
+  difficulty: complex
+  role: Purchasing
+  question: A new order for 60 units of P61-000351 has come in. Protecting its backlog first, if every open purchase (overdue ones included) could be chased in, would materials be enough? What would still
+    be short, and by how much?
+  output_contract: covered or not, full shortage list
+- id: Q-48
+  scenario: S09
+  difficulty: complex
+  role: PMC
+  question: For class-D audio amplifier 972-000677, we need to issue 500 to production by September 5 and 5,000 cumulative by September 15. With stock plus purchases arriving on schedule, is there enough
+    at each point?
+  output_contract: available quantity, coverage and gap at each date
+- id: Q-49
+  scenario: S06
+  difficulty: complex
+  role: PMC
+  question: For the products whose backlog can't be covered, how many more units would purchases arriving on schedule before the end of September let each of them build?
+  output_contract: extra units per product
+- id: Q-50
+  scenario: S08
+  difficulty: complex
+  role: Purchasing
+  question: Among the short materials for the YN580 367-000130 backlog, which have open purchases we can expedite? If all of those purchases came in, would it close the gap?
+  output_contract: expeditable materials (shortage, open quantity, enough or not), materials still short after chasing everything
