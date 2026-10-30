@@ -26,3 +26,9 @@ python3 samples/financial-fibo-en-us/bkn-eval/baselines/2026-10-30-business-scen
 ## Exceptions in the data
 
 As of the business date, 304 instructions are not fully settled: 144 failed and 80 partially settled (all overdue), and 80 pending (due March 2). At the end of February, 96 valuations are blocked by stale, unapproved or missing prices, so issuer concentration cannot be judged for 96 portfolios. At the end of February, 20 portfolios breach an issuer concentration limit and 12 breach a counterparty receivable limit. New limits take effect on March 15 for 8 portfolios, which newly breach under the March plan. Month-end questions can read the recorded valuation, exposure and limit-assessment snapshots directly; questions about a non-month-end date or about what was known on a day need recomputation from the original trades and settlement events.
+
+## Runs
+
+| Agent | Result | Record |
+|---|---|---|
+| External MCP agent (can call the sample functions), one round | 50/50 | [runs/2026-10-30-mcp-agent-r1](runs/2026-10-30-mcp-agent-r1/README.md) |
