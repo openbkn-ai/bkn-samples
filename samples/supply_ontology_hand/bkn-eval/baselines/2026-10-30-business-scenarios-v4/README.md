@@ -33,6 +33,13 @@ python3 samples/supply_ontology_hand/bkn-eval/baselines/2026-10-30-business-scen
 
 Q-05、Q-07、Q-11、Q-14、Q-15、Q-16、Q-35、Q-37、Q-40、Q-41、Q-43、Q-48 的库存部分已在 8081（bkn-backend 主线 9156ec5）上用 Cypher 复核，与脚本结果一致。
 
+## 运行记录
+
+| 智能体 | 结果 | 记录 |
+|---|---|---|
+| 外部 MCP 智能体（可调用样例函数），验收口径 | 50/50 | [runs/2026-10-30-mcp-agent-r1](runs/2026-10-30-mcp-agent-r1/README.md) |
+| Studio 智能问答（平台公开接口不提供函数调用），尽力而为 | 43/50 | [runs/2026-10-30-studio-smart-qa-r1](runs/2026-10-30-studio-smart-qa-r1/README.md) |
+
 ## 与 v3 的差异
 
 v3 题干写明“先扣成品再逐层扣组件、全仓、不计 PO”等规则，直连数据库也能照做；v4 去掉这些提示，并加入需要跨单据推理的问题，例如先保欠货再算可承诺量、区分按期在途与逾期可催、按交期补发欠单、采购到预测的单据追溯。

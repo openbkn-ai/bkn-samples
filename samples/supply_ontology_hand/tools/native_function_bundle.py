@@ -23,7 +23,7 @@ from managed_execution import KN_ID, execute_from_bkn_rows, load_bkn_rows
 
 @tool
 def supply_function(
-    product: str | None = None, demands: list | None = None,
+    products: list | None = None, demands: list | None = None,
     substitute_enabled: bool | None = None, warehouse_scope: str | None = None,
     need_by: str | None = None, chase_overdue_po: bool | None = None,
     reserve_signed_backlog: bool | None = None, use_finished_goods: bool | None = None,

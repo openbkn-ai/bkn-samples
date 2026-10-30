@@ -35,6 +35,6 @@ def test_bundled_function_runs_with_the_sandbox_reader(monkeypatch):
     monkeypatch.setattr(sys, "path", list(sys.path))
     namespace: dict = {}
     exec(build_native_function_code(fixed_operation="build_capacity"), namespace)
-    result = namespace["supply_function"](product="526-000006")
-    assert result["available_to_promise"] == 8
+    result = namespace["supply_function"](products=["526-000006"])
+    assert result["products"][0]["available_to_promise"] == 8
     assert result["data_source"]["loaded_rows"]["sales_order"] > 0

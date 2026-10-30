@@ -18,16 +18,24 @@ def object_types(query):
 
 
 def test_capacity_reads_bom_stock_and_backlog_but_no_purchase_orders():
-    query, rows, result = run("build_capacity", {"product": "526-000006"})
+    query, rows, result = run("build_capacity", {"products": ["526-000006"]})
     assert object_types(query) == {"bom", "inventory", "salesorder"}
     assert all(r["stock_status"] == "可用" for r in rows["inventory"])
-    assert result["available_to_promise"] == 8
+    assert result["products"][0]["available_to_promise"] == 8
+
+
+def test_several_products_are_computed_independently_in_one_call():
+    _, _, together = run("build_capacity", {"products": ["526-000006", "382-000005"]})
+    assert [item["product"] for item in together["products"]] == ["526-000006", "382-000005"]
+    for item in together["products"]:
+        _, _, alone = run("build_capacity", {"products": [item["product"]]})
+        assert alone["products"] == [item]
 
 
 def test_purchase_orders_are_read_only_when_in_transit_is_asked_for():
-    query, rows, result = run("build_capacity", {"product": "U00-000080", "chase_overdue_po": True})
+    query, rows, result = run("build_capacity", {"products": ["U00-000080"], "chase_overdue_po": True})
     assert "po" in object_types(query)
-    assert result["buildable_qty"] == 2972
+    assert result["products"][0]["buildable_qty"] == 2972
 
 
 def test_coverage_reads_sales_orders_only_to_reserve_backlog():
@@ -39,14 +47,15 @@ def test_coverage_reads_sales_orders_only_to_reserve_backlog():
 
 
 def test_warehouse_scope_is_filtered_on_the_server():
-    query, _, result = run("build_capacity", {"product": "382-000005", "warehouse_scope": "production_available"})
+    query, _, result = run("build_capacity", {"products": ["382-000005"], "warehouse_scope": "production_available"})
     inventory = next(c for c in query.calls if c["ot_id"].endswith("_inventory"))
     assert any(item.get("field") == "warehouse" for item in inventory["condition"]["sub_conditions"])
-    assert result["buildable_qty"] == 34
+    assert result["products"][0]["buildable_qty"] == 34
 
 
 @pytest.mark.parametrize("operation, params", [
     ("build_capacity", {}),
+    ("build_capacity", {"products": []}),
     ("demand_coverage", {"demands": []}),
     ("demand_coverage", {"demands": [{"product": "382-000005"}]}),
     ("bom_list", {"product": "382-000005"}),

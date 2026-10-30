@@ -48,10 +48,10 @@ def _page_rows(page: Mapping[str, Any]) -> list[dict[str, Any]]:
 
 def _products(operation: str, params: Mapping[str, Any]) -> list[str]:
     if operation == "build_capacity":
-        product = str(params.get("product") or "").strip()
-        if not product:
-            raise CannotCompute("请提供产品编码")
-        return [product]
+        products = params.get("products")
+        if not isinstance(products, list) or not [p for p in products if str(p or "").strip()]:
+            raise CannotCompute("请提供至少一个产品编码")
+        return sorted({str(p).strip() for p in products if str(p or "").strip()})
     demands = params.get("demands")
     if not isinstance(demands, list) or not demands:
         raise CannotCompute('请按 [{"product": "产品编码", "qty": 数量}] 提供至少一条需求')
@@ -97,7 +97,8 @@ def execute_from_bkn_rows(operation: str, rows: Mapping[str, list[dict[str, Any]
     common = {key: params[key] for key in ("substitute_enabled", "warehouse_scope", "need_by", "chase_overdue_po",
                                            "business_date") if params.get(key) is not None}
     if operation == "build_capacity":
-        return build_capacity(rows, str(params["product"]).strip(), **common)
+        products = list(dict.fromkeys(str(p).strip() for p in params["products"] if str(p or "").strip()))
+        return {"products": [build_capacity(rows, product, **common) for product in products]}
     if operation == "demand_coverage":
         extra = {key: params[key] for key in ("reserve_signed_backlog", "use_finished_goods") if params.get(key) is not None}
         return demand_coverage(rows, list(params["demands"]), **common, **extra)

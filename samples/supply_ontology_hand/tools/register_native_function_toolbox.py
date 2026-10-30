@@ -35,7 +35,9 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
         _input("business_date", "string", "业务日期；默认 2026-08-25。"),
     ]
     if operation == "build_capacity":
-        return [product, *common]
+        products = _input("products", "array", '产品编码列表，如 ["382-000005"]；多个产品各自独立计算，不共用库存。', required=True)
+        products["sub_parameters"] = [{"name": "items", "type": "string", "required": True, "description": "产品编码。"}]
+        return [products, *common]
     demands = _input("demands", "array", '需求列表，格式 [{"product":"382-000005","qty":50}]；数组顺序即扣减先后。', required=True)
     demands["sub_parameters"] = [{
         "name": "items", "type": "object", "required": True,

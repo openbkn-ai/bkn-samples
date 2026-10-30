@@ -437,8 +437,9 @@ with_po = [i for i in items if i['open_po']]
 q('Q-50', 'S08', '复杂', '采购', 'YN580 367-000130 欠单的缺料里，哪些有没到的采购可以催？把这些采购全催回来，够不够补上缺口？',
   dict(materials={i['material_code']: dict(shortage_qty=i['shortage_qty'], open_po_qty=i['open_po_qty'],
                                            enough=i['open_po_qty'] >= i['shortage_qty']) for i in with_po},
-       other_materials_still_short=len(items) - len(with_po)),
-  '可催物料清单（缺量、在途量、是否够）、仍需新下单的物料种数')
+       # chasing every open line also refills upstream assemblies, so the remaining gaps come from netting again
+       still_short_after_chasing=sorted(allocate('367-000130', BACKLOG['367-000130'], pool_with_po(chase_overdue=True))['gaps'])),
+  '可催物料清单（缺量、在途量、是否够）、全部催回后仍缺的物料')
 
 
 def main():

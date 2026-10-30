@@ -26,12 +26,13 @@ FUNCTION_CATALOG = {
     "build_capacity": _spec(
         "产品可做数量与可承诺量",
         "build_capacity",
-        "按 BOM 逐层净扣，算一个产品的成品库存、还能生产的最大套数、已签约欠货、可承诺量（成品+可做−欠货），"
+        "按 BOM 逐层净扣，算每个产品各自的成品库存、还能生产的最大套数、已签约欠货、可承诺量（成品+可做−欠货），"
         "以及再多做一套时卡住的物料。默认只用现有可用库存、全仓、不用替代料；"
         "传 need_by 计入该日前按交期到货的在途，传 chase_overdue_po=true 计入逾期在途。",
-        use_when="问某产品现在能做多少、能卖多少、还能接多少新单、被哪颗料卡住，或某日前在途到货后能多做多少。",
+        use_when="问某个或某几个产品现在能做多少、能卖多少、还能接多少新单、被哪颗料卡住，或某日前在途到货后能多做多少。"
+                 "几个产品要一起看时一次传入 products，不要逐个调用。",
         do_not_use_when="只问库存、欠货、预测、在途数量或 BOM 清单时用 Cypher。",
-        minimum_business_inputs=["product"],
+        minimum_business_inputs=["products"],
     ),
     "demand_coverage": _spec(
         "需求齐套与缺料",
