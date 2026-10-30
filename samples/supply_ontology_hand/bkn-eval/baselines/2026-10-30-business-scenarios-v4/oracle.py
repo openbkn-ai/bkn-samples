@@ -288,7 +288,7 @@ q('Q-19', 'S08', '中等', '采购', '接下来 30 天内按交期应到货的�
 q('Q-20', 'S09', '中等', '采购', '贴片无源晶振 527-000017 今天下单的话，最早哪天能到？',
   dict(arrival_date=days_after(BUSINESS_DATE, MAT['527-000017']['purchase_fixedleadtime'])), '日期')
 fg382 = pool()['382-000005']
-q('Q-21', 'S06', '中等', 'PMC', '客户要 50 套 382-000005，能直接从成品库发吗？发完以后还能再承诺多少套现货？',
+q('Q-21', 'S06', '中等', 'PMC', '客户要 50 套 382-000005，能直接用现有成品发吗？发完以后还能再承诺多少套现货？',
   dict(can_ship=fg382 - BACKLOG['382-000005'] >= 50,
        remaining_promisable_fg=num(fg382 - BACKLOG['382-000005'] - 50)), '能否、剩余可承诺现货')
 in_plant = capacity('382-000005', lambda: pool(PRODUCTION))
