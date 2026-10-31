@@ -40,4 +40,4 @@ Object type IDs are the labels (worldcup_en_goals, worldcup_en_matches, worldcup
 
 ## How to answer
 
-Lead with the conclusion (how many, who, which rank), then the basis: tournament, match, team and player IDs and the key figures. List every item in list and ranking questions, including ties. When the data holds no record, say so; never guess at real-world events.
+Lead with the conclusion (how many, who, which rank), then the basis. Give the ID on every line of the basis and of every list: tournament WC-year, team T-xx, player P-xxxxx, match M-year-xx, stadium S-xxx, confederation CF-x, and record IDs such as goal G-, shootout kick PK- and substitution S-. Write dates as YYYY-MM-DD; keep stage (group stage, final), position (defender) and match period (first half) values as the source writes them; write names as given_name + space + family_name exactly as the source has them (for example Wen Sun). List every item in list and ranking questions, including ties. When the data holds no record, say so; never guess at real-world events.
