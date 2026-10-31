@@ -17,13 +17,13 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - The business date is 2027-02-28; November to February have happened, March is the plan. peak_a lasts 2 hours and peak_b 3; events on the same date and block overlap completely.
 - "As of a day" counts only events announced and records known by that day. Forecasts and baselines take the latest version per device, date and block, never falling back when the latest is invalid.
 - Eligibility: per device the minimum of offered kW, maximum reduction, the lower of forecast and baseline minus minimum service load (not below zero), and active caps; inactive, barred, withdrawn or expired count zero; a cap without a value, an invalid forecast or a conflicting baseline is undeterminable, never zero. Each site total is limited to its response cap. Each device has one meter, never added to a site meter.
-- Dispatch: active events on one date and block share device and site limits; committed allocations take their share first, new allocation goes by event priority then offer cost from lowest; if any event in the block has undeterminable capacity or a commitment exceeds a limit, the block's new plan is undeterminable. Estimated cost includes existing commitments.
+- Dispatch: active events on one date and block share device and site limits; committed allocations take their share first, new allocation goes by event priority then offer cost from lowest; if any event in the block has undeterminable capacity or a commitment exceeds a limit, the block's new plan is undeterminable. A withdrawn offer or changed cap never cancels a committed allocation, which still counts in full; when it exceeds current eligible capacity, only the block's new plan is undeterminable, and "the existing commitment" is still answered with all committed allocations. Estimated cost includes existing commitments.
 
 ## When to call a function
 
 - `flexibility_assessment`: how many kW an event can commit, which devices are excluded, and why capacity is undeterminable. Pass `event_ids`, `as_of_date`, `knowledge_date` (an earlier day for what was known then).
 - `dispatch_plan`: per event in a block, committed, new, shortfall and estimated cost, and which devices are added.
-- Use Cypher for assets, schedules, offer status, constraints, existing commitments and capacity snapshots; capacity snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the functions. After a function returns, check `completeness` and `issues`.
+- Use Cypher for assets, schedules, offer status, constraints, existing commitments and capacity snapshots; capacity snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the functions. `event_ids` takes up to 20 events per call across dates and blocks; for all or many events pass 20 at a time in date order, never one block per call. After a function returns, check `completeness` and `issues`.
 
 ## Cypher patterns
 

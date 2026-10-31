@@ -23,7 +23,7 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 ## When to call a function
 
 - `settlement_assessment`: an event's committed energy, verified energy, delivery ratio, revenue, compensation, net and ledger difference. Pass `event_ids`, `as_of_date`, `knowledge_date` (an earlier day, or a date before or after a correction, to see what was known then).
-- Use Cypher for receipt counts, reading versions, ledger rows and settlement snapshots; settlement snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the function. After a function returns, check `completeness` and `issues`.
+- Use Cypher for receipt counts, reading versions, ledger rows and settlement snapshots; settlement snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the function. `event_ids` takes up to 20 events per call across dates and blocks; for all past events pass 20 at a time in date order, about three calls, never one block per call. After a function returns, check `completeness` and `issues`.
 
 ## Cypher patterns
 
