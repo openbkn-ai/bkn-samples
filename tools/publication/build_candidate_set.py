@@ -55,11 +55,15 @@ def build_set(plan_path,output):
         print(entry['sampleId'],entry['version'],digest,flush=True)
     skipped={e['directory'] for e in plan.get('excluded',[])}
     require({e['sampleId'] for e in result['candidates']}=={load_sample(p)['metadata']['name'] for p in discover_sample_dirs(ROOT) if p.name not in skipped},'post-build coverage differs')
-    (downloads/'candidate-index.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     (downloads/'SHA256SUMS').write_text(''.join(e['package_digest'].removeprefix('sha256:')+'  '+e['file']+'\n' for e in result['candidates']))
-    (downloads/'README.md').write_text('''# Complete OpenBKN 0.2.1 candidate set
+    excluded=''.join(f"\n- {e['directory']}: {e['reason']}" for e in plan.get('excluded',[]))
+    result['excluded']=plan.get('excluded',[])
+    (downloads/'candidate-index.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    (downloads/'README.md').write_text(f'''# OpenBKN {plan['productVersion']} candidate set
 
-All 13 source samples are represented. Import a matching *-package.tar.gz directly
+{len(result['candidates'])} samples are offered; every other source sample is excluded with a reason:{excluded or ' none.'}
+
+Import a matching *-package.tar.gz directly
 into a fixed OpenBKN 0.2.1 test instance with the shared sample database. Verify
 SHA256SUMS first; do not unpack and repack. No sample-specific data image is needed.
 Each file is a fixed-source candidate; no successful platform proof is fabricated.
