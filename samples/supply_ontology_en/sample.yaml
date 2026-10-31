@@ -5,13 +5,13 @@ metadata:
   name: supply-chain-en
   aliases: []
   displayName: Supply Chain (EN)
-  summary: Assess demand coverage using sample orders, stock, BOMs and supply.
+  summary: Use sample orders, stock, BOMs and purchases to fill backlog, accept orders and follow up purchases.
 spec:
   studio:
     licenseNote: Fictional historical data for demonstration only.
     questions:
-      - Can current stock and work in progress cover this demand?
-      - Which alternatives can cover material shortages?
+      - A customer wants another 30 units of 526-000006. How many can we accept right now?
+      - Which products' backlog can neither stock on hand nor current stock cover?
     experienceSet: experience/experience-set.yaml
   database:
     engine: mariadb
@@ -27,7 +27,7 @@ spec:
   components:
     objects: true
     relations: true
-    metrics: true
+    metrics: false
     functions: true
     skills: true
   hooks:

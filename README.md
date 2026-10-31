@@ -113,6 +113,6 @@ Useful guides:
 - [Sample service deployment](docs/sample-service-deployment.md)
 - [Design and documentation index](docs/README.md)
 
-[Supply shortage rule follow-up #190](docs/shortage-rule-190.md): Chinese 0.1.11 and English 0.1.7 source candidates; upstream event integration and formal admission pending.
+[Supply shortage rule follow-up #190](docs/shortage-rule-190.md): retired; supply-chain 0.1.17 and supply-chain-en 0.1.11 no longer publish it.
 
 See the [release retention and 021 promotion plan](docs/release-retention-20261030.md). Energy and Manufacturing in both languages remain protected candidates until actual platform acceptance.

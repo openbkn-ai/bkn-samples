@@ -6,7 +6,7 @@
     "Manual",
     "Partner"
   ],
-  "comment": "A supply-chain demo for partners and customers, covering demand forecasts → BOM → MRP → purchase requests → purchase orders → stock coverage → production plans, plus product-linked sales analysis. Organizations and warehouses use consistent demo names.",
+  "comment": "A supply-chain demo for partners and customers, covering sales orders, demand forecasts, product BOMs, MRP, purchase requests, purchase orders, stock and production work orders. The business date is 2026-08-25; \"now\", \"today\" and \"current\" mean this date; the data snapshot date is 2026-08-13. Organizations and warehouses use consistent demo names.",
   "icon": "icon-dip-graph",
   "color": "#52C41A",
   "detail": "---\ntype: network\nid: supply_ontology_en\nname: Supply Chain EN\ntags: ['Demo', 'Manual', 'Partner']\nbranch: main\n---\n\n# Supply Chain EN\n\nExplore demand forecasts, BOMs, MRP, procurement, stock coverage and production planning, with product-linked sales analysis.\n\n## Capabilities\n\n- Inspect product demand and forecasts\n- Expand multilevel BOMs\n- Trace MRP, purchase requests and purchase orders\n- Assess stock coverage and production plans\n- Link sales orders to products\n",
@@ -333,7 +333,7 @@
       "tags": [
         "Approved"
       ],
-      "comment": "Multilevel product BOM: product → L1 components → L2 components → raw materials; types include Manufactured, Subcontracted and Purchased. Default analysis selects alt_priority == 0. Alternate groups require alt_method = 'Alternate', the same parent_material_code (falling back to bom_material_code), and the same nonempty alt_group_no. Within a group, alt_priority = 0 is the main component; alt_priority > 0 is an alternate, with lower values preferred.",
+      "comment": "Multilevel product BOM: product → L1 components → L2 components → raw materials; types include Manufactured, Subcontracted and Purchased. Default analysis selects alt_priority == 0. Alternate groups require alt_method = 'Alternate', the same parent_material_code (falling back to bom_material_code), and the same nonempty alt_group_no. Within a group, alt_priority = 0 is the main component; alt_priority > 0 is an alternate, with lower values preferred. Buildable quantity: use finished-goods stock first, then expand level by level; at each level use the component's stock and expand only the net shortage. Gaps of materials that cannot be expanded further are the real shortages. Several demands share one stock pool. No alternates by default; use them only when the user allows.",
       "icon": "icon-dip-suanziguanli",
       "color": "#0e5fc5",
       "branch": "main",
@@ -636,7 +636,7 @@
           "name": "closestatus_title",
           "display_name": "Closure Status",
           "type": "text",
-          "comment": "",
+          "comment": "Close status: Open or Closed.",
           "mapped_field": {
             "name": "closestatus_title",
             "type": "text",
@@ -681,7 +681,7 @@
       "tags": [
         "Approved"
       ],
-      "comment": "Upstream product demand forecasts reflect sales demand and market expectations. Each month forecasts the next 3 months for rolling product planning. Forecast → MRP → released PR → approved PO → materials covered → production work order → forecast complete. This fixture treats product forecasts as demand plans.",
+      "comment": "Upstream product demand forecasts reflect sales demand and market expectations. Each month forecasts the next 3 months for rolling product planning. Forecast → MRP → released PR → approved PO → materials covered → production work order → forecast complete. This fixture treats product forecasts as demand plans. A forecast whose close status is not Closed is open. One forecast (billno) can cover several products. Forecasts are met after signed backlog. How much forecast current stock can support is its available to promise: finished-goods stock + what current stock can still build − signed backlog.",
       "icon": "icon-jingquezhunque",
       "color": "#52C41A",
       "branch": "main"
@@ -1007,7 +1007,7 @@
           "name": "stock_status",
           "display_name": "Stock Status",
           "type": "string",
-          "comment": "Available or another stock status.",
+          "comment": "Available stock can be used in production and shipped; Defective stock cannot be used.",
           "mapped_field": {
             "name": "stock_status",
             "type": "string",
@@ -1088,7 +1088,7 @@
       "tags": [
         "Approved"
       ],
-      "comment": "Stock quantities, status and batches by warehouse and bin. production_available includes Available stock in Suzhou Subassemblies, Suzhou Finished Goods, Suzhou Electronics, Suzhou Drone Materials, Suzhou Assembly, Urumqi Finished Goods and Harbin Finished Goods. all includes Available stock in every warehouse.",
+      "comment": "Stock quantities, status and batches by warehouse and bin. Available stock counts only available_inventory_qty with stock status Available, across every warehouse by default; Defective stock cannot be used in production or shipped. \"Finished-goods warehouses\" means Suzhou Finished Goods, Urumqi Finished Goods and Harbin Finished Goods; \"the seven Suzhou plant production warehouses\" means Suzhou Subassemblies, Suzhou Finished Goods, Suzhou Electronics, Suzhou Drone Materials, Suzhou Assembly, Urumqi Finished Goods and Harbin Finished Goods.",
       "icon": "icon-dip-suanziguanli",
       "color": "#0e5fc5",
       "branch": "main"
@@ -1326,7 +1326,7 @@
           "name": "purchase_fixedleadtime",
           "display_name": "Purchase Lead_Time",
           "type": "decimal",
-          "comment": "Purchase lead time (days).",
+          "comment": "Purchasing lead time (days). A new order placed today arrives no earlier than business date + lead time.",
           "mapped_field": {
             "name": "purchase_fixedleadtime",
             "type": "decimal",
@@ -1392,355 +1392,6 @@
       "comment": "Material master data: code, name, specification, type, units and planning parameters.",
       "icon": "icon-dip-suanziguanli",
       "color": "#0e5fc5",
-      "branch": "main",
-      "logic_properties": []
-    },
-    {
-      "id": "supply_ontology_en_mon_task",
-      "name": "Monitor Task",
-      "data_properties": [
-        {
-          "name": "task_id",
-          "display_name": "Task ID",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "task_id",
-            "type": "string",
-            "display_name": "task_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "product_code",
-          "display_name": "Monitored Product",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "product_code",
-            "type": "string",
-            "display_name": "product_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "forecast_id",
-          "display_name": "Monitored Forecast",
-          "type": "string",
-          "comment": "Each task covers exactly one demand forecast.",
-          "mapped_field": {
-            "name": "forecast_id",
-            "type": "string",
-            "display_name": "forecast_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "forecast_qty",
-          "display_name": "Forecast Quantity Baseline",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "forecast_qty",
-            "type": "decimal",
-            "display_name": "forecast_qty"
-          }
-        },
-        {
-          "name": "demand_end",
-          "display_name": "Need Date Baseline",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "demand_end",
-            "type": "date",
-            "display_name": "demand_end"
-          }
-        },
-        {
-          "name": "warehouse_scope",
-          "display_name": "Warehouse Scope",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "warehouse_scope",
-            "type": "string",
-            "display_name": "warehouse_scope"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "substitute_enabled",
-          "display_name": "Alternate Policy",
-          "type": "integer",
-          "comment": "1 allow alternatives; 0 disable alternatives.",
-          "mapped_field": {
-            "name": "substitute_enabled",
-            "type": "integer",
-            "display_name": "substitute_enabled"
-          }
-        },
-        {
-          "name": "kitting_status",
-          "display_name": "Current Coverage Status",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "kitting_status",
-            "type": "string",
-            "display_name": "kitting_status"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "can_deliver_on_time",
-          "display_name": "Currently On Time",
-          "type": "integer",
-          "comment": "1 on time; 0 late.",
-          "mapped_field": {
-            "name": "can_deliver_on_time",
-            "type": "integer",
-            "display_name": "can_deliver_on_time"
-          }
-        },
-        {
-          "name": "max_delay_days",
-          "display_name": "Current Maximum Delay",
-          "type": "integer",
-          "comment": "",
-          "mapped_field": {
-            "name": "max_delay_days",
-            "type": "integer",
-            "display_name": "max_delay_days"
-          }
-        },
-        {
-          "name": "planned_start",
-          "display_name": "Backward Production Start",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "planned_start",
-            "type": "date",
-            "display_name": "planned_start"
-          }
-        },
-        {
-          "name": "planned_end",
-          "display_name": "Need Date",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "planned_end",
-            "type": "date",
-            "display_name": "planned_end"
-          }
-        },
-        {
-          "name": "snapshot_id",
-          "display_name": "Latest Snapshot",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "snapshot_id",
-            "type": "string",
-            "display_name": "snapshot_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "task_status",
-          "display_name": "Task Status",
-          "type": "string",
-          "comment": "watching / risk / ready / completed / closed",
-          "mapped_field": {
-            "name": "task_status",
-            "type": "string",
-            "display_name": "task_status"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "check_interval",
-          "display_name": "Check Interval (Minutes)",
-          "type": "integer",
-          "comment": "",
-          "mapped_field": {
-            "name": "check_interval",
-            "type": "integer",
-            "display_name": "check_interval"
-          }
-        },
-        {
-          "name": "next_check_at",
-          "display_name": "Next Check",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "next_check_at",
-            "type": "datetime",
-            "display_name": "next_check_at"
-          }
-        },
-        {
-          "name": "last_checked_at",
-          "display_name": "Last Check",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "last_checked_at",
-            "type": "datetime",
-            "display_name": "last_checked_at"
-          }
-        },
-        {
-          "name": "created_by",
-          "display_name": "Created By",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "created_by",
-            "type": "string",
-            "display_name": "created_by"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "created_at",
-          "display_name": "Created At",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "created_at",
-            "type": "datetime",
-            "display_name": "created_at"
-          }
-        },
-        {
-          "name": "closed_at",
-          "display_name": "Closed At",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "closed_at",
-            "type": "datetime",
-            "display_name": "closed_at"
-          }
-        }
-      ],
-      "primary_keys": [
-        "task_id"
-      ],
-      "display_key": "task_id",
-      "incremental_key": "",
-      "tags": [],
-      "comment": "Backward plan monitor: one product and one forecast per task, with materials as fulfillment evidence.",
-      "icon": "icon-daibanshixiang",
-      "color": "#FF4D4F",
       "branch": "main",
       "logic_properties": []
     },
@@ -2107,7 +1758,7 @@
           "name": "xkquainwaqty",
           "display_name": "Accepted Receipt Quantity",
           "type": "decimal",
-          "comment": "",
+          "comment": "Accepted quantity received into stock; qty − xkquainwaqty is still to be received.",
           "mapped_field": {
             "name": "xkquainwaqty",
             "type": "decimal",
@@ -3124,7 +2775,7 @@
           "name": "deliverdate",
           "display_name": "Expected Delivery Date",
           "type": "date",
-          "comment": "Expected delivery date; buyers can update supplier feedback in ERP.",
+          "comment": "Due date. A line due before the business date and not fully received is overdue.",
           "mapped_field": {
             "name": "deliverdate",
             "type": "date",
@@ -3226,7 +2877,7 @@
           "name": "actqty",
           "display_name": "Net Received Quantity",
           "type": "decimal",
-          "comment": "Net receipts = received quantity - returned quantity.",
+          "comment": "Net receipts = received quantity − returned quantity; qty − actqty is the open quantity.",
           "mapped_field": {
             "name": "actqty",
             "type": "decimal",
@@ -3317,7 +2968,7 @@
           "name": "rowclosestatus_title",
           "display_name": "Closure Status",
           "type": "string",
-          "comment": "",
+          "comment": "Line close status: Open or Closed.",
           "mapped_field": {
             "name": "rowclosestatus_title",
             "type": "string",
@@ -3357,7 +3008,7 @@
           "name": "rowterminatestatus_title",
           "display_name": "Termination Status",
           "type": "string",
-          "comment": "",
+          "comment": "Line terminate status: Open or Terminated.",
           "mapped_field": {
             "name": "rowterminatestatus_title",
             "type": "string",
@@ -3403,7 +3054,7 @@
       "tags": [
         "Approved"
       ],
-      "comment": "Formal purchase order sent to the supplier.",
+      "comment": "Formal purchase order sent to the supplier, one material per line. Open purchase = close status and terminate status are both Open and qty − actqty > 0. Open lines due on or after the business date count as supply on their due date; lines due earlier are overdue: the supplier missed the date, so chase them, but they are not firm supply. \"Due in the next N days\" means due from the day after the business date through day N, excluding today.",
       "icon": "icon-dip-suanziguanli",
       "color": "#52C41A",
       "branch": "main"
@@ -4137,7 +3788,7 @@
           "name": "signing_quantity",
           "display_name": "Signed Quantity",
           "type": "integer",
-          "comment": "",
+          "comment": "Signed quantity (units).",
           "mapped_field": {
             "name": "signing_quantity",
             "type": "integer",
@@ -4187,7 +3838,7 @@
           "name": "promised_delivery_date",
           "display_name": "Promised Delivery",
           "type": "date",
-          "comment": "",
+          "comment": "Promised date; overdue when it is before the business date and units are still owed.",
           "mapped_field": {
             "name": "promised_delivery_date",
             "type": "date",
@@ -4212,7 +3863,7 @@
           "name": "shipping_quantity",
           "display_name": "Delivered Quantity",
           "type": "float",
-          "comment": "",
+          "comment": "Shipped quantity (units); signed quantity minus this is the owed quantity.",
           "mapped_field": {
             "name": "shipping_quantity",
             "type": "float",
@@ -4287,7 +3938,7 @@
           "name": "salesperson",
           "display_name": "Sales Rep",
           "type": "string",
-          "comment": "",
+          "comment": "Salesperson responsible for the order.",
           "mapped_field": {
             "name": "salesperson",
             "type": "string",
@@ -4318,7 +3969,7 @@
         "Approved",
         "Legacy Data"
       ],
-      "comment": "Sales signing and delivery records linked by product code, with customer, signed quantity, promised date and delivery details for fulfillment analysis.",
+      "comment": "Sales signing and delivery records linked by product code. Owed = signed quantity − shipped quantity > 0; owed orders whose promised date is before the business date are overdue. Owed orders are filled by promised date, then order number. Available to promise must first deduct the product's signed backlog.",
       "icon": "icon-dip-suanziguanli",
       "color": "#0e5fc5",
       "branch": "main",
@@ -4469,658 +4120,6 @@
       "logic_properties": []
     },
     {
-      "id": "supply_ontology_en_pr_decision",
-      "name": "Purchase Decision",
-      "data_properties": [
-        {
-          "name": "decision_id",
-          "display_name": "Decision Line ID",
-          "type": "string",
-          "comment": "Purchase decision ID, distinct from an ERP purchase request number.",
-          "mapped_field": {
-            "name": "decision_id",
-            "type": "string",
-            "display_name": "decision_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "decision_batch_id",
-          "display_name": "Suggestion Batch",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "decision_batch_id",
-            "type": "string",
-            "display_name": "decision_batch_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "forecast_id",
-          "display_name": "Source Forecast",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "forecast_id",
-            "type": "string",
-            "display_name": "forecast_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "product_code",
-          "display_name": "Source Product",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "product_code",
-            "type": "string",
-            "display_name": "product_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "material_code",
-          "display_name": "Suggested Material",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "material_code",
-            "type": "string",
-            "display_name": "material_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "recommended_qty",
-          "display_name": "Suggested Quantity",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "recommended_qty",
-            "type": "decimal",
-            "display_name": "recommended_qty"
-          }
-        },
-        {
-          "name": "required_date",
-          "display_name": "Required Arrival Date",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "required_date",
-            "type": "date",
-            "display_name": "required_date"
-          }
-        },
-        {
-          "name": "warehouse_scope",
-          "display_name": "Warehouse Scope",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "warehouse_scope",
-            "type": "string",
-            "display_name": "warehouse_scope"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "substitute_enabled",
-          "display_name": "Alternate Policy",
-          "type": "integer",
-          "comment": "1 allow alternatives; 0 disable alternatives.",
-          "mapped_field": {
-            "name": "substitute_enabled",
-            "type": "integer",
-            "display_name": "substitute_enabled"
-          }
-        },
-        {
-          "name": "reason_code",
-          "display_name": "Shortage Reason",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "reason_code",
-            "type": "string",
-            "display_name": "reason_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "snapshot_id",
-          "display_name": "Calculation Snapshot",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "snapshot_id",
-            "type": "string",
-            "display_name": "snapshot_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "interaction_id",
-          "display_name": "OpenBKN Interaction",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "interaction_id",
-            "type": "string",
-            "display_name": "interaction_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "status",
-          "display_name": "Status",
-          "type": "string",
-          "comment": "approved / rejected / cancelled",
-          "mapped_field": {
-            "name": "status",
-            "type": "string",
-            "display_name": "status"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "approved_by",
-          "display_name": "Approved By",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "approved_by",
-            "type": "string",
-            "display_name": "approved_by"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "approved_at",
-          "display_name": "Approved At",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "approved_at",
-            "type": "datetime",
-            "display_name": "approved_at"
-          }
-        },
-        {
-          "name": "created_at",
-          "display_name": "Created At",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "created_at",
-            "type": "datetime",
-            "display_name": "created_at"
-          }
-        },
-        {
-          "name": "idempotency_key",
-          "display_name": "Idempotency Key",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "idempotency_key",
-            "type": "string",
-            "display_name": "idempotency_key"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        }
-      ],
-      "primary_keys": [
-        "decision_id"
-      ],
-      "display_key": "decision_id",
-      "incremental_key": "",
-      "tags": [],
-      "comment": "Human-approved procurement decision record. This sample does not create ERP purchase requests.",
-      "icon": "icon-caigou",
-      "color": "#2F54EB",
-      "branch": "main",
-      "logic_properties": []
-    },
-    {
-      "id": "supply_ontology_en_mon_item",
-      "name": "Monitor Evidence",
-      "data_properties": [
-        {
-          "name": "item_id",
-          "display_name": "Line ID",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "item_id",
-            "type": "string",
-            "display_name": "item_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "task_id",
-          "display_name": "Monitor Task",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "task_id",
-            "type": "string",
-            "display_name": "task_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "material_code",
-          "display_name": "BOM Material",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "material_code",
-            "type": "string",
-            "display_name": "material_code"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "bom_level",
-          "display_name": "BOM Level",
-          "type": "integer",
-          "comment": "",
-          "mapped_field": {
-            "name": "bom_level",
-            "type": "integer",
-            "display_name": "bom_level"
-          }
-        },
-        {
-          "name": "l1_parent",
-          "display_name": "Direct Parent",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "l1_parent",
-            "type": "string",
-            "display_name": "l1_parent"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "gross_requirement",
-          "display_name": "Gross Demand",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "gross_requirement",
-            "type": "decimal",
-            "display_name": "gross_requirement"
-          }
-        },
-        {
-          "name": "required_date",
-          "display_name": "Required Arrival Date",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "required_date",
-            "type": "date",
-            "display_name": "required_date"
-          }
-        },
-        {
-          "name": "available_qty",
-          "display_name": "Current Available Stock",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "available_qty",
-            "type": "decimal",
-            "display_name": "available_qty"
-          }
-        },
-        {
-          "name": "in_transit_qty",
-          "display_name": "Current In-Transit Supply",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "in_transit_qty",
-            "type": "decimal",
-            "display_name": "in_transit_qty"
-          }
-        },
-        {
-          "name": "expected_arrival",
-          "display_name": "Expected Arrival Date",
-          "type": "date",
-          "comment": "",
-          "mapped_field": {
-            "name": "expected_arrival",
-            "type": "date",
-            "display_name": "expected_arrival"
-          }
-        },
-        {
-          "name": "net_shortage",
-          "display_name": "Current Net Shortage",
-          "type": "decimal",
-          "comment": "",
-          "mapped_field": {
-            "name": "net_shortage",
-            "type": "decimal",
-            "display_name": "net_shortage"
-          }
-        },
-        {
-          "name": "delay_class",
-          "display_name": "Delay Level",
-          "type": "string",
-          "comment": "A / B / none",
-          "mapped_field": {
-            "name": "delay_class",
-            "type": "string",
-            "display_name": "delay_class"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "supply_status",
-          "display_name": "Supply_Status",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "supply_status",
-            "type": "string",
-            "display_name": "supply_status"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "snapshot_id",
-          "display_name": "Latest Snapshot",
-          "type": "string",
-          "comment": "",
-          "mapped_field": {
-            "name": "snapshot_id",
-            "type": "string",
-            "display_name": "snapshot_id"
-          },
-          "index_config": {
-            "keyword_config": {
-              "enabled": true,
-              "ignore_above_len": 1024
-            },
-            "fulltext_config": {
-              "enabled": false,
-              "analyzer": ""
-            },
-            "vector_config": {
-              "enabled": false,
-              "model_id": ""
-            }
-          }
-        },
-        {
-          "name": "updated_at",
-          "display_name": "Updated At",
-          "type": "datetime",
-          "comment": "",
-          "mapped_field": {
-            "name": "updated_at",
-            "type": "datetime",
-            "display_name": "updated_at"
-          }
-        }
-      ],
-      "primary_keys": [
-        "item_id"
-      ],
-      "display_key": "item_id",
-      "incremental_key": "",
-      "tags": [],
-      "comment": "BOM supply evidence supporting the task; materials are evidence rather than task targets.",
-      "icon": "icon-zhengju",
-      "color": "#13C2C2",
-      "branch": "main",
-      "logic_properties": []
-    },
-    {
       "id": "skills",
       "name": "Skills",
       "data_properties": [
@@ -5200,30 +4199,6 @@
         "Approved"
       ],
       "comment": "Production is planned from the demand forecast.",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_mon2fcst",
-      "name": "Task Forecast",
-      "source_object_type_id": "supply_ontology_en_mon_task",
-      "target_object_type_id": "supply_ontology_en_forecast",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "forecast_id",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "id",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "Task forecast relation maps forecast_id → id.",
       "icon": "",
       "color": "",
       "branch": "main"
@@ -5573,503 +4548,7 @@
       "icon": "",
       "color": "",
       "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_mon2prod",
-      "name": "Task Product",
-      "source_object_type_id": "supply_ontology_en_mon_task",
-      "target_object_type_id": "supply_ontology_en_product",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "product_code",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "material_number",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "Each task monitors one product, keyed by material_number.",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_mon2item",
-      "name": "Task Evidence",
-      "source_object_type_id": "supply_ontology_en_mon_task",
-      "target_object_type_id": "supply_ontology_en_mon_item",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "task_id",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "task_id",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "Task BOM supply evidence.",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_monitem2mat",
-      "name": "Evidence Material",
-      "source_object_type_id": "supply_ontology_en_mon_item",
-      "target_object_type_id": "supply_ontology_en_material",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "material_code",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "material_code",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "Material referenced as fulfillment evidence for the monitored product.",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_prdec2prod",
-      "name": "Decision Product",
-      "source_object_type_id": "supply_ontology_en_pr_decision",
-      "target_object_type_id": "supply_ontology_en_product",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "product_code",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "material_number",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "Source product covered by the purchase decision.",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_prdec2fcst",
-      "name": "Decision Forecast",
-      "source_object_type_id": "supply_ontology_en_pr_decision",
-      "target_object_type_id": "supply_ontology_en_forecast",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "forecast_id",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "id",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "Demand forecast underlying the purchase decision.",
-      "icon": "",
-      "color": "",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_prdec2mat",
-      "name": "Decision Material",
-      "source_object_type_id": "supply_ontology_en_pr_decision",
-      "target_object_type_id": "supply_ontology_en_material",
-      "type": "direct",
-      "mapping_rules": [
-        {
-          "source_property": {
-            "name": "material_code",
-            "display_name": ""
-          },
-          "target_property": {
-            "name": "material_code",
-            "display_name": ""
-          }
-        }
-      ],
-      "tags": [],
-      "comment": "Material recommended by the purchase decision. This sample records decisions without calling ERP.",
-      "icon": "",
-      "color": "",
-      "branch": "main"
     }
   ],
-  "action_types": [
-    {
-      "id": "supply_ontology_en_act_mon",
-      "name": "Create Plan Monitor",
-      "action_type": "add",
-      "object_type_id": "supply_ontology_en_mon_task",
-      "condition": {
-        "object_type_id": "supply_ontology_en_mon_task",
-        "field": "task_id",
-        "operation": "==",
-        "value": ""
-      },
-      "affect": {
-        "object_type_id": "supply_ontology_en_mon_task",
-        "object_type": {
-          "id": "supply_ontology_en_mon_task",
-          "name": "Monitor Task",
-          "branch": "main",
-          "icon": "",
-          "color": ""
-        }
-      },
-      "action_source": {
-        "type": "tool",
-        "box_id": "",
-        "tool_id": ""
-      },
-      "parameters": [
-        {
-          "name": "Authorization",
-          "type": "string",
-          "source": "Header",
-          "operation": "",
-          "value_from": "const",
-          "value": ""
-        },
-        {
-          "name": "created_at",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "created_by",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "demand_end",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "demand_quantity",
-          "type": "number",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "demand_start",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "description_entries",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "ended_at",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "product_code",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "product_name",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "production_end",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "production_quantity",
-          "type": "number",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "production_start",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "task_id",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "task_name",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "task_status",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "updated_at",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        }
-      ],
-      "schedule": {
-        "type": "",
-        "expression": ""
-      },
-      "tags": [],
-      "comment": "Plan monitor created by a user or agent.",
-      "icon": "",
-      "color": "#52C41A",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_act_po",
-      "name": "Create PO",
-      "action_type": "add",
-      "object_type_id": "supply_ontology_en_mrp",
-      "condition": {
-        "object_type_id": "supply_ontology_en_mrp",
-        "field": "materialplanid_number",
-        "operation": "=="
-      },
-      "affect": {
-        "object_type_id": "supply_ontology_en_po",
-        "object_type": {
-          "id": "supply_ontology_en_po",
-          "name": "Purchase Order",
-          "branch": "main",
-          "icon": "",
-          "color": ""
-        },
-        "comment": "Create a material purchase request from MRP, then convert it to a purchase order."
-      },
-      "action_source": {
-        "type": "tool",
-        "box_id": "",
-        "tool_id": ""
-      },
-      "parameters": [
-        {
-          "name": "origin",
-          "type": "string",
-          "source": "Header",
-          "operation": "",
-          "value_from": "const",
-          "value": "supply_chain_brain"
-        },
-        {
-          "name": "timestamp",
-          "type": "integer",
-          "source": "Header",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "sign",
-          "type": "string",
-          "source": "Header",
-          "operation": "",
-          "value_from": "const",
-          "value": "8685546a07e7fbb7761418534aaa9627"
-        },
-        {
-          "name": "nonce",
-          "type": "string",
-          "source": "Header",
-          "operation": "",
-          "value_from": "const",
-          "value": "supplyCB"
-        },
-        {
-          "name": "billentry",
-          "type": "array",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "bizuser_number",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "huid_cglx",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "org_number",
-          "type": "string",
-          "source": "Body",
-          "operation": "",
-          "value_from": "input",
-          "value": null
-        }
-      ],
-      "schedule": {
-        "type": "",
-        "expression": ""
-      },
-      "tags": [],
-      "comment": "Complete the PO 2 days before the material lead-time window begins so the supplier can deliver on time under the backward plan.",
-      "icon": "",
-      "color": "#0e5fc5",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_act_mon_close",
-      "name": "Close Monitoring Task",
-      "action_type": "modify",
-      "object_type_id": "supply_ontology_en_mon_task",
-      "impact_contracts": [
-        {
-          "object_type_id": "supply_ontology_en_mon_task",
-          "expected_operation": "modify",
-          "description": "Set task_status to closed without deleting history."
-        }
-      ],
-      "action_source": {
-        "type": "tool",
-        "box_id": "",
-        "tool_id": ""
-      },
-      "parameters": [
-        {
-          "name": "proposal",
-          "type": "object",
-          "source": "Body",
-          "value_from": "input",
-          "value": null
-        },
-        {
-          "name": "approval_token",
-          "type": "string",
-          "source": "Body",
-          "value_from": "input",
-          "value": null
-        }
-      ],
-      "schedule": {
-        "type": "",
-        "expression": ""
-      },
-      "tags": [
-        "requires_confirmation",
-        "monitoring"
-      ],
-      "comment": "Close a monitoring task after explicit human approval.",
-      "icon": "",
-      "color": "#52C41A",
-      "branch": "main"
-    },
-    {
-      "id": "supply_ontology_en_act_replen_draft",
-      "name": "Replenishment Draft",
-      "action_type": "add",
-      "object_type_id": "supply_ontology_en_product",
-      "action_source": {
-        "type": "tool",
-        "box_id": "",
-        "tool_id": ""
-      },
-      "parameters": [
-        {
-          "name": "coverage",
-          "type": "object",
-          "source": "Body",
-          "value_from": "input"
-        }
-      ],
-      "schedule": {
-        "type": "",
-        "expression": ""
-      },
-      "tags": [
-        "draft_only",
-        "no_business_write"
-      ],
-      "comment": "Return a proposal from supplied coverage. Structure validation only, no fact re-query, persistence, purchase order, business write or scheduling.",
-      "branch": "main"
-    }
-  ]
+  "action_types": []
 }

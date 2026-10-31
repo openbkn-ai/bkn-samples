@@ -1,0 +1,973 @@
+{
+ "agent": "external MCP agent (mcp_agent.py): deepseek-v4-flash via the platform model API + every tool of the BKN MCP server",
+ "platform": "8081 bkn-backend-ee 0.2.1-main sha9156ec5, ontology-query sha3703f10",
+ "sample_version": "0.1.11",
+ "question_set": "question-set-v4.yaml",
+ "rounds": 1,
+ "passed": 50,
+ "total": 50,
+ "results": [
+  {
+   "id": "Q-01",
+   "passed": true,
+   "seconds": 40.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_object_types",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**28 finished-goods models are currently listed (on sale), spread across 7 product lines.**\n\nBasis (business date 2026-08-25 per the network's baseline; \"finished-goods model\" = a Product record, i.e. finished product master data, all of which also carry Stock Category \"Finished Goods\"; listing status and product line come from the Material record — `product_status` = Listed/Unlisted and `huid_productline_name`):\n\n| Product line | Listed models |\n|---|---|\n| Smart Positioning | 7 |\n| Monitoring Devices | 6 |\n| Autonomous Driving | 6 |\n| Drones | 4 |\n| Smart Seeding | 3 |\n| Unmanned Vehicles | 1 |\n| Smart Displays | 1 |\n| **Total** | **28** |\n\nDetails:\n- Total product (finished-goods model) records: 30 — 28 Listed, 2 Unlisted (367-000102 \"625 agricultural drone\", Drones line; 734-000003 \"WH300 dual nozzle complete vehicle (EU version)\", Unmanned Vehicles line).\n- Cross-check on the material master directly: materials with Stock Category \"Finished Goods\" and status Listed = 28, over the same 7 distinct product lines. (One extra Finished-Goods material, P69-000059, has no Product record; it is Unlisted, so it doesn't change the count.)\n- No double counting: each of the 30 product codes maps to exactly one material/master record."
+  },
+  {
+   "id": "Q-02",
+   "passed": true,
+   "seconds": 17.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Standard purchasing lead time for 606-000989: 14 days.**\n\nBasis (rule used: a material's standard purchasing lead time is `purchase_fixedleadtime` on the Material record, per the procurement follow-up skill):\n\n| Material code | Material name | Material attribute | Purchase fixed lead time |\n|---|---|---|---|\n| 606-000989 | YN406 packaging outer carton_V2 | Purchased (bought-in) | 14 days |\n\nFor reference, under the network's business date of 2026-08-25, a new purchase order placed today for this material would have an earliest arrival of 2026-09-08 (business date + 14 days). This is information only and does not place any order."
+  },
+  {
+   "id": "Q-03",
+   "passed": true,
+   "seconds": 35.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**5 first-level materials** go directly into final assembly of **U00-000080** (BeiDou vehicle smart terminal system):\n\n1. **815-000002** — UA500 (customer-supplied Ironfield engine) unit, qty 1.000\n2. **606-000217** — UA500 liner board, qty 0.080\n3. **606-000218** — UA500 clamp stop, qty 0.100\n4. **606-000216** — UA500 large packaging box, qty 0.020\n5. **849-000655** — UA500 mounting screw pack, qty 1.000\n\nRule used: BOM structure with `bom_level = 1` and main components only (`alt_priority = 0`, no alternates exist at this level). The product's BOM has 76 rows in total; levels 2–3 (e.g. 165-001285, 588-000496, 725-140…) belong under sub-assemblies rather than directly to final assembly.\n\nNote: the component names are stored with \"UA500\" prefixes even though the product is a BeiDou terminal — the codes above are the authoritative key."
+  },
+  {
+   "id": "Q-04",
+   "passed": true,
+   "seconds": 29.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**534 units available** of 382-000005 (BeiDou navigation farm autopilot) across the three finished-goods warehouses.\n\n| Warehouse | Available qty |\n|---|---|\n| Suzhou Finished Goods | 325 |\n| Urumqi Finished Goods | 127 |\n| Harbin Finished Goods | 82 |\n| **Total** | **534** |\n\nRules used: only `available_inventory_qty` with stock status = Available; scope limited to the three finished-goods warehouses (Suzhou / Urumqi / Harbin Finished Goods); business date 2026-08-25.\n\nFor context, the same product also shows Available stock outside that scope — Loan Stock 232, Suzhou Returns 44, Suzhou Dispatch 6 — which is excluded from the 534. This is planning information only; nothing has been reserved or shipped."
+  },
+  {
+   "id": "Q-05",
+   "passed": true,
+   "seconds": 45.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**192 sales orders are not fully shipped, and we still owe customers 470 units in total.**\n\nHow I got there — rule used: *Owed = signed quantity − shipped quantity > 0*, business date = 2026-08-25, source = Sales Order (one row per order, 800 orders):\n\n- Fully shipped (shipped ≥ signed): 608\n- Not fully shipped: **192** orders, **470** units owed\n\nBreakdown by order status:\n\n| Order status | Owed orders | Owed units |\n|---|---|---|\n| Confirmed | 176 | 435 |\n| In Progress | 16 | 35 |\n| **Total** | **192** | **470** |\n\nTiming: all 192 owed orders have a promised delivery date before 2026-08-25 (latest is 2026-08-14), so **the whole 470 units are already overdue** as of the business date; they should be filled by promised date, then order number.\n\nLargest owed products: 526-000005 (41 units), 590-000072 (39), 526-000006 (33), 590-000074 (31), 590-000064 (30). Individual balances are small — the largest single order owes 4 units (e.g. SO0000005 / Cypressspring Agri / 382-000005, promised 2026-04-30).\n\nCaveats: this is planning information only — nothing is reserved, shipped or scheduled. Also, the model tags the Sales Order object class as both \"Approved\" and \"Legacy Data\".\n\nHappy to go deeper on any product — e.g. how much of its backlog current stock plus buildable quantity covers, and which materials block the rest."
+  },
+  {
+   "id": "Q-06",
+   "passed": true,
+   "seconds": 25.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**26 demand forecasts are still open, totaling 56,340 units.**\n\nBasis (rule used: \"open forecast = close status is not Closed\", per the PMC supply-planning skill):\n- Source: Demand Forecast (`supply_ontology_en_forecast`); open = `closestatus_title` <> 'Closed'; quantity = `qty`.\n- **Open: 26 forecast documents (distinct billno), 90 product forecast lines, sum(qty) = 56,340 units.**\n- For reference, the remainder is closed: 11 documents, 47 lines, 59,582 units.\n\nNotes:\n- One forecast (billno) can cover several products, so 26 open forecasts correspond to 90 product-level forecast lines; 56,340 units is the total across all open lines.\n- Open forecasts' need dates span 2026-01-12 up to end dates of 2026-12-31 — some open forecasts already have need dates before the business date of 2026-08-25.\n- Largest open forecasts by units: YCD2026071700000091 (6 lines, 9,605), YCD2026081500000002 (1 line, 6,000), YCD2026040200000063 (7 lines, 4,100).\n\nThis is planning information only — nothing is placed, shipped or scheduled."
+  },
+  {
+   "id": "Q-07",
+   "passed": true,
+   "seconds": 29.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**517 purchase order lines are not yet fully received.**\n\n**Rule used** (per the procurement-follow-up skill): an open purchase line requires closure status `Open` **and** termination status `Open`, with open quantity `qty − actqty > 0` (`actqty` = net received, i.e. received − returned). Closed and terminated lines are excluded, as you requested. Business date: 2026-08-25.\n\n**Supporting detail:**\n\n| Metric | Value |\n|---|---|\n| Open, not fully received lines | **517** |\n| Purchase orders involved | 337 |\n| Total open quantity | 8,591,550.5 |\n| — of which overdue (due before 2026-08-25) | 483 lines / 308 POs / 8,030,209.5 qty |\n| — due on or after 2026-08-25 | 34 lines |\n\n**Why 517 and not 518:** one line is still flagged Open/Open but has nothing left to receive — PO `01-HDKJ-CGDD-260509-014613`, material 549-000880, supplier Aldergrove Technology, ordered 4 with 4 net received (open qty 0), so it is correctly excluded.\n\nFor context, the full PO line population is 1,972 lines: 1,434 Closed/Open, 518 Open/Open, 18 Open/Terminated, 2 Closed/Terminated.\n\nThis is a follow-up assessment only — it does not place orders or contact suppliers."
+  },
+  {
+   "id": "Q-08",
+   "passed": true,
+   "seconds": 22.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_object_types",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**262 MRP planned orders have been calculated but not released yet.**\n\nBasis (rule from the PMC planning skill: MRP planned orders = records in `supply_ontology_en_mrp` with release status \"Not Released\"):\n- Total MRP plan records: 824 — 562 \"Released\", **262 \"Not Released\"**.\n- All 262 have no release timestamp (`droptime` empty), confirming they are still awaiting release.\n- Their closure status is uniformly \"Open\" (none closed, split-closed, merged-closed or release-closed).\n\nBreakdown by the release document type they would generate on release:\n\n| Release document type | Planned orders |\n|---|---|\n| Production purchase request (Purchased) | 189 |\n| Production reporting (Manufactured) | 67 |\n| Standard subcontracting (Subcontracted) | 6 |\n| **Total** | **262** |\n\nNote: business date is 2026-08-25 (data snapshot 2026-08-13), per the network's stated convention. This is a read-only count — nothing was released."
+  },
+  {
+   "id": "Q-09",
+   "passed": true,
+   "seconds": 39.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**All 192 orders we still owe are past their promised date — the entire backlog is overdue. The most overdue is SO0000538 (Lindenfield Research, product 382-000006), promised 2026-03-16 and 162 days late.**\n\nRules used (PMC supply-planning skill): business date = 2026-08-25; *owed* = signed − shipped > 0; *overdue* = promised delivery date before the business date. Queried on Sales Order (`supply_ontology_en_salesorder`).\n\n**How many**\n- Owed lines: **192** of 800 total sales order lines — 59 customers, **470 units** still owed.\n- Of those, **192** have a promised date before 2026-08-25, and **0** have one on/after it. So there is no on-time portion of the backlog; every owed order is late. No owed line is missing a promised date.\n\n**Most overdue — SO0000538**\n- Customer: Lindenfield Research · Contract HT-2026-00538 · Sales rep Joel Hayes · Status: Confirmed\n- Product: 382-000006 (BeiDou navigation farm autopilot); signed 4, shipped 2 → **2 units owed**\n- Promised 2026-03-16 (signed 2026-03-01) → **162 days overdue**\n\n**Runners-up**\n\n| Order | Customer | Product | Owed | Promised | Days overdue |\n|---|---|---|---|---|---|\n| SO0000538 | Lindenfield Research | 382-000006 | 2 | 2026-03-16 | 162 |\n| SO0000200 | Grovespring Survey | 590-000072 | 1 | 2026-03-18 | 160 |\n| SO0000527 | Juniperlake Energy | 382-000006 | 4 | 2026-03-23 | 155 |\n| SO0000262 | Grovevale Survey | 590-000075 | 4 | 2026-03-25 | 153 |\n| SO0000477 | Lindenbridge Research | P61-000328 | 3 | 2026-03-26 | 152 |\n\nThe tail is very stale: 104 of the 192 overdue lines were already past due before 2026-06-01 (over 85 days). This is planning information only — it places, ships and schedules nothing."
+  },
+  {
+   "id": "Q-10",
+   "passed": true,
+   "seconds": 28.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "run_cypher",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Cypressridge Agri has 7 orders that are not fully shipped, and you owe them 20 units in total.**\n\nRule used (network default): owed = signed quantity − shipped quantity > 0; business date 2026-08-25; owed orders listed by promised date, then order number. Note that **all 7 are already overdue** (promised date before 2026-08-25).\n\n| # | Order | Product | Signed | Shipped | Owed | Promised | Status |\n|---|---|---|---|---|---|---|---|\n| 1 | SO0000484 | P61-000351 — Agriculture Smart Seeding monitoring system | 36 | 32 | 4 | 2026-04-20 | Confirmed |\n| 2 | SO0000544 | 526-000001 — BeiDou navigation farm autopilot | 1 | 0 | 1 | 2026-04-29 | In Progress |\n| 3 | SO0000184 | 590-000064 — Agriculture full-cycle smart implement detection system | 22 | 18 | 4 | 2026-05-19 | Confirmed |\n| 4 | SO0000604 | 623-000034 — 408 satellite leveling system (export version) | 13 | 11 | 2 | 2026-05-26 | Confirmed |\n| 5 | SO0000124 | 367-000097 — 625 agricultural drone | 42 | 41 | 1 | 2026-06-14 | Confirmed |\n| 6 | SO0000784 | 590-000100 — smart farm implement detection system | 27 | 23 | 4 | 2026-06-21 | Confirmed |\n| 7 | SO0000064 | 526-000005 — BeiDou navigation farm autopilot | 37 | 33 | 4 | 2026-07-13 | Confirmed |\n\nBasis and cross-checks:\n- Sum of owed: 4+1+4+2+1+4+4 = **20 units** (cross-check: total signed 463 − total shipped 443 = 20).\n- All 7 owed orders / 20 units are overdue — no owed order on this account has a promised date on or after the business date.\n- Cypressridge Agri has 14 order lines in this snapshot; the other 7 are fully shipped.\n\nThis is planning information only — nothing has been scheduled, shipped or changed."
+  },
+  {
+   "id": "Q-11",
+   "passed": true,
+   "seconds": 28.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**483 overdue, still-open purchase lines, involving 133 suppliers.**\n\nRules used (from the procurement follow-up skill): business date = 2026-08-25; a line is open and not fully received when both close status and terminate status are `Open` and `qty − actqty > 0`; past due = `deliverdate` before 2026-08-25.\n\nBasis from the knowledge network:\n- Overdue open lines: **483**; distinct suppliers: **133** (same count whether counted by supplier number or supplier name). All 483 lines have a supplier number, so none are unassigned.\n- Context: total open purchase lines are 517 across 146 suppliers — so 93% of open lines are already overdue, and 91% of suppliers with open lines have at least one overdue line.\n- Largest exposures by line count: Ashvale Components (50 lines, 2,844,000 open qty), Cedarhill Components (34 lines, 1,266,300), Ashspring Tooling (28 lines, 10,376), Pinestone Components (20 lines, 10,975), Hazelspring Technology (16 lines, 10,349), Aspenstone Components (15 lines, 1,735,930.5). Most of the remaining suppliers carry 1–3 overdue lines each.\n\nNote: per the skill's rule, overdue lines are missed supplier commitments — chase them, but they don't count as firm supply. This is follow-up advice only; no orders were placed and no suppliers were contacted."
+  },
+  {
+   "id": "Q-12",
+   "passed": true,
+   "seconds": 44.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Ashvale Components (supplier code 59202002) has the most overdue purchase lines: 50 overdue lines, with 2,844,000 units still outstanding.**\n\nRules used (procurement follow-up skill): business date = 2026-08-25; open line = closure status Open AND termination status Open AND qty − actqty > 0; overdue = deliverdate before 2026-08-25.\n\n**Ashvale Components — overdue exposure**\n- Overdue lines: **50**\n- Outstanding (open) quantity: **2,844,000 units**\n- Overdue since: earliest due 2026-04-03, latest 2026-07-24 → roughly 32 to 144 days late\n- Supplier's responsible buyer: **Finn Brooks** (payment terms Net 60); lines executed by Adam Hayes (48 lines / 2,830,000), Paul Hayes (1 / 2,000), Ryan Reed (1 / 12,000)\n- Largest items: 539-000008 SMD resistor (2 / 1,020,000), 539-000002 SMD resistor (2 / 270,000), 539-000014 SMD resistor (2 / 230,000), 539-000005 SMD resistor (3 / 150,000), 725-000014 SMD ceramic capacitor (2 / 124,000) — 37 materials in total\n- Indicative value ≈ 39,194 (open qty × material standard price; PO lines carry no price/amount field and no currency is stated, so this is indicative only)\n\n**Next largest, same rules**\n\n| Supplier | Overdue lines | Outstanding qty |\n|---|---|---|\n| Ashvale Components (59202002) | 50 | 2,844,000 |\n| Cedarhill Components (75502049) | 34 | 1,266,300 |\n| Ashspring Tooling (5810109) | 28 | 10,376 |\n| Pinestone Components (25040036) | 20 | 10,975 |\n| Hazelspring Technology (02100140) | 16 | 10,349 |\n\n**Portfolio context:** 483 overdue open lines across 133 suppliers, 8,030,209.5 units outstanding — Ashvale alone is ~10% of all overdue lines.\n\nNote: this network stores no monetary amount on purchase order lines (only qty, received qty, returned qty), so \"still outstanding\" is given as open quantity. This is follow-up advice only; no orders were placed or suppliers contacted."
+  },
+  {
+   "id": "Q-13",
+   "passed": true,
+   "seconds": 41.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**25 of the 51 suppliers Alex Reed is responsible for currently have overdue purchase lines** — 77 overdue open lines totaling 194,928 open units.\n\nRules applied: business date 2026-08-25 (\"current\" = that date); open line = close status and terminate status both \"Open\" and qty − actqty > 0; overdue = deliverdate earlier than 2026-08-25; a supplier's buyer is `purchaserid_name` on the supplier record.\n\n| # | Code | Supplier | Overdue lines | Open qty |\n|---|---|---|---|---|\n| 1 | 25040036 | Pinestone Components | 20 | 10,975 |\n| 2 | 02100140 | Hazelspring Technology | 16 | 10,349 |\n| 3 | 57403020 | Ashbrook Technology | 7 | 1,164 |\n| 4 | 51204099 | Cherryview Rubber | 6 | 3,870 |\n| 5 | 02102033 | Maplefield Components | 3 | 47,500 |\n| 6 | 2510-755-0364 | Willowridge Optics | 2 | 1,090 |\n| 7 | 2504-02102-0005 | Pineview Components | 2 | 12,480 |\n| 8 | 2604-55101-0607 | Aspenridge Components | 2 | 900 |\n| 9 | 75504065 | Elmgrove Components | 2 | 13,180 |\n| 10 | 02104042 | Oakford Components | 2 | 34 |\n| 11 | 02802001 | Pineridge Components | 1 | 300 |\n| 12 | 2507-75502-0204 | Rowanlake Technology | 1 | 4,000 |\n| 13 | 02104077 | Oaklake Components | 1 | 7,000 |\n| 14 | 02102065 | Maplehill Technology | 1 | 12,000 |\n| 15 | 5120234 | Cherrybridge Components | 1 | 33,000 |\n| 16 | 02103021 | Oakbridge Components | 1 | 1,520 |\n| 17 | 75501022 | Birchford Antennas | 1 | 500 |\n| 18 | 7550491 | Firfield Technology | 1 | 19,900 |\n| 19 | 2607-02103-0712 | Beechbridge Components | 1 | 170 |\n| 20 | 02104105 | Oakspring Technology | 1 | 500 |\n| 21 | 75502013 | Cedarbridge Technology | 1 | 10,000 |\n| 22 | 76904022 | Firwood Packaging | 1 | 3,000 |\n| 23 | 02700014 | Pinemill Technology | 1 | 4,500 |\n| 24 | 2508-02102-0243 | Rowanvale Components | 1 | 9,000 |\n| 25 | 75502004 | Birchwell Wireless | 1 | 3,000 |\n\nCross-checked two independent ways (PO→Supplier relationship join, and PO `supplier_number` matched against the 51 Alex Reed supplier codes) — both give 25 suppliers / 77 lines. The other 26 of his suppliers have no overdue lines. Network-wide there are 133 suppliers with overdue lines (483 lines), so his portfolio holds 25 of them.\n\nThis is follow-up advice only — no orders placed, no suppliers contacted."
+  },
+  {
+   "id": "Q-14",
+   "passed": true,
+   "seconds": 25.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "Yes — 5 finished products use **seal ring 165-002537**.\n\n**The part:** 165-002537, \"seal ring OD 17.61*2.62\", material type Purchased, stock category Assembly Materials, unit pcs.\n\n**Finished products (where-used):**\n\n| # | Product code | Product name | BOM level | Usage per unit |\n|---|---|---|---|---|\n| 1 | 367-000061 | agricultural drone | 3 | 2 pcs |\n| 2 | 367-000097 | 625 agricultural drone | 3 | 2 pcs |\n| 3 | 367-000102 | 625 agricultural drone | 3 | 2 pcs |\n| 4 | 367-000130 | YN580 agricultural drone | 3 | 2 pcs |\n| 5 | 367-000131 | YN580 agricultural drone | 3 | 2 pcs |\n\n**Basis**\n- **Rules used:** default BOM analysis — main components only (`alt_priority = 0`), `bom_level > 0`, per the PMC planning skill on this network.\n- All 5 BOM rows referencing the seal ring are main components (`alt_priority = 0`, `alt_group_no = 0`) with standard usage 2.000000, and all sit at **BOM level 3** — the ring is nested under a subassembly, not a first-level part.\n- No alternate (`alt_priority > 0`) usages exist, so no extra product is reached through an alternate group.\n- All five owning codes are present in the finished-product master, so they are finished products rather than intermediate subassemblies.\n\nThis is a structural where-used result only — it says nothing about stock, cost or scheduling."
+  },
+  {
+   "id": "Q-15",
+   "passed": true,
+   "seconds": 56.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**1,017 main parts in common.** Both 367-000130 and 367-000131 are \"YN580 agricultural drone\". Counting distinct material codes in each product's BOM across all levels (levels 1–6, alt_priority = 0 = main component, alternates excluded):\n\n- 367-000130: 1,139 distinct main-part materials\n- 367-000131: 1,077 distinct main-part materials\n- **Shared by both: 1,017** (94 only in 130, 60 only in 131)\n\nFirst-level view (bom_level = 1, main components): each has 14 top-level main parts, **11 shared** — solid wood pallet, YN580 blank nameplate, 590 front/rear lower shroud (gray), camera silicone sleeve, user manual, cardboard corner protector, packaging insert, unit packaging box, blind rivet, stainless shoulder screw. The differing 3 are variant shroud/body parts:\n\n| 367-000130 | 367-000131 |\n|---|---|\n| 580V3 front upper shroud orange (165-003237) | 580V3 front upper shroud – yellow (165-003607) |\n| 580V3 drone body dual-centrifugal final assembly, stereo camera, Eurasia version (525-000200) | 580V3 drone body dual-centrifugal final assembly, no stereo camera, US/FCC (478-000038) |\n| 590 rear upper shroud assembly orange (525-000208) | 590 rear upper shroud assembly – yellow (525-000222) |\n\nBasis: BOM rows reached from each product via Product BOM, `bom_level > 0` and `alt_priority = 0` (main components; alternates with alt_priority > 0 excluded), distinct `material_code` intersection."
+  },
+  {
+   "id": "Q-16",
+   "passed": true,
+   "seconds": 32.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "search_schema",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**6 materials have Defective stock (cannot be used in production or shipped), totaling 407 pcs.**\n\nRule used: per the network's stock definition, only status `Available` is usable stock; `Defective` stock cannot be used in production or shipped. No warehouse restriction applied (all warehouses).\n\n| Material code | Material name | Warehouse / Bin | Batch | Qty (pcs) |\n|---|---|---|---|---|\n| 165-002251 | YN580 battery tray washer | Suzhou Drone Materials / B01-01-01 | 202503310001 | 240 |\n| 849-000744 | M3*25 stainless flanged socket screw, full nylon patch | Suzhou Drone Materials / B01-01-01 | 202503310001 | 160 |\n| 165-001321 | YN540pro radar-to-connector signal mounting aluminum part | Suzhou Rejects / B26-01-02 | 20250331 | 2 |\n| 165-001528 | YN540S radar obstacle-avoidance mounting aluminum part | Suzhou Rejects / B26-01-02 | 20250331 | 2 |\n| 165-001894 | 701 local-source display bracket (Hazellake) | Suzhou Rejects / B26-01-03 | 20250331 | 2 |\n| 165-001319 | YN540pro radar rotary support part | Suzhou Rejects / B26-01-02 | 20250331 | 1 |\n| **Total** | | | | **407** |\n\nNotes:\n- 6 stock records, all in `pcs`, all with zero reserved quantity — so defective quantity equals the booked quantity (407 pcs in total).\n- 4 items (7 pcs) sit in the dedicated `Suzhou Rejects` warehouse; the bulk — 400 pcs of washers and screws — is held in `Suzhou Drone Materials`, a production warehouse, so it is stock a planner might otherwise expect to consume but which is unusable.\n- Organization for all records: Greenfield Agri. No expiry dates recorded on these defective batches.\n- These quantities are excluded from any \"available stock\" / buildable-quantity figure, since those only count `Available` status."
+  },
+  {
+   "id": "Q-17",
+   "passed": true,
+   "seconds": 30.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**23 production work orders are not complete yet, and 6,336 units have not been received into stock** (business date 2026-08-25).\n\n| Task status | Work orders | Planned qty | Received | Not received |\n|---|---|---|---|---|\n| Not Started | 2 | 800 | 0 | 800 |\n| Started | 18 | 5,463 | 0 | 5,463 |\n| Partly Complete | 3 | 940 | 867 | 73 |\n| **Not complete** | **23** | **7,203** | **867** | **6,336** |\n| Complete (reference) | 582 | 157,391 | 156,789 | 602 |\n\n- \"Not yet received\" = qty − xkquainwaqty on the `Production Plan` (work order) records.\n- All 23 open work orders have planned end dates before the business date (2025-12-06 → 2026-08-05), so all are already past their planned completion date.\n- Largest gaps: KSHA-20251205-004 (U00-000170, 2,000 units, Started), HDKJ-20251225-013 (590-000075, 700 units, Not Started), HDKJ-20251208-009 and HDKJ-20251226-001 (590-000075, 600 each, Started), KSHA-20260730-002 (U00-000159, 600, Started).\n- Footnote: one work order marked Complete still shows 602 units not received; including it, total outstanding receipts across all work orders would be 6,938 units.\n\nThis is planning information only — nothing is released, scheduled or received."
+  },
+  {
+   "id": "Q-18",
+   "passed": true,
+   "seconds": 38.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Product with the largest open forecast: U00-000080 — \"BeiDou vehicle smart terminal system\" (Smart Positioning line).**\n\n- **Open forecast quantity: 20,000 units**, across 12 open forecast lines (demand window 2026-01-12 → 2026-12-31; e.g. the two largest lines are 6,000 and 3,000 units).\n- **Current finished-goods stock: 61 units** (Suzhou Finished Goods 20 + Suzhou Returns 41, Available status, all warehouses).\n- **Ratio: 20,000 ÷ 61 ≈ 327.9×** — the open forecast is about **328 times** its current on-hand stock.\n\nBasis and rules used:\n- *Open forecast* = forecast whose close status is not Closed (the forecast data carries only two statuses: Open 90 lines, Closed 47). Quantity = forecast line `qty`, product = `material_number`; since one forecast bill can cover several products, I totalled forecast quantity per product code.\n- *Finished-goods stock* per the network's default rule = the product's own Available stock (`available_inventory_qty`, stock status Available) across every warehouse, defective stock excluded.\n\nRunners-up (open forecast total vs. available stock):\n\n| Product | Name | Open forecast qty | Available stock | Multiple |\n|---|---|---|---|---|\n| U00-000080 | BeiDou vehicle smart terminal system | 20,000 | 61 | ≈ 327.9× |\n| 526-000001 | BeiDou navigation farm autopilot | 9,861 | 1,173 | ≈ 8.4× |\n| U00-000151 | BeiDou vehicle smart terminal system | 4,000 | 4,609 | ≈ 0.9× |\n| U00-000170 | BeiDou vehicle smart terminal system | 3,810 | 990 | ≈ 3.8× |\n\nNotes:\n- If you count only the three finished-goods warehouses (Suzhou / Urumqi / Harbin Finished Goods), U00-000080's stock is 20 units, i.e. **1,000×** its stock in that scope.\n- Forecasts are demand plans, not firm orders; coverage of a demand plan is properly measured against available to promise (finished-goods stock + what current stock can build − signed backlog), not stock alone. This is planning information only and does not place, ship or schedule anything."
+  },
+  {
+   "id": "Q-19",
+   "passed": true,
+   "seconds": 38.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**31 purchase lines from 23 suppliers** are due to arrive in the next 30 days (527,541 units open in total).\n\n**Rules applied** (procurement follow-up skill): business date = 2026-08-25; \"the next 30 days\" = **2026-08-26 through 2026-09-24** (day after business date through day 30, both ends included); a line counts only if it's an open purchase line — close status Open, terminate status Open, and `qty - actqty > 0`. Overdue lines are excluded; nothing falls exactly on the 2026-09-24 boundary.\n\n**Top suppliers by line count:**\n\n| Supplier no. | Supplier | Lines | Open qty |\n|---|---|---|---|\n| 02102051 | Mapleford Components | 5 | 86,000 |\n| 75502049 | Cedarhill Components | 3 | 71,500 |\n| 02102024 | Maplebrook Components | 2 | 29,000 |\n| 02102065 | Maplehill Technology | 2 | 40,000 |\n| 73901002 | Ashwood Components | 1 | 45,000 |\n| 02104106 | Oakstone Materials | 1 | 45,000 |\n| 02104051 | Oakgrove Components | 1 | 33,600 |\n| 76901013 | Firvale Components | 1 | 33,000 |\n| 75501075 | Birchmill Optics | 1 | 33,000 |\n| 75502001 | Birchview Technology | 1 | 25,000 |\n\n…plus 13 more single-line suppliers (Aspenstone, Birchvale, Cherryhill, Cypressford, Elmford, Elmhill, Hazelbridge, Hazelmill, Maplebridge Trading, Maplespring, Pineford, Pinevale, Rowanwell Rubber) — 23 suppliers in total.\n\n**Due-date pattern:** only 3 lines fall in August (2026-08-28 ×2, 2026-08-30 ×1). The rest arrive in two clusters — **15 lines due 2026-09-01** and **13 lines due 2026-09-11** — so the workload concentrates on those two dates. The largest single commitment is 50,000 units of material 725-000257 from Mapleford Components due 2026-09-11 (PO 01-HDKJ-CGDD-260727-016128).\n\nThis is follow-up information only — no orders were placed or suppliers contacted. If you want, I can break this down by material, flag which of these lines cover shortage items, or pull the responsible buyer for the top suppliers."
+  },
+  {
+   "id": "Q-20",
+   "passed": true,
+   "seconds": 22.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Earliest arrival: 2026-11-03**\n\nBasis (rule used: earliest arrival of a new order = business date + the material's standard purchasing lead time):\n- Material **527-000017 – SMD crystal** (material attribute: Purchased)\n- Standard purchasing lead time `purchase_fixedleadtime` = **70 days**\n- Business date \"today\" = **2026-08-25** → 2026-08-25 + 70 days = **2026-11-03**\n\nThis is planning advice only — it does not place an order or contact the supplier."
+  },
+  {
+   "id": "Q-21",
+   "passed": true,
+   "seconds": 54.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yes — all 50 units can ship straight from finished goods, no production needed. After that shipment and after protecting the signed backlog, 751 more units of stock on hand can still be promised.**\n\n*Business date 2026-08-25; rule used: \"stock on hand\" = the product's own Available stock across every warehouse (Defective excluded).*\n\n**1. Coverage of the 50-unit demand — yes, from stock**\n`Demand_Coverage_and_Shortages` (50 × 382-000005, reserve signed backlog = yes, use finished goods = yes, scope = all):\n- covered: **true** · finished_goods_used = **50** · manufacture_qty = **0** · shortages: none\n- Backlog protected first: SO0000008, SO0000005, SO0000506, SO0000502, SO0000517, SO0000013\n\n**2. Stock on hand for 382-000005 (Available, all warehouses): 816 units**\n\n| Warehouse | Available qty |\n|---|---|\n| Suzhou Finished Goods | 325 |\n| Urumqi Finished Goods | 127 |\n| Harbin Finished Goods | 82 |\n| Loan Stock | 232 |\n| Suzhou Returns | 44 |\n| Suzhou Dispatch | 6 |\n| **Total** | **816** |\n\n**3. Signed backlog: 15 units** (6 orders, all overdue — promised before the business date)\n\n| Sales order | Customer | Owed | Promised |\n|---|---|---|---|\n| SO0000008 | Cypressview Agri | 1 | 2026-04-12 |\n| SO0000005 | Cypressspring Agri | 4 | 2026-04-30 |\n| SO0000506 | Hollybrook Media | 2 | 2026-06-02 |\n| SO0000502 | Grovevale Survey | 4 | 2026-06-21 |\n| SO0000517 | Hollyvale Security | 2 | 2026-06-23 |\n| SO0000013 | Grovefield Survey | 2 | 2026-07-27 |\n\n**4. Still promisable from stock on hand**\n816 (stock) − 15 (signed backlog) − 50 (shipping now) = **751 units**\n\nScope note: the 816 figure uses the default all-warehouse Available stock. If you meant strictly the three finished-goods warehouses only, that stock is 534 units (325 + 127 + 82) — still enough for the 50 plus the 15-unit backlog, leaving 469 units promisable. I have not counted what could additionally be built from components; ask if you want that available-to-promise figure.\n\nThis is planning advice only — nothing has been reserved, shipped or scheduled."
+  },
+  {
+   "id": "Q-22",
+   "passed": true,
+   "seconds": 40.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_skill_content",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**At most 34 units of 382-000005 from the seven Suzhou plant production warehouses — 17 fewer than the 51 units that company-wide stock allows.**\n\n| Scope (current stock only) | Buildable qty | Finished-goods qty | Signed backlog | ATP |\n|---|---|---|---|---|\n| Seven Suzhou plant production warehouses (`production_available`) | **34** | 534 | 15 | 553 |\n| All warehouses (`all`) | **51** | 816 | 15 | 852 |\n\nDifference in buildable quantity: 51 − 34 = **17 units fewer**.\n\nBasis (Buildable_Quantity_and_ATP / build_capacity):\n- Business date 2026-08-25; only Available inventory counts, Defective stock excluded.\n- \"The seven Suzhou plant production warehouses\" per the network rule = Suzhou Subassemblies, Suzhou Finished Goods, Suzhou Electronics, Suzhou Drone Materials, Suzhou Assembly, Urumqi Finished Goods, Harbin Finished Goods.\n- \"Build at most\" = BOM netted level by level against current stock only (no open purchase lines, no overdue POs chased in), no alternates.\n- The binding constraint in both scopes is bottom-level material **165-003886** (short 2), so that material, not finished goods, sets the ceiling.\n- ATP is shown for reference only: it deducts the 15-unit signed backlog and is not the build limit.\n\nThese are planning estimates for current stock. Adding open purchase lines due by a need-by date (or chasing overdue POs) would raise the buildable quantity."
+  },
+  {
+   "id": "Q-23",
+   "passed": true,
+   "seconds": 59.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yes — 8 products already owe customers more than their available finished-goods stock, 83 units short in total.**\n\n| # | Product | Description | Signed backlog (owed) | Available stock | Short by |\n|---|---|---|---|---|---|\n| 1 | 367-000130 | YN580 agricultural drone | 21 | 0 | **21** |\n| 2 | 590-000100 | smart farm implement detection system | 18 | 0 | **18** |\n| 3 | 367-000131 | YN580 agricultural drone | 15 | 0 | **15** |\n| 4 | P61-000351 | Agriculture Smart Seeding monitoring system | 12 | 0 | **12** |\n| 5 | 367-000102 | 625 agricultural drone | 9 | 0 | **9** |\n| 6 | 367-000097 | 625 agricultural drone | 13 | 9 | **4** |\n| 7 | 526-000006 | BeiDou navigation farm autopilot | 33 | 30 | **3** |\n| 8 | 734-000001 | WH300 Unmanned Vehicles | 2 | 1 | **1** |\n\n**Basis (rules used)**\n- **Owed** = signed quantity − shipped quantity > 0 per sales-order line, business date 2026-08-25 (Confirmed and In Progress orders).\n- **Finished-goods stock** = `available_inventory_qty` with status *Available*, across **every** warehouse (Defective excluded — it can't be shipped). Per the network rule, \"finished-goods stock\" is the product's own available stock in all warehouses, not just the three finished-goods warehouses.\n- Shortage = owed − available stock, listed only where owed > stock.\n\n**Notes**\n- The five zero-stock products (367-000130, 590-000100, 367-000131, P61-000351, 367-000102) have **no stock record at all** in any warehouse or status.\n- Where the small balances sit: 526-000006 → Suzhou Finished Goods 24 + Loan Stock 6; 367-000097 → Suzhou FG 5 + Loan Stock 3 + Suzhou Dispatch 1; 734-000001 → Suzhou FG 1.\n- All eight have earliest promised dates **before** 2026-08-25 (April–June 2026), so the shortfall hits overdue commitments first.\n- The other 20 backlog products are fully covered by stock — the largest of those, 526-000005 (41 owed), has 195 units on hand.\n\n**Scope:** stock-on-hand comparison only — it does not net the BOM, so some gaps may be closable by building. I can run the buildable-quantity/ATP calculation for these eight if you want that. This is planning information only; nothing has been reserved, shipped or scheduled."
+  },
+  {
+   "id": "Q-24",
+   "passed": true,
+   "seconds": 61.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yes — 5 products remain uncoverable even after building from current stock, short a combined 50 units.**\n\n| Product | Name | Signed backlog | FG stock | Buildable from stock | Units short |\n|---|---|---|---|---|---|\n| 367-000130 | YN580 agricultural drone | 21 | 0 | 0 | **21** |\n| 367-000131 | YN580 agricultural drone | 15 | 0 | 0 | **15** |\n| 367-000102 | 625 agricultural drone | 9 | 0 | 0 | **9** |\n| 367-000097 | 625 agricultural drone | 13 | 9 | 0 | **4** |\n| 734-000001 | WH300 Unmanned Vehicles | 2 | 1 | 0 | **1** |\n| **Total** | | **60** | **10** | **0** | **50** |\n\n**Basis (business date 2026-08-25; \"current stock\" = Available stock across all warehouses, no alternates):**\n1. Owed (signed − shipped > 0) summed per product → 28 products carry backlog.\n2. 8 products have backlog exceeding their own finished-goods stock: 367-000130, 590-000100, 367-000131, P61-000351, 367-000102, 367-000097, 526-000006, 734-000001.\n3. Those 8 were passed in one call to the BOM-netting function (Buildable_Quantity_and_ATP, level-by-level netting on a shared stock pool). Three turn out coverable by production, so they drop out: 590-000100 (0 + 878 vs 18), P61-000351 (0 + 19 vs 12), 526-000006 (30 + 11 vs 33).\n4. Shortage = backlog − FG − buildable (not `available_to_promise`, which floors at 0).\n\n**Blocking bottom-level materials:** 367-000130 — 606-001059, 165-002076, 165-003483, 165-003484, 165-003486; 367-000131 — 606-001059, 165-003483, 165-003484; 367-000102 / 367-000097 — 165-002619, 606-000691, 606-000692; 734-000001 — 45 materials, short 2–16 each (largest: 849-001391 ×16, 849-001278 ×10, 849-001390 ×8, 849-001295 ×8, 849-001375 ×8).\n\nOpen purchase lines (including overdue) were **not** counted here. I can re-run with a need-by date or with overdue POs chased in to see how much of the 50 units that closes. Planning advice only — nothing was placed, shipped or scheduled."
+  },
+  {
+   "id": "Q-25",
+   "passed": true,
+   "seconds": 98.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_skill_content",
+    "get_object_types",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**4 of the 13 backlog units of the 625 agricultural drone (367-000097) cannot be covered.** Three materials block them — one is expeditable from an open PO, two need new orders, and everything can be in by **2026-09-08**.\n\n**Basis** (business date 2026-08-25; Available stock only, all warehouses, no alternates):\n- Signed backlog (signed − shipped) = **13 units** over 5 sales orders, all already overdue: SO0000622 (3, 2026-05-27), SO0000628 (4, 2026-05-31), SO0000126 (1, 2026-06-02), SO0000621 (4, 2026-06-04), SO0000124 (1, 2026-06-14).\n- Finished-goods stock = **9**; net BOM build with current component stock = **0** → uncovered = 13 − 9 − 0 = **4 units**.\n\n**Blocking materials** (all first-level main parts, 1 pc per drone → 4 pcs needed each, 0 available):\n\n| Material | Name | Need | Open purchase |\n|---|---|---|---|\n| 606-000692 | YN525 product packaging insert | 4 | 10 open units — **expedite** |\n| 606-000691 | YN525 product carton, unbranded English edition | 4 | none — **new order** |\n| 165-002619 | solid wood pallet | 4 | none — **new order** |\n\n**1) Expedite from open purchase orders — 606-000692 insert.** PO **01-HDKJ-CGDD-260717-015914**, supplier **Ashford Packaging (57403040)**, buyer **Jack Brooks**: 10 open units (ordered 10, received 0), due **2026-07-31** — overdue by 25 days, hence not firm supply until chased. 10 ≥ 4, so this line alone covers the insert.\n\n**2) Needs a new order — 606-000691 carton and 165-002619 pallet.** No open PO line (the only other line, PO 01-HDKJ-CGDD-260721-015964, is closed with 20/20 received), no open purchase request, no unreleased MRP planned order. Buy 4 each; standard lead time 14 days → earliest arrival **2026-09-08**.\n\n**3) Earliest date everything is in: 2026-09-08** — set by the two new orders (14-day lead time), with the insert to be chased in from Ashford Packaging by then. For confirmation, even with the overdue insert line chased in and all open purchases counted through 2026-09-08, buildable quantity stays 0: the carton and pallet have no coverage at all and are the real gate.\n\nThis is planning and follow-up advice only — nothing was ordered, expedited or scheduled."
+  },
+  {
+   "id": "Q-26",
+   "passed": true,
+   "seconds": 61.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## Conclusion\n\nTo clear the YN580 agricultural drone (367-000130) backlog of **21 units**, **10 of the 12 short materials have no open purchase order at all** and must be ordered right away.\n\n**The slowest is `527-000017` (SMD crystal)** — lead time **70 days**; ordered on the business date 2026-08-25, the **earliest it can arrive is 2026-11-03**.\n\n## No open PO at all — order now (sorted by earliest arrival)\n\n| Material | Name | Short qty | Lead time | Earliest arrival |\n|---|---|---|---|---|\n| 527-000017 | SMD crystal | 8 | 70 d | **2026-11-03** ← slowest |\n| 795-000776 | YN580-L type barbed fitting | 60 | 35 d | 2026-09-29 |\n| 795-000761 | YN580 check valve E14 fitting | 80 | 28 d | 2026-09-22 |\n| 165-002076 | YN580 rear upper shroud panel_ rear radar 3-in-1 | 21 | 28 d | 2026-09-22 |\n| 165-003484 | 590 rear lower shroud_ gray | 21 | 28 d | 2026-09-22 |\n| 165-003486 | 590 rear upper shroud_ orange | 21 | 28 d | 2026-09-22 |\n| 501-000002 | LAN transformer | 8 | 28 d | 2026-09-22 |\n| 606-001070 | YN580_V3_ unit packaging box_ unbranded | 18 | 14 d | 2026-09-08 |\n| 606-001069 | YN580_V3_ product packaging insert | 18 | 14 d | 2026-09-08 |\n| 165-003483 | 590 front lower shroud_ gray | 21 | 1 d | 2026-08-26 |\n\nFor `795-000761` / `795-000776` the only lines on record are fully received and closed, so nothing is still on order.\n\n## Short materials that do have open POs (expedite, no new order)\n\n- **165-002537** seal ring OD 17.61*2.62 — short 80; `01-HDKJ-CGDD-260423-014259` Alderbrook Rubber, 560 open, **due 2026-05-31 (overdue)** → chase; enough on order.\n- **606-001059** cardboard corner protector — short 84; `01-HDKJ-CGDD-260706-015729` Hazelspring Technology 8 open **due 2026-07-06 (overdue)** + `01-HDKJ-CGDD-260729-016176` 800 open due **2026-08-25 (today)** → 808 on order, enough.\n\n## Basis (rules used)\n\n- Business date **2026-08-25**; open PO line = close & terminate status both `Open` and ordered − received > 0.\n- Backlog evaluated as backlog itself: signed − shipped > 0 for 367-000130 → 21 units over 10 orders, promised 2026-04-05 → 2026-07-27 (all already overdue).\n- Shortages are bottom-level BOM-netted gaps (finished goods first, no alternates, no open purchases counted) from `Demand_Coverage_and_Shortages` on 21 units: not covered, 0 finished goods used.\n- Earliest arrival of a new order = business date + `purchase_fixedleadtime`.\n\n`527-000017` landing around 2026-11-03 is far past every promised date, so it is the real critical path — worth checking for an approved substitute or faster source. This is follow-up advice only; no orders were placed."
+  },
+  {
+   "id": "Q-27",
+   "passed": true,
+   "seconds": 58.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## Conclusion\n\nStock on hand covers 30 of the 33 units still owed on 526-000006, so **2 of the 13 open orders fall short — 3 units total** — and **yes, that shortfall can be built from current component stock** (a 3‑unit work order nets with no material shortages).\n\n## Basis\n\nRules used (PMC defaults): business date 2026‑08‑25; stock = `available_inventory_qty` with stock status Available across all warehouses; owed = signed − shipped > 0; fill by promised date, then order number; \"stock on hand\" = the product's own finished-goods stock, current stock only (no purchase lines counted).\n\n**Stock on hand for 526-000006: 30 units** — Suzhou Finished Goods 24 + Loan Stock 6 (no defective/other stock).\n\n**Backlog allocation in promised-date order (33 units owed):**\n\n| # | Sales order | Customer | Promised | Owed | Can ship | Short |\n|---|---|---|---|---|---|---|\n| 1 | SO0000581 | Juniperbrook Energy | 2026-04-16 | 3 | 3 | 0 |\n| 2 | SO0000091 | Hollyhill Security | 2026-05-12 | 3 | 3 | 0 |\n| 3 | SO0000094 | Hollyridge Security | 2026-05-20 | 2 | 2 | 0 |\n| 4 | SO0000597 | Lindenbridge Research | 2026-05-24 | 2 | 2 | 0 |\n| 5 | SO0000583 | Juniperfield Energy | 2026-05-27 | 3 | 3 | 0 |\n| 6 | SO0000586 | Juniperhill Energy | 2026-05-31 | 4 | 4 | 0 |\n| 7 | SO0000097 | Hollyvale Security | 2026-06-03 | 1 | 1 | 0 |\n| 8 | SO0000099 | Hollywell Security | 2026-06-17 | 4 | 4 | 0 |\n| 9 | SO0000089 | Hollyford Media | 2026-06-21 | 1 | 1 | 0 |\n| 10 | SO0000092 | Hollylake Security | 2026-07-13 | 4 | 4 | 0 |\n| 11 | SO0000598 | Lindenfield Research | 2026-07-17 | 2 | 2 | 0 |\n| **12** | **SO0000592** | Junipervale Logistics | 2026-07-27 | 2 | **1** | **1** |\n| **13** | **SO0000096** | Hollystone Security | 2026-08-08 | 2 | **0** | **2** |\n\nStock is exhausted after order 11 (29 units) plus 1 unit on SO0000592 = 30.\n\n## Can the shortfall be built?\n\n**Yes.** Buildable_Quantity_and_ATP for 526-000006 (current stock, all warehouses, no alternates): finished goods 30, signed backlog 33, **buildable from component stock 11 units**, available to promise 8.\n\n- A 3‑unit work order checked against current stock: **fully covered — no bottom-level shortages** (`all_covered = true`, manufacture 3, no shortage materials). So SO0000592's 1 unit and SO0000096's 2 units can be produced.\n- There is also headroom beyond this: 11 units are buildable vs. the 3 needed, so ~8 more units of additional demand could be built before hitting the constraint.\n- Binding material at that limit: **165-003886 \"receiver adjustable base\"** (Autonomous Driving line) — short 2 units, with no available stock on hand, purchase lead time 1 day.\n\nThis is planning advice only — nothing is shipped, scheduled or ordered by this analysis."
+  },
+  {
+   "id": "Q-28",
+   "passed": true,
+   "seconds": 58.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "execute_tool",
+    "execute_tool",
+    "run_cypher",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Short answer: only 8 units — not 30.** For 526-000006 (BeiDou navigation farm autopilot, Finished Goods, Listed), available to promise on current stock alone is **8 units** as of the 2026-08-25 business date. The 30 requested is 22 units beyond what we can commit right now.\n\n**Basis** (rules: current stock only — no open purchases counted; no alternates; ATP protects signed backlog first; all warehouses)\n- Finished-goods stock (Available, all warehouses): **30** (Suzhou Finished Goods 24 + Loan Stock 6)\n- What current stock can still build (BOM netted level by level): **11**\n- Signed backlog: **33** across 13 owed orders, all already overdue (promised 2026-04-16 → 2026-08-08)\n- ATP = 30 + 11 − 33 = **8**\n\n**Backlog behind that figure**\n\n| Order | Customer | Owed | Promised |\n|---|---|---|---|\n| SO0000581 | Juniperbrook Energy | 3 | 2026-04-16 |\n| SO0000091 | Hollyhill Security | 3 | 2026-05-12 |\n| SO0000094 | Hollyridge Security | 2 | 2026-05-20 |\n| SO0000597 | Lindenbridge Research | 2 | 2026-05-24 |\n| SO0000583 | Juniperfield Energy | 3 | 2026-05-27 |\n| SO0000586 | Juniperhill Energy | 4 | 2026-05-31 |\n| SO0000097 | Hollyvale Security | 1 | 2026-06-03 |\n| SO0000099 | Hollywell Security | 4 | 2026-06-17 |\n| SO0000089 | Hollyford Media | 1 | 2026-06-21 |\n| SO0000092 | Hollylake Security | 4 | 2026-07-13 |\n| SO0000598 | Lindenfield Research | 2 | 2026-07-17 |\n| SO0000592 | Junipervale Logistics | 2 | 2026-07-27 |\n| SO0000096 | Hollystone Security | 2 | 2026-08-08 |\n| **Total** | | **33** | |\n\n**What blocks more building:** material **165-003886** (receiver adjustable base, Assembly Materials) — bottom-level shortage of **2**. It has **0 available stock and no open purchase order lines at all**, so a new PO is needed before additional units can be built.\n\n**To get closer to 30:** if open purchase lines due by a required date may be counted (or overdue POs chased in), the buildable/ATP figure rises — give me the delivery date and I'll re-run it; same if alternates are allowed.\n\nThis is planning advice only — nothing has been reserved, ordered or scheduled."
+  },
+  {
+   "id": "Q-29",
+   "passed": true,
+   "seconds": 95.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Short answer: no without alternates — stock on hand (816) plus buildable from current stock (51) = 867 units, and after protecting the 15 pcs signed backlog you can promise 852, i.e. 48 units short of 900. With alternates allowed the order is fully covered (ATP 1,145), no shortage.**\n\nBasis: business date 2026-08-25; stock = Available `available_inventory_qty` across all warehouses; signed backlog reserved first; open/overdue purchase lines not counted. Source: `Demand_Coverage_and_Shortages` and `Buildable_Quantity_and_ATP`, each run with substitutes off and on.\n\n### 382-000005 — no alternates\n| Item | Qty |\n|---|---|\n| Finished-goods stock on hand (all warehouses, Available) | 816 |\n| Buildable from current stock | 51 |\n| Stock + buildable | 867 |\n| Signed backlog to protect (SO0000008, SO0000005, SO0000506, SO0000502, SO0000517, SO0000013) | 15 |\n| Available to promise | 852 |\n| Order | 900 |\n\nNot covered. Allocation gives 801 from finished goods + 99 to manufacture; the build side falls **48 units short**, showing up as a bottom-level shortage of **165-003886 \"receiver adjustable base\" — 96 pcs** (2 pcs/unit × 48 units). That material has **0 Available stock and no open purchase lines**, so it is the only blocker.\n\n### 382-000005 — alternates allowed\n| Item | Qty |\n|---|---|\n| Finished-goods stock on hand | 816 |\n| Buildable from current stock (with alternates) | 344 |\n| Signed backlog to protect | 15 |\n| Available to promise | 1,145 |\n| Order | 900 |\n\n**Covered** — 801 finished goods + 99 built, no shortage. The 48-unit gap is filled by the approved alternate of 165-003886: **165-002658 \"YS221 receiver bracket base (with adhesive backing)\"** (same alternate group 1 under parent 528-000036, alt_priority 1, same 2 pcs/unit usage, alt_method = Alternate / direct replacement), which has **4,830 pcs Available**.\n\nWith alternates the binding constraint shifts to **606-000989 \"YN406 packaging outer carton_V2\" — 344 pcs Available**, which caps buildable quantity at 344 units (still ample: 801 + 99 ≤ 816 + 344). It also has no open purchase lines.\n\nAdditional note: chasing open/overdue POs would not change either answer — none of 165-003886, 165-002658 or 606-000989 has an open PO line. This is planning advice only; nothing is reserved, shipped or scheduled."
+  },
+  {
+   "id": "Q-30",
+   "passed": true,
+   "seconds": 64.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Conclusion:** P61-000351 carries **600 units of open forecast**. After protecting the signed backlog, current stock can support only **7 units** of it — a **gap of 593 units**.\n\n**1) Open forecast — 600 units**\n- Forecast YCD2026030400000052, status **Open** (close status not Closed), product P61-000351 \"Agriculture Smart Seeding monitoring system\", qty **600**, delivery window 2026-04-10 → 2026-04-30. It is the only forecast line for this product.\n\n**2) Signed backlog protected first — 12 units owed**\n| Sales order | Customer | Owed | Promised date |\n|---|---|---|---|\n| SO0000484 | Cypressridge Agri | 4 | 2026-04-20 (overdue) |\n| SO0000488 | Cypressview Agri | 4 | 2026-05-31 |\n| SO0000492 | Grovebridge Agri | 3 | 2026-06-29 |\n| SO0000490 | Cypresswood Agri | 1 | 2026-08-08 (overdue) |\n\n**3) Forecast current stock can support (available to promise) — 7 units**\n- Finished-goods stock on hand: **0** (no Available stock for P61-000351 in any warehouse)\n- What current stock can still build: **19 units**, blocked at the bottom level by **606-000069 YC200 terminal mailer box** (19 units Available)\n- ATP = 0 + 19 − 12 = **7 units**\n\n**4) Gap** — 600 − 7 = **593 units short**.\n\n**Rules used:** business date 2026-08-25; Available stock only, all warehouses; open forecast = close status ≠ Closed; forecast must protect signed backlog first, and forecast support = available to promise (not finished-goods stock alone); no substitutes; stock only (no open purchase lines). Calculated with the published Buildable_Quantity_and_ATP function.\n\nThis is planning advice only — nothing has been ordered, shipped or scheduled."
+  },
+  {
+   "id": "Q-31",
+   "passed": true,
+   "seconds": 104.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_skill_content",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "execute_tool",
+    "execute_tool",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Conclusion: No — current stock cannot take both orders. U00-000151 (50) is fully covered; P61-000351 (60) is not, and it is component-blocked.**\n\nBasis (default rules, business date 2026-08-25): stock = Available inventory across all warehouses, no alternates, overdue/open purchase lines not counted, each product's signed backlog reserved first — via `Demand_Coverage_and_Shortages` (reserve_signed_backlog=true) and `Buildable_Quantity_and_ATP`.\n\n**U00-000151 — BeiDou vehicle smart terminal system: covered**\n- 50 units taken from finished goods (manufacture 0). Stock on hand 4,609; signed backlog 5 reserved first; ATP 4,733.\n\n**P61-000351 — Agriculture Smart Seeding monitoring system: NOT covered**\n- 60 required, **finished goods used 0** — there is no available stock of P61-000351 in any warehouse at all, so all 60 must be built.\n- Current component stock can build only **19 units** (limiter 606-000069) → **at least 41 finished units short**.\n- Its own backlog is 12 units (SO0000484 4, SO0000488 4, SO0000492 3, SO0000490 1, all past promised date), so backlog-protected ATP is only **7** → against the protected backlog the new order is **53 units short**.\n\n**Bottom-level shortages for the full 60-unit build**\n\n| Material | Description | Short by | On hand |\n|---|---|---|---|\n| 606-000069 | YC200 terminal mailer box | **53** | 19 |\n| 606-000071 | YC200 mailer box packaging box | **42** | 30 |\n| 994-000645 | YC400 power cable (shielded) | **32** | 40 |\n\n**Recovery view (not counted in the above):** all open PO lines for 606-000069 (198 open) and 606-000071 (130 open) are already overdue (due 2026-04-15 … 2026-06-05, Hazelspring Technology), so not firm supply; even chasing all of them, **994-000645 stays short 32** — it has no open purchase order at all and a 35-day lead time (new order arrives no earlier than ~2026-09-29).\n\nPlanning advice only; nothing was reserved, ordered, shipped or scheduled."
+  },
+  {
+   "id": "Q-32",
+   "passed": true,
+   "seconds": 128.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Bottom line: 4 finished products use SMD crystal 527-000017 and must be built because finished goods can't cover their signed backlog — 367-000097 (build 4), 367-000102 (build 9), 367-000130 (build 21), 367-000131 (build 15); 49 units in total.**\n\n**1) Where-used: products containing 527-000017** (main component, alt_priority 0; no alternates exist)\n367-000061 (agricultural drone), 367-000097 (625 agricultural drone), 367-000102 (625 agricultural drone), 367-000130 (YN580 agricultural drone), 367-000131 (YN580 agricultural drone), 590-000064, 590-000072, 590-000073, 590-000074, 590-000075, 590-000100 (Agriculture full-cycle / smart farm implement detection systems).\n\nIn the drones the part sits at BOM level 4–5, inside sub-assemblies (588-000464, 588-000541, 588-000578, 588-000687, 588-000702, 588-000545), usage 1 per parent module; in the 590-xxxxxx detection systems at level 4 under 588-000562 / 588-000643.\n\n**2) Must-build list**\n\n| Product | Name | Signed backlog | FG stock (Available, all warehouses) | Buildable with current stock | Units to build |\n|---|---|---|---|---|---|\n| 367-000097 | 625 agricultural drone | 13 | 9 | 0 | **4** |\n| 367-000102 | 625 agricultural drone | 9 | 0 | 0 | **9** |\n| 367-000130 | YN580 agricultural drone | 21 | 0 | 0 | **21** |\n| 367-000131 | YN580 agricultural drone | 15 | 0 | 0 | **15** |\n\nFor all four, FG + buildable < signed backlog and buildable is 0, so the gap equals the build quantity. Their builds are currently blocked by other bottom-level materials: 165-002619 / 606-000691 / 606-000692 (367-000097, 367-000102) and 165-003483 / 165-003484 / 165-003486 / 165-002076 / 606-001059 (367-000130, 367-000131). Note 527-000017 itself has **no Available stock in any warehouse** (no inventory rows), so any build beyond existing sub-assembly stock needs this part supplied.\n\n**3) The other 7 where-used products are not on the must-build list** — finished goods alone cover their backlog: 367-000061 (backlog 13 vs FG 41, buildable 57), 590-000064 (30 vs 137), 590-000072 (39 vs 213), 590-000073 (16 vs 791), 590-000074 (31 vs 1690), 590-000075 (10 vs 1041), 590-000100 (18 vs FG 0, buildable 878).\n\n**Rules used:** business date 2026-08-25; stock = available_inventory_qty with status Available, all warehouses; owed = signed − shipped > 0, filled by promised date then order number; current stock only (open/overdue purchase lines not counted); no alternates; buildable nets the BOM level by level with each product calculated on its own; uncovered when finished_goods_qty + buildable_qty < signed_backlog_qty, gap = backlog − FG − buildable. Figures come from the Buildable_Quantity_and_ATP function plus Cypher lookups on sales-order, inventory and BOM data.\n\nThis is planning advice only — nothing has been placed, shipped or scheduled."
+  },
+  {
+   "id": "Q-33",
+   "passed": true,
+   "seconds": 80.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_skill_content",
+    "get_skill_content",
+    "execute_tool",
+    "execute_tool",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**344 units of 382-000005 can still be built** (alternates allowed, current available stock only, all warehouses, business date 2026-08-25).\n\n**Bottleneck: 606-000989 — \"YN406 packaging outer carton_V2\"** (purchased part, 1 pc per unit, 14-day purchasing lead time). It is a level‑1 main component of 382-000005 and the only limiting material the BOM netting returned. Available stock is 344 pcs, all in Suzhou Assembly (on-hand = available, no defective stock), which caps the build at 344 units. Allowing alternates does not help this part: its BOM row has alt_priority = 0, no alternate group and no alternate method, so it has no substitute.\n\n**Open purchase order: none.** All 1,972 PO lines were checked — there is not a single line (open or closed) for 606-000989, so it cannot be expedited; it needs a new order. What does exist are open purchase requisitions not yet converted to a PO:\n- CGSQ-260804-000015 — 230 pcs open, raised 2026-08-04 (0 joined/received)\n- CGSQ-251030-000008 — 1 pc open (2025-10-30)\n- CGSQ-251216-000007 — 1 pc open (2025-12-16)\n\nThere is also no unreleased MRP planned order for this material.\n\n**Supporting figures (same run):** finished-goods stock 816, signed backlog 15, available to promise 1,145 (= 816 + 344 − 15). Buildable quantity counts stock only — no open or overdue purchase lines were treated as supply. For context, the next-tightest level‑1 component by available stock is 606-000990 (YN406 EPE foam insert_V2) at 400 pcs.\n\nRules used: business date 2026-08-25; stock = available_inventory_qty with status Available across all warehouses; open purchase = close and terminate status both Open with qty − actqty > 0; BOM netted level by level with finished goods first, alternates allowed.\n\nNext step is a purchasing action, not executed here: converting CGSQ-260804-000015 (230 pcs) to a PO and ordering the remaining gap; a new order placed on the business date would arrive around 2026-09-08 at the 14-day lead time. This is planning advice only — nothing has been ordered, shipped or scheduled."
+  },
+  {
+   "id": "Q-34",
+   "passed": true,
+   "seconds": 135.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**No — current stock is not enough. 16 materials are short, and the biggest shortfall is 606-001059 \"cardboard corner protector\", short by 400 pcs.**\n\nBasis: product 367-000131 = YN580 agricultural drone; business date 2026-08-25; current stock only (no open POs / no overdue chase-in); all warehouses; Available stock only; no alternates; planned as a work order so no finished goods are consumed (`all_covered = false`). Cross-check via Buildable_Quantity_and_ATP: finished-goods stock 0 and **buildable_qty 0** — current stock can't build even one unit (signed backlog 15, ATP 0).\n\nShort materials for the 100-unit work order (largest first):\n\n| # | Material | Name | Short qty | Lead time |\n|---|---|---|---|---|\n| 1 | 606-001059 | cardboard corner protector | 400 | 28 d |\n| 2 | 795-000761 | YN580 check valve E14 fitting | 396 | 28 d |\n| 3 | 165-002537 | seal ring OD 17.61*2.62 | 396 | 21 d |\n| 4 | 795-000776 | YN580-L type barbed fitting | 376 | 35 d |\n| 5 | 501-000005 | LAN transformer | 189 | 30 d |\n| 6 | 994-000712 | 580V3 3 No.4 centrifugal nozzle harness | 120 | 35 d |\n| 7 | 165-003483 | 590 front lower shroud_ gray | 100 | 1 d |\n| 8 | 165-003484 | 590 rear lower shroud_ gray | 100 | 28 d |\n| 9 | 606-001069 | YN580_V3_ product packaging insert | 97 | 14 d |\n| 10 | 606-001070 | YN580_V3_ unit packaging box_ unbranded | 97 | 14 d |\n| 11 | 165-003607 | 580V3 front upper shroud – yellow | 86 | 35 d |\n| 12 | 165-003608 | 590 rear upper shroud – yellow | 80 | 35 d |\n| 13 | 527-000021 | SMD crystal | 63 | 49 d |\n| 14 | 554-000038 | synchronous buck converter | 59 | 84 d |\n| 15 | 549-002409 | 580V3 drive motor_ without screen print version | 27 | 50 d |\n| 16 | 733-000048 | SMD power inductor | 8 | 31 d |\n\nThings to note before acting:\n- These are bottom-level netted shortages (BOM netted level by level), not gross requirements.\n- Only 5 of the 16 have open purchase cover: 606-001059 (800 pcs due 2026-08-25 + an overdue line with 8 pcs left), 165-002537 (560 pcs, overdue since 2026-05-31), 165-003607 (127 pcs left, overdue 2026-04-10), 165-003608 (126 pcs left, overdue 2026-04-10), 549-002409 (2,211 pcs left, overdue 2026-03-30). The other **11 materials have no open PO at all** and need new orders.\n- Counting the 800 pcs of 606-001059 due on 2026-08-25 removes that shortage; adding open POs due up to 2026-09-06 fixes nothing else.\n- This is a second work order: HDKJ-20260413-003 for 100 units is already \"Started\" with 0 received, so these 100 units are additional demand on the same stock pool.\n- If the product's signed backlog must be protected first, it gets worse: 21 materials short, with 606-001059, 165-002537, 795-000761 and 795-000776 each short 400 pcs.\n\nThis is planning advice only — nothing has been scheduled, purchased or reserved."
+  },
+  {
+   "id": "Q-35",
+   "passed": true,
+   "seconds": 59.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "get_relation_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Document trace for PO 02-KSHA-CGDD-260402-012958, line 849-000904**\n\n| Step | Document | Key details |\n|---|---|---|\n| Purchase order line | PO 02-KSHA-CGDD-260402-012958, line entry_id 33698 | Material 849-000904 \"TB series sheet metal spare part – unit adapter board – Farmcrest\", qty 80, supplier Ashspring Tooling, due 2026-05-31 |\n| ← Purchase request | **CGSQ-260331-000026, line 33132** | Same material, qty 80, PR business date 2026-03-31, line status Closed |\n| ← MRP planned order | **JHJY-20260331-00045866** | MRP run MRP-20260331-00000119, material type Purchased, advised qty 80 / revised qty 80 / released qty 80, release status Released, close status Release Closed, released 2026-03-31 20:13 |\n| ← Demand forecast | **YCD2026020500000045** | Forecast material P69-000060, qty 400, required delivery 2026-04-15, created 2026-02-05 by Owen Brooks, close status Open |\n| ← Product | **P69-000060 – Fieldline BeiDou smart instrument system** | Confirmed twice: the forecast is raised on this product code, and the BOM shows 849-000904 as a level-1 component of P69-000060 (standard usage 1.0) |\n\n**In words**\n- The requisition behind that PO line is **CGSQ-260331-000026** (line 33132).\n- That requisition line came from MRP planned order **JHJY-20260331-00045866** (planning run MRP-20260331-00000119, released into procurement on 2026-03-31).\n- The chain ends at forecast **YCD2026020500000045** — the MRP order's root demand number is the same forecast — which forecasts **400 units of product P69-000060, \"Fieldline BeiDou smart instrument system\"**, required 2026-04-15. So the boards were bought for the **Fieldline BeiDou smart instrument system**.\n\nNotes: PO 02-KSHA-CGDD-260402-012958 has three lines (849-000902/903/904), all drawn from the same requisition but from different MRP orders — only 849-000904 follows this chain. Requisition CGSQ-260331-000026 has 11 lines, each released from its own MRP order; line 33132 is the one matching this PO line by source request line ID + material code. No permission restrictions were reported on any query."
+  },
+  {
+   "id": "Q-36",
+   "passed": true,
+   "seconds": 18.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "run_cypher",
+    "get_object_types",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "You have **230 suppliers** on file in total.\n\nFrom the Supplier master data (`supply_ontology_en_supplier`):\n- Total supplier records: **230**\n- Distinct supplier codes: **230** (no duplicates — `supplier_code` is the primary key)\n- Records with a supplier name populated: **230**\n\nEach supplier record includes Supplier Code, Supplier Name, Business Registration Code, owning Buyer (purchaser), and Payment Terms."
+  },
+  {
+   "id": "Q-37",
+   "passed": true,
+   "seconds": 28.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "For product **382-000005**, as of the business date **2026-08-25** (all 40 order lines were signed between 2026-03-02 and 2026-06-21, so \"to date\" covers every line):\n\n- **Signed units: 1,081**\n- **Shipped units: 1,066**\n- **Still owed: 15 units** (signed − shipped > 0) on 6 orders — all 6 are **overdue**, as each promised date is before 2026-08-25.\n\n| Sales order | Customer | Signed | Shipped | Owed | Promised |\n|---|---|---|---|---|---|\n| SO0000008 | Cypressview Agri | 44 | 43 | 1 | 2026-04-12 |\n| SO0000005 | Cypressspring Agri | 43 | 39 | 4 | 2026-04-30 |\n| SO0000506 | Hollybrook Media | 3 | 1 | 2 | 2026-06-02 |\n| SO0000502 | Grovevale Survey | 10 | 6 | 4 | 2026-06-21 |\n| SO0000517 | Hollyvale Security | 37 | 35 | 2 | 2026-06-23 |\n| SO0000013 | Grovefield Survey | 21 | 19 | 2 | 2026-07-27 |\n\nRules used: owed = signed quantity − shipped quantity > 0; owed orders with a promised date before the business date are overdue. All 40 lines have order status Confirmed. This is planning information only — nothing has been shipped or scheduled."
+  },
+  {
+   "id": "Q-38",
+   "passed": true,
+   "seconds": 26.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**40 pcs** of material **321-000569** is available across the company right now.\n\n**Basis** (PMC planning rules; business date 2026-08-25, \"now\" = current stock only):\n- Material: 321-000569 — YC400_controler_P5_PCB (Stock category Electronics, type Purchased, unit pcs)\n- Available stock counts only `available_inventory_qty` with stock status **Available**, across every warehouse.\n\n**Detail** — there is exactly one stock record for this material:\n\n| Warehouse | Stock org | Batch | Stock qty | Reserved | Available qty | Status |\n|---|---|---|---|---|---|---|\n| Suzhou Subcontracting | Greenfield Agri | 202512120001 | 40 | 0 | 40 | Available |\n\nTotal available = **40 pcs**. No reserved quantity and no defective stock on hand, so stock on hand and available stock are both 40 pcs.\n\nThis covers current stock only — open purchase orders and other inbound supply are not included. If you want the position including open POs due by a certain date, tell me the date and I can add those."
+  },
+  {
+   "id": "Q-39",
+   "passed": true,
+   "seconds": 26.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**16 sales orders** are still in progress (sales order status = \"In Progress\").\n\nBasis (Sales Order object type, queried by `order_status`):\n- In Progress: **16 orders** — signed 35 units, shipped 0 units\n- Confirmed: 784 orders — signed 20,361 units, shipped 19,926 units\n- Total: 800 orders\n\nAll 16 in-progress orders are completely unshipped, and every one has a promised delivery date earlier than the business date (2026-08-25), so they are all overdue:\n\n| Order | Customer | Product | Signed | Shipped | Promised |\n|---|---|---|---|---|---|\n| SO0000262 | Grovevale Survey | 590-000075 | 4 | 0 | 2026-03-25 |\n| SO0000729 | Cypresswell Agri | 590-000073 | 1 | 0 | 2026-03-31 |\n| SO0000253 | Grovefield Survey | 590-000075 | 2 | 0 | 2026-04-01 |\n| SO0000533 | Juniperview Environment | 382-000006 | 2 | 0 | 2026-04-02 |\n| SO0000158 | Hollyview Security | 367-000130 | 4 | 0 | 2026-04-05 |\n| SO0000672 | Grovebridge Agri | 367-000131 | 4 | 0 | 2026-04-06 |\n| SO0000544 | Cypressridge Agri | 526-000001 | 1 | 0 | 2026-04-29 |\n| SO0000187 | Cypressvale Agri | 590-000064 | 1 | 0 | 2026-05-06 |\n| SO0000091 | Hollyhill Security | 526-000006 | 3 | 0 | 2026-05-12 |\n| SO0000404 | Juniperford Energy | U00-000161 | 4 | 0 | 2026-05-15 |\n| SO0000420 | Lindengrove Research | U00-000170 | 1 | 0 | 2026-05-19 |\n| SO0000029 | Hollyford Media | 382-000006 | 1 | 0 | 2026-05-31 |\n| SO0000614 | Groveford Survey | 367-000061 | 2 | 0 | 2026-06-07 |\n| SO0000542 | Cypresslake Agri | 526-000001 | 1 | 0 | 2026-06-30 |\n| SO0000069 | Cypresswell Agri | 526-000005 | 3 | 0 | 2026-07-13 |\n| SO0000576 | Hollystone Security | 526-000005 | 1 | 0 | 2026-07-18 |\n\nNote on interpretation: if \"still in progress\" means orders that are still owed (signed quantity − shipped quantity > 0) regardless of the status label, that number is **192 orders** (16 In Progress + 176 Confirmed). I can break that backlog down by product, customer, or overdue bucket if useful."
+  },
+  {
+   "id": "Q-40",
+   "passed": true,
+   "seconds": 30.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**One open purchase line is due to arrive today (business date 2026-08-25):**\n\n| | |\n|---|---|\n| Purchase order | 01-HDKJ-CGDD-260729-016176 |\n| Supplier | Hazelspring Technology (code 02100140) — responsible buyer Alex Reed, Net 30 |\n| Material | 606-001059 cardboard corner protector (1137\\*50\\*50, pcs) |\n| Quantities | ordered 800 pcs · received 0 · **outstanding 800 pcs** |\n| Due date | 2026-08-25 |\n| Buyers on the line | sourcing Mark Brooks / executing Jack Brooks |\n\n**Basis**\n- Rules applied: business date 2026-08-25 (\"today\"); open line = close status and terminate status both `Open` and `qty − actqty > 0`; \"due today\" = `deliverdate` = 2026-08-25.\n- Three other lines also carry a 2026-08-25 due date, but they are Closed and fully received (nothing outstanding): 01-HDKJ-CGDD-260421-014175 (725-000019 and 725-000246, Aspenstone Components) and 01-HDKJ-CGDD-260421-014174 (539-000490, Rowanbrook Components).\n\n**Follow-up notes**\n- Hazelspring Technology also holds many open lines past their due date (overdue — chase, but not firm supply), including a further 8 pcs of the same material 606-001059 due 2026-07-06.\n- Standard purchase lead time for 606-001059 is 28 days, so a new order placed today arrives no earlier than 2026-09-22.\n\nThis is follow-up advice only — no orders were placed and no suppliers were contacted."
+  },
+  {
+   "id": "Q-41",
+   "passed": true,
+   "seconds": 30.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**28 open purchase lines are due to arrive in September 2026, from 20 different suppliers** (total open quantity 526,211 units).\n\n**Rules used:** business date is 2026-08-25, so \"September\" = 2026-09-01 → 2026-09-30 inclusive (both ends). Open purchase line = close status and terminate status both **Open** and open quantity `qty − actqty > 0`; each line is counted on its due date. No line in this window is overdue.\n\n**Due dates:** 12 lines due 2026-09-01, 16 lines due 2026-09-11.\n\n**Lines per supplier (all 20):**\n\n| # | Supplier | Code | Lines | Open qty |\n|---|---|---|---|---|\n| 1 | Mapleford Components | 02102051 | 5 | 86,000 |\n| 2 | Cedarhill Components | 75502049 | 3 | 71,500 |\n| 3 | Maplebrook Components | 02102024 | 2 | 29,000 |\n| 4 | Maplehill Technology | 02102065 | 2 | 40,000 |\n| 5 | Ashwood Components | 73901002 | 1 | 45,000 |\n| 6 | Oakstone Materials | 02104106 | 1 | 45,000 |\n| 7 | Oakgrove Components | 02104051 | 1 | 33,600 |\n| 8 | Firvale Components | 76901013 | 1 | 33,000 |\n| 9 | Birchmill Optics | 75501075 | 1 | 33,000 |\n| 10 | Birchview Technology | 75502001 | 1 | 25,000 |\n| 11 | Maplespring Components | 02102078 | 1 | 15,000 |\n| 12 | Cherryhill Components | 51204021 | 1 | 13,500 |\n| 13 | Cypressford Components | 51902001 | 1 | 12,000 |\n| 14 | Hazelmill Components | 02002076 | 1 | 12,450 |\n| 15 | Elmhill Components | 75504067 | 1 | 8,000 |\n| 16 | Maplebridge Trading | 02102032 | 1 | 7,500 |\n| 17 | Pineford Components | 0216086 | 1 | 6,411 |\n| 18 | Pinevale Components | 2504011 | 1 | 4,900 |\n| 19 | Birchvale Components | 75501084 | 1 | 4,500 |\n| 20 | Aspenstone Components | 2604-75503-0613 | 1 | 850 |\n\nThe top four suppliers (Mapleford, Cedarhill, Maplebrook, Maplehill) hold 12 of the 28 lines.\n\n**Worth noting — overdue, not counted above:** there are also 9 open lines with due dates in September **2025** (2025-09-05 and 2025-09-29). Those are long overdue, already missed by the supplier, and not firm September supply — they need chasing separately.\n\nThis is follow-up information only; no orders were placed and no suppliers were contacted."
+  },
+  {
+   "id": "Q-42",
+   "passed": true,
+   "seconds": 27.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**The three products with the largest backlog are 526-000005 (41 units owed), 590-000072 (39 units) and 526-000006 (33 units).**\n\n| # | Product code | Product name | Owed units | Owed order lines | Of which overdue |\n|---|---|---|---|---|---|\n| 1 | 526-000005 | BeiDou navigation farm autopilot | 41 | 15 | 41 (15 lines) |\n| 2 | 590-000072 | Agriculture full-cycle smart implement detection system | 39 | 16 | 39 (16 lines) |\n| 3 | 526-000006 | BeiDou navigation farm autopilot | 33 | 13 | 33 (13 lines) |\n\nFor reference, the next largest are 590-000074 with 31 units and 590-000064 with 30 units.\n\n**Basis / rules used**\n- Rule applied: *owed = signed quantity − shipped quantity > 0* (the network's backlog definition); backlog is aggregated per product code and ranked by total owed units.\n- Business date 2026-08-25, so an owed order whose promised delivery date is before that date is overdue — for these top three products **all** of the owed units sit on overdue promised dates (44 lines in total), i.e. the entire backlog shown is already past promise.\n- Source: Sales Order object (`supply_ontology_en_salesorder`), product names from Product master (`supply_ontology_en_product`).\n- Note: 526-000005 and 526-000006 are two different product codes sharing the same product name, so they are listed separately.\n\nThis is planning information only — nothing has been rescheduled, shipped or allocated."
+  },
+  {
+   "id": "Q-43",
+   "passed": true,
+   "seconds": 40.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Bottom line for Joel Hayes: 71 orders not fully shipped, 181 units still owed, and all 71 of those orders are overdue.**\n\nBasis (per the PMC supply-planning skill's default rules):\n- Business date = **2026-08-25**; owed = signed quantity − shipped quantity > 0; an owed order is overdue when its promised delivery date is before the business date.\n- Matched salesperson exactly on \"Joel Hayes\" (a distinct rep from Eli Hayes and Will Hayes).\n\nFrom the Sales Order data:\n- Joel Hayes has **267 orders** in total: 6,837 units signed, 6,656 shipped → **181 units owed** across **71 orders**.\n- **All 71 owed orders are overdue** (owed units on overdue orders = 181, so none of his open orders is still within its promise date). Promised dates on these open orders run from **2026-03-16 to 2026-08-09** — the latest is still 16 days before the business date.\n\nWorst open products (product / orders / units owed): 526-000006 7/17 · 526-000005 5/16 · 526-000001 6/15 · 590-000072 5/13 · 590-000064 4/11 · 590-000073 4/11 · 590-000074 3/9 · 367-000097 3/8 · 382-000005 3/8 · 590-000100 4/8. The remaining 61 units sit on 17 other products.\n\nOldest items to chase first (fill rule: promised date, then order number): SO0000538 (382-000006, 2 units, 2026-03-16), SO0000262 (590-000075, 4 units, 2026-03-25), SO0000073 (526-000005, 2 units, 2026-03-29), SO0000253 (590-000075, 2 units, 2026-04-01), SO0000325 (U00-000151, 3 units, 2026-04-03).\n\nThis is planning information only — nothing has been scheduled, shipped or changed in any system."
+  },
+  {
+   "id": "Q-44",
+   "passed": true,
+   "seconds": 30.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Cardboard corner protector 606-001059** (purchased part, standard purchasing lead time 28 days) has **2 open purchase lines that haven't arrived**, and **1 of them is overdue (past due by 50 days)**.\n\nRules used (per the procurement follow-up skill): business date = 2026-08-25; open line = close status Open **and** terminate status Open with open qty = qty − actqty > 0; overdue = deliverdate earlier than the business date.\n\n**Not yet arrived (open lines)**\n\n| # | Purchase order | Supplier | Ordered | Arrived | Open qty | Due date | Status |\n|---|---|---|---|---|---|---|---|\n| 1 | 01-HDKJ-CGDD-260706-015729 | Hazelspring Technology (02100140) | 300 | 292 | **8** | 2026-07-06 | **Overdue** (50 days late) |\n| 2 | 01-HDKJ-CGDD-260729-016176 | Hazelspring Technology (02100140) | 800 | 0 | **800** | 2026-08-25 | Not overdue — due today |\n\n**Overdue ones: 1 line**\n- **01-HDKJ-CGDD-260706-015729** — 8 pcs still short, due 2026-07-06. The supplier missed the date, so these 8 pcs should be chased but must not be treated as firm supply.\n\n**Basis / next step**\n- Both lines belong to the same supplier, **Hazelspring Technology**, whose responsible buyer is **Alex Reed** — one follow-up covers everything.\n- The bigger exposure is the 800 pcs due today (01-HDKJ-CGDD-260729-016176): not late yet, but nothing received against it, so confirm that one first today.\n- Total outstanding quantity on this material: 808 pcs.\n\nThis is follow-up advice only; no orders were placed and no suppliers were contacted."
+  },
+  {
+   "id": "Q-45",
+   "passed": true,
+   "seconds": 37.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**5 of the 24 products with open forecasts have no finished-goods stock at all** (business date 2026-08-25):\n\n| Product code | Product name | Open forecast qty | FG stock on hand |\n|---|---|---|---|\n| P61-000351 | Agriculture Smart Seeding monitoring system | 600 | 0 |\n| 367-000130 | YN580 agricultural drone | 490 | 0 |\n| 367-000131 | YN580 agricultural drone | 200 | 0 |\n| 367-000102 | 625 agricultural drone | 100 | 0 |\n| 734-000003 | WH300 dual nozzle complete vehicle (EU version) | 12 | 0 |\n\n**Basis**\n- *Open forecast* = close status not Closed (Open: 90 lines / 56,340 pcs; Closed: 47 lines / 59,582 pcs) → 24 distinct products.\n- *Finished-goods stock* = the product's own Available stock across **all** warehouses (Available stock status only).\n- These 5 are not merely zero-available: they have **no stock records at all** — no rows in any warehouse or any status (not even Defective), verified by a direct lookup on the five codes.\n\n**Context:** the other 19 open-forecast products do hold stock, though several are far short of their forecast — U00-000080 (20,000 forecast vs 61 on hand), 526-000001 (9,861 vs 1,173), 382-000005 (2,605 vs 816), 526-000006 (830 vs 30), 367-000097 (80 vs 9), 734-000001 (20 vs 1). Note that stock on hand ≠ what can be promised; available to promise also nets out signed backlog and adds what component stock can still build. Ask if you want that for these products.\n\nThis is planning information only — nothing has been ordered, shipped or scheduled."
+  },
+  {
+   "id": "Q-46",
+   "passed": true,
+   "seconds": 61.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "execute_tool",
+    "execute_tool",
+    "run_cypher",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Short answers**\n\n1. **141 units** of U00-000080 (BeiDou vehicle smart terminal system) can still be built from current stock — on top of **61** finished units already on hand.\n2. The single material blocking one more unit is **994-000328 — UA500 harness** (Purchased, 35-day lead time): only **107 pcs** Available, i.e. **1 pc short** of unit #142.\n3. If every overdue purchase line is chased in, buildable rises to **2,972 units**, and the bottleneck shifts to **795-000629 — UA500 shield B top cover**.\n\n**Basis** (function *Buildable_Quantity_and_ATP*, BOM netted level by level)\n- Rules: business date 2026-08-25; all warehouses; only `available_inventory_qty` with stock status Available; no alternates; stock only — open purchases not counted.\n- U00-000080: finished goods 61 → buildable **141** → signed backlog 11 → available to promise **191** (61 + 141 − 11).\n- Why 141: **107** harnesses in stock plus **34** already-built subassemblies of 815-000002 (one harness each). The harness's own overdue PO **02-KSHA-CGDD-260604-015190** (Beechmill Components, **2,881 pcs, due 2026-07-19**) is past due, so it is not firm supply and needs chasing.\n- With `chase_overdue_po`: buildable **2,972**, ATP 3,022, limited by **795-000629** (2,938 pcs, 1 per unit under 815-000002, shortage 1). It has **no open purchase line at all** (both POs fully received/closed), so it needs a **new order** — 21-day lead time means earliest arrival **2026-09-15**, which is why the cap is 2,972 rather than the 3,022 the harness would allow.\n- Also nearly exhausted deeper in the tree: 725-000140 SMD ceramic capacitor (431 pcs × 4/unit ≈ 107 units).\n\nThis is planning advice only — nothing has been ordered, scheduled or shipped."
+  },
+  {
+   "id": "Q-47",
+   "passed": true,
+   "seconds": 90.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**No — materials would not be enough.** Even with every open purchase line chased in (overdue ones included) and the backlog protected first, one bottom-level item is still short:\n\n| Short item | Name | Short by |\n|---|---|---|\n| 994-000645 | YC400 power cable (shielded version) | **32 pcs** |\n\n**Basis** (Demand_Coverage_and_Shortages; business date 2026-08-25; all warehouses; Available stock only; no alternates; signed backlog reserved; all open PO lines incl. overdue counted):\n\n- **Demand 60 units of P61-000351** — finished-goods stock is 0, so all 60 units must be built.\n- **Backlog protected first** — 4 owed sales orders, 12 units: SO0000484 (4), SO0000488 (4), SO0000492 (3), SO0000490 (1).\n- **Cable 994-000645** (level-1 item, 1 pc per unit): 60 + 12 = 72 pcs required, only 40 pcs Available on hand, and **no open purchase line at all** → 32 pcs short. It is a Purchased item with a 35-day lead time, so an order placed today arrives no earlier than 2026-09-29.\n- **Why chasing overdue POs matters:** on current stock alone three items block — 606-000069 YC200 terminal mailer box short 53 (19 on hand; overdue lines 78 + 120 from Hazelspring), 606-000071 YC200 mailer box packaging box short 42 (30 on hand; overdue lines 20 + 50 + 60), plus the cable. The two mailer-box shortages clear only if those overdue lines are actually chased in; the cable shortage does not, because no open PO exists for it.\n\nOne side note: 994-000645 has an approved same-group alternate, **363-000282 YC400 power cable (non-shielded)** — 35-day lead time, 218 pcs Available — which was not counted because you did not authorize substitutes. If you want, I can re-run the check with alternates allowed.\n\nThis is planning advice only; nothing was ordered, shipped or scheduled."
+  },
+  {
+   "id": "Q-48",
+   "passed": true,
+   "seconds": 55.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Short answer: No at Sept 5 — short 435 pcs. Yes at Sept 15 — covered, with 7,515 pcs to spare.**\n\nMaterial 972-000677 = \"D-class audio power amplifier\", spec XT8623, Purchased / Electronics / pcs, product status Unlisted, purchase lead time 28 days.\n\n**Supply position (business date 2026-08-25)**\n- Stock: 65 pcs available, all in Suzhou Subcontracting, status Available, 0 reserved, no defective stock.\n- Open purchases: one line — PO 01-HDKJ-CGDD-260724-016089, Hazelmill Components (02002076, buyer Adam Hayes), ordered 12,450, received 0, open 12,450 pcs, due **2026-09-11**.\n- No overdue open PO lines; no other open supply (all 9 purchase-request lines are Closed, no unreleased MRP planned orders).\n\n**Checkpoint 1 — 500 pcs by Sept 5:** 65 pcs available + nothing else due by 9/5 → **435 pcs short**. The 12,450-pc receipt lands 9/11, after the need date.\n\n**Checkpoint 2 — 5,000 pcs cumulative by Sept 15:** 65 + 12,450 (arrives 9/11) = **12,515 pcs vs 5,000 → covered, 7,515 pcs surplus.** This also covers the 4,500-pc tranche between 9/5 and 9/15, but only once the 9/11 receipt actually arrives.\n\nRules used: stock counts only available_inventory_qty with status Available across all warehouses; open purchase = close and terminate status both Open with qty − actqty > 0, counted on its due date if due on/after the business date; overdue lines are not firm supply (none here to chase).\n\nFor the 435-pc gap: pull the existing 9/11 line in to on or before 9/5 (12,450 pcs would cover both checkpoints), or find another source — a brand-new order placed today needs 28 days and arrives around 2026-09-22, too late for both dates.\n\nThis is planning advice only; nothing has been ordered, expedited, scheduled or shipped."
+  },
+  {
+   "id": "Q-49",
+   "passed": true,
+   "seconds": 142.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Answer: zero extra units — purchases due by 2026-09-30 would not let any uncovered product build even one more unit.**\n\n**Products whose backlog can't be covered** (business date 2026-08-25; stock = Available qty, all warehouses; no alternates; overdue open POs excluded). Rule: uncovered when FG stock + buildable qty < signed backlog.\n\n| Product | Signed backlog | FG stock | Buildable now | FG+buildable | Short by |\n|---|---|---|---|---|---|\n| 367-000130 | 21 | 0 | 0 | 0 | 21 |\n| 367-000131 | 15 | 0 | 0 | 0 | 15 |\n| 367-000102 | 9 | 0 | 0 | 0 | 9 |\n| 367-000097 | 13 | 9 | 0 | 9 | 4 |\n| 734-000001 | 2 | 1 | 0 | 1 | 1 |\n\n28 products carry signed backlog; 8 had backlog above FG stock, but 3 of those are fully coverable by production (590-000100 buildable 878 vs backlog 18; P61-000351 19 vs 12; 526-000006 30+11=41 vs 33) — leaving the 5 above.\n\n**With open purchases due by 2026-09-30 added** (same basis, lines due 2026-08-25 → 2026-09-30 counted on their due date):\n\n| Product | Buildable now | Buildable with Sept purchases | Extra units |\n|---|---|---|---|\n| 367-000130 | 0 | 0 | **0** |\n| 367-000131 | 0 | 0 | **0** |\n| 367-000102 | 0 | 0 | **0** |\n| 367-000097 | 0 | 0 | **0** |\n| 734-000001 | 0 | 0 | **0** |\n\n**Why it stays at zero:**\n- **367-000130 / 367-000131**: still blocked by 165-003483 and 165-003484 (plus 165-003486, 165-002076 for 130) with **no open purchase line at all**. The 800 pcs of 606-001059 due 2026-08-25 is counted, but it stops being the constraint once it lands.\n- **367-000102 / 367-000097**: blocked by 606-000691 and 165-002619 (nothing on order), and 606-000692, whose only open line is **overdue** (10 pcs, due 2026-07-31) and therefore not firm supply.\n- **734-000001**: blocked by dozens of parts short by 1–16 units each (849-001391 16, 849-001278 10, 849-001375 8, 849-001295 8, 849-001390 8, …); nothing arriving by 2026-09-30 closes enough for one unit.\n\nBuildable quantity nets the BOM level by level (finished goods first, only the net shortage expanded). This is planning advice only — nothing was ordered, shipped or scheduled."
+  },
+  {
+   "id": "Q-50",
+   "passed": true,
+   "seconds": 162.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "get_object_types",
+    "run_code",
+    "get_skill_content",
+    "run_code",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Short answer: two of the short materials have their own open purchase lines you can expedite (165‑002537 and 606‑001059), and two more (501‑000002, 527‑000017) are covered by an overdue purchase of their parent PCBA. No — even if every one of those purchases came in, it would not close the gap: 8 materials still have no supply at all, so the 21‑unit backlog still cannot be built.**\n\n**What \"the YN580 367‑000130 backlog\" is**\n367‑000130 = \"YN580 agricultural drone\". Signed backlog still owed (signed − shipped > 0) = **21 units across 10 orders** (SO0000158 4, SO0000146 3, SO0000652 2, SO0000644 2, SO0000642 2, SO0000657 2, SO0000647 1, SO0000648 1, SO0000649 2, SO0000156 2). Available finished‑goods stock = **0**, so all 21 must be manufactured (function used 0 finished goods, manufacture qty 21).\n\n**Short materials (bottom‑level gaps for 21 units, stock only) and their open purchases**\nRule used: business date 2026‑08‑25; open purchase line = close status and terminate status both Open and qty − actqty > 0; lines due before 2026‑08‑25 are overdue — supplier missed the date, not firm supply, chase them.\n\n| Material | Name | Shortage | Open purchase | Lead time |\n|---|---|---|---|---|\n| 165‑002537 | seal ring OD 17.61*2.62 | 80 | **560 pcs open, 1 line, overdue** | 21 d |\n| 606‑001059 | cardboard corner protector | 84 | **808 pcs open, 2 lines (8 overdue + 800 due today)** | 28 d |\n| 501‑000002 | LAN transformer | 8 | none on the part itself — parent PCBA 588‑000545 has 598 pcs overdue | 28 d |\n| 527‑000017 | SMD crystal | 8 | none on the part itself — same parent PCBA line | 70 d |\n| 165‑003486 | 590 rear upper shroud_ orange | 21 | none — needs a new order | 28 d |\n| 165‑003484 | 590 rear lower shroud_ gray | 21 | none — needs a new order | 28 d |\n| 165‑003483 | 590 front lower shroud_ gray | 21 | none — needs a new order | 1 d |\n| 165‑002076 | YN580 rear upper shroud panel_ rear radar 3‑in‑1 | 21 | none — needs a new order | 28 d |\n| 606‑001070 | YN580_V3_ unit packaging box_ unbranded | 18 | none — needs a new order | 14 d |\n| 606‑001069 | YN580_V3_ product packaging insert | 18 | none — needs a new order | 14 d |\n| 795‑000761 | YN580 check valve E14 fitting | 80 | none — needs a new order | 28 d |\n| 795‑000776 | YN580‑L type barbed fitting | 60 | none — needs a new order | 35 d |\n\n**Expedite / chase list (open quantity ≥ shortage, so expediting is enough)**\n- 165‑002537 \"seal ring OD 17.61*2.62\" — PO **01‑HDKJ‑CGDD‑260423‑014259**, Alderbrook Rubber, 560 pcs open, due **2026‑05‑31 (overdue)**, buyer **Mark Brooks**. Shortage 80 → fully covered.\n- 606‑001059 \"cardboard corner protector\" — Hazelspring Technology, buyer **Jack Brooks**:\n  - PO **01‑HDKJ‑CGDD‑260729‑016176**, **800 pcs open, due 2026‑08‑25 (due today)**;\n  - PO **01‑HDKJ‑CGDD‑260706‑015729**, 8 pcs open, due **2026‑07‑06 (overdue)**.\n  808 pcs vs 84 short → fully covered.\n- 501‑000002 \"LAN transformer\" (8) and 527‑000017 \"SMD crystal\" (8) need no purchase of their own: both sit under purchased subassembly **588‑000545 YS403_X3M mainboard_P2_S01_PCBA**, which has **598 pcs overdue** on PO **01‑HDKJ‑CGDD‑260326‑012615**, Ashbrook Technology, due **2026‑03‑26**, buyer **Alex Reed**. Chase that line and these two gaps disappear (the PCBA arrives instead of being built).\n\n**Would it close the gap? No**\nChecked with the shortage calculation (Demand_Coverage_and_Shortages, demand = 367‑000130 × 21, business date 2026‑08‑25):\n- Current stock only: **not covered**, 12 short materials.\n- Assuming all overdue open purchases chased back: still **not covered**, 9 short materials — 165‑002537, 501‑000002 and 527‑000017 drop out.\n- Adding open purchases due by a need‑by date (tested 2026‑09‑30): 606‑001059 drops out, the other 11 unchanged.\n- Putting both overlays together: **8 materials still short and not covered** — 165‑003486 21, 165‑003484 21, 165‑003483 21, 165‑002076 21, 795‑000761 80, 795‑000776 60, 606‑001070 18, 606‑001069 18. **None of these eight has a single open purchase line**, so they need new orders; earliest arrival = 2026‑08‑25 + lead time: 165‑003483 2026‑08‑26, 606‑001070/606‑001069 2026‑09‑08, 165‑003486/165‑003484/165‑002076/795‑000761 2026‑09‑22, 795‑000776 2026‑09‑29.\n\nSo the open purchases cover the rubber seal and the cardboard corner protector (plus the two components riding on the PCBA), but the shroud set, the radar panel, the packaging box and insert, and the two fittings have nothing on order — the 21‑unit backlog stays unbuildable until those are ordered.\n\nThis is follow‑up advice only; no orders were placed or suppliers contacted."
+  }
+ ]
+}

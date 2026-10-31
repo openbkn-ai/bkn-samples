@@ -3,22 +3,14 @@
 from __future__ import annotations
 
 EXECUTION_USE_RULE = (
-    'Call execute_tool with unchanged toolbox_id=owner_id and tool_id=capability_id from discovery. '
-    'Check body.exit_code and result; HTTP 200 is insufficient. '
-    'Preserve requested fields; do not character-truncate JSON. '
-    'Reuse verified same-scope results instead of repeating calls.'
+    'Call through execute_tool, copying toolbox_id=owner_id and tool_id=capability_id exactly from discovery. '
+    'Check body.exit_code and result: HTTP 200 alone does not mean the calculation succeeded. '
+    'Use Cypher, not a function, for lookups, totals and following relations.'
 )
 
 
-def _spec(
-    name: str,
-    operation: str,
-    description: str,
-    *,
-    use_when: str = 'Choose the function matching the business scenario.',
-    do_not_use_when: str = 'Use only for this business scenario.',
-    minimum_business_inputs: list[str] | None = None,
-) -> dict[str, object]:
+def _spec(name: str, operation: str, description: str, *, use_when: str, do_not_use_when: str,
+          minimum_business_inputs: list[str]) -> dict[str, object]:
     return {
         "name": name,
         "operation": operation,
@@ -26,119 +18,47 @@ def _spec(
         "use_rule": EXECUTION_USE_RULE,
         "use_when": use_when,
         "do_not_use_when": do_not_use_when,
-        "minimum_business_inputs": minimum_business_inputs or [],
+        "minimum_business_inputs": minimum_business_inputs,
     }
 
 
 FUNCTION_CATALOG = {
-    "shortage_rule": _spec("Material_Shortage_Rule", "shortage_rule", "Use case: scheduled shortage evaluation. Input: resolved event_source and fixed window_start/window_end. Result: candidates, evidence and eligible closure IDs; reads verified inputs only, never writes or schedules events.", minimum_business_inputs=["event_source", "window_start", "window_end"]),
-
-    "material_coverage": _spec("Material_Assurance", "material_coverage", "Use case: material assurance. Input: product, whole-kit quantity, explicit customer_delivery/new_production purpose, optional scope (all). Result: bounded coverage, allocations, gaps and BOM revision; no incoming supply or alternates.", minimum_business_inputs=["product", "qty", "demand_purpose"]),
-    "replenishment_draft": _spec("Replenishment_Draft", "replenishment_draft", "Use case: replenishment proposal. Input: complete material_coverage result. Result: structure-checked supplied evidence in a non-executable draft; no fact re-query, persistence or business writes.", minimum_business_inputs=["coverage"]),
-
-    "bom_list": _spec(
-        'BOM_Structure',
-        "bom_list",
-        'Use case: BOM structure. Input: product, optional depth/alternates. Result: summary counts and first-level mains; full returns paged rows.',
-        use_when='Use to inspect product structure, first-level main components or material counts.',
-        do_not_use_when='Use a different function for where-used impact or multi-product allocation.',
-        minimum_business_inputs=["product"],
+    "build_capacity": _spec(
+        "Buildable_Quantity_and_ATP",
+        "build_capacity",
+        "Per product, nets the BOM level by level and returns finished goods, the most units current stock can build, "
+        "signed backlog, available to promise and blocking materials. need_by adds purchases due by that date; "
+        "chase_overdue_po adds overdue ones.",
+        use_when="How many units of one or more products can be built or promised now, how much more can be accepted, "
+                 "which material blocks them, or how many more units open purchase lines due by a date would allow. "
+                 "Pass several products in one call instead of calling once per product.",
+        do_not_use_when="Use Cypher for stock, backlog, forecasts, open purchase quantities or BOM lists.",
+        minimum_business_inputs=["products"],
     ),
-    "bom_shared_list": _spec(
-        'Shared_BOM',
-        "bom_shared_list",
-        'Use case: shared BOMs. Input: at least two products, optional depth/alternates. Result: shared component structure without stock or allocation analysis.',
-    ),
-    "layered_inventory": _spec(
-        'BOM_Stock',
-        "layered_inventory",
-        'Use case: component stock. Input: product, optional depth/scope. Result: BOM levels, available stock and resolved scope; repeated positions share stock.',
-    ),
-    "substitute_status": _spec(
-        'Alternate_Status',
-        "substitute_status",
-        'Use case: alternatives. Input: prefer material_code for a named component, or product, never both; scope/policy. Result: parent-scoped groups with available_qty and usage per candidate. Preserve matched group members; never truncate JSON by characters.',
-    ),
-    "theoretical_build": _spec(
-        'Manufacturing_Capacity',
-        "theoretical_build",
-        'Use case: stock-supported manufacturing. Input: product, explicit alternate policy, optional scope (all). Result: capacity and bottlenecks; excludes finished goods and incoming supply.',
-    ),
-    "total_sellable": _spec(
-        'Total_Sellable',
-        "total_sellable",
-        'Use case: current sellable capacity. Input: product, explicit alternate policy, optional scopes (all). Result: finished stock, manufacturing capacity and total sellable; no incoming supply.',
-        use_when='Use for current stock, sellable capacity or direct shipment coverage.',
-        do_not_use_when='Do not substitute a structure-only backward plan for production scheduling, receipt dates or delay analysis.',
-        minimum_business_inputs=["product", "substitute_enabled"],
-    ),
-    "kitting_net_demand": _spec(
-        'Demand_Coverage',
-        "kitting_net_demand",
-        'Use case: fixed demand. Input: product, qty, policy, scope (all). Result: coverage, all shortages and suggested replenishment; summary includes gaps with net_requirement; full adds lines. Stock only; no POs.',
-    ),
-    "shared_contention": _spec(
-        'Shared_Demand_Allocation',
-        "shared_contention",
-        'Use case: shared stock allocation. Input: ordered {product, qty} objects, policy, scope (all). Result: per-demand coverage and shortages in summary; full adds allocations/remaining pool. Do not replace with independent single-demand calculations.',
-        use_when='Use to assess simultaneous coverage for multiple products with explicit quantities.',
-        do_not_use_when='For one product or structure-only comparison without quantities, choose another function.',
-        minimum_business_inputs=["demands", "substitute_enabled"],
-    ),
-    "max_build_without_po": _spec(
-        'Stock_Only_Capacity',
-        "max_build_without_po",
-        'Use case: no-purchase manufacturing. Input: product, explicit alternate policy, optional scope (all). Result: deterministic capacity and bottlenecks, excluding finished goods and incoming supply.',
-    ),
-    "leadtime_days": _spec(
-        'Lead_Time',
-        "leadtime_days",
-        'Use case: standard lead time. Input: material_code. Result: leadtime_days, purchase/production caliber, material type, source field and unit; missing type keeps the marked production default.',
-    ),
-    "supply_status": _spec(
-        'Supply_Status',
-        "supply_status",
-        'Use case: dated material coverage. Input: material, need date, gross quantity, business date, optional scope (all). Result: on-time coverage/shortage and stock/net PO evidence; excludes overdue, undated and closed POs.',
-    ),
-    "open_forecast_count": _spec(
-        'Open_Forecast_Count',
-        "open_forecast_count",
-        'Use case: open forecast count. Input: optional product. Result: record count and exclusions; full adds IDs. Not forecast demand quantity.',
-    ),
-    "backward_plan": _spec(
-        'Backward_Plan',
-        "backward_plan",
-        'Use case: deadline coverage. Input: forecast ID and alternate policy, or product/quantity/deadline/policy. Result: direct-stock or net production plan, customer/internal delays and evidence. Default business date: 2026-08-25.',
-        use_when='Use when finished stock is insufficient or production timing, receipt risks or delays need analysis.',
-        do_not_use_when='If finished stock covers customer demand, retain the direct-shipment result instead of applying manufacturing backward planning.',
-        minimum_business_inputs=["product", "demand_qty", "demand_end", "substitute_enabled"],
-    ),
-    "material_where_used": _spec(
-        'Where_Used',
-        "material_where_used",
-        'Use case: which products use a material. Input: material_code. Result: affected_product_count and products, including alternate branches by default; full adds BOM paths.',
-        use_when='Use to find products affected by a material, identify common materials or assess shortage impact.',
-        do_not_use_when='Do not use to inspect a single product BOM.',
-        minimum_business_inputs=["material_code"],
+    "demand_coverage": _spec(
+        "Demand_Coverage_and_Shortages",
+        "demand_coverage",
+        "Evaluates demands in order on one shared stock pool: finished goods first, then BOM netting. "
+        "Returns coverage, units to build and bottom-level shortages. reserve_signed_backlog protects backlog first; "
+        "use_finished_goods=false plans a work order.",
+        use_when="Whether one or more demands (new orders, backlog, planned work orders) are covered, what is short and by how much, or how competing orders share stock.",
+        do_not_use_when="Use the buildable-quantity function when only the maximum buildable quantity is asked.",
+        minimum_business_inputs=["demands"],
     ),
 }
 
 
 def native_tool_description() -> str:
     """Return a concise description of the native Function collection."""
-    operations = "；".join(
-        f"{operation}（{spec['name']}）" for operation, spec in FUNCTION_CATALOG.items()
-    )
+    operations = "；".join(f"{operation}（{spec['name']}）" for operation, spec in FUNCTION_CATALOG.items())
     return (
-        'Supply EN function catalog. Choose a named function by business question:'
-        f"{operations}。"
-        'Each function accepts only scenario-specific parameters and reads its bound knowledge network through sandbox_sdk.bkn at runtime.'
-        'backward_plan defaults business_date to 2026-08-25.'
+        f"Supply planning functions: {operations}. "
+        "They read the bound knowledge network through sandbox_sdk.bkn at run time; business_date defaults to 2026-08-25."
     )
 
 
 def native_operation_description() -> str:
-    return 'Available named functions:' + "、".join(FUNCTION_CATALOG)
+    return "Named functions: " + ", ".join(FUNCTION_CATALOG)
 
 
 __all__ = ["FUNCTION_CATALOG", "native_operation_description", "native_tool_description"]

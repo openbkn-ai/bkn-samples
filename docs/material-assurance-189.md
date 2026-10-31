@@ -1,5 +1,7 @@
 # Material assurance follow-up (#189)
 
+> Retired: supply-chain 0.1.17 and supply-chain-en 0.1.11 replace these functions with buildable quantity and demand coverage, and the acceptance script below has been removed. This page is kept as history.
+
 This source update adds bilingual `material_coverage` and `replenishment_draft`
 Functions to the existing native toolbox (16 Functions in total), plus a draft-only
 BKN action that binds to the latter. It does not change data, immutable metric

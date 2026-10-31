@@ -25,6 +25,6 @@
 
 样例内容、独立版本说明和正式验收凭证位于 `samples/<directory>/releases/<version>/`。根目录 [catalog.json](../catalog.json) 保留给已发布的 0.2.0 客户端；新服务按产品版本选择 [0.2.0 目录](../catalogs/0.2.0/catalog.json)或 [0.2.1 目录](../catalogs/0.2.1/catalog.json)。本次更新包含13个源码样例和13项固定源码候选；候选不代表平台验收通过。
 
-- [Material assurance follow-up (#189)](material-assurance-189.md): demand purpose, combined replacement classification, complete reads and draft-only replenishment.
+- [Material assurance follow-up (#189)](material-assurance-189.md): demand purpose, combined replacement classification, complete reads and draft-only replenishment (retired).
 
-- [Read-only shortage rule (#190)](shortage-rule-190.md): proposed event adapter, evidence and write boundary.
+- [Read-only shortage rule (#190)](shortage-rule-190.md): proposed event adapter, evidence and write boundary (retired).

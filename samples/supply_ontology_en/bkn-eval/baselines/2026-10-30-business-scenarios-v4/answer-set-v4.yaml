@@ -1,0 +1,457 @@
+schema_version: '4.0'
+set_id: supply-business-scenarios-v4
+business_date: '2026-08-25'
+source_snapshot_date: '2026-08-13'
+prd: docs/PRD.en-US.md
+generation_method: independent raw CSV Decimal oracle (oracle.py)
+answers:
+- id: Q-01
+  question: How many finished-goods models are currently on sale (listed), and across how many product lines?
+  expected:
+    on_sale_models: 28
+    product_lines: 7
+  answer: '{"on_sale_models": 28, "product_lines": 7}'
+- id: Q-02
+  question: What is the standard purchasing lead time for bought-in part 606-000989, in days?
+  expected:
+    purchase_lead_days: 14
+  answer: '{"purchase_lead_days": 14}'
+- id: Q-03
+  question: How many first-level materials go straight into final assembly of vehicle terminal U00-000080? List the material codes.
+  expected:
+    count: 5
+    material_codes:
+    - 606-000216
+    - 606-000217
+    - 606-000218
+    - 815-000002
+    - 849-000655
+  answer: '{"count": 5, "material_codes": ["606-000216", "606-000217", "606-000218", "815-000002", "849-000655"]}'
+- id: Q-04
+  question: How much available stock of 382-000005, the BeiDou navigation farm autopilot, is left in the three finished-goods warehouses?
+  expected:
+    qty: 534
+  answer: '{"qty": 534}'
+- id: Q-05
+  question: How many sales orders are not fully shipped yet, and how many units do we still owe customers in total?
+  expected:
+    orders: 192
+    unshipped_qty: 470
+  answer: '{"orders": 192, "unshipped_qty": 470}'
+- id: Q-06
+  question: How many demand forecasts are still open, and how many units do they add up to?
+  expected:
+    count: 90
+    qty: 56340
+  answer: '{"count": 90, "qty": 56340}'
+- id: Q-07
+  question: How many purchase order lines are not yet fully received? Closed and terminated lines don't count.
+  expected:
+    lines: 517
+  answer: '{"lines": 517}'
+- id: Q-08
+  question: How many MRP planned orders have been calculated but not released yet?
+  expected:
+    count: 262
+  answer: '{"count": 262}'
+- id: Q-09
+  question: Among the orders we still owe, how many are past their promised date? Which one is the most overdue, and by how many days?
+  expected:
+    overdue_orders: 192
+    oldest_order: SO0000538
+    days_late: 162
+  answer: '{"overdue_orders": 192, "oldest_order": "SO0000538", "days_late": 162}'
+- id: Q-10
+  question: Which of Cypressridge Agri's orders are not fully shipped yet, and how many units do we owe them in total?
+  expected:
+    orders:
+    - SO0000064
+    - SO0000124
+    - SO0000184
+    - SO0000484
+    - SO0000544
+    - SO0000604
+    - SO0000784
+    unshipped_qty: 20
+  answer: '{"orders": ["SO0000064", "SO0000124", "SO0000184", "SO0000484", "SO0000544", "SO0000604", "SO0000784"], "unshipped_qty": 20}'
+- id: Q-11
+  question: How many purchase lines are past their due date and still not fully received? How many suppliers do they involve?
+  expected:
+    lines: 483
+    suppliers: 133
+  answer: '{"lines": 483, "suppliers": 133}'
+- id: Q-12
+  question: Which supplier has the most overdue purchase lines? How many overdue lines, and how much is still outstanding on them?
+  expected:
+    supplier: Ashvale Components
+    lines: 50
+    open_qty: 2844000
+  answer: '{"supplier": "Ashvale Components", "lines": 50, "open_qty": 2844000}'
+- id: Q-13
+  question: Of the suppliers Alex Reed is responsible for, how many currently have overdue purchase lines?
+  expected:
+    suppliers: 51
+    with_overdue: 25
+  answer: '{"suppliers": 51, "with_overdue": 25}'
+- id: Q-14
+  question: Which finished products use seal ring 165-002537?
+  expected:
+    product_codes:
+    - 367-000061
+    - 367-000097
+    - 367-000102
+    - 367-000130
+    - 367-000131
+  answer: '{"product_codes": ["367-000061", "367-000097", "367-000102", "367-000130", "367-000131"]}'
+- id: Q-15
+  question: How many main parts do the two YN580 agricultural drones (367-000130 and 367-000131) have in common?
+  expected:
+    shared_count: 1017
+  answer: '{"shared_count": 1017}'
+- id: Q-16
+  question: Which materials have stock judged defective that can't go into production? What is the total quantity?
+  expected:
+    material_codes:
+    - 165-001319
+    - 165-001321
+    - 165-001528
+    - 165-001894
+    - 165-002251
+    - 849-000744
+    qty: 407
+  answer: '{"material_codes": ["165-001319", "165-001321", "165-001528", "165-001894", "165-002251", "849-000744"], "qty": 407}'
+- id: Q-17
+  question: How many production work orders are not complete yet, and how many units have not been received into stock?
+  expected:
+    work_orders: 23
+    remaining_qty: 6336
+  answer: '{"work_orders": 23, "remaining_qty": 6336}'
+- id: Q-18
+  question: Among the open forecasts, which product has the largest forecast quantity? What multiple of its current finished-goods stock is that?
+  expected:
+    product_code: U00-000080
+    forecast_qty: 20000
+    fg_qty: 61
+    ratio: 327.9
+  answer: '{"product_code": "U00-000080", "forecast_qty": 20000, "fg_qty": 61, "ratio": 327.9}'
+- id: Q-19
+  question: How many purchase lines are due to arrive in the next 30 days, and from how many suppliers?
+  expected:
+    lines: 31
+    suppliers: 23
+  answer: '{"lines": 31, "suppliers": 23}'
+- id: Q-20
+  question: If we order SMD crystal 527-000017 today, what is the earliest date it can arrive?
+  expected:
+    arrival_date: '2026-11-03'
+  answer: '{"arrival_date": "2026-11-03"}'
+- id: Q-21
+  question: A customer wants 50 units of 382-000005. Can we ship them straight from finished goods? After that, how many more units of stock on hand can we still promise?
+  expected:
+    can_ship: true
+    remaining_promisable_fg: 751
+  answer: '{"can_ship": true, "remaining_promisable_fg": 751}'
+- id: Q-22
+  question: Using only materials in the seven Suzhou plant production warehouses, how many units of 382-000005 can we build at most? How many fewer is that than using stock across the company?
+  expected:
+    plant_buildable: 34
+    company_buildable: 51
+    difference: 17
+  answer: '{"plant_buildable": 34, "company_buildable": 51, "difference": 17}'
+- id: Q-23
+  question: Which products already owe customers more than we have in finished-goods stock? By how many units each?
+  expected:
+    products:
+      367-000097: 4
+      367-000102: 9
+      367-000130: 21
+      367-000131: 15
+      526-000006: 3
+      590-000100: 18
+      734-000001: 1
+      P61-000351: 12
+  answer: '{"products": {"367-000097": 4, "367-000102": 9, "367-000130": 21, "367-000131": 15, "526-000006": 3, "590-000100": 18, "734-000001": 1, "P61-000351": 12}}'
+- id: Q-24
+  question: Of the products where finished goods can't cover the backlog, which still can't be covered even by building from current stock? How many units short is each?
+  expected:
+    products:
+      367-000097: 4
+      367-000102: 9
+      367-000130: 21
+      367-000131: 15
+      734-000001: 1
+  answer: '{"products": {"367-000097": 4, "367-000102": 9, "367-000130": 21, "367-000131": 15, "734-000001": 1}}'
+- id: Q-25
+  question: For the 625 agricultural drone 367-000097, how many backlog units can't be covered? Which materials block it? Which can we expedite from open purchase orders, which need a new order, and what
+    is the earliest date everything is in?
+  expected:
+    short_sets: 4
+    blocking_materials:
+      165-002619: 4
+      606-000691: 4
+      606-000692: 4
+    chase_open_po:
+    - 606-000692
+    new_order_needed:
+    - 165-002619
+    - 606-000691
+    earliest_new_order_arrival: '2026-09-08'
+  answer: '{"short_sets": 4, "blocking_materials": {"165-002619": 4, "606-000691": 4, "606-000692": 4}, "chase_open_po": ["606-000692"], "new_order_needed": ["165-002619", "606-000691"], "earliest_new_order_arrival":
+    "2026-09-08"}'
+- id: Q-26
+  question: To clear the backlog for the YN580 agricultural drone 367-000130, which short materials have no open purchase order at all and must be ordered right away? Which is the slowest, and when is the
+    earliest it can arrive?
+  expected:
+    no_open_po:
+    - 165-002076
+    - 165-003483
+    - 165-003484
+    - 165-003486
+    - 501-000002
+    - 527-000017
+    - 606-001069
+    - 606-001070
+    - 795-000761
+    - 795-000776
+    slowest_material: 527-000017
+    arrival_date: '2026-11-03'
+  answer: '{"no_open_po": ["165-002076", "165-003483", "165-003484", "165-003486", "501-000002", "527-000017", "606-001069", "606-001070", "795-000761", "795-000776"], "slowest_material": "527-000017",
+    "arrival_date": "2026-11-03"}'
+- id: Q-27
+  question: If we ship the 526-000006 backlog from stock on hand in promised-date order, which orders can't be filled? Can the shortfall be built from current stock?
+  expected:
+    unmet_orders:
+    - SO0000592
+    - SO0000096
+    remaining_qty: 3
+    can_build: true
+  answer: '{"unmet_orders": ["SO0000592", "SO0000096"], "remaining_qty": 3, "can_build": true}'
+- id: Q-28
+  question: A customer wants another 30 units of 526-000006. What is the most we can accept right now?
+  expected:
+    accept_qty: 8
+    fg_qty: 30
+    buildable_qty: 11
+    backlog_qty: 33
+    available_to_promise: 8
+  answer: '{"accept_qty": 8, "fg_qty": 30, "buildable_qty": 11, "backlog_qty": 33, "available_to_promise": 8}'
+- id: Q-29
+  question: A customer wants 900 units of 382-000005. Can stock on hand plus what we can build from current stock cover it? What if alternates are allowed?
+  expected:
+    without_substitutes:
+      can_accept: false
+      promisable: 852
+    with_substitutes:
+      can_accept: true
+      promisable: 1145
+  answer: '{"without_substitutes": {"can_accept": false, "promisable": 852}, "with_substitutes": {"can_accept": true, "promisable": 1145}}'
+- id: Q-30
+  question: How many units of open forecast does P61-000351 have? After protecting the signed backlog, how much of that forecast can current stock support, and what is the gap?
+  expected:
+    forecast_qty: 600
+    backlog_qty: 12
+    supported_qty: 7
+    gap_qty: 593
+  answer: '{"forecast_qty": 600, "backlog_qty": 12, "supported_qty": 7, "gap_qty": 593}'
+- id: Q-31
+  question: 'Two new orders arrive together: 60 units of P61-000351 and 50 units of U00-000151. Protecting both products'' backlog first, can current stock take both? What is short, and by how much?'
+  expected:
+    P61_000351:
+      covered: false
+      shortages:
+        606-000069: 53
+        606-000071: 42
+        994-000645: 32
+    U00_000151:
+      covered: true
+      shortages: {}
+  answer: '{"P61_000351": {"covered": false, "shortages": {"606-000069": 53, "606-000071": 42, "994-000645": 32}}, "U00_000151": {"covered": true, "shortages": {}}}'
+- id: Q-32
+  question: Which finished products use SMD crystal 527-000017? Among them, which have backlog that finished goods can't cover, so they must be built and are directly affected by this part? How many units
+    must each build?
+  expected:
+    product_codes:
+    - 367-000061
+    - 367-000097
+    - 367-000102
+    - 367-000130
+    - 367-000131
+    - 590-000064
+    - 590-000072
+    - 590-000073
+    - 590-000074
+    - 590-000075
+    - 590-000100
+    must_build:
+      367-000097: 4
+      367-000102: 9
+      367-000130: 21
+      367-000131: 15
+      590-000100: 18
+  answer: '{"product_codes": ["367-000061", "367-000097", "367-000102", "367-000130", "367-000131", "590-000064", "590-000072", "590-000073", "590-000074", "590-000075", "590-000100"], "must_build": {"367-000097":
+    4, "367-000102": 9, "367-000130": 21, "367-000131": 15, "590-000100": 18}}'
+- id: Q-33
+  question: With alternates allowed, how many units of 382-000005 can we still build at most? Which material is the bottleneck, and does it have any open purchase order?
+  expected:
+    buildable_qty: 344
+    limiting_material: 606-000989
+    limiting_stock: 344
+    has_open_po: false
+  answer: '{"buildable_qty": 344, "limiting_material": "606-000989", "limiting_stock": 344, "has_open_po": false}'
+- id: Q-34
+  question: Next week we want to schedule another work order for 100 units of YN580 367-000131. Is current stock enough? If not, how many materials are short, and which is short the most?
+  expected:
+    covered: false
+    shortage_material_count: 16
+    largest_shortage: 606-001059
+  answer: '{"covered": false, "shortage_material_count": 16, "largest_shortage": "606-001059"}'
+- id: Q-35
+  question: 'Purchase order 02-KSHA-CGDD-260402-012958, line 849-000904: which purchase requisition did it come from? Which MRP planned order generated that requisition? In the end, which forecast and which
+    product was the material bought for?'
+  expected:
+    purchase_request: CGSQ-260331-000026
+    mrp_plan_order: JHJY-20260331-00045866
+    forecast: YCD2026020500000045
+    product_codes:
+    - P69-000060
+  answer: '{"purchase_request": "CGSQ-260331-000026", "mrp_plan_order": "JHJY-20260331-00045866", "forecast": "YCD2026020500000045", "product_codes": ["P69-000060"]}'
+- id: Q-36
+  question: How many suppliers do we have on file in total?
+  expected:
+    suppliers: 230
+  answer: '{"suppliers": 230}'
+- id: Q-37
+  question: For 382-000005, how many units are on signed sales orders to date, how many have shipped, and how many are still owed?
+  expected:
+    signed: 1081
+    shipped: 1066
+    unshipped: 15
+  answer: '{"signed": 1081, "shipped": 1066, "unshipped": 15}'
+- id: Q-38
+  question: How much available stock of material 321-000569 is there across the company right now?
+  expected:
+    qty: 40
+  answer: '{"qty": 40}'
+- id: Q-39
+  question: How many sales orders are still in progress?
+  expected:
+    orders: 16
+  answer: '{"orders": 16}'
+- id: Q-40
+  question: Which purchases are due to arrive today? From which supplier, which material, and how much is still outstanding?
+  expected:
+    lines:
+    - po: 01-HDKJ-CGDD-260729-016176
+      supplier: Hazelspring Technology
+      material_code: 606-001059
+      open_qty: 800
+  answer: '{"lines": [{"po": "01-HDKJ-CGDD-260729-016176", "supplier": "Hazelspring Technology", "material_code": "606-001059", "open_qty": 800}]}'
+- id: Q-41
+  question: How many purchase lines are due to arrive in September, and from how many suppliers?
+  expected:
+    lines: 28
+    suppliers: 20
+  answer: '{"lines": 28, "suppliers": 20}'
+- id: Q-42
+  question: Which three products have the biggest backlog, and how many units does each owe?
+  expected:
+    products:
+      526-000005: 41
+      590-000072: 39
+      526-000006: 33
+  answer: '{"products": {"526-000005": 41, "590-000072": 39, "526-000006": 33}}'
+- id: Q-43
+  question: How many orders does salesperson Joel Hayes still have not fully shipped? How many units are owed, and how many of those orders are overdue?
+  expected:
+    orders: 71
+    unshipped_qty: 181
+    overdue: 71
+  answer: '{"orders": 71, "unshipped_qty": 181, "overdue": 71}'
+- id: Q-44
+  question: Which purchases of cardboard corner protector 606-001059 haven't arrived yet? Which of them are overdue?
+  expected:
+    lines:
+    - po: 01-HDKJ-CGDD-260706-015729
+      supplier: Hazelspring Technology
+      open_qty: 8
+      deliver_date: '2026-07-06'
+      overdue: true
+    - po: 01-HDKJ-CGDD-260729-016176
+      supplier: Hazelspring Technology
+      open_qty: 800
+      deliver_date: '2026-08-25'
+      overdue: false
+  answer: '{"lines": [{"po": "01-HDKJ-CGDD-260706-015729", "supplier": "Hazelspring Technology", "open_qty": 8, "deliver_date": "2026-07-06", "overdue": true}, {"po": "01-HDKJ-CGDD-260729-016176", "supplier":
+    "Hazelspring Technology", "open_qty": 800, "deliver_date": "2026-08-25", "overdue": false}]}'
+- id: Q-45
+  question: Among products with open forecasts, which have no finished-goods stock at all right now?
+  expected:
+    product_codes:
+    - 367-000102
+    - 367-000130
+    - 367-000131
+    - 734-000003
+    - P61-000351
+  answer: '{"product_codes": ["367-000102", "367-000130", "367-000131", "734-000003", "P61-000351"]}'
+- id: Q-46
+  question: How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
+  expected:
+    stock_only_buildable: 141
+    first_blocking_materials:
+    - 994-000328
+    with_overdue_po_chased: 2972
+  answer: '{"stock_only_buildable": 141, "first_blocking_materials": ["994-000328"], "with_overdue_po_chased": 2972}'
+- id: Q-47
+  question: A new order for 60 units of P61-000351 has come in. Protecting its backlog first, if every open purchase (overdue ones included) could be chased in, would materials be enough? What would still
+    be short, and by how much?
+  expected:
+    covered: false
+    shortages:
+      994-000645: 32
+  answer: '{"covered": false, "shortages": {"994-000645": 32}}'
+- id: Q-48
+  question: For class-D audio amplifier 972-000677, we need to issue 500 to production by September 5 and 5,000 cumulative by September 15. With stock plus purchases arriving on schedule, is there enough
+    at each point?
+  expected:
+    by_2026_09_05:
+      available: 65
+      covered: false
+      short: 435
+    by_2026_09_15:
+      available: 12515
+      covered: true
+      short: 0
+  answer: '{"by_2026_09_05": {"available": 65, "covered": false, "short": 435}, "by_2026_09_15": {"available": 12515, "covered": true, "short": 0}}'
+- id: Q-49
+  question: For the products whose backlog can't be covered, how many more units would purchases due by the end of September let each of them build?
+  expected:
+    extra_buildable:
+      367-000097: 0
+      367-000102: 0
+      367-000130: 0
+      367-000131: 0
+      734-000001: 0
+  answer: '{"extra_buildable": {"367-000097": 0, "367-000102": 0, "367-000130": 0, "367-000131": 0, "734-000001": 0}}'
+- id: Q-50
+  question: Among the short materials for the YN580 367-000130 backlog, which have open purchases we can expedite? If all of those purchases came in, would it close the gap?
+  expected:
+    materials:
+      165-002537:
+        shortage_qty: 80
+        open_po_qty: 560
+        enough: true
+      606-001059:
+        shortage_qty: 84
+        open_po_qty: 808
+        enough: true
+    still_short_after_chasing:
+    - 165-002076
+    - 165-003483
+    - 165-003484
+    - 165-003486
+    - 606-001069
+    - 606-001070
+    - 795-000761
+    - 795-000776
+  answer: '{"materials": {"165-002537": {"shortage_qty": 80, "open_po_qty": 560, "enough": true}, "606-001059": {"shortage_qty": 84, "open_po_qty": 808, "enough": true}}, "still_short_after_chasing": ["165-002076",
+    "165-003483", "165-003484", "165-003486", "606-001069", "606-001070", "795-000761", "795-000776"]}'

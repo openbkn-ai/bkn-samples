@@ -17,15 +17,13 @@ The package references a fixed data image; it does not contain the image itself.
 
 ## Capabilities and MCP acceptance
 
-Connect an external agent through MCP. Verify that it can discover the knowledge network, metrics, Native Function Toolbox and Skills. Query orders and stock, then invoke functions with their declared business parameters. Check warehouse scopes, allocation policies and leading-zero forecast lookup. Installation success alone does not prove the business path.
+Connect an external agent through MCP. Verify that it can discover the knowledge network, the two native calculation functions and the two Skills (PMC production planning, purchase follow-up). Use Cypher to query the backlog and stock of product `382-000005`, then call the functions to check buildable quantity, coverage and shortages. Functions and Skills must actually run; installation success alone does not prove the business path.
 
-The native implementations in `tools/fn/` are published by installation hooks. Callers do not construct `resolved_context`, pass credentials or supply inventory snapshots. Runtime functions read their bound BKN objects; local CSV calculations cannot replace actual MCP results.
+The native implementations in `tools/fn/` are published by installation hooks. Callers provide only the declared business parameters; they do not construct `resolved_context` or pass credentials, service addresses or stock snapshots. Local CSV calculations cannot replace actual MCP results.
 
-## Core 50-question evaluation
+## Business-scenario 50-question evaluation
 
-Use the source repository's [BKN-Eval](../bkn-eval/README.md) for the core 50 questions. An independent external agent answers through MCP without seeing reference answers, CSVs or implementation source. Compare required fields, ordering and business values after completion, using the exact installed version and data baseline.
-
-Run the four complete-calendar-month questions separately. Verify the published Monthly Sales Skill, half-open Asia/Shanghai boundaries, May 31 inclusion, identical filters and agent arithmetic. Keep execution evidence locally outside the committed sample.
+The source repository's [v4 business-scenario test set](../bkn-eval/baselines/2026-10-30-business-scenarios-v4/README.md) provides 50 questions and reference answers, written from the [PRD](PRD.en-US.md). An independent external agent answers through MCP without seeing the reference answers; run each question once, then check the business values question by question.
 
 ## Failure and reinstallation
 

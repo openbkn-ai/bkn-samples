@@ -13,7 +13,6 @@ def test_tools_only_expose_supported_import_and_capability_entries():
         "setup_catalog.py",
         "bind_kn_resources.py",
         "smoke_test.py",
-        "power_layer.py",
         "register_native_function_toolbox.py",
         "register_skills.py",
         "native_function_bundle.py",
@@ -22,12 +21,12 @@ def test_tools_only_expose_supported_import_and_capability_entries():
     }
     assert required <= {path.name for path in TOOLS.iterdir()}
     assert (TOOLS / "fn").is_dir()
-    assert (TOOLS / "assets").is_dir()
 
     retired_entries = {
         "action_gateway.py",
         "benchmark_third_party.py",
         "bind_action_datasets.py",
+        "bind_draft_action.py",
         "bind_skill_dataset.py",
         "bootstrap_action_layer.py",
         "compress_resolved_context.py",
@@ -36,12 +35,15 @@ def test_tools_only_expose_supported_import_and_capability_entries():
         "fn_service.py",
         "localize_kn.py",
         "localize_sample_data.py",
+        "metric_consumer.py",
         "online_acceptance.py",
+        "power_layer.py",
         "resolve_function_toolbox.py",
         "run_scenario.py",
         "service_dependencies.py",
         "setup_action_datasets.py",
         "setup_skill_dataset.py",
+        "shortage_rule_runtime.py",
         "skill_orchestration.py",
         "start_function_service.py",
         "toolbox_resolution.py",
@@ -49,5 +51,5 @@ def test_tools_only_expose_supported_import_and_capability_entries():
     assert not ({path.name for path in TOOLS.iterdir()} & retired_entries)
     assert not any(
         (TOOLS / name).exists()
-        for name in ("actions", "context", "dialogue", "eval", "scenario")
+        for name in ("actions", "assets", "context", "dialogue", "eval", "scenario")
     )
