@@ -20,48 +20,35 @@ OpenBKN 官方样例集合，提供知识网络模型、数据、对象关系和
 
 ## 样例目录
 
-本次 OpenBKN 0.2.1 更新统一覆盖 **13 个标准样例**：订单入门 1 个，以及供应链、世界杯、制造业、金融 FIBO、零售 GS1、能源 SAREF4ENER 各中英文 2 个。能源源码已在本次变更中整合；13 项以同一份候选清单统一构建和核对，不再只按此前主线清单打包。
+OpenBKN 0.2.1 提供 **12 个标准样例**：供应链、世界杯、制造业、金融 FIBO、零售 GS1、能源 SAREF4ENER 各中英文一对，全部登记在 [0.2.1 目录](catalogs/0.2.1/catalog.json)。订单入门不在 0.2.1 提供，保留原有版本。0.2.1 的每个 Release 标题以 `[OpenBKN 0.2.1]` 开头。
 
-| 样例 | 语言 | 体验场景 | 可用状态 |
+| 样例 | 语言 | 场景 | 可用版本 |
 | --- | --- | --- | --- |
-| [订单入门](samples/order-basics/) | 中文 | 用少量订单和产品了解对象及关系 | 已有版本 0.1.2；0.2.1 候选 0.1.4，待平台验收 |
-| [供应链](samples/supply_ontology_hand/) | 中文 | 订单、预测、BOM、库存、采购、缺料及交付分析 | 原始 020：[0.1.16](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.16)；021 主线：[0.1.14](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.14)，需体验集能力 |
-| [供应链](samples/supply_ontology_en/) | 英文 | 英文数据、本体、函数、指标和 Skill 的供应链分析 | 原始 020：[0.1.1](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.1)；021 主线：[0.1.10](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.10)，需体验集能力 |
-| [世界杯](samples/world-cup/) | 中文模型、英文数据 | 赛事、球队、球员和比赛事件查询，提供 50 道中文评测题 | 已有版本 0.1.2；0.2.1 候选 0.1.6，待平台验收 |
-| [世界杯](samples/world-cup-en/) | 英文 | 对象查询、多表关联、排名及跨届赛事分析，提供 50 道评测题 | 已有版本 0.1.0；0.2.1 候选 0.1.2，待平台验收 |
-| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 候选 0.1.3；统一自包含包，待平台验收 |
-| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | 中文 | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 候选 0.1.3；统一自包含包，待平台验收 |
-| [Financial Portfolio Operations（FIBO）](samples/financial-fibo-en-us/) | 英文 | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | 已有版本 0.2.5；0.2.1 候选 0.2.6，待平台验收 |
-| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 中文本体与业务数据，覆盖交易后运营控制；20 张表、78,356 条记录和 100 道评测题 | 已有版本 0.2.5；0.2.1 候选 0.2.6，待平台验收 |
-| [Food Supply and Recall（GS1）](samples/retail-gs1-en-us/) | 英文 | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | 已有版本 0.1.0；0.2.1 候选 0.1.1，待平台验收 |
-| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | 中文 | 中文本体、数据及业务能力，与英文样例事实对应；15张表、2,911条记录、100题 | 已有版本 0.1.0；0.2.1 候选 0.1.1，待平台验收 |
-| [Energy demand response（SAREF4ENER）](samples/energy-saref4ener-en-us/) | 英文 | 需求响应资格、共享容量调度、计量交付及结算；15 张表、14,787 条记录 | 0.2.1 候选 0.1.5；统一自包含包，待平台验收 |
-| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | 中文 | 中文本体和对应业务事实；3 个函数、2 个已记录快照指标、1 个调查 Skill | 0.2.1 候选 0.1.5；统一自包含包，待平台验收 |
+| [Order Basics](samples/order-basics/) | 中文 | A small starting point for orders, products and object relationships | 原始 020： 0.1.2；0.2.1 不提供 |
+| [Supply Chain](samples/supply_ontology_hand/) | 中文 | PMC 生产计划与采购：欠货、可做与可承诺数量、缺料与跟进 | 原始 020： [0.1.16](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.16)；0.2.1： [0.1.17](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.17) |
+| [Supply Chain](samples/supply_ontology_en/) | 英文 | 英文版 PMC 与采购场景 | 原始 020： [0.1.1](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.1)；0.2.1： [0.1.11](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.11) |
+| [World Cup](samples/world-cup/) | 中文模型、英文数据 | 赛事、球队、球员和比赛事件 | 原始 020： 0.1.2；0.2.1： [0.1.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-world-cup-v0.1.7) |
+| [World Cup](samples/world-cup-en/) | 英文 | 赛事、球队、球员和比赛事件 | 原始 020： 0.1.0；0.2.1： [0.1.3](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-world-cup-en-v0.1.3) |
+| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 精密加工订单履约：交付、物料、执行合规、质量放行、采购与维护 | 0.2.1：[0.1.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-manufacturing-industry-en-us-v0.1.5) |
+| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | 中文 | 精密加工订单履约：交付、物料、执行合规、质量放行、采购与维护 | 0.2.1：[0.1.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-manufacturing-industry-zh-cn-v0.1.5) |
+| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | 英文 | 交易后运营、估值、集中度与限额 | 0.2.1：[0.2.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.7) |
+| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 交易后运营、估值、集中度与限额 | 0.2.1：[0.2.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.7) |
+| [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | 英文 | 到货质检、批次追溯、仓库与门店履约、补货和召回 | 0.2.1：[0.1.2](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.2) |
+| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | 中文 | 到货质检、批次追溯、仓库与门店履约、补货和召回 | 0.2.1：[0.1.2](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.2) |
+| [Energy demand response (SAREF4ENER)](samples/energy-saref4ener-en-us/) | 英文 | 可承诺容量、同时段调度、交付核实与结算 | 0.2.1：[0.1.6](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-energy-saref4ener-en-us-v0.1.6) |
+| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | 中文 | 可承诺容量、同时段调度、交付核实与结算 | 0.2.1：[0.1.6](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-energy-saref4ener-zh-cn-v0.1.6) |
 
+0.2.1 的每个样例都按业务角色重整：有业务 PRD、50 题业务场景测试集（参考答案独立计算）、按角色编写的 Skill 和 15 张体验卡；去掉指标，只为 Cypher 表达不了的计算保留函数，社区版即可完整使用。每个 Release 都在 OpenBKN 0.2.1 主线构建（arm64）上全新安装，在线核验了体验卡，验收证据与边界记录在各自的 `verification.json`。
 
-本轮[完整 13 包候选集](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r2)包含上表全部样例；[机器可读清单](tools/publication/candidates-0.2.1.json)与源码 manifest 双向核对，缺项、重复或未登记项会使构建失败。候选附固定源码提交及 SHA-256，完成本地校验后供 0.2.1 测试环境离线导入；真实安装、MCP、函数及业务场景验收仍待完成。已替代过程包按[发布保留与转正计划](docs/release-retention-20261030.md)归档后清理；r1/r2 完整候选继续保护。
+已发布 0.2.0 客户端继续使用根[官方目录](catalog.json)。更新后的样例服务按产品版本选择目录，见 [0.2.0 目录](catalogs/0.2.0/catalog.json)、[0.2.1 目录](catalogs/0.2.1/catalog.json)和[目录选择说明](docs/product-version-catalogs.md)。此前面向 0.2.1 的版本已在目录中标为撤回并删除附件，源码保留在 Git 历史中。
 
-已发布 0.2.0 客户端继续使用根[官方目录](catalog.json)。更新后的样例服务按产品版本选择目录，见 [0.2.0 目录](catalogs/0.2.0/catalog.json)、[0.2.1 目录](catalogs/0.2.1/catalog.json)和[目录选择说明](docs/product-version-catalogs.md)。当前 0.2.1 目录保留已有 FIBO/GS1，并新增独立验收的供应链补丁版本；其他样例仍以各自候选验收状态为准。OpenBKN 0.2.1 产品尚未正式发布，候选供其测试环境离线导入。
-
-两个GS1零售样例均要求 **OpenBKN 0.2.1及以上**，当前manifest兼容范围为 `>=0.2.1 <0.3.0`，数据内置，使用产品共享MariaDB。每语言提供3个通用函数、2个日期快照指标、1个调查Skill，以Apache-2.0的[GS1 Web Vocabulary](https://github.com/gs1/WebVoc)为语义参考，业务数据全部虚构，并明确本地扩展。8081首轮各100题：**英文96/100、中文95/100**；修复事件去重和题目契约后，只复测原未通过题，**英文4/4、中文5/5**，9题执行及证据均完成。未再次全量跑，不能称修订版全量100%。详见[验收报告](docs/retail-gs1-acceptance.zh-CN.md)。源码PR #186已合并，[英文0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0)与[中文0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.0)固定制品已发布，目录 PR #187 已合并。目前可在OpenBKN0.2.1及以上离线导入，旧020内置索引未修改。
-
-制造业双语 0.1.3 和能源双语 0.1.5 已纳入统一自包含候选，均使用产品共享 MariaDB，不再要求样例专属数据镜像。制造业保留 40 表、71 关系及 IOF 参考层；能源保留 15 表、3 个函数、2 个快照指标及调查 Skill。源码整合及本地验证的范围见[整合记录](docs/energy-saref4ener-readiness.md)。
-
-两个金融样例以 MIT 许可的[选定 FIBO 来源](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890)作语义参考，业务数据全部虚构，不宣称全量 FIBO。**[英文0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.5)** 与 **[中文0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.5)** 每语含3个函数、2个已记录快照指标、1个调查Skill，要求 **OpenBKN 0.2.1及以上**（`>=0.2.1 <0.3.0`）。0.2.5仅修正发布说明和执行能力要求，业务内容和题库不变；可下载固定包离线导入，在线可用版本以已合并官方目录为准。本修正版仅验证全新安装、兼容门槛与包一致性，不新增模型问答。历史单轮财务字段仍为**中英文各96/100**；指定历史工具路径为**4/4（该四项100%）**、0.2.4代表性技术检查为**16/16（该检查集100%）**，均不代表0.2.5全量问答准确率。详见[0.2.5发布验收与边界](docs/financial-fibo-release-0.2.5.zh-CN.md)。旧0.2.4及0.1.x Release 附件经本地归档后清理，Git 源码历史保留。
-
-世界杯数据是冻结的历史快照，包含截至 2022 年的男足赛事和截至 2019 年的女足赛事；不同明细表的覆盖范围有所差异。各样例的数据范围、许可和场景假设见对应 README。
+世界杯数据是冻结的历史快照，包含截至 2022 年的男足赛事和截至 2019 年的女足赛事。各样例的数据范围、许可和场景假设见对应 README。
 
 ## 场景评测
 
-提供评测集的样例在 `bkn-eval/` 中维护问题集、参考答案与基线校验：
+每个样例在 `bkn-eval/baselines/` 下维护业务场景测试集：按 PRD 场景编写的问题集（基础 12、中等 20、复杂 18）、不向被测方提供的答案集、从交付数据计算答案的脚本，以及外部 MCP 智能体的运行记录。
 
-- [供应链评测](samples/supply_ontology_hand/bkn-eval/README.md)
-- [英文供应链评测](samples/supply_ontology_en/bkn-eval/README.md)
-- [世界杯评测](samples/world-cup/bkn-eval/README.md)：50 道中文题，明确输出字段和排序，提供冻结参考答案与评分脚本。
-- [英文世界杯评测](samples/world-cup-en/bkn-eval/README.md)：基础查询统计 10 题、多表关联 12 题、排名和跨届对比 14 题、综合分析 14 题。
-- [英文 FIBO 评测](samples/financial-fibo-en-us/bkn-eval/README.md)与[中文 FIBO 评测](samples/financial-fibo-zh-cn/bkn-eval/README.md)：每个样例 10 个场景、100 道题，其中简单 30 题、中等 40 题、复杂 30 题，提供冻结完整答案及金融回归校验。
-
-由独立的外部 Agent 通过 MCP 解答问题，评测过程中不提供参考答案，再核对业务值、输出字段及排序。每次评测记录实际使用的数据基线、样例包和测试结果。
+由独立的外部 Agent 通过 MCP 解答问题，评测过程中不提供参考答案，完成后核对业务值。每次评测记录实际使用的样例包和测试结果。
 
 ## 开发与发布
 
@@ -96,4 +83,4 @@ samples/<directory>/
 
 [供应链缺料规则 #190](docs/shortage-rule-190.md)：已停用，供应链 0.1.17 与英文版 0.1.11 不再发布。
 
-发布清理及能源／制造业 021 验收、转正状态见[版本保留与转正计划](docs/release-retention-20261030.md)。r1/r2 完整候选包受保护，尚未验收的四包不进入稳定清单。
+0.2.1 正式发布清单、撤回的旧版本和删除的 Release 见 [0.2.1 发布记录](docs/release-0.2.1-20261031.md)；更早的保留计划见[版本保留与转正计划](docs/release-retention-20261030.md)。

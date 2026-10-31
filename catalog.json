@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000016",
-    "sequence": 16,
+    "revision": "catalog-000017",
+    "sequence": 17,
     "channel": "stable",
-    "publishedAt": "2026-10-29T19:07:52Z"
+    "publishedAt": "2026-10-31T06:27:10Z"
   },
   "spec": {
     "entries": [
@@ -635,7 +635,7 @@
         "displayName": "Food Supply and Recall",
         "summary": "Synthetic food distribution, fulfillment and recall operations.",
         "publishedAt": "2026-10-20T23:50:47Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "GS1 food-supply operations; original EN96/ZH95; targeted EN4/4,ZH5/5; OpenBKN>=0.2.1",
@@ -677,7 +677,8 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/1533b268e1e37421671e02fb57499be03c0e8f45/samples/retail-gs1-en-us/releases/0.1.0/verification.json",
           "digest": "sha256:fc11f4408863d305d3aaf6f5322a6f27a73c50992ada90cc48b2e6b2fe1437fc"
-        }
+        },
+        "withdrawalReason": "Superseded by retail-gs1-en-us 0.1.2 for OpenBKN 0.2.1; historical metadata retained, release assets archived before cleanup."
       },
       {
         "sampleId": "retail-gs1-zh-cn",
@@ -685,7 +686,7 @@
         "displayName": "食品供应链追溯与召回",
         "summary": "虚构食品流通、履约和召回闭环。",
         "publishedAt": "2026-10-20T23:50:49Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "食品供应链运营；首轮英文96/中文95；定向英文4/4、中文5/5；要求OpenBKN>=0.2.1",
@@ -727,7 +728,8 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/1533b268e1e37421671e02fb57499be03c0e8f45/samples/retail-gs1-zh-cn/releases/0.1.0/verification.json",
           "digest": "sha256:85dcabca84af35bf333a7f84656c22dc7566dd06a701d15d44be92cb59fe78e5"
-        }
+        },
+        "withdrawalReason": "Superseded by retail-gs1-zh-cn 0.1.2 for OpenBKN 0.2.1; historical metadata retained, release assets archived before cleanup."
       },
       {
         "sampleId": "financial-fibo-en-us",
@@ -735,7 +737,7 @@
         "displayName": "Financial Portfolio Operations (EN)",
         "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
         "publishedAt": "2026-10-21T04:37:30Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "FIBO 0.2.5: publication description and execution requirements corrected; unchanged business content; requires OpenBKN 0.2.1 or later.",
@@ -777,7 +779,8 @@
           ],
           "platformVersion": ">=0.2.1 <0.3.0",
           "requiredExtensions": []
-        }
+        },
+        "withdrawalReason": "Superseded by financial-fibo-en-us 0.2.7 for OpenBKN 0.2.1; historical metadata retained, release assets archived before cleanup."
       },
       {
         "sampleId": "financial-fibo-zh-cn",
@@ -785,7 +788,7 @@
         "displayName": "金融投资组合运营（中文）",
         "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
         "publishedAt": "2026-10-21T04:37:33Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "FIBO 0.2.5: publication description and execution requirements corrected; unchanged business content; requires OpenBKN 0.2.1 or later.",
@@ -827,7 +830,8 @@
           ],
           "platformVersion": ">=0.2.1 <0.3.0",
           "requiredExtensions": []
-        }
+        },
+        "withdrawalReason": "Superseded by financial-fibo-zh-cn 0.2.7 for OpenBKN 0.2.1; historical metadata retained, release assets archived before cleanup."
       }
     ]
   }
