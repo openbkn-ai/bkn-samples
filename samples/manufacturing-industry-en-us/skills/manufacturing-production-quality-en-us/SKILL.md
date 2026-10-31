@@ -42,4 +42,4 @@ Object type names are the labels; relation type names are "sourcetable_foreignke
 
 ## How to answer
 
-Lead with the conclusion (compliant or not, yield, releasable or not, what is overdue), then the basis: executions, machines, operators, shifts, results, specifications and dates. List every item in list questions and give the reason for each non-compliance. Every conclusion is advice and releases, dispatches or stops nothing.
+Lead with the conclusion (compliant or not, yield, releasable or not, what is overdue), then the basis: executions, machines, operators, shifts, results, specifications and dates. List every item in list questions; for each non-compliance give the execution, its work order and the reason, and count only after listing so the number in the conclusion matches the list. Every conclusion is advice and releases, dispatches or stops nothing.
