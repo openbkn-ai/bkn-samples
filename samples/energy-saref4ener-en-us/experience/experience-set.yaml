@@ -1,0 +1,244 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: en-US
+  source:
+    answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v1/answer-set-v1.yaml
+    setId: energy-business-scenarios-v1
+spec:
+  businessDate: '2027-02-28'
+  cases:
+  - id: Q-02
+    title: How much a site can respond
+    explanation: Read the site response cap, then follow device → site to list its devices.
+    question: What is the most SIT-001 can respond in kW, and which devices does it have?
+    answer: SIT-001 can respond with at most 30 kW; its devices are DEV-001, DEV-002 and DEV-003.
+    expected:
+      response_cap_kw: 30
+      devices:
+      - DEV-001
+      - DEV-002
+      - DEV-003
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (d:devices)-[:device_to_site]->(s:sites)
+        WHERE s.site_id = 'SIT-001'
+  - id: Q-03
+    title: Which devices are inactive
+    explanation: Inactive devices cannot respond and count zero capacity.
+    question: Which devices are currently inactive?
+    answer: DEV-143 and DEV-149 are inactive.
+    expected:
+      devices:
+      - DEV-143
+      - DEV-149
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (d:devices)
+        WHERE d.status_code = 'inactive'
+        RETURN d.device_id AS devices
+  - id: Q-04
+    title: How much a device can shed
+    explanation: Device maximum reduction and minimum service load; follow meter → device for its meter.
+    question: How much can DEV-001 reduce at most, how much load must it keep for safe operation, and which meter measures it?
+    answer: DEV-001 can shed at most 16 kW, must keep 9 kW of service load and is metered by MTR-001.
+    expected:
+      max_reduction_kw: 16
+      min_service_kw: 9
+      meter_id: MTR-001
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (m:meters)-[:meter_to_device]->(d:devices)
+        WHERE d.device_id = 'DEV-001'
+        RETURN d.max_reduction_kw AS max_reduction_kw, d.min_service_kw AS min_service_kw, m.meter_id AS meter_id
+      graph: |-
+        MATCH (m:meters)-[:meter_to_device]->(d:devices)
+        WHERE d.device_id = 'DEV-001'
+  - id: Q-49
+    title: Who owns a device
+    explanation: Follow device → site → customer and read the site response cap.
+    question: Which site and customer does DEV-016 belong to, and what is that site's response cap?
+    answer: DEV-016 belongs to site SIT-006 of customer CUS-006; the site can respond with at most 55 kW.
+    expected:
+      site_id: SIT-006
+      customer_id: CUS-006
+      response_cap_kw: 55
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (d:devices)-[:device_to_site]->(s:sites)-[:site_to_customer]->(c:customers)
+        WHERE d.device_id = 'DEV-016'
+        RETURN s.site_id AS site_id, c.customer_id AS customer_id, s.response_cap_kw AS response_cap_kw
+      graph: |-
+        MATCH (d:devices)-[:device_to_site]->(s:sites)-[:site_to_customer]->(c:customers)
+        WHERE d.device_id = 'DEV-016'
+  - id: Q-44
+    title: Which events are cancelled
+    explanation: Cancelled events are neither dispatched nor settled.
+    question: Which response events have been cancelled?
+    answer: The cancelled events are EVT-009, EVT-052 and EVT-084.
+    expected:
+      events:
+      - EVT-009
+      - EVT-052
+      - EVT-084
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (e:response_events)
+        WHERE e.status_code = 'cancelled'
+        RETURN e.event_id AS events
+  - id: Q-09
+    title: How much an event can commit
+    explanation: Per device the minimum of offer, maximum reduction, load headroom and caps; each site total limited to its cap.
+    question: Of the devices offered for EVT-001, how many kW can be committed under load and device constraints?
+    answer: The devices offered for EVT-001 can commit 331 kW in total.
+    expected:
+      eligible_kw: 331
+    surfaces:
+    - agent
+  - id: Q-14
+    title: Which sites hit their cap
+    explanation: Device capacity adds up per site and is cut back to the site response cap.
+    question: In EVT-001, which sites have device eligibility that adds up to more than the site response cap, and what are they limited to?
+    answer: 'Four sites exceed their cap in EVT-001: SIT-002 39 kW cut to 35, SIT-003 48 to 40, SIT-009 42 to 30, SIT-010 41 to 35.'
+    expected:
+      sites:
+        SIT-002:
+          devices_kw: 39
+          capped_kw: 35
+        SIT-003:
+          devices_kw: 48
+          capped_kw: 40
+        SIT-009:
+          devices_kw: 42
+          capped_kw: 30
+        SIT-010:
+          devices_kw: 41
+          capped_kw: 35
+    surfaces:
+    - agent
+  - id: Q-18
+    title: Where a device is committed
+    explanation: Events in one block share devices; follow allocation → event for committed events.
+    question: In the 2026-11-04 peak_a block, which events was DEV-016 committed to at the same time?
+    answer: In that block on 2026-11-04, DEV-016 is committed to both EVT-001 and EVT-002.
+    expected:
+      events:
+      - EVT-001
+      - EVT-002
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (a:dispatch_allocations)-[:allocation_to_event]->(e:response_events)
+        WHERE a.device_id = 'DEV-016' AND e.response_date = '2026-11-04' AND e.block_code = 'peak_a' AND a.status_code = 'committed'
+        RETURN e.event_id AS events
+      graph: |-
+        MATCH (a:dispatch_allocations)-[:allocation_to_event]->(e:response_events)
+        WHERE a.device_id = 'DEV-016' AND e.response_date = '2026-11-04' AND e.block_code = 'peak_a' AND a.status_code = 'committed'
+  - id: Q-21
+    title: Can the target be reached
+    explanation: Events in a block share devices by priority and cost; committed plus new is compared with the target.
+    question: Can EVT-061 reach its target with the current plan, and how many kW short is it?
+    answer: EVT-061 cannot reach its target with the current plan; it is 38 kW short.
+    expected:
+      target_met: false
+      shortfall_kw: 38
+    surfaces:
+    - agent
+  - id: Q-23
+    title: How execution went
+    explanation: 'Count receipts by status: completed, failed, customer declined.'
+    question: In the execution receipts, how many completed, how many failed and how many were declined by the customer?
+    answer: Receipts show 333 completed, 5 failed and 3 declined by the customer.
+    expected:
+      completed: 333
+      failed: 5
+      declined: 3
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (x:execution_logs)
+        RETURN sum(CASE WHEN x.status_code = 'completed' THEN 1 ELSE 0 END) AS completed, sum(CASE WHEN x.status_code = 'failed' THEN 1 ELSE 0 END) AS failed, sum(CASE WHEN x.status_code = 'declined' THEN 1 ELSE 0 END) AS declined
+  - id: Q-24
+    title: Was delivery met
+    explanation: Verified energy = baseline × hours − reading, divided by committed energy, compared with the minimum.
+    question: How many kWh of reduction were verified for EVT-001, what is the delivery ratio, and did it meet the threshold?
+    answer: EVT-001 committed 37.5 kWh and verified 30 kWh, a delivery ratio of 0.8, which meets the minimum.
+    expected:
+      committed_kwh: 37.5
+      verified_kwh: 30
+      delivery_ratio: 0.8
+      met: true
+    surfaces:
+    - agent
+  - id: Q-33
+    title: How much is posted
+    explanation: Count ledger rows by status.
+    question: How many settlements are posted in the ledger, and how many are still pending?
+    answer: The ledger has 56 posted rows and 5 pending.
+    expected:
+      posted: 56
+      pending: 5
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (s:settlements)
+        RETURN sum(CASE WHEN s.status_code = 'posted' THEN 1 ELSE 0 END) AS posted, sum(CASE WHEN s.status_code = 'pending' THEN 1 ELSE 0 END) AS pending
+  - id: Q-35
+    title: Recomputed vs ledger
+    explanation: Recompute revenue from verified energy and the reward rate, then compare with the latest posted revenue.
+    question: How much does EVT-025's revenue from verified energy differ from the revenue posted in the ledger?
+    answer: EVT-025 recomputes to 37.2 CNY against 42.2 CNY posted, a difference of -5 CNY.
+    expected:
+      recomputed_revenue_cny: 37.2
+      posted_revenue_cny: 42.2
+      difference_cny: -5.0
+    surfaces:
+    - agent
+  - id: Q-39
+    title: Settlement totals
+    explanation: Add up only past events whose settlement is determinable; revenue depends on the threshold, compensation is paid regardless.
+    question: Up to today, for past events whose settlement can be determined, what are total revenue and total customer compensation, the net, and how many events are included?
+    answer: '55 past events have a determinable settlement: revenue 1823.34 CNY, compensation 665.52 CNY, net 1157.82 CNY.'
+    expected:
+      events: 55
+      revenue_cny: 1823.34
+      cost_cny: 665.52
+      net_cny: 1157.82
+    surfaces:
+    - agent
+  - id: Q-50
+    title: Which settlements are open
+    explanation: A missing receipt, missing reading or conflicting baseline leaves settlement undeterminable, never zero.
+    question: Which past events cannot have their settlement determined yet, and what is blocking each?
+    answer: Settlement is still undeterminable for EVT-021 (conflicting baseline), EVT-029 (missing meter reading) and EVT-033 (missing receipt).
+    expected:
+      events:
+      - EVT-021
+      - EVT-029
+      - EVT-033
+    surfaces:
+    - agent

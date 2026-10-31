@@ -50,11 +50,11 @@
 
 台账只取posted_date不晚于业务日、known_date不晚于知识日的posted记录中最新入账日；该日业务内容冲突则对账未知，并保留已知物理交付和应收。没有台账则recorded_revenue_cny/revenue_difference_cny为空，不是假定账面零。
 
-## 输出、指标与Skill
+## 输出与Skill
 
 公共输出为scope、rows、issues（code/source_ids/event_ids）、evidence（表名→原始ID）、completeness（complete/partial）、units。能力评估另有device_rows，计划另有allocation_rows（event_id/device_id/site_id/kind/allocated_kw/cost_cny_kwh）；不得静默截断必要证据。未公告或不存在事件报告event_unavailable。
 
-仅两个原子快照指标：capacity_snapshots.eligible_kw和settlement_snapshots.delivery_ratio。它们属于单个事件／观察日／知识日快照，不是实时结果，不跨期相加。调查Skill先核口径、选择三函数之一、比较相同口径快照和重算、归纳异常和下一步；引用文件实物放在自身references目录。
+不使用指标。capacity_snapshots 和 settlement_snapshots 是单个事件、业务日、知识截止日的已记录快照，用 Cypher 读取并与重算核对，不能替代重算，不跨期相加。每种语言两个只读 Skill：容量与调度（运营、能源经理）、执行与结算（值班、结算），先核口径，再用 Cypher 查数或调用三函数之一。
 
 函数参数必须在读源之前验证；SDK缺页、部分错误、重复主键、每表超过20000行或输出超过1MiB均明确失败，要求缩小范围或修复源，不返回伪完整数据。此为本地实现边界，未宣称平台运行认证或模型准确率。
 

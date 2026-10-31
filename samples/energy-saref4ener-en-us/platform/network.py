@@ -62,7 +62,7 @@ def main():
         obj=single(cli('bkn','object-type','get',KN,table));require(obj['data_source']['id']==bindings[table],'binding differs')
         data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
     capabilities=register_capabilities(KN,apply=sys.argv[1]=='install')
-    require(len(capabilities['tool_ids'])==3 and len(capabilities['metrics'])==2 and len(capabilities['skills']['skills'])==1,'capability counts differ')
+    require(len(capabilities['tool_ids'])==3 and len(capabilities['skills']['skills'])==2,'capability counts differ')
     result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership','15-object-types',str(sum(len(s.get('foreign_keys',{})) for s in specs.values()))+'-relations','15-resource-bindings','15-live-object-queries')],'degrade':[],'message':''}
     Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result));print(json.dumps(result))
 if __name__=='__main__':
