@@ -7,16 +7,17 @@
     "aliases": [],
     "displayName": "Food Supply and Recall",
     "summary": "Synthetic food distribution, fulfillment and recall operations.",
-    "version": "0.1.1"
+    "version": "0.1.2"
   },
   "spec": {
     "studio": {
       "licenseNote": "MIT synthetic assets; GS1 WebVoc Apache-2.0 semantic references",
       "questions": [
-        "Which lots are quarantined?",
-        "Where did affected lots go?",
-        "What are March 2027 replenishment gaps?"
-      ]
+        "PRD-001 has plenty on hand at WH-001. Why is so little available? Explain by lot.",
+        "Where is REC-001 stock now, and how many units are on hand at each place?",
+        "Against the March forecast, how many units of PRD-001 must WH-001 replenish in March?"
+      ],
+      "experienceSet": "experience/experience-set.yaml"
     },
     "database": {
       "engine": "mariadb",
@@ -37,7 +38,7 @@
     "components": {
       "objects": true,
       "relations": true,
-      "metrics": true,
+      "metrics": false,
       "functions": true,
       "skills": true
     },
