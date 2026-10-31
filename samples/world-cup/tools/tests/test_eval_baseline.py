@@ -1,52 +1,52 @@
-"""Contracts for the Chinese World Cup scenario baseline."""
+"""Contracts for the Chinese World Cup business-scenario baseline."""
 import importlib.util
 import json
+from collections import Counter
 from pathlib import Path
 import yaml
 
 SAMPLE = Path(__file__).resolve().parents[2]
-EVAL = SAMPLE / 'bkn-eval'
 
 
-def test_recalculated_chinese_reference_matches_frozen_csv():
-    spec = importlib.util.spec_from_file_location('worldcup_cn_reference', EVAL / 'scripts/recalculate.py')
+BASELINE = SAMPLE / 'bkn-eval' / 'baselines' / '2026-10-31-business-scenarios-v1'
+
+
+def _oracle():
+    spec = importlib.util.spec_from_file_location('worldcup_oracle_' + SAMPLE.name.replace('-', '_'), BASELINE / 'oracle.py')
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    assert module.calculate() == yaml.safe_load(module.ANSWER.read_text())
+    return module
 
 
-def test_question_distribution_and_complete_table_coverage():
-    questions = yaml.safe_load((EVAL / 'datasets/question-set-v1.yaml').read_text())['questions']
-    cases = json.loads((EVAL / 'gold/cases.json').read_text())
-    assert len({q['id'] for q in questions}) == 50
-    assert {category: sum(q['category'] == category for q in questions) for category in 'BJRA'} == {'B': 10, 'J': 12, 'R': 14, 'A': 14}
-    assert {q['id'] for q in questions} == {q['id'] for q in cases}
-    assert all(q['output_fields'] and q['row_order'] for q in questions)
-    assert {table for case in cases for table in case['tables']} == {p.stem for p in (SAMPLE / 'data').glob('*.csv')}
+def test_answer_set_is_what_the_oracle_computes_from_the_locked_csv():
+    oracle = _oracle()
+    computed = oracle.calculate()
+    answers = yaml.safe_load((BASELINE / 'answer-set-v1.yaml').read_text(encoding='utf-8'))['answers']
+    assert {a['id']: a['expected'] for a in answers} == {qid: oracle.expected(qid, rows) for qid, rows in computed.items()}
 
 
-def test_business_answers_match_the_same_locked_snapshot():
+def test_question_set_is_business_language_without_answers():
+    questions = yaml.safe_load((BASELINE / 'question-set-v1.yaml').read_text(encoding='utf-8'))
+    items = questions['questions']
+    assert questions['answer_set_access'] == 'forbidden' and all('expected' not in q for q in items)
+    assert len({q['id'] for q in items}) == 50 and len({q['scenario'] for q in items}) == 10
+    assert sorted(Counter(q['difficulty'] for q in items).values()) == [12, 18, 20]
+    tables = {t for ref in json.loads((BASELINE / 'reference-queries.json').read_text()).values() for t in ref['tables']}
+    assert tables == {p.stem for p in (SAMPLE / 'data').glob('*.csv')}
+
+
+def test_both_languages_share_data_and_answers():
     english = SAMPLE.parent / 'world-cup-en'
     assert (SAMPLE / 'dataset.lock').read_bytes() == (english / 'dataset.lock').read_bytes()
-    cn = yaml.safe_load((EVAL / 'gold/answer-set-v1.yaml').read_text())
-    en = yaml.safe_load((english / 'bkn-eval/gold/answer-set-v1.yaml').read_text())
-    assert cn['source_commit'] == en['source_commit']
-    assert cn['row_counts'] == en['row_counts']
-    assert cn['answers'] == en['answers']
-    assert sum(cn['row_counts'].values()) == 81200
+    other = english / BASELINE.relative_to(SAMPLE)
+    assert (BASELINE / 'oracle.py').read_bytes() == (other / 'oracle.py').read_bytes()
+    assert (BASELINE / 'reference-queries.json').read_bytes() == (other / 'reference-queries.json').read_bytes()
+    cn = yaml.safe_load((BASELINE / 'answer-set-v1.yaml').read_text(encoding='utf-8'))['answers']
+    en = yaml.safe_load((other / 'answer-set-v1.yaml').read_text(encoding='utf-8'))['answers']
+    assert [a['expected'] for a in cn] == [a['expected'] for a in en]
 
 
-def test_grading_preserves_identity_and_requires_ordered_complete_results():
-    spec = importlib.util.spec_from_file_location('worldcup_cn_grader', EVAL / 'scripts/grade_answers.py')
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    assert module.same_value(3, '3', 0.0005)
-    assert not module.same_value(3, 3.0001, 0.0005)
-    assert not module.same_value('P-00001', 'P-1', 0.0005)
-    assert not module.same_value(2.5, 'nan', 0.0005)
-    expected = [{'player_id': 'P-00001', 'ranking': 1}, {'player_id': 'P-00002', 'ranking': 1}]
-    assert not module.row_differences(expected, expected, 0.0005)
-    assert module.row_differences(expected, list(reversed(expected)), 0.0005)
-    assert module.row_differences(expected, expected[:1], 0.0005)
-    report = module.grade([])
-    assert report['correct'] == 0 and report['total'] == 50
+def test_sample_publishes_skills_and_no_sql_tool():
+    manifest = yaml.safe_load((SAMPLE / 'sample.yaml').read_text())
+    assert manifest['spec']['components']['skills'] and not manifest['spec']['components']['functions']
+    assert not (SAMPLE / 'vega_sql_execute.openapi.json').exists() and 'toolbox' not in (SAMPLE / 'run.sh').read_text()

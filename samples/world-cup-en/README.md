@@ -1,34 +1,37 @@
 # World Cup
 
-Explore tournament editions, teams, players, stadiums and match events through an English knowledge network and the standard MCP object-query tools.
+Query tournaments, teams, players, matches and events such as goals, cards, substitutions and shootouts from Joshua C. Fjelstul's open World Cup history data. Includes 27 data tables, the ontology and 1 business Skill. Business needs and rules are in the [PRD](docs/PRD.md).
 
-The locked snapshot contains **27 CSV tables and 81,200 rows**: 22 men’s editions through 2022 and eight women’s editions through 2019. Detail coverage varies by table. Names, accents and historical identities retain their source spelling.
+## Install and try
 
-## Contents
+1. Sign in to OpenBKN and open **Quick start** on the home page.
+2. Refresh the official catalog, choose **World Cup (EN)** and click **Install**; it needs **OpenBKN >=0.2.1 <0.3.0**.
+3. Wait for installation and verification to finish, then open the World Cup knowledge network.
+4. Try the experience cards in smart Q&A, data query and graph exploration, or connect an external agent over MCP to query objects and use the Skill.
 
-- 27 object types with all 410 CSV fields, 29 relationships and four concept groups.
-- 50 evaluation questions, deterministic reference answers and a CSV-based recalculation script.
-- Managed installation and verification hooks, with a separate database and knowledge network named `worldcup_en`.
+Without access to the official catalog, download this sample's `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases) and install it with **Import offline package** in Quick start.
 
-No custom functions, metrics or executable business Skills are declared in this release. Independent external agents query the published object model through MCP and compute the requested results.
+The locked snapshot contains **27 CSV tables and 81,200 rows**: 22 men's World Cups through 2022 and 8 women's through 2019. Detail records cover different editions; names of people, teams and awards keep the source spelling.
 
-## Installation
+## Capabilities
 
-Open **Studio → One-click onboarding**, refresh the official catalog, select **World Cup (EN)** and click **Install**. Wait for installation and verification to complete, then open the knowledge network.
+Every question can be answered with Cypher, so the sample ships no functions and no metrics, and the Community edition can use all of it.
 
-If the catalog is unreachable, download this sample’s `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases), choose **Import offline package**, then install it. The referenced data image must be reachable or preloaded in the target cluster.
+- **Cypher queries**: tournaments and hosts, teams and confederations, squads and players, managers and referees, stadiums, matches and scores, goals, cards, substitutions, shootouts, group tables and final standings, awards.
+- **Skill**: "World Cup history analysis" for sports editors, team analysts and tournament data stewards, stating the business rules, Cypher patterns and how to answer.
 
-See [the import guide](docs/import-guide.en-US.md), [model semantics](kn/README.md) and the repository’s [evaluation suite](https://github.com/openbkn-ai/bkn-samples/tree/main/samples/world-cup-en/bkn-eval). The evaluation suite is maintained in source control and is excluded from the runtime installation package. To remove an installed sample, use **Uninstall** and wait for cleanup to finish before reinstalling. Installation history is retained.
+## Experience cards
 
-## Questions to try
+15 experience cards are taken from the test set, covering editions, the 2022 tournament, the final and its shootout, goals and cards, Messi's awards and goals, a co-hosted tournament, the 1950 format and the two Müllers. The cards' data-query and graph Cypher are checked online after installation with `tools/acceptance/experience_set.py`.
 
-- Which awards did Lionel Messi receive in WC-2014 and WC-2022?
-- Who won the 2014, 2018 and 2022 men’s tournaments?
-- Which players share a top-five scorer rank at WC-2022, excluding own goals?
-- How do Argentina’s match results, credited goals and shootout outcomes reconcile at WC-2022?
+## Acceptance and maintenance
+
+The test set is the [business-scenario test set v1](bkn-eval/baselines/2026-10-31-business-scenarios-v1/README.md); reference answers are computed by reference SQL directly from the locked CSV files and are not shipped in the package. After installation, an agent that has not seen the answers runs every question once; below 100%, record why it failed and change the ontology description or the Skill first, never the questions or answers.
+
+The installation hooks call `run.sh` and register the Skill; users never run scripts by hand. To upgrade, uninstall the old sample before installing the new version.
 
 ## Data and attribution
 
-Data: [Fjelstul World Cup Database](https://github.com/jfjelstul/worldcup), commit `35a8667f518b07469182ae16d35574dd0e7a00fb`. The CSV hashes are recorded in `dataset.lock`.
+Data: [Fjelstul World Cup Database](https://github.com/jfjelstul/worldcup), commit `35a8667f518b07469182ae16d35574dd0e7a00fb`; the CSV hashes are recorded in [dataset.lock](dataset.lock).
 
 © 2023 Joshua C. Fjelstul, Ph.D. Data is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Retain the attribution and license when sharing data or adaptations.

@@ -1,0 +1,329 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: zh-CN
+  source:
+    answerSet: bkn-eval/baselines/2026-10-31-business-scenarios-v1/answer-set-v1.yaml
+    setId: worldcup-business-scenarios-v1
+spec:
+  businessDate: '2022-12-18'
+  cases:
+  - id: B-01
+    title: 有几届世界杯
+    explanation: 赛事名称含 Women's 的是女足，其余是男足。
+    question: 数据里一共有多少届男足世界杯、多少届女足世界杯？
+    answer: 数据里有 22 届男足世界杯、8 届女足世界杯。
+    expected:
+      men: 22
+      women: 8
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (t:tournaments)
+        RETURN sum(CASE WHEN t.tournament_name CONTAINS 'Women' THEN 0 ELSE 1 END) AS men, sum(CASE WHEN t.tournament_name CONTAINS 'Women' THEN 1 ELSE 0 END) AS women
+  - id: B-03
+    title: 2022 年世界杯概况
+    explanation: 赛事记录直接给出年份、日期、主办国和冠军。
+    question: 2022 年世界杯是哪年哪天开幕、哪天结束？在哪里举办？冠军是谁？
+    answer: 2022 年世界杯于 2022-11-20 开幕、2022-12-18 结束，在 Qatar（卡塔尔）举办，冠军是 Argentina（阿根廷）。
+    expected:
+      rows:
+      - year: 2022
+        start_date: '2022-11-20'
+        end_date: '2022-12-18'
+        host_country: Qatar
+        winner: Argentina
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (t:tournaments)
+        WHERE t.tournament_id = 'WC-2022'
+        RETURN t.year AS year, t.start_date AS start_date, t.end_date AS end_date, t.host_country AS host_country, t.winner AS winner
+  - id: B-06
+    title: 2022 年的红黄牌
+    explanation: 黄牌、红牌、两黄变红、罚下各自统计，不能相加。
+    question: 2022 年世界杯一共出现了多少次黄牌、红牌、两黄变一红和罚下？
+    answer: 2022 年世界杯有 224 次黄牌、1 次红牌、3 次两黄变红、4 次罚下。
+    expected:
+      rows:
+      - yellow_cards: 224
+        red_cards: 1
+        second_yellows: 3
+        sendings_off: 4
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (b:bookings)
+        WHERE b.tournament_id = 'WC-2022'
+        RETURN sum(b.yellow_card) AS yellow_cards, sum(b.red_card) AS red_cards, sum(b.second_yellow_card) AS second_yellows, sum(b.sending_off) AS sendings_off
+  - id: B-07
+    title: 2022 年决赛
+    explanation: 比分不含点球大战，点球大战比分单列。
+    question: 2022 年世界杯决赛是哪天、谁对谁？比分多少？点球大战比分多少？
+    answer: 2022 年世界杯决赛 M-2022-64 于 2022-12-18 进行，Argentina 对 France，比分 3–3，点球大战 4–2。
+    expected:
+      rows:
+      - match_id: M-2022-64
+        match_date: '2022-12-18'
+        home_team_name: Argentina
+        away_team_name: France
+        score: 3–3
+        score_penalties: 4–2
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (m:matches)
+        WHERE m.tournament_id = 'WC-2022' AND m.stage_name = 'final'
+        RETURN m.match_id AS match_id, m.match_date AS match_date, m.home_team_name AS home_team_name, m.away_team_name AS away_team_name, m.score AS score, m.score_penalties AS score_penalties
+      graph: |-
+        MATCH (m:matches)-[:rel_matches_stadium]->(s:stadiums)
+        WHERE m.tournament_id = 'WC-2022' AND m.stage_name = 'final'
+  - id: B-08
+    title: 2022 年进了多少球
+    explanation: 球员进球不含乌龙球，比赛中的点球算进球，点球大战不算。
+    question: 2022 年世界杯一共进了多少球？其中球员自己打进的、乌龙球、比赛中的点球各多少？
+    answer: 2022 年世界杯共进 172 球：球员进球 170 个、乌龙球 2 个，其中比赛内点球 17 个。
+    expected:
+      rows:
+      - all_goals: 172
+        personal_goals: 170
+        own_goals: 2
+        match_penalties: 17
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (g:goals)
+        WHERE g.tournament_id = 'WC-2022'
+        RETURN count(*) AS all_goals, sum(CASE WHEN g.own_goal = 0 THEN 1 ELSE 0 END) AS personal_goals, sum(g.own_goal) AS own_goals, sum(g.penalty) AS match_penalties
+  - id: J-01
+    title: 梅西的奖项
+    explanation: 沿获奖记录 → 球员找到梅西的全部奖项。
+    question: 梅西在 2014 年和 2022 年世界杯拿过哪些奖？
+    answer: 梅西 Lionel Messi（P-14758）在 WC-2014（2014 FIFA Men's World Cup）获 A-1 Golden Ball，在 WC-2022（2022 FIFA Men's World Cup）获 A-1 Golden Ball 和 A-5 Silver Boot。
+    expected:
+      rows:
+      - tournament_id: WC-2014
+        tournament_name: 2014 FIFA Men's World Cup
+        award_id: A-1
+        award_name: Golden Ball
+        player_id: P-14758
+        player_name: Lionel Messi
+      - tournament_id: WC-2022
+        tournament_name: 2022 FIFA Men's World Cup
+        award_id: A-1
+        award_name: Golden Ball
+        player_id: P-14758
+        player_name: Lionel Messi
+      - tournament_id: WC-2022
+        tournament_name: 2022 FIFA Men's World Cup
+        award_id: A-5
+        award_name: Silver Boot
+        player_id: P-14758
+        player_name: Lionel Messi
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (a:award_winners)-[:rel_award_winners_player]->(p:players)
+        WHERE p.player_id = 'P-14758'
+  - id: J-04
+    title: 德国 2014 年主帅
+    explanation: 教练任命记录给出每届各队的主教练。
+    question: 2014 年世界杯德国队的主教练是谁？
+    answer: 2014 年德国 Germany（T-31）的主教练是 Joachim Löw（M-234）。
+    expected:
+      rows:
+      - team_id: T-31
+        team_name: Germany
+        manager_id: M-234
+        manager_name: Joachim Löw
+    surfaces:
+    - agent
+  - id: J-05
+    title: 决赛主裁判
+    explanation: 裁判执法记录给出每场比赛的主裁判。
+    question: 2022 年世界杯决赛的主裁判是谁？来自哪个国家？
+    answer: 2022 年决赛 M-2022-64 的主裁判是 Szymon Marciniak（R-269），来自 Poland（波兰）。
+    expected:
+      rows:
+      - match_id: M-2022-64
+        referee_id: R-269
+        referee_name: Szymon Marciniak
+        country_name: Poland
+    surfaces:
+    - agent
+  - id: J-07
+    title: 联合举办的世界杯
+    explanation: 联合举办的赛事每个主办国单独列出。
+    question: 2002 年世界杯是哪些国家联合举办的？
+    answer: WC-2002（2002 FIFA Men's World Cup）由 Japan（日本）和 South Korea（韩国）联合举办。
+    expected:
+      rows:
+      - tournament_id: WC-2002
+        tournament_name: 2002 FIFA Men's World Cup
+        host_country: Japan
+      - tournament_id: WC-2002
+        tournament_name: 2002 FIFA Men's World Cup
+        host_country: South Korea
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (h:host_countries)
+        WHERE h.tournament_id = 'WC-2002'
+        RETURN h.tournament_id AS tournament_id, h.tournament_name AS tournament_name, h.team_name AS host_country
+  - id: J-08
+    title: 决赛点球大战
+    explanation: 点球大战罚球按记录顺序列出，只说罚进或未罚进。
+    question: 2022 年世界杯决赛的点球大战，双方谁罚了、罚进没有？
+    answer: 2022 年决赛点球大战：Argentina 的 Lionel Messi（PK-389，P-14758）、Paulo Dybala（PK-390，P-28151）、Leandro Paredes（PK-391，P-27582）、Gonzalo Montiel（PK-392，P-91431）全部罚进（1）；France 的 Kylian Mbappé（PK-393，P-64077）罚进（1），Kingsley Coman（PK-394，P-06614）和 Aurélien Tchouaméni（PK-395，P-54517）未罚进（0），Randal Kolo Muani（PK-396，P-92987）罚进（1）。
+    expected:
+      rows:
+      - penalty_kick_id: PK-389
+        team_name: Argentina
+        player_id: P-14758
+        player_name: Lionel Messi
+        converted: 1
+      - penalty_kick_id: PK-390
+        team_name: Argentina
+        player_id: P-28151
+        player_name: Paulo Dybala
+        converted: 1
+      - penalty_kick_id: PK-391
+        team_name: Argentina
+        player_id: P-27582
+        player_name: Leandro Paredes
+        converted: 1
+      - penalty_kick_id: PK-392
+        team_name: Argentina
+        player_id: P-91431
+        player_name: Gonzalo Montiel
+        converted: 1
+      - penalty_kick_id: PK-393
+        team_name: France
+        player_id: P-64077
+        player_name: Kylian Mbappé
+        converted: 1
+      - penalty_kick_id: PK-394
+        team_name: France
+        player_id: P-06614
+        player_name: Kingsley Coman
+        converted: 0
+      - penalty_kick_id: PK-395
+        team_name: France
+        player_id: P-54517
+        player_name: Aurélien Tchouaméni
+        converted: 0
+      - penalty_kick_id: PK-396
+        team_name: France
+        player_id: P-92987
+        player_name: Randal Kolo Muani
+        converted: 1
+    surfaces:
+    - agent
+  - id: R-04
+    title: 每届进球最多的球队
+    explanation: 球队进球按记入球队计算，含对方乌龙球，不含点球大战。
+    question: 2014、2018、2022 三届世界杯，每届进球最多的球队是哪支？各进了多少球？
+    answer: 进球最多的球队：WC-2014 是 T-31 德国 18 球，WC-2018 是 T-06 比利时 16 球，WC-2022 是 T-30 法国 16 球。
+    expected:
+      rows:
+      - tournament_id: WC-2014
+        team_id: T-31
+        goals: 18
+      - tournament_id: WC-2018
+        team_id: T-06
+        goals: 16
+      - tournament_id: WC-2022
+        team_id: T-30
+        goals: 16
+    surfaces:
+    - agent
+  - id: R-09
+    title: 梅西每届进球
+    explanation: 球员进球不含乌龙球，只列有进球的届次。
+    question: 梅西在哪几届世界杯有进球？每届各进了几个？
+    answer: 梅西在 WC-2006 进 1 球、WC-2014 进 4 球、WC-2018 进 1 球、WC-2022 进 7 球。
+    expected:
+      rows:
+      - tournament_id: WC-2006
+        goals: 1
+      - tournament_id: WC-2014
+        goals: 4
+      - tournament_id: WC-2018
+        goals: 1
+      - tournament_id: WC-2022
+        goals: 7
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (g:goals)
+        WHERE g.player_id = 'P-14758' AND g.own_goal = 0
+        RETURN g.tournament_id AS tournament_id, count(*) AS goals
+      graph: |-
+        MATCH (g:goals)-[:rel_goals_player]->(p:players)
+        WHERE p.player_id = 'P-14758'
+  - id: A-07
+    title: 阿根廷的点球大战
+    explanation: 统计对手罚球的结果，不说成扑救。
+    question: 阿根廷在 2022 年世界杯打了几场点球大战？每场对手罚进几个、没罚进几个？
+    answer: 阿根廷 2022 年打了两场点球大战：M-2022-58 Netherlands vs Argentina 对手罚进 3 个、未罚进 2 个；M-2022-64 Argentina vs France 对手罚进 2 个、未罚进 2 个。
+    expected:
+      rows:
+      - match_id: M-2022-58
+        match_name: Netherlands vs Argentina
+        opponent_scored: 3
+        opponent_unsuccessful: 2
+      - match_id: M-2022-64
+        match_name: Argentina vs France
+        opponent_scored: 2
+        opponent_unsuccessful: 2
+    surfaces:
+    - agent
+  - id: A-09
+    title: 1950 年没有决赛
+    explanation: 1950 年由决胜循环赛决出冠军，不虚构决赛。
+    question: 1950 年世界杯有决赛吗？冠军是怎么决出的？最后阶段踢了几场？
+    answer: WC-1950 有决胜循环赛（final_round 为 1）、没有决赛（final 为 0）：决胜循环赛踢了 6 场，决赛 0 场。
+    expected:
+      rows:
+      - tournament_id: WC-1950
+        final_round: 1
+        final: 0
+        final_round_matches: 6
+        final_matches: 0
+    surfaces:
+    - agent
+  - id: A-10
+    title: 两位穆勒
+    explanation: 进球不含乌龙球，入选届数按不同赛事计数。
+    question: 盖德·穆勒和托马斯·穆勒谁的世界杯进球更多？两人各入选过几届世界杯大名单？
+    answer: Gerd Müller（P-72441）入选 2 届大名单、进 14 球；Thomas Müller（P-28154）入选 4 届、进 10 球，盖德·穆勒进球更多。
+    expected:
+      rows:
+      - player_id: P-28154
+        player_name: Thomas Müller
+        editions: 4
+        goals: 10
+      - player_id: P-72441
+        player_name: Gerd Müller
+        editions: 2
+        goals: 14
+    surfaces:
+    - agent

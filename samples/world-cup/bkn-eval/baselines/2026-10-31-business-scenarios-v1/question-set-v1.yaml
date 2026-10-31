@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: worldcup-business-scenarios-v1
+business_date: '2022-12-18'
+prd: docs/PRD.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: B-01
+  scenario: S01
+  difficulty: 基础
+  role: 体育编辑
+  question: 数据里一共有多少届男足世界杯、多少届女足世界杯？
+  output_contract: 男足届数、女足届数
+- id: B-02
+  scenario: S01
+  difficulty: 基础
+  role: 赛事数据管理员
+  question: 数据里一共记录了多少场世界杯比赛？
+  output_contract: 比赛场数
+- id: B-03
+  scenario: S01
+  difficulty: 基础
+  role: 体育编辑
+  question: 2022 年世界杯是哪年哪天开幕、哪天结束？在哪里举办？冠军是谁？
+  output_contract: 年份、开幕日期、闭幕日期、主办国、冠军
+- id: B-04
+  scenario: S02
+  difficulty: 基础
+  role: 赛事数据管理员
+  question: 数据里的国家队有多少支只有男足、多少支只有女足、多少支男女足都有？
+  output_contract: 各类球队数（以男足、女足标记组合表示）
+- id: B-05
+  scenario: S03
+  difficulty: 基础
+  role: 赛事数据管理员
+  question: 数据里有多少名男球员、多少名女球员？
+  output_contract: 男、女球员数（female 标记 0/1）
+- id: B-06
+  scenario: S06
+  difficulty: 基础
+  role: 体育编辑
+  question: 2022 年世界杯一共出现了多少次黄牌、红牌、两黄变一红和罚下？
+  output_contract: 黄牌、红牌、两黄变红、罚下各自的次数
+- id: B-07
+  scenario: S05
+  difficulty: 基础
+  role: 体育编辑
+  question: 2022 年世界杯决赛是哪天、谁对谁？比分多少？点球大战比分多少？
+  output_contract: 比赛编号、日期、主队、客队、比分、点球大战比分
+- id: B-08
+  scenario: S04
+  difficulty: 基础
+  role: 体育编辑
+  question: 2022 年世界杯一共进了多少球？其中球员自己打进的、乌龙球、比赛中的点球各多少？
+  output_contract: 全部进球、球员进球、乌龙球、比赛内点球
+- id: B-09
+  scenario: S10
+  difficulty: 基础
+  role: 赛事数据管理员
+  question: 数据里记录了多少条 1999 年女足世界杯的球员出场记录？
+  output_contract: 已记录的出场条数
+- id: B-10
+  scenario: S10
+  difficulty: 基础
+  role: 体育编辑
+  question: 数据里容量最大的球场是哪座？能容纳多少人？
+  output_contract: 球场编号、名称、容量（并列全列）
+- id: J-01
+  scenario: S03
+  difficulty: 中等
+  role: 体育编辑
+  question: 梅西在 2014 年和 2022 年世界杯拿过哪些奖？
+  output_contract: 赛事、奖项、球员（编号与名称）
+- id: J-02
+  scenario: S05
+  difficulty: 中等
+  role: 赛事数据管理员
+  question: 2022 年世界杯决赛的主队、客队是谁？在哪座球场、哪个城市和国家踢的？
+  output_contract: 比赛编号、主客队编号与名称、球场编号与名称、城市、国家
+- id: J-03
+  scenario: S03
+  difficulty: 中等
+  role: 球队分析师
+  question: 阿根廷 2022 年世界杯的大名单有哪些球员？各穿几号、踢什么位置？
+  output_contract: 球员编号、姓名、号码、位置（全列）
+- id: J-04
+  scenario: S07
+  difficulty: 基础
+  role: 体育编辑
+  question: 2014 年世界杯德国队的主教练是谁？
+  output_contract: 球队编号与名称、教练编号与姓名
+- id: J-05
+  scenario: S07
+  difficulty: 中等
+  role: 赛事数据管理员
+  question: 2022 年世界杯决赛的主裁判是谁？来自哪个国家？
+  output_contract: 比赛编号、裁判编号、姓名、国家
+- id: J-06
+  scenario: S08
+  difficulty: 中等
+  role: 球队分析师
+  question: 2022 年世界杯 A 组的最终积分榜是怎样的？
+  output_contract: 球队、名次、场次、胜平负、进失球、积分、小组球队数
+- id: J-07
+  scenario: S01
+  difficulty: 基础
+  role: 体育编辑
+  question: 2002 年世界杯是哪些国家联合举办的？
+  output_contract: 赛事编号与名称、每个主办国
+- id: J-08
+  scenario: S09
+  difficulty: 中等
+  role: 球队分析师
+  question: 2022 年世界杯决赛的点球大战，双方谁罚了、罚进没有？
+  output_contract: 罚球编号、球队、球员编号与姓名、是否罚进（按罚球顺序）
+- id: J-09
+  scenario: S07
+  difficulty: 中等
+  role: 球队分析师
+  question: 阿根廷 2022 年世界杯每场比赛的对手是谁、哪天踢、处在哪个阶段、谁在场边指挥？
+  output_contract: 比赛编号、日期、阶段序号、对手、教练编号与姓名
+- id: J-10
+  scenario: S04
+  difficulty: 中等
+  role: 体育编辑
+  question: 姆巴佩在 2022 年世界杯的进球分别是在哪场比赛、什么阶段、第几分钟进的？哪些是点球？
+  output_contract: 进球编号、比赛编号与名称、阶段、分钟、是否点球
+- id: J-11
+  scenario: S02
+  difficulty: 中等
+  role: 赛事数据管理员
+  question: 2022 年世界杯有哪些球队参赛？各属于哪个洲际足联？
+  output_contract: 球队编号与名称、足联编号与名称（全列）
+- id: J-12
+  scenario: S09
+  difficulty: 中等
+  role: 球队分析师
+  question: 2022 年世界杯决赛双方是怎么换人的？谁在第几分钟上场或下场？
+  output_contract: 换人记录编号、球队、球员编号与姓名、分钟、上场或下场
+- id: R-01
+  scenario: S04
+  difficulty: 复杂
+  role: 体育编辑
+  question: 男足世界杯历史射手榜前十是哪些人？各进了多少球？
+  output_contract: 球员编号、进球数、名次（含并列）
+- id: R-02
+  scenario: S04
+  difficulty: 复杂
+  role: 体育编辑
+  question: 女足世界杯历史射手榜前十是哪些人？各进了多少球？
+  output_contract: 球员编号、进球数、名次（含并列）
+- id: R-03
+  scenario: S04
+  difficulty: 中等
+  role: 体育编辑
+  question: 2022 年世界杯射手榜前五是谁？
+  output_contract: 球员编号、进球数、名次（含并列）
+- id: R-04
+  scenario: S02
+  difficulty: 中等
+  role: 球队分析师
+  question: 2014、2018、2022 三届世界杯，每届进球最多的球队是哪支？各进了多少球？
+  output_contract: 赛事、球队编号、进球数（并列全列）
+- id: R-05
+  scenario: S02
+  difficulty: 复杂
+  role: 球队分析师
+  question: 近三届（2014、2018、2022）世界杯合计赢球最多的前五支球队是哪些？各赢了几场？
+  output_contract: 球队编号、胜场、名次（含并列）
+- id: R-06
+  scenario: S10
+  difficulty: 中等
+  role: 赛事数据管理员
+  question: 数据里容量最大的十座球场是哪些？
+  output_contract: 球场编号、名称、容量（恰好十座）
+- id: R-07
+  scenario: S05
+  difficulty: 中等
+  role: 球队分析师
+  question: 2022 年世界杯净胜球最多的前五场比赛是哪些？
+  output_contract: 比赛编号、分差、名次（含并列）
+- id: R-08
+  scenario: S05
+  difficulty: 中等
+  role: 体育编辑
+  question: 2014、2018、2022 三届世界杯各踢了多少场、进了多少球、场均几球？
+  output_contract: 赛事、场数、进球数、场均进球（三位小数）
+- id: R-09
+  scenario: S04
+  difficulty: 中等
+  role: 体育编辑
+  question: 梅西在哪几届世界杯有进球？每届各进了几个？
+  output_contract: 赛事、进球数
+- id: R-10
+  scenario: S04
+  difficulty: 中等
+  role: 体育编辑
+  question: 孙雯在女足世界杯一共进了多少球？在女足历史射手榜排第几？
+  output_contract: 球员编号、姓名、进球数、名次
+- id: R-11
+  scenario: S02
+  difficulty: 复杂
+  role: 球队分析师
+  question: 2014、2018、2022 三届世界杯，各大洲际足联的球队分别赢了多少场？每届怎么排名？
+  output_contract: 赛事、足联编号、胜场、名次（全部足联，含零胜）
+- id: R-12
+  scenario: S07
+  difficulty: 中等
+  role: 赛事数据管理员
+  question: 执法世界杯场次最多的前五名裁判是谁？各执法了多少场？
+  output_contract: 裁判编号、场次、名次（含并列）
+- id: R-13
+  scenario: S03
+  difficulty: 中等
+  role: 球队分析师
+  question: 2022 年世界杯出场次数最多的前五名球员是谁？各出场几次？
+  output_contract: 球员编号、出场次数、名次（含并列）
+- id: R-14
+  scenario: S06
+  difficulty: 中等
+  role: 体育编辑
+  question: 2010 到 2022 年的四届男足世界杯，各出了多少张黄牌？场均几张？
+  output_contract: 赛事、黄牌数、场数、场均黄牌（三位小数）
+- id: A-01
+  scenario: S08
+  difficulty: 复杂
+  role: 球队分析师
+  question: 把阿根廷 2022 年世界杯一路走来的每场比赛列出来：哪天、什么阶段、对手是谁、比分多少、有没有点球大战、结果如何？
+  output_contract: 日期、比赛编号、阶段、对手编号与名称、进失球、点球大战比分、胜负平标记
+- id: A-02
+  scenario: S08
+  difficulty: 复杂
+  role: 球队分析师
+  question: 法国队 2022 年世界杯每场比赛在哪个阶段、对谁、在哪座球场踢的？比分多少？有没有进点球大战？
+  output_contract: 比赛编号、阶段、对手、球场、进失球、是否点球大战
+- id: A-03
+  scenario: S04
+  difficulty: 复杂
+  role: 球队分析师
+  question: 阿根廷 2022 年世界杯的进球都是谁进的？每人进了几个、其中几个点球？球队一共进了多少球？
+  output_contract: 球员编号、个人进球、点球进球、球队总进球
+- id: A-04
+  scenario: S05
+  difficulty: 复杂
+  role: 体育编辑
+  question: 2022 年世界杯决赛的进球过程是怎样的？谁在第几分钟为哪队进球？
+  output_contract: 进球编号、分钟、时段、进球者、记入球队、进球者所属球队、是否乌龙、是否点球
+- id: A-05
+  scenario: S03
+  difficulty: 复杂
+  role: 球队分析师
+  question: 阿根廷 2022 年世界杯大名单里每名球员出场了几次、进了几个球？没出场或没进球的也要列出来。
+  output_contract: 球员编号、出场次数、进球数（全名单）
+- id: A-06
+  scenario: S04
+  difficulty: 复杂
+  role: 球队分析师
+  question: 2022 年世界杯的进球里，首发球员进了多少、替补登场的球员进了多少？
+  output_contract: 首发/替补标记、进球数
+- id: A-07
+  scenario: S09
+  difficulty: 复杂
+  role: 球队分析师
+  question: 阿根廷在 2022 年世界杯打了几场点球大战？每场对手罚进几个、没罚进几个？
+  output_contract: 比赛编号与名称、对手罚进数、对手未罚进数
+- id: A-08
+  scenario: S03
+  difficulty: 复杂
+  role: 体育编辑
+  question: 2019 年女足和 2022 年男足世界杯的金靴奖得主是谁？她或他在那届进了几个球？
+  output_contract: 赛事、球员编号与姓名、奖项、进球数
+- id: A-09
+  scenario: S01
+  difficulty: 复杂
+  role: 赛事数据管理员
+  question: 1950 年世界杯有决赛吗？冠军是怎么决出的？最后阶段踢了几场？
+  output_contract: 赛事编号、是否有决胜循环赛、是否有决赛、决胜循环赛场数、决赛场数
+- id: A-10
+  scenario: S03
+  difficulty: 复杂
+  role: 体育编辑
+  question: 盖德·穆勒和托马斯·穆勒谁的世界杯进球更多？两人各入选过几届世界杯大名单？
+  output_contract: 球员编号、姓名、入选届数、进球数
+- id: A-11
+  scenario: S08
+  difficulty: 复杂
+  role: 球队分析师
+  question: 法国队 2018 年和 2022 年世界杯的表现对比：最终名次、场次、胜负平和进失球各是多少？
+  output_contract: 赛事、名次、场次、胜、负、平、进球、失球
+- id: A-12
+  scenario: S06
+  difficulty: 复杂
+  role: 球队分析师
+  question: 2022 年世界杯前四名球队各进了多少球、丢了多少球？各吃了多少黄牌、红牌、两黄变红和罚下？
+  output_contract: 名次、球队、进球、失球、黄牌、红牌、两黄变红、罚下
+- id: A-13
+  scenario: S10
+  difficulty: 复杂
+  role: 赛事数据管理员
+  question: 1999 年女足世界杯在比赛、大名单、进球和球员出场这几类数据上各记录了多少条？
+  output_contract: 数据类别及记录条数
+- id: A-14
+  scenario: S05
+  difficulty: 复杂
+  role: 赛事数据管理员
+  question: 2014、2018、2022 三届世界杯的比分进球、进球记录、乌龙球和点球大战罚球各是多少？比分和进球记录对得上吗？
+  output_contract: 赛事、比分进球、进球记录、乌龙球、点球大战罚球数

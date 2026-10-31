@@ -1,6 +1,7 @@
 """World Cup model, baseline and mounted-capability acceptance contracts."""
 import importlib.util
 import json
+from collections import Counter
 from pathlib import Path
 import re
 import yaml
@@ -15,18 +16,31 @@ def load(relative):
     return module
 
 
-def test_recalculated_answers_match_locked_reference():
-    oracle = load('bkn-eval/scripts/recalculate.py')
-    assert oracle.calculate() == yaml.safe_load(oracle.ANSWER.read_text())
+BASELINE = SAMPLE / 'bkn-eval' / 'baselines' / '2026-10-31-business-scenarios-v1'
 
 
-def test_scenario_distribution_and_complete_table_coverage():
-    questions = yaml.safe_load((SAMPLE / 'bkn-eval/datasets/question-set-v1.yaml').read_text())['questions']
-    cases = json.loads((SAMPLE / 'bkn-eval/gold/cases.json').read_text())
-    assert len({q['id'] for q in questions}) == 50
-    assert {category: sum(q['category'] == category for q in questions) for category in 'BJRA'} == {'B': 10, 'J': 12, 'R': 14, 'A': 14}
-    assert {q['id'] for q in questions} == {q['id'] for q in cases}
-    assert {table for case in cases for table in case['tables']} == {p.stem for p in (SAMPLE / 'data').glob('*.csv')}
+def _oracle():
+    spec = importlib.util.spec_from_file_location('worldcup_oracle_' + SAMPLE.name.replace('-', '_'), BASELINE / 'oracle.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_answer_set_is_what_the_oracle_computes_from_the_locked_csv():
+    oracle = _oracle()
+    computed = oracle.calculate()
+    answers = yaml.safe_load((BASELINE / 'answer-set-v1.yaml').read_text(encoding='utf-8'))['answers']
+    assert {a['id']: a['expected'] for a in answers} == {qid: oracle.expected(qid, rows) for qid, rows in computed.items()}
+
+
+def test_question_set_is_business_language_without_answers():
+    questions = yaml.safe_load((BASELINE / 'question-set-v1.yaml').read_text(encoding='utf-8'))
+    items = questions['questions']
+    assert questions['answer_set_access'] == 'forbidden' and all('expected' not in q for q in items)
+    assert len({q['id'] for q in items}) == 50 and len({q['scenario'] for q in items}) == 10
+    assert sorted(Counter(q['difficulty'] for q in items).values()) == [12, 18, 20]
+    tables = {t for ref in json.loads((BASELINE / 'reference-queries.json').read_text()).values() for t in ref['tables']}
+    assert tables == {p.stem for p in (SAMPLE / 'data').glob('*.csv')}
 
 
 def test_published_metadata_is_english_and_uses_standard_objects():
@@ -36,7 +50,7 @@ def test_published_metadata_is_english_and_uses_standard_objects():
         if path.is_file() and path.suffix in {'.bkn', '.json', '.md', '.yaml', '.py', '.sh'}:
             assert not re.search(r'[\u3400-\u9fff]', path.read_text()), path
     manifest = yaml.safe_load((SAMPLE / 'sample.yaml').read_text())
-    assert not manifest['spec']['components']['functions']
+    assert not manifest['spec']['components']['functions'] and manifest['spec']['components']['skills']
     assert not (SAMPLE / 'vega_sql_execute.openapi.json').exists()
 
 

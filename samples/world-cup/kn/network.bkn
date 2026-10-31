@@ -1,26 +1,29 @@
 ---
 type: knowledge_network
 id: worldcup_vega_catalog_bkn
-name: Fjelstul 世界杯 · Vega Catalog 绑定（占位符）
+name: 世界杯
 tags: [worldcup, fjelstul, CSV]
 ---
 
-# Fjelstul 世界杯数据 · 领域模型说明
+# 世界杯历史数据
 
-本网络覆盖 Joshua C. Fjelstul 世界杯开放数据库（`data/*.csv`）的实体与关系。**关系类型**已不再使用无含义的 `fk_<hash>` ID，而采用 `rel_<来源表>_<外键列>` 的可读标识，并在各关系文件中用中文说明业务语义与典型 join 用途。
+Joshua C. Fjelstul 世界杯开放数据库：男足世界杯截至 2022 年（22 届），女足截至 2019 年（8 届），覆盖赛事、球队、球员、教练、裁判、球场、比赛、进球、红黄牌、换人、点球大战和奖项。人名、队名、奖项名等是数据源英文原文，保留原拼写和重音符号；全名 = given_name + 空格 + family_name。
 
-**关系从何而来**：凡列名在 FK 白名单中（如 `tournament_id`、`match_id`、`team_id`、`home_team_id` 等）且能对应到另一张对象表，即生成一条 **RelationType**，映射为「事实表外键 → 维表主键」。
+业务口径（默认规则；使用者明确提出别的条件时以使用者为准）：
+- 赛事编号形如 WC-2022；tournament_name 含 Women's 的是女足。各类明细覆盖的届次不同，没有记录不代表现实中没有发生（如 WC-1999 没有球员出场记录）。
+- 比赛按场计数；team_appearances 每场两条（双方各一条）。出场次数按不同 match_id 计数。
+- 球员进球排除 own_goal=1；球队进球按 goals.team_id 记账，含对方乌龙球。比赛内点球（penalty=1）算进球；点球大战罚球在 penalty_kicks，不算进球、不计入比分。
+- 比分不含点球大战，点球大战比分单列；胜负平以 team_appearances 的 win、lose、draw 标记为准，点球大战决出的比赛通常记为平。分差 = 比分之差的绝对值。
+- 黄牌、红牌、两黄变红（second_yellow_card）、罚下（sending_off）各自统计，同一条可能带多个标记，不能相加。
+- 射手榜等用竞赛排名：同分同名次、后续跳号；“前 N 名”返回名次不超过 N 的全部并列者；问“N 座、N 个”时恰好取 N 个，同值按编号排序。
+- 比赛阶段以 stage_name 为准（group stage、final 等）；1950 年没有决赛，由决胜循环赛（final round）决出。联合举办的赛事每个主办国单独列出。点球大战只说罚进或未罚进，不说扑救。平均值保留三位小数。
 
-**RelationTypes（minimal · 默认）**：**29** 条骨架边（约 **20～30** 量级）——赛程、积分榜、阵容、黄牌、进球及奖项。**不含** `substitutions.*` RelationType、`goals.player_team_id`。换人分析可经由 `substitutions` 表本体属性 + `matches`/`player_appearances`。`compact` / `full` 见上文。
+回答方式：
+- 全部问题用 Cypher 查询，本样例没有函数。对象类型名就是标签，关系类型名是 rel_<来源表>_<外键>。matches、team_appearances、goals 等已带赛事、阶段、球队和比赛名称字段，可直接读取。
+- Cypher 支持关联、WITH、CASE、聚合和 ORDER BY，不支持变长路径和 UNWIND。数值可能以字符串返回，比较大小前转为数值。
 
 ## Network Overview
 
 - **ObjectTypes** (27): award_winners, awards, bookings, confederations, goals, group_standings, groups, host_countries, manager_appearances, manager_appointments, managers, matches, penalty_kicks, player_appearances, players, qualified_teams, referee_appearances, referee_appointments, referees, squads, stadiums, substitutions, team_appearances, teams, tournament_stages, tournament_standings, tournaments
 - **RelationTypes** (29): rel_award_winners_award, rel_award_winners_player, rel_award_winners_team, rel_award_winners_tournament, rel_bookings_match, rel_bookings_player, rel_bookings_team, rel_goals_match, rel_goals_player, rel_goals_team, rel_group_standings_team, rel_group_standings_tournament, rel_groups_tournament, rel_matches_away_team, rel_matches_home_team, rel_matches_stadium, rel_matches_tournament, rel_player_appearances_match, rel_player_appearances_player, rel_player_appearances_team, rel_qualified_teams_team, rel_qualified_teams_tournament, rel_squads_player, rel_squads_team, rel_squads_tournament, rel_team_appearances_match, rel_team_appearances_opponent, rel_team_appearances_team, rel_teams_confederation
 - **ConceptGroups** (4): worldcup_competition, worldcup_participants, worldcup_events, worldcup_honors
-
-## 分析提示
-
-- 优先从 **matches**、**goals**、**player_appearances**、`group_standings` 出发；骨架模式（**minimal**）下部分明细表无外键 RelationType。
-- 带 **`match_id`** 的事实一般先连 **`matches`** 再上至届次；**compact/full** 下若仍存在直达 **`tournaments`**/`stadiums` 的关系，请参阅 `relation_types/` 前缀说明。
-- 展示可读名请用 **`_name`** 列，仅用 ID 联接与计数。

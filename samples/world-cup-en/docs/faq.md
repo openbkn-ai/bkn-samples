@@ -4,7 +4,7 @@
 
 **Why do team appearances exceed match counts?** Each match has two team appearance records. Count matches at match grain.
 
-**How do agents query the sample?** Independent external agents use standard MCP object queries and perform the analysis themselves. There is no sample SQL tool or platform-internal agent dependency.
+**How do agents query the sample?** With Cypher over the published object model, guided by the World Cup history analysis Skill. There is no SQL tool and no custom function.
 
 **Why can capacity ordering be incorrect?** Source values are text. Convert capacities to integers before comparing them.
 

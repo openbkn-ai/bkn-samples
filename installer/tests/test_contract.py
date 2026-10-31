@@ -77,7 +77,8 @@ class SupplyContractTest(unittest.TestCase):
         self.assertEqual(supply["name"], "supply-chain")
         self.assertEqual(supply["expectedTables"], 12)
         self.assertTrue(supply["components"]["skills"])
-        self.assertFalse(next(item for item in index["samples"] if item["name"] == "world-cup")["components"]["skills"])
+        self.assertTrue(next(item for item in index["samples"] if item["name"] == "world-cup")["components"]["skills"])
+        self.assertFalse(next(item for item in index["samples"] if item["name"] == "order-basics")["components"]["skills"])
         check_manifest_index(ROOT, index)
 
     def test_rejects_other_source_repo(self):
