@@ -28,3 +28,9 @@ python3 samples/manufacturing-industry-en-us/bkn-eval/baselines/2026-10-30-busin
 ## Exceptions in the data
 
 Of 55 work orders (one a replacement), 43 are completed, 2 in production, 4 blocked and 6 released for March. WO-2611-08 failed its bore check and was remade by WO-2612-R1, 12 days late; WO-2701-10 and WO-2702-10 were rejected and not yet remade; WO-2612-10 was recorded as pass with flatness out of limit and shipped (a quality escape). Four work orders had scrap, leaving three order lines 2 to 5 units short. Eight executions are non-compliant: 2 on a machine whose capability is suspended, 3 by an operator with an expired or in-training qualification, 1 on a service day, and 2 with the operator assigned to another work centre or not scheduled. WO-2612-09 was issued material from a receipt still in inspection; three Baolian Special Steel purchases are short and a South China Foundry casting receipt was rejected; WO-2702-03, WO-2703-04 and WO-2703-06 are blocked by material and WO-2703-02 by a draft BOM. Three maintenance orders are overdue and 5-axis Mill 3 is under repair. The PH100 critical bore specification tightened from 2027-01-01.
+
+## Runs
+
+| Agent | Result | Record |
+|---|---|---|
+| External MCP agent, first round 50/50 after one resend of a client error | 50/50 | [runs/2026-10-30-mcp-agent-r1](runs/2026-10-30-mcp-agent-r1/README.md) |
