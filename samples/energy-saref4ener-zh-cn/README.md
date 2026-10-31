@@ -1,43 +1,39 @@
-# 能源需求响应运营（SAREF4ENER参考，中文）
+# 需求响应与柔性用能（SAREF4ENER 参考，中文）
 
-固定源码候选样例，版本0.1.5，目标兼容OpenBKN **>=0.2.1 <0.3.0**。以虚构负荷聚合商为场景，贯通资源准入、可承诺能力、多事件分配、执行计量及结算调查。业务起点是[PRD](docs/PRD.md)，精确口径集中于[业务计算契约](docs/business-capability-contract.md)。
+以虚构负荷聚合商为场景，从企业客户、场所、可调设备和电表，追溯到响应事件、负荷预测与基线、设备申报与约束、多事件共享资源的调度、执行回执、电表读数和结算台账。包含 15 张数据表、本体、3 个原生函数和 2 个业务 Skill。业务需求与口径见 [PRD](docs/PRD.md)。
 
-每语15张关联数据表、14,787条记录，每表至少50条；原生BKN为15个业务对象、15条关系、3个概念分组。中文企业、场所、设备、状态和原因使用中文，稳定ID、代码及kW/kWh/CNY等单位代码保留英文。默认观察日2027-02-28，历史覆盖2026年11月起，已公告计划和预测至2027-03-31；日期只到天，以具名区段及持续小时数表达响应。
+## 安装与体验
 
-## 包含哪些内容
+1. 登录 OpenBKN，进入首页的**一键体验**。
+2. 刷新官方目录，选择**需求响应与柔性用能**并点击**安装**，要求 **OpenBKN >=0.2.1 <0.3.0**。
+3. 等待安装和验证完成，打开对应知识网络。
+4. 在智能问答、数据查询和图探索页面试用体验卡，或接入外部 Agent，通过 MCP 查询对象、调用已发布函数和使用 Skill。
 
-| 业务内容 | 文件 |
-|---|---|
-| 谁要作什么决定、10个验收场景与100题的对应 | [PRD](docs/PRD.md) |
-| BKN模型、来源语义映射与本地扩展 | [本体规范](docs/bkn-modeling-spec.md)、[kn/](kn/network.bkn) |
-| 全部对象的实例、类型/主外键与锁 | [data/](data/)、[model-contract.json](model-contract.json)、[dataset.lock](dataset.lock) |
-| 业务差异、已知异常及精确记录ID | [数据场景](docs/dataset-scenarios.md) |
-| 3函数：能力评估、分配建议、实际交付/结算核验 | [energy.py](tools/energy.py)、[契约](docs/business-capability-contract.md) |
-| 2指标：单个日期快照的可响应功率、交付比例 | [指标定义](tools/assets/metrics-create.json) |
-| 1只读调查Skill，引用文件在其references内实物交付 | [Skill](skills/energy-response-investigation-zh-cn/SKILL.md) |
-| 100题、逐题答案/来源/解释及场景映射 | [题目](bkn-eval/questions.json)、[答案](bkn-eval/answers.md)、[机器金标](bkn-eval/expected-results.json) |
+无法访问官方目录时，从 [Releases](https://github.com/openbkn-ai/bkn-samples/releases) 下载本样例的 `package.tar.gz`，在一键体验中选择**导入离线包**后安装。
 
-## 开源来源与模型边界
+数据是虚构的合成数据，覆盖 2026 年 11 月至 2027 年 3 月，业务日期为 2027-02-28：十一月至二月已发生，三月为当天已知的计划。不代表真实电网调度或结算，不下发控制指令，也不付款。
 
-官方[SAREF4ENER 2.1.1](https://saref.etsi.org/saref4ener/v2.1.1/)及其直接导入[SAREF Core 4.1.1](https://saref.etsi.org/core/v4.1.1/)是语义参考，实际下载的Turtle、BSD-3-Clause许可、SHA256、完整具名类/属性清单与映射保留在[saref-reference/](saref-reference/README.md)。SAREF4ENER源有80个显式具名类（76个为自身命名空间），Core有32个（29个为自身）；完整来源清单与15个运行时业务对象分别说明其覆盖范围。
+## 能力
 
-本地结算公式、客户/场所及调度提案是明确声明的业务扩展。使用兼容的BKN 2.x结构及原生验证器；未转换全部OWL公理，不宣称ETSI认证、完整电网调度或全局最优。数据全部虚构，资产和客户均不能用于实际控制或付款。
+能用 Cypher 查到的不写函数，只为 Cypher 表达不了的计算保留函数。样例不使用指标，社区版即可完整使用。
 
-## 在仓库内本地验证
+- **Cypher 查询**：客户、场所、设备和电表，事件安排，申报与约束，已承诺分配，执行回执，读数版本，结算台账，以及 2027-02-28 的容量和结算快照。
+- **原生函数**：`flexibility_assessment` 算某事件的可承诺容量和设备排除原因；`dispatch_plan` 按优先级和申报成本给出同一时段事件的新增方案、缺口和预计成本；`settlement_assessment` 算核实电量、交付比例、收入、客户补偿和与台账的差额。三个函数都可按更早某天已知的信息回看。
+- **Skill**：按使用者组织为“容量与调度”（聚合商运营、企业能源经理）和“执行与结算”（响应值班员、结算专员），写明业务口径、何时用 Cypher、何时调用函数和回答格式。
 
-需要Python3.11+、已安装的openbkn CLI及其本地依赖。在仓库根运行：
+## 体验卡
+
+15 张体验卡从测试集中选题，覆盖资产、可承诺容量、场所上限、共享时段、执行、交付达标、台账核对和结算合计，由浅入深。卡片的数据查询和图探索 Cypher 用 `tools/acceptance/experience_set.py` 在安装后的平台上在线核验。
+
+## 验收与维护
+
+测试集见 [业务场景测试集 v1](bkn-eval/baselines/2026-10-30-business-scenarios-v1/README.md)，参考答案由独立脚本从交付数据计算，不随安装包交付。安装后让未读答案的智能体每题跑一轮；未达 100% 时记录失败原因，先改本体描述、Skill 或函数，不改题目和答案迁就结果。原有 100 题回放与数据核验见 [bkn-eval](bkn-eval/README.md)，可在仓库根运行：
 
 ```sh
 python3 tools/energy_saref4ener/verify.py --sample zh-cn
 python3 -m unittest tools.energy_saref4ener.test_engine tools.energy_saref4ener.test_adapter -v
 ```
 
-也可运行本目录的 `python3 bkn-eval/run.py`。回放调用实际交付的计算实现，对照从历史终态记录恢复、附来源摘要的结构化参考；原独立金标文件未完整保留，不能将恢复参考冒充原文件。另有独立手工边界及托管数据适配器检查，不新增逐题函数。100题分为基础/简单30、中等40、困难/复杂30，每场景10题；业务日和知识截止日显式声明，带 reference_scope 的题同时比较两种视图。
+本体与 SAREF4ENER 的对应见[本体规范](docs/bkn-modeling-spec.md)；来源为 ETSI [SAREF4ENER 2.1.1](https://saref.etsi.org/saref4ener/v2.1.1/) 及其导入的 [SAREF Core 4.1.1](https://saref.etsi.org/core/v4.1.1/)，BSD-3-Clause 许可，原始 Turtle 见 [saref-reference/](saref-reference/README.md)。客户、场所、调度方案和结算公式是本样例的业务扩展，不宣称 ETSI 认证或全局最优调度。
 
-实际结果见[本地验收报告](../../docs/energy-saref4ener-readiness.md)。报告保留首轮差异和定向修复，不把结构化字段通过率称为自然语言模型准确率。
-
-## 安装准备与本轮边界
-
-`sample.yaml`、共享MariaDB初始化/核验、原生本体绑定、指标/函数/Skill注册与归属保护hooks已提供；仅声明实际交付的组件。安装时消费包内数据和资源，不需要creator或读取题库。未来发布前仍须按标准流程对固定包作实际平台验收。
-
-本样例作为固定源码候选交付，尚未登记正式目录。整合报告覆盖源码、本地数据库及回归检查；固定包的平台安装、能力运行及实际问答须另留与精确包绑定的回执，不能以本README作为平台成功证明。两个快照指标是已记录来源值，不替代实时重算；不完整资料保留null与证据。源公开许可条件保留，样例自定义代码与虚构数据采用仓库MIT许可。
+升级时先卸载旧样例，再安装新版本。卸载会清理样例数据和用户修改；删除离线包缓存不会卸载已安装资源。

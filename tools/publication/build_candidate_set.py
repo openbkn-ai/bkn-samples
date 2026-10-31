@@ -15,7 +15,11 @@ def validate_plan(root,plan):
     declared={p.name:load_sample(p) for p in discover_sample_dirs(root)}
     entries=plan.get('candidates',[]);directories=[e['directory'] for e in entries];ids=[e['sampleId'] for e in entries]
     require(len(directories)==len(set(directories)) and len(ids)==len(set(ids)),'duplicate sample in candidate set')
-    require(set(directories)==set(declared),'candidate coverage differs: missing='+str(sorted(set(declared)-set(directories)))+', unknown='+str(sorted(set(directories)-set(declared))))
+    excluded=plan.get('excluded',[]);skipped=[e['directory'] for e in excluded]
+    require(all(isinstance(e.get('reason'),str) and e['reason'].strip() for e in excluded),'every excluded sample needs a reason')
+    require(not set(skipped)&set(directories) and len(skipped)==len(set(skipped)),'a sample is both a candidate and excluded')
+    covered=set(directories)|set(skipped)
+    require(covered==set(declared),'candidate coverage differs: missing='+str(sorted(set(declared)-covered))+', unknown='+str(sorted(covered-set(declared))))
     for entry in entries:
         document=declared[entry['directory']]
         require(entry['sampleId']==document['metadata']['name'],'candidate sample identity differs')
@@ -49,12 +53,17 @@ def build_set(plan_path,output):
         filename=entry['sampleId']+'-'+entry['version']+'-package.tar.gz';shutil.copyfile(archive,downloads/filename)
         result['candidates'].append({**entry,'sample':entry['sampleId'],'file':filename,'package_digest':digest,'size':archive.stat().st_size,'source':report['source'],'offline_import_checks':{'amd64':'metadata-and-integrity-passed','arm64':'metadata-and-integrity-passed','product_0.2.0':'rejected'},'platform_acceptance':'not-run'})
         print(entry['sampleId'],entry['version'],digest,flush=True)
-    require({e['sampleId'] for e in result['candidates']}=={load_sample(p)['metadata']['name'] for p in discover_sample_dirs(ROOT)},'post-build coverage differs')
-    (downloads/'candidate-index.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    skipped={e['directory'] for e in plan.get('excluded',[])}
+    require({e['sampleId'] for e in result['candidates']}=={load_sample(p)['metadata']['name'] for p in discover_sample_dirs(ROOT) if p.name not in skipped},'post-build coverage differs')
     (downloads/'SHA256SUMS').write_text(''.join(e['package_digest'].removeprefix('sha256:')+'  '+e['file']+'\n' for e in result['candidates']))
-    (downloads/'README.md').write_text('''# Complete OpenBKN 0.2.1 candidate set
+    excluded=''.join(f"\n- {e['directory']}: {e['reason']}" for e in plan.get('excluded',[]))
+    result['excluded']=plan.get('excluded',[])
+    (downloads/'candidate-index.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    (downloads/'README.md').write_text(f'''# OpenBKN {plan['productVersion']} candidate set
 
-All 13 source samples are represented. Import a matching *-package.tar.gz directly
+{len(result['candidates'])} samples are offered; every other source sample is excluded with a reason:{excluded or ' none.'}
+
+Import a matching *-package.tar.gz directly
 into a fixed OpenBKN 0.2.1 test instance with the shared sample database. Verify
 SHA256SUMS first; do not unpack and repack. No sample-specific data image is needed.
 Each file is a fixed-source candidate; no successful platform proof is fabricated.

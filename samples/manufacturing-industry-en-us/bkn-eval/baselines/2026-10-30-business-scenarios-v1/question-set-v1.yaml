@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: manufacturing-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: basic
+  role: Production lead
+  question: How many plants, work centres and production machines do we have, and how many machines does each plant have?
+  output_contract: plants, work centres, machines, machines per plant
+- id: Q-02
+  scenario: S01
+  difficulty: basic
+  role: Purchasing and materials manager
+  question: Which BOM version does the PH200 high-pressure pump housing use now, and which materials go into each unit, in what quantity?
+  output_contract: BOM version, materials and quantity per unit
+- id: Q-03
+  scenario: S01
+  difficulty: basic
+  role: Production lead
+  question: Which operations does the VB080 valve body go through, and in which work centre is each done, in order?
+  output_contract: operations and work centres in order
+- id: Q-04
+  scenario: S01
+  difficulty: medium
+  role: Production lead
+  question: Which operators can run 5-axis milling now?
+  output_contract: operator ids
+- id: Q-05
+  scenario: S01
+  difficulty: medium
+  role: Production lead
+  question: Which machines cannot be scheduled for production now, and why?
+  output_contract: machines and reasons
+- id: Q-06
+  scenario: S02
+  difficulty: basic
+  role: Order fulfilment manager
+  question: Among order lines whose requested date has arrived, how many are not fully shipped, and how many units do we still owe customers in total?
+  output_contract: order lines, units owed
+- id: Q-07
+  scenario: S02
+  difficulty: medium
+  role: Order fulfilment manager
+  question: Among fully shipped order lines, which were delivered late, and by how many days?
+  output_contract: order lines and days late
+- id: Q-08
+  scenario: S02
+  difficulty: medium
+  role: Order fulfilment manager
+  question: 'How was SO-2611-04 shipped: in how many shipments, how many units each and on which dates, and was it late?'
+  output_contract: quantity and date per shipment, days late
+- id: Q-09
+  scenario: S02
+  difficulty: complex
+  role: Order fulfilment manager
+  question: Why was the pump housing order SO-2610-06 for Central China Smart Fluids delivered late, and how was it finally delivered?
+  output_contract: original work order, failed characteristic and value, replacement work order, shipped units, days late
+- id: Q-10
+  scenario: S02
+  difficulty: complex
+  role: Order fulfilment manager
+  question: For each order line past its requested date and not fully shipped, how many units are missing and what is holding it up?
+  output_contract: order line, units owed and cause
+- id: Q-11
+  scenario: S02
+  difficulty: complex
+  role: Order fulfilment manager
+  question: By customer, how many units past their requested date are still owed, and which customer is owed the most?
+  output_contract: units owed per customer, customer owed most
+- id: Q-12
+  scenario: S03
+  difficulty: basic
+  role: Order fulfilment manager
+  question: How many PH100 units are planned for March, and what is the March forecast for PH100?
+  output_contract: planned, forecast
+- id: Q-13
+  scenario: S03
+  difficulty: medium
+  role: Order fulfilment manager
+  question: In February 2027, which products have a production plan below their forecast, and what is each coverage ratio?
+  output_contract: products and coverage ratio
+- id: Q-14
+  scenario: S03
+  difficulty: medium
+  role: Order fulfilment manager
+  question: Over November to March, which product's plan falls furthest below its forecast, and by how many units?
+  output_contract: product, shortfall
+- id: Q-15
+  scenario: S03
+  difficulty: complex
+  role: Order fulfilment manager
+  question: Taking blocked work orders out of the March plan, which products have an executable plan below forecast, and by how many units?
+  output_contract: products and shortfall
+- id: Q-16
+  scenario: S04
+  difficulty: basic
+  role: Purchasing and materials manager
+  question: How much 316L stainless bar does WO-2702-03 need, how much has been issued, and how much is still missing?
+  output_contract: required, issued, missing (kg)
+- id: Q-17
+  scenario: S04
+  difficulty: complex
+  role: Purchasing and materials manager
+  question: Which work orders are blocked now, and why?
+  output_contract: work orders and reasons
+- id: Q-18
+  scenario: S04
+  difficulty: medium
+  role: Purchasing and materials manager
+  question: How much of each material does WO-2703-01 need?
+  output_contract: materials and required quantity
+- id: Q-19
+  scenario: S04
+  difficulty: complex
+  role: Purchasing and materials manager
+  question: Why can WO-2703-02 not start, and if it switched to the frozen BOM revision A, would current aluminium billet stock be enough?
+  output_contract: BOM reason, revision A requirement, available stock, enough or not, shortfall
+- id: Q-20
+  scenario: S04
+  difficulty: complex
+  role: Purchasing and materials manager
+  question: How many grey iron housing castings do the released March work orders that have not started still need, is available stock enough, and how far short is it?
+  output_contract: work orders, required, available, shortfall
+- id: Q-21
+  scenario: S05
+  difficulty: medium
+  role: Purchasing and materials manager
+  question: Which purchase orders are overdue now?
+  output_contract: purchase order ids
+- id: Q-22
+  scenario: S05
+  difficulty: medium
+  role: Purchasing and materials manager
+  question: Which incoming receipts were rejected, and which work order did that affect?
+  output_contract: rejected receipts, affected work orders
+- id: Q-23
+  scenario: S05
+  difficulty: complex
+  role: Purchasing and materials manager
+  question: Was any material issued from a receipt that had not passed incoming inspection? To which work order and how much, and was that order later completed and shipped?
+  output_contract: issue, receipt, work order, quantity, shipped units
+- id: Q-24
+  scenario: S05
+  difficulty: medium
+  role: Purchasing and materials manager
+  question: Which suppliers delivered late, and by how many days?
+  output_contract: suppliers and days late
+- id: Q-25
+  scenario: S05
+  difficulty: complex
+  role: Purchasing and materials manager
+  question: Which purchase orders from Baolian Special Steel are not fully delivered, how many kg is each short, and which work orders were they bought for?
+  output_contract: purchase orders, missing kg, work orders
+- id: Q-26
+  scenario: S06
+  difficulty: basic
+  role: Production lead
+  question: How many work orders are in each status now?
+  output_contract: work orders per status
+- id: Q-27
+  scenario: S06
+  difficulty: medium
+  role: Production lead
+  question: How far has WO-2702-05 progressed?
+  output_contract: operations completed, current step, good units so far
+- id: Q-28
+  scenario: S06
+  difficulty: medium
+  role: Production lead
+  question: Which work orders had scrap, at which step, and how many units?
+  output_contract: work order, step, scrap units
+- id: Q-29
+  scenario: S06
+  difficulty: complex
+  role: Production lead
+  question: What is the yield of WO-2611-06, and how did the missing units affect the customer delivery?
+  output_contract: completed units, yield, order line, units owed
+- id: Q-30
+  scenario: S06
+  difficulty: medium
+  role: Production lead
+  question: How many good units did the work orders finished in January 2027 produce in total?
+  output_contract: good units
+- id: Q-31
+  scenario: S07
+  difficulty: basic
+  role: Production lead
+  question: When does Sun Hao's 5-axis milling qualification expire?
+  output_contract: expiry date
+- id: Q-32
+  scenario: S07
+  difficulty: complex
+  role: Production lead
+  question: Which executions were done by an operator who was not qualified or whose qualification had expired?
+  output_contract: executions, operators, reasons
+- id: Q-33
+  scenario: S07
+  difficulty: medium
+  role: Production lead
+  question: What work has MACH-MILL-04 done, and were those executions compliant?
+  output_contract: executions, compliant or not, reason
+- id: Q-34
+  scenario: S07
+  difficulty: complex
+  role: Production lead
+  question: Among completed executions, which are non-compliant, and why?
+  output_contract: execution, work order, reason
+- id: Q-35
+  scenario: S07
+  difficulty: complex
+  role: Production lead
+  question: Among work orders with a non-compliant execution, which have already been shipped, and to which customers?
+  output_contract: work orders, customers
+- id: Q-36
+  scenario: S07
+  difficulty: medium
+  role: Production lead
+  question: Who did the finish milling on WO-2701-09, and which work centre was that operator assigned to that week?
+  output_contract: operator, assigned work centre, operation work centre
+- id: Q-37
+  scenario: S08
+  difficulty: basic
+  role: Quality manager
+  question: Which final inspection lots were rejected?
+  output_contract: inspection lot ids
+- id: Q-38
+  scenario: S08
+  difficulty: medium
+  role: Quality manager
+  question: What are the current limits for the PH100 critical bore, and how do they differ from the previous revision?
+  output_contract: current limits and effective date, previous limits
+- id: Q-39
+  scenario: S08
+  difficulty: complex
+  role: Quality manager
+  question: Is there a lot whose result was recorded as pass although the measured value is outside the specification, and was it shipped?
+  output_contract: work order, lot, measured value, upper limit, shipped units
+- id: Q-40
+  scenario: S08
+  difficulty: medium
+  role: Quality manager
+  question: Why did WO-2701-10 fail inspection, and by how much?
+  output_contract: characteristic, measured value, upper limit, excess
+- id: Q-41
+  scenario: S08
+  difficulty: medium
+  role: Quality manager
+  question: Which inspection lots have no decision yet?
+  output_contract: inspection lot ids
+- id: Q-42
+  scenario: S08
+  difficulty: complex
+  role: Quality manager
+  question: How many units do the rejected lots and the lot released despite an out-of-spec result involve, and which customers are affected, by how many units each?
+  output_contract: total units, units per customer
+- id: Q-43
+  scenario: S09
+  difficulty: basic
+  role: Production lead
+  question: Which maintenance work orders are overdue?
+  output_contract: maintenance work order ids
+- id: Q-44
+  scenario: S09
+  difficulty: medium
+  role: Production lead
+  question: Was CNC Lathe 1 used for production on the day of its January service?
+  output_contract: maintenance order, date, same-day executions
+- id: Q-45
+  scenario: S09
+  difficulty: complex
+  role: Production lead
+  question: How long has Pressure Rig 1's service been overdue, and which pressure tests has it run since?
+  output_contract: maintenance order, planned date, days overdue, later executions
+- id: Q-46
+  scenario: S09
+  difficulty: basic
+  role: Production lead
+  question: How many machines are under repair now, and which?
+  output_contract: machine ids
+- id: Q-47
+  scenario: S10
+  difficulty: complex
+  role: Order fulfilment manager
+  question: 'Trace SO-2612-05 from order to shipment: which work order made it, what material was issued, who did the work on which machine, how inspection and receipt went, and when it shipped.'
+  output_contract: work order, issue, machines, operators, lot, receipt, shipment, days late
+- id: Q-48
+  scenario: S10
+  difficulty: basic
+  role: Purchasing and materials manager
+  question: How many FKM seal kits are on hand, allocated and available now?
+  output_contract: on hand, allocated, available
+- id: Q-49
+  scenario: S10
+  difficulty: medium
+  role: Purchasing and materials manager
+  question: Which finished goods are in stock now, and how many units of each?
+  output_contract: products and units
+- id: Q-50
+  scenario: S10
+  difficulty: complex
+  role: Order fulfilment manager
+  question: Is WO-2703-01 finished and released by quality, where are the finished goods stored, and when does the customer want them?
+  output_contract: completed units, released or not, location, requested date, shipped units

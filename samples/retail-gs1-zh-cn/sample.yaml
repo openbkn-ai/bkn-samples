@@ -7,16 +7,17 @@
     "aliases": [],
     "displayName": "食品供应链追溯与召回",
     "summary": "虚构食品流通、履约和召回闭环。",
-    "version": "0.1.1"
+    "version": "0.1.2"
   },
   "spec": {
     "studio": {
       "licenseNote": "MIT synthetic assets; GS1 WebVoc Apache-2.0 semantic references",
       "questions": [
-        "哪些批次当前被隔离？",
-        "问题批次流向哪些门店？",
-        "2027年3月补货缺口是多少？"
-      ]
+        "PRD-001 在 WH-001 在库不少，为什么能用的只有这么些？按批次说明。",
+        "REC-001 的问题货现在在哪些地方？各有多少件在库？",
+        "按三月预测，PRD-001 在 WH-001 三月份需要补多少件？"
+      ],
+      "experienceSet": "experience/experience-set.yaml"
     },
     "database": {
       "engine": "mariadb",
@@ -37,7 +38,7 @@
     "components": {
       "objects": true,
       "relations": true,
-      "metrics": true,
+      "metrics": false,
       "functions": true,
       "skills": true
     },

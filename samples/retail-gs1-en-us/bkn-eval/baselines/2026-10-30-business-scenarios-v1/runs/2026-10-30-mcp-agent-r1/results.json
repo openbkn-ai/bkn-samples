@@ -1,0 +1,1020 @@
+{
+ "agent": "external MCP agent (mcp_agent.py): deepseek-v4-flash via the platform model API + every tool of the BKN MCP server",
+ "platform": "8081 bkn-backend-ee 0.2.1-main sha9156ec5, ontology-query sha3703f10",
+ "sample_version": "0.1.2",
+ "question_set": "question-set-v1.yaml",
+ "rounds": 1,
+ "passed": 50,
+ "total": 50,
+ "results": [
+  {
+   "id": "Q-01",
+   "passed": true,
+   "seconds": 24.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**50 products across 5 categories.**\n\nFrom the product master data (`products` / Food Product):\n\n| Category | Products |\n|---|---|\n| Dairy | 10 |\n| Bakery | 10 |\n| Beverages | 10 |\n| Cereals | 10 |\n| Snacks | 10 |\n| **Total** | **50** |\n\nEach `product_id` is counted once, and every product carries a category — so the catalog is 50 distinct products spread evenly over 5 categories, 10 per category."
+  },
+  {
+   "id": "Q-02",
+   "passed": true,
+   "seconds": 26.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "search_schema",
+    "get_skill_content",
+    "run_cypher",
+    "query_object_instance",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**PRD-001 — Original Yogurt 250 g (category: Dairy, base unit: ea)**\n\n| Question | Answer |\n|---|---|\n| Supplier | **Hangzhou Greenfield Foods Ltd** (ORG-001, role: Supplier) |\n| Units per case | **6** (`pack_multiplier` = 6) |\n| Shelf life that must remain when it ships | **4 days** (`min_shelf_days` = 4) |\n\nBasis: the product master record for PRD-001 (`products`, via the `products_by_supplier_id` link to `organizations`).\n\nOne caveat worth flagging: shelf-life requirements are also held per order line, and PRD-001's open lines carry their own values, which parameterise the product-level 4 days:\n\n- LINE-001-A (order ORD-001-A, qty 111) — 3 days\n- LINE-001-B (order ORD-001-B, qty 101) — 7 days\n- LINE-001-H (order ORD-001-H, qty 64) — 0 days\n\nUnder the allocation rule, each line may only use lots at its own location that passed inspection and stay in date at the later of today (2027-02-28) and the due date plus that line's minimum shelf days, earliest expiry first. So \"4 days\" is the product master requirement; a given shipment is judged against its order line's value. This is advice only — nothing is shipped or reserved by this answer."
+  },
+  {
+   "id": "Q-03",
+   "passed": true,
+   "seconds": 24.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**25 warehouses and 25 stores** — 50 business locations in total.\n\n| Location type | Code | Locations |\n|---|---|---|\n| Store | store | 25 |\n| Warehouse | warehouse | 25 |\n| **Total** | — | **50** |\n\nBasis: master data read with Cypher from the `locations` object type, with location type taken from `locations.location_type_code` (as the inventory/fulfilment skill directs). 50 location rows = 50 distinct `location_id` values, with only 2 distinct type codes, so no location is unclassified. No permission or data-access limitations were reported."
+  },
+  {
+   "id": "Q-04",
+   "passed": true,
+   "seconds": 42.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**WH-001 – Hangzhou Central Distribution Center** is the only warehouse that supplies STORE-001 (Hangzhou Central Grocery) by transfer.\n\nBasis (rules used: business date 2027-02-28; \"as of\" counts only actual events recorded on/before that date; duplicate events counted once and reversed events excluded — none of these transfer events is duplicated or reversed):\n\n- Each transfer into STORE-001 appears as a paired dispatch → arrive event sharing one `transfer_id`, always with source `WH-001` and destination `STORE-001`:\n  - TRF-001-A / LOT-001-A, TRF-001-B / LOT-001-B, TRF-001-C / LOT-001-C, TRF-001-D / LOT-001-D\n  - TRF-026-A / LOT-026-A, TRF-026-B / LOT-026-B, TRF-026-C / LOT-026-C, TRF-026-D / LOT-026-D\n  - 40 units each → **8 transfers, 320 units**, dispatched 2027-02-22, arrived 2027-02-23\n- Grouping all dispatches into STORE-001 by source location returns exactly one warehouse: WH-001. No other warehouse ships to STORE-001.\n- The only other inbound movements at STORE-001 are 4 customer `return` events with no `transfer_id` — not transfers.\n- WH-001 and STORE-001 are both under organisation ORG-026 (Hangzhou Central), consistent with a same-organisation warehouse-to-store transfer.\n- The data's single reversal (MOV-00922, recorded 2027-02-27, reversing EV-00921, a 9-unit sale from STORE-019) does not touch any of these transfers."
+  },
+  {
+   "id": "Q-05",
+   "passed": true,
+   "seconds": 44.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**4 lots failed inspection and 3 lots are still awaiting inspection** (out of 250 inspected lots; the other 243 passed). Per the default quality rule — a lot whose latest inspection failed or is pending is fully quarantined — all 7 lots are fully quarantined.\n\n**Failed (4)** — all inspected 2027-01-16, reason \"Microbial test exceeded control\":\n\n| Lot | Product | Inspection | Location | Supplier lot | Expiry |\n|---|---|---|---|---|---|\n| LOT-011-C | Original Wholegrain Biscuit 250 g | QC-011-C | WH-011 Nanjing Central DC | SUP-011-011-C | 2027-03-31 |\n| LOT-022-C | Strawberry Fruit Drink 250 g | QC-022-C | WH-022 Wuxi East Lake DC | SUP-022-022-C | 2027-03-31 |\n| LOT-033-C | Blueberry Breakfast Cereal 250 g | QC-033-C | WH-008 Suzhou West Park DC | SUP-008-033-C | 2027-03-31 |\n| LOT-044-C | Mango Nut Bar 250 g | QC-044-C | WH-019 Ningbo Riverside DC | SUP-019-044-C | 2027-03-31 |\n\n**Pending / awaiting inspection (3)** — all inspected 2027-02-16, reason \"Awaiting retest\":\n\n| Lot | Product | Inspection | Location | Supplier lot | Expiry |\n|---|---|---|---|---|---|\n| LOT-013-D | Blueberry Wholegrain Biscuit 250 g | QC-013-D | WH-013 Nanjing West Park DC | SUP-013-013-D | 2027-03-05 |\n| LOT-026-D | Coconut Fruit Drink 250 g | QC-026-D | WH-001 Hangzhou Central DC | SUP-001-026-D | 2027-03-05 |\n| LOT-039-D | Sesame Breakfast Cereal 250 g | QC-039-D | WH-014 Nanjing Riverside DC | SUP-014-039-D | 2027-03-05 |\n\n**Basis (rules used):**\n- Business date 2027-02-28, counting only inspections whose inspection date and known date are on or before it. All 250 inspection records (2026-11-03 → 2027-02-27) qualify, so none was cut off.\n- Each of the 250 lots has exactly one inspection record, so \"latest inspection\" is unambiguous — no failed/pending result is superseded by a later retest.\n- The 3 pending inspections (2027-02-16) are recorded as awaiting retest with no result yet; they are not treated as passed.\n- The D-series lots expire 2027-03-05, about a week after the business date, so the retest decision is time-critical.\n\nThis is advice only — no quarantine, withdrawal or notice has been executed."
+  },
+  {
+   "id": "Q-06",
+   "passed": true,
+   "seconds": 54.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "All four failed-inspection lots still hold stock, and all of it is in quarantine — **667 ea in total**, split between each product's distribution center (560 ea) and the matching store (107 ea). Available quantity is 0 at every location.\n\n| Product | Lot | Location | Type | On hand | Quarantined | Available |\n|---|---|---|---|---|---|---|\n| PRD-011 | LOT-011-C | WH-011 Nanjing Central Distribution Center | Warehouse | 140 ea | 140 | 0 |\n| PRD-011 | LOT-011-C | STORE-011 Nanjing Central Grocery | Store | 26 ea | 26 | 0 |\n| PRD-022 | LOT-022-C | WH-022 Wuxi East Lake Distribution Center | Warehouse | 140 ea | 140 | 0 |\n| PRD-022 | LOT-022-C | STORE-022 Wuxi East Lake Grocery | Store | 27 ea | 27 | 0 |\n| PRD-033 | LOT-033-C | WH-008 Suzhou West Park Distribution Center | Warehouse | 140 ea | 140 | 0 |\n| PRD-033 | LOT-033-C | STORE-008 Suzhou West Park Grocery | Store | 28 ea | 28 | 0 |\n| PRD-044 | LOT-044-C | WH-019 Ningbo Riverside Distribution Center | Warehouse | 140 ea | 140 | 0 |\n| PRD-044 | LOT-044-C | STORE-019 Ningbo Riverside Grocery | Store | 26 ea | 26 | 0 |\n\n**Basis**\n- Rule used: \"a lot whose latest inspection failed is fully quarantined\"; business date and knowledge cutoff both 2027-02-28.\n- Failing inspections (all 2027-01-16, recorded 2027-01-16, reason \"Microbial test exceeded control\"): QC-011-C at WH-011, QC-022-C at WH-022, QC-033-C at WH-008, QC-044-C at WH-019. These are the only 4 failed results out of 250 inspections, and each lot has just one inspection, so it is also its latest.\n- Quantities from the `inventory_asof` function (completeness = complete); returns and active holds are folded into the quarantined figure without double counting (3 ea returned per store lot).\n- Sold earlier from these lots, listed separately: LOT-011-C 14 ea, LOT-022-C 13 ea, LOT-033-C 12 ea, LOT-044-C 14 ea — all at the respective stores.\n- Data-trust caveat: the function flags **OVERRESERVATION** on all four warehouse rows (WH-011, WH-022, WH-008, WH-019); verify those warehouse figures against reservations before any disposal decision.\n- Not asked, but related: three further lots have pending inspections (LOT-013-D, LOT-026-D, LOT-039-D) and are quarantined under the same rule — say the word and I'll break their stock down by location.\n\nThis is advice only; no recall, hold or disposal has been executed."
+  },
+  {
+   "id": "Q-07",
+   "passed": true,
+   "seconds": 58.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**100 lots were received in February 2027.**\n\nRules used: business date is 2027-02-28; only actual events; an event recorded twice counts once, a reversed event does not count.\n\n| Receipt date | Receiving events | Distinct lots | Locations | Units |\n|---|---|---|---|---|\n| 2027-02-02 | 50 | 50 (LOT-001-B … LOT-050-B) | 25 warehouses (WH-001…WH-025) | 5,895 |\n| 2027-02-16 | 50 | 50 (LOT-001-D … LOT-050-D) | 25 warehouses (WH-001…WH-025) | 5,900 |\n| **February total** | **100** | **100** | **25** | **11,795** |\n\nDetails:\n- Each of the 100 received lots has exactly one receiving (`receive`) event, one event ID and one event date, and each was recorded on the day it occurred — so no duplicates, no late-recorded copies and no reversals affect this count (the single reversal on 2027-02-27 reverses a *sale* on 2027-02-26, not a receipt).\n- Every warehouse took 4 lots on each receipt day.\n- Outside February, for context: 50 lots on 2026-11-03, 50 lots on 2027-01-16, and a **planned** receipt of 50 lots on 2027-03-05 (excluded, it is a plan, not stock).\n\nCaveat if \"received\" means goods arriving at stores rather than supplier receipts: there are also 202 `arrive` events (2027-02-23 at STORE-001…STORE-025, plus 2 at STORE-020 on 2027-02-26) covering 200 lots. These carry no source location — arrivals without a matching dispatch, which the network treats as a data-trust issue — and they are lots already received earlier, so they add no new lots received."
+  },
+  {
+   "id": "Q-08",
+   "passed": true,
+   "seconds": 47.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**No — LOT-013-D cannot be sold now: 87 units on hand, 87 quarantined, so available = 0 at every location** (business date 2027-02-28).\n\n**Lot / product**\n- LOT-013-D, PRD-013 \"Blueberry Wholegrain Biscuit 250 g\" (ea), produced 2027-02-15, expiry 2027-03-05 (near expiry — 5 days left).\n- Latest inspection QC-013-D (2027-02-16, WH-013): **Pending**, reason \"Awaiting retest\" → *rule used: a lot whose latest inspection is pending is fully quarantined.*\n\n**Available at each location** (`inventory_asof`, as_of 2027-02-28 / knowledge 2027-02-28; completeness **complete**, no data issues — so the 0 is a real zero, not undeterminable)\n\n| Location | On hand | Quarantined | Reserved | Recall-blocked | In transit | **Available** | Sold |\n|---|---|---|---|---|---|---|---|\n| WH-013 — Nanjing West Park Distribution Center (warehouse) | 63 | 63 | 0 | 0 | 0 | **0** | 0 |\n| STORE-013 — Nanjing West Park Grocery (store) | 24 | 24 | 0 | 0 | 0 | **0** | 16 (0 returned) |\n\nNo other location holds this lot.\n\n**Second, independent blocker**\n- LOT-013-D is a split child of LOT-013-B, the root lot of **open recall REC-013** (announced 2027-02-27), so it is an affected downstream lot. `recall_blocked` shows 0 only because those units are already counted in quarantined (never deducted twice). REC-013 for PRD-013 shows on hand 157 / controlled 83 at WH-013 (coverage 52.9%) and 51 / 27 at STORE-013 (coverage 52.9%), affecting order ORD-013-H at STORE-013.\n\n**Bottom line:** it stays unsellable while the inspection is pending. Even if a retest passes before expiry (2027-03-05), the units remain recall-blocked as a downstream lot of REC-013 and cannot be released until that recall is closed — worth escalating both to the quality lead. This is advice only; nothing is shipped, released or recalled."
+  },
+  {
+   "id": "Q-09",
+   "passed": true,
+   "seconds": 45.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "get_object_types",
+    "query_object_instance",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**111 units (ea) of PRD-001 are available at WH-001 as of 2027-02-28** — the business date this network treats as \"now\". All of it sits in a single lot, LOT-001-C.\n\nBasis (inventory_asof, as of / knowledge date 2027-02-28; completeness = complete, no data issues reported):\n\n| Lot | On hand | Quarantined | Recall-blocked | Reserved | Available | Why |\n|---|---|---|---|---|---|---|\n| LOT-001-A | 81 | 0 | 0 | 0 | 0 | Expired (expiry 2027-02-20, before today) |\n| LOT-001-B | 91 | 20 | 71 | 0 | 0 | Root lot of open recall REC-001 (announced 2027-02-27); 20 ea on precautionary hold HOLD-001-Q, remaining 71 ea recall-blocked |\n| LOT-001-C | 141 | 0 | 0 | 30 | **111** | 141 on hand minus 30 ea active reservations; passed inspection, expiry 2027-03-31 |\n| LOT-001-D | 61 | 0 | 61 | 0 | 0 | Derived from recalled LOT-001-B via lot transformation, so fully recall-blocked |\n| **Total** | **374** | **20** | **132** | **30** | **111** | |\n\nNotes:\n- Rule used: available = on hand − quarantined − recall-blocked − active reservations, never below zero; expired lots count as zero available; near expiry = expiring within 14 days (LOT-001-B 2027-03-10 and LOT-001-D 2027-03-05 qualify).\n- In transit at WH-001 for this product is 0.\n- 263 of the 374 units on hand are unavailable: 81 expired, 20 quarantined, 132 recall-blocked, 30 reserved.\n\nThis is an assessment only — nothing is reserved, shipped or ordered."
+  },
+  {
+   "id": "Q-10",
+   "passed": true,
+   "seconds": 66.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**50 units (ea) are in transit — dispatched but not yet arrived — as of the business date 2027-02-28.**\n\nBasis (rule used: \"today\" = business date 2027-02-28; quantities in the product base unit; in-transit taken from the recorded inventory snapshot and cross-checked against supply events):\n\nSnapshot totals: on hand 24,122 · **in transit 50** · quarantined 2,292 · reserved 1,380 · available 6,422 ea (400 lot-location rows).\n\nThe 50 in-transit units sit in 10 lot-location pairs, 5 ea each (all lots expire 2027-03-10, all inspection-passed):\n\n| Product | Location | Lot | In transit |\n|---|---|---|---|\n| PRD-005 | STORE-005 | LOT-005-B | 5 |\n| PRD-030 | STORE-005 | LOT-030-B | 5 |\n| PRD-010 | STORE-010 | LOT-010-B | 5 |\n| PRD-035 | STORE-010 | LOT-035-B | 5 |\n| PRD-015 | STORE-015 | LOT-015-B | 5 |\n| PRD-040 | STORE-015 | LOT-040-B | 5 |\n| PRD-020 | STORE-020 | LOT-020-B | 5 |\n| PRD-045 | STORE-020 | LOT-045-B | 5 |\n| PRD-025 | STORE-025 | LOT-025-B | 5 |\n| PRD-050 | STORE-025 | LOT-050-B | 5 |\n\nEvent check gives the same figure: each of these lots was dispatched 40 ea from its warehouse on 2027-02-22 and only 35 ea was recorded as arriving on 2027-02-23 — a 5-unit dispatch-vs-arrival gap per lot (10 × 5 = 50).\n\nData caveat (function completeness = \"partial\"; unknown is not zero): 4 lot-locations have no determinable stock and are not counted — LOT-043-C/STORE-018 (conflicting event EV-00897), LOT-046-C/STORE-021 (negative stock EV-00967, hold exceeds on hand), and LOT-045-C plus LOT-045-D at STORE-020 (transfer coverage missing, EV-00944/EV-00949). Two of those are missing transfer coverage, so 50 is the *determined* in-transit amount; any real in-transit for those lot-locations is unknown rather than zero.\n\nThis is inventory advice only — nothing was shipped, received or changed."
+  },
+  {
+   "id": "Q-11",
+   "passed": true,
+   "seconds": 67.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2,292 units are quarantined right now, spread across 157 lot-location positions.**\n\nBusiness date 2027-02-28; rule used: \"a lot whose latest inspection failed or is pending is fully quarantined; returns and active holds are quarantined too, never deducting the same units twice.\"\n\n**Basis**\n- All 50 products, no location/lot filter — a full replay of stock events for 2027-02-28 counting only records known by that date (`inventory_asof`).\n- 157 of 400 lot-location positions carry non-zero quarantine; 100 lots across 50 locations, in base unit ea.\n- Cross-check: the recorded 2027-02-28 inventory snapshot gives exactly the same figures (400 rows, 2,292 units, 157 positions above zero).\n\n**What the 2,292 units are**\n- Latest inspection **failed** (full lot quarantined): 667 units / 8 positions — LOT-011-C 166 (PRD-011), LOT-022-C 167 (PRD-022), LOT-033-C 168 (PRD-033), LOT-044-C 166 (PRD-044).\n- Latest inspection **pending** (full lot quarantined): 260 units / 6 positions — LOT-013-D 87 (PRD-013), LOT-026-D 84 (PRD-026), LOT-039-D 89 (PRD-039).\n- **Passed** lots still carrying quarantine from returns and active holds: 1,365 units / 143 positions over 93 lots (291 returned units were booked back at these positions; the return/hold overlap contract prevents double counting).\n\n**Undeterminable — not zero**\nFour positions cannot be determined, so the 2,292 covers only positions where stock was reconstructable: LOT-043-C/STORE-018 (conflicting event EV-00897), LOT-045-C and LOT-045-D/STORE-020 (transfer coverage missing EV-00944, EV-00949), LOT-046-C/STORE-021 (negative stock EV-00967, hold exceeding on hand).\n\n**Data-trust issues (function completeness = partial, 10 issues)**: 1 duplicate event ignored (EV-00875), 1 conflicting event (EV-00897), 1 negative stock (EV-00967), 2 transfers missing coverage (EV-00944, EV-00949), 4 over-reservations (LOT-011-C, LOT-022-C, LOT-033-C, LOT-044-C), 1 hold exceeding on hand (LOT-046-C/STORE-021).\n\nThis is advisory analysis only — it places no hold and executes no recall or notice."
+  },
+  {
+   "id": "Q-12",
+   "passed": true,
+   "seconds": 49.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Conclusion:** PRD-001 at WH-001 has **374 ea on hand but only 111 ea available** as of 2027-02-28. Roughly 70% of the stock is unusable — one lot is expired, two lots are inside an open recall, and the only clean lot is partly reserved. (Source: `inventory_asof`; completeness = complete, no data issues.)\n\n| Lot | Expiry | On hand | Quarantined | Recall-blocked | Reserved | Available | Why |\n|---|---|---|---|---|---|---|---|\n| LOT-001-A | 2027-02-20 | 81 | 0 | 0 | 0 | **0** | Expired 8 days before the business date — expired lots carry zero available |\n| LOT-001-B | 2027-03-10 | 91 | 20 | 71 | 0 | **0** | Root lot of open recall REC-001 (announced 2027-02-27, \"Supplier seal integrity defect\"); 20 ea also on hold HOLD-001-Q (recall precautionary hold from 2027-02-27). Near expiry (10 days) |\n| LOT-001-C | 2027-03-31 | 141 | 0 | 0 | 30 | **111** | Only unblocked lot; 30 ea reserved by RSV-001-A (20, LINE-001-A) and RSV-001-B (10, LINE-001-B), effective 2027-02-22 → 2027-03-04 |\n| LOT-001-D | 2027-03-05 | 61 | 0 | 61 | 0 | **0** | Split child of LOT-001-B (lot link LINK-001, 20 ea split on 2027-02-21), so it falls inside the REC-001 recall scope. Near expiry (5 days) |\n| **Total** | | **374** | **20** | **132** | **30** | **111** | |\n\n**Where the 263 ea of unavailable stock goes:** 81 ea expired (A) + 20 ea quarantined/held (B) + 132 ea recall-blocked (71 on B + 61 on D) + 30 ea reserved (C).\n\n**Checks:** all four lots passed receiving inspection at WH-001 (QC-001-A … QC-001-D), so the quarantine is not an inspection failure but the recall-precaution hold on LOT-001-B. In transit is 0 for every lot, and no lot-location stock was undeterminable.\n\n**Rules used:** business date 2027-02-28; available = on hand − quarantined − recall-blocked − active reservations (floor zero); expired lots have zero available; within 14 days of expiry = near expiry.\n\n**Practical read:** only 111 ea of LOT-001-C can ship today, with 30 of those freeing up when RSV-001-A/B end on 2027-03-04. LOT-001-B, LOT-001-D and LOT-001-A stay blocked until the recall is dispositioned or the stock is written off. This is advice only — nothing was changed, shipped or allocated."
+  },
+  {
+   "id": "Q-13",
+   "passed": true,
+   "seconds": 47.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**STORE-001 can sell 43 units now (business date 2027-02-28), across 2 lots.**\n\n| Lot | Product | On hand | Quarantined | Recall-blocked | Available |\n|---|---|---|---|---|---|\n| LOT-001-C | PRD-001 | 27 | 5 | 0 | **22** |\n| LOT-026-C | PRD-026 | 26 | 5 | 0 | **21** |\n| **Total** | | 53 | 10 | 0 | **43** |\n\nThe other six lots at the store hold 147 units but are not sellable:\n- **Expired (2027-02-20):** LOT-001-A (24), LOT-026-A (23) → zero available.\n- **Recall-blocked:** LOT-001-B (24 blocked of 27, plus 3 quarantined), LOT-001-D (24 blocked of 24), LOT-026-B (23 blocked of 26) → zero available.\n- **Inspection pending:** LOT-026-D (23) → fully quarantined, zero available.\n\nBasis: `inventory_asof` replay for location STORE-001, as of/knowledge date 2027-02-28, for PRD-001 and PRD-026 — completeness \"complete\", no data issues, and consistent with the 2027-02-28 inventory snapshot (on hand 200, quarantined 39, reserved 0, available 43). Quantities are in base units (ea). This is an assessment only; nothing has been reserved or shipped."
+  },
+  {
+   "id": "Q-14",
+   "passed": true,
+   "seconds": 46.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**100 lot-location positions hold expired stock that is still on hand, totalling 5,347 units.**\n\nBasis (business date 2027-02-28, read from the `inventory_snapshots` snapshot; rule: \"expiry before today = expired\", counting only positions with on_hand > 0):\n\n- **Positions:** 100 lot-location combinations with on_hand > 0 whose lot expires before 2027-02-28.\n- **Units:** 5,347 on hand in those positions (same rows show 0 quarantined, 0 reserved, available = 0 — expired lots have zero available).\n- **Expiry:** all 100 positions fall in one band — lots expiring **2027-02-20** (8 days past). Nothing expires exactly today.\n- **Spread:** 50 distinct lots × 50 distinct locations, 2 expired positions per location (STORE-001…STORE-025 and WH-001…WH-025), spanning 50 products. Stores hold 47–49 units each; warehouses 163–169 units each.\n- **Largest product totals:** PRD-006, PRD-027, PRD-048 at 111 units each; the rest 103–110.\n\nData note: 4 snapshot rows have undetermined (null) on_hand — IS-LOT-043-C/STORE-018, IS-LOT-045-C/STORE-020, IS-LOT-045-D/STORE-020, IS-LOT-046-C/STORE-021. None of them are expired lots (they expire 2027-03-05 and 2027-03-31), so they don't affect the count; they are excluded rather than treated as zero."
+  },
+  {
+   "id": "Q-15",
+   "passed": true,
+   "seconds": 63.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**4 lots at STORE-001 (Hangzhou Central Grocery) expire within two weeks and still carry stock on hand — but all four have zero available stock; every unit is blocked by a recall hold, quarantine, or both.**\n\nRule used: business date 2027-02-28; near expiry = within 14 days (expiring by 2027-03-14); available = on hand − quarantined − recall-blocked − active reservations; quantities in ea.\n\n| Lot | Product | Expiry | Days left | On hand | Quarantined | Recall-blocked | Available |\n|---|---|---|---|---|---|---|---|\n| LOT-001-D | PRD-001 Original Yogurt 250 g | 2027-03-05 | 5 | 24 | 0 | 24 | 0 |\n| LOT-026-D | PRD-026 Coconut Fruit Drink 250 g | 2027-03-05 | 5 | 23 | 23 | 0 | 0 |\n| LOT-001-B | PRD-001 Original Yogurt 250 g | 2027-03-10 | 10 | 27 | 3 | 24 | 0 |\n| LOT-026-B | PRD-026 Coconut Fruit Drink 250 g | 2027-03-10 | 10 | 26 | 3 | 23 | 0 |\n\nTotal on hand inside the window: **100 ea**; total available: **0 ea**.\n\n**Why each lot is blocked**\n- **LOT-001-D** – fully recall-blocked (24 ea) under open recall REC-001; inspection QC-001-D passed, so the block is the recall, not quality.\n- **LOT-001-B** – 24 ea recall-blocked under open recall REC-001 (precautionary hold HOLD-001-Q) plus 3 ea quarantined.\n- **LOT-026-B** – 23 ea recall-blocked under open recall REC-026 (precautionary hold HOLD-026-Q) plus 3 ea quarantined.\n- **LOT-026-D** – fully quarantined (23 ea) because inspection QC-026-D is still **pending**; no recall block.\n\n**Also worth knowing (excluded from the count)**\n- **Already expired, not \"within two weeks\":** LOT-001-A and LOT-026-A expired 2027-02-20 and so carry zero available by the expiry rule, despite 24 ea and 23 ea still physically on hand — 47 ea stranded stock.\n- **Usable but outside the window:** LOT-001-C and LOT-026-C expire 2027-03-31 (31 days out) and are the only sellable stock of these two products at this store — 22 ea and 21 ea available respectively.\n\nBasis: `inventory_asof` replay for as-of and knowledge date 2027-02-28, location STORE-001, products PRD-001 and PRD-026 — completeness \"complete\", no data issues reported. STORE-001's 2027-02-28 snapshot contains only these two products (8 lot rows), so no other product has recorded stock at this store.\n\nThis is advice only; no stock was released, moved or written off."
+  },
+  {
+   "id": "Q-16",
+   "passed": true,
+   "seconds": 49.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Two lots at STORE-001 (Hangzhou Central Grocery) are expired but still on hand — 47 units total (business date 2027-02-28).**\n\n| Lot | Product | Expiry | On hand | Available |\n|---|---|---|---|---|\n| LOT-001-A | PRD-001 — Original Yogurt 250 g | 2027-02-20 | 24 ea | 0 |\n| LOT-026-A | PRD-026 — Coconut Fruit Drink 250 g | 2027-02-20 | 23 ea | 0 |\n\nBasis and rules used:\n- Business date 2027-02-28 (\"today\"); expired = expiry date before that date. Both lots expired 2027-02-20, 8 days ago.\n- Read from STORE-001's 2027-02-28 recorded inventory snapshot (as of and known on 2027-02-28), cross-checked with the `inventory_asof` replay for the two products this store carries: it flags both lots expired = true, completeness \"complete\", no data issues.\n- Available = on hand − quarantined − recall-blocked − reservations, and expired lots carry zero available, so these 47 units are on hand but fully unavailable for sale or allocation. Neither lot is quarantined, recall-blocked or reserved — expiry alone is the cause.\n- Quantities are in the product base unit (ea).\n\nNothing else at STORE-001 is expired: its other six lot rows (LOT-001-B/C/D, LOT-026-B/C/D) expire 2027-03-05 to 2027-03-31, with the 03-05 and 03-10 lots near expiry and already reduced by quarantine and recall blocks.\n\nThis is advice only — no stock was written off, adjusted or ordered."
+  },
+  {
+   "id": "Q-17",
+   "passed": true,
+   "seconds": 46.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**100 orders are still open, and exactly 1 of them is past its due date.**\n\nBasis (business date 2027-02-28; \"open\" = status code `open`; \"past due\" = due date before the business date):\n- Orders on file: 150 — 100 open, 50 closed.\n- Open orders by due date: 1 due 2027-02-27 (overdue), 49 due 2027-03-02, 50 due 2027-03-04.\n\nThe single overdue open order:\n- **ORD-049-A** — due 2027-02-27, one day past due, priority 1\n- Location: WH-024 Wuxi Riverside Distribution Center (warehouse)\n- Customer: ORG-049 Wuxi Sunridge Retail Ltd\n- Line LINE-049-A: PRD-049 Sesame Nut Bar 250 g, quantity 111 base units, minimum shelf life 3 days\n\nNotes: all 100 open orders were recorded by 2027-02-20, so none is a late-arriving record. Under the fulfilment rule, overdue open orders stay in the shared stock pool and are still allocated by priority, due date and order number. This is advice only — nothing has been shipped, allocated or changed."
+  },
+  {
+   "id": "Q-18",
+   "passed": true,
+   "seconds": 56.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Result (business date 2027-02-28): of the 100 open order lines, 47 are fully covered, 45 partly covered, and 8 get nothing.**\n\nBasis: `fulfillment_plan` in `mode=orders`, `as_of_date=2027-02-28`, `knowledge_date=2027-02-28`, all 50 products (company-wide scope). Rule used: all open orders share one stock pool, queued by priority → due date → order number; each line draws only lots at its own location for its product that passed inspection and stay in date at the later of today and the due date plus the minimum shelf days, earliest expiry first; overdue open orders are still allocated.\n\nQuantities (base unit, ea):\n- **Fully covered** — 47 lines, 5,317 requested / 5,317 allocated / 0 short\n- **Partly covered** — 45 lines, 4,590 requested / 1,430 allocated / 3,160 short (e.g. LINE-001-B asked 101, got 30)\n- **Nothing** — 8 lines, 864 requested / 0 allocated / 864 short\n- Total: 10,771 requested, 6,747 allocated, 4,024 short (37.4% unfilled)\n\nThe 8 lines that get nothing:\n- ORD-011-A / ORD-011-B — PRD-011 at WH-011 (113 and 101 ea)\n- ORD-022-A / ORD-022-B — PRD-022 at WH-022 (116 and 102 ea)\n- ORD-033-A / ORD-033-B — PRD-033 at WH-008 (111 and 103 ea)\n- ORD-044-A / ORD-044-B — PRD-044 at WH-019 (114 and 104 ea)\n\nData-quality caveat: the function reports `completeness = partial` with 10 issues — 4 × OVERRESERVATION (LOT-011-C/WH-011, LOT-022-C/WH-022, LOT-033-C/WH-008, LOT-044-C/WH-019 — exactly the four locations above, so those zeros stem from reservations exceeding on hand), 2 × TRANSFER_COVERAGE_MISSING (LOT-045-D and LOT-045-C at STORE-020), 1 × DUPLICATE_EVENT_IGNORED (LOT-042-C), 1 × CONFLICTING_EVENT (LOT-043-C at STORE-018), 1 × NEGATIVE_STOCK (LOT-046-C at STORE-021), 1 × HOLD_EXCEEDS_ON_HAND (LOT-046-C at STORE-021). Those lines should be re-checked once the stock records are corrected.\n\nThis is advice only — it ships nothing and reserves nothing."
+  },
+  {
+   "id": "Q-19",
+   "passed": true,
+   "seconds": 62.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "execute_tool",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "execute_tool",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yes — ORD-001-A can ship in full: all 111 units from a single lot, LOT-001-C at WH-001 (shortage 0).**\n\n**Order and allocation** (`fulfillment_plan`, mode=orders, business date / knowledge date 2027-02-28; completeness \"complete\", no issues):\n- ORD-001-A — customer ORG-026, ship-from WH-001, status open, priority 1, due 2027-03-02\n- One line LINE-001-A: PRD-001 Original Yogurt 250 g, **111 ea**, min shelf days 3\n- Allocation status **full**: allocated 111 ea, shortage 0\n  - **LOT-001-C** (WH-001, expiry 2027-03-31) — **111 ea**\n\n**Why only LOT-001-C is usable** — PRD-001 stock at WH-001 as of 2027-02-28 (`inventory_asof`, completeness \"complete\"):\n\n| Lot | On hand | Blocked / reserved | Available | Expiry |\n|---|---|---|---|---|\n| LOT-001-A | 81 | expired | 0 | 2027-02-20 |\n| LOT-001-B | 91 | 20 quarantined + 71 recall-blocked (HOLD-001-Q, REC-001 precautionary hold) | 0 | 2027-03-10 (near expiry) |\n| LOT-001-C | 141 | 30 reserved (incl. 20 already reserved for this line, RSV-001-A) | **111** | 2027-03-31 |\n| LOT-001-D | 61 | 61 recall-blocked | 0 | 2027-03-05 (near expiry) |\n\nAll four lots passed inspection (QC-001-A…D). LOT-001-P (expiry 2027-03-31) has no stock position at WH-001.\n\n**Shelf-life check:** due 2027-03-02 + 3 minimum shelf days requires the lot to stay in date through 2027-03-05; LOT-001-C (2027-03-31) clears that and is the earliest-expiring eligible lot.\n\n**Note:** LOT-001-C's 111 available units are fully consumed by this order, so nothing remains at WH-001 for the next open order ORD-001-B (priority 2, due 2027-03-04), which already holds 10 reserved units on that lot.\n\nRules used: business date 2027-02-28; available = on hand − quarantined − recall-blocked − active reservations; allocation by priority, due date, earliest expiry with shelf-life checks. This is advice only — nothing has been shipped or reserved."
+  },
+  {
+   "id": "Q-20",
+   "passed": true,
+   "seconds": 72.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "get_object_types",
+    "run_cypher",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**ORD-049-A can still get all 111 ea it asks for — entirely from lot LOT-049-C at WH-024** (shortage 0, allocation status \"full\").\n\nSource: `fulfillment_plan`, as of business date 2027-02-28 (knowledge date 2027-02-28, mode=orders), completeness \"complete\", no data issues.\n\n**The order line**\n- LINE-049-A, order ORD-049-A, status open, priority 1, location WH-024\n- Product PRD-049, requested 111 ea, minimum shelf days 3, due 2027-02-27 (one day overdue)\n\n**Rule applied:** overdue open orders are still allocated; a line may only use lots at its own location for its product that passed inspection and stay in date at the later of today (2027-02-28) and the due date plus the required 3 shelf days → expiry must be on/after **2027-03-02**, earliest expiry first; available = on hand − quarantined − recall-blocked − reservations.\n\n**Why LOT-049-C and not the others (PRD-049 at WH-024, 2027-02-28)**\n\n| Lot | Expiry | On hand | Quarantined | Recall-blocked | Reserved | Available | Fits requirement |\n|---|---|---|---|---|---|---|---|\n| LOT-049-C | 2027-03-31 | 145 | 0 | 0 | 30 | **115** | Yes — 111 allocated, **4 ea left** |\n| LOT-049-D | 2027-03-05 | 64 | 0 | 64 | 0 | 0 | Shelf life OK, but fully recall-blocked (split child of LOT-049-B under open recall REC-049) |\n| LOT-049-B | 2027-03-10 | 94 | 20 | 74 | 0 | 0 | Shelf life OK, but 20 ea quarantined (HOLD-049-Q) + 74 ea recall-blocked as the recall's root lot (REC-049, open since 2027-02-27) |\n| LOT-049-A | 2027-02-20 | 80 | 0 | 0 | 0 | 0 | Expired |\n\nThe 30 ea reserved on LOT-049-C are RSV-049-A (20, on LINE-049-A itself) and RSV-049-B (10, LINE-049-B). LOT-049-P (26 ea, expiry 2027-03-31) exists only as a **planned** receipt dated 2027-03-05, so it is plan, not existing stock, and was not counted.\n\nThis is advice only — nothing was shipped or reserved by this answer."
+  },
+  {
+   "id": "Q-21",
+   "passed": true,
+   "seconds": 85.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**8 of the 100 open order lines get zero units — each is short by its full requested quantity, 864 ea in total.**\n\nRan `fulfillment_plan` (mode=orders) for all 50 products as of business date 2027-02-28, knowledge date 2027-02-28, with the rule that open orders share one stock pool by priority, due date and order number, and each line draws only on lots at its own location that passed inspection and stay in date at the later of today and due date + minimum shelf days.\n\n| Line | Order | Product | Location | Requested | Allocated | Short |\n|---|---|---|---|---|---|---|\n| LINE-011-A | ORD-011-A | PRD-011 Original Wholegrain Biscuit 250 g | WH-011 | 113 ea | 0 | **113 ea** |\n| LINE-011-B | ORD-011-B | PRD-011 Original Wholegrain Biscuit 250 g | WH-011 | 101 ea | 0 | **101 ea** |\n| LINE-022-A | ORD-022-A | PRD-022 Strawberry Fruit Drink 250 g | WH-022 | 116 ea | 0 | **116 ea** |\n| LINE-022-B | ORD-022-B | PRD-022 Strawberry Fruit Drink 250 g | WH-022 | 102 ea | 0 | **102 ea** |\n| LINE-033-A | ORD-033-A | PRD-033 Blueberry Breakfast Cereal 250 g | WH-008 | 111 ea | 0 | **111 ea** |\n| LINE-033-B | ORD-033-B | PRD-033 Blueberry Breakfast Cereal 250 g | WH-008 | 103 ea | 0 | **103 ea** |\n| LINE-044-A | ORD-044-A | PRD-044 Mango Nut Bar 250 g | WH-019 | 114 ea | 0 | **114 ea** |\n| LINE-044-B | ORD-044-B | PRD-044 Mango Nut Bar 250 g | WH-019 | 104 ea | 0 | **104 ea** |\n\nAll other open lines got something: 47 fully covered, 45 partly covered (3,160 ea short across them).\n\n**Why these eight get nothing** — at each of those four warehouses every lot of the product has zero available, so there is no eligible unit:\n- Lot A (expiry 2027-02-20) is **expired** → 0 available (84 / 81 / 85 / 82 ea on hand).\n- Lot B (expiry 2027-03-10) is **quarantine + recall-blocked**: 92 = 20 + 72, 94 = 20 + 74, 96 = 20 + 76, 98 = 20 + 78.\n- Lot C (expiry 2027-03-31) **failed inspection** and is fully quarantined (140 ea each location).\n- Lot D (expiry 2027-03-05) is **fully recall-blocked**: 61 / 62 / 63 / 64 ea.\n\n**Data caveats:** the plan reports `completeness = partial` and flags `OVERRESERVATION` on LOT-011-C (WH-011), LOT-022-C (WH-022), LOT-033-C (WH-008), LOT-044-C (WH-019), plus DUPLICATE_EVENT_IGNORED (EV-00875), CONFLICTING_EVENT (EV-00897), NEGATIVE_STOCK and HOLD_EXCEEDS_ON_HAND (LOT-046-C at STORE-021), and TRANSFER_COVERAGE_MISSING (EV-00944, EV-00949 at STORE-020). The zeros above come from expiry, quarantine and recall block, not from those events.\n\nThis is advice only — nothing was shipped or changed."
+  },
+  {
+   "id": "Q-22",
+   "passed": true,
+   "seconds": 58.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "execute_tool",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Total shortfall: 4,024 units (base unit \"ea\")** across the 100 open orders, after allocating all available stock as of the business date 2027-02-28.\n\n**Basis** (fulfillment_plan, mode=orders, all 50 products, as-of 2027-02-28, knowledge date 2027-02-28):\n- 100 open order lines (all 100 open orders covered; 50 other orders are closed). Requested 10,771 units, allocated 6,747 units, short **4,024**.\n- 53 of 100 lines are short:\n  - **8 lines get nothing → 864 units**: ORD-022-A (PRD-022 @ WH-022, 116), ORD-044-A (PRD-044 @ WH-019, 114), ORD-011-A (PRD-011 @ WH-011, 113), ORD-033-A (PRD-033 @ WH-008, 111), plus ORD-044-B (104), ORD-033-B (103), ORD-022-B (102), ORD-011-B (101).\n  - **45 lines partly filled → 3,160 units**.\n- Worst products: PRD-022 (218), PRD-044 (218), PRD-011 (214), PRD-033 (214), then a long tail (PRD-023 79, PRD-014 77…). 49 of 50 products carry some shortfall.\n- Rule used: open orders share one stock pool by priority, due date and order number; each line uses only lots at its own location for its product that passed inspection and still stay in date at the later of today and the due date plus minimum shelf days, earliest expiry first; expired lots count as zero available. Overdue open orders are still allocated (1 open order is overdue, due 2027-02-27; the rest due 2027-03-02 / 2027-03-04).\n\n**Caveats** — the plan reports completeness *partial*, so 4,024 is the best-supported figure, not an exact one:\n- Over-reservation at WH-011 (LOT-011-C), WH-022 (LOT-022-C), WH-008 (LOT-033-C), WH-019 (LOT-044-C) — exactly the four product/location pairs that received zero allocation, i.e. their stock is already fully reserved.\n- Duplicate event ignored (EV-00875, LOT-042-C); conflicting event (EV-00897, LOT-043-C @ STORE-018).\n- Negative stock (EV-00967, LOT-046-C @ STORE-021); hold exceeds on hand (LOT-046-C @ STORE-021).\n- Transfer coverage missing (EV-00944 LOT-045-C, EV-00949 LOT-045-D, both STORE-020), so stock arriving there could not be fully determined.\n\nThis is advice only — no stock is allocated and no orders are shipped."
+  },
+  {
+   "id": "Q-23",
+   "passed": true,
+   "seconds": 26.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**March 2027 demand forecast for PRD-001 at WH-001 totals 243 ea.**\n\nBasis (from `demand_forecasts`, planned forecast view):\n\n| Demand date | Quantity |\n|---|---|\n| 2027-03-05 | 81 ea |\n| 2027-03-15 | 81 ea |\n| 2027-03-31 | 81 ea |\n| **Total** | **243 ea** (3 rows) |\n\nContext: PRD-001 is \"Original Yogurt 250 g\" (base unit ea, pack multiplier 6); WH-001 is the Hangzhou Central Distribution Center (warehouse). All forecast rows recorded are known as of 2027-02-26, view = Planned, and these three are the only forecast rows in the network for this product–location pair (network-wide forecast dates span 2027-03-05 to 2027-03-31).\n\nNote this is the March plan, not existing stock. If you also want the replenishment shortfall against available stock and eligible planned receipts, I can run that calculation."
+  },
+  {
+   "id": "Q-24",
+   "passed": true,
+   "seconds": 26.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "execute_tool",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**WH-001 must replenish 106 units of PRD-001 for March, and it starts to fall short at the 2027-03-15 demand (FC-001-M2).**\n\nReplenishment walk for PRD-001 at WH-001 (base unit ea), as of / known on 2027-02-28, horizon 2027-03-31:\n\n| Demand date | Forecast ID | Demand | Eligible supply | Allocated | Shortage | Recommended replenishment |\n|---|---|---|---|---|---|---|\n| 2027-03-05 | FC-001-M1 | 81 | 137 | 81 | 0 | 0 |\n| 2027-03-15 | FC-001-M2 | 81 | 56 | 56 | 25 | 25 |\n| 2027-03-31 | FC-001-M3 | 81 | 0 | 0 | 81 | 81 |\n| **Total** | | **243** | | **137** | **106** | **106** |\n\nHow the gap builds:\n- March forecast totals 243 units (3 × 81); available stock plus eligible planned receipts cover 137.\n- The 2027-03-05 demand is fully covered and leaves 56 units, which cover only 56 of the 81 units due 2027-03-15 → **first shortfall of 25 units**.\n- No eligible supply is left for 2027-03-31, so all 81 units are short.\n- Total March replenishment need: 25 + 81 = **106 units**.\n\nRule used: \"replenishment walks the March forecast by date against available stock and eligible planned receipts; the shortfall is the recommended replenishment.\" The function reported completeness = complete with no issues; it does not create any order or shipment."
+  },
+  {
+   "id": "Q-25",
+   "passed": true,
+   "seconds": 72.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Largest March replenishment gap: Mango Nut Bar 250 g (PRD-044) at WH-019 – Ningbo Riverside Distribution Center (warehouse) — 257 units short.**\n\nBasis (rule used: March replenishment walk — forecast by date vs. available stock and eligible planned receipts; business date 2027-02-28, horizon 2027-03-31; quantities in base unit, ea). From the `fulfillment_plan` function, mode=replenishment, all 50 products:\n\n| Forecast date | Demand | Eligible supply | Gap |\n|---|---|---|---|\n| 2027-03-05 | 94 | 25 | 69 |\n| 2027-03-15 | 94 | 0 | 94 |\n| 2027-03-31 | 94 | 0 | 94 |\n| **March total** | **282** | **25** | **257** |\n\nRunner-ups (month total gap): PRD-011 Original Wholegrain Biscuit 250 g at WH-011 – 245 (273 demand / 28 supply); PRD-022 Strawberry Fruit Drink 250 g at WH-022 – 234 (261 / 27); PRD-033 Blueberry Breakfast Cereal 250 g at WH-008 – 223 (249 / 26). Total March gap across all product–location pairs: 6,524 units.\n\nData caveats from the same run:\n- `completeness = partial` with 10 data issues. One touches this answer directly: **OVERRESERVATION on lot LOT-044-C at WH-019** (PRD-044). The 2027-02-28 snapshot shows PRD-044 at WH-019 with on hand 82 (LOT-044-A), 98 (LOT-044-B), 140 (LOT-044-C, fully quarantined), 64 (LOT-044-D) and available = 0 on every lot — hence only 25 units of coverable supply.\n- Other issues in scope: duplicate event EV-00875, conflicting event EV-00897, negative stock EV-00967, missing transfer coverage EV-00944/EV-00949, and overreservation on LOT-011-C, LOT-022-C, LOT-033-C.\n\nThis is advisory only; nothing was ordered or shipped."
+  },
+  {
+   "id": "Q-26",
+   "passed": true,
+   "seconds": 64.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**March (2027-03-01 → 2027-03-31): 6,524 units must be replenished, across 50 product–warehouse pairs (all 50 product/location combinations in the plan need some replenishment).**\n\n**Basis**\n- Rule used: \"Replenishment walks the March forecast by date against available stock and eligible planned receipts; the shortfall is the recommended replenishment.\" Business date 2027-02-28, knowledge date 2027-02-28, horizon 2027-03-31, mode=replenishment, all 50 products (PRD-001…PRD-050); quantities in base unit **ea**.\n- March forecast demand totals 12,990 ea; eligible supply covers 6,466 ea; the uncovered shortfall = recommended replenishment = **6,524 ea**.\n- By forecast date:\n  - 2027-03-05 — demand 4,330 / allocated 4,081 / shortfall **249**\n  - 2027-03-15 — demand 4,330 / allocated 2,385 / shortfall **1,945**\n  - 2027-03-31 — demand 4,330 / allocated 0 / shortfall **4,330**\n- Largest single shortfalls: PRD-044 @ WH-019 (163 ea for the month), PRD-011 @ WH-011 (154), PRD-022 @ WH-022 (147), PRD-033 @ WH-008 (140), PRD-014 @ WH-014 (75); the remaining pairs are short roughly 15–106 ea each.\n\n**Data caveat (don't treat the total as final)**\nThe run returned `completeness = partial` with stock-data issues that make some lot/locations undeterminable: duplicate event EV-00875 (LOT-042-C); conflicting event EV-00897 (LOT-043-C @ STORE-018); negative stock EV-00967 (LOT-046-C @ STORE-021); missing transfer coverage EV-00944 (LOT-045-C @ STORE-020) and EV-00949 (LOT-045-D @ STORE-020); over-reservation at LOT-011-C/WH-011, LOT-022-C/WH-022, LOT-033-C/WH-008, LOT-044-C/WH-019; hold exceeding on hand at LOT-046-C/STORE-021. The affected warehouse pairs (WH-008, WH-011, WH-019, WH-022) may shift once corrected.\n\nThis is advisory only — no orders or shipments were created."
+  },
+  {
+   "id": "Q-27",
+   "passed": true,
+   "seconds": 104.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Short answer:** the 15 Mar 2027 demand for PRD-001 at WH-001 (forecast FC-001-M2, 81 ea) is covered only 56 ea — **56 ea usable stock left for that date, 25 ea short** (recommended replenishment 25 ea).\n\n**Replenishment walk (business date 2027-02-28, horizon 2027-03-31)**\n\n| Demand date | Forecast | Demand | Eligible supply then | Allocated | Shortage |\n|---|---|---|---|---|---|\n| 2027-03-05 | FC-001-M1 | 81 ea | 137 ea | 81 ea | 0 |\n| 2027-03-15 | FC-001-M2 | 81 ea | 56 ea | 56 ea | **25 ea** |\n| 2027-03-31 | FC-001-M3 | 81 ea | 0 ea | 0 ea | 81 ea |\n\nThe entire March supply pool at WH-001 is just **137 ea = 111 ea usable on hand + 26 ea eligible planned receipt**. The 5 Mar forecast consumes 81 ea of that pool first, leaving 56 ea for 15 Mar → 25 ea short of 81 ea; nothing remains for 31 Mar.\n\n**Why the pool is only 137 ea although 374 ea is physically on hand at WH-001**\n- **LOT-001-C, 141 ea** (expiry 2027-03-31, QC-001-C passed): 30 ea reserved by active reservations RSV-001-A (20, LINE-001-A) and RSV-001-B (10, LINE-001-B) until 2027-03-04 → **111 ea available** at the business date.\n- **LOT-001-A, 81 ea**: expired 2027-02-20 → 0 usable.\n- **LOT-001-B, 91 ea**: root lot of open recall REC-001 (announced 2027-02-27, \"Supplier seal integrity defect\") — 71 ea recall-blocked + 20 ea quarantined under HOLD-001-Q (recall precautionary hold); also expires 2027-03-10 → 0 usable.\n- **LOT-001-D, 61 ea**: derived from LOT-001-B (lot link LINK-001), 61 ea recall-blocked, expires 2027-03-05 → 0 usable.\n- **Planned receipt MOV-00019**: LOT-001-P, 26 ea, receive WH-001 on 2027-03-05, expiry 2027-03-31, QC-001-P passed, recorded 2027-02-27 → eligible supply.\n\nNote: the 30 ea reservations lapse on 2027-03-04, so stock physically available on 15 Mar looks like 141 ea (LOT-001-C), but 81 ea of it is already committed to the 5 Mar forecast — hence only 56 ea can go to 15 Mar.\n\n**Rules used:** available = on hand − quarantined − recall-blocked − active reservations (never below zero), expired lots = zero; March forecasts and planned receipts are plan, not on-hand stock; the March forecast is walked by date and the shortfall is the recommended replenishment. The function run reported completeness = complete with no issues. This is advice only — no stock, receipt or order was changed."
+  },
+  {
+   "id": "Q-28",
+   "passed": true,
+   "seconds": 27.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**49 recalls are in progress (open), and 1 is closed** — 50 recall records in total.\n\n**Basis (status code on the Product Recall records, business date 2027-02-28):**\n- open: 49\n- closed: 1\n\n**The closed one:**\n- Recall: REC-050\n- Root lot: LOT-050-B\n- Reason: Supplier seal integrity defect\n- Announced: 2027-02-27 · Known date: 2027-02-27\n\n**Notes on the count:**\n- All 50 records were announced and known on 2027-02-27 — on or before the business date 2027-02-28 — so none is excluded by the \"as of a day\" cutoff.\n- All 49 open recalls carry the same reason, \"Supplier seal integrity defect\"; the closed one has that reason too.\n- Per the recall rules used: a closed recall blocks nothing and gets no recall assessment, so only the 49 open recalls need tracing. An open recall reaches every downstream lot of its root lot through splits and transformations, and on-hand stock of those lots not already quarantined is recall-blocked.\n\nI can run a recall assessment (on hand, in transit, sold, returned, controlled/controllable, coverage, affected orders) for any specific open recall if you want the detail.\n\nThis is advice only — no recall or notice has been executed."
+  },
+  {
+   "id": "Q-29",
+   "passed": true,
+   "seconds": 37.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**REC-001 covers two lots: LOT-001-B (the root lot) and LOT-001-D (the lot split from it).**\n\n| Lot | Role in recall | Product | Supplier lot | Produced | Expiry |\n|---|---|---|---|---|---|\n| LOT-001-B | Root lot named on the recall | PRD-001 – Original Yogurt 250 g | SUP-001-001-B | 2027-02-01 | 2027-03-10 |\n| LOT-001-D | Downstream lot (split, 20 ea) | PRD-001 – Original Yogurt 250 g | SUP-001-001-D | 2027-02-15 | 2027-03-05 |\n\nBasis:\n- **Recall record:** REC-001, status Open, announced 2027-02-27, reason \"Supplier seal integrity defect\", root lot LOT-001-B.\n- **Split / transformation chain (lot_links):** LOT-001-B → LOT-001-D, link type split, 20 ea, effective 2027-02-21 (recorded 2027-02-21). The full lot_links table (51 links) contains no further link out of LOT-001-D and no transformation touching LOT-001-B, so the downstream closure stops at one level.\n- **Rule used:** \"an open recall reaches every downstream lot of its root lot through splits and transformations\" — since REC-001 is open, LOT-001-B plus its downstream lots (only LOT-001-D) are in scope.\n- **Dates:** both lots and the link are known on or before the business date 2027-02-28, so no knowledge-cutoff exclusion applies.\n\nThe recall's quantities, locations and coverage are a separate question — I can run the recall assessment for REC-001 as of 2027-02-28 if you want. This is advisory analysis only; no recall or notice is executed."
+  },
+  {
+   "id": "Q-30",
+   "passed": true,
+   "seconds": 54.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**REC-001 is an open recall** (announced 2027-02-27), not a product code — its root lot is LOT-001-B of **PRD-001 \"Original Yogurt 250 g\"**, which split into LOT-001-D (20 units). Applying the default rule \"**business date = 2027-02-28, so 'now' means that date**\", the recalled stock sits in exactly two places, 203 units on hand in total:\n\n| Place | Type | On hand | of which quarantined | recall-blocked, not yet controlled |\n|---|---|---|---|---|\n| WH-001 Hangzhou Central Distribution Center | warehouse | **152** (LOT-001-B 91 + LOT-001-D 61) | 20 | 132 |\n| STORE-001 Hangzhou Central Grocery | store | **51** (LOT-001-B 27 + LOT-001-D 24) | 3 | 48 |\n| **Total** | | **203** | **23** | **180** |\n\nBasis (recall assessment for REC-001 as of and known by 2027-02-28 — complete, no data issues — cross-checked against the 2027-02-28 inventory snapshot per lot):\n\n- Affected lots: LOT-001-B (root) and LOT-001-D (split child, LINK-001); affected product: PRD-001 only; inspections QC-001-B / QC-001-D; hold HOLD-001-Q.\n- In transit: 0 units at both locations; available is 0 at both because all of this stock is recall-blocked.\n- Sold from STORE-001: 29 units net of 3 returned units; affected order ORD-001-H (an open order with stock committed against an affected lot).\n- **Recall control**: controllable = on hand + in transit = 203; controlled = quarantined part = 23; coverage = 23 ÷ 203 ≈ **11.3%**, leaving **180 units uncontrolled and pending recall control** (48 at STORE-001, 132 at WH-001). Coverage is below 100% at every location.\n\nThis is advice only — no recall, hold or notice was executed and no stock was moved."
+  },
+  {
+   "id": "Q-31",
+   "passed": true,
+   "seconds": 46.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**29 units** of REC-001 stock were sold and not returned, all at **STORE-001 (Hangzhou Central Grocery)** — product PRD-001 (Original Yogurt 250 g).\n\nBasis (recall_assessment for REC-001, business date and knowledge date 2027-02-28; rule: \"units sold are net of returns and listed separately\"):\n\n| Location | Sold (net of returns) | Returned | On hand |\n|---|---|---|---|\n| STORE-001 (Hangzhou Central Grocery) | 29 ea | 3 ea | 51 ea |\n| WH-001 (Hangzhou Central Distribution Center) | 0 ea | 0 ea | 152 ea |\n\nEvents behind the number (affected lots LOT-001-B and its downstream split LOT-001-D):\n- 2027-02-24 retail sales at STORE-001: MOV-00008 16 ea of LOT-001-B + MOV-00018 16 ea of LOT-001-D, both on order ORD-001-H → 32 ea gross\n- 2027-02-25 customer return to STORE-001: MOV-00009 3 ea of LOT-001-B\n- 32 − 3 = 29 ea net sold and not returned, entirely at STORE-001\n\nNo duplicate/reversed sale or return events on these lots; the assessment reported completeness \"complete\" with no issues. REC-001 is open (announced 2027-02-27). This is advisory information only and executes no recall or notice."
+  },
+  {
+   "id": "Q-32",
+   "passed": true,
+   "seconds": 55.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Conclusion (basis: open recall reaches every downstream lot through splits and transformations):** REC-048 reaches **3 lots and 2 products**.\n\n**Recall:** REC-048 — status **open**, announced 2027-02-27, reason *\"Supplier seal integrity defect\"*, root lot **LOT-048-B**.\n\n**Lots and products reached**\n\n| Lot | Product | Role in recall | Link |\n|---|---|---|---|\n| LOT-048-B | PRD-048 **Cocoa Nut Bar 250 g** (supplier ORG-023, exp 2027-03-10) | root lot | — |\n| LOT-048-D | PRD-048 Cocoa Nut Bar 250 g (exp 2027-03-05) | downstream split child, 20 ea | LINK-048, `split`, 20 → 20 ea, 2027-02-21 |\n| LOT-047-D | PRD-047 **Vanilla Nut Bar 250 g** (supplier ORG-022, exp 2027-03-05) | downstream transform child, 4 ea | LINK-047-MULTI, `transform`, 5 → 4 ea, 2027-02-21 |\n\nNo further downstream lots exist (both children have zero outgoing lot links).\n\n**Why another product is involved:** on 2027-02-21 link **LINK-047-MULTI** is recorded as a *transform* edge from the cocoa-bar root lot LOT-048-B (5 ea) into the vanilla-bar lot LOT-047-D (4 ea). LOT-047-D is also a split child of LOT-047-B, so the transform merged cocoa-bar material into a vanilla-bar lot — that product-crossing link is what pulls PRD-047 into REC-048.\n\n**Quantities and control** (recall_assessment, as of 2027-02-28, completeness `complete`, issues: none)\n\n- **PRD-048 / WH-023:** 151 ea on hand, 0 in transit, 20 ea controlled, 151 ea controllable, coverage **13.2%**; controlled 20 ea is hold HOLD-048-Q on LOT-048-B. No affected orders.\n- **PRD-048 / STORE-023:** 53 ea on hand, 3 ea controlled, 53 ea controllable, coverage **5.7%**; 27 ea sold net of 3 ea returned (per rule, returned units are quarantined, which matches the 3 ea controlled); affected order **ORD-048-H**.\n- **PRD-047 / WH-022:** 66 ea on hand, **0 controlled**, 66 ea controllable, coverage **0%**; no affected orders.\n- **PRD-047 / STORE-022:** 23 ea on hand, **0 controlled**, 23 ea controllable, coverage **0%**; 17 ea sold; affected order **ORD-047-H**.\n\nSo the picture is: PRD-048 is partly controlled, while the cross-product lot LOT-047-D (105 ea on hand in total, 17 ea already sold) is entirely **uncontrolled** — coverage there is a genuine 0%, not an unknown.\n\n**Supporting checks:** latest inspections for LOT-047-D (QC-047-D, WH-022), LOT-048-B (QC-048-B, WH-023) and LOT-048-D (QC-048-D, WH-023) all **passed**, so quarantine is not driven by an inspection failure. Recall exposure here spans 2 products, 2 warehouses and 2 stores, with 2 affected orders.\n\nThis is advice only — no recall, hold or notice was executed."
+  },
+  {
+   "id": "Q-33",
+   "passed": true,
+   "seconds": 52.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**One order is affected: ORD-001-H** — it shipped two of REC-001's affected lots.\n\n**The recall**\n- REC-001, open, announced 2027-02-27, reason \"Supplier seal integrity defect\", root lot LOT-001-B (product PRD-001, supplier ORG-001).\n- The recall reaches 2 lots: LOT-001-B and LOT-001-D (LOT-001-D is downstream of LOT-001-B via a 20 ea split/transformation, LINK-001, MOV-00020/MOV-00021).\n\n**The affected order (ORD-001-H)**\n- Customer ORG-026, location STORE-001, ordered 2027-02-20, due 2027-02-24, status Closed, priority 1.\n- Line LINE-001-H: PRD-001, 64 ea.\n- On 2027-02-24 it shipped affected stock: 16 ea LOT-001-B (MOV-00008) and 16 ea LOT-001-D (MOV-00018) — 32 ea total.\n- 3 ea of LOT-001-B returned on 2027-02-25 (MOV-00009), so net affected units sold on this order = 29 ea.\n- The order closed on 2027-02-24, three days before the recall was announced — the affected product was sold before the recall existed.\n\n**Why no other orders**\n- There are no reservations on LOT-001-B or LOT-001-D, so no open order holds affected stock (the second test for \"affected order\").\n- Other movements on the affected lots are internal, not order-linked: receive at WH-001 (MOV-00005, MOV-00015), consume/produce (MOV-00020/21), dispatch WH-001→STORE-001 (MOV-00006, MOV-00016), arrive (MOV-00007, MOV-00017).\n- The other STORE-001 sales on 2027-02-24 (LOT-001-A via MOV-00004, LOT-001-C via MOV-00013) are on lots outside the recall, so those orders are not affected.\n\n**Recall control context** (recall_assessment, as of 2027-02-28, completeness = complete, no data issues)\n\n| Product | Location | On hand | In transit | Sold | Returned | Controlled | Controllable | Coverage | Pending control |\n|---|---|---|---|---|---|---|---|---|---|\n| PRD-001 | STORE-001 | 51 | 0 | 29 | 3 | 3 | 51 | 5.88% | 48 |\n| PRD-001 | WH-001 | 152 | 0 | 0 | 0 | 20 | 152 | 13.16% | 132 |\n\nCoverage is controlled ÷ controllable (48 ea still unblocked at STORE-001, 132 ea at WH-001 pending control).\n\nRules used: business date 2027-02-28, \"as of a day\" counting only events dated and recorded on or before that day; an open recall reaches every downstream lot of its root lot; affected orders = orders that shipped affected lots plus open orders holding a reservation on an affected lot.\n\nThis is advice only — no recall, hold or notice has been executed."
+  },
+  {
+   "id": "Q-34",
+   "passed": true,
+   "seconds": 28.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "execute_tool",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**REC-001 (as of 2027-02-28, the current business date): 23 units controlled out of 203 controllable — coverage 11.33% (0.1133). 180 units remain uncontrolled.**\n\nRecall context: REC-001 is **open**, announced 2027-02-27, rooted on lot **LOT-001-B**. Through one split/transformation link (LINK-001) it reaches downstream lots **LOT-001-B** and **LOT-001-D**, affecting a single product, **PRD-001**.\n\nBasis — control by product and location (controllable = on hand + in transit of affected lots; controlled = the quarantined part; coverage = controlled ÷ controllable):\n\n| Product | Location | On hand | In transit | Controllable | Controlled | Coverage | Uncontrolled | Sold (net of returns) | Affected orders |\n|---|---|---|---|---|---|---|---|---|---|\n| PRD-001 | STORE-001 | 51 | 0 | 51 | 3 | 5.88% | 48 | 29 (3 returned) | ORD-001-H |\n| PRD-001 | WH-001 | 152 | 0 | 152 | 20 | 13.16% | 132 | 0 | — |\n| **Total** | | **203** | **0** | **203** | **23** | **11.33%** | **180** | **29** | **1** |\n\n- Controlled units come from quarantined/held stock: inspection records QC-001-B and QC-001-D and hold HOLD-001-Q; affected movement events are MOV-00005 through MOV-00021.\n- Units sold are listed separately and net of returns; they are not part of controllable stock.\n- Cross-check: the recorded recall control for REC-001 / PRD-001 shows controllable 203, controlled 23, coverage 0.1133 — consistent with the assessment.\n\nData quality: the assessment is **complete** with **no issues**, so stock and coverage are determinable here (11.33% is a real figure, not an unknown).\n\nRules applied (quality & recall skill): the business date 2027-02-28 counts only events dated and recorded on or before that day; a lot whose latest inspection failed or is pending is fully quarantined, as are returns and active holds, without double-deducting; an open recall reaches all downstream lots of its root lot; coverage = controlled ÷ controllable.\n\nThis is advice only — nothing here executes a recall or issues a notice."
+  },
+  {
+   "id": "Q-35",
+   "passed": true,
+   "seconds": 27.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "execute_tool",
+    "bkn_finish_interaction",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**REC-001 coverage at WH-001: 13.16%** (20 of 152 controllable units controlled) — coverage is calculable, not unknown.\n\nAssessment as of the business date 2027-02-28 (records known by 2027-02-28):\n\n| Field | Value |\n|---|---|\n| Recall / Product / Location | REC-001 / PRD-001 / WH-001 |\n| Coverage | 0.131579 (13.16%) |\n| Controllable (on hand + in transit) | 152 ea (on hand 152, in transit 0) |\n| Controlled (quarantined part) | 20 ea |\n| Pending control (not yet controlled) | 132 ea |\n| Sold / Returned | 0 / 0 |\n| Affected lots | LOT-001-B, LOT-001-D |\n| Affected orders | none |\n\n**Rule used:** recall control by product and location — controllable = on hand + in transit of affected lots; controlled = the quarantined portion; coverage = controlled ÷ controllable. Open recall REC-001 reaches the downstream lots of its root lot (LOT-001-B and LOT-001-D); their WH-001 stock not already quarantined is recall-blocked, which is the 132 ea still to be brought under control. The function returned completeness \"complete\" with no issues, so no WH-001 stock was undeterminable.\n\nFor context, the only other location in this assessment is STORE-001 (same product PRD-001): coverage 5.88% — 3 controlled of 51 controllable ea, 48 ea pending control, 29 sold, 3 returned, affected order ORD-001-H.\n\nThis is advisory analysis only; no recall or notice was executed."
+  },
+  {
+   "id": "Q-36",
+   "passed": true,
+   "seconds": 26.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "execute_tool",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**48 units (ea) of PRD-001 at STORE-001 are still not yet under control** for recall REC-001.\n\nFrom the `recall_assessment` function (as of business date 2027-02-28, knowledge date 2027-02-28):\n\n| Measure (STORE-001 / PRD-001) | Value |\n|---|---|\n| Controllable (on hand 51 + in transit 0) | 51 ea |\n| Controlled (quarantined part) | 3 ea |\n| **Pending control — not yet under control** | **48 ea** |\n| Coverage | 0.058824 (≈5.9%) |\n| Sold (net of 3 returned) | 29 ea |\n\nBasis details:\n- Affected lots reaching STORE-001: LOT-001-B and LOT-001-D (downstream of root lot LOT-001 via a split).\n- Affected order: ORD-001-H.\n- Supporting evidence: movements MOV-00005–MOV-00021, inspections QC-001-B / QC-001-D, hold HOLD-001-Q.\n- Completeness: \"complete\", no data issues — the quantity is determinable, not unknown.\n\nFor comparison, the other location in scope, WH-001, has 152 ea controllable / 20 ea controlled → 132 ea not yet under control.\n\nRules applied: business date 2027-02-28; an open recall blocks on-hand stock of every downstream lot not already quarantined; controllable = on hand + in transit of affected lots, controlled = the quarantined portion. This is advisory only — no recall action or notice was executed."
+  },
+  {
+   "id": "Q-37",
+   "passed": true,
+   "seconds": 80.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Lowest coverage: REC-048 — 7.85% (23 of 293 units controlled, 270 uncontrolled).** It's a clear outlier; the next lowest open recalls are around 10.8–11%.\n\nBasis: business date 2027-02-28, knowledge cutoff 2027-02-28; coverage = controlled ÷ controllable (rule used: recall coverage = controlled ÷ controllable; a closed recall gets no assessment). REC-048 is open — root lot LOT-048-B, announced 2027-02-27, reason \"Supplier seal integrity defect\". Confirmed with the `recall_assessment` function (complete, no issues), consistent with the recorded `recall_snapshots` control rows.\n\nREC-048 by product and location:\n| Product | Location | Controllable | Controlled | Coverage |\n|---|---|---|---|---|\n| PRD-047 Vanilla Nut Bar 250 g | STORE-022 | 23 | 0 | 0.00% (17 sold, order ORD-047-H) |\n| PRD-047 Vanilla Nut Bar 250 g | WH-022 | 66 | 0 | 0.00% |\n| PRD-048 Cocoa Nut Bar 250 g | STORE-023 | 53 | 3 | 5.66% (27 sold, 3 returned, order ORD-048-H) |\n| PRD-048 Cocoa Nut Bar 250 g | WH-023 | 151 | 20 | 13.25% |\n\nThe whole PRD-047 line is uncontrolled (89 units at 0%), which drags the recall to the bottom.\n\nNext lowest open recalls (controlled / controllable): REC-024 10.80% (23/213), REC-033 and REC-034 10.85% (23/212), REC-042/043/044 10.90% (23/211), REC-006/007/008 10.95% (23/210). Highest by contrast: REC-039 53.33%, REC-013 52.88%, REC-026 51.44%.\n\nTwo exceptions:\n- **REC-045 — coverage cannot be calculated (unknown, not zero).** At STORE-020 the quantities for lots LOT-045-B/D are undeterminable (issue TRANSFER_COVERAGE_MISSING on movement EV-00949), so the assessment is partial and the recall-level ratio can't be computed. Its WH-020 alone is 20/150 = 13.33%. Affected order ORD-045-H.\n- **REC-050 is closed**, so it blocks nothing and gets no recall assessment; excluded from the ranking.\n\nScope: 50 recalls exist; 49 open ones assessed, 48 with a calculable coverage ratio. This is advice only — no recall or notice is executed."
+  },
+  {
+   "id": "Q-38",
+   "passed": true,
+   "seconds": 81.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "get_object_types",
+    "run_code",
+    "execute_tool",
+    "execute_tool",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**No. REC-050 is closed, so its lots should no longer be blocked as a recall.**\n\n**Rule used** (retail-quality-recall-en-us): *a closed recall blocks nothing and gets no recall assessment.* Business date is 2027-02-28.\n\n**1. The recall is genuinely closed**\n- REC-050: `status_code = closed`, root lot **LOT-050-B**, announced 2027-02-27, known 2027-02-27, reason \"Supplier seal integrity defect\".\n- It is the only recall for product PRD-050, and LOT-050-B has no parent lot, so no other open recall reaches these lots either.\n\n**2. Live stock confirms zero recall block**\ninventory_asof (as_of 2027-02-28, knowledge 2027-02-28, PRD-050, trace_lot_id LOT-050-B) — completeness: complete, issues: none:\n\n| Lot | Location | On hand | Recall-blocked | Quarantined | Available |\n|---|---|---|---|---|---|\n| LOT-050-B | WH-025 | 95 | **0** | 20 | 75 |\n| LOT-050-B | STORE-025 | 21 | **0** | 3 (returns) | 18 (in transit 5) |\n| LOT-050-D | WH-025 | 60 | **0** | 0 | 60 |\n| LOT-050-D | STORE-025 | 23 | **0** | 0 | 23 |\n\nLatest inspections on both lots passed (2027-02-02 and 2027-02-16), so no inspection quarantine applies. There are also no recall snapshots for REC-050/PRD-050 — consistent with a closed recall getting no recall assessment.\n\n**3. Why some units still look unavailable — and it is not a recall block**\n- **HOLD-050-Q**: LOT-050-B @ WH-025, qty 20, reason \"Recall precautionary hold\", effective 2027-02-27 → 2027-03-31, still active on 2027-02-28. Closing the recall does not release the hold, so those 20 units stay quarantined under the hold rule.\n- 3 units of LOT-050-B at STORE-025 are quarantined as returns (unrelated to the recall).\n- HOLD-050-R (5 units, STORE-025, \"Returns and packaging retest\") sits on LOT-050-C, which is outside REC-050's scope — LOT-050-B's only downstream lot is LOT-050-D, via split LINK-050.\n\n**Recommendation:** drop the recall block on LOT-050-B and LOT-050-D; releasing the remaining 20 units at WH-025 is a separate hold decision on HOLD-050-Q (runs to 2027-03-31). This is advice only — no recall, notice or hold was changed."
+  },
+  {
+   "id": "Q-39",
+   "passed": true,
+   "seconds": 129.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_cypher",
+    "run_cypher",
+    "bkn_start_interaction",
+    "bkn_finish_interaction",
+    "bkn_start_interaction",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yes — REC-045 is the one recall whose coverage cannot be calculated. Its coverage is undefined (not zero) for the STORE-020 row because stock there is undeterminable: an 8 ea arrival of affected lot LOT-045-D into STORE-020 has no matching dispatch event.**\n\n**The recall:** REC-045 — open, root lot LOT-045-B, product PRD-045, announced 2027-02-27. Affected lots: LOT-045-B and LOT-045-D; affected order at the problem site: ORD-045-H.\n\n**Where it breaks**\n\n| Location | on hand | in transit | controlled | controllable | coverage |\n|---|---|---|---|---|---|\n| **STORE-020** | null | null | null | **null** | **null** |\n| WH-020 | 150 | 0 | 20 | 150 | 0.1333 |\n\n`recall_assessment` returns completeness = **partial** with issue `TRANSFER_COVERAGE_MISSING`, ref **EV-00949**, lot LOT-045-D, STORE-020. In the events data, EV-00949 (MOV-00949) is an **arrive** of **8 ea** dated/recorded 2027-02-26, destination STORE-020, **source_location_id = null**, transfer_id **TRF-MISSING-D** — and **no dispatch event exists for that transfer**. An arrival with no dispatch means the inbound units can't be reconciled, so on hand, in transit, sold, returned, controlled and controllable are all undeterminable, and controlled ÷ controllable cannot be computed. It is **not 0**.\n\nAlso at STORE-020: **EV-00944** has the identical defect for **LOT-045-C** (8 ea, transfer TRF-MISSING, no dispatch). LOT-045-C is not an affected lot of REC-045, so it doesn't enter this recall's coverage, but it is why `inventory_asof` for PRD-045 also flags STORE-020. These are the only two missing-transfer events in the whole event set.\n\n**What this means for the number:** the WH-020 half is fully determinable (150 controllable, 20 controlled → 0.1333), but the STORE-020 half is unknown, so a whole-recall coverage figure can't be stated. Fix or void EV-00949 and physically confirm LOT-045-D stock at STORE-020, and coverage becomes calculable.\n\n**This is the only such case.** Of 50 recalls (49 open, 1 closed), recorded recall control for 2027-02-28 has 50 rows and **REC-045 is the only null-coverage row** — neighbours are normal (REC-044: 23/211 = 0.1090; REC-046: 23/203 = 0.1133). **No recall has controllable = 0**, so the other trigger doesn't apply. **REC-050 is closed**, so per the rule it gets no assessment and no coverage figure at all — excluded, not uncertain. REC-001 to REC-014 were each run individually and came back complete with calculable coverage and no issues.\n\n**Rules used:** business date 2027-02-28, counting only events dated and recorded on or before that day; coverage = controlled ÷ controllable with \"cannot be calculated\" kept distinct from zero; incomplete event copies such as arrivals without dispatch make related stock undeterminable; closed recalls get no assessment. These findings are advice and execute no recall or notice."
+  },
+  {
+   "id": "Q-40",
+   "passed": true,
+   "seconds": 60.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "run_code",
+    "run_code",
+    "run_code",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**At WH-001 (Hangzhou Central Distribution Center), REC-001 stock breaks down as: 20 ea already quarantined, and 132 ea blocked only by the recall** — 152 ea of affected stock on hand, so the recall controls about 13.2% of it.\n\nBasis (business date 2027-02-28; an open recall reaches every downstream lot of its root lot, and on-hand stock not already quarantined is recall-blocked — `recall_assessment` + `inventory_asof`, both complete with no data issues):\n\n- **REC-001** — open, announced 2027-02-27, root lot LOT-001-B, product PRD-001 (Original Yogurt 250 g). Affected lots at WH-001: **LOT-001-B** (root) and **LOT-001-D** (20 ea split off LOT-001-B, link LINK-001).\n- **Already quarantined: 20 ea** — active hold HOLD-001-Q at WH-001/LOT-001-B, reason \"Recall precautionary hold\", 20 ea effective 2027-02-27 → 2027-03-31 (known 2027-02-27). Both affected lots passed inspection (QC-001-B on 2027-02-02, QC-001-D on 2027-02-16), so none of it is inspection quarantine.\n- **Blocked only by the recall: 132 ea** — on hand that is neither held nor reserved: LOT-001-B 71 ea + LOT-001-D 61 ea.\n\nLot detail at WH-001, PRD-001:\n\n| Lot | On hand | Quarantined | Recall-blocked | Reserved | Available | Note |\n|---|---|---|---|---|---|---|\n| LOT-001-B | 91 | 20 | 71 | 0 | 0 | affected (root), expiry 2027-03-10, near expiry |\n| LOT-001-D | 61 | 0 | 61 | 0 | 0 | affected (split), expiry 2027-03-05, near expiry |\n| LOT-001-A | 81 | 0 | 0 | 0 | 0 | not in recall scope; expired 2027-02-20 |\n| LOT-001-C | 141 | 0 | 0 | 30 | 111 | not in recall scope |\n\nTwo things worth flagging: LOT-001-A's 81 ea shows zero available because it is expired, not because of REC-001; and the day's recorded recall control for PRD-001 company-wide is 23 ea controlled against 203 ea controllable (11.3%), of which WH-001 is 20/152 and STORE-001 is 3/51 (29 ea sold net of 3 returned, affected order ORD-001-H).\n\nThis is advice only — it ships or recalls nothing."
+  },
+  {
+   "id": "Q-41",
+   "passed": true,
+   "seconds": 63.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "As of the dataset’s business date **2027-02-28** (“now”), **4 lot-location positions** have stock that cannot be determined. They are unknown — **not zero**:\n\n| Lot | Product | Location | Why stock is undeterminable |\n|---|---|---|---|\n| **LOT-043-C** | PRD-043 — Blueberry Nut Bar 250 g | **STORE-018** — Ningbo West Park Grocery | **Conflicting event copies** for event **EV-00897** |\n| **LOT-045-C** | PRD-045 — Peach Nut Bar 250 g | **STORE-020** — Ningbo South Gate Grocery | **Transfer coverage missing** for event **EV-00944** |\n| **LOT-045-D** | PRD-045 — Peach Nut Bar 250 g | **STORE-020** — Ningbo South Gate Grocery | **Transfer coverage missing** for event **EV-00949** |\n| **LOT-046-C** | PRD-046 — Coconut Nut Bar 250 g | **STORE-021** — Wuxi Central Grocery | **Negative stock** from event **EV-00967**, plus **hold exceeds on-hand** |\n\nBasis: `inventory_asof` for all 50 products with `as_of_date=2027-02-28` and `knowledge_date=2027-02-28`. The result was **partial**: 396 of 400 lot-location rows had determinable stock; these 4 rows had `quality_status=unknown` and null quantity fields."
+  },
+  {
+   "id": "Q-42",
+   "passed": true,
+   "seconds": 58.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yes — two stock movements are recorded twice, but neither is counted twice.** One is a harmless identical duplicate (counted once); the other has conflicting copies, which makes that lot's stock undeterminable rather than double counted.\n\n**Rule used:** \"An event recorded twice counts once and a reversed event does not count; conflicting event copies … make the related stock undeterminable.\" Business date 2027-02-28.\n\n**Scope of the check:** 1,060 movement rows, 1,058 distinct `event_id`s — exactly two event ids appear twice; no blank event ids; no duplicates among planned rows (all duplicates are actual events).\n\n**1. Duplicate that counts once — lot LOT-042-C (product PRD-042, STORE-017)**\n- `EV-00875`: MOV-00875 (recorded 2027-02-24) and MOV-00877 (recorded 2027-02-26). Both are the same retail sale of 15 ea, event date 2027-02-24, event sequence 40, order ORD-042-H, source STORE-017, no reversal.\n- Only the recorded date differs → identical business duplicate, late-recorded a second time. Function verdict: `DUPLICATE_EVENT_IGNORED / EV-00875`.\n- Counted **once**, and the balances prove it: STORE-017 on hand 28 ea = arrive 40 − sale 15 + return 3; sold 12 ea net of 3 returned. Had the sale been counted twice, on hand would be 13 ea and sold 27 ea. WH-017 is consistent too (189 received − 40 dispatched = 149 on hand).\n\n**2. Duplicate that conflicts — lot LOT-043-C (product PRD-043, STORE-018)**\n- `EV-00897`: MOV-00897 = 16 ea and MOV-00899 = 99 ea, same sale event date 2027-02-24, same order ORD-043-H, same source STORE-018, neither reversal.\n- Quantities conflict → `CONFLICTING_EVENT / EV-00897`. Neither copy is counted; LOT-043-C stock **at STORE-018 cannot be determined** (quality status `unknown`, on hand / available / sold null — not zero). After the return of 3 ea, 16 would give 27 on hand and 99 would give negative stock, so no single balance is defensible.\n- Not affected: LOT-043-C at WH-018, which is known and clean (190 received − 40 dispatched = 150 on hand, 30 reserved, 120 available).\n\n**Caveat:** the `inventory_asof` replay returned `completeness = partial`; conclusions above are limited to the two lots/products examined (PRD-042, PRD-043, as of and known by 2027-02-28).\n\nThis is advice only; it executes no correction, recall or notice."
+  },
+  {
+   "id": "Q-43",
+   "passed": true,
+   "seconds": 93.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yes — 2 transfer arrivals have no matching dispatch.**\n\nBasis: business date 2027-02-28, actual events only, identical duplicates counted once, reversed events not counted; a transfer pairs a `dispatch` event with an `arrive` event under the same `transfer_id` (rule: \"arrivals without dispatch make the related stock undeterminable\").\n\n| Arrival event | Transfer ID | Lot | Destination | Source | Qty | Event / recorded date |\n|---|---|---|---|---|---|---|\n| EV-00944 (MOV-00944) | TRF-MISSING | LOT-045-C | STORE-020 | blank | 8 ea | 2027-02-26 / 2027-02-26 |\n| EV-00949 (MOV-00949) | TRF-MISSING-D | STORE-020 | LOT-045-D | blank | 8 ea | 2027-02-26 / 2027-02-26 |\n\nBoth are product **PRD-045 \"Peach Nut Bar 250 g\"** arriving at **STORE-020 (Ningbo South Gate Grocery)**, 16 ea in total, all within the knowledge cutoff.\n\n**Checks done**\n- 202 distinct transfer IDs; 200 of them have exactly one dispatch + one arrival. 200 dispatch events vs 202 arrive events — the surplus is exactly the two rows above.\n- No dispatch movement carries `TRF-MISSING` or `TRF-MISSING-D`, and no matching dispatch was recorded later.\n- The network's single reversal (EV-00922 → EV-00921) reverses a *sale*, not a dispatch, so no dispatch is cancelled.\n- No dispatch lacks its arrival (0 open transfer legs of that kind), and no duplicate arrival events exist inside transfers.\n- The 200 actual + 50 planned `receive` events carry **no** `transfer_id` — they are order/planned receipts, not transfers, so they are not expected to pair with dispatches.\n- Both lots did have a properly matched earlier transfer into STORE-020: EV-00940 dispatch 40 ea 2027-02-22 WH-020 → EV-00941 arrival 40 ea 2027-02-23 (LOT-045-C), and EV-00946/E V-00947 40 ea for LOT-045-D. The two 8-ea arrivals are extra receipts on top of those matched moves.\n\n**Impact on stock (from the published `inventory_asof` function, as_of and knowledge date 2027-02-28, scope STORE-020)** — result `completeness: partial`, with issues:\n- `TRANSFER_COVERAGE_MISSING` — ref EV-00944, LOT-045-C, STORE-020\n- `TRANSFER_COVERAGE_MISSING` — ref EV-00949, LOT-045-D, STORE-020\n\nBoth rows come back `quality_status: unknown` with null on-hand / available, so stock of LOT-045-C and LOT-045-D at STORE-020 **cannot be determined — it is not zero**. The warehouse side is unaffected: WH-020 shows LOT-045-C 141 on hand (30 reserved, 111 available) and LOT-045-D 60 on hand (0 available).\n\nRelated data-trust issues elsewhere, for information (not unmatched arrivals): duplicate sale copies EV-00875 (identical, 15 ea, LOT-042-C, STORE-017) and conflicting copies EV-00897 vs EV-00899 (16 vs 99 ea, LOT-043-C, STORE-018) — these make those lot/location stocks undeterminable too.\n\nThis is advice only — no transfer, receipt or correction has been executed."
+  },
+  {
+   "id": "Q-44",
+   "passed": true,
+   "seconds": 105.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**8 reservations in 4 lot/location pairs exceed the stock that can be used — at each one the usable stock is 0, so the whole reservation (30 units per pair, 120 units in total) cannot be met.**\n\n| Reservation | Order / line | Product | Lot · location | Reserved | Usable stock | Excess |\n|---|---|---|---|---|---|---|\n| RSV-011-A | ORD-011-A / LINE-011-A | PRD-011 | LOT-011-C · WH-011 | 20 | 0 | 20 |\n| RSV-011-B | ORD-011-B / LINE-011-B | PRD-011 | LOT-011-C · WH-011 | 10 | 0 | 10 |\n| RSV-022-A | ORD-022-A / LINE-022-A | PRD-022 | LOT-022-C · WH-022 | 20 | 0 | 20 |\n| RSV-022-B | ORD-022-B / LINE-022-B | PRD-022 | LOT-022-C · WH-022 | 10 | 0 | 10 |\n| RSV-033-A | ORD-033-A / LINE-033-A | PRD-033 | LOT-033-C · WH-008 | 20 | 0 | 20 |\n| RSV-033-B | ORD-033-B / LINE-033-B | PRD-033 | LOT-033-C · WH-008 | 10 | 0 | 10 |\n| RSV-044-A | ORD-044-A / LINE-044-A | PRD-044 | LOT-044-C · WH-019 | 20 | 0 | 20 |\n| RSV-044-B | ORD-044-B / LINE-044-B | PRD-044 | LOT-044-C · WH-019 | 10 | 0 | 10 |\n\nAll four orders are still open (priority 1 due 2027-03-02, priority 2 due 2027-03-04); the reservations are effective 2027-02-22 → 2027-03-04 and were recorded 2027-02-22.\n\n**Why the stock can't be used (as of 2027-02-28):** each of the four lots has 140 units on hand, but all 140 are quarantined and 0 are recall-blocked, so available = 0. The cause is a failed quality inspection on 2027-01-16 — \"Microbial test exceeded control\" (QC-011-C, QC-022-C, QC-033-C, QC-044-C); a lot that failed inspection is fully quarantined. The lots are not expired (expiry 2027-03-31), no recall is recorded against them, and the 2027-02-28 snapshot shows reserved = 0 at these lot/locations, i.e. the reservations are backed by no usable stock.\n\n**Rules used:** business date 2027-02-28; Available = on hand − quarantined − recall-blocked − active reservations, never below zero; expired or failed-inspection lots have zero available. The stock replay function run for all 50 products at 2027-02-28 flags exactly these 4 lot/locations as OVERRESERVATION — no others exist.\n\n**Also worth knowing:**\n- The other 92 reservations (46 lot/location pairs) sit on lots with 111–120 available against 30 reserved and are fully covered.\n- That replay was only \"partial\" overall because of data issues elsewhere: duplicate event on LOT-042-C, conflicting event on LOT-043-C, negative stock on LOT-046-C at STORE-021, missing transfer coverage on LOT-045-C/LOT-045-D at STORE-020. Stock at STORE-018/LOT-043-C, STORE-020/LOT-045-C and LOT-045-D, and STORE-021/LOT-046-C is undeterminable rather than zero — none of these is a location where the reservations above sit, so the list is unaffected.\n- This is advice only; it ships or releases nothing."
+  },
+  {
+   "id": "Q-45",
+   "passed": true,
+   "seconds": 40.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "execute_tool",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**After the reversal, STORE-019 has sold 14 units of LOT-044-C (net of returns) and has 26 units on hand.**\n\nRule used: \"a reversed event does not count\" and \"units sold are net of returns\" (business date 2027-02-28; as-of and knowledge cutoff both 2027-02-28).\n\nBasis — the only reversal on this lot is EV-00922 (recorded 2027-02-27, `reversal_of` = EV-00921, quantity 0), which cancels the second retail sale:\n\n| Event | Date | Type | Effect at STORE-019 |\n|---|---|---|---|\n| MOV-00916 | 2027-01-16 | receive | +180 at WH-019 |\n| MOV-00917 | 2027-02-22 | Shipping (dispatch) | −40 WH-019 → STORE-019 |\n| MOV-00918 | 2027-02-23 | Arriving | +40 at STORE-019 |\n| MOV-00919 | 2027-02-24 | Retail sale (ORD-044-H) | −17 |\n| MOV-00920 | 2027-02-25 | Customer return (ORD-044-H) | +3 |\n| MOV-00921 | 2027-02-26 | Retail sale | −9 |\n| MOV-00922 | 2027-02-27 | Reversal of EV-00921 | 9-unit sale does not count |\n\n- **Sold:** 17 − 9 (reversed) = 8 gross, less the 3 returned units → net sold **14 ea**; returns of 3 ea are listed separately.\n- **On hand:** 40 arrived − 17 sold + 3 returned = **26 ea** (the reversal nets back to this balance).\n- Cross-check with `inventory_asof` (PRD-044 / LOT-044-C / STORE-019, as of and known by 2027-02-28): sold 14.000000, returned 3.000000, on hand 26.000000, in transit 0 — `completeness: complete`.\n\nCaveat on using that stock: the lot's latest inspection failed, so all 26 on-hand units are quarantined (quarantined 26, available 0). An OVERRESERVATION data issue is also flagged at WH-019 (not at STORE-019), so it doesn't affect this store's figures.\n\nThis is advice only; nothing was shipped, adjusted or recalled."
+  },
+  {
+   "id": "Q-46",
+   "passed": true,
+   "seconds": 41.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "get_object_types",
+    "execute_tool",
+    "execute_tool",
+    "run_cypher",
+    "execute_tool",
+    "execute_tool",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Rule used:** \"today\" is the business date 2027-02-28, and \"as of a day\" counts only actual events whose **event date and recorded date** are both on or before that day. Both reconstructions were computed as of 2027-02-28, differing only in the knowledge cutoff.\n\n## LOT-041-C at STORE-016 (product PRD-041)\n\n| View | On hand | Quarantined | Reserved | Available |\n|---|---|---|---|---|\n| As known today (knowledge ≤ 2027-02-28) | **26 ea** | 5 ea | 0 ea | **21 ea** |\n| As known on 2027-03-05 (knowledge ≤ 2027-03-05) | **19 ea** | 5 ea | 0 ea | **14 ea** |\n\nThe late-recorded February 26 sale therefore moves the position by **7 ea**: 26 → 19 ea on hand, 21 → 14 ea available.\n\n## Basis\nLot flow at STORE-016 for LOT-041-C (expiry 2027-03-31, passed inspection):\n- 2027-02-23 — arrival from WH-016, +40 ea (MOV-00852)\n- 2027-02-24 — retail sale, −17 ea (MOV-00853)\n- 2027-02-25 — customer return, +3 ea (MOV-00854)\n- 2027-02-26 — retail sale, **−7 ea, event date 2027-02-26 but recorded 2027-03-02** (MOV-00855)\n\nThat sale sits inside the February 28 business date but was not known on 2027-02-28, so today's view excludes it (sold 14 ea) while the March 5 view includes it (sold 21 ea). The 5 ea quarantine reduces available under both cutoffs.\n\n## Store level, all lots of PRD-041 at STORE-016\nOn hand as of 2027-02-28: **98 ea** as known today (A 23, B 26, C 26, D 23) vs **91 ea** as known on 2027-03-05 (A 23, B 26, C 19, D 23). Only LOT-041-C moves. Most of the rest isn't sellable: LOT-041-B and LOT-041-D are 23 ea recall-blocked each, LOT-041-A (23 ea) is expired (2027-02-20), so available is 0 ea for those lots under both cutoffs.\n\nBoth runs returned completeness \"complete\" with no data issues, so nothing was undeterminable. Advisory only — nothing has been shipped, blocked or adjusted."
+  },
+  {
+   "id": "Q-47",
+   "passed": true,
+   "seconds": 51.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Short answer: on 2027-02-20 there were 534 units of PRD-001 available at WH-001 (as known then); today, 2027-02-28, only 111 units are available — down 423 units, or about 79%.**\n\nRule used: \"today\" = the business date 2027-02-28; \"as of a day\" counts only actual events whose event date and recorded date are on or before that day. For 2027-02-20 I used `knowledge_date` = 2027-02-20, i.e. only what was known then (`inventory_asof`, completeness = complete, no data issues).\n\n**2027-02-20, as known then — 534 available**\n\n| Lot | On hand | Reserved | Quarantined | Recall-blocked | Available | Expiry |\n|---|---|---|---|---|---|---|\n| LOT-001-A | 121 | 0 | 0 | 0 | 121 | 2027-02-20 (last valid day) |\n| LOT-001-B | 151 | 0 | 0 | 0 | 151 | 2027-03-10 |\n| LOT-001-C | 181 | 0 | 0 | 0 | 181 | 2027-03-31 |\n| LOT-001-D | 81 | 0 | 0 | 0 | 81 | 2027-03-05 |\n| **Total** | **534** | 0 | 0 | 0 | **534** | |\n\nNothing was held back yet on that day — no reservations, quarantine or recall blocks — so all 534 were available.\n\n**Today, 2027-02-28 — 111 available**\n\n| Lot | On hand | Reserved | Quarantined | Recall-blocked | Available | Note |\n|---|---|---|---|---|---|---|\n| LOT-001-A | 81 | 0 | 0 | 0 | **0** | expired 2027-02-20 |\n| LOT-001-B | 91 | 0 | 20 | 71 | **0** | fully blocked, near expiry |\n| LOT-001-C | 141 | 30 | 0 | 0 | **111** | only free stock left |\n| LOT-001-D | 61 | 0 | 0 | 61 | **0** | recall-blocked |\n| **Total** | **374** | 30 | 20 | 132 | **111** | |\n\n**Where the 423 units went (per lot)**\n- LOT-001-A: −121 (40 dispatched to STORE-001 on 02-22; the remaining 81 have passed their 02-20 expiry, so 0 available).\n- LOT-001-B: −151 (40 dispatched on 02-22, 20 consumed 02-21, 20 quarantined, 71 recall-blocked).\n- LOT-001-C: −70 (40 dispatched on 02-22, 30 reserved on open demand).\n- LOT-001-D: −81 (40 dispatched on 02-22, 20 received as production 02-21, 61 recall-blocked).\n\nSo it is not just depletion: of the 423-unit drop, 160 is lower on-hand stock (mostly the 40-unit dispatches to STORE-001 on 02-22 and the 20-unit consume on 02-21), and 263 is stock still physically at WH-001 but no longer available (132 recall-blocked, 20 quarantined, 30 reserved, 81 expired).\n\n**Consistency check:** replaying 2027-02-20 with knowledge through 2027-02-28 returns exactly the same 534 / 121-151-181-81 figures, so no duplicated, reversed or late-recorded events change that day's picture. Today's snapshot object agrees with the replay (on hand 374, reserved 30, quarantined 20, available 111).\n\nNote: a 26-unit receipt of LOT-001-P is planned for 2027-03-05 — that is a future event and is not included in today's stock. This is informational only; nothing is reserved, shipped or ordered."
+  },
+  {
+   "id": "Q-48",
+   "passed": true,
+   "seconds": 36.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**LOT-001-B (product PRD-001, supplier ORG-001, supplier lot SUP-001-001-B, produced 2027-02-01, expires 2027-03-10) was received into the Hangzhou Central Distribution Center, then split, shipped to a store, sold, and partly returned.** Quantities are in the base unit (ea), using actual events only — no duplicate event IDs and no reversals were found; business date 2027-02-28.\n\n| Date | Event | From → To | Quantity |\n|---|---|---|---|\n| 2027-02-02 | Receiving (EV-00005) | supplier → WH-001 Hangzhou Central Distribution Center | **+151** |\n| 2027-02-21 | Transformation input / consume (EV-00020) | WH-001 → out of lot (split into LOT-001-D) | **−20** |\n| 2027-02-22 | Shipping / dispatch (EV-00006, transfer TRF-001-B) | WH-001 → STORE-001 Hangzhou Central Grocery | **−40** |\n| 2027-02-23 | Arriving (EV-00007, transfer TRF-001-B) | → STORE-001 Hangzhou Central Grocery | **+40** |\n| 2027-02-24 | Retail sale (EV-00008, order ORD-001-H) | STORE-001 → customer | **−16** |\n| 2027-02-25 | Customer return (EV-00009, order ORD-001-H) | customer → STORE-001 | **+3** |\n\nWhy each step:\n- **151 ea received** on 2027-02-02 at WH-001 — the only inbound receipt for this lot.\n- **20 ea consumed on 2027-02-21**: lot link LINK-001 records a *split* of LOT-001-B (parent 20 ea) into child lot **LOT-001-D** (20 ea), effective 2027-02-21, and the matching transformation output of 20 ea (EV-00021) is booked into WH-001 under LOT-001-D. Those 20 ea are no longer part of LOT-001-B.\n- **40 ea shipped** from WH-001 on 2027-02-22, and the **same 40 ea arrived at STORE-001** on 2027-02-23 under the same transfer TRF-001-B — nothing left in transit.\n- **16 ea sold** at STORE-001 on 2027-02-24 (order ORD-001-H) and **3 ea returned** to STORE-001 on 2027-02-25 (same order) — net 13 ea out to the customer.\n\nPosition implied by these events (derived from the events, not a recorded snapshot): 91 ea at WH-001 (151 − 20 − 40) and 27 ea at STORE-001 (40 − 16 + 3). Only WH-001 and STORE-001 were touched by this lot."
+  },
+  {
+   "id": "Q-49",
+   "passed": true,
+   "seconds": 21.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**LOT-001-D** was split from **LOT-001-B** — **20 ea** (child quantity 20.000000, parent quantity 20.000000 ea).\n\nBasis (Lot Transformation record, using the quality/recall skill's split pattern):\n- Link **LINK-001**: parent LOT-001-B → child LOT-001-D, link type `split`, child quantity **20 ea**\n- Effective date 2027-02-21, known date 2027-02-21\n- Both lots are product PRD-001: LOT-001-B produced 2027-02-01 (expires 2027-03-10); LOT-001-D produced 2027-02-15 (expires 2027-03-05)\n\nThis is the only split link with LOT-001-B as parent in the data, and it covers the direct one-level child only — I did not expand any further splits below LOT-001-D."
+  },
+  {
+   "id": "Q-50",
+   "passed": true,
+   "seconds": 54.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## REC-001 stock has only ever been at two locations: WH-001 and STORE-001\n\n**Conclusion.** Recall REC-001 (open, announced 2027-02-27, \"Supplier seal integrity defect\") is rooted on lot **LOT-001-B** of product **PRD-001 Original Yogurt 250 g**. Its affected lots are LOT-001-B and its one downstream lot **LOT-001-D** (split, 20 ea). Every recorded event for those two lots touches just two places:\n\n| Location | Id | Type | Role in the trail |\n|---|---|---|---|\n| Hangzhou Central Distribution Center | WH-001 | warehouse | Receipts, the split/consume→produce, dispatch out |\n| Hangzhou Central Grocery | STORE-001 | store | Arrival, sales, and the return |\n\n**The path it travelled (actual events, date order):**\n1. 2027-02-02 – LOT-001-B received into **WH-001** (151 ea).\n2. 2027-02-16 – LOT-001-D received into **WH-001** (81 ea).\n3. 2027-02-21 – 20 ea of LOT-001-B consumed at **WH-001**, LOT-001-D produced there (20 ea) — the split link that makes LOT-001-D recall-reachable.\n4. 2027-02-22 – dispatch **WH-001 → STORE-001** (40 ea of each lot).\n5. 2027-02-23 – arrival at **STORE-001** (40 ea of each lot).\n6. 2027-02-24 – sales out of **STORE-001** (16 ea each; 29 ea sold in total).\n7. 2027-02-25 – 3 ea of LOT-001-B returned to **STORE-001**.\n\nNo other warehouse, store or in-transit location appears anywhere in these lots' history.\n\n**Where that stock is now (2027-02-28):** 152 ea on hand at **WH-001**, 51 ea at **STORE-001**, 0 in transit. Affected open order: ORD-001-H.\n\n**Rules and evidence**\n- Business date is **2027-02-28**; only actual events dated and recorded on/before that day were counted, planned events excluded.\n- Open recall reaches every downstream lot of its root lot through splits/transformations — hence LOT-001-D is included.\n- Data-trust check: the 11 events on these lots have distinct event ids, none is a reversal, and each arrival has its matching dispatch — the trail is fully determinable (function completeness: complete, no data issues).\n- Source: `recall_assessment` for REC-001 as of 2027-02-28 (rows for WH-001 and STORE-001 over lots LOT-001-B/LOT-001-D), plus the lot-link and Supply Event records.\n\nThis is advice only; it executes no recall, hold or notice."
+  }
+ ]
+}

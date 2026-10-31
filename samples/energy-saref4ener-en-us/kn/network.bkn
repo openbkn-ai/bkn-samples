@@ -7,6 +7,23 @@ version: 0.1.0
 branch: main
 ---
 
-# Energy Demand Response
+# Energy Demand Response Operations
 
-Aggregator flexibility assessment, shared-resource planning and measured settlement. SAREF4ENER provides semantic references; commercial rules are local extensions. Plans are not actuals; unknown is not zero. Dates are day-only, peak_a is2hours and peak_b is3hours, not instantaneous dispatch. Discover3functions,2snapshot metrics and the investigation Skill through standard capabilities.
+Capacity assessment, shared-resource dispatch and metered settlement for an aggregator. SAREF4ENER provides semantic references only; all data is synthetic.
+
+## Business rules (defaults; a user's explicit condition wins)
+
+- The business date is 2027-02-28; "now" and "today" mean this date. November to February events have happened; March events are announced plans. Block peak_a lasts 2 hours and peak_b 3 hours; events on the same date and block overlap completely.
+- "As of a day" counts only events whose announced_date and known_date are on or before that day, and other records whose known_date is on or before it.
+- Forecasts, baselines and readings take the latest visible version (highest revision) per device (meter), date and block; offers per event and device; receipts per allocation. A duplicate with the same content counts once; conflicting content in the same revision is undeterminable. Never fall back to an older version when the latest is invalid.
+- Power in kW, energy in kWh = kW × block hours, prices in CNY/kWh; sum exact values, then round half up to 6 decimals for quantities and ratios and 2 for money. Unknown is not zero; a ratio with a zero denominator is empty.
+- Eligibility: per device the minimum of offered kW, maximum reduction, the lower of forecast and baseline minus minimum service load (not below zero), and active caps; inactive devices, barred devices, withdrawn or expired offers count zero; a cap without a value is undeterminable. Each site total is limited to response_cap_kw.
+- Dispatch: active events on one date and block share device and site limits; committed allocations take their share first, new allocation goes by priority then offer cost from lowest; if any event in the block has undeterminable capacity or a commitment exceeds a limit, the block's new plan is undeterminable. A withdrawn offer or changed cap never cancels a committed allocation, which still counts in full; when it exceeds current eligible capacity, only the block's new plan is undeterminable. Estimated cost includes existing commitments.
+- Delivery: only allocations with a completed receipt count; failed or declined count zero; a missing receipt is undeterminable. Measured reduction = approved baseline × hours − valid reading (not below zero), shared in proportion to committed energy when one device serves several events in a block; delivery ratio = verified energy ÷ committed energy.
+- Settlement: revenue = verified energy × reward_cny_kwh only when the delivery ratio meets minimum_ratio (equal counts); customer compensation = shared energy × offer cost, paid regardless; net may be negative. The ledger uses the latest posted row with posted_date on or before the day; same-day conflicts cannot be reconciled, and no posting is empty.
+
+## How to answer
+
+- Use Cypher for master data, events, allocations, receipts, readings, the ledger and snapshots. capacity_snapshots and settlement_snapshots only record 2027-02-28; rows with quality_code invalid cannot be used, and valid ones still need checking against recomputation.
+- Call flexibility_assessment for eligible capacity, dispatch_plan for plans, and settlement_assessment for verified energy, delivery ratio, revenue and compensation; set knowledge_date to an earlier day to see what was known then.
+- Cypher on the OpenBKN 0.2.1 mainline supports joins, WITH, CASE and aggregation, not variable-length paths or UNWIND. Code columns (*_code) hold English codes.

@@ -36,7 +36,7 @@ Event committed_kwh=sum(all visible committed allocation kW*hours). verified_kwh
 
 ## Minimal reusable capabilities and snapshots
 
-Exactly3functions above,2atomic source-snapshot metrics and1read-only investigation Skill per language. Snapshot metrics capacity_snapshots.eligible_kw and settlement_snapshots.delivery_ratio are recorded values for their asof/knowledge pair, not real-time calculations or substitutes for recomputation. Skill routes assessment/planning/settlement, compares cached versus recomputed results, explains evidence/missing facts and avoids actual control/payment. All Skill references are physically inside its references/ directory and included in its attachment manifest. No one-function-per-question design.
+Exactly the three functions above and two read-only Skills per language: capacity and dispatch (operations, site energy managers) and execution and settlement (duty officers, settlement clerks); no metrics. capacity_snapshots and settlement_snapshots are recorded values for their as-of/knowledge pair, read with Cypher and checked against recomputation, never substitutes for it. No one-function-per-question design.
 
 ## Ten acceptance scenarios and bank mapping
 

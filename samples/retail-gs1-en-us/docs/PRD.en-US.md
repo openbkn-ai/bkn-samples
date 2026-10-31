@@ -1,54 +1,57 @@
-# Food distribution, inventory fulfillment and recall PRD
+# Food Supply Operations: Lot Traceability, Inventory Fulfilment and Recall PRD
 
-Status: implementation baseline, not an acceptance certificate. Two standalone samples: retail-gs1-en-us and retail-gs1-zh-cn. Data/IDs have equivalent meanings, localized display values and paired question/gold banks.
+## Goals and users
 
-## Business users and decisions
+A food retailer runs 25 warehouses and 25 stores selling dairy, bakery, beverages, cereals and snacks. Lots arrive from suppliers, are inspected and received, move between warehouses and stores, and are sold or returned at stores; quality problems trigger recalls. Business users want to ask in plain business language where stock is, whether it can be used, whether it is enough and how far a recall reaches, and see the lots, events and dates behind every conclusion.
 
-Quality owners need to identify affected lots, warehouse/store locations, shipments, sold units and orders, then distinguish already controlled stock from still-exposed stock. Distribution planners must allocate shared inventory without selling quarantined, expired or recalled goods. Store managers need usable stock, expiry risks and future replenishment gaps. Every result declares business date, knowledge cutoff, unit, evidence IDs and uncertainty.
+| User | Concern | Expected conclusion |
+|---|---|---|
+| Quality lead | Which lots failed inspection or are recalled, where the stock is, how much was sold, how much is under control | inspection results, quarantined and recall-blocked quantities, flows, units sold and not returned, coverage |
+| Warehouse and distribution lead | How much is really available, whether orders can be filled, how much to replenish in March | available stock with the reasons it is reduced, line-by-line allocation and shortfalls, replenishment against the forecast |
+| Store manager | How much the store can sell, what is near or past expiry, which orders a recall affects | store availability, near-expiry and expired lots, affected orders |
 
-The closed loop covers supplier receipt, inspection, warehouse/store movements, transit, sale, return, isolation/release, expiry, reservation, order fulfillment, known demand forecasts, replenishment recommendations, lot transformation and recall. It does not execute procurement, shipment, payment or recall notifications; does not train forecasts, optimize routes or claim compliance certification.
+Success means users get conclusions that follow the business rules below without stating any calculation rule, together with the lots, events and documents behind them. An answer that is only right when the rule is spelled out in the question, and wrong when it is phrased differently, does not count.
 
-## Time and quantity rules
+## Decision scope
 
-Data spans 2026-11-01 through 2027-03-31; default observation date 2027-02-28. Explicit business date, knowledge date and actual/planned scope are mandatory. Planned supply never becomes realized inventory. Public presentation is day-only; source event timestamp/sequence, when present, is retained for provenance. Same-day chronology is explicit, never inferred from ID ordering.
+In scope: product, organization and location master data; lots and inspections; receipts, transfers, in-transit, sales, returns and other stock movements; holds; orders and reservations; demand forecasts and planned receipts; lot splits and transformations; recalls, recall snapshots and inventory snapshots.
 
-Identical semantic event IDs count once; conflicting payloads invalidate affected balances. Visible reversals remove their target effects. Late reports are visible only by knowledge cutoff. Missing essential flows and negative inventory produce issues and unknown balances rather than silent zeroes. Case quantities use the declared product conversion exactly once. Never sum incompatible products or units. Dispatch removes source stock and creates destination transit; arrival converts transit to received stock. Returns are physically quarantined.
+Out of scope: placing orders, shipping or paying; routing; forecasting models; automatic recall notices; regulatory certification and financial settlement. Every conclusion is advice only.
 
-Available stock excludes overlapping physical quarantine, active recalls, expired units and valid reservations without double deduction. Inspection failure/pending blocks sale. A line must meet remaining shelf-life at its due date. Shared FEFO allocation sorts expiry/lot after quality and location constraints; orders sort ascending priority, due date, order ID and line ID. A line may consume its own reservation exactly once while reservations for excluded/other lines remain protected. Unused own reservations are released after the line is processed.
+## Business rules
 
-Recall traverses declared downstream lot links and keeps direct/indirect evidence. Cross-product transformations establish traceability, not equality between raw-material and finished-product counts; only declared same-unit splits conserve quantities. Sold, returned, on-hand, transit, controlled, pending control and unknown are distinguished; returns already included in on-hand are not added again. Coverage is controlled/controllable only for a complete positive denominator, otherwise null.
+These are the default rules; users do not need to repeat them. When a user states a different condition, the user's condition wins.
 
-Forecasts are explicit synthetic business inputs, not a model-accuracy claim. Replenishment advances through demand dates until 2027-03-31, admits only timely known eligible planned supply, expires stock and consumes FEFO buckets; shortages are read-only suggestions. See business-contract.md for the executable field-level semantics.
+1. **Business date**: 2027-02-28; "now" and "today" mean this date. March forecasts and planned receipts are the plan known today and never count as having happened.
+2. **As of a day**: count only actual events dated on or before that day and recorded on or before that day; an event recorded later does not count when looking at what was known before it was recorded.
+3. **Event trust**: an event recorded twice counts once; a reversed event does not count. When copies of one event conflict, an arrival has no matching dispatch, stock goes negative, or returns exceed sales, the stock of the affected lot-location cannot be determined, and it is never treated as zero.
+4. **Quantities**: always in the product's base unit (units); quantities recorded in cases are multiplied by units per case.
+5. **On hand and in transit**: receipts, production, arrivals and returns add to on hand; sales, consumption and dispatches reduce it; dispatched goods not yet arrived are in transit, not on hand.
+6. **Quarantine**: a lot that failed inspection or is still awaiting it is fully quarantined; returns and active holds are quarantined too, and the same units are never deducted twice.
+7. **Recall block**: an open recall reaches every downstream lot from its root lot through splits and transformations; whatever on-hand stock of those lots is not already quarantined is blocked. A closed recall no longer blocks anything.
+8. **Available stock**: on hand minus quarantine, recall block and active reservations; an expired lot has zero available; a reservation can only reduce availability to zero, and anything beyond that is over-reservation. A lot expiring within two weeks is near expiry.
+9. **Order allocation**: open orders share one pool of available stock in order of priority, due date and order number. Each line uses only lots at the same location for the same product that passed inspection and remain in date at the later of today and the due date plus the line's minimum remaining shelf days, earliest expiry first; an order's own reservation can be used for that order. Open orders already past their due date are still allocated.
+10. **Replenishment**: walk the March forecast in date order, drawing on available stock and on eligible planned receipts arriving by each demand date, earliest expiry first; stock that no longer meets the remaining shelf life on the demand date does not count. The shortfall is the recommended replenishment.
+11. **Recall control**: by product and location. Controllable = on hand + in transit of the affected lots; controlled = the quarantined part of it; coverage = controlled ÷ controllable. When controllable is zero or stock cannot be determined, coverage cannot be calculated, which is not zero. Units sold are net of returns and shown separately.
 
-## Scenario-to-test agreement
+## Business scenarios
 
-| Scenario | Business question and output | IDs | Basic/medium/complex |
-|---|---|---|---|
-| S01 Product, organization, location | Units, packaging and responsible suppliers | Q001–010 | 6/3/1 |
-| S02 Receipt and inspection | Receipt, inspection and quarantined/available quantities | Q011–020 | 4/4/2 |
-| S03 Lot traceability | Upstream/downstream paths, transformations and affected sets | Q021–030 | 3/4/3 |
-| S04 Inventory and transit | On-hand, transit, quarantine, reservation, availability, issues | Q031–040 | 3/4/3 |
-| S05 Expiry | Near-expiry risks, eligibility and FEFO evidence | Q041–050 | 3/4/3 |
-| S06 Order fulfillment | Shared-stock allocations, line shortages and reasons | Q051–060 | 2/4/4 |
-| S07 Future replenishment | Known supply/demand, expiry and shortages through March | Q061–070 | 2/4/4 |
-| S08 Recall reach | Affected stock, locations, orders, sales, returns and unknowns | Q071–080 | 2/4/4 |
-| S09 Recall action | Physical control, remaining exposure and qualified coverage | Q081–090 | 2/4/4 |
-| S10 Data trust | Duplicate/conflict/reversal/late-report effects and cutoff changes | Q091–100 | 3/5/2 |
+| Scenario | User question | Expected conclusion |
+|---|---|---|
+| S01 Products and locations | What we sell, who supplies it, how many warehouses and stores | products and categories, suppliers, packaging, shelf-life requirement, location counts |
+| S02 Receipt and inspection | Which lots failed or are awaiting inspection, where they are | inspection results, stock of problem lots, whether they can be sold |
+| S03 Lot flow | Where stock came from, where it went, what it was split into | movement events, transfer sources, split child lots, locations a recalled lot reached |
+| S04 Stock and in transit | How much is really available, why it is less | available, in-transit and quarantined quantities, reasons by lot |
+| S05 Expiry | What is near or past expiry and still on hand | near-expiry and expired lots, expired quantity |
+| S06 Order fulfilment | Whether orders can be filled, how much is short | line allocation, lots used, short orders and shortfall |
+| S07 Replenishment | How much to replenish in March, from which demand it falls short | forecast, replenishment, shortfall by demand date, largest gap |
+| S08 Recall reach | Which lots, locations and orders a recall reaches | downstream lots, stock by location, sold and not returned, affected orders |
+| S09 Recall control | How much is controlled and how much is left | controlled, controllable, coverage, uncontrolled quantity, handling of closed recalls |
+| S10 Data trust and look-back | Which data is unreliable, how conclusions differ by date | undeterminable stock and reasons, duplicate and reversed events, before and after late records |
 
-Exactly 100 questions per language, 30 basic, 40 medium, 30 complex. Every question has a scenario ID, scope, output contract and evidence. Each scenario exercises relationships/evidence; complex questions combine at least two business constraints. Changing identifiers in a single lookup template does not make a sufficient bank. PRD owns the business scenario matrix; no separate duplicative scenario requirements document.
+## Acceptance
 
-## Minimal capabilities and ontology boundary
-
-Three general functions: inventory_asof (dated reconstruction and trace), fulfillment_plan (orders and replenishment modes), recall_assessment (reach and physical control). One investigation Skill determines scope, chooses capabilities, checks completeness/issues and provides evidence-supported suggestions. Two metrics are individual recorded snapshots: available inventory quantity and recall-control coverage. They require date, knowledge, product/unit and location or recall qualification; they do not replace live reconstruction.
-
-Functions accept business scopes, never question IDs, and never load questions/gold. Output scope, rows, issues, evidence and completeness. Decimal quantities/ratios use six decimal places; unknown remains null. Simple master-data lookups use native object queries.
-
-GS1 Web Vocabulary v1.16 commit f8f407bf717233c871dca2f62f4e45b0940e8cad is Apache-2.0. Organization/Place/FoodBeverageTobaccoProduct provide conceptual references, not equivalentClass assertions. EPCIS/CBV inform events; their specifications and official examples are not redistributed. Orders, forecasts, inspections, reservations and recall controls are declared local operational extensions. All 15 object classes are populated and linked, with 30 direct foreign-key relations and 3 concept groups. Stable synthetic IDs are not registered GTIN/GLN. Normal master tables have at least 50 meaningful records; fact volumes follow scenario complexity. Chinese business values are localized, stable machine codes are separate.
-
-## Delivery and validation
-
-Complete deterministic development checks before formal evaluation: BKN/schema, data hashes, foreign keys, temporal/unit/quantity invariants, intentional quality exceptions, bilingual parity, capability registration, actual function/metric/Skill queries, package self-containment and installation fidelity. Development checks are not extra Q&A rounds.
-
-Freeze package/data/questions/grader before one formal evaluation through installed live tools by isolated subagents without gold access. Store first responses, tool traces and lifecycle result. All 100 questions per language remain in the denominator, including failures. Score business correctness separately from evidence capture. 100% is the target, not an assumed result. Preserve failures; do not silently retry, alter gold or start another round without user direction.
-
-Deliver bilingual docs, BKN, synthetic data, capabilities, 100-question banks, local offline archives and actual 8081 evidence. No commit/push/release/catalog update is authorized by this implementation task. README reports actual state and prerequisites; packaging alone is not acceptance.
+1. 50 questions per language covering the 10 scenarios: 12 basic, 20 medium, 18 complex. All asked in the business language of the quality, warehouse or store lead, with no calculation rule in the question.
+2. Complex questions involve at least two business rules, or reasoning across three or more record types.
+3. Reference answers are computed independently of the capability under test, and the tested agent never sees them.
+4. One round per language, with a 100% accuracy target.
