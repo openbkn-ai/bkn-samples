@@ -1,35 +1,34 @@
-# End-to-End Manufacturing Operations Sample
+# Manufacturing operations (IOF reference, English)
 
-This is an importable end-to-end manufacturing sample for tracing demand forecast through plan, supply, production, quality, finished-goods receipt, and shipment.
+A fictional precision machining company: two plants, Shenzhen and Suzhou, machine pump housings, valve bodies, impellers and flanges for ten customers, traced from sales orders, demand forecasts and production plans to material requirements, purchasing and receipts, material issues, production execution, inspection, finished goods receipts, shipments and machine maintenance. Includes 40 data tables, the ontology and 2 business Skills. Business needs and rules are in the [PRD](docs/PRD.md).
 
-**Installation compatibility:** this sample requires OpenBKN **0.2.1 or later**. Version 0.1.3 is a fixed-source self-contained candidate in the complete thirteen-package update, using the product shared MariaDB and requiring no sample-specific image. Local checks and real platform acceptance are recorded separately; it is not admitted to a stable catalog.
+## Install and try
 
-## What is included
+1. Sign in to OpenBKN and open **Quick start** on the home page.
+2. Refresh the official catalog, choose **Manufacturing Operations** and click **Install**; it needs **OpenBKN >=0.2.1 <0.3.0**.
+3. Wait for installation and verification to finish, then open the knowledge network.
+4. Try the experience cards in smart Q&A, data query and graph exploration, or connect an external agent over MCP to query objects and use the Skills.
 
-- `kn/`: the operational BKN model with **40 ObjectTypes**, **71 RelationTypes**, and 3 concept groups.
-- `data/`: 40 operational CSV tables with **2,700 records** in total; every table contains at least 50 records.
-- `iof-reference/`: a separate, fixed **112-class IOF Core + Production Planning** reference layer. Its synthetic reference instances preserve source IRI, label, and definition; it is not operational transaction data.
-- `bkn-eval/`: 100 bilingual questions and 18 deterministic acceptance scenarios.
-- `docs/`: business PRD, model mapping, data-branch design, ontology-layer rationale, and capability requirements.
+Without access to the official catalog, download this sample's `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases) and install it with **Import offline package** in Quick start.
 
-## Scenario and planning horizon
+All data are fictional and synthetic, covering November 2026 to March 2027 with business date 2027-02-28: November to February have happened and March work orders are the plan. Nothing here represents a real company; nothing is ordered, scheduled or shipped.
 
-The data chain is forecast → production plan → sales order → material receipt and issue → work order and routing → equipment, people, and execution → quality specification and inspection → finished-goods receipt → shipment.
+## Capabilities
 
-The planning horizon is **November 2026 through March 2027**. Day-level temporal fields are date-only (`YYYY-MM-DD`): sales delivery, procurement receipt, goods receipt, shift, execution, maintenance, and production due dates. The latest planned production due date is `2027-03-30`. The forecast period is a `YYYY-MM` planning-month string, not a day-level date.
+Every question can be answered with Cypher, so the sample ships no functions and no metrics, and the Community edition can use all of it.
 
-Fifty connected business cases cover 22 shipped completions, 11 material shortages, 11 quality failures, and 6 work orders in production. Read [the branch design](docs/dataset-scenarios.md) for the evidence represented by each outcome.
+- **Cypher queries**: products, BOM revisions, routings, machine capabilities and operator qualifications, orders, shipments and units owed, forecasts and plans, material requirements and issues, purchasing and receipts, executions and shifts, inspection results and specifications, inventory and maintenance.
+- **Skills**: organised by user as "Orders and materials" (order fulfilment manager, purchasing and materials manager) and "Production and quality" (production lead, quality manager), stating the business rules, Cypher patterns and how to answer.
 
-## English and Chinese packages
+## Experience cards
 
-The English and Chinese packages have the same CSV schemas, row counts, stable IDs, BKN relation structure, and evaluation IDs. Business display values and status values are localized in each package. Use stable IDs for cross-language comparison; do not infer an exception from an entity name.
+15 experience cards are taken from the test set, covering BOMs and routings, operator qualifications, late and remade orders, shortages and blocking, scrap, execution compliance, rejected lots and escapes, overdue maintenance, order traces and stock, from simple to involved. The cards' data-query and graph Cypher are checked online after installation with `tools/acceptance/experience_set.py`.
 
-## Start here
+## Data and acceptance
 
-1. Read the [business PRD](docs/PRD.md), which includes scenario scope and P0 acceptance needs.
-2. Inspect `kn/` and `data/` together: relation mapping rules identify the foreign-key fields used by the CSVs.
-3. Review the [IOF-to-operational mapping](docs/iof-operational-mapping.md) and [ontology-layer rationale](docs/ontology-layers.md) before treating the 112-class reference layer as transactional data.
-4. Run the local checks from this directory:
+The data are generated deterministically from one business story by [`tools/manufacturing_industry/generate_data.py`](../../tools/manufacturing_industry/generate_data.py), and the two language packages differ only in translated text. Machines, operators, materials, suppliers and stock are shared across work orders, with deliberate exceptions: split and late shipments, scrap shortfalls, rejected and remade work orders, a quality escape, non-compliant executions, an issue from a receipt in inspection, short and rejected purchases, a draft BOM and overdue maintenance; see the test set README.
+
+The test set is the [business-scenario test set v1](bkn-eval/baselines/2026-10-30-business-scenarios-v1/README.md); reference answers are computed from the delivered data by an independent script and are not shipped in the package. After installation, an agent that has not seen the answers runs every question once; below 100%, record why it failed and change the ontology description or a Skill first, never the questions or answers. Run the local checks in this directory:
 
 ```bash
 python3 tools/verify_industry_links.py
@@ -38,19 +37,13 @@ python3 bkn-eval/run.py
 openbkn bkn validate kn
 ```
 
-The checks validate 71 operational relations, plan/BOM provenance, transaction-derived inventory snapshots, every shipment gate, 112 IOF reference-instance tables, and the 18 acceptance baselines, and BKN syntax.
+## Open ontology sources
 
-## Open-source ontology source
+`iof-reference/` is a separate **IOF Core + Production Planning 112-class** reference layer whose synthetic reference instances keep the source IRI, label and definition and are not operational records; its correspondence to the operational model is in the [IOF operational mapping](docs/iof-operational-mapping.md) and [ontology layers](docs/ontology-layers.md). The operational model and CSV files are this sample's fictional business implementation, not an official IOF release.
 
-The 112-class reference layer is derived from the released **IOF Core** and **IOF Production Planning** modules. The operational BKN model and CSV records are a local, fictional implementation for this sample; they are not an official IOF release or a verbatim copy of its OWL files.
-
-- [IOF ontology source repository](https://github.com/iofoundry/ontology)
+- [IOF ontology repository](https://github.com/iofoundry/ontology)
 - [IOF Core module](https://spec.industrialontologies.org/portal/release/202603/core.html)
 - [IOF Production Planning module](https://spec.industrialontologies.org/portal/release/202603/productionplanning/ProductionPlanningOntology.html)
-- [MIT license declared by the IOF Core source](https://github.com/iofoundry/Core/blob/main/Core.rdf)
+- [MIT license declared in the IOF Core source](https://github.com/iofoundry/Core/blob/main/Core.rdf)
 
-The exact source IRIs, labels, definitions, and the fixed module boundary used by this package are documented in [`iof-reference/README.md`](iof-reference/README.md).
-
-## Scope boundary
-
-The sample answers whether a released production plan can be fulfilled through material issue, execution, final quality, finished-goods receipt, and shipment. It deliberately excludes dispatch optimization, finite-capacity scheduling, lot genealogy, and root-cause workflows. See [capability requirements](docs/capability-requirements.md) for the supported evidence and decision boundary.
+To upgrade, uninstall the old sample before installing the new version. Uninstalling removes the sample's data and user changes; deleting the offline package cache does not uninstall installed resources.

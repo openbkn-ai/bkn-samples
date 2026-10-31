@@ -22,7 +22,7 @@ class IndustryEnergyTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'duplicate'):validate_plan(ROOT,changed)
 
     def test_four_typed_fixtures_match_locked_data_and_model(self):
-        for family,count,records in [('manufacturing-industry',40,2700),('energy-saref4ener',15,14787)]:
+        for family,count,records in [('manufacturing-industry',40,1529),('energy-saref4ener',15,14787)]:
             for language in ('en-us','zh-cn'):
                 root=ROOT/'samples'/(family+'-'+language);db=load(root/'db/database.py',family+language)
                 specs,rows,digest=db.fixture();self.assertEqual(len(rows),count);self.assertEqual(sum(map(len,rows.values())),records)

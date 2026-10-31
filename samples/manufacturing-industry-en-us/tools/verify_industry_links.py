@@ -1,19 +1,40 @@
 #!/usr/bin/env python3
-"""Verify BKN links and manufacturing decision constraints for every business branch."""
+"""Verify BKN links and the bookkeeping that every manufacturing record must obey.
+
+The checks hold for any data that follows the business rules (links resolve, material and finished
+goods balance to the transactions, shipments come from accepted lots), not for particular IDs.
+"""
 import csv
+import math
 import re
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NORMAL = {'已接受':'accepted','已拒绝':'rejected','已完成':'completed','已阻塞':'blocked','待处理':'pending','已下达':'released','已发料':'issued','部分发料':'partial','通过':'pass','失败':'fail'}
+CODES = {  # displayed status (zh-CN or en-US) -> code
+    '已接受': 'accepted', '已拒绝': 'rejected', '已拒收': 'rejected', '待检': 'pending_inspection', '待处理': 'pending',
+    '已完成': 'completed', '已阻塞': 'blocked', '已下达': 'released', '生产中': 'in_production', '进行中': 'in_progress', '未开始': 'not_started',
+    '已发料': 'issued', '部分发料': 'partial', '待发料': 'awaiting_issue', '通过': 'pass', '不通过': 'fail', '已发运': 'shipped',
+    '已冻结': 'frozen', '草稿': 'draft', '已停用': 'obsolete', '原料库': 'raw_material', '待检区': 'quality_hold', '成品库': 'finished_goods',
+}
+BUSINESS_DATE = '2027-02-28'
+
+
 def rows(name):
-    with (ROOT/'data'/f'{name}.csv').open(encoding='utf-8', newline='') as f: return list(csv.DictReader(f))
-def state(value): return NORMAL.get(value, value)
-def num(value): return float(value)
+    with (ROOT / 'data' / f'{name}.csv').open(encoding='utf-8', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def code(value):
+    return CODES.get(value, value)
+
+
+def num(value):
+    return float(value) if value != '' else 0.0
+
 
 relation_count = 0
-for path in sorted((ROOT/'kn/relation_types').glob('*.bkn')):
+for path in sorted((ROOT / 'kn/relation_types').glob('*.bkn')):
     text = path.read_text(encoding='utf-8')
     identifier = re.search(r'(?m)^id: ([a-z][a-z0-9_]*)$', text)
     display_name = re.search(r'(?m)^name: (.+)$', text)
@@ -21,64 +42,75 @@ for path in sorted((ROOT/'kn/relation_types').glob('*.bkn')):
     assert path.stem == identifier.group(1), f'Relation filename and id differ: {path.name}'
     assert len(identifier.group(1)) <= 128 and len(display_name.group(1)) <= 128, f'Relation API length limit exceeded: {path.name}'
     endpoint = re.search(r'\| ([a-z_]+) \| ([a-z_]+) \| direct \|', text)
-    mapping = re.search(r'\| ([a-z_]+) \| ([a-z_]+) \|\s*$', text.split('### Mapping Rules',1)[1], re.M)
+    mapping = re.search(r'\| ([a-z_]+) \| ([a-z_]+) \|\s*$', text.split('### Mapping Rules', 1)[1], re.M)
     assert endpoint and mapping, f'Invalid relation declaration: {path.name}'
-    source, target = endpoint.groups(); source_field, target_field = mapping.groups()
+    source, target = endpoint.groups()
+    source_field, target_field = mapping.groups()
     target_ids = {row[target_field] for row in rows(target)}
-    assert all(row[source_field] in target_ids for row in rows(source)), f'{source}.{source_field} has an unresolved BKN link'
+    assert all(row[source_field] in target_ids for row in rows(source) if row[source_field]), f'{source}.{source_field} has an unresolved BKN link'
     relation_count += 1
 
-orders = {r['production_order_id']:r for r in rows('production_orders')}
-plans = {r['production_plan_id']:r for r in rows('production_plans')}
-plan_lines = {r['production_order_id']:r for r in rows('production_plan_lines')}
-versions = {r['bom_version_id']:r for r in rows('product_bom_versions')}
-components = {r['bom_component_id']:r for r in rows('bom_components')}
-requirements = {r['production_order_id']:r for r in rows('production_order_material_requirements')}
-lots = {r['production_order_id']:r for r in rows('quality_inspection_lots')}
-results = {r['inspection_lot_id']:r for r in rows('quality_inspection_results')}
-specs = {r['quality_specification_id']:r for r in rows('quality_specifications')}
-fg = {r['finished_goods_receipt_id']:r for r in rows('finished_goods_receipts')}
+orders = {r['production_order_id']: r for r in rows('production_orders')}
+versions = {r['bom_version_id']: r for r in rows('product_bom_versions')}
+components = {r['bom_component_id']: r for r in rows('bom_components')}
+receipts = {r['goods_receipt_id']: r for r in rows('goods_receipts')}
+lots = {r['inspection_lot_id']: r for r in rows('quality_inspection_lots')}
+fg = {r['finished_goods_receipt_id']: r for r in rows('finished_goods_receipts')}
+sol = {r['sales_order_line_id']: r for r in rows('sales_order_lines')}
 
-for order_id, order in orders.items():
-    plan_line = plan_lines[order_id]; plan = plans[plan_line['production_plan_id']]
-    requirement = requirements[order_id]; component = components[requirement['bom_component_id']]
-    assert plan['snapshot_date'] == '2026-10-20' and plan['planning_start_date'] == '2026-11-01' and plan['planning_end_date'] == '2027-03-31'
-    assert state(plan_line['status']) == 'released' and plan_line['scenario_as_of_date'] == plan['snapshot_date']
-    assert plan_line['product_id'] == order['product_id'] == versions[order['bom_version_id']]['product_id']
-    assert component['bom_version_id'] == order['bom_version_id'] and component['component_product_id'] == requirement['product_id']
+# work orders follow their BOM version, and each requirement is the BOM quantity with scrap rounded up
+for order in orders.values():
+    assert versions[order['bom_version_id']]['product_id'] == order['product_id'] == sol[order['sales_order_line_id']]['product_id']
+issued_by_requirement = defaultdict(float)
+for issue in rows('material_issue_transactions'):
+    issued_by_requirement[issue['material_requirement_id']] += num(issue['issued_quantity'])
+for req in rows('production_order_material_requirements'):
+    comp = components[req['bom_component_id']]
+    order = orders[req['production_order_id']]
+    assert comp['bom_version_id'] == order['bom_version_id'] and comp['component_product_id'] == req['product_id']
+    assert num(req['required_quantity']) == math.ceil(round(num(order['requested_quantity']) * num(comp['quantity_per']) * (1 + num(comp['scrap_factor'])), 6))
+    assert num(req['issued_quantity']) == issued_by_requirement[req['material_requirement_id']]
+    expected = 'issued' if num(req['issued_quantity']) >= num(req['required_quantity']) else ('partial' if num(req['issued_quantity']) > 0 else 'awaiting_issue')
+    assert code(req['status']) == expected, req
 
-issues_by_location = defaultdict(float); receipts_by_location = defaultdict(float)
-for r in rows('material_issue_transactions'): issues_by_location[r['inventory_location_id']] += num(r['issued_quantity'])
-for r in rows('goods_receipts'): receipts_by_location[r['inventory_location_id']] += num(r['received_quantity'])
-fg_in = defaultdict(float); fg_out = defaultdict(float)
-for r in fg.values(): fg_in[r['inventory_location_id']] += num(r['received_quantity'])
-for r in rows('shipments'): fg_out[fg[r['finished_goods_receipt_id']]['inventory_location_id']] += num(r['shipped_quantity'])
-for balance in rows('inventory_balances'):
-    loc = balance['inventory_location_id']
-    expected = receipts_by_location[loc] - issues_by_location[loc] if balance['inventory_balance_id'].startswith('IB-RAW') else fg_in[loc] - fg_out[loc]
-    assert num(balance['on_hand_quantity']) == expected
-    assert num(balance['available_quantity']) == num(balance['on_hand_quantity']) - num(balance['allocated_quantity']) >= 0
-    assert balance['as_of_date'] == '2027-03-31'
-
+# material and finished goods balance to receipts, issues and shipments as of the business date
+issued_from = defaultdict(float)
+on_hand = defaultdict(float)
+for r in receipts.values():
+    assert r['received_date'] <= BUSINESS_DATE
+    if code(r['inspection_status']) in ('accepted', 'pending_inspection'):
+        on_hand[(r['inventory_location_id'], r['product_id'])] += num(r['received_quantity'])
+for issue in rows('material_issue_transactions'):
+    r = receipts[issue['goods_receipt_id']]
+    assert code(r['inspection_status']) != 'rejected' and issue['inventory_location_id'] == r['inventory_location_id'] and issue['issue_date'] <= BUSINESS_DATE
+    issued_from[r['goods_receipt_id']] += num(issue['issued_quantity'])
+    on_hand[(r['inventory_location_id'], r['product_id'])] -= num(issue['issued_quantity'])
+assert all(issued_from[k] <= num(r['received_quantity']) for k, r in receipts.items())
+shipped_from = defaultdict(float)
+for receipt in fg.values():
+    assert code(lots[receipt['inspection_lot_id']]['status']) == 'accepted' and lots[receipt['inspection_lot_id']]['production_order_id'] == receipt['production_order_id']
+    on_hand[(receipt['inventory_location_id'], orders[receipt['production_order_id']]['product_id'])] += num(receipt['received_quantity'])
 for shipment in rows('shipments'):
-    order = orders[shipment['production_order_id']]; receipt = fg[shipment['finished_goods_receipt_id']]
-    lot = lots[shipment['production_order_id']]; result = results[lot['inspection_lot_id']]
-    delivery = state(shipment['delivery_status'])
-    assert receipt['production_order_id'] == shipment['production_order_id']
-    assert shipment['sales_order_line_id'] == order['sales_order_line_id']
-    assert num(shipment['shipped_quantity']) <= num(receipt['received_quantity']) <= num(order['requested_quantity'])
-    if delivery == 'completed':
-        spec = specs[result['quality_specification_id']]
-        assert state(receipt['status']) == state(lot['status']) == 'accepted'
-        assert state(result['result_status']) == 'pass' and num(spec['lower_limit']) <= num(result['measured_value']) <= num(spec['upper_limit'])
-        assert num(shipment['shipped_quantity']) > 0
-    else:
-        assert delivery in {'blocked','rejected','pending'} and num(shipment['shipped_quantity']) == 0
+    receipt = fg[shipment['finished_goods_receipt_id']]
+    assert receipt['production_order_id'] == shipment['production_order_id'] and orders[shipment['production_order_id']]['sales_order_line_id'] == shipment['sales_order_line_id']
+    assert shipment['shipment_date'] <= BUSINESS_DATE and receipt['receipt_date'] <= shipment['shipment_date']
+    shipped_from[receipt['finished_goods_receipt_id']] += num(shipment['shipped_quantity'])
+    on_hand[(receipt['inventory_location_id'], orders[receipt['production_order_id']]['product_id'])] -= num(shipment['shipped_quantity'])
+assert all(shipped_from[k] <= num(r['received_quantity']) for k, r in fg.items())
+balances = rows('inventory_balances')
+for balance in balances:
+    key = (balance['inventory_location_id'], balance['product_id'])
+    assert abs(num(balance['on_hand_quantity']) - on_hand.pop(key, 0.0)) < 1e-6, balance
+    assert num(balance['available_quantity']) == num(balance['on_hand_quantity']) - num(balance['allocated_quantity']) >= 0
+    assert balance['as_of_date'] == BUSINESS_DATE
+assert all(abs(v) < 1e-6 for v in on_hand.values()), on_hand
 
-for order_id, requirement in requirements.items():
-    if state(requirement['status']) == 'partial':
-        raw = next(r for r in rows('inventory_balances') if r['product_id'] == requirement['product_id'])
-        assert num(requirement['issued_quantity']) < num(requirement['required_quantity']) and num(raw['available_quantity']) == 0
-
+# execution quantities: each operation passes on the good quantity of the one before
+steps = {r['process_step_id']: r for r in rows('process_steps')}
+operations = {r['operation_id']: r for r in rows('manufacturing_operations')}
+for e in rows('production_execution_records'):
+    if code(e['status']) == 'completed':
+        assert e['started_date'] <= e['completed_date'] <= BUSINESS_DATE
+        assert num(e['good_quantity']) + num(e['scrap_quantity']) <= num(orders[operations[steps[e['process_step_id']]['operation_id']]['production_order_id']]['requested_quantity'])
 print(f'Validated {relation_count} BKN relations across the operational model.')
-print('Validated plan/BOM provenance, transaction-derived inventory snapshots, and every shipment quality-and-receipt gate.')
+print('Validated requirements, transaction-derived stock, finished goods and shipment gates as of the business date.')
