@@ -1,5 +1,5 @@
-"""Register/verify two immutable metrics, three readable functions and one Skill."""
-import hashlib,json,os,subprocess,tempfile
+"""Register/verify the three retail functions and the Skills."""
+import hashlib,json,subprocess
 from pathlib import Path
 from ownership_receipt import read, remember, require_owned
 from register_skills import run as register_skills
@@ -36,25 +36,38 @@ def managed_query(*args, **kwargs):
     if not ctx.token or not ctx.interaction_id:raise ValueError('MISSING_MANAGED_CALL_CONTEXT')
     return kn.query_object_instance(*args,context=ctx,**kwargs)
 @tool
-def retail_function(product_ids: list, as_of_date: str, knowledge_date: str, view_kind: str='actual', location_ids: list=None, lot_ids: list=None, order_ids: list=None, recall_id: str='', trace_lot_id: str='', mode: str='orders', horizon_date: str='2027-03-31') -> dict:
-    scope=dict(product_ids=product_ids,as_of_date=as_of_date,knowledge_date=knowledge_date,view_kind=view_kind,location_ids=location_ids,lot_ids=lot_ids,order_ids=order_ids,recall_id=recall_id,trace_lot_id=trace_lot_id,mode=mode,horizon_date=horizon_date)
+def retail_function(as_of_date: str, knowledge_date: str, product_ids: list=None, location_ids: list=None, lot_ids: list=None, order_ids: list=None, recall_id: str='', trace_lot_id: str='', mode: str='orders', horizon_date: str='2027-03-31') -> dict:
+    scope=dict(product_ids=product_ids,as_of_date=as_of_date,knowledge_date=knowledge_date,location_ids=location_ids,lot_ids=lot_ids,order_ids=order_ids,recall_id=recall_id,trace_lot_id=trace_lot_id,mode=mode,horizon_date=horizon_date)
     return run_request(managed_query,KN_ID,CONTRACT,OPERATION,scope,execute)
 """
     return core+'\n'+loader+'\nKN_ID='+repr(kn_id)+'\nOPERATION='+repr(operation)+'\nCONTRACT='+repr(c)+'\n'+entry
 
-def metric_definitions():
-    zh=json.loads((ROOT/'model-contract.json').read_text()).get('language')=='zh-cn';result=[]
-    for table,prop,code,scale,name in [('inventory_snapshots','available','recorded_available_quantity',6,'已记录可用库存量' if zh else 'Recorded available inventory'),('recall_snapshots','coverage_ratio','recorded_recall_coverage',6,'已记录召回处置覆盖率' if zh else 'Recorded recall control coverage')]:
-        result.append({'version':1,'code':code,'name':name,'description':('单个带日期快照实例；须匹配业务日、知识截止日、商品、地点或召回及单位。未知为空，不跨期合计。' if zh else 'One dated snapshot instance. Match business/knowledge date, product, location or recall and unit; null is unknown; never aggregate history.'),'owner_object_type_id':table,'metric_type':'atomic','calculation_scope':'object_instance','result_semantics':{'statistical_grain':{'group_by_dimensions':[]},'value':{'physical_type':'decimal','semantic_type':'ratio' if table=='recall_snapshots' else 'measure','unit':{'system':'UCUM','quantity_kind':'dimensionless' if table=='recall_snapshots' else 'count','code':'1','scale_factor':1},'precision':38,'scale':scale,'rounding_mode':'half_up'},'no_data_policy':'null','partial_data_policy':'reject'},'specification':{'kind':'atomic','measure':{'aggregation':'identity','expression':{'node_type':'property','property_ref':{'object_type_id':table,'property_name':prop}}}},'query_capabilities':{'analysis_dimensions':[],'time_dimensions':[]},'lifecycle':{'status':'draft','ontology_version':'1.0','expression_language_version':'1.0','function_registry_version':'1.0','aggregation_registry_version':'1.0','unit_registry_version':'1.0'}})
-    return result
-
-def metric_call(action,kn_id,metric=None,definition=None):
-    args=['bkn','object-metric',action,kn_id]
-    if metric:args += [metric['id'],'--metric-version',str(metric['version'])]
-    if definition:
-        with tempfile.NamedTemporaryFile(mode='w',suffix='.json') as f:
-            json.dump(definition,f);f.flush();return cli(*args,'--body-file',f.name)
-    return cli(*args)
+# (name, type, required, English, Chinese) per operation; only what each calculation uses.
+COMMON=[('as_of_date','string',True,'Business date YYYY-MM-DD.','业务日期 YYYY-MM-DD。'),
+        ('knowledge_date','string',True,'Count only records known by this date, YYYY-MM-DD; usually the business date.','只计这一天及以前已记录的事件，YYYY-MM-DD；一般与业务日期相同。')]
+INPUTS={
+    'inventory_asof':[('product_ids','array',True,'1 to 50 product IDs.','1 到 50 个商品编号。'),
+                      ('location_ids','array',False,'Optional locations to report.','可选，只看这些地点。'),
+                      ('lot_ids','array',False,'Optional lots to report.','可选，只看这些批次。'),
+                      ('trace_lot_id','string',False,'Optional lot whose connected upstream and downstream lots to trace.','可选，追溯这个批次上下游相连的批次。')],
+    'fulfillment_plan':[('product_ids','array',True,'1 to 50 product IDs.','1 到 50 个商品编号。'),
+                        ('mode','string',False,'orders (default) allocates open orders; replenishment walks the forecast.','orders（默认）为未完成订单配货；replenishment 按预测算补货。'),
+                        ('order_ids','array',False,'Optional orders to report; other orders keep their place in the queue.','可选，只看这些订单；其他订单仍按原顺序占用库存。'),
+                        ('location_ids','array',False,'Optional locations to report.','可选，只看这些地点。'),
+                        ('horizon_date','string',False,'Replenishment horizon, default 2027-03-31.','补货计算截至日期，默认 2027-03-31。')],
+    'recall_assessment':[('recall_id','string',True,'Recall ID.','召回编号。')],
+}
+DESCRIPTIONS={
+    'inventory_asof':('Replay stock movements as of a date and knowledge cutoff: on hand, in transit, quarantined, recall-blocked, reserved and available by lot and location, '
+                      'inspection and expiry status, and data issues that make stock undeterminable.',
+                      '按某天和当天已知的出入库事件回放库存：各批次地点的在库、在途、隔离、召回封存、预留和可用，质检和效期状态，以及导致库存算不清的数据问题。'),
+    'fulfillment_plan':('Allocate available stock to open orders by priority, due date and earliest expiry with shelf-life checks, or walk the March forecast to recommend '
+                        'replenishment from stock and eligible planned receipts.',
+                        '按优先级、交期和先到期先出给未完成订单配货并检查剩余保质期；或按三月预测，用库存和合格计划到货算出建议补货量。'),
+    'recall_assessment':('Trace an open recall from its root lot through splits and transformations and report, by product and location, on hand, in transit, sold, '
+                         'returned, controlled, controllable, coverage and affected orders.',
+                         '从召回根批次沿拆分和转换追到所有下游批次，按商品和地点给出在库、在途、已售、退回、已控制、可控制、控制比例和受影响订单。'),
+}
 
 def run(kn_id,apply):
     manifest=json.loads((ROOT/'sample.yaml').read_text());name='RETAIL_'+manifest['metadata']['name'].rsplit('gs1-',1)[1].replace('-','_')+'_Functions'
@@ -64,20 +77,12 @@ def run(kn_id,apply):
         if not apply:raise ValueError('missing owned toolbox')
         box=cli('call',API+'/tool-box','-X','POST','-d',json.dumps(dict(box_name=name,box_desc='Retail traceability, inventory and recall controls',box_category='data_process',metadata_type='function',source='custom')));remember('toolboxes',box['box_id'])
     else:box=matches[0];require_owned('toolboxes',box['box_id'])
+    zh=json.loads((ROOT/'model-contract.json').read_text()).get('language')=='zh-cn'
     bid=box['box_id'];tools=entries(cli('tool','list','--toolbox',bid,'--all'),'tools','data','entries');tids={};hashes={}
     for operation in OPERATIONS:
         code=tool_code(operation,kn_id);hashes[operation]=hashlib.sha256(code.encode()).hexdigest();found=next((t for t in tools if t['name']==operation),None)
-        inputs=[{'name':n,'type':typ,'required':required,'description':desc} for n,typ,required,desc in [
-            ('product_ids','array',True,'Product IDs 1..50; recall traverses full descendants regardless product filter'),
-            ('as_of_date','string',True,'Business date YYYY-MM-DD'),('knowledge_date','string',True,'Knowledge cutoff YYYY-MM-DD'),
-            ('view_kind','string',False,'actual or planned; inventory always realized events'),
-            ('location_ids','array',False,'Optional output/demand location scope'),('lot_ids','array',False,'Optional inventory lot scope'),
-            ('order_ids','array',False,'Optional order demand subset; other reservations remain protected'),
-            ('recall_id','string',False,'Required for recall_assessment; active recall blocks inventory'),
-            ('trace_lot_id','string',False,'Optional inventory connected upstream/downstream trace root'),
-            ('mode','string',False,'fulfillment_plan: orders or replenishment'),
-            ('horizon_date','string',False,'Replenishment horizon, default 2027-03-31')]]
-        body=dict(name=operation,description=operation+'; atomic facts, explicit dated scope, Decimal and source evidence; bounded retail operations and evidence',script_type='python',code=code,inputs=inputs,outputs=[dict(name='result',type='object',required=True,description='Typed retail rows, completeness, issues and source evidence; null remains unknown')])
+        inputs=[{'name':n,'type':typ,'required':req,'description':zh_d if zh else en_d} for n,typ,req,en_d,zh_d in COMMON+INPUTS[operation]]
+        body=dict(name=operation,description=DESCRIPTIONS[operation][1 if zh else 0],script_type='python',code=code,inputs=inputs,outputs=[dict(name='result',type='object',required=True,description='Typed retail rows, completeness, issues and source evidence; null remains unknown')])
         if apply:
             if found:
                 tid=found['tool_id'];cli('call',API+'/tool-box/'+bid+'/tool/'+tid,'-X','POST','-d',json.dumps(dict(name=operation,description=body['description'],metadata_type='function',function_input=body),ensure_ascii=False))
@@ -95,21 +100,8 @@ def run(kn_id,apply):
 
         if box.get('status')!='published':cli('toolbox','publish',bid)
         cli('bkn','capability','attach',kn_id,'--box',bid,'--tool',','.join(tids.values()))
-    metrics=[]
-    existing=[e['definition'] for e in cli('bkn','object-metric','list',kn_id,'--limit','100')['entries']]
-    for spec in metric_definitions():
-        found=next((m for m in existing if m['code']==spec['code']),None)
-        if not found:
-            if not apply:raise ValueError('missing metric '+spec['code'])
-            found=metric_call('create',kn_id,definition=spec)['definition']
-        for key in ('version','code','owner_object_type_id','metric_type','calculation_scope','result_semantics','specification','query_capabilities'):
-            if spec[key]!=found.get(key):raise ValueError('metric definition differs '+key)
-        if found['lifecycle']['status']!='published':
-            if not apply:raise ValueError('unpublished metric')
-            metric_call('validate-saved',kn_id,found);found=metric_call('publish',kn_id,found)['definition']
-        metrics.append({'code':found['code'],'id':found['id'],'version':found['version']})
     if apply:skills=register_skills(apply=True,kn_id=kn_id)
     else:
         skills={'owned':read()['skills']}
         if not skills['owned']:raise ValueError('missing owned Skill')
-    return {'toolbox_id':bid,'tool_ids':tids,'source_sha256':hashes,'metrics':metrics,'skills':skills,'ownedExecution':read()}
+    return {'toolbox_id':bid,'tool_ids':tids,'source_sha256':hashes,'skills':skills,'ownedExecution':read()}

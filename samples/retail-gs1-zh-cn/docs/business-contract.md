@@ -42,10 +42,10 @@ fulfillment_plan.mode为orders（默认）或replenishment。订单需在asof前
 
 补货规划horizon_date默认2027-03-31且不早于asof。需求来自已知的planned预测，满足asof<demand_date<=horizon。计划供给仅包括截止日已知、到货日不晚于需求日、商品地点匹配且质检passed、满足商品最小剩余效期、未被召回阻断的planned receive/produce事件。期初使用当前available；按需求日期推进，先处理该日合格供给并剔除过期库存，再按FEFO消耗需求。每行返回forecast_id、product_id、location_id、demand_date、unit、demand_quantity、eligible_supply_quantity、allocated_quantity、shortage_quantity、recommended_quantity；eligible_supply_quantity是当日新增/过期处理后、消费前余额；建议数量等于缺口，不假设MOQ。未知余额不能编造建议。
 
-## 召回核算与指标
+## 召回核算
 
 recall_assessment按受影响商品/地点分行，商品和单位分组，字段包括recall_id、product_id、location_id、unit、affected_lot_ids、on_hand、in_transit、sold、returned、controlled_quantity、pending_control_quantity、controllable_quantity、coverage_ratio。controlled_quantity为物理隔离量；controllable_quantity=在库+在途；pending_control_quantity=可控制量−已控制量。仅完整正分母时coverage_ratio按已控制/可控制四舍五入六位，否则null。sold为累计销售减退货，returned单列但已经计入在库和隔离，不再加入分母。
 
 affected_order_ids只包含受影响批次已履约销售所关联订单，以及开放订单中预留了受影响批次的订单；不能将同地点任意订单或任意事件的订单一并算成受影响。缺失/非法流转使相关数量和覆盖率无法判定，保留证据及issues。召回公告不可见、已关闭或根批次缺失时返回明确问题，不能制造100%控制率。
 
-inventory_snapshots及recall_snapshots是记录快照，只能在相同业务日、知识截止日、商品/地点或召回及单位下与函数重算核对。两个原子指标使用inventory_snapshots.available与recall_snapshots.coverage_ratio，不代表实时函数替代品，不可跨期相加。
+inventory_snapshots及recall_snapshots是记录快照，只能在相同业务日、知识截止日、商品/地点或召回及单位下与函数重算核对。它们记录 2027-02-28 的结果，与同一日期的函数重算一致，问这一天的数可用 Cypher 直接读；其他日期或快照里没有的内容调用函数，不跨期相加。

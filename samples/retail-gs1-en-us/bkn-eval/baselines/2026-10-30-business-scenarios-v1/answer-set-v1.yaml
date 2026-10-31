@@ -1,0 +1,399 @@
+schema_version: '1.0'
+set_id: retail-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.en-US.md
+generation_method: independent CSV oracle (oracle.py with tools/retail_eval reference)
+answers:
+- id: Q-01
+  question: How many products do we carry, and in how many categories?
+  expected:
+    products: 50
+    categories: 5
+- id: Q-02
+  question: Who supplies PRD-001, how many units are in a case, and how many days of shelf life must remain when it ships?
+  expected:
+    supplier_id: ORG-001
+    supplier: Hangzhou Greenfield Foods Ltd
+    pack_multiplier: 6
+    min_shelf_days: 4
+- id: Q-03
+  question: How many warehouses and how many stores do we have?
+  expected:
+    warehouses: 25
+    stores: 25
+- id: Q-04
+  question: Which warehouse supplies STORE-001 by transfer?
+  expected:
+    warehouses:
+    - WH-001
+- id: Q-05
+  question: Which lots have failed inspection, and which are still awaiting inspection?
+  expected:
+    failed:
+    - LOT-011-C
+    - LOT-022-C
+    - LOT-033-C
+    - LOT-044-C
+    pending:
+    - LOT-013-D
+    - LOT-026-D
+    - LOT-039-D
+- id: Q-06
+  question: Where is stock of the lots that failed inspection still held, and how much at each place?
+  expected:
+    stock:
+    - lot_id: LOT-011-C
+      location_id: STORE-011
+      on_hand: 26
+    - lot_id: LOT-011-C
+      location_id: WH-011
+      on_hand: 140
+    - lot_id: LOT-022-C
+      location_id: STORE-022
+      on_hand: 27
+    - lot_id: LOT-022-C
+      location_id: WH-022
+      on_hand: 140
+    - lot_id: LOT-033-C
+      location_id: STORE-008
+      on_hand: 28
+    - lot_id: LOT-033-C
+      location_id: WH-008
+      on_hand: 140
+    - lot_id: LOT-044-C
+      location_id: STORE-019
+      on_hand: 26
+    - lot_id: LOT-044-C
+      location_id: WH-019
+      on_hand: 140
+- id: Q-07
+  question: How many lots did we receive in February?
+  expected:
+    lots: 100
+- id: Q-08
+  question: LOT-013-D is still awaiting inspection. Can it be sold now, and how much is available at each location?
+  expected:
+    can_sell: false
+    available:
+      STORE-013: 0
+      WH-013: 0
+- id: Q-09
+  question: How many units of PRD-001 are available at WH-001 now?
+  expected:
+    available: 111
+- id: Q-10
+  question: How many units are currently in transit, dispatched but not yet arrived?
+  expected:
+    in_transit: 50
+- id: Q-11
+  question: How many units are quarantined now, and across how many lot-location positions?
+  expected:
+    quarantined: 2292
+    positions: 157
+- id: Q-12
+  question: PRD-001 has plenty on hand at WH-001. Why is so little available? Explain by lot.
+  expected:
+    on_hand: 374
+    available: 111
+    lots:
+      LOT-001-A:
+        on_hand: 81
+        expired: true
+        quarantined: 0
+        recall_blocked: 0
+        reserved: 0
+        available: 0
+      LOT-001-B:
+        on_hand: 91
+        expired: false
+        quarantined: 20
+        recall_blocked: 71
+        reserved: 0
+        available: 0
+      LOT-001-C:
+        on_hand: 141
+        expired: false
+        quarantined: 0
+        recall_blocked: 0
+        reserved: 30
+        available: 111
+      LOT-001-D:
+        on_hand: 61
+        expired: false
+        quarantined: 0
+        recall_blocked: 61
+        reserved: 0
+        available: 0
+- id: Q-13
+  question: How many units can STORE-001 sell now, and in how many lots?
+  expected:
+    available: 43
+    lots: 2
+- id: Q-14
+  question: How many lot-location positions hold expired stock that is still on hand, and how many units in total?
+  expected:
+    positions: 100
+    units: 5347
+- id: Q-15
+  question: Which lots at STORE-001 expire within two weeks and still have stock?
+  expected:
+    lots:
+    - LOT-001-B
+    - LOT-001-D
+    - LOT-026-B
+    - LOT-026-D
+- id: Q-16
+  question: Which lots at STORE-001 have expired but are still on hand?
+  expected:
+    lots:
+    - LOT-001-A
+    - LOT-026-A
+- id: Q-17
+  question: How many orders are still open, and are any of them past their due date?
+  expected:
+    open_orders: 100
+    overdue:
+    - ORD-049-A
+- id: Q-18
+  question: Allocating available stock to open order lines by priority and due date, how many lines are fully covered, partly covered, and get nothing?
+  expected:
+    full: 47
+    partial: 45
+    none: 8
+    unknown: 0
+- id: Q-19
+  question: Can ORD-001-A ship in full? Which lots and how many units of each?
+  expected:
+    requested: 111
+    allocated: 111
+    lots:
+      LOT-001-C: 111
+- id: Q-20
+  question: ORD-049-A is past its due date and not shipped. With its required shelf life, how many units can it still get, and from which lot?
+  expected:
+    requested: 111
+    allocated: 111
+    lots:
+      LOT-049-C: 111
+- id: Q-21
+  question: Which order lines cannot get a single unit, and how much is each short?
+  expected:
+    lines:
+      ORD-011-A: 113
+      ORD-011-B: 101
+      ORD-022-A: 116
+      ORD-022-B: 102
+      ORD-033-A: 111
+      ORD-033-B: 103
+      ORD-044-A: 114
+      ORD-044-B: 104
+- id: Q-22
+  question: After allocating current stock, how many units are the open orders short in total?
+  expected:
+    shortage: 4024
+- id: Q-23
+  question: What is the March demand forecast for PRD-001 at WH-001 in total?
+  expected:
+    forecast: 243
+- id: Q-24
+  question: Against the March forecast, how many units of PRD-001 must WH-001 replenish in March, and from which demand does it start to fall short?
+  expected:
+    replenish: 106
+    shortages:
+      '2027-03-15': 25
+      '2027-03-31': 81
+- id: Q-25
+  question: Which product at which warehouse has the largest March replenishment gap, and how many units?
+  expected:
+    product_id: PRD-044
+    location_id: WH-019
+    replenish: 257
+- id: Q-26
+  question: Across all products, how many units must be replenished in March, and for how many product-warehouse pairs?
+  expected:
+    replenish: 6524
+    pairs: 50
+- id: Q-27
+  question: Why can the March 15 demand for PRD-001 at WH-001 be met only in part? How much usable stock is there then, and how much is short?
+  expected:
+    demand: 81
+    usable_supply: 56
+    shortage: 25
+- id: Q-28
+  question: How many recalls are in progress, and are any closed?
+  expected:
+    open: 49
+    closed:
+    - REC-050
+- id: Q-29
+  question: Which lots does REC-001 cover, including lots split from it?
+  expected:
+    lots:
+    - LOT-001-B
+    - LOT-001-D
+- id: Q-30
+  question: Where is REC-001 stock now, and how many units are on hand at each place?
+  expected:
+    locations:
+      STORE-001: 51
+      WH-001: 152
+- id: Q-31
+  question: How many units of REC-001 stock were sold and not returned, and at which store?
+  expected:
+    sold: 29
+    stores:
+    - STORE-001
+- id: Q-32
+  question: Which lots and products does REC-048 reach, and why does it involve another product?
+  expected:
+    lots:
+    - LOT-047-D
+    - LOT-048-B
+    - LOT-048-D
+    products:
+    - PRD-047
+    - PRD-048
+    via_link:
+    - LINK-047-MULTI
+- id: Q-33
+  question: Which orders does REC-001 affect?
+  expected:
+    orders:
+    - ORD-001-H
+- id: Q-34
+  question: For REC-001 as of today, how many units are controlled, how many are controllable, and what is the coverage?
+  expected:
+    controlled: 23
+    controllable: 203
+    coverage: 0.1133
+- id: Q-35
+  question: What is REC-001's coverage at WH-001?
+  expected:
+    controlled: 20
+    controllable: 152
+    coverage: 0.131579
+- id: Q-36
+  question: How many units of REC-001 at STORE-001 are not yet under control?
+  expected:
+    pending: 48
+- id: Q-37
+  question: Which recalls have the lowest coverage, and what is it?
+  expected:
+    recalls:
+    - REC-048
+    coverage: 0
+- id: Q-38
+  question: REC-050 is closed. Should its lots still be blocked as a recall now?
+  expected:
+    still_blocked: false
+    assessment_rows: 0
+- id: Q-39
+  question: Is there a recall whose coverage cannot be calculated, and why?
+  expected:
+    recalls:
+    - REC-045
+- id: Q-40
+  question: Of REC-001 stock at WH-001, how much is already quarantined and how much is blocked only by the recall?
+  expected:
+    quarantined: 20
+    recall_blocked: 132
+- id: Q-41
+  question: Which lot-location positions have stock that cannot be determined now, and why?
+  expected:
+    positions:
+      LOT-043-C@STORE-018:
+      - conflicting_event
+      - returns_exceed_sales
+      LOT-045-C@STORE-020:
+      - negative_inventory
+      LOT-045-D@STORE-020:
+      - negative_inventory
+      LOT-046-C@STORE-021:
+      - negative_inventory
+- id: Q-42
+  question: Is any stock movement recorded twice? Which lot does it involve, and is it counted twice?
+  expected:
+    events:
+      EV-00875:
+        lot_id: LOT-042-C
+        copies: identical
+      EV-00897:
+        lot_id: LOT-043-C
+        copies: conflicting
+    counted_twice: false
+- id: Q-43
+  question: Are there transfers that arrived without a matching dispatch?
+  expected:
+    transfers:
+    - TRF-MISSING
+    - TRF-MISSING-D
+- id: Q-44
+  question: Which reservations exceed the stock that can be used?
+  expected:
+    positions:
+    - LOT-011-C@WH-011
+    - LOT-022-C@WH-022
+    - LOT-033-C@WH-008
+    - LOT-044-C@WH-019
+- id: Q-45
+  question: A sale of LOT-044-C at STORE-019 was reversed. After the reversal, how many units has the store sold and how many are on hand?
+  expected:
+    reversed_event: EV-00921
+    sold: 14
+    on_hand: 26
+- id: Q-46
+  question: A February 26 sale of LOT-041-C at STORE-016 was only recorded on March 2. What is the store's on-hand quantity based on what is known today, and based on what is known on March 5?
+  expected:
+    known_today: 26
+    known_march_5: 19
+- id: Q-47
+  question: Back on February 20, based on what was known then, how many units of PRD-001 were available at WH-001, and how does that compare with today?
+  expected:
+    feb20: 534
+    today: 111
+    change: -423
+- id: Q-48
+  question: Where did LOT-001-B go after it was received? Give the quantities by event.
+  expected:
+    events:
+    - event: receive
+      source: null
+      destination: WH-001
+      quantity: 151
+      date: '2027-02-02'
+    - event: consume
+      source: WH-001
+      destination: null
+      quantity: 20
+      date: '2027-02-21'
+    - event: dispatch
+      source: WH-001
+      destination: STORE-001
+      quantity: 40
+      date: '2027-02-22'
+    - event: arrive
+      source: null
+      destination: STORE-001
+      quantity: 40
+      date: '2027-02-23'
+    - event: sale
+      source: STORE-001
+      destination: null
+      quantity: 16
+      date: '2027-02-24'
+    - event: return
+      source: null
+      destination: STORE-001
+      quantity: 3
+      date: '2027-02-25'
+- id: Q-49
+  question: Which child lot was split from LOT-001-B, and how many units?
+  expected:
+    children:
+      LOT-001-D: 20
+- id: Q-50
+  question: Which locations has REC-001 stock been to?
+  expected:
+    locations:
+    - STORE-001
+    - WH-001

@@ -1,13 +1,34 @@
 # Food Supply Chain Traceability and Recall
 
-Synthetic receipt inspection, warehouse/store movements, sales/returns, expiry/reservations, shared-stock fulfillment, future replenishment and recall. Requires OpenBKN >=0.2.1 <0.3.0.
+A fictional food retailer's lot traceability, inventory fulfilment and recall sample: 25 warehouses and 25 stores, covering receipt inspection, transfers, sales and returns, quarantine, expiry, order allocation, March replenishment and recall control. The sample includes 15 tables, an ontology, 3 native functions and 2 business Skills. Business requirements and rules are in the [PRD](docs/PRD.en-US.md).
 
-Import the fixed [0.1.0 release archive](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0) from the homepage, install and open the network on OpenBKN 0.2.1 or later. Release metadata and exact-package verification are in [releases/0.1.0](releases/0.1.0/verification.json). The follow-up official-catalog PR remains unmerged; English and Chinese are separate samples.
+## Install and explore
 
-[PRD](docs/PRD.en-US.md) · [Business contract](docs/business-contract.md) · [BKN ontology](docs/ontology.md) · [GS1 sources/license](docs/standard-sources.md).
+1. Sign in to OpenBKN and open **One-click onboarding** from the homepage.
+2. Refresh the official catalog, select **Food Supply Chain Traceability and Recall** and click **Install**; it requires **OpenBKN >=0.2.1 <0.3.0**.
+3. Wait for installation and verification to complete, then open the knowledge network.
+4. Try the experience cards on the Q&A, data query and graph pages, or connect an external agent through MCP to query objects, call published functions and use Skills.
 
-15 populated object types, 30 foreign-key relations, 3 concept groups; three functions, two recorded snapshot metrics and one investigation Skill. Default observation 2027-02-28; data spans November 2026 through March 2027. Unknown is not zero; planned supply is not realized stock. No business action is executed.
+If the official catalog is unreachable, download this sample's `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases), choose **Import offline package** in one-click onboarding, then install it.
 
-100 questions per language, 30 basic/40 medium/30 complex, mapped to the PRD's 10 scenarios. Questions/gold are development-only, excluded from runtime archives. After deterministic checks, run one formal subagent Q&A pass, preserving first failures; 100% is a target and results are reported as observed.
+The data is synthetic and covers November 2026 to March 2027, with business date 2027-02-28; March forecasts and planned receipts are the plan. Every conclusion is advice only; nothing places orders, ships or issues recall notices.
 
-2026-10-20 original full-pass result: English 96/100, Chinese 95/100; original scores are retained. The repaired candidates were subsequently installed on 8081 under explicit authorization. Only the prior nonpassing cases were retested: English 4/4 and Chinese 5/5 passed, all execution and evidence states complete. The duplicate-event repair is effective on live data, and question/output contracts were clarified. No second full-bank run was performed; this does not establish 100% on the complete revised banks. [Original acceptance](verification/acceptance-20261020.json) · [Targeted retest](verification/targeted-retest-20261020.json) · [Detailed analysis](../../docs/retail-gs1-acceptance.en-US.md).
+## Capabilities
+
+Anything Cypher can answer has no function; functions are kept only for calculations Cypher cannot express. The sample uses no metrics, so the Community edition can use all of it.
+
+- **Cypher queries**: products, organizations, locations, lots, inspections, movements, orders and reservations, forecasts, recalls, lot splits and transformations. The February 28 inventory and recall snapshots match recomputation from the source events and can be read directly.
+- **Native functions**: `inventory_asof` replays stock for a day and what was known that day; `fulfillment_plan` allocates orders or works out replenishment against the March forecast; `recall_assessment` traces a recall from its root lot to downstream lots and works out control by location.
+- **Skills**: organized for the users, "Inventory and fulfilment" (warehouse, store) and "Quality and recall" (quality lead), stating the business rules, when to use Cypher, when to call a function, and how to answer.
+
+## Experience cards
+
+The experience cards are taken from the test set and cover products, inspection, stock and its reasons, expiry, orders, replenishment, lot flow, recall reach and control, and data trust, from simple to complex. The cards' data query and graph Cypher are checked online after installation with `tools/acceptance/experience_set.py`.
+
+## Acceptance and maintenance
+
+See the [business-scenario test set v1](bkn-eval/baselines/2026-10-30-business-scenarios-v1/README.md). Reference answers are computed independently of the sample's functions and are not shipped in the package. After installation, an agent that has not read the answers runs each question once; below 100%, record why each failed and fix the ontology descriptions, Skills or functions first, never the questions or answers. The original 100-question bank is in [bkn-eval](bkn-eval/README.md).
+
+For the ontology and standard sources see the [ontology notes](docs/ontology.md), [business contract](docs/business-contract.md) and [GS1 sources and license](docs/standard-sources.md).
+
+To install a new version, uninstall the existing sample first. Uninstallation removes sample data and user edits; deleting a cached offline package does not uninstall installed resources.
