@@ -22,9 +22,14 @@ switching between them does not delete another version's cache or installation h
 
 The initial 0.2.0 directory preserves its existing sample entries. The initial 0.2.1
 directory contains the already published bilingual FIBO/GS1 releases declaring
-0.2.1 compatibility. All thirteen packages, including newly integrated Manufacturing and Energy, are
-tracked by tools/publication/candidates-0.2.1.json and added to stable directories
-only after fixed-candidate platform acceptance. Missing entries are not replaced with an
+0.2.1 compatibility. The twelve samples offered on 0.2.1 are tracked by
+tools/publication/candidates-0.2.1.json (Order Basics is excluded) and added to stable
+directories only after fixed-candidate platform acceptance.
+
+Release tags and titles carry the product version, for example the tag
+`openbkn-0.2.1-world-cup-v0.1.7` titled `[OpenBKN 0.2.1] 世界杯 0.1.7`, so a release
+list shows which product each package targets. `prepare_shared_release.py` writes this
+tag into the manifest's download location and rebuilds the manifest from `sample.yaml`. Missing entries are not replaced with an
 unverified bundled development sample in the online listing.
 
 ## Publish and verify

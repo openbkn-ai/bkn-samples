@@ -154,6 +154,7 @@ class SharedDatabaseTest(unittest.TestCase):
             baseline.parent.mkdir(parents=True)
             previous = json.loads((ROOT / 'samples/order-basics/releases/0.1.2/sample.json').read_text())
             baseline.write_text(json.dumps(previous))
+            (sample / 'sample.yaml').write_text((ROOT / 'samples/order-basics/sample.yaml').read_text())
             candidate = root / 'candidate'
             candidate.mkdir()
             required = dict(previous['spec']['requires'], platformVersion='>=0.2.1 <0.3.0',
@@ -173,6 +174,10 @@ class SharedDatabaseTest(unittest.TestCase):
                 result = prepare(sample, '0.1.3', root / 'output')
             manifest = json.loads(Path(result['manifest']).read_text())
             self.assertEqual(manifest['spec']['requires'], required)
+            self.assertEqual(result['tag'], 'openbkn-' + read_version(ROOT) + '-order-basics-v0.1.3')
+            self.assertEqual(manifest['spec']['artifacts'][0]['locations'],
+                             ['https://github.com/openbkn-ai/bkn-samples/releases/download/' + result['tag'] + '/package.tar.gz'])
+            self.assertEqual(manifest['spec']['delivery']['dataDependencies'][0]['id'], previous['spec']['delivery']['dataDependencies'][0]['id'])
             entry = dict(sampleId='order-basics', version='0.1.3', releaseStatus='published', requires=required)
             for missing in ('execution.function', 'execution.skill'):
                 reader = Mock(side_effect=AssertionError('must reject before reading metadata'))
