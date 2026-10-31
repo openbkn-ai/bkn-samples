@@ -26,3 +26,9 @@ python3 samples/world-cup/bkn-eval/baselines/2026-10-31-business-scenarios-v1/or
 | S08 积分榜与比赛历程 | J-06、A-01、A-02、A-11 | 0/1/3 |
 | S09 点球大战与换人 | J-08、J-12、A-07 | 0/2/1 |
 | S10 场馆与数据覆盖 | B-09、B-10、R-06、A-13 | 2/1/1 |
+
+## 运行记录
+
+| 智能体 | 结果 | 记录 |
+|---|---|---|
+| 外部 MCP 智能体，修改技能后定向重跑 | 50/50 | [runs/2026-10-31-mcp-agent-r1](runs/2026-10-31-mcp-agent-r1/README.md) |

@@ -24,3 +24,9 @@ python3 samples/world-cup-en/bkn-eval/baselines/2026-10-31-business-scenarios-v1
 | S08 Tables and team runs | J-06, A-01, A-02, A-11 | 0/1/3 |
 | S09 Shootouts and substitutions | J-08, J-12, A-07 | 0/2/1 |
 | S10 Venues and coverage | B-09, B-10, R-06, A-13 | 2/1/1 |
+
+## Runs
+
+| Agent | Result | Record |
+|---|---|---|
+| External MCP agent, targeted rerun after the Skill fix | 50/50 | [runs/2026-10-31-mcp-agent-r1](runs/2026-10-31-mcp-agent-r1/README.md) |

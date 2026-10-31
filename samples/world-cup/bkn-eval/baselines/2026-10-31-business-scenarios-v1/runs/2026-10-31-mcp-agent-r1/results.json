@@ -1,0 +1,889 @@
+{
+ "agent": "external MCP agent (mcp_agent.py): deepseek-v4-flash via the platform model API + every tool of the BKN MCP server",
+ "platform": "8081 bkn-backend-ee 0.2.1-main sha9156ec5",
+ "knowledge_network": "worldcup_vega_catalog_bkn",
+ "sample_version": "0.1.7",
+ "question_set": "question-set-v1.yaml",
+ "passed": 50,
+ "total": 50,
+ "results": [
+  {
+   "id": "A-01",
+   "passed": true,
+   "round": 2,
+   "seconds": 34.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "阿根廷 WC-2022（男足）全程 **7 场，6 胜 1 负，最终夺冠**（数据源：Fjelstul World Cup Database；比分不含点球大战）：\n\n| # | 比赛编号 | 日期 | 阶段 | 对手 | 比分 | 点球大战 | 结果 |\n|---|---|---|---|---|---|---|---|\n| 1 | M-2022-05 | 2022-11-22 | group stage（小组赛，Group C） | Saudi Arabia | 1–2 | 无 | 负 |\n| 2 | M-2022-24 | 2022-11-26 | group stage（小组赛，Group C） | Mexico | 2–0 | 无 | 胜 |\n| 3 | M-2022-39 | 2022-11-30 | group stage（小组赛，Group C） | Poland | 2–0（该场阿根廷为客队，记作 Poland 0–2 Argentina） | 无 | 胜 |\n| 4 | M-2022-50 | 2022-12-03 | round of 16（16 强） | Australia | 2–1 | 无 | 胜 |\n| 5 | M-2022-58 | 2022-12-09 | quarter-finals（1/4 决赛） | Netherlands | 2–2（加时平） | 有：阿根廷 4–3 | 胜（点球晋级） |\n| 6 | M-2022-61 | 2022-12-13 | semi-finals（半决赛） | Croatia | 3–0 | 无 | 胜 |\n| 7 | M-2022-64 | 2022-12-18 | final（决赛） | France | 3–3（加时平） | 有：阿根廷 4–2 | 胜（点球夺冠） |\n\n**点球大战明细**（penalty_kicks，罚球不计入比分）\n- M-2022-58 vs 荷兰：阿根廷罚 5 进 4（1 未进），荷兰罚 5 进 3（2 未进）→ 4–3\n- M-2022-64 vs 法国：阿根廷罚 4 全部罚进，法国罚 4 进 2（2 未进）→ 4–2\n\n小组赛 2 胜 1 负，淘汰赛 4 场全胜（其中两场靠点球大战）；两场均罚在 Lusail Stadium（Lusail）。若还需看每场进球者、首发/换人、得牌等，可以继续问。"
+  },
+  {
+   "id": "A-02",
+   "passed": true,
+   "round": 2,
+   "seconds": 31.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 法国队（France，T-30）2022 年世界杯（WC-2022）全部 7 场\n\n| # | 日期 | 阶段 | 对手 | 球场（城市） | 比分 | 点球大战 | 结果 |\n|---|---|---|---|---|---|---|---|\n| 1 | 2022-11-22 | group stage（D 组） | Australia | Al Janoub Stadium（Al Wakrah） | 4-1 | 无 | win |\n| 2 | 2022-11-26 | group stage（D 组） | Denmark | Stadium 974（Doha） | 2-1 | 无 | win |\n| 3 | 2022-11-30 | group stage（D 组） | Tunisia | Education City Stadium（Al Rayyan） | 0-1 | 无 | lose |\n| 4 | 2022-12-04 | round of 16 | Poland | Al Thumama Stadium（Doha） | 3-1 | 无 | win |\n| 5 | 2022-12-10 | quarter-finals | England | Al Bayt Stadium（Al Khor） | 2-1 | 无 | win |\n| 6 | 2022-12-14 | semi-finals | Morocco | Al Bayt Stadium（Al Khor） | 2-0 | 无 | win |\n| 7 | 2022-12-18 | final | Argentina | Lusail Stadium（Lusail） | 3-3 | **有：2-4 负** | lose |\n\n比赛编号依次为：M-2022-08、M-2022-23、M-2022-38、M-2022-51、M-2022-60、M-2022-62、M-2022-64。\n\n## 点球大战\n只有决赛 M-2022-64「Argentina vs France」进入点球大战：常规时间加加时赛 3-3，点球大战中法国 **2-4** 负于阿根廷。法国队罚球明细：Kylian Mbappé 罚进、Randal Kolo Muani 罚进；Aurélien Tchouaméni、Kingsley Coman 未罚进。\n\n## 口径说明\n- 球队逐场数据取自 `team_appearances`（team_name=France，tournament_id=WC-2022），点球大战罚球取自 `penalty_kicks`；数据源为 Fjelstul World Cup Database（男足世界杯截至 2022 年）。\n- 比分不含点球大战，点球大战比分单列，罚球不算进球；胜负平以 `team_appearances` 的 win/lose/draw 标记为准，因此决赛记为法国的 lose。\n- 阶段按 `stage_name` 原文给出；非小组赛的 group_name 在数据源里为 not applicable。"
+  },
+  {
+   "id": "A-03",
+   "passed": true,
+   "round": 1,
+   "seconds": 49.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n阿根廷在 **2022 年卡塔尔世界杯（WC-2022，冠军）一共打进 15 球**，由 6 名球员包办，其中 **4 球是比赛内点球**（不含点球大战）。\n\n| 球员 | 进球数 | 其中点球 |\n|---|---|---|\n| Lionel Messi（P-14758） | **7** | **4** |\n| Julián Álvarez（P-19776） | **4** | 0 |\n| Ángel Di María（P-42113） | 1 | 0 |\n| Enzo Fernández（P-10739） | 1 | 0 |\n| Alexis Mac Allister（P-71343） | 1 | 0 |\n| Nahuel Molina（P-84430） | 1 | 0 |\n| **合计** | **15** | **4** |\n\nMessi 的 7 球 = 3 个运动战进球 + 4 个点球。\n\n## 逐场逐球依据（goals 表，team_id = T-03 / Argentina）\n\n- 小组赛 沙特阿拉伯 2–1 阿根廷：Messi 10'（点球）\n- 小组赛 阿根廷 2–0 墨西哥：Messi 64'、Fernández 87'\n- 小组赛 波兰 0–2 阿根廷：Mac Allister 46'、Álvarez 67'\n- 1/8 决赛 阿根廷 2–1 澳大利亚：Messi 35'、Álvarez 57'\n- 1/4 决赛 荷兰 2–2 阿根廷（点球大战 3–4）：Molina 35'、Messi 73'（点球）\n- 半决赛 阿根廷 3–0 克罗地亚：Messi 34'（点球）、Álvarez 39'、Álvarez 69'\n- 决赛 阿根廷 3–3 法国（点球大战 4–2）：Messi 23'（点球）、Di María 36'、Messi 108'\n\n## 口径说明\n\n- 球员进球**排除乌龙球**：这 15 球的 own_goal 全为 0，即没有一球来自对方乌龙，所以「球员进球合计 = 球队进球总数 = 15」，两种口径一致。\n- 比赛内点球（penalty=1）计入进球，共 4 个，全部由 Messi 罚进；**点球大战罚球不计入进球与比分**（对荷兰、法国两场的点球大战罚进不在上述 7 球内）。\n- 交叉核对：team_appearances 中 Argentina 在 WC-2022 为 7 场、goals_for = 15、goals_against = 8，与逐球统计吻合。\n- 人名保留数据源英文原文（含重音符号），括号内为球员编号。"
+  },
+  {
+   "id": "A-04",
+   "passed": true,
+   "round": 2,
+   "seconds": 37.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 2022 年世界杯决赛进球过程\n\n**比赛**：M-2022-64 Argentina vs France，2022-12-18，Lusail Stadium（Lusail, Qatar）；常规时间+加时 **3–3**，点球大战 Argentina **4–2** 胜出（点球大战比分单列，不计入 3–3，也不算进球）。全场 6 个进球，无乌龙球。\n\n| # | 分钟 | 时段 | 球队 | 进球者 | 方式 | 记录 |\n|---|---|---|---|---|---|---|\n| 1 | 23' | first half 上半场 | Argentina | Lionel Messi（P-14758，10号） | 点球 | G-3632 |\n| 2 | 36' | first half 上半场 | Argentina | Ángel Di María（P-42113，11号） | 运动战 | G-3633 |\n| 3 | 80' | second half 下半场 | France | Kylian Mbappé（P-64077，10号） | 点球 | G-3634 |\n| 4 | 81' | second half 下半场 | France | Kylian Mbappé（P-64077，10号） | 运动战 | G-3635 |\n| 5 | 108' | extra time, second half 加时下半场 | Argentina | Lionel Messi（P-14758，10号） | 运动战 | G-3636 |\n| 6 | 118' | extra time, second half 加时下半场 | France | Kylian Mbappé（P-64077，10号） | 点球 | G-3637 |\n\n比分演进：2–0（半场）→ 2–2（81'）→ 3–2（108'）→ 3–3（118'）→ 点球大战 4–2。\n\n**进球者**：Messi 2 球（23'、108'）、Mbappé 3 球（80'、81'、118'，其中两粒点球）、Di María 1 球（36'）。所有进球补时为 0，分钟即 23'/36'/80'/81'/108'/118'。\n\n**点球大战（不进球、不计比分）**：\n- Argentina 4 罚全中：Messi(389)、Dybala(390)、Paredes(391)、Montiel(392)\n- France 4 罚 2 中：Mbappé(393 罚进)、Coman(394 未罚进)、Tchouaméni(395 未罚进)、Kolo Muani(396 罚进)\n\n口径：排除乌龙球；比赛内点球算进球；点球大战罚球不计入进球与比分。人名队名保留数据源英文原文。"
+  },
+  {
+   "id": "A-05",
+   "passed": true,
+   "round": 1,
+   "seconds": 97.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 阿根廷 2022 年世界杯大名单：出场与进球\n\n**结论**：大名单共 **26 人**，球员合计 **113 人次出场、15 个进球**；**2 人全程未出场**（Armani、Rulli，两位替补门将），**20 人未进球**。\n\n**口径**：出场次数按不同 `match_id` 去重计数；球员进球排除乌龙球（`own_goal=1`），比赛内点球算进球，点球大战罚球不计。数据来自 Fjelstul 世界杯数据库（赛事 `WC-2022`，球队 `Argentina`）。\n\n### 明细（按球衣号，未出场/未进球也列出）\n\n| 号 | 球员 | 位置 | 出场(首发/替补) | 进球 |\n|---|---|---|---|---|\n| 1 | Franco Armani (P-39788) | 门将 | 0 (0/0) | 0 |\n| 2 | Juan Foyth (P-00652) | 后卫 | 1 (0/1) | 0 |\n| 3 | Nicolás Tagliafico (P-35173) | 后卫 | 6 (3/3) | 0 |\n| 4 | Gonzalo Montiel (P-91431) | 后卫 | 4 (1/3) | 0 |\n| 5 | Leandro Paredes (P-27582) | 中场 | 5 (2/3) | 0 |\n| 6 | Germán Pezzella (P-29298) | 后卫 | 3 (0/3) | 0 |\n| 7 | Rodrigo De Paul (P-37314) | 中场 | 7 (7/0) | 0 |\n| 8 | Marcos Acuña (P-73712) | 中场 | 6 (4/2) | 0 |\n| 9 | Julián Álvarez (P-19776) | 前锋 | 7 (5/2) | **4** |\n| 10 | Lionel Messi (P-14758) | 前锋 | 7 (7/0) | **7** |\n| 11 | Ángel Di María (P-42113) | 前锋 | 5 (4/1) | **1** |\n| 12 | Gerónimo Rulli (P-36188) | 门将 | 0 (0/0) | 0 |\n| 13 | Cristian Romero (P-79650) | 后卫 | 7 (6/1) | 0 |\n| 14 | Exequiel Palacios (P-40147) | 中场 | 3 (0/3) | 0 |\n| 15 | Ángel Correa (P-92353) | 前锋 | 1 (0/1) | 0 |\n| 16 | Thiago Almada (P-56659) | 中场 | 1 (0/1) | 0 |\n| 17 | Papu Gómez (P-10231) | 中场 | 2 (2/0) | 0 |\n| 18 | Guido Rodríguez (P-03265) | 中场 | 1 (1/0) | 0 |\n| 19 | Nicolás Otamendi (P-49114) | 后卫 | 7 (7/0) | 0 |\n| 20 | Alexis Mac Allister (P-71343) | 中场 | 6 (6/0) | **1** |\n| 21 | Paulo Dybala (P-28151) | 前锋 | 2 (0/2) | 0 |\n| 22 | Lautaro Martínez (P-81505) | 前锋 | 6 (2/4) | 0 |\n| 23 | Emiliano Martínez (P-13162) | 门将 | 7 (7/0) | 0 |\n| 24 | Enzo Fernández (P-10739) | 中场 | 7 (5/2) | **1** |\n| 25 | Lisandro Martínez (P-23070) | 后卫 | 5 (2/3) | 0 |\n| 26 | Nahuel Molina (P-84430) | 后卫 | 7 (6/1) | **1** |\n\n### 进球者（6 人，共 15 球）\nMessi 7 球、Álvarez 4 球，Di María、Mac Allister、Enzo Fernández、Molina 各 1 球。\n\n**核对**：名单取自 `squads`（26 条），出场取自 `player_appearances`（24 人有记录，合计 113 人次），进球取自 `goals`（`own_goal=0`）；球员非乌龙进球合计 15 球，与球队口径的 15 条进球记录一致（本届无计入阿根廷的对手乌龙球）。"
+  },
+  {
+   "id": "A-06",
+   "passed": true,
+   "round": 1,
+   "seconds": 123.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**结论（2022 年卡塔尔世界杯，WC-2022）：**\n\n| 进球者身份 | 进球数 |\n|---|---|\n| 首发球员 | **140 球** |\n| 替补登场球员 | **30 球** |\n| 合计（球员进球） | 170 球 |\n\n**依据与口径：**\n- 按技能默认口径，球员进球**排除乌龙球**（`own_goal=1`）：2022 年共 172 个进球事件，其中乌龙球 2 个，球员本人破门 170 个，正好等于 140 + 30，无遗漏、无重复。\n- 身份判定：把每个进球按 `player_id` + `match_id` 关联到该场的 `player_appearances`（该届 1995 条出场记录，每名球员每场唯一一条）。`starter=1` 记为首发（140 球），`substitute=1` 记为替补登场（30 球），两组互斥且无空缺。\n- 交叉验证：用换人表 `substitutions` 中 `coming_on=1` 反查进球者，同样得到 30 球，两种口径一致。\n- 附带细节：170 个球员进球中 17 个是比赛内点球（`penalty=1`），全部由首发球员罚进，替补登场者无点球破门。\n\n数据来源：Fjelstul World Cup Database（goals、player_appearances、substitutions），人名队名为数据源英文原文。"
+  },
+  {
+   "id": "A-07",
+   "passed": true,
+   "round": 1,
+   "seconds": 104.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**结论：阿根廷在 2022 年世界杯一共打了 2 场点球大战（四分之一决赛、决赛）。对手分别罚进 3 个，另有 2 个未罚进；罚进 2 个，另有 2 个未罚进。**\n\n**1）四分之一决赛 M-2022-58 · 2022-12-09 · Netherlands vs Argentina（比分 2–2，点球 3–4）**\n- 对手荷兰：罚 5 球，**罚进 3 个、未罚进 2 个**\n  - 未罚进：Virgil van Dijk（第 1 轮）、Steven Berghuis（第 2 轮）\n  - 罚进：Teun Koopmeiners、Wout Weghorst、Luuk de Jong\n- 阿根廷：罚 5 球、罚进 4 个（未罚进 1 个，Enzo Fernández），点球 4–3 晋级\n\n**2）决赛 M-2022-64 · 2022-12-18 · Argentina vs France（比分 3–3，点球 4–2）**\n- 对手法国：罚 4 球，**罚进 2 个、未罚进 2 个**\n  - 罚进：Kylian Mbappé、Randal Kolo Muani\n  - 未罚进：Kingsley Coman、Aurélien Tchouaméni\n- 阿根廷：罚 4 球全部罚进（Messi、Dybala、Paredes、Montiel），点球 4–2 夺冠\n\n口径说明：点球大战罚球不计入比分，只记录罚进或未罚进（不表述为「扑救」）；数据源只记录 converted 与否，未区分扑出与射失。本届另外三场点球大战（克罗地亚–日本、摩洛哥–西班牙、克罗地亚–巴西）与阿根廷无关。数据来自 penalty_kicks / matches 表（赛事 WC-2022）。"
+  },
+  {
+   "id": "A-08",
+   "passed": true,
+   "round": 1,
+   "seconds": 144.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n| 届次 | 金靴奖得主 | 球队 | 该届进球数 | 其中点球 |\n|---|---|---|---|---|\n| 2019 女足世界杯（WC-2019） | **Megan Rapinoe**（P-09273） | United States 美国 | **6 球** | 3 |\n| 2022 男足世界杯（WC-2022） | **Kylian Mbappé**（P-64077） | France 法国 | **8 球** | 2 |\n\n**依据**\n\n1. 奖项记录（award_winners，award_name = `Golden Boot`，award_id = A-4，shared = 0）：WC-2019 金靴为 P-09273 Megan Rapinoe（美国）；WC-2022 金靴为 P-64077 Kylian Mbappé（法国）。\n2. 进球数按网络口径统计：排除乌龙球（own_goal=0）；比赛内点球计入，点球大战罚球不计入。\n   - 拉皮诺埃 6 球：vs Thailand 79′；vs Spain 7′（点球）、75′（点球）；vs France 5′、65′；决赛 vs Netherlands 61′（点球）。\n   - 姆巴佩 8 球：vs Australia 68′；vs Denmark 61′、86′；vs Poland 74′、90′+1′；决赛 vs Argentina 80′（点球）、81′、118′（点球）。\n3. 该届射手榜前列佐证：WC-2019 拉皮诺埃、Alex Morgan（美国）、Ellen White（英格兰）同为 6 球，金靴判给拉皮诺埃，Morgan、White 分获银靴、铜靴（同分靠赛事规则区分，进球数不分上下）；WC-2022 姆巴佩 8 球、Messi 7 球、Álvarez 4 球、Giroud 4 球，银靴 Messi、铜靴 Giroud。\n\n（人名保留数据源英文原文；进球数已排除乌龙球，含比赛内点球，点球大战罚球不计。）"
+  },
+  {
+   "id": "A-09",
+   "passed": true,
+   "round": 1,
+   "seconds": 176.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**结论：1950 年世界杯没有决赛（单场决赛），冠军由“决胜循环赛（final round）”的积分决出；最后阶段共踢了 6 场，冠军是乌拉圭（Uruguay）。**\n\n**1）赛制里就没有 final**\n- 赛事属性（WC-1950「1950 FIFA Men's World Cup」，主办国 Brazil，13 队）：`final_round=1`，而 `final=0`、`semi_finals=0`、`quarter_finals=0`、`round_of_16=0`、`third_place_match=0`、`second_group_stage=0`、`group_stage=1`——整届只有小组赛 + 决胜循环赛，没有任何淘汰赛或决赛。\n- 阶段表只有两段：`group stage`（1950-06-24 至 07-02，16 场，13 队）；`final round`（1950-07-09 至 07-16，**6 场，4 队**）。\n- 该届全部 22 场比赛按 stage_name 汇总只有这两类，查不到 stage_name 为 `final` / `semi-finals` 的比赛。\n\n**2）冠军怎么决出：4 队单循环按积分定名次**（当时胜 2 分、平 1 分）\n\n| 名次 | 球队 | 场次 | 胜 | 平 | 负 | 进/失 | 积分 |\n|---|---|---|---|---|---|---|---|\n| 1 | Uruguay (URY) | 3 | 2 | 1 | 0 | 7/5 | **5** |\n| 2 | Brazil (BRA) | 3 | 2 | 0 | 1 | 14/4 | 4 |\n| 3 | Sweden (SWE) | 3 | 1 | 0 | 2 | 6/11 | 2 |\n| 4 | Spain (ESP) | 3 | 0 | 1 | 2 | 4/11 | 1 |\n\n`tournament_standings` 的名次（1 Uruguay、2 Brazil、3 Sweden、4 Spain）与 `tournaments.winner = Uruguay` 一致。\n\n**决胜循环赛 6 场明细**\n- 07-09 Brazil 7–1 Sweden（Maracanã，里约）\n- 07-09 Uruguay 2–2 Spain（Pacaembu，圣保罗）\n- 07-13 Brazil 6–1 Spain（Maracanã）\n- 07-13 Uruguay 3–2 Sweden（Pacaembu）\n- 07-16 Sweden 3–1 Spain（Pacaembu）\n- 07-16 **Uruguay 2–1 Brazil**（Maracanã）\n\n最后一场乌拉圭 2–1 击败巴西（“马拉卡纳打击”），以 5 分反超巴西 4 分夺冠——但这属于 `final round` 循环赛的收官战，不是一场“决赛”。"
+  },
+  {
+   "id": "A-10",
+   "passed": true,
+   "round": 1,
+   "seconds": 169.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n**进球：盖德·穆勒（Gerd Müller）更多，14 球；托马斯·穆勒（Thomas Müller）10 球。**\n**大名单：托马斯·穆勒 4 届；盖德·穆勒 2 届。**\n\n### 一、世界杯进球（按知识网络的统计规则：排除乌龙球 own_goal=1；比赛内点球算进球）\n\n| 球员 | 球员编号 | 进球合计 | 分届明细 |\n|---|---|---|---|\n| Gerd Müller（盖德·穆勒） | P-72441 | **14** | 1970：10 球；1974：4 球 |\n| Thomas Müller（托马斯·穆勒） | P-28154 | **10** | 2010：5 球；2014：5 球 |\n\n相差 4 球，差距主要来自盖德·穆勒在 1970 年一届的 10 球。\n\n### 二、入选大名单（squads 阵容名单表，按不同 tournament_id 计届数）\n\n| 球员 | 届数 | 具体届次（球队 / 球衣号 / 位置） |\n|---|---|---|\n| Gerd Müller | **2 届** | 1970（West Germany，13 号，forward）、1974（West Germany，13 号，forward） |\n| Thomas Müller | **4 届** | 2010（Germany，13 号，midfielder）、2014（Germany，13 号，forward）、2018（Germany，13 号，midfielder）、2022（Germany，13 号，midfielder） |\n\n球员主档 players 表的记录与此一致：Gerd Müller 为 1970、1974；Thomas Müller 为 2010、2014、2018、2022。\n\n### 三、数据说明\n\n- 数据源：Fjelstul World Cup Database，男足世界杯截至 2022 年（22 届）；人名和队名保留英文原文，全名由 given_name 和 family_name 组成。\n- 两人同名但并非同一人，已按球员编号区分：P-72441（生于 1945-11-03）与 P-28154（生于 1989-09-13），均为男性球员。\n- 进球按 goals 表中的每一个进球事件计数；点球大战的罚球记录在 penalty_kicks 中，不计入进球，也不影响上述数字。\n- 对应赛事编号：WC-1970、WC-1974、WC-2010、WC-2014、WC-2018、WC-2022。"
+  },
+  {
+   "id": "A-11",
+   "passed": true,
+   "round": 2,
+   "seconds": 44.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 法国队（France，T-30）2018 vs 2022 男足世界杯对比\n\n| 指标 | 2018（WC-2018） | 2022（WC-2022） |\n|---|---|---|\n| 最终名次 | **第 1 名（冠军）** | **第 2 名（亚军）** |\n| 场次 | 7 | 7 |\n| 胜 | 6 | 5 |\n| 平 | 1 | 0 |\n| 负 | 0 | 2 |\n| 进球 | 14 | 16 |\n| 失球 | 6 | 8 |\n| 净胜球 | +8 | +8 |\n\n两届都是 7 场；2022 进球更多（16 比 14）但失球也更多（8 比 6），净胜球持平，名次由冠军降为亚军。\n\n## 依据\n\n- 名次出自 `tournament_standings`（position）：France / T-30 → WC-2018 = 1，WC-2022 = 2。\n- 场次、胜平负、进失球出自 `team_appearances` 按法国队逐场汇总（场次按不同 match_id 计数；胜负平以 win/draw/lose 标记为准；点球大战罚球不计入比分）。\n\n**WC-2018 逐场**\n- M-2018-05 group stage vs Australia 2-1 胜\n- M-2018-22 group stage vs Peru 1-0 胜\n- M-2018-38 group stage vs Denmark 0-0 平\n- M-2018-49 round of 16 vs Argentina 4-3 胜\n- M-2018-57 quarter-finals vs Uruguay 2-0 胜\n- M-2018-61 semi-finals vs Belgium 1-0 胜\n- M-2018-64 final vs Croatia 4-2 胜\n\n**WC-2022 逐场**\n- M-2022-08 group stage vs Australia 4-1 胜\n- M-2022-23 group stage vs Denmark 2-1 胜\n- M-2022-38 group stage vs Tunisia 0-1 负\n- M-2022-51 round of 16 vs Poland 3-1 胜\n- M-2022-60 quarter-finals vs England 2-1 胜\n- M-2022-62 semi-finals vs Morocco 2-0 胜\n- M-2022-64 final vs Argentina 3-3（点球大战告负，penalty_shootout=1）→ 数据源记为负\n\n口径说明：比分不含点球大战；2022 决赛在数据源中 win/draw/lose 标记为 **lose**（与「点球大战决出的比赛通常记为平」的默认说法不同），此处按数据源标记如实给出，故 2022 为 5 胜 0 平 2 负。"
+  },
+  {
+   "id": "A-12",
+   "passed": true,
+   "round": 2,
+   "seconds": 63.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论：2022 年世界杯（WC-2022）前四名球队的进球、失球与红黄牌\n\n| 名次 | 球队 | 场次 | 进球 | 失球 | 黄牌 | 红牌 | 两黄变红 | 罚下 |\n|---|---|---|---|---|---|---|---|---|\n| 1 | Argentina（阿根廷，T-03） | 7 | 15 | 8 | 17 | 0 | 0 | 0 |\n| 2 | France（法国，T-30） | 7 | 16 | 8 | 8 | 0 | 0 | 0 |\n| 3 | Croatia（克罗地亚，T-18） | 7 | 8 | 7 | 8 | 0 | 0 | 0 |\n| 4 | Morocco（摩洛哥，T-47） | 7 | 6 | 5 | 8 | 0 | 1 | 1 |\n\n要点：进球最多的是 France（16 球），失球最少的是 Morocco（5 球）；黄牌最多的是 Argentina（17 张）；四强中只有 Morocco 出现两黄变红或罚下，各 1 次，对应同一次罚下事件，两种标记同时存在。\n\n## 依据与口径\n\n**口径**（知识网络默认规则）\n- 届次为 WC-2022（男足）；名次取自 `tournament_standings.position`。\n- 进球和失球按 `team_appearances` 的 `goals_for`、`goals_against` 逐场求和，含对方乌龙球；比分不含点球大战。已与逐场比分核对一致。\n- 黄牌、红牌、两黄变红（`second_yellow_card`）、罚下（`sending_off`）分别对 `bookings` 求和；同一张牌可能带多个标记，四项不能相加。\n\n**逐场比分核对（不含点球大战，点球大战单列）**\n- Argentina：M-2022-05 1–2 沙特、M-2022-24 2–0 墨西哥、M-2022-39 波兰 0–2 阿根廷、M-2022-50 2–1 澳大利亚、M-2022-58 2–2 荷兰（点球 4–3）、M-2022-61 3–0 克罗地亚、M-2022-64 3–3 法国（点球 4–2 夺冠）→ 进 15 失 8\n- France：M-2022-08 4–1 澳大利亚、M-2022-23 2–1 丹麦、M-2022-38 突尼斯 1–0 法国、M-2022-51 3–1 波兰、M-2022-60 英格兰 1–2 法国、M-2022-62 2–0 摩洛哥、M-2022-64 3–3（点球 2–4）→ 进 16 失 8\n- Croatia：M-2022-09 0–0 摩洛哥、M-2022-27 4–1 加拿大、M-2022-42 0–0 比利时、M-2022-53 日本 1–1 克罗地亚（点球 1–3）、M-2022-57 1–1 巴西（点球 4–2）、M-2022-61 阿根廷 3–0 克罗地亚、M-2022-63 2–1 摩洛哥 → 进 8 失 7\n- Morocco：M-2022-09 0–0 克罗地亚、M-2022-26 比利时 0–2 摩洛哥、M-2022-41 加拿大 1–2 摩洛哥、M-2022-55 0–0 西班牙（点球 3–0）、M-2022-59 1–0 葡萄牙、M-2022-62 法国 2–0 摩洛哥、M-2022-63 克罗地亚 2–1 摩洛哥 → 进 6 失 5\n\n**得牌记录**（`bookings`，WC-2022，按 team_id 汇总）\n- T-03 Argentina：17 条，黄牌 17，红牌、两黄变红、罚下均为 0\n- T-30 France：8 条，黄牌 8，其余 0\n- T-18 Croatia：8 条，黄牌 8，其余 0\n- T-47 Morocco：8 条，黄牌 8、两黄变红 1、罚下 1，红牌 0\n\n数据来源：知识网络 worldcup_vega_catalog_bkn（Joshua C. Fjelstul 世界杯开放数据库），对象类 `team_appearances`、`bookings`、`tournament_standings`、`matches`，按技能 worldcup-analysis-zh-cn 的口径用 Cypher 计算。"
+  },
+  {
+   "id": "A-13",
+   "passed": true,
+   "round": 1,
+   "seconds": 54.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "1999 年女足世界杯（WC-1999，1999 FIFA Women's World Cup，冠军为 United States）四类明细的记录条数：\n\n| 数据类别 | 对象类 | 记录条数 |\n|---|---|---|\n| 比赛 | matches | 32 条（match_id 无重复，即 32 场） |\n| 大名单 | squads | 320 条（16 队 × 每队 20 人） |\n| 进球 | goals | 123 条进球事件 |\n| 球员出场 | player_appearances | 0 条 |\n\n口径与依据：\n- 均按 `tournament_id = 'WC-1999'` 过滤（该编号即女足 1999 届；再用 `tournament_name` 含 1999 复核，结果一致）。\n- 比赛按场计数；大名单/进球/球员出场按明细条数计。\n- **球员出场为 0 是数据源缺口**，不是查询遗漏：`player_appearances` 在 WC-1970～WC-2022 多数届次有记录（如 WC-1991 660 条、WC-1995 691 条、WC-2003 868 条），但数据源中确实没有 WC-1999 届的球员出场明细。按网络口径「明细覆盖的届次不同，没有记录不代表现实中没有发生」，这里只能说该届无出场记录，不能据此推断当时没有球员上场比赛。\n- 进球数包含乌龙球和比赛内点球；点球大战罚球记在 `penalty_kicks`，不计入进球，因此不在 123 条之内。"
+  },
+  {
+   "id": "A-14",
+   "passed": true,
+   "round": 1,
+   "seconds": 67.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论：三个口径完全对得上，逐场核对也没有不符之处\n\n按知识网络《世界杯》技能口径（男足，WC-2014/2018/2022，各 64 场）：比分进球 = SUM(home_team_score+away_team_score)；进球记录 = goals 表行数（乌龙球按受益球队记录，仍计入比分）；点球大战罚球来自 penalty_kicks，**不计入比分**。\n\n| 届次 | 场数 | 比分进球 | 进球记录 | 差值 | 乌龙球 | 非乌龙进球 | 比赛内点球破门 | 点球大战罚球（罚进/总罚） |\n|---|---|---|---|---|---|---|---|---|\n| WC-2014 | 64 | 171 | 171 | 0 | 5 | 166 | 12 | 26 / 36（4 场） |\n| WC-2018 | 64 | 169 | 169 | 0 | 12 | 157 | 22 | 26 / 39（4 场） |\n| WC-2022 | 64 | 172 | 172 | 0 | 2 | 170 | 17 | 26 / 41（5 场） |\n\n（主队/客队比分合计：2014 为 81+90，2018 为 91+78，2022 为 101+71）\n\n## 一致性核对\n- **总分**：三届的比分进球与 goals 记录数全部相等（171=171、169=169、172=172）。\n- **逐场**：192 场比赛中，比分之和与该场 goals 记录数逐场比对，**不符 0 场**。\n- **点球大战**：penalty_kicks 罚进数与该场 score_penalties 之和一致——2014（3–2、5–3、2–4、4–3）罚进 26；2018（3–4、3–2、3–4、3–4）罚进 26；2022（4–2、4–2、1–3、3–0、3–4）罚进 26；未罚进分别为 10/13/15 次，不计比分。\n- 点球大战场次：2014 有 Brazil–Chile、Costa Rica–Greece、Netherlands–Costa Rica、Netherlands–Argentina；2018 有 Spain–Russia、Croatia–Denmark、Colombia–England、Russia–Croatia；2022 有 Morocco–Spain、Japan–Croatia、Croatia–Brazil、Netherlands–Argentina、Argentina–France（决赛 3–3，点球 4–2）。\n\n注：2018 乌龙球 12 个最多，但乌龙球已含在进球记录与球队比分内，不影响两边核对。数据源为 Fjelstul World Cup Database（男足截至 2022 年）。"
+  },
+  {
+   "id": "B-01",
+   "passed": true,
+   "round": 1,
+   "seconds": 24.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "数据里共有 **30 届世界杯赛事：男足 22 届、女足 8 届**。\n\n口径：`tournaments` 表每一行代表一届赛事，`tournament_name` 含 Women's 的算女足。\n\n- **男足 22 届**：1930、1934、1938、1950、1954、1958、1962、1966、1970、1974、1978、1982、1986、1990、1994、1998、2002、2006、2010、2014、2018、2022（WC-1930 ~ WC-2022）\n- **女足 8 届**：1991、1995、1999、2003、2007、2011、2015、2019（WC-1991 ~ WC-2019）\n\n核对：22 + 8 = 30，与 `tournaments` 总记录数 30 一致。"
+  },
+  {
+   "id": "B-02",
+   "passed": true,
+   "round": 1,
+   "seconds": 25.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "数据里一共记录了 **1248 场**世界杯比赛。\n\n**口径**：比赛按场计数，`matches` 表一行即一场；`match_id` 无重复（count(*) = count(DISTINCT match_id) = 1248）。\n\n| 类别 | 届数 | 比赛场次 |\n|---|---|---|\n| 男足世界杯（WC-1930 ~ WC-2022） | 22 届 | 964 场 |\n| 女足世界杯（WC-1991 ~ WC-2019） | 8 届 | 284 场 |\n| **合计** | **30 届** | **1248 场** |\n\n说明：本数据库为 Fjelstul World Cup Database，男足截至 2022 年、女足截至 2019 年，因此 2023 年女足世界杯与 2026 年男足世界杯不在统计范围内。"
+  },
+  {
+   "id": "B-03",
+   "passed": true,
+   "round": 1,
+   "seconds": 26.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2022 年世界杯（WC-2022，2022 FIFA Men's World Cup，第 22 届男足世界杯，2022 年举行）**\n\n- **开幕**：2022 年 11 月 20 日\n- **结束**：2022 年 12 月 18 日\n- **举办地**：卡塔尔（Qatar），单一东道主（东道主成绩为小组赛出局，group stage）\n- **冠军**：阿根廷（Argentina），本届共 32 支球队参赛\n\n依据（Fjelstul World Cup Database，对象类 tournaments / host_countries / matches）：\n\n| 项 | 值 |\n|---|---|\n| tournament_id | WC-2022 |\n| 年份 | 2022 |\n| start_date | 2022-11-20 |\n| end_date | 2022-12-18 |\n| host_country | Qatar |\n| winner | Argentina |\n| count_teams | 32 |\n\n- host_countries：WC-2022 仅一条东道主记录，Qatar（QAT），performance = group stage；联合举办时才会多国分列，本届不是。\n- 决赛佐证：M-2022-64，2022-12-18，Argentina vs France，比分 3–3，点球大战 4–2，Lusail Stadium（Lusail, Qatar）。\n\n口径说明：按本网络默认规则，比分不含点球大战、点球大战比分单列，所以决赛记 3–3（点球 4–2）；赛事起止日期取 tournaments 的 start_date / end_date。"
+  },
+  {
+   "id": "B-04",
+   "passed": true,
+   "round": 1,
+   "seconds": 35.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "数据里共有 88 支国家队，按男女足情况划分如下：\n\n| 类别 | 数量 |\n|---|---|\n| 只有男足 | **52 支** |\n| 只有女足 | **3 支** |\n| 男女足都有 | **33 支** |\n\n**依据与计算方式**\n- `teams`（国家队）共 88 条记录，用 `mens_team` / `womens_team` 两个标记分组：mens=1、womens=0 的有 52 支；mens=0、womens=1 的有 3 支；mens=1、womens=1 的有 33 支。\n- 我又用 `team_appearances` 的实际参赛记录做交叉核对，按 tournament_name 含 Women's 判定女足赛事，结果完全一致：出现在女足赛事的球队共 36 支（33+3），出现在男足赛事的共 85 支（52+33），没有任何一支球队的标记与实际参赛情况冲突。\n\n**细节**\n- 只有女足的 3 支：Chinese Taipei（T-15）、Equatorial Guinea（T-29）、Thailand（T-76）。\n- 男女足都有的 33 支，例如 Argentina（T-03）、Australia（T-04）、Brazil（T-09）、Canada（T-12）、China（T-14）、Germany（T-31）、Japan（T-44）、United States（T-83）等。\n\n**范围提示**：数据中男足世界杯截至 2022 年（22 届），女足截至 2019 年（8 届）。“只有男足”只表示数据里没有这支球队的女足世界杯记录，并不代表现实中没有女足国家队。"
+  },
+  {
+   "id": "B-05",
+   "passed": true,
+   "round": 1,
+   "seconds": 27.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_object_types",
+    "get_skill_content",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "按 `players` 表的性别标记 `female` 统计（0=男、1=女，10401 名球员全部有标记，无空值）：\n\n| 性别 | 人数 |\n|---|---|\n| 男球员（female=0） | **8,482** |\n| 女球员（female=1） | **1,919** |\n| 合计 | 10,401 |\n\n口径说明：这是球员维度表里的全部球员记录数（数据源 Fjelstul World Cup Database，男足截至 2022 年 22 届、女足截至 2019 年 8 届），并非某一届赛事的大名单人数；男女数量差异主要来自两性赛事届数与每届报名人数的不同。"
+  },
+  {
+   "id": "B-06",
+   "passed": true,
+   "round": 1,
+   "seconds": 29.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "2022 年男足世界杯的纪律统计（来自 `bookings` 表，`tournament_id = 'WC-2022'`，2022 FIFA Men's World Cup）：\n\n| 项目 | 次数 |\n|---|---|\n| 黄牌 yellow_card | **224** |\n| 红牌（直接红牌）red_card | **1** |\n| 两黄变一红 second_yellow_card | **3** |\n| 罚下 sending_off | **4** |\n\n补充说明：\n- 得牌明细共 225 条记录。按本知识网络的口径，黄牌、红牌、两黄变一红、罚下是四个独立标记，各自统计、**不能相加**（同一条记录可能带多个标记）。\n- 数值上是自洽的：罚下 4 次 = 直接红牌 1 次 + 两黄变一红 3 次。\n- 该数据源中女足世界杯只覆盖到 2019 年，因此 2022 年只涉及男足赛事，口径无混用。"
+  },
+  {
+   "id": "B-07",
+   "passed": true,
+   "round": 2,
+   "seconds": 100.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 2022 年世界杯决赛（M-2022-64）\n\n| 项目 | 结果 |\n|---|---|\n| 日期 | **2022-12-18** |\n| 对阵 | **Argentina（阿根廷，ARG） vs France（法国，FRA）**（阿根廷为主队） |\n| 比分（含加时） | **3–3**（打满加时，extra_time=1） |\n| 点球大战 | **4–2，阿根廷胜** |\n| 场地 | Lusail Stadium，Lusail，Qatar |\n\n**依据**\n\n1. 比赛记录（matches，WC-2022，stage_name = 'final'）：M-2022-64｜2022-12-18｜Argentina vs France｜score 3–3｜score_penalties 4–2｜Lusail Stadium, Lusail, Qatar；result 标记为 \"home team win\"。\n2. 点球大战逐罚核对（penalty_kicks，WC-2022 / final）：阿根廷罚 4 次全部罚进；法国罚 4 次、2 进 2 失——与点球大战 4–2 一致。\n\n口径说明（按知识网络默认规则）：比分不含点球大战，点球大战比分单列；点球大战的罚球记在 penalty_kicks，不算进球、也不计入 3–3 的比分。"
+  },
+  {
+   "id": "B-08",
+   "passed": true,
+   "round": 1,
+   "seconds": 32.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2022 FIFA Men's World Cup（WC-2022，主办国 Qatar，冠军 Argentina）共进 172 球。**\n\n| 类别 | 数量 |\n|---|---|\n| 总进球（全部进球事件） | **172** |\n| 球员自己打进（own_goal=0） | **170** |\n| 乌龙球（own_goal=1） | **2** |\n| 比赛内点球（penalty=1） | **17** |\n\n说明（按技能口径：球员进球排除乌龙球；比赛内点球算进球；点球大战罚球不计入）：\n- **170 + 2 = 172**，这是互不重叠的拆分。\n- **17 个点球是「球员自己打进」170 球中的子集**（数据里所有 penalty=1 的记录 own_goal 均为 0），不要再叠加到总数上；非点球进球为 153 球。\n- 点球大战（penalty_kicks）罚球不算进球、也不计入比分，不在此 172 球内。\n\n依据：\n- 赛事锚定：tournaments 中 `tournament_id='WC-2022'` → 2022 FIFA Men's World Cup（非女足）。\n- 进球明细：goals 表该届共 172 条；按 own_goal × penalty 交叉为 153（0,0）、17（0,1）、2（1,0）。\n- 独立校验：matches 表 64 场，主队进球 101 + 客队进球 71 = 172，与进球事件数一致。"
+  },
+  {
+   "id": "B-09",
+   "passed": true,
+   "round": 1,
+   "seconds": 26.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_object_types",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**结论：0 条。** 本知识网络中，1999 年女足世界杯（`WC-1999`，1999 FIFA Women's World Cup）**没有球员出场记录**。\n\n依据：\n- 赛事确认：`WC-1999` = 1999 FIFA Women's World Cup；1999 年只有这一届赛事。\n- 对「球员每场比赛出场」（player_appearances）按届次进行分组统计：该表覆盖 21 届赛事，其中女足赛事为 WC-1991(660)、WC-1995(691)、WC-2003(868)、WC-2007(865)、WC-2011(853)、WC-2015(1430)、WC-2019(1447)，**结果中没有 WC-1999**；直接以 `tournament_id = 'WC-1999'` 计数，结果为 **0**。\n- 这并非整届赛事数据缺失：同一届赛事的阵容名单（squads）有 320 条记录，只是该届未建立「球员出场」明细。\n\n口径说明：按知识网络定义，各类明细覆盖的届次不同，因此 `WC-1999` 没有球员出场记录；没有记录不代表现实中未发生，不能用 0 反推该届无人上场。"
+  },
+  {
+   "id": "B-10",
+   "passed": true,
+   "round": 1,
+   "seconds": 17.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "容量最大的球场是巴西里约热内卢的 **Estádio do Maracanã**（球场编号 S-020），可容纳 **200,000 人**。\n\n按 `stadiums.stadium_capacity` 降序的前几名：\n\n| 排名 | 球场 | 城市 | 国家 | 容量 | 编号 |\n|---|---|---|---|---|---|\n| 1 | Estádio do Maracanã | Rio de Janeiro | Brazil | 200,000 | S-020 |\n| 2 | Camp Nou | Barcelona | Spain | 121,000 | S-182 |\n| 3 | Estadio Azteca | Mexico City | Mexico | 115,000 | S-132 |\n| 4 | Wembley Stadium | London | England | 99,000 | S-049 |\n| 5 | Rose Bowl | Los Angeles | United States | 96,000 | S-225 |\n\n全表最高容量 200,000 只有 Maracanã 一座，无并列。数据源为 Fjelstul World Cup Database（男足截至 2022 年、女足截至 2019 年）。"
+  },
+  {
+   "id": "J-01",
+   "passed": true,
+   "round": 1,
+   "seconds": 41.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n梅西（Lionel Messi，player_id **P-14758**，阿根廷 ARG）在 2014 与 2022 两届男足世界杯上共拿到 **3 项个人奖项**：\n\n| 届次 | 赛事名称 | 奖项 | 含义 | 共享 |\n|---|---|---|---|---|\n| WC-2014 | 2014 FIFA Men's World Cup | **Golden Ball** 金球奖（A-1） | best player 最佳球员 | 否 |\n| WC-2022 | 2022 FIFA Men's World Cup | **Golden Ball** 金球奖（A-1） | best player 最佳球员 | 否 |\n| WC-2022 | 2022 FIFA Men's World Cup | **Silver Boot** 银靴奖（A-5） | second top goal scorer 射手榜第二 | 否 |\n\n也就是：2014 年 1 项（金球奖），2022 年 2 项（金球奖和银靴奖）。\n\n**依据与口径**\n- 查的是「奖项与荣誉」分组下的 `award_winners`（奖项得主，逐条记录届次、奖项和球员），奖项含义取自 `awards`（奖项定义）。\n- 球员在 `players` 里确认唯一：Lionel Messi，P-14758，男足（female=0），参赛 5 届（2006、2010、2014、2018、2022）。\n- 按 `player_id='P-14758'` 全量复核，获奖记录正好 3 条，都在 WC-2014 / WC-2022，且 `shared=0`（无并列）。\n- 同时把这两届的完整个人奖项名单逐条核对过，没有遗漏的梅西条目。例如 2014 年金靴是 James Rodríguez、金球二三名是 Thomas Müller 和 Arjen Robben；2022 年金靴是 Kylian Mbappé、银靴是梅西、金球二三名是 Mbappé 和 Luka Modrić。\n- 数据源为 Fjelstul 世界杯数据库，奖项名和人名保留英文原文；这个网络没有函数和已建模指标，全部用 Cypher 在对象模型上查询。以上只统计奖项表内的官方个人奖项记录，没有推测现实中的其他荣誉。"
+  },
+  {
+   "id": "J-02",
+   "passed": true,
+   "round": 2,
+   "seconds": 100.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "bkn_start_interaction",
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n2022 年卡塔尔世界杯（WC-2022）决赛：\n\n- **主队**：Argentina（阿根廷），球队编号 T-03\n- **客队**：France（法国），球队编号 T-30\n- **球场**：Lusail Stadium（卢赛尔球场），球场编号 S-147，容量 89,000\n- **城市**：Lusail（卢赛尔）\n- **国家**：Qatar（卡塔尔）\n\n## 依据（比赛记录 matches）\n\n| 项 | 值 |\n|---|---|\n| 比赛编号 | M-2022-64 |\n| 比赛名称 | Argentina vs France |\n| 日期 | 2022-12-18 |\n| 阶段 | final（决赛） |\n| 主队 | Argentina（T-03） |\n| 客队 | France（T-30） |\n| 比分 | 3–3（不含点球大战） |\n| 点球大战比分 | 4–2 |\n| 球场 | Lusail Stadium（S-147） |\n| 城市 / 国家 | Lusail / Qatar |\n\n球场记录（stadiums，S-147）：Lusail Stadium，城市 Lusail，国家 Qatar，容量 89,000。\n\n按本网络默认口径：比分不含点球大战，两队 3–3 平，点球大战比分单列（阿根廷 4–2）；点球大战决出的比赛通常记为平。"
+  },
+  {
+   "id": "J-03",
+   "passed": true,
+   "round": 2,
+   "seconds": 102.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "WC-2022 阿根廷（Argentina，球队编号 T-03，代码 ARG）大名单共 **26 人**，号码 1–26 连续。\n\n| # | 球员（数据源原文） | 球员编号 | 位置 |\n|---|---|---|---|\n| 1 | Franco Armani | P-39788 | goal keeper（门将） |\n| 2 | Juan Foyth | P-00652 | defender（后卫） |\n| 3 | Nicolás Tagliafico | P-35173 | defender（后卫） |\n| 4 | Gonzalo Montiel | P-91431 | defender（后卫） |\n| 5 | Leandro Paredes | P-27582 | midfielder（中场） |\n| 6 | Germán Pezzella | P-29298 | defender（后卫） |\n| 7 | Rodrigo De Paul | P-37314 | midfielder（中场） |\n| 8 | Marcos Acuña | P-73712 | midfielder（中场） |\n| 9 | Julián Álvarez | P-19776 | forward（前锋） |\n| 10 | Lionel Messi | P-14758 | forward（前锋） |\n| 11 | Ángel Di María | P-42113 | forward（前锋） |\n| 12 | Gerónimo Rulli | P-36188 | goal keeper（门将） |\n| 13 | Cristian Romero | P-79650 | defender（后卫） |\n| 14 | Exequiel Palacios | P-40147 | midfielder（中场） |\n| 15 | Ángel Correa | P-92353 | forward（前锋） |\n| 16 | Thiago Almada | P-56659 | midfielder（中场） |\n| 17 | Papu Gómez | P-10231 | midfielder（中场） |\n| 18 | Guido Rodríguez | P-03265 | midfielder（中场） |\n| 19 | Nicolás Otamendi | P-49114 | defender（后卫） |\n| 20 | Alexis Mac Allister | P-71343 | midfielder（中场） |\n| 21 | Paulo Dybala | P-28151 | forward（前锋） |\n| 22 | Lautaro Martínez | P-81505 | forward（前锋） |\n| 23 | Emiliano Martínez | P-13162 | goal keeper（门将） |\n| 24 | Enzo Fernández | P-10739 | midfielder（中场） |\n| 25 | Lisandro Martínez | P-23070 | defender（后卫） |\n| 26 | Nahuel Molina | P-84430 | defender（后卫） |\n\n**位置分布（按数据源 position_name 原文）**：门将 3 人（1、12、23）、后卫 8 人（2、3、4、6、13、19、25、26）、中场 9 人（5、7、8、14、16、17、18、20、24）、前锋 6 人（9、10、11、15、21、22）。\n\n**依据**：查询数据表 `squads`（阵容名单），条件为 `tournament_id = 'WC-2022'` 且 `team_name = 'Argentina'`，按球衣号码升序返回，共 26 条记录。位置写法保留数据源原文英文并在括号中附中文；需注意数据源把 8 号 Marcos Acuña 归为中场（midfielder），因此中场是 9 人而不是 8 人。"
+  },
+  {
+   "id": "J-04",
+   "passed": true,
+   "round": 2,
+   "seconds": 98.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "2014 年世界杯德国队的主教练是 **Joachim Löw**（约阿希姆·勒夫，德国籍，manager_id M-234）。\n\n**依据**（数据源：Fjelstul 世界杯数据库，男足口径）：\n- **主帅执教任命**（manager_appointments）：在 2014 FIFA Men's World Cup（WC-2014）中，德国队（T-31）的任命记录 key_id 为 509，对应 manager_id M-234，given_name 为 Joachim，family_name 为 Löw，country_name 为 Germany。\n- **交叉核验教练临场指挥记录**（manager_appearances）：WC-2014 德国队的指挥记录全部归属 M-234，共 7 场比赛，没有其他教练的记录。\n\n注：数据源保留人名英文原拼写（Löw）。"
+  },
+  {
+   "id": "J-05",
+   "passed": true,
+   "round": 1,
+   "seconds": 33.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "2022 年男足世界杯决赛（2022-12-18，阿根廷 3–3 法国，点球 4–2）的主裁判是 **Szymon Marciniak**（希蒙·马齐尼亚克），来自 **波兰**，欧足联（UEFA）旗下裁判。\n\n依据（数据源记录）：\n- 决赛场次 `matches`：match_id = M-2022-64，Argentina vs France，stage_name = final，Lusail Stadium。\n- 执法记录 `referee_appearances`：该场 referee_id = R-269，Szymon Marciniak，country_name = Poland，confederation = UEFA。\n- 裁判主档 `referees` / 指派表 `referee_appointments`：R-269，Szymon Marciniak，Poland，2022 FIFA Men's World Cup 指派名单内。\n\n（按本网络默认口径，人名保留数据源英文原文，全名 = given_name + family_name。）"
+  },
+  {
+   "id": "J-06",
+   "passed": true,
+   "round": 2,
+   "seconds": 25.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 2022 年世界杯 A 组最终积分榜（Group A，group stage）\n\n| 名次 | 球队 | 代码 | 场次 | 胜 | 平 | 负 | 进球 | 失球 | 净胜球 | 积分 | 出线 |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| 1 | Netherlands（荷兰） | NLD | 3 | 2 | 1 | 0 | 5 | 1 | +4 | 7 | 是 |\n| 2 | Senegal（塞内加尔） | SEN | 3 | 2 | 0 | 1 | 5 | 4 | +1 | 6 | 是 |\n| 3 | Ecuador（厄瓜多尔） | ECU | 3 | 1 | 1 | 1 | 4 | 3 | +1 | 4 | 否 |\n| 4 | Qatar（卡塔尔） | QAT | 3 | 0 | 0 | 3 | 1 | 7 | −6 | 0 | 否 |\n\n**结论**：荷兰 2 胜 1 平、净胜球 +4、积 7 分排名 A 组第一；塞内加尔 2 胜 1 负积 6 分列第二，两队晋级淘汰赛。厄瓜多尔积 4 分、卡塔尔 3 战全负积 0 分，均未出线。\n\n**依据与口径**：\n- 数据源：本知识网络「小组积分榜」对象类 `group_standings`，筛选 `tournament_id = 'WC-2022'`、`group_name = 'Group A'`、`stage_name = 'group stage'`，按 `position` 排序。\n- 场次、胜平负、进失球、净胜球、积分、出线标记（advanced）均取自数据源原字段；队名保留英文原文，中文译名仅供参考。\n- 该榜为小组赛阶段结束后的最终排位，不含淘汰赛成绩。"
+  },
+  {
+   "id": "J-07",
+   "passed": true,
+   "round": 1,
+   "seconds": 26.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "结论：**2002 年男足世界杯由韩国（South Korea）和日本（Japan）联合举办。**\n\n依据（赛事编号 WC-2002，2002 FIFA Men's World Cup，赛期 2002-05-31 至 2002-06-30，冠军为 Brazil）：\n\n| 主办国 | 球队编号 | 代码 | 该届成绩 |\n|---|---|---|---|\n| Japan（日本） | T-44 | JPN | round of 16（16 强） |\n| South Korea（韩国） | T-71 | KOR | fourth place（第四名） |\n\n- 赛事的 `host_country` 字段记为 “Korea, Japan”。\n- 东道主明细在 host_countries 中按每个主办国单独列出，两条记录同属 WC-2002，即「联合举办」的口径。"
+  },
+  {
+   "id": "J-08",
+   "passed": true,
+   "round": 2,
+   "seconds": 24.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**结论：2022 世界杯决赛点球大战双方共 8 罚（各 4 罚），阿根廷 4 罚全中，法国 4 罚 2 中，点球大战比分 4–2。**\n\n比赛为 M-2022-64「Argentina vs France」，2022-12-18，阶段 final（决赛）；该场常规时间加加时赛的比分是 3–3，点球大战比分另计为 4–2。\n\n| 顺序 | 记录编号 | 球队 | 球员 | 号码 | 结果 |\n|---|---|---|---|---|---|\n| 1 | PK-389 | 阿根廷 Argentina (ARG) | Lionel Messi | 10 | 罚进 |\n| 2 | PK-390 | 阿根廷 Argentina (ARG) | Paulo Dybala | 21 | 罚进 |\n| 3 | PK-391 | 阿根廷 Argentina (ARG) | Leandro Paredes | 5 | 罚进 |\n| 4 | PK-392 | 阿根廷 Argentina (ARG) | Gonzalo Montiel | 4 | 罚进 |\n| 5 | PK-393 | 法国 France (FRA) | Kylian Mbappé | 10 | 罚进 |\n| 6 | PK-394 | 法国 France (FRA) | Kingsley Coman | 20 | 未罚进 |\n| 7 | PK-395 | 法国 France (FRA) | Aurélien Tchouaméni | 8 | 未罚进 |\n| 8 | PK-396 | 法国 France (FRA) | Randal Kolo Muani | 12 | 罚进 |\n\n分项统计：\n- 阿根廷（ARG）：4 罚 4 中，主罚者为 Messi、Dybala、Paredes、Montiel。\n- 法国（FRA）：4 罚 2 中，罚进的是 Mbappé、Kolo Muani；未罚进的是 Coman、Tchouaméni。\n\n统计规则说明（按知识网络默认规则）：点球大战罚球记录存放在 penalty_kicks 表，这些罚球不计入进球，也不计入比分，点球大战比分单独列出；数据中只记录到第 8 罚，也就是说，法国第 5 名主罚者未出场。按数据源规则，这里只描述“罚进/未罚进”，不判断是谁扑出的。"
+  },
+  {
+   "id": "J-09",
+   "passed": true,
+   "round": 1,
+   "seconds": 30.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "get_relation_types",
+    "query_object_instance",
+    "bkn_finish_interaction"
+   ],
+   "answer": "阿根廷在 2022 年男足世界杯（WC-2022）共踢了 **7 场**，7 场全部由主教练 **Lionel Scaloni（M-383）** 在场边指挥。\n\n| # | 日期 | 阶段 | 对手 | 阿根廷角色 | 比分（点球大战） | 场地/城市 |\n|---|---|---|---|---|---|---|\n| 1 | 2022-11-22 | group stage（Group C） | Saudi Arabia | 主队 | 1–2 负 | Lusail Stadium，Lusail |\n| 2 | 2022-11-26 | group stage（Group C） | Mexico | 主队 | 2–0 胜 | Lusail Stadium，Lusail |\n| 3 | 2022-11-30 | group stage（Group C） | Poland | 客队 | 0–2（阿根廷 2–0 胜） | Stadium 974，Doha |\n| 4 | 2022-12-03 | round of 16 | Australia | 主队 | 2–1 胜 | Ahmad bin Ali Stadium，Al Rayyan |\n| 5 | 2022-12-09 | quarter-finals | Netherlands | 客队 | 2–2，点球 3–4（阿根廷晋级） | Lusail Stadium，Lusail |\n| 6 | 2022-12-13 | semi-finals | Croatia | 主队 | 3–0 胜 | Lusail Stadium，Lusail |\n| 7 | 2022-12-18 | final | France | 主队 | 3–3，点球 4–2 夺冠 | Lusail Stadium，Lusail |\n\n口径与依据：\n- 比赛取自 `matches` 中 tournament_id = 'WC-2022' 且主/客队为 Argentina 的场次，按比赛日期升序：M-2022-05、M-2022-24、M-2022-39、M-2022-50、M-2022-58、M-2022-61、M-2022-64。\n- 阶段以 stage_name 为准；小组名来自 group_name（Group C）。\n- 比分不含点球大战，点球大战比分单列（score_penalties）；点球大战决出的比赛常规时间记为平。\n- 教练来自 `manager_appearances`（tournament_id='WC-2022'、team_name='Argentina'）的 7 条记录，均为 Lionel Scaloni，manager_id = M-383。\n- 队名、人名保留数据源英文原文。"
+  },
+  {
+   "id": "J-10",
+   "passed": true,
+   "round": 2,
+   "seconds": 44.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "search_schema",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 姆巴佩 2022 世界杯进球明细\n\n**Kylian Mbappé（基利安·姆巴佩，P-64077，法国）在 WC-2022 共进 8 球**，分布在 4 场比赛；其中 **2 球是比赛内点球**，且都在决赛。\n\n| # | 记录编号 | 日期 | 比赛 | 阶段 | 第几分钟 | 时段 | 点球 |\n|---|---|---|---|---|---|---|---|\n| 1 | G-3486 | 2022-11-22 | M-2022-08 France vs Australia（D 组） | group stage | 68' | second half | 否 |\n| 2 | G-3518 | 2022-11-26 | M-2022-23 France vs Denmark（D 组） | group stage | 61' | second half | 否 |\n| 3 | G-3520 | 2022-11-26 | M-2022-23 France vs Denmark（D 组） | group stage | 86' | second half | 否 |\n| 4 | G-3594 | 2022-12-04 | M-2022-51 France vs Poland | round of 16 | 74' | second half | 否 |\n| 5 | G-3595 | 2022-12-04 | M-2022-51 France vs Poland | round of 16 | 90'+1' | second half, stoppage time | 否 |\n| 6 | G-3634 | 2022-12-18 | M-2022-64 Argentina vs France | final | 80' | second half | **是** |\n| 7 | G-3635 | 2022-12-18 | M-2022-64 Argentina vs France | final | 81' | second half | 否 |\n| 8 | G-3637 | 2022-12-18 | M-2022-64 Argentina vs France | final | 118' | extra time, second half | **是** |\n\n**点球进球：2 个**，即决赛第 80 分钟（G-3634）和第 118 分钟（G-3637）；其余 6 球为运动战进球。\n\n**相关比分（不含点球大战）**：法国 4–1 澳大利亚；法国 2–1 丹麦；法国 3–1 波兰；决赛 阿根廷 3–3 法国（点球大战 4–2）。\n\n**补充**：决赛点球大战中 Mbappé 罚进（PK-393，converted=1）。按本网络口径，点球大战罚球单列，**不算进球、不计入比分**，故不计入上述 8 球。\n\n**口径说明**：球员进球排除乌龙球（这 8 条记录 own_goal 均为 0）；比赛内点球（penalty=1）算进球；阶段用 `stage_name` 原文。数据来源为 Fjelstul World Cup Database（男足截至 2022 年）。"
+  },
+  {
+   "id": "J-11",
+   "passed": true,
+   "round": 2,
+   "seconds": 37.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n2022 年卡塔尔男足世界杯（**WC-2022**，2022 FIFA Men's World Cup，主办国 Qatar，冠军 Argentina）共有 **32 支**球队参赛。按洲际足联分布：**UEFA 13 支、AFC 6 支、CAF 5 支、CONMEBOL 4 支、CONCACAF 4 支，OFC 0 支**。\n\n口径：以出线球队资格表 `qualified_teams` 中 WC-2022 的 32 条记录为准，经 `rel_qualified_teams_team` 关联 `teams` 取其所属足联；并用 `team_appearances` 中 WC-2022 出现的球队交叉核验，两者为同一批 32 队（`tournaments.count_teams` 亦为 32）。队名/编号/足联名保留数据源英文原文。\n\n## 各队归属\n\n**UEFA — Union of European Football Associations（CF-6，13 支）**\nT-06 Belgium(BEL)、T-18 Croatia(HRV)、T-22 Denmark(DNK)、T-28 England(ENG)、T-30 France(FRA)、T-31 Germany(DEU)、T-48 Netherlands(NLD)、T-57 Poland(POL)、T-58 Portugal(PRT)、T-66 Serbia(SRB)、T-73 Spain(ESP)、T-75 Switzerland(CHE)、T-85 Wales(WAL)\n\n**AFC — Asian Football Confederation（CF-1，6 支）**\nT-04 Australia(AUS)、T-38 Iran(IRN)、T-44 Japan(JPN)、T-59 Qatar(QAT)、T-63 Saudi Arabia(SAU)、T-71 South Korea(KOR)\n\n**CAF — Confederation of African Football（CF-2，5 支）**\nT-11 Cameroon(CMR)、T-32 Ghana(GHA)、T-47 Morocco(MAR)、T-65 Senegal(SEN)、T-79 Tunisia(TUN)\n\n**CONMEBOL — South American Football Confederation（CF-4，4 支）**\nT-03 Argentina(ARG)、T-09 Brazil(BRA)、T-25 Ecuador(ECU)、T-84 Uruguay(URY)\n\n**CONCACAF — Confederation of North, Central American and Caribbean Association Football（CF-3，4 支）**\nT-12 Canada(CAN)、T-17 Costa Rica(CRI)、T-46 Mexico(MEX)、T-83 United States(USA)\n\n**OFC — Oceania Football Confederation（CF-5）**：本届无参赛球队（数据中 Australia 归 AFC）。\n\n## 依据\n- 赛事锚点：`tournaments` → WC-2022\n- 出线记录：`qualified_teams` 中 tournament_id='WC-2022'，共 32 行\n- 足联字段：`teams.confederation_id / confederation_name / confederation_code`，与 `confederations`（CF-1 AFC、CF-2 CAF、CF-3 CONCACAF、CF-4 CONMEBOL、CF-5 OFC、CF-6 UEFA）一致\n- 交叉核验：`team_appearances` 中 WC-2022 的不同 team_id 为 32 个，名单与上表完全一致"
+  },
+  {
+   "id": "J-12",
+   "passed": true,
+   "round": 2,
+   "seconds": 43.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n2022 年世界杯决赛（**M-2022-64**，2022-12-18，Lusail Stadium，Argentina 3–3 France，点球大战 4–2）双方共 **13 次换人：Argentina 6 次、France 7 次**。France 在 41' 和 71' 各做了一次双人换人，并在 120'+1' 再换一人；Argentina 的换人分布在 64'、91'、102'（双换）、116'、120'+1'。\n\n依据：`substitutions` 表中该场（stage_name = `final`）共 26 条记录，每条记录对应一名球员的单独上下场记录（`going_off=1` 表示下场，`coming_on=1` 表示上场），按 `key_id` 数值排序即记录顺序。\n\n### Argentina（ARG）— 6 次换人\n\n| 分钟 | 时段（数据源原文） | 下场 | 上场 | 记录编号 |\n|---|---|---|---|---|\n| 64' | second half | Ángel Di María（P-42113，#11） | Marcos Acuña（P-73712，#8） | S-10201、S-10202 |\n| 91' | extra time, first half | Nahuel Molina（P-84430，#26） | Gonzalo Montiel（P-91431，#4） | S-10207、S-10208 |\n| 102' | extra time, first half | Rodrigo De Paul（P-37314，#7）、Julián Álvarez（P-19776，#9） | Leandro Paredes（P-27582，#5）、Lautaro Martínez（P-81505，#22） | S-10211–S-10214 |\n| 116' | extra time, second half | Alexis Mac Allister（P-71343，#20） | Germán Pezzella（P-29298，#6） | S-10217、S-10218 |\n| 120'+1' | extra time, second half, stoppage time | Nicolás Tagliafico（P-35173，#3） | Paulo Dybala（P-28151，#21） | S-10219、S-10221 |\n\n### France（FRA）— 7 次换人\n\n| 分钟 | 时段（数据源原文） | 下场 | 上场 | 记录编号 |\n|---|---|---|---|---|\n| 41' | first half | Ousmane Dembélé（P-97778，#11）、Olivier Giroud（P-89750，#9） | Randal Kolo Muani（P-92987，#12）、Marcus Thuram（P-13613，#26） | S-10197–S-10200 |\n| 71' | second half | Théo Hernandez（P-09867，#22）、Antoine Griezmann（P-90908，#7） | Kingsley Coman（P-06614，#20）、Eduardo Camavinga（P-80996，#25） | S-10203–S-10206 |\n| 96' | extra time, first half | Adrien Rabiot（P-57401，#14） | Youssouf Fofana（P-23304，#13） | S-10209、S-10210 |\n| 113' | extra time, second half | Raphaël Varane（P-42326，#4） | Ibrahima Konaté（P-86920，#24） | S-10215、S-10216 |\n| 120'+1' | extra time, second half, stoppage time | Jules Koundé（P-78484，#5） | Axel Disasi（P-91324，#3） | S-10220、S-10222 |\n\n### 口径说明\n- 按网络默认口径：阶段取 `stage_name`（本场 `final`）；人名、队名用数据源英文原文，全名 = given_name + family_name。\n- 同一分钟「两上两下」时，数据源把四名球员各记为一条独立记录（换人记录编号各不相同），**没有标明哪位替补具体换下哪位**，所以上表只按同队、同分钟并列，不做一一配对。\n- 数据只覆盖该场有记录的换人事件，表中没有的球员不代表现实中没发生。"
+  },
+  {
+   "id": "R-01",
+   "passed": true,
+   "round": 2,
+   "seconds": 42.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 男足世界杯历史射手榜前十（截至 2022 年，共 22 届）\n\n按竞赛排名（同分同名次、后续跳号），**第 10 名并列 6 人**，所以榜单共 15 行：\n\n| 名次 | 球员 | 代表队 | 进球 |\n|---|---|---|---|\n| 1 | Miroslav Klose（P-27787） | Germany | 16 |\n| 2 | Ronaldo（P-62722） | Brazil | 15 |\n| 3 | Gerd Müller（P-72441） | West Germany | 14 |\n| 4 | Just Fontaine（P-77939） | France | 13 |\n| 4 | Lionel Messi（P-14758） | Argentina | 13 |\n| 6 | Kylian Mbappé（P-64077） | France | 12 |\n| 6 | Pelé（P-38906） | Brazil | 12 |\n| 8 | Sándor Kocsis（P-07028） | Hungary | 11 |\n| 8 | Jürgen Klinsmann（P-91373） | West Germany 3 + Germany 8 | 11 |\n| 10 | Grzegorz Lato（P-21597） | Poland | 10 |\n| 10 | Thomas Müller（P-28154） | Germany | 10 |\n| 10 | Teófilo Cubillas（P-96979） | Peru | 10 |\n| 10 | Gabriel Batistuta（P-84542） | Argentina | 10 |\n| 10 | Helmut Rahn（P-08136） | West Germany | 10 |\n| 10 | Gary Lineker（P-36651） | England | 10 |\n\n第 10 名之后是 9 球档（名次跳到第 16），因此「前十」到此为止。\n\n**统计口径**（按知识网络的默认规则）：\n- 只算男足世界杯（排除赛事名称含 Women's 的女足世界杯），数据覆盖 1930—2022 共 22 届；\n- 球员进球剔除乌龙球（own_goal=1）；比赛内点球（penalty=1）计入进球；\n- 点球大战罚球记录在 penalty_kicks 表，不算进球、不计入本榜；\n- 名次用竞赛排名：同分同名次、后续跳号，「前十」包含名次不超过 10 的全部并列者；\n- 人名、队名保留数据源英文原文（Pelé 的 given_name 在源数据中为 \"not applicable\"，故只书名）。"
+  },
+  {
+   "id": "R-02",
+   "passed": true,
+   "round": 1,
+   "seconds": 32.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_skill_content",
+    "run_cypher",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "女足世界杯（1991–2019，共 8 届）历史射手榜前 10 名共 **11 人**（按竞技排名的规则：同分同名次，后续名次跳号；名次不超过 10 的并列者全部列出）：\n\n| 名次 | 球员（英文原文） | 编号 | 代表队 | 进球 |\n|---|---|---|---|---|\n| 1 | Marta | P-07458 | Brazil | **17** |\n| 2 | Abby Wambach | P-89236 | United States | 14 |\n| 2 | Birgit Prinz | P-52478 | Germany | 14 |\n| 4 | Michelle Akers | P-54794 | United States | 12 |\n| 5 | Bettina Wiegmann | P-53366 | Germany | 11 |\n| 5 | Wen Sun（孙雯） | P-14903 | China | 11 |\n| 5 | Cristiane | P-93057 | Brazil | 11 |\n| 8 | Heidi Mohr | P-30335 | Germany | 10 |\n| 8 | Ann Kristin Aarønes | P-29915 | Norway | 10 |\n| 8 | Carli Lloyd | P-62104 | United States | 10 |\n| 8 | Christine Sinclair | P-97813 | Canada | 10 |\n\n**统计规则**：基于 goals 表，按 player_id 汇总 tournament_name 含 Women's 的 8 届赛事（WC-1991、1995、1999、2003、2007、2011、2015、2019），并排除乌龙球（own_goal=1）；比赛内点球计为进球，点球大战罚球不计入。\n\n**为什么到第 8 名就结束**：排在 10 球档之后的是 9 球档，包括 Linda Medalen、Hege Riise、Alex Morgan、Megan Rapinoe，各 9 球；该档按上述竞技排名规则为第 12 名，因此不列入前 10 名。\n\n**各人分届进球数**\n- Marta：2003 3、2007 7、2011 4、2015 1、2019 2\n- Abby Wambach：2003 3、2007 6、2011 4、2015 1\n- Birgit Prinz：1995 1、1999 1、2003 7、2007 5\n- Michelle Akers：1991 10、1999 2\n- Bettina Wiegmann：1991 3、1995 3、1999 3、2003 2\n- Wen Sun：1991 1、1995 2、1999 7、2003 1\n- Cristiane：2007 5、2011 2、2019 4\n- Heidi Mohr：1991 7、1995 3\n- Ann Kristin Aarønes：1995 6、1999 4\n- Carli Lloyd：2011 1、2015 6、2019 3\n- Christine Sinclair：2003 3、2007 3、2011 1、2015 2、2019 1"
+  },
+  {
+   "id": "R-03",
+   "passed": true,
+   "round": 1,
+   "seconds": 41.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 2022 年世界杯（WC-2022 · 卡塔尔 · 男足）射手榜前五\n\n依据本知识网络中的计算规则：**球员进球排除乌龙球**；比赛内点球计算在进球内，点球大战罚球不算进球；射手榜采用**竞赛排名（同分同名次、后续跳号）**，“前 N 名”会列出名次不超过 N 的**全部并列者**。因此前五名共 **11 人**：\n\n| 名次 | 球员（数据源英文原名） | 球队 | 进球 | 球员编号 |\n|---|---|---|---|---|\n| 1 | Kylian Mbappé | France | **8** | P-64077 |\n| 2 | Lionel Messi | Argentina | **7** | P-14758 |\n| 3 | Julián Álvarez | Argentina | **4** | P-19776 |\n| 3 | Olivier Giroud | France | **4** | P-89750 |\n| 5 | Cody Gakpo | Netherlands | **3** | P-28911 |\n| 5 | Gonçalo Ramos | Portugal | **3** | P-41647 |\n| 5 | Enner Valencia | Ecuador | **3** | P-75912 |\n| 5 | Bukayo Saka | England | **3** | P-76842 |\n| 5 | Richarlison | Brazil | **3** | P-68016 |\n| 5 | Álvaro Morata | Spain | **3** | P-29274 |\n| 5 | Marcus Rashford | England | **3** | P-59837 |\n\n说明：\n- 第一名是 Kylian Mbappé（8 球）；第二名是 Lionel Messi（7 球）。第 3 名有两人并列（Álvarez、Giroud 各 4 球），所以第 4 名空缺；第 5 名由 7 位各进 3 球的球员并列。\n- 如果你需要“恰好 5 个人”的名单，则按进球数相同者再按编号排序，取 Mbappé、Messi、Álvarez、Giroud 以及 3 球组中编号最小的一位。\n- 数据校验：WC-2022 进球事件共 172 条，其中乌龙球 2 条、比赛内点球 17 条；球员进球统计已剔除这 2 条乌龙球。\n- 数据源中 Richarlison 的 given_name 记录为 \"not applicable\"，因此这里只给出姓氏原文和编号。\n- 统计范围严格限定 `tournament_id = 'WC-2022'`（\"2022 FIFA Men's World Cup\"），不包含女足赛事。\n\n依据：对 `goals` 对象类按 `tournament_id='WC-2022' AND own_goal=0` 聚合进球数并降序排列，再计算竞赛名次。"
+  },
+  {
+   "id": "R-04",
+   "passed": true,
+   "round": 2,
+   "seconds": 23.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**结论（三届男足世界杯中，各届队内进球最多的球队，均无并列）**\n\n| 届次 | 进球最多球队 | 进球数 | 该届第二名 |\n|---|---|---|---|\n| 2014（WC-2014） | **Germany**（T-31） | **18 球** | Netherlands（T-48）15 球 |\n| 2018（WC-2018） | **Belgium**（T-06） | **16 球** | Croatia（T-18）14 球、France（T-30）14 球 |\n| 2022（WC-2022） | **France**（T-30） | **16 球** | Argentina（T-03）15 球 |\n\n三届的最高值都只有一支球队达到，因此不存在并列。\n\n**数据口径**：按照本知识网络的技能默认规则，球队进球按 `goals.team_id` 记录，**包含对方乌龙球**；比赛内点球计入进球，点球大战罚球不计入。查询为对 `goals` 按 `tournament_id` + `team_id` 计数再排序：\n\n`MATCH (g:goals) WHERE g.tournament_id IN ['WC-2014','WC-2018','WC-2022'] RETURN g.tournament_id, g.team_name, count(*) AS goals ORDER BY tid, goals DESC`\n\n三届 `tournament_name` 均为 “FIFA Men's World Cup”，确认属于男足、不含女足赛事。\n\n**各届前五名**\n- WC-2014：Germany 18、Netherlands 15、Colombia 12、Brazil 11、France 10\n- WC-2018：Belgium 16、Croatia 14、France 14、England 12、Russia 11\n- WC-2022：France 16、Argentina 15、England 13、Portugal 12、Netherlands 10"
+  },
+  {
+   "id": "R-05",
+   "passed": true,
+   "round": 2,
+   "seconds": 29.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 近三届（2014、2018、2022）男足世界杯合计赢球场次最多的五支球队\n\n| 名次 | 球队（原文/中文） | 球队编号 | 合计胜场 | 2014 | 2018 | 2022 |\n|---|---|---|---|---|---|---|\n| 1 | France（法国） | T-30 | **14** | 3 | 6 | 5 |\n| 2 | Argentina（阿根廷） | T-03 | **13** | 6 | 1 | 6 |\n| 3 | Belgium（比利时） | T-06 | **11** | 4 | 6 | 1 |\n| 3 | Croatia（克罗地亚） | T-18 | **11** | 1 | 6 | 4 |\n| 5 | Brazil（巴西） | T-09 | **10** | 4 | 3 | 3 |\n\n- 第 5 名之后是 Netherlands（荷兰，T-48）9 胜，与第 5 名不并列，因此「前五支」正好是以上 5 队。\n- 比利时与克罗地亚同为 11 胜，按同分同名次、后续跳号的竞赛排名口径并列第 3，巴西因此列为第 5。\n\n**口径说明**\n- 数据取自球队每场参赛记录 `team_appearances`，三届各 128 条（64 场×双方）；胜场按 `win = 1` 逐条计数（比赛场次口径）。\n- 三届胜场合计校验：WC-2014 55、WC-2018 55、WC-2022 54，其余为平/负。\n- 胜负以 `win / lose / draw` 标记为准；点球大战决出的比赛在数据中通常记为平局，不计入胜场。"
+  },
+  {
+   "id": "R-06",
+   "passed": true,
+   "round": 1,
+   "seconds": 24.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "按 `stadiums`（wc_stadiums）表 `stadium_capacity` 降序，容量最大的 10 条球场记录：\n\n| 名次 | 球场 | 城市 | 国家 | 容量 | 球场ID / key_id |\n|---|---|---|---|---|---|\n| 1 | Estádio do Maracanã | Rio de Janeiro | Brazil | 200,000 | S-020 / 20 |\n| 2 | Camp Nou | Barcelona | Spain | 121,000 | S-182 / 182 |\n| 3 | Estadio Azteca | Mexico City | Mexico | 115,000 | S-132 / 132 |\n| 4 | Wembley Stadium | London | England | 99,000 | S-049 / 49 |\n| 5 | Rose Bowl | Los Angeles | United States | 96,000 | S-225 / 225 |\n| 6 | Rose Bowl | Pasadena | United States | 94,000 | S-228 / 228 |\n| 7 | Estadio Santiago Bernabéu | Madrid | Spain | 90,000 | S-187 / 187 |\n| 8 | Estadio Centenario | Montevideo | Uruguay | 90,000 | S-238 / 238 |\n| 9 | Lusail Stadium | Lusail | Qatar | 89,000 | S-147 / 147 |\n| 10 | Olympiastadion | Berlin | Germany | 86,000 | S-080 / 80 |\n\n口径说明：\n- 依据网络说明与技能口径，用 Cypher 在 `stadiums` 上按 `stadium_capacity` 数值降序取数。\n- 按「问 N 座就恰好取 N 座、同值按编号排序」的规则，第 10 位止于 86,000；下一档是 85,000 的 Stanford Stadium，未列入。\n- 数据源中同名的 Rose Bowl 有两条独立记录（S-225 容量 96,000，记 Los Angeles；S-228 容量 94,000，记 Pasadena），因此占去两个名额——这 10 条记录实际对应 9 座不同名称的球场。若要按「同名合并」口径，我可以再跑一次。"
+  },
+  {
+   "id": "R-07",
+   "passed": true,
+   "round": 1,
+   "seconds": 38.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论：2022 年世界杯（WC-2022，卡塔尔）单场净胜球（分差）最多的前五场\n\n| 名次 | 比分 | 分差 | 比赛 | 阶段 / 小组 | 日期 | 球场（城市） | match_id |\n|---|---|---|---|---|---|---|---|\n| 1 | 7–0 | **7** | Spain vs Costa Rica | 小组赛 E 组 | 2022-11-23 | Al Thumama Stadium（多哈） | M-2022-11 |\n| 2 | 6–1 | **5** | Portugal vs Switzerland | 1/8 决赛 | 2022-12-06 | Lusail Stadium（卢赛尔） | M-2022-56 |\n| 3 | 6–2 | **4** | England vs Iran | 小组赛 B 组 | 2022-11-21 | Khalifa International Stadium（赖扬） | M-2022-02 |\n| 4 | 4–1 | **3** | France vs Australia | 小组赛 D 组 | 2022-11-22 | Al Janoub Stadium（沃克拉） | M-2022-08 |\n| 5 | 4–1 | **3** | Croatia vs Canada | 小组赛 F 组 | 2022-11-27 | Khalifa International Stadium（赖扬） | M-2022-27 |\n\n### 重要提示：第 4 名起为并列\n本届单场分差不少于 3 球的比赛共 9 场，其中分差正好 3 球的有 **6 场并列**。按「取满 5 场、同值按 match_id 排序」的口径，上表第 4、5 位取编号最靠前的两场；另外 4 场同为 3 球分差的并列场次是：\n\n- Wales 0–3 England（M-2022-36，2022-11-29，小组赛 B 组，赖扬）\n- England 3–0 Senegal（M-2022-52，2022-12-04，1/8 决赛，豪尔）\n- Brazil 4–1 South Korea（M-2022-54，2022-12-05，1/8 决赛，多哈）\n- Argentina 3–0 Croatia（M-2022-61，2022-12-13，半决赛，卢赛尔）\n\n若按「前 5 名包含并列者」的竞赛排名口径，第 4 名应把上述 4 场一并列出，共 9 场。\n\n### 口径说明\n- 数据源：Fjelstul 世界杯数据库，男足世界杯截至 2022 年（共 22 届）；本届共 64 场。\n- 「净胜球」按单场比赛比分之差的绝对值计算，比分不含点球大战。核对结果：本届最大分差为 7，没有其他分差不少于 4 的比赛（Portugal 6–1 为 5，England 6–2 为 4）。\n- 队名保留数据源英文原拼写；查询全部基于 matches 对象类（score、home_team_score、away_team_score、stage_name、match_date、stadium_name）。"
+  },
+  {
+   "id": "R-08",
+   "passed": true,
+   "round": 1,
+   "seconds": 25.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论（男足世界杯，三届均为 32 队）\n\n| 届次 | 赛事 | 场次 | 进球数 | 场均进球 |\n|---|---|---|---|---|\n| 2014 | 2014 FIFA Men's World Cup（巴西） | 64 场 | 171 球 | 2.672 |\n| 2018 | 2018 FIFA Men's World Cup（俄罗斯） | 64 场 | 169 球 | 2.641 |\n| 2022 | 2022 FIFA Men's World Cup（卡塔尔） | 64 场 | 172 球 | 2.688 |\n| 合计 | — | 192 场 | 512 球 | 2.667 |\n\n三届场次相同（各 64 场）；进球最多的是 2022（172 球，场均 2.688），最少的是 2018（169 球，场均 2.641）。\n\n## 依据与口径\n- 数据来源：Fjelstul World Cup Database，检索 tournament_id = WC-2014 / WC-2018 / WC-2022（tournament_name 均含 Men's，为男足）。\n- 场次：`matches` 表按场计数，各届均为 64 场。\n- 进球数用两条口径交叉核对，结果完全一致：\n  - 按比赛比分累加：2014 主队 81 + 客队 90 = 171；2018 主队 91 + 客队 78 = 169；2022 主队 101 + 客队 71 = 172。\n  - 按 `goals` 进球事件计数：2014 = 171、2018 = 169、2022 = 172 条，其中乌龙球分别为 5、12、2 个（乌龙球计入比分与球队进球，故含在总数内）。\n- 比分不含点球大战罚球（penalty_shootout 单列，不计入比分、不算进球）。\n- 场均进球 = 进球数 ÷ 场次，按口径保留三位小数：171/64=2.672、169/64=2.641、172/64=2.688。"
+  },
+  {
+   "id": "R-09",
+   "passed": true,
+   "round": 2,
+   "seconds": 27.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**结论：梅西（Lionel Messi，P-14758，阿根廷）在 4 届男足世界杯上有进球，共 13 球。**\n\n| 届次 | 赛事 | 进球数 | 其中比赛内点球 |\n|---|---|---|---|\n| WC-2006 | 2006 FIFA Men's World Cup | 1 | 0 |\n| WC-2014 | 2014 FIFA Men's World Cup | 4 | 0 |\n| WC-2018 | 2018 FIFA Men's World Cup | 1 | 0 |\n| WC-2022 | 2022 FIFA Men's World Cup | 7 | 4 |\n| 合计 | — | **13** | 4 |\n\n逐球明细：\n- **WC-2006**：G-2396｜M-2006-21｜group stage｜88'\n- **WC-2014**：G-2869｜M-2014-11｜group stage｜65'；G-2911｜M-2014-27｜group stage｜90'+1'；G-2955｜M-2014-42｜group stage｜3'；G-2957｜M-2014-42｜group stage｜45'+1'\n- **WC-2018**：G-3253｜M-2018-40｜group stage｜14'\n- **WC-2022**：G-3480｜M-2022-05｜group stage｜10'（点球）；G-3521｜M-2022-24｜group stage｜64'；G-3590｜M-2022-50｜round of 16｜35'；G-3617｜M-2022-58｜quarter-finals｜73'（点球）；G-3624｜M-2022-61｜semi-finals｜34'（点球）；G-3632｜M-2022-64｜final｜23'（点球）；G-3636｜M-2022-64｜final｜108'\n\n口径说明：\n- 计算球员进球时排除乌龙球；本问题涉及的 13 条记录 own_goal 都是 0，因此没有需要扣减的进球。\n- 比赛进行中判罚的点球（penalty=1，共 4 个，全部出现在 WC-2022）按口径计入进球；点球大战罚球不算进球。\n- 数据覆盖男足世界杯截至 2022 年；WC-2010 该球员有出场记录但没有进球记录。"
+  },
+  {
+   "id": "R-10",
+   "passed": true,
+   "round": 2,
+   "seconds": 41.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n**孙雯（Wen Sun，P-14903，中国）在女足世界杯共打进 11 球；在女足世界杯历史射手榜上并列第 5 名**（竞赛排名：同分同名次、后续跳号）。\n\n口径：仅统计女足世界杯（tournament_name 含 Women's，覆盖 1991–2019 共 8 届）的进球明细，排除乌龙球（own_goal=0）；比赛内点球算进球，点球大战罚球不计。\n\n## 她的 11 个进球（逐条）\n\n| 编号 | 赛事 | 比赛 | 阶段 | 分钟 | 点球 |\n|---|---|---|---|---|---|\n| G-1472 | WC-1991 | M-1991-09 | group stage | 37' | 否 |\n| G-1709 | WC-1995 | M-1995-06 | group stage | 79' | 否 |\n| G-1757 | WC-1995 | M-1995-17 | group stage | 76' | 否 |\n| G-1997 | WC-1999 | M-1999-12 | group stage | 9' | 否 |\n| G-1999 | WC-1999 | M-1999-12 | group stage | 21' | 否 |\n| G-2000 | WC-1999 | M-1999-12 | group stage | 54' | 否 |\n| G-2029 | WC-1999 | M-1999-18 | group stage | 39' | 否 |\n| G-2030 | WC-1999 | M-1999-18 | group stage | 51' | 否 |\n| G-2072 | WC-1999 | M-1999-30 | semi-final | 3' | 否 |\n| G-2076 | WC-1999 | M-1999-30 | semi-final | 72' | **是** |\n| G-2264 | WC-2003 | M-2003-08 | group stage | 29' | 否 |\n\n按届分布：1991 年 1 球、1995 年 2 球、1999 年 7 球（该届与 Sissi 并列最佳射手）、2003 年 1 球。\n\n## 女足世界杯历史射手榜前列\n\n| 名次 | 球员 | 进球 |\n|---|---|---|\n| 1 | Marta（P-07458） | 17 |\n| 2 | Abby Wambach（P-89236） | 14 |\n| 2 | Birgit Prinz（P-52478） | 14 |\n| 4 | Michelle Akers（P-54794） | 12 |\n| **5** | **Bettina Wiegmann（P-53366）** | **11** |\n| **5** | **Wen Sun 孙雯（P-14903）** | **11** |\n| **5** | **Cristiane（P-93057）** | **11** |\n| 8 | Carli Lloyd / Ann Kristin Aarønes / Christine Sinclair / Heidi Mohr | 各 10 |\n\n11 球为三人并列第 5，故第 6、7 名空缺，第 8 名起为 4 人并列的 10 球集团。榜单基于库内 8 届女足世界杯进球明细（共 377 名进球球员）计算。"
+  },
+  {
+   "id": "R-11",
+   "passed": true,
+   "round": 3,
+   "seconds": 47.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论\n\n口径：胜负平以 `team_appearances` 的 win / draw / lose 标记为准（点球大战决出的比赛按数据源通常记为平，不计为胜）；按足联经 `rel_team_appearances_team` 关联 `teams.confederation_name` 汇总。\n\n### WC-2014（2014 巴西，64 场，128 条球队记录）\n| 名次 | 足联 | 场次 | 胜 | 平 | 负 |\n|---|---|---|---|---|---|\n| 1 | UEFA 欧足联（CF-6） | 53 | **27** | 7 | 19 |\n| 2 | CONMEBOL 南美足联（CF-4） | 30 | **19** | 2 | 9 |\n| 3 | CONCACAF 中北美及加勒比（CF-3） | 16 | **6** | 3 | 7 |\n| 4 | CAF 非足联（CF-2） | 17 | **3** | 3 | 11 |\n| 5 | AFC 亚足联（CF-1） | 12 | **0** | 3 | 9 |\n| 5 | OFC 大洋洲足联（CF-5） | 0 | **0** | 0 | 0 |\n\n### WC-2018（2018 俄罗斯，64 场）\n| 名次 | 足联 | 场次 | 胜 | 平 | 负 |\n|---|---|---|---|---|---|\n| 1 | UEFA（CF-6） | 66 | **35** | 10 | 21 |\n| 2 | CONMEBOL（CF-4） | 21 | **11** | 2 | 8 |\n| 3 | AFC（CF-1） | 16 | **4** | 3 | 9 |\n| 4 | CAF（CF-2） | 15 | **3** | 2 | 10 |\n| 5 | CONCACAF（CF-3） | 10 | **2** | 1 | 7 |\n| 6 | OFC（CF-5） | 0 | **0** | 0 | 0 |\n\n### WC-2022（2022 卡塔尔，64 场）\n| 名次 | 足联 | 场次 | 胜 | 平 | 负 |\n|---|---|---|---|---|---|\n| 1 | UEFA（CF-6） | 56 | **24** | 11 | 21 |\n| 2 | CONMEBOL（CF-4） | 18 | **11** | 2 | 5 |\n| 3 | CAF（CF-2） | 20 | **9** | 3 | 8 |\n| 4 | AFC（CF-1） | 21 | **7** | 1 | 13 |\n| 5 | CONCACAF（CF-3） | 13 | **3** | 3 | 7 |\n| 6 | OFC（CF-5） | 0 | **0** | 0 | 0 |\n\n### 三届合计（按胜场排名）\n| 名次 | 足联 | 场次 | 胜 |\n|---|---|---|---|\n| 1 | UEFA（CF-6） | 175 | **86** |\n| 2 | CONMEBOL（CF-4） | 69 | **41** |\n| 3 | CAF（CF-2） | 52 | **15** |\n| 4 | CONCACAF（CF-3） | 39 | **11** |\n| 4 | AFC（CF-1） | 49 | **11** |\n| 6 | OFC（CF-5） | 0 | **0** |\n\n**要点**\n- 每届第一名都是 **UEFA**：27 → 35 → 24 胜，三届合计 86 胜，占三届全部胜场（166 场）一半以上，场次也最多。\n- 第二名固定为 **CONMEBOL**：19 → 11 → 11 胜，场均胜率反而最高（41/69 ≈ 0.594 胜/场，UEFA 约 0.491）。\n- **AFC 与 CAF 位置互换**：2014 亚足联 0 胜（5 队全部小组出局）、非足联 3 胜；2018 亚足联 4 胜反超 3 胜；2022 非足联 9 胜（摩洛哥进四强）明显反超亚足联 7 胜。三届合计同为 11 胜并列第 4。\n- **CONCACAF** 逐届走弱：6 → 2 → 3 胜。\n- **OFC** 这三届无球队参赛，按口径计 0 胜（无记录，不代表其他届次）。\n\n名次采用竞赛排名（同分同名次、后续跳号），6 个洲际足联全部列出。核对：三届各组「胜+平+负 = 场次」，每届合计 128 条球队记录（64 场），均吻合。</br>"
+  },
+  {
+   "id": "R-12",
+   "passed": true,
+   "round": 1,
+   "seconds": 52.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 结论（并列按竞赛排名处理，名次≤5 的一共 6 人）\n\n按不同场次（match_id）去重计数，世界杯历史上执法场次最多的前五名裁判是：\n\n| 名次 | 裁判 | 国籍 | 执法场次 |\n|---|---|---|---|\n| 1 | Ravshan Irmatov（R-202） | 乌兹别克斯坦 | 11 |\n| 2 | Nicole Petignat（R-342） | 瑞士 | 10 |\n| 3 | Néstor Pitana（R-346） | 阿根廷 | 9 |\n| 3 | Sonia Denoncourt（R-120） | 加拿大 | 9 |\n| 3 | Tammy Ogston（R-322） | 澳大利亚 | 9 |\n| 3 | Kari Seitz（R-400） | 美国 | 9 |\n\n第 3 名有 4 人并列（均为 9 场），按「同分同名次、后续跳号」的口径，名次不超过 5 的共 6 位；下一个名次是第 7 名（8 场：Benito Archundia、Jorge Larrionda、Joël Quiniou）。\n\n## 依据（赛事分布）\n\n- **Ravshan Irmatov 11 场**：2010 男足 5 + 2014 男足 4 + 2018 男足 2（唯一只靠男足世界杯入选者）\n- **Nicole Petignat 10 场**：1999 女足 4 + 2003 女足 3 + 2007 女足 3\n- **Néstor Pitana 9 场**：2014 男足 4 + 2018 男足 5\n- **Sonia Denoncourt 9 场**：1995 女足 3 + 1999 女足 3 + 2003 女足 3\n- **Tammy Ogston 9 场**：1999 女足 1 + 2003 女足 4 + 2007 女足 4\n- **Kari Seitz 9 场**：1999 女足 1 + 2003 女足 3 + 2007 女足 2 + 2011 女足 3\n\n口径说明：数据为 Fjelstul 世界杯开放数据库，男足截至 2022 年、女足截至 2019 年；「执法场次」按 referee_appearances 中不同 match_id 计数，男女足合并统计（表内已标出各自来自男足还是女足赛事）；全库共 493 名有执法记录的裁判。如需只看男足世界杯范围，我可以再单独出一版。"
+  },
+  {
+   "id": "R-13",
+   "passed": true,
+   "round": 1,
+   "seconds": 30.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**口径**：按 `player_appearances` 中不同 `match_id` 计数（赛事 WC-2022）。\n\n**结论**：2022 年世界杯单人最高出场为 **7 场**，但并列者多达 **27 人**（正是打进四强的阿根廷、法国、克罗地亚、摩洛哥四队的全勤主力），按竞赛排名（同分同名次）他们全部并列第一，所以**不存在唯一的“前五名”**。\n\n**并列第一（各 7 场）**\n- **阿根廷（8 人）**：Lionel Messi（P-14758）、Emiliano Martínez（P-13162）、Nahuel Molina（P-84430）、Cristian Romero（P-79650）、Nicolás Otamendi（P-49114）、Rodrigo De Paul（P-37314）、Enzo Fernández（P-10739）、Julián Álvarez（P-19776）\n- **法国（4 人）**：Kylian Mbappé（P-64077）、Antoine Griezmann（P-90908）、Aurélien Tchouaméni（P-54517）、Ousmane Dembélé（P-97778）\n- **克罗地亚（8 人）**：Luka Modrić（P-29491）、Mateo Kovačić（P-07670）、Ivan Perišić（P-93884）、Joško Gvardiol（P-58420）、Dominik Livaković（P-99988）、Lovro Majer（P-64353）、Mario Pašalić（P-89948）、Andrej Kramarić（P-65182）\n- **摩洛哥（7 人）**：Achraf Hakimi（P-45288）、Hakim Ziyech（P-70715）、Sofyan Amrabat（P-71023）、Azzedine Ounahi（P-40619）、Youssef En-Nesyri（P-42517）、Sofiane Boufal（P-59033）、Selim Amallah（P-23330）\n\n**出场次数分布（WC-2022）**：7 场 27 人、6 场 23 人、5 场 36 人、4 场 112 人、3 场 2 人。\n\n若您坚持要“恰好 5 个人头”（同值按球员编号排序取前 5）：Mateo Kovačić（P-07670）、Enzo Fernández（P-10739）、Emiliano Martínez（P-13162）、Lionel Messi（P-14758）、Julián Álvarez（P-19776），均为 7 场。"
+  },
+  {
+   "id": "R-14",
+   "passed": true,
+   "round": 1,
+   "seconds": 33.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "2010–2022 四届男足世界杯的黄牌数与场均数如下。\n\n**口径**：男足世界杯（WC-2010 / WC-2014 / WC-2018 / WC-2022）；黄牌 = bookings.yellow_card 求和（红牌、两黄变红、罚下各自独立统计，未混入）；场均 = 该届黄牌数 ÷ 该届比赛场次，四届均为 64 场。\n\n| 届次 | 赛事 | 黄牌数 | 场次 | 场均 |\n|---|---|---|---|---|\n| 2010 | 2010 FIFA Men's World Cup | 254 | 64 | 3.969 |\n| 2014 | 2014 FIFA Men's World Cup | 184 | 64 | 2.875 |\n| 2018 | 2018 FIFA Men's World Cup | 221 | 64 | 3.453 |\n| 2022 | 2022 FIFA Men's World Cup | 224 | 64 | 3.500 |\n| **合计** | 四届 | **883** | **256** | **3.449** |\n\n要点：\n- 场均最高为 2010 年（3.969 张/场），最低为 2014 年（2.875 张/场）；2018、2022 分别为 3.453、3.500，四届整体场均 3.449 张。\n- 顺带核对的纪律数据（不计入黄牌口径）：红牌 9 / 7 / 2 / 1，两黄变红 8 / 3 / 2 / 3，罚下 17 / 10 / 4 / 4 —— 呈逐届下降趋势。\n\n数据来源：Fjelstul World Cup Database 的 bookings（得牌记录）与 matches（比赛场次），平均值保留三位小数。"
+  }
+ ]
+}

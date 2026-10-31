@@ -1,0 +1,912 @@
+{
+ "agent": "external MCP agent (mcp_agent.py): deepseek-v4-flash via the platform model API + every tool of the BKN MCP server",
+ "platform": "8081 bkn-backend-ee 0.2.1-main sha9156ec5",
+ "knowledge_network": "worldcup_en",
+ "sample_version": "0.1.3",
+ "question_set": "question-set-v1.yaml",
+ "passed": 50,
+ "total": 50,
+ "results": [
+  {
+   "id": "A-01",
+   "passed": true,
+   "round": 3,
+   "seconds": 39.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Argentina played 7 matches at the 2022 World Cup (WC-2022, team T-03): 6 wins and 1 loss, with two of the wins decided by penalty shootouts.** Score excludes shootout kicks; result follows the win/lose/draw flags on team_appearances.\n\n| # | Date | Stage | Opponent | Score (Argentina first) | Shootout | Result | Match ID |\n|---|---|---|---|---|---|---|---|\n| 1 | 2022-11-22 | group stage (Group C) | Saudi Arabia (T-63) | 1–2 | none | **Loss** | M-2022-05 |\n| 2 | 2022-11-26 | group stage (Group C) | Mexico (T-46) | 2–0 | none | **Win** | M-2022-24 |\n| 3 | 2022-11-30 | group stage (Group C) | Poland (T-57) | 2–0 (Poland 0–2 Argentina) | none | **Win** | M-2022-39 |\n| 4 | 2022-12-03 | round of 16 | Australia (T-04) | 2–1 | none | **Win** | M-2022-50 |\n| 5 | 2022-12-09 | quarter-finals | Netherlands (T-48) | 2–2 after extra time | **Argentina won 4–3** | **Win** | M-2022-58 |\n| 6 | 2022-12-13 | semi-finals | Croatia (T-18) | 3–0 | none | **Win** | M-2022-61 |\n| 7 | 2022-12-18 | final | France (T-30) | 3–3 after extra time | **Argentina won 4–2** | **Win** | M-2022-64 |\n\nBasis and detail (source: wc_team_appearances / wc_matches / wc_penalty_kicks):\n\n- **M-2022-05** — group stage, Group C, Argentina 1–2 Saudi Arabia, Argentina designated home side, Lusail Stadium, Lusail. Result: lose.\n- **M-2022-24** — group stage, Group C, Argentina 2–0 Mexico, home side, Lusail Stadium, Lusail. Result: win.\n- **M-2022-39** — group stage, Group C, Poland 0–2 Argentina, Argentina designated away side, Stadium 974, Doha. Result: win.\n- **M-2022-50** — round of 16, Argentina 2–1 Australia, home side, Ahmad bin Ali Stadium, Al Rayyan. Result: win.\n- **M-2022-58** — quarter-finals, Netherlands 2–2 Argentina after extra time (extra time = 1), Argentina home side, Lusail Stadium. Shootout: Argentina 4, Netherlands 3 (shootout = 1; score_penalties 3–4 from home side's view). Kicks — Netherlands: Virgil van Dijk (PK-379, missed), Steven Berghuis (PK-380, missed), Teun Koopmeiners (PK-381, scored), Wout Weghorst (PK-382, scored), Luuk de Jong (PK-383, scored); Argentina: Lionel Messi (PK-384, scored), Leandro Paredes (PK-385, scored), Gonzalo Montiel (PK-386, scored), Enzo Fernández (PK-387, missed), Lautaro Martínez (PK-388, scored). Result recorded as win.\n- **M-2022-61** — semi-finals, Argentina 3–0 Croatia, home side, Lusail Stadium. Result: win.\n- **M-2022-64** — final, Argentina 3–3 France after extra time (extra time = 1), home side, Lusail Stadium. Shootout: Argentina 4, France 2 (score_penalties 4–2). Kicks — Argentina: Lionel Messi (PK-389, scored), Paulo Dybala (PK-390, scored), Leandro Paredes (PK-391, scored), Gonzalo Montiel (PK-392, scored); France: Kylian Mbappé (PK-393, scored), Kingsley Coman (PK-394, missed), Aurélien Tchouaméni (PK-395, missed), Randall Kolo Muani (PK-396, scored). Result recorded as win.\n\nRules used: the score excludes shootout kicks and the shootout score is recorded separately — so the quarter-final and final are level at 2–2 and 3–3 on the score line, with the source's win flag crediting Argentina via the shootout; shootout kicks are neither goals nor part of the score, and each kick is recorded as scored or missed. Stage values are kept as the source writes them."
+  },
+  {
+   "id": "A-02",
+   "passed": true,
+   "round": 3,
+   "seconds": 53.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "France (T-30) played 7 matches at the 2022 men's World Cup (WC-2022). Only the final went to a shootout.\n\n| # | Match | Date | Stage | Opponent | Stadium | Score (France first) | Shootout? |\n|---|---|---|---|---|---|---|---|\n| 1 | M-2022-08 | 2022-11-22 | group stage | Australia (T-04) | Al Janoub Stadium (S-144) | France 4–1 Australia (\"4–1\", France home) | No |\n| 2 | M-2022-23 | 2022-11-26 | group stage | Denmark (T-22) | Stadium 974 (S-146) | France 2–1 Denmark (\"2–1\", France home) | No |\n| 3 | M-2022-38 | 2022-11-30 | group stage | Tunisia (T-79) | Education City Stadium (S-142) | France 0–1 Tunisia (\"1–0\", France away) | No |\n| 4 | M-2022-51 | 2022-12-04 | round of 16 | Poland (T-57) | Al Thumama Stadium (S-145) | France 3–1 Poland (\"3–1\", France home) | No |\n| 5 | M-2022-60 | 2022-12-10 | quarter-finals | England (T-28) | Al Bayt Stadium (S-140) | France 2–1 England (\"1–2\", France away) | No |\n| 6 | M-2022-62 | 2022-12-14 | semi-finals | Morocco (T-47) | Al Bayt Stadium (S-140) | France 2–0 Morocco (\"2–0\", France home) | No |\n| 7 | M-2022-64 | 2022-12-18 | final | Argentina (T-03) | Lusail Stadium (S-147) | France 3–3 Argentina after extra time (\"3–3\", France away) | Yes — shootout 4–2 to Argentina (France 2, Argentina 4) |\n\nBasis and rules used:\n- Source: `worldcup_en_team_appearances` (team = France, tournament WC-2022) joined with `worldcup_en_matches`; IDs as listed (matches M-2022-08/23/38/51/60/62/64).\n- Score rule: the score excludes the shootout, which has its own separate score (score_penalties); shootout kicks are not goals and are not part of the score. Hence the final is recorded as 3–3 with a separate 4–2 shootout (extra_time=1, penalty_shootout=1). No other France match had extra time or a shootout.\n- Stage values are kept exactly as the source writes them (group stage, round of 16, quarter-finals, semi-finals, final).\n- The source \"score\" field is written home team–away team; the table restates it France-first and quotes the original string. France was the home side in matches 1, 2, 4, 6 and the away side in 3, 5, 7."
+  },
+  {
+   "id": "A-03",
+   "passed": true,
+   "round": 1,
+   "seconds": 64.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Argentina scored 15 goals at the 2022 men's World Cup; 4 of them were in-match penalties.**\n\n| Player | Player ID | Goals | of which penalties |\n|---|---|---|---|\n| Lionel Messi | P-14758 | 7 | 4 |\n| Julián Álvarez | P-19776 | 4 | 0 |\n| Alexis Mac Allister | P-71343 | 1 | 0 |\n| Nahuel Molina | P-84430 | 1 | 0 |\n| Ángel Di María | P-42113 | 1 | 0 |\n| Enzo Fernández | P-10739 | 1 | 0 |\n| **Team total** | — | **15** | **4** |\n\nMessi's penalty goals: vs Saudi Arabia (group stage, 10'), vs Netherlands (quarter-final, 73'), vs Croatia (semi-final, 34'), vs France (final, 23').\n\nRules applied (network defaults): player goals exclude own goals (`own_goal=1`); team goals are credited by `goals.team_id`, so opponents' own goals would count for the team — here player goals (7+4+1+1+1+1 = 15) equal the team total of 15, so no own goals were involved. In-match penalties (`penalty=1`) are goals, while shootout kicks live in `penalty_kicks` and are neither goals nor part of the score, so Argentina's shootout kicks (vs Netherlands, and the final vs France) are excluded from both the 4 and the 15. Cross-check: goals_for summed over Argentina's 7 team appearances in WC-2022 is also 15 (8 conceded)."
+  },
+  {
+   "id": "A-04",
+   "passed": true,
+   "round": 3,
+   "seconds": 36.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_object_types",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2022 World Cup final: Argentina 3–3 France (Argentina won the shootout 4–2) — six goals, two Argentina up, two France replies, one each in extra time.**\n\nMatch: M-2022-64 · Argentina vs France · 2022-12-18 · Lusail Stadium, Lusail, Qatar\n\n| # | Minute | Score after | Side credited | Scorer | Type | Goal ID |\n|---|---|---|---|---|---|---|\n| 1 | 23' (first half) | 1–0 | Argentina (home) | Lionel Messi (P-14758) | penalty (in-match, counts) | G-3632 |\n| 2 | 36' (first half) | 2–0 | Argentina (home) | Ángel Di María (P-42113) | open play | G-3633 |\n| 3 | 80' (second half) | 2–1 | France (away) | Kylian Mbappé (P-64077) | penalty (in-match) | G-3634 |\n| 4 | 81' (second half) | 2–2 | France (away) | Kylian Mbappé (P-64077) | open play | G-3635 |\n| 5 | 108' (extra time, second half) | 3–2 | Argentina (home) | Lionel Messi (P-14758) | open play | G-3636 |\n| 6 | 118' (extra time, second half) | 3–3 | France (away) | Kylian Mbappé (P-64077) | penalty (in-match) | G-3637 |\n\nBasis / rules used:\n- Goals taken from the Goals object type for tournament WC-2022, stage \"final\"; in-match penalties (penalty=1) count as goals; shootout kicks are recorded separately and are not part of the 3–3 score; all six goals have own_goal=0, so no own goals.\n- Per side: Argentina — Messi 2 (one penalty), Di María 1; France — Mbappé 3 (two penalties).\n- Names kept as the source records them (family_name / given_name as given, e.g. \"Messi / Lionel\"); full name = given_name + space + family_name."
+  },
+  {
+   "id": "A-05",
+   "passed": true,
+   "round": 3,
+   "seconds": 65.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Argentina's 2022 World Cup squad (WC-2022, team T-03) had 26 players. All 26 are listed with appearances and goals — 24 played at least once, 2 (both reserve goalkeepers) did not play, and 20 did not score. Squad totals: 113 appearances, 15 player goals.**\n\nRules applied (World Cup analysis skill): squad membership comes from the squads table (a squad place is not an appearance); appearances = count of distinct `match_id` in player match appearances; player goals exclude own goals (`own_goal=0`), and shootout kicks are not goals.\n\n| # | Player | Player ID | Position | Apps | Goals |\n|---|---|---|---|---|---|\n| 10 | Lionel Messi | P-14758 | forward | 7 | 7 |\n| 9 | Julián Álvarez | P-19776 | forward | 7 | 4 |\n| 24 | Enzo Fernández | P-10739 | midfielder | 7 | 1 |\n| 26 | Nahuel Molina | P-84430 | defender | 7 | 1 |\n| 20 | Alexis Mac Allister | P-71343 | midfielder | 6 | 1 |\n| 11 | Ángel Di María | P-42113 | forward | 5 | 1 |\n| 7 | Rodrigo De Paul | P-37314 | midfielder | 7 | 0 |\n| 13 | Cristian Romero | P-79650 | defender | 7 | 0 |\n| 19 | Nicolás Otamendi | P-49114 | defender | 7 | 0 |\n| 23 | Emiliano Martínez | P-13162 | goal keeper | 7 | 0 |\n| 3 | Nicolás Tagliafico | P-35173 | defender | 6 | 0 |\n| 8 | Marcos Acuña | P-73712 | midfielder | 6 | 0 |\n| 22 | Lautaro Martínez | P-81505 | forward | 6 | 0 |\n| 5 | Leandro Paredes | P-27582 | midfielder | 5 | 0 |\n| 25 | Lisandro Martínez | P-23070 | defender | 5 | 0 |\n| 4 | Gonzalo Montiel | P-91431 | defender | 4 | 0 |\n| 6 | Germán Pezzella | P-29298 | defender | 3 | 0 |\n| 14 | Exequiel Palacios | P-40147 | midfielder | 3 | 0 |\n| 17 | Papu Gómez | P-10231 | midfielder | 2 | 0 |\n| 21 | Paulo Dybala | P-28151 | forward | 2 | 0 |\n| 2 | Juan Foyth | P-00652 | defender | 1 | 0 |\n| 15 | Ángel Correa | P-92353 | forward | 1 | 0 |\n| 16 | Thiago Almada | P-56659 | midfielder | 1 | 0 |\n| 18 | Guido Rodríguez | P-03265 | midfielder | 1 | 0 |\n| 1 | Franco Armani | P-39788 | goal keeper | 0 | 0 |\n| 12 | Gerónimo Rulli | P-36188 | goal keeper | 0 | 0 |\n\nNotes: the two zero-appearance players (Franco Armani, Gerónimo Rulli) have no rows in the 2022 player-appearance records at all; the 24 players with rows equal the 24 distinct Argentina players in that table. Every appearing player and every scorer matched a squad `player_id`, so no squad member is missing from the counts."
+  },
+  {
+   "id": "A-06",
+   "passed": true,
+   "round": 1,
+   "seconds": 37.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**At the 2022 World Cup (WC-2022): 140 goals were scored by starters, and 30 by substitutes.**\n\nBasis and rule used:\n- Player goals exclude own goals (`own_goal = 1`) per the network's scoring rule; in-match penalties (`penalty = 1`) count as goals, and shootout kicks live in a separate table and are not goals.\n- Each goal in `worldcup_en_goals` was matched to the scorer's match appearance in `worldcup_en_player_appearances` (same `player_id` and `match_id`), then split using the `starter` / `substitute` flags.\n\nFigures:\n- Non-own goals in WC-2022: **170** — all 170 matched an appearance record (140 + 30, no leftovers).\n- Starters: **140**; substitutes: **30**.\n- Own goals in WC-2022: **2** — they have no scorer role, so they sit outside the 170 split.\n- Total goals recorded for the tournament, including own goals: **172**.\n\nCoverage note: appearance detail exists for this edition, so the starter/substitute split is complete (a missing appearance row would have left goals unmatched, and none did)."
+  },
+  {
+   "id": "A-07",
+   "passed": true,
+   "round": 1,
+   "seconds": 85.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "Argentina played **2 penalty shootouts** at the 2022 World Cup:\n\n| Match | Stage | Match ID | Opponent | Opponent scored | Opponent missed |\n|---|---|---|---:|---:|---:|\n| Netherlands vs Argentina | Quarter-finals | M-2022-58 | Netherlands | 3 | 2 |\n| Argentina vs France | Final | M-2022-64 | France | 2 | 2 |\n\nBasis: 2022 World Cup shootout kicks in the Shootout Kicks data, where each kick is recorded as scored or missed. Per the network’s rule, shootout kicks are separate from goals and the match score."
+  },
+  {
+   "id": "A-08",
+   "passed": true,
+   "round": 1,
+   "seconds": 153.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Golden Boot winners**\n\n| Tournament | Golden Boot | Goals in that tournament |\n|---|---|---|\n| 2019 FIFA Women's World Cup (WC-2019) | **Megan Rapinoe** — United States (P-09273) | **6** goals (3 from match penalties) |\n| 2022 FIFA Men's World Cup (WC-2022) | **Kylian Mbappé** — France (P-64077) | **8** goals (2 from match penalties) |\n\n**Basis (award records + goal counts, own goals excluded; shootout kicks are not goals)**\n\n- Award records in `worldcup_en_award_winners`: WC-2019 award A-4 \"Golden Boot\" → P-09273 Megan Rapinoe (United States); WC-2022 award A-4 \"Golden Boot\" → P-64077 Kylian Mbappé (France). Both marked `shared = 0` (award not shared).\n- Goals in `worldcup_en_goals` with `own_goal = 0`: WC-2019 P-09273 = 6 goals; WC-2022 P-64077 = 8 goals.\n- 2019 context — the scoring chart was tied: Rapinoe, Alex Morgan (P-37034, United States) and Ellen White (P-84864, England) all scored 6, so the source's Silver Boot went to Morgan and Bronze Boot to White. Next was Sam Kerr (P-76435, Australia) with 5.\n- 2022 context — Mbappé 8, Lionel Messi (P-14758, Argentina) 7 (Silver Boot), Olivier Giroud (P-89750, France) 4 (Bronze Boot).\n\nRule used: player scoring totals exclude own goals, in-match penalties count as goals, shootout kicks are excluded."
+  },
+  {
+   "id": "A-09",
+   "passed": true,
+   "round": 1,
+   "seconds": 224.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**No — the 1950 World Cup had no final.** It was decided by a **final round** (a four-team round-robin group), and that final round consisted of **6 matches**.\n\n*Rule applied: \"1950 had no final and was decided by a final round.\"*\n\n**How the winner was decided**\n\nWC-1950 (\"1950 FIFA Men's World Cup\", hosts: Brazil, 24 Jun – 16 Jul 1950) had only two stages:\n\n| # | Stage | Dates | Matches | Teams | Knockout? |\n|---|---|---|---|---|---|\n| 1 | group stage | 1950-06-24 → 1950-07-02 | 16 | 13 | no |\n| 2 | **final round** | 1950-07-09 → 1950-07-16 | **6** | 4 | no |\n\nThe final round was a **round-robin league, not a knockout**, among Brazil, Uruguay, Sweden and Spain — each played the other three once (4 × 3 ÷ 2 = 6 matches). The title went to whoever topped that group table, so the last match (Uruguay v Brazil) served as the decisive game rather than a \"final\".\n\n**All 6 final-round matches**\n\n| Match ID | Date | Home | Score | Away | Stadium (city) |\n|---|---|---|---|---|---|\n| M-1950-17 | 1950-07-09 | Brazil | 7–1 | Sweden | Estádio do Maracanã (Rio de Janeiro) |\n| M-1950-18 | 1950-07-09 | Uruguay | 2–2 | Spain | Estádio do Pacaembu (São Paulo) |\n| M-1950-19 | 1950-07-13 | Brazil | 6–1 | Spain | Estádio do Maracanã (Rio de Janeiro) |\n| M-1950-20 | 1950-07-13 | Uruguay | 3–2 | Sweden | Estádio do Pacaembu (São Paulo) |\n| M-1950-21 | 1950-07-16 | Sweden | 3–1 | Spain | Estádio do Pacaembu (São Paulo) |\n| M-1950-22 | 1950-07-16 | **Uruguay** | **2–1** | Brazil | Estádio do Maracanã (Rio de Janeiro) |\n\n**Outcome**\n\nFinal standings: 1. Uruguay (T-84, URY) · 2. Brazil (T-09, BRA) · 3. Sweden (T-74, SWE) · 4. Spain (T-73, ESP). Uruguay won all three of their final-round games, including the 2–1 win over Brazil on the last day, and the tournament record lists `winner = Uruguay`.\n\nData note: I checked explicitly for a \"final\" stage — no WC-1950 match carries that stage name, while every other edition in this database has exactly one."
+  },
+  {
+   "id": "A-10",
+   "passed": true,
+   "round": 1,
+   "seconds": 142.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Gerd Müller scored more World Cup goals (14 vs 10), but Thomas Müller was named in more World Cup squads (4 vs 2).**\n\nThey are two different people, so I matched on `player_id` rather than surname — the database has several other Müllers (Dieter, Hansi, Martina, Patrick, Sándor, and a Brazilian \"Müller\" recorded as \"not applicable\").\n\n**Gerd Müller — P-72441 (West Germany, born 1945-11-03)**\n- Goals: **14** (own goals excluded; none recorded for him)\n  - WC-1970: 10 · WC-1974: 4\n- Squads: **2** — WC-1970 and WC-1974 (West Germany, No. 13, forward both times)\n\n**Thomas Müller — P-28154 (Germany, born 1989-09-13)**\n- Goals: **10**\n  - WC-2010: 5 · WC-2014: 5 (none recorded in 2018 or 2022)\n- Squads: **4** — WC-2010, WC-2014, WC-2018, WC-2022 (Germany, No. 13; midfielder in 2010/2018/2022, forward in 2014)\n\nBasis: `worldcup_en_goals` rows with `own_goal = 0` aggregated per player_id, and `worldcup_en_squads` (one row per player per tournament squad — squad membership is distinct from match appearances). Rule applied: *player goals exclude own goals*."
+  },
+  {
+   "id": "A-11",
+   "passed": true,
+   "round": 1,
+   "seconds": 154.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## France, 2018 vs 2022 men's World Cup\n\nFrance (team_id **T-30**) reached the final both times but finished one place lower in 2022:\n\n| Metric | 2018 (WC-2018) | 2022 (WC-2022) |\n|---|---|---|\n| Final position | **1st** — champion | **2nd** — runner-up |\n| Matches played | 7 | 7 |\n| Wins | 6 | 5 |\n| Draws | 1 | 0 |\n| Losses | 0 | 2 |\n| Goals for | 14 | 16 |\n| Goals against | 6 | 8 |\n\n**2018 (champions)** — 7 matches: Australia 2–1 W · Peru 1–0 W · Denmark 0–0 D · Argentina 4–3 W (R16) · Uruguay 2–0 W (QF) · Belgium 1–0 W (SF) · Croatia 4–2 W (final, no shootout). Totals 14–6, unbeaten.\n\n**2022 (runners-up)** — 7 matches: Australia 4–1 W · Denmark 2–1 W · Tunisia 0–1 L · Poland 3–1 W (R16) · England 2–1 W (QF) · Morocco 2–0 W (SF) · Argentina 3–3, lost 2–4 on penalties (final). Totals 16–8.\n\nRules used: matches counted once each (distinct match_id); wins/losses/draws follow the win, lose, draw flags on team_appearances — so the 2022 final, drawn 3–3 and settled by a shootout kept separate from the score, is recorded as a **loss**, not a draw (hence 5 W / 0 D / 2 L). Final positions come from the tournament standings table (2022 top four: Argentina 1, France 2, Croatia 3, Morocco 4). Only one \"France\" identity exists in the data (T-30), and both editions queried are men's tournaments."
+  },
+  {
+   "id": "A-12",
+   "passed": true,
+   "round": 1,
+   "seconds": 120.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2022 World Cup top four — goals and cards (WC-2022 source data)**\n\n| Rank | Team | Matches | Goals scored | Goals conceded | Yellow | Red | Second yellow | Sending off |\n|---|---|---|---|---|---|---|---|---|\n| 1 | Argentina (T-03) | 7 | 15 | 8 | 17 | 0 | 0 | 0 |\n| 2 | France (T-30) | 7 | 16 | 8 | 8 | 0 | 0 | 0 |\n| 3 | Croatia (T-18) | 7 | 8 | 7 | 8 | 0 | 0 | 0 |\n| 4 | Morocco (T-47) | 7 | 6 | 5 | 8 | 0 | 1 | 1 |\n\nRules used:\n- \"Top four\" = final standings positions 1–4 of tournament WC-2022.\n- Goals are the per-team match rows (7 each); **shootout kicks are not goals and not part of the score**, so the shootout ties are counted on their extra-time score.\n- Card figures are the four separate flags summed individually — **yellow, red, second yellow and sending off are counted separately and never added up**, because one booking can carry several flags. Morocco's 8 booking events therefore read as 8 yellow flags, one of which is also a second yellow and a sending-off; no straight reds were recorded for any of the four.\n\nThe one dismissal: Morocco's Walid Cheddira (P-05216), second yellow in the quarter-final \"Morocco vs Portugal\", 90'+1' (yellow 1, second yellow 1, sending off 1, straight red 0).\n\nCross-checks: Argentina 15 scored / 8 conceded, France 16 / 8, Croatia 8 / 7, Morocco 6 / 5 — each consistent with the match-level rows."
+  },
+  {
+   "id": "A-13",
+   "passed": true,
+   "round": 1,
+   "seconds": 78.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 1999 FIFA Women's World Cup (WC-1999 — host: United States, winner: United States)\n\n| Table | Records for WC-1999 |\n|---|---|\n| Matches (`worldcup_en_matches`) | **32** |\n| Squads (`worldcup_en_squads`) | **320** |\n| Goals (`worldcup_en_goals`) | **123** |\n| Player match appearances (`worldcup_en_player_appearances`) | **0** |\n\n**Basis**\n- Tournament resolved as `WC-1999` / \"1999 FIFA Women's World Cup\"; raw row counts filtered on `tournament_id = 'WC-1999'` (matches count once each, per the default rule).\n- **Squads:** 320 rows across 16 teams (20 players per squad).\n- **Goals:** 123 records = 120 player goals (`own_goal = 0`) + 3 own goals.\n- **Player appearances: 0 — the data holds no player-appearance records for this edition.** This is a real gap in the source, not a query failure: that table contains 27,432 rows spanning 21 tournaments (men's editions plus women's 1991, 1995, 2003, 2007, 2011, 2015, 2019), and WC-1999 is not among them. The knowledge network description states the same (\"WC-1999 has no player appearances\"), and a missing record doesn't mean it didn't happen — so player-level appearance data for 1999 can't be reported from this dataset."
+  },
+  {
+   "id": "A-14",
+   "passed": true,
+   "round": 1,
+   "seconds": 78.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yes — scores and goal records agree exactly, in all three editions, match by match and side by side.**\n\nRules applied (skill defaults): the score excludes the shootout, which is recorded separately; shootout kicks are neither goals nor part of the score; own goals count for the credited (opposing) team in the score; in-match penalties (`goals.penalty = 1`) are ordinary goals.\n\n| Tournament | Matches | Goals from scores (home + away) | Goal records | Own goals | In-match penalties | Shootout matches | Shootout kicks | Kicks converted |\n|---|---|---|---|---|---|---|---|---|\n| WC-2014 | 64 | **171** (81 + 90) | **171** | 5 | 12 | 4 | 36 | 26 |\n| WC-2018 | 64 | **169** (91 + 78) | **169** | 12 | 22 | 4 | 39 | 26 |\n| WC-2022 | 64 | **172** (101 + 71) | **172** | 2 | 17 | 5 | 41 | 26 |\n| Total | 192 | **512** | **512** | 19 | 51 | 13 | 116 | 78 |\n\nReconciliation:\n- **Scores vs goal records:** 512 = 512. I also checked all 192 matches on both sides separately (home score vs home-side goal records, away score vs away-side goal records) — **0 mismatches**.\n- **Own goals:** the 19 own goals sit inside the 512 goal records but are credited to the opposing team (`goals.team_id`), so they are already inside the score; they only drop out of individual scoring charts.\n- **Shootout kicks:** 116 kicks (78 scored, 38 missed) live in a separate table and are excluded from both the 171/169/172 score totals and the goal records.\n- **Shootout score consistency:** successful kicks equal the recorded shootout scores — 26 per tournament (2014: 5+8+7+6; 2018: 7+5+7+7; 2022: 4+3+6+7+6).\n\nHighest-scoring of the three is 2022 (172 goals, 101 by the designated home side), then 2014 (171), then 2018 (169)."
+  },
+  {
+   "id": "B-01",
+   "passed": true,
+   "round": 1,
+   "seconds": 33.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**The data holds 22 men's World Cups and 8 women's World Cups — 30 tournaments in total.**\n\nBasis — tournaments table (`worldcup_en_tournaments`), classifying each edition by gender per the skill's rule (a `tournament_name` containing \"Women's\" is a women's tournament):\n\n| Group | Editions | First | Last |\n|---|---|---|---|\n| Men's | 22 | 1930 | 2022 |\n| Women's | 8 | 1991 | 2019 |\n| Total | 30 | | |\n\n**Men's editions (22):** WC-1930, 1934, 1938, 1950, 1954, 1958, 1962, 1966, 1970, 1974, 1978, 1982, 1986, 1990, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022.\n\n**Women's editions (8):** WC-1991, 1995, 1999, 2003, 2007, 2011, 2015, 2019.\n\nRule used: *a `tournament_name` containing \"Women's\" is a women's tournament* — so women's editions were counted by that marker and the remainder are men's. (Note: filtering on the substring \"Men\" also matches \"Women's\", so the women's marker is the reliable classifier.)\n\nCoverage caveat: this sample reaches 2022 for the men's game but only 2019 for the women's, so the 2023 Women's World Cup is not in the data."
+  },
+  {
+   "id": "B-02",
+   "passed": true,
+   "round": 1,
+   "seconds": 24.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**1,248 World Cup matches are recorded in the data.**\n\nBasis (each match counted once, per the \"matches count once each\" rule — `team_appearances` has two rows per match, so it isn't used for this count):\n\n- Rows in the Matches object type (`worldcup_en_matches`): **1,248**\n- By edition: **964** matches across the 22 men's tournaments (WC-1930 … WC-2022) and **284** across the 8 women's tournaments (WC-1991 … WC-2019) — 964 + 284 = 1,248.\n- Examples: WC-1930 = 18, WC-1950 = 22, WC-1954 = 26, WC-1958 = 35, WC-1982/1986/1990/1994 = 52 each, WC-1998–WC-2022 = 64 each (men's); WC-1991 = 26, WC-1995 = 26, WC-1999/2003/2007/2011 = 32 each, WC-2015/2019 = 52 each (women's).\n\nCoverage note: men's World Cups run to 2022 (22 editions), women's to 2019 (8 editions)."
+  },
+  {
+   "id": "B-03",
+   "passed": true,
+   "round": 1,
+   "seconds": 43.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**The 2022 World Cup (WC-2022, \"2022 FIFA Men's World Cup\")**\n\n- **Dates:** 20 November 2022 – 18 December 2022. The match records confirm the same span: first match 2022-11-20, last 2022-12-18, 64 matches in total.\n- **Host:** Qatar (host_country = \"Qatar\"; also present in the host countries table with code QAT, performance \"group stage\"). Each co-host is listed separately in this data, but only Qatar appears for 2022.\n- **Winner:** Argentina.\n\n**Basis (tournament row WC-2022):** year 2022, count_teams 32, host_country Qatar, winner Argentina.\n\n**Final, as confirmation (match M-2022-64):** 2022-12-18, Argentina vs France at Lusail Stadium, Lusail, Qatar — score 3–3, penalties 4–2 (the shootout score is separate and not part of the match score). Final standings: 1 Argentina, 2 France, 3 Croatia, 4 Morocco.\n\nRule used: tournament IDs look like WC-2022, and a tournament_name containing \"Women's\" is a women's tournament — WC-2022 is the men's edition."
+  },
+  {
+   "id": "B-04",
+   "passed": true,
+   "round": 1,
+   "seconds": 43.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Answer (from `worldcup_en_teams`, one row per national-team identity with `mens_team` / `womens_team` flags):**\n\n| Team identities | Count |\n|---|---|\n| Men's side only | **52** |\n| Women's side only | **3** |\n| Both men's and women's sides | **33** |\n| **Total** | **88** |\n\nSo of the 88 national-team identities in the data, 52 field only a men's side, 3 only a women's side, and 33 have both.\n\n**Basis / details**\n- Rule used: team identities as modelled, keeping historical identities separate; classification by the `mens_team` / `womens_team` flags (1/0). No row has both flags at 0.\n- The three women's-only identities: Chinese Taipei (T-15, TWN), Equatorial Guinea (T-29, GNQ), Thailand (T-76, THA).\n- Granularity note: the 88 rows cover 87 distinct federation names, because \"Germany Football Association\" holds two identities — Germany (T-31, DEU, both sides) and West Germany (T-86, DEU, men only). Counting modern federations instead of historical identities would make men's-only 51, both still 33.\n- Coverage caveat: men's World Cups run to 2022 (22 editions), women's only to 2019 (8 editions), so \"men's only\" largely reflects thinner women's coverage rather than federations that never had a women's team."
+  },
+  {
+   "id": "B-05",
+   "passed": true,
+   "round": 1,
+   "seconds": 33.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**8,482 male players and 1,919 female players — 10,401 players in total.**\n\nBasis: Cypher count on the Players object type (`worldcup_en_players`) grouped by its `female` flag (1 = female, 0 = otherwise):\n\n| female | players |\n|---|---|\n| 0 (male) | 8,482 |\n| 1 (female) | 1,919 |\n\n- Total rows = 10,401 and `count(DISTINCT player_id)` = 10,401, so the split is by unique individual players, not duplicated rows.\n- Data-scope rule: the dataset covers men's World Cups to 2022 (22 editions) and women's World Cups to 2019 (8 editions), so the female figures come from the women's tournaments.\n- Every row carries a `player_id`, so nothing was dropped for missing identity."
+  },
+  {
+   "id": "B-06",
+   "passed": true,
+   "round": 1,
+   "seconds": 34.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2022 FIFA Men's World Cup (WC-2022) — cards, each flag counted separately (the four flags are never added up):**\n\n| Measure | Count |\n|---|---|\n| Yellow cards | **224** |\n| Red cards | **1** |\n| Second yellow cards | **3** |\n| Sendings-off | **4** |\n\n**Basis:** `worldcup_en_bookings` filtered to `tournament_id = 'WC-2022'` (\"2022 FIFA Men's World Cup\"), summing each flag separately across 225 booking records.\n\n**How the flags overlap:**\n- 221 records: yellow card only.\n- 3 records: yellow card + second yellow + sending-off (dismissal for a second booking).\n- 1 record: red card + sending-off (straight red).\n\nSo the 4 sendings-off = 1 straight red + 3 second yellows, and the 224 yellows = 221 first yellows + 3 second yellows. The straight red card is the tournament's only standalone red. (Same dataset, WC-2018: 221 yellows / 2 reds / 2 second yellows / 4 sendings-off.)\n\nSource: the Fjelstul open World Cup database as modeled in this network."
+  },
+  {
+   "id": "B-07",
+   "passed": true,
+   "round": 3,
+   "seconds": 33.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**The 2022 World Cup final was played on 2022-12-18 between Argentina and France at Lusail Stadium, Lusail, Qatar. The score was 3–3, and Argentina won the shootout 4–2.**\n\nBasis (using the network's default rule: the score excludes the shootout, which is recorded separately):\n\n- **Match M-2022-64** — tournament WC-2022, stage \"final\": date 2022-12-18; Argentina vs France; score 3–3; penalty score 4–2; Lusail Stadium, Lusail, Qatar.\n- **Team appearances for M-2022-64** (one row per side):\n  - Argentina (T-03): goals for 3 / against 3, penalties for 4 / against 2, win 1, lose 0, draw 0.\n  - France (T-30): goals for 3 / against 3, penalties for 2 / against 4, win 0, lose 1, draw 0.\n- **Shootout kicks (worldcup_en_penalty_kicks) for M-2022-64**: Argentina 4 kicks / 4 converted; France 4 kicks / 2 converted — consistent with the recorded shootout score of 4–2.\n\nRecords used: WC-2022, M-2022-64, T-03, T-30."
+  },
+  {
+   "id": "B-08",
+   "passed": true,
+   "round": 1,
+   "seconds": 30.6,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2022 World Cup (WC-2022): 172 goals in total — 170 scored by players for their own side, 2 own goals, and 17 in-match penalties.**\n\n| Metric | Count |\n|---|---|\n| All goals scored in matches | 172 |\n| Goals scored for the player's own side (own_goal = 0) | 170 |\n| Own goals (own_goal = 1) | 2 |\n| In-match penalties (penalty = 1) | 17 |\n\nBasis (skill rule used: *player goals exclude own goals; in-match penalties are goals; shootout kicks are not goals*):\n- Counted from `worldcup_en_goals` where `tournament_id = 'WC-2022'`: 172 goal rows across 57 of the 64 matches, by 118 distinct players.\n- Cross-check with `worldcup_en_matches` (WC-2022): 101 home-team goals + 71 away-team goals = 172, matching the goal rows (team-credited totals, so own goals count for the side that benefited).\n- All 17 penalties carry `own_goal = 0`, and 170 + 2 = 172 — no overlap between penalties and own goals.\n- The two own goals: M-2022-41, 40' (credited to Canada, scored by a Morocco player) and M-2022-50, 77' (credited to Australia, scored by an Argentina player).\n- Shootout kicks are stored in `penalty_kicks`, are not goals, and are excluded from all figures above."
+  },
+  {
+   "id": "B-09",
+   "passed": true,
+   "round": 1,
+   "seconds": 21.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Zero — the data holds no player-appearance records for the 1999 FIFA Women's World Cup (WC-1999).**\n\nBasis:\n- The tournament exists: WC-1999, \"1999 FIFA Women's World Cup\", host United States, winner United States.\n- Querying `worldcup_en_player_appearances` with `tournament_id = 'WC-1999'` returns **0** rows.\n- This is consistent with the network's stated coverage rule: detail records cover different editions, and WC-1999 has no player appearances — a missing record doesn't mean it didn't happen.\n\nWomen's editions actually present in the appearance table (row counts): 1991 (660), 1995 (691), 2003 (868), 2007 (865), 2011 (853), 2015 (1430), 2019 (1447). 1999 is absent."
+  },
+  {
+   "id": "B-10",
+   "passed": true,
+   "round": 1,
+   "seconds": 31.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Estádio do Maracanã (S-020) in Rio de Janeiro, Brazil — capacity 200,000.**\n\nIt's the largest of the 240 stadiums recorded in the network (all of which have a capacity value). Basis: ranked `worldcup_en_stadiums` by `stadium_capacity` descending; per the source, this is the recorded stadium capacity, not match attendance.\n\nRunners-up: Camp Nou, Barcelona (121,000); Estadio Azteca, Mexico City (115,000); Wembley, London (99,000); Rose Bowl (96,000 Los Angeles / 94,000 Pasadena — the data holds two separate Rose Bowl records); Santiago Bernabéu and Estadio Centenario (90,000 each); Lusail Stadium (89,000); Olympiastadion Berlin (86,000)."
+  },
+  {
+   "id": "J-01",
+   "passed": true,
+   "round": 1,
+   "seconds": 34.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Lionel Messi (P-14758, Argentina) won three awards in total across those two tournaments:**\n\n**2014 FIFA Men's World Cup (WC-2014)**\n- **Golden Ball** (A-1 — best player) — shared = 0 (sole winner)\n\n**2022 FIFA Men's World Cup (WC-2022)**\n- **Golden Ball** (A-1 — best player) — shared = 0\n- **Silver Boot** (A-5 — second top goal scorer) — shared = 0\n\nSo: one award in 2014 (Golden Ball) and two in 2022 (Golden Ball + Silver Boot).\n\n**Basis:** `worldcup_en_award_winners` filtered to family_name = \"Messi\" (the only other similar name in the data is Julio Musimessi, a different player), joined to `worldcup_en_awards` for the award definitions. Data caveat per the network's rules: detail records cover different editions, so a missing record would not by itself mean an award wasn't won."
+  },
+  {
+   "id": "J-02",
+   "passed": true,
+   "round": 3,
+   "seconds": 35.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2022 World Cup final (WC-2022)**\n\n- **Home team:** Argentina (T-03)\n- **Away team:** France (T-30)\n- **Stadium:** Lusail Stadium (S-147)\n- **City:** Lusail\n- **Country:** Qatar\n\n**Basis** — record from `worldcup_en_matches`:\n- Match M-2022-64, stage \"final\", played 2022-12-18\n- Score 3–3; penalty shootout 4–2 (recorded separately, not part of the match score)\n- The home/away labels are the source's designated sides and do not imply a host-country team.\n\n(Per the network's data rules: each match counts once, and the shootout score is kept separate from the match score.)"
+  },
+  {
+   "id": "J-03",
+   "passed": true,
+   "round": 1,
+   "seconds": 25.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "Argentina named **26 players** in its 2022 World Cup squad (WC-2022, team code ARG). Source: `worldcup_en_squads` — squad membership, not match appearances.\n\n| # | Player | Position | Player ID |\n|---|---|---|---|\n| 1 | Franco Armani | GK (goal keeper) | P-39788 |\n| 2 | Juan Foyth | DF (defender) | P-00652 |\n| 3 | Nicolás Tagliafico | DF (defender) | P-35173 |\n| 4 | Gonzalo Montiel | DF (defender) | P-91431 |\n| 5 | Leandro Paredes | MF (midfielder) | P-27582 |\n| 6 | Germán Pezzella | DF (defender) | P-29298 |\n| 7 | Rodrigo De Paul | MF (midfielder) | P-37314 |\n| 8 | Marcos Acuña | MF (midfielder) | P-73712 |\n| 9 | Julián Álvarez | FW (forward) | P-19776 |\n| 10 | Lionel Messi | FW (forward) | P-14758 |\n| 11 | Ángel Di María | FW (forward) | P-42113 |\n| 12 | Gerónimo Rulli | GK (goal keeper) | P-36188 |\n| 13 | Cristian Romero | DF (defender) | P-79650 |\n| 14 | Exequiel Palacios | MF (midfielder) | P-40147 |\n| 15 | Ángel Correa | FW (forward) | P-92353 |\n| 16 | Thiago Almada | MF (midfielder) | P-56659 |\n| 17 | Papu Gómez | MF (midfielder) | P-10231 |\n| 18 | Guido Rodríguez | MF (midfielder) | P-03265 |\n| 19 | Nicolás Otamendi | DF (defender) | P-49114 |\n| 20 | Alexis Mac Allister | MF (midfielder) | P-71343 |\n| 21 | Paulo Dybala | FW (forward) | P-28151 |\n| 22 | Lautaro Martínez | FW (forward) | P-81505 |\n| 23 | Emiliano Martínez | GK (goal keeper) | P-13162 |\n| 24 | Enzo Fernández | MF (midfielder) | P-10739 |\n| 25 | Lisandro Martínez | DF (defender) | P-23070 |\n| 26 | Nahuel Molina | DF (defender) | P-84430 |\n\nBreakdown by position: 3 goalkeepers, 8 defenders, 8 midfielders, 7 forwards."
+  },
+  {
+   "id": "J-04",
+   "passed": true,
+   "round": 1,
+   "seconds": 23.1,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Joachim Löw** managed Germany at the 2014 World Cup.\n\nBasis (from the knowledge network `worldcup_en`):\n- **Manager appointments** — tournament `WC-2014` (\"2014 FIFA Men's World Cup\"), team **Germany** (team_id `T-31`): manager_id **M-234**, given_name *Joachim*, family_name *Löw*, country Germany.\n- **Manager match appearances** — same tournament/team: M-234 was in charge for **7 matches**.\n\nRule used: 2014 men's World Cup, managers taken from `worldcup_en_manager_appointments` / `worldcup_en_manager_appearances`."
+  },
+  {
+   "id": "J-05",
+   "passed": true,
+   "round": 1,
+   "seconds": 22.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**The 2022 World Cup final was refereed by Szymon Marciniak, from Poland** (UEFA).\n\nBasis — Referee Match Appearances table, cross-checked with the Referees table:\n- Match: **M-2022-64**, \"Argentina vs France\", stage **final**, 2022-12-18, Lusail Stadium, Lusail, Qatar\n- Score: 3–3, Argentina won 4–2 on penalties\n- Referee: **R-269 — Szymon Marciniak**, country **Poland**, confederation UEFA\n- Rule applied: referee assignments are read from `worldcup_en_referee_appearances` (which carries the referee's country)."
+  },
+  {
+   "id": "J-06",
+   "passed": true,
+   "round": 1,
+   "seconds": 25.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## 2022 World Cup — Final Group A table\n\n| Pos | Team | Pld | W | D | L | GF | GA | GD | Pts | Advanced |\n|---|---|---|---|---|---|---|---|---|---|---|\n| 1 | Netherlands (NLD, T-48) | 3 | 2 | 1 | 0 | 5 | 1 | +4 | 7 | Yes |\n| 2 | Senegal (SEN, T-65) | 3 | 2 | 0 | 1 | 5 | 4 | +1 | 6 | Yes |\n| 3 | Ecuador (ECU, T-25) | 3 | 1 | 1 | 1 | 4 | 3 | +1 | 4 | No |\n| 4 | Qatar (QAT, T-59) | 3 | 0 | 0 | 3 | 1 | 7 | −6 | 0 | No |\n\nNetherlands topped the group and Senegal took the second qualifying spot; Ecuador finished third on 4 points and host nation Qatar went out without a point.\n\n**Basis:** knowledge network `worldcup_en`, object type `worldcup_en_group_standings`, filtered on `tournament_id = 'WC-2022'` and `group_name = 'Group A'`, ordered by `position`. Every figure (played, W/D/L, goals for/against, goal difference, points, advanced flag) is the value recorded in that standings table.\n\n**Rules applied** (from the network's mounted `worldcup-analysis-en-us` skill): standings are taken as recorded in the source rather than recalculated — the skill explicitly warns not to assume a single points rule across eras; goals exclude shootout kicks; and team IDs are listed because the skill requires always including IDs. All four rows are shown, and there were no ties in position or points within this group."
+  },
+  {
+   "id": "J-07",
+   "passed": true,
+   "round": 1,
+   "seconds": 32.8,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "The 2002 World Cup was co-hosted by **two countries: South Korea (KOR) and Japan (JPN)**.\n\nBasis from the knowledge network (rule applied: each co-host is listed separately):\n- Tournament record — `WC-2002`, \"2002 FIFA Men's World Cup\", host_country \"Korea, Japan\", winner Brazil.\n- Host-country records for `WC-2002`:\n  - key_id 20 — Japan (JPN), performance: round of 16\n  - key_id 21 — South Korea (KOR), performance: fourth place"
+  },
+  {
+   "id": "J-08",
+   "passed": true,
+   "round": 3,
+   "seconds": 38.4,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**The 2022 final shootout (Argentina 4–2 France) had 8 kicks: Argentina converted all 4; France converted 2 and missed 2.**\n\nMatch: M-2022-64, Argentina vs France, 2022-12-18, Lusail Stadium — score 3–3, shootout 4–2 (the shootout is recorded separately from the score; kicks are scored/missed, not goals).\n\n**Argentina (T-03) — 4/4 scored**\n\n| Kick | Player | Shirt | Result |\n|---|---|---|---|\n| PK-389 | Lionel Messi (P-14758) | 10 | Scored |\n| PK-390 | Paulo Dybala (P-28151) | 21 | Scored |\n| PK-391 | Leandro Paredes (P-27582) | 5 | Scored |\n| PK-392 | Gonzalo Montiel (P-91431) | 4 | Scored |\n\n**France (T-30) — 2/4 scored**\n\n| Kick | Player | Shirt | Result |\n|---|---|---|---|\n| PK-393 | Kylian Mbappé (P-64077) | 10 | Scored |\n| PK-394 | Kingsley Coman (P-06614) | 20 | Missed |\n| PK-395 | Aurélien Tchouaméni (P-54517) | 8 | Missed |\n| PK-396 | Randal Kolo Muani (P-92987) | 12 | Scored |\n\nBasis: `worldcup_en_penalty_kicks` filtered on tournament_id = 'WC-2022' and stage_name = 'final', ordered by key_id (record order); `converted` = 1 means scored. The source stores the four Argentina kicks and four France kicks in blocks rather than strictly alternating, so the tables follow record order. Rule applied: shootout kicks are scored or missed, and are neither goals nor part of the score."
+  },
+  {
+   "id": "J-09",
+   "passed": true,
+   "round": 1,
+   "seconds": 52.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "search_schema",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Argentina played 7 matches at the 2022 men's World Cup (WC-2022), and Lionel Scaloni (manager_id M-383, Argentina) was the manager recorded for all seven.**\n\n| # | Match ID | Date | Stage | Opponent | Score | Result | Manager |\n|---|---|---|---|---|---|---|---|\n| 1 | M-2022-05 | 2022-11-22 | group stage (Group C) | Saudi Arabia | 1–2 | loss | Lionel Scaloni (M-383) |\n| 2 | M-2022-24 | 2022-11-26 | group stage (Group C) | Mexico | 2–0 | win | Lionel Scaloni (M-383) |\n| 3 | M-2022-39 | 2022-11-30 | group stage (Group C) | Poland | 2–0 | win | Lionel Scaloni (M-383) |\n| 4 | M-2022-50 | 2022-12-03 | round of 16 | Australia | 2–1 | win | Lionel Scaloni (M-383) |\n| 5 | M-2022-58 | 2022-12-09 | quarter-finals | Netherlands | 2–2 (shootout 4–3) | win | Lionel Scaloni (M-383) |\n| 6 | M-2022-61 | 2022-12-13 | semi-finals | Croatia | 3–0 | win | Lionel Scaloni (M-383) |\n| 7 | M-2022-64 | 2022-12-18 | final | France | 3–3 (shootout 4–2) | win | Lionel Scaloni (M-383) |\n\nRules applied (per the network's business rules): matches count once each — team_appearances has two rows per match, so Argentina's 7 rows are 7 distinct matches; scores exclude shootout kicks, and the Netherlands/France ties are draws on the scoreline with a separate shootout score, with results following the recorded win/lose/draw flags; \"manager on the touchline\" is Argentina's row in manager_appearances for each match, and all 7 matches had a manager record (no gaps)."
+  },
+  {
+   "id": "J-10",
+   "passed": true,
+   "round": 3,
+   "seconds": 52.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Kylian Mbappé (P-64077, France) scored 8 goals at the 2022 World Cup, in 4 matches — 2 of them were in-match penalties, both in the final.**\n\n| Match | Stage | Date | Score | Minute | Goal ID | Penalty? |\n|---|---|---|---|---|---|---|\n| M-2022-08 France vs Australia | group stage (Group D) | 2022-11-22 | 4–1 | 68' | G-3486 | No |\n| M-2022-23 France vs Denmark | group stage (Group D) | 2022-11-26 | 2–1 | 61' | G-3518 | No |\n| M-2022-23 France vs Denmark | group stage (Group D) | 2022-11-26 | 2–1 | 86' | G-3520 | No |\n| M-2022-51 France vs Poland | round of 16 | 2022-12-04 | 3–1 | 74' | G-3594 | No |\n| M-2022-51 France vs Poland | round of 16 | 2022-12-04 | 3–1 | 90'+1' | G-3595 | No |\n| M-2022-64 Argentina vs France | final | 2022-12-18 | 3–3 (shootout 4–2) | 80' | G-3634 | **Yes** |\n| M-2022-64 Argentina vs France | final | 2022-12-18 | 3–3 (shootout 4–2) | 81' | G-3635 | No |\n| M-2022-64 Argentina vs France | final | 2022-12-18 | 3–3 (shootout 4–2) | 118' | G-3637 | **Yes** |\n\n**Penalties:** the 80' and 118' goals in the final against Argentina (M-2022-64).\n\nSeparately, he also converted his shootout kick in that final (PK-393, converted=1) — shootout kicks are recorded in penalty kicks, are not goals and are not part of the score.\n\n**Rule used:** player goal totals exclude own goals (all 8 records have own_goal=0); in-match penalties (penalty=1) count as goals, shootout kicks do not."
+  },
+  {
+   "id": "J-11",
+   "passed": true,
+   "round": 3,
+   "seconds": 59.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**32 teams played at the 2022 FIFA Men's World Cup (WC-2022, hosted by Qatar, won by Argentina).** The 32 distinct team IDs in the 2022 team-match-appearances data match exactly the 32 entrants in the tournament-entrants table.\n\n**By confederation (all 6 listed, 0 where no team entered):**\n\n| Confederation | Teams |\n|---|---|\n| AFC — Asian Football Confederation (CF-1) | 6 |\n| CAF — Confederation of African Football (CF-2) | 5 |\n| CONCACAF (CF-3) | 4 |\n| CONMEBOL — South American Football Confederation (CF-4) | 4 |\n| OFC — Oceania Football Confederation (CF-5) | 0 |\n| UEFA — Union of European Football Associations (CF-6) | 13 |\n\n**AFC / CF-1:** T-04 Australia, T-38 Iran, T-44 Japan, T-59 Qatar, T-63 Saudi Arabia, T-71 South Korea\n**CAF / CF-2:** T-11 Cameroon, T-32 Ghana, T-47 Morocco, T-65 Senegal, T-79 Tunisia\n**CONCACAF / CF-3:** T-12 Canada, T-17 Costa Rica, T-46 Mexico, T-83 United States\n**CONMEBOL / CF-4:** T-03 Argentina, T-09 Brazil, T-25 Ecuador, T-84 Uruguay\n**UEFA / CF-6:** T-06 Belgium, T-18 Croatia, T-22 Denmark, T-28 England, T-30 France, T-31 Germany, T-48 Netherlands, T-57 Poland, T-58 Portugal, T-66 Serbia, T-73 Spain, T-75 Switzerland, T-85 Wales\n\n**Basis:** distinct `team_id` in Team Match Appearances (`worldcup_en_team_appearances`, `tournament_id='WC-2022'`, 64 matches), joined to Teams (`worldcup_en_teams`) via `wc_en_rel_team_appearances_team` for `confederation_id`/`confederation_name`; category names/codes from Confederations (`worldcup_en_confederations`). Cross-checked with Tournament Entrants (`worldcup_en_qualified_teams`): same 32-team set. Names are as the source records them; Australia is classified under AFC (not OFC), which is why OFC shows 0."
+  },
+  {
+   "id": "J-12",
+   "passed": true,
+   "round": 3,
+   "seconds": 38.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**2022 World Cup final — Argentina vs France (M-2022-64, WC-2022, 2022-12-18, Lusail Stadium, 3–3, Argentina won the shootout 4–2): 13 substitution changes in total — 7 by France, 6 by Argentina.** The source records each player entering or leaving as its own row (26 rows = 13 changes), so who came on and who went off is exact; which arriving player replaced which departing player is not stored per row, so the changes below are grouped by the minute they happened on each side.\n\n**France (T-30, designated away side) — 7 changes**\n\n| Minute (period) | Off | On |\n|---|---|---|\n| 41' (first half) | Ousmane Dembélé (P-97778, #11, S-10197) | Randal Kolo Muani (P-92987, #12, S-10199) |\n| 41' (first half) | Olivier Giroud (P-89750, #9, S-10198) | Marcus Thuram (P-13613, #26, S-10200) |\n| 71' (second half) | Théo Hernandez (P-09867, #22, S-10203) | Kingsley Coman (P-06614, #20, S-10205) |\n| 71' (second half) | Antoine Griezmann (P-90908, #7, S-10204) | Eduardo Camavinga (P-80996, #25, S-10206) |\n| 96' (extra time, first half) | Adrien Rabiot (P-57401, #14, S-10209) | Youssouf Fofana (P-23304, #13, S-10210) |\n| 113' (extra time, second half) | Raphaël Varane (P-42326, #4, S-10215) | Ibrahima Konaté (P-86920, #24, S-10216) |\n| 120'+1' (extra time, second half, stoppage time) | Jules Koundé (P-78484, #5, S-10220) | Axel Disasi (P-91324, #3, S-10222) |\n\n**Argentina (T-03, designated home side) — 6 changes**\n\n| Minute (period) | Off | On |\n|---|---|---|\n| 64' (second half) | Ángel Di María (P-42113, #11, S-10201) | Marcos Acuña (P-73712, #8, S-10202) |\n| 91' (extra time, first half) | Nahuel Molina (P-84430, #26, S-10207) | Gonzalo Montiel (P-91431, #4, S-10208) |\n| 102' (extra time, first half) | Rodrigo De Paul (P-37314, #7, S-10211) | Leandro Paredes (P-27582, #5, S-10213) |\n| 102' (extra time, first half) | Julián Álvarez (P-19776, #9, S-10212) | Lautaro Martínez (P-81505, #22, S-10214) |\n| 116' (extra time, second half) | Alexis Mac Allister (P-71343, #20, S-10217) | Germán Pezzella (P-29298, #6, S-10218) |\n| 120'+1' (extra time, second half, stoppage time) | Nicolás Tagliafico (P-35173, #3, S-10219) | Paulo Dybala (P-28151, #21, S-10221) |\n\n**Basis and rules used:** `worldcup_en_substitutions` filtered on `tournament_id = 'WC-2022'` and `stage_name = 'final'` (all 26 rows are match M-2022-64), ordered by numeric `key_id` following the source's record order; `minute_label`, `match_period`, `going_off` and `coming_on` give the minute, period and direction. Per the data note for this object type, a substitution can produce two rows, so paired rows were not counted as two events (26 rows → 13 changes). Match context (date, 3–3 score excluding the shootout, 4–2 shootout, extra time) comes from `worldcup_en_matches` for M-2022-64. Names are written exactly as the source spells them."
+  },
+  {
+   "id": "R-01",
+   "passed": true,
+   "round": 1,
+   "seconds": 41.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Men's World Cup all-time scoring chart — \"top ten\" means 15 players, because six men are tied on 10 goals at rank 10.**\n\nRules applied (network defaults): men's tournaments only (22 editions, through WC-2022), own goals excluded, in-match penalties count as goals, shootout kicks are not goals; competition ranking, so \"top ten\" lists everyone ranked 10th or better.\n\n| Rank | Player | Goals | Player ID |\n|---|---|---|---|\n| 1 | Miroslav Klose | 16 | P-27787 |\n| 2 | Ronaldo | 15 | P-62722 |\n| 3 | Gerd Müller | 14 | P-72441 |\n| 4 | Just Fontaine | 13 | P-77939 |\n| 4 | Lionel Messi | 13 | P-14758 |\n| 6 | Pelé | 12 | P-38906 |\n| 6 | Kylian Mbappé | 12 | P-64077 |\n| 8 | Jürgen Klinsmann | 11 | P-91373 |\n| 8 | Sándor Kocsis | 11 | P-07028 |\n| 10 | Gabriel Batistuta | 10 | P-84542 |\n| 10 | Helmut Rahn | 10 | P-08136 |\n| 10 | Gary Lineker | 10 | P-36651 |\n| 10 | Grzegorz Lato | 10 | P-21597 |\n| 10 | Thomas Müller | 10 | P-28154 |\n| 10 | Teófilo Cubillas | 10 | P-96979 |\n\nBasis and caveats:\n- Computed from the Goals table (2,666 non-own-goal men's goals across 22 editions), counting goals per `player_id`.\n- Names are given_name + family_name as recorded in the source; for Ronaldo, Pelé and others the source records given_name as \"not applicable\", so only the family name appears. Surnames are not unique, hence the IDs.\n- Next players back sit on 9 goals (Uwe Seeler, Christian Vieri, Jairzinho, Roberto Baggio, Karl-Heinz Rummenigge, David Villa, Eusébio, Paolo Rossi and others). If you'd rather have exactly ten names, I can cut the 10-goal tie by ID."
+  },
+  {
+   "id": "R-02",
+   "passed": true,
+   "round": 1,
+   "seconds": 49.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_cypher",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "## Women's World Cup all-time scoring chart\n\nData scope: the 8 women's editions in this network (WC-1991 through WC-2019). Player goals exclude own goals; in-match penalties count as goals, shootout kicks do not. Rule used: **competition ranking — equal totals share a rank and the next rank is skipped; \"top N\" lists everyone ranked N or better, including ties.**\n\nBecause ties occur at 2nd, 5th and 8th, **11 players hold ranks 1–10** (nobody holds rank 9 or 10):\n\n| Rank | Player | Team | Goals | Player ID |\n|---|---|---|---|---|\n| 1 | Marta | Brazil | 17 | P-07458 |\n| 2 | Birgit Prinz | Germany | 14 | P-52478 |\n| 2 | Abby Wambach | United States | 14 | P-89236 |\n| 4 | Michelle Akers | United States | 12 | P-54794 |\n| 5 | Sun Wen | China | 11 | P-14903 |\n| 5 | Bettina Wiegmann | Germany | 11 | P-53366 |\n| 5 | Cristiane | Brazil | 11 | P-93057 |\n| 8 | Ann Kristin Aarønes | Norway | 10 | P-29915 |\n| 8 | Heidi Mohr | Germany | 10 | P-30335 |\n| 8 | Carli Lloyd | United States | 10 | P-62104 |\n| 8 | Christine Sinclair | Canada | 10 | P-97813 |\n| 12 | Megan Rapinoe | United States | 9 | P-09273 |\n| 12 | Alex Morgan | United States | 9 | P-37034 |\n| 12 | Linda Medalen | Norway | 9 | P-58688 |\n| 12 | Hege Riise | Norway | 9 | P-84389 |\n\n**Basis and checks**\n- Goals rows where `tournament_name` contains \"Women\" and `own_goal = 0`, grouped by `player_id`, counted per goal row, ordered by goals descending.\n- Total women's-tournament goal rows: 917 — 892 non-own-goal goals (the scoring base above) plus 25 own goals excluded from personal totals.\n- Marta (P-07458) leads clearly with 17; the chart is identified by `player_id`, not surname, since names can repeat.\n- Single-name players (Marta, Cristiane) are shown as recorded; the source stores their given name as \"not applicable\".\n\nIf you want exactly ten names rather than ten ranks, the tie-break-by-ID convention drops the last of the 10-goal group (Christine Sinclair, P-97813), leaving Marta through Carli Lloyd."
+  },
+  {
+   "id": "R-03",
+   "passed": true,
+   "round": 1,
+   "seconds": 56.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Top five of the 2022 FIFA Men's World Cup scoring chart — 11 players, because of a seven-way tie at fifth**\n\n| Rank | Player | Team | Goals |\n|---|---|---|---|\n| 1 | Kylian Mbappé (P-64077) | France | 8 |\n| 2 | Lionel Messi (P-14758) | Argentina | 7 |\n| 3 | Julián Álvarez (P-19776) | Argentina | 4 |\n| 3 | Olivier Giroud (P-89750) | France | 4 |\n| 5 | Cody Gakpo (P-28911) | Netherlands | 3 |\n| 5 | Álvaro Morata (P-29274) | Spain | 3 |\n| 5 | Gonçalo Ramos (P-41647) | Portugal | 3 |\n| 5 | Marcus Rashford (P-59837) | England | 3 |\n| 5 | Richarlison (P-68016) | Brazil | 3 |\n| 5 | Enner Valencia (P-75912) | Ecuador | 3 |\n| 5 | Bukayo Saka (P-76842) | England | 3 |\n\n**Basis and rules used**\n- Tournament: `WC-2022` = \"2022 FIFA Men's World Cup\" (a men's edition, so no women's 2022 chart applies).\n- Source table: `worldcup_en_goals` (Goals), filtered to `tournament_id = 'WC-2022'`; goals counted per `player_id`.\n- Rule applied — player goals exclude own goals (`own_goal = 0`); the 2 own goals recorded in this tournament are therefore not credited to anyone. In-match penalties do count as goals, and shootout kicks are not goals (they are in the separate shootout table), so nothing from the final's shootout is included.\n- Rule applied — competition ranking (\"top N\" includes everyone ranked N or better): ties share a rank and the next rank is skipped, so with 4 goals Giroud and Álvarez both rank 3, and the seven players on 3 goals all rank 5.\n- Overall context: 117 players scored, and their goals sum to 170 — consistent with the tournament's 170 non-own-goal goals.\n- Names keep the source's original spelling and accents. Note the source stores Richarlison's `given_name` as \"not applicable\", so only the family name is shown for him."
+  },
+  {
+   "id": "R-04",
+   "passed": true,
+   "round": 1,
+   "seconds": 39.9,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Top-scoring team in each men's World Cup:**\n\n| Tournament | Top-scoring team | Goals | Matches |\n|---|---|---|---|\n| 2014 FIFA Men's World Cup (WC-2014) | Germany (T-31) | **18** | 7 |\n| 2018 FIFA Men's World Cup (WC-2018) | Belgium (T-06) | **16** | 7 |\n| 2022 FIFA Men's World Cup (WC-2022) | France (T-30) | **16** | 7 |\n\nNo ties for first place in any of the three editions.\n\n**Basis:** Team goals credited by `goals.team_id` (opponents' own goals included; shootout kicks excluded — they live in the separate `penalty_kicks` table), cross-checked against `sum(goals_for)` in `worldcup_en_team_appearances`; both methods agree exactly. Tournament goal totals: 2014 = 171, 2018 = 169, 2022 = 172.\n\n**Runners-up, for context:** 2014 Netherlands 15 · 2018 Croatia 14 and France 14 · 2022 Argentina 15.\n\nRule applied: \"team goals are credited by goals.team_id, including opponents' own goals\", men's editions only (2014/2018/2022 have no women's tournaments in this data)."
+  },
+  {
+   "id": "R-05",
+   "passed": true,
+   "round": 1,
+   "seconds": 51.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Top five teams by matches won across the 2014, 2018 and 2022 men's World Cups**\n\n| Rank | Team (team_id) | 2014 | 2018 | 2022 | Total wins |\n|---|---|---|---|---|---|\n| 1 | France (T-30) | 3 | 6 | 5 | **14** |\n| 2 | Argentina (T-03) | 6 | 1 | 6 | **13** |\n| 3= | Belgium (T-06) | 4 | 6 | 1 | **11** |\n| 3= | Croatia (T-18) | 1 | 6 | 4 | **11** |\n| 5 | Brazil (T-09) | 4 | 3 | 3 | **10** |\n\nNext closest is the Netherlands (T-48) with 9, so the top five has no tie at 5th place.\n\n**How this was counted**\n- Scope: WC-2014, WC-2018, WC-2022 — all \"FIFA Men's World Cup\", 64 matches each (192 matches, 384 team-appearance rows).\n- Rule applied: wins follow `win`, `lose`, `draw` on `worldcup_en_team_appearances` (count of rows with `win = 1`; each team appears once per match).\n- Checks: 164 winning rows (55 / 55 / 54 by tournament) against 164 losing rows and 56 draw rows (28 drawn matches) — the totals reconcile.\n- One data convention to note: shootout ties are recorded as a win for the shootout winner, not a draw (e.g. Argentina's 2014 semi-final vs Netherlands, M-2014-62, 0-0, is win=1). That is why Argentina shows 6 wins in 2014.\n\nRemaining order behind the top five: Netherlands 9, Germany 8, England 7, Uruguay 7, Colombia 6, Switzerland 5, Mexico 5, Portugal 5, Costa Rica 4, Morocco 4, then Russia, Sweden, Japan, Senegal and Spain with 3 each."
+  },
+  {
+   "id": "R-06",
+   "passed": true,
+   "round": 1,
+   "seconds": 22.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "search_schema",
+    "get_skill_content",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**The ten largest stadiums in the data by recorded capacity** (rule used: \"ten stadiums\" = exactly ten rows, ordered by capacity descending with ties broken by stadium ID; source names and IDs as stored):\n\n| # | Stadium | City | Country | Capacity | ID |\n|---|---|---|---|---|---|\n| 1 | Estádio do Maracanã | Rio de Janeiro | Brazil | 200,000 | S-020 |\n| 2 | Camp Nou | Barcelona | Spain | 121,000 | S-182 |\n| 3 | Estadio Azteca | Mexico City | Mexico | 115,000 | S-132 |\n| 4 | Wembley Stadium | London | England | 99,000 | S-049 |\n| 5 | Rose Bowl | Los Angeles | United States | 96,000 | S-225 |\n| 6 | Rose Bowl | Pasadena | United States | 94,000 | S-228 |\n| 7 | Estadio Santiago Bernabéu | Madrid | Spain | 90,000 | S-187 |\n| 8 | Estadio Centenario | Montevideo | Uruguay | 90,000 | S-238 |\n| 9 | Lusail Stadium | Lusail | Qatar | 89,000 | S-147 |\n| 10 | Olympiastadion | Berlin | Germany | 86,000 | S-080 |\n\nBasis and notes:\n- Source: `worldcup_en_stadiums` (`stadium_id`, `stadium_name`, `city_name`, `country_name`, `stadium_capacity`); 240 stadiums in total, capacities ranging from 5,000 to 200,000.\n- The cut-off is unambiguous: rank 10 has 86,000, while the next stadium is S-233 Stanford Stadium (San Fransisco) at 85,000, so no tie straddles position 10. Ranks 7 and 8 are tied on 90,000 and both fall inside the ten.\n- The data holds two separate records named \"Rose Bowl\" — S-225 (Los Angeles, 96,000) and S-228 (Pasadena, 94,000). They are distinct rows in the source and are listed separately, as recorded."
+  },
+  {
+   "id": "R-07",
+   "passed": true,
+   "round": 1,
+   "seconds": 31.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "search_capabilities",
+    "get_skill_content",
+    "get_kn_detail",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "The five largest winning margins at the 2022 men's World Cup (WC-2022; margin = absolute score difference, shootout excluded):\n\n| # | Match | Margin | Stage | Date | Match ID |\n|---|---|---|---|---|---|\n| 1 | Spain 7–0 Costa Rica | 7 | Group E | 2022-11-23 | M-2022-11 |\n| 2 | Portugal 6–1 Switzerland | 5 | Round of 16 | 2022-12-06 | M-2022-56 |\n| 3 | England 6–2 Iran | 4 | Group B | 2022-11-21 | M-2022-02 |\n| 4 | France 4–1 Australia | 3 | Group D | 2022-11-22 | M-2022-08 |\n| 5 | Croatia 4–1 Canada | 3 | Group F | 2022-11-27 | M-2022-27 |\n\nTeam IDs: Spain T-73 / Costa Rica T-17; Portugal T-58 / Switzerland T-75; England T-28 / Iran T-38; France T-30 / Australia T-04; Croatia T-18 / Canada T-12.\n\nTie note: six matches sit at a margin of 3, so four are pushed just outside a strict five-item list — England 3–0 Wales (M-2022-36), England 3–0 Senegal (M-2022-52), Brazil 4–1 South Korea (M-2022-54) and Argentina 3–0 Croatia (M-2022-61). Because you asked for exactly five, the cut among the tied margin-3 matches was made by match ID (network rule: a quantity request returns exactly that many, ties broken by ID).\n\nRules used: 2022 men's tournament scope (tournament_id WC-2022); margin = absolute score difference with the shootout score excluded. All 64 matches of the edition were checked, so nothing with a larger margin is missing. Source: worldcup_en_matches."
+  },
+  {
+   "id": "R-08",
+   "passed": true,
+   "round": 1,
+   "seconds": 23.5,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Men's World Cup 2014, 2018 and 2022 — matches, goals and goals per match**\n\n| Tournament | Matches | Goals | Goals per match |\n|---|---|---|---|\n| 2014 FIFA Men's World Cup (WC-2014) | 64 | 171 | 2.672 |\n| 2018 FIFA Men's World Cup (WC-2018) | 64 | 169 | 2.641 |\n| 2022 FIFA Men's World Cup (WC-2022) | 64 | 172 | 2.688 |\n| **All three combined** | **192** | **512** | **2.667** |\n\nBasis and rules used:\n- Each match counts once (the matches table holds one row per match); all three editions had 64 matches and 32 teams.\n- Goals = sum of the two sides' scores (home_team_score + away_team_score) over those matches, i.e. regulation/extra-time goals only — shootout kicks are recorded separately and are not goals (network rule).\n- Cross-checked against the goals detail table: 171 rows for 2014, 169 for 2018, 172 for 2022 — identical totals (own goals are credited in team totals: 5 / 12 / 2; they are only excluded from personal scoring charts).\n- Averages are given to three decimals per the network's business rules."
+  },
+  {
+   "id": "R-09",
+   "passed": true,
+   "round": 3,
+   "seconds": 29.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "Lionel Messi (player **P-14758**, born 1987-06-24) scored in **4 World Cup tournaments — 13 goals in total**:\n\n| Tournament | Tournament name | Goals |\n|---|---|---|\n| WC-2006 | 2006 FIFA Men's World Cup | 1 |\n| WC-2014 | 2014 FIFA Men's World Cup | 4 |\n| WC-2018 | 2018 FIFA Men's World Cup | 1 |\n| WC-2022 | 2022 FIFA Men's World Cup | 7 |\n| **Total** | | **13** |\n\n**Basis:** grouped count over the Goals object class (`worldcup_en_goals`), filtered on `player_id = 'P-14758'` with `own_goal = 0`. No own goals are recorded for him, so that flag doesn't change the numbers.\n\n**Rule applied:** player goals exclude own goals; in-match penalties count as goals, shootout kicks do not."
+  },
+  {
+   "id": "R-10",
+   "passed": true,
+   "round": 3,
+   "seconds": 58.2,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Wen Sun (Sun Wen, player P-14903) scored 11 Women's World Cup goals — joint 5th on the all-time women's scoring chart.**\n\n**Basis** (women's tournament = tournament_name containing \"Women's\"; player goals exclude own goals; equal totals share a rank with the next rank skipped; data covers the 8 women's editions to 2019):\n\nWen Sun's goals, all own_goal = 0:\n- WC-1991 (1991 FIFA Women's World Cup): 1, group stage\n- WC-1995: 2, group stage\n- WC-1999: 7 (5 group stage + 2 semi-final)\n- WC-2003: 1, group stage\n- Total: 11\n\nAll-time women's scoring chart (377 players with women's World Cup goals):\n1. Marta (P-07458) — 17\n2. Birgit Prinz (P-52478) — 14\n2. Abby Wambach (P-89236) — 14\n4. Michelle Akers (P-54794) — 12\n5. Wen Sun (P-14903) — 11\n5. Bettina Wiegmann (P-53366) — 11\n5. Cristiane (P-93057) — 11\n8. Ann Kristin Aarønes (P-29915), Heidi Mohr (P-30335), Carli Lloyd (P-62104), Christine Sinclair (P-97813) — 10 each\n\nShe is four goals behind Marta's record, sharing 5th place with two others on 11. (Shootout kicks are not counted as goals; the source records her name as \"Wen Sun\", given name + family name.)"
+  },
+  {
+   "id": "R-11",
+   "passed": true,
+   "round": 3,
+   "seconds": 75.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "list_knowledge_networks",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Wins by confederation, with competition ranking** (equal wins share a rank, next rank skipped). All six confederations are listed, with 0 where no team won a match.\n\n**2014 FIFA Men's World Cup (WC-2014)**\n| Rank | Confederation | Wins |\n|---|---|---|\n| 1 | UEFA – Union of European Football Associations (CF-6) | 27 |\n| 2 | CONMEBOL – South American Football Confederation (CF-4) | 19 |\n| 3 | CONCACAF (CF-3) | 6 |\n| 4 | CAF – Confederation of African Football (CF-2) | 3 |\n| 5= | AFC – Asian Football Confederation (CF-1) | 0 |\n| 5= | OFC – Oceania Football Confederation (CF-5) | 0 |\n\n**2018 FIFA Men's World Cup (WC-2018)**\n| Rank | Confederation | Wins |\n|---|---|---|\n| 1 | UEFA (CF-6) | 35 |\n| 2 | CONMEBOL (CF-4) | 11 |\n| 3 | AFC (CF-1) | 4 |\n| 4 | CAF (CF-2) | 3 |\n| 5 | CONCACAF (CF-3) | 2 |\n| 6 | OFC (CF-5) | 0 |\n\n**2022 FIFA Men's World Cup (WC-2022)**\n| Rank | Confederation | Wins |\n|---|---|---|\n| 1 | UEFA (CF-6) | 24 |\n| 2 | CONMEBOL (CF-4) | 11 |\n| 3 | CAF (CF-2) | 9 |\n| 4 | AFC (CF-1) | 7 |\n| 5 | CONCACAF (CF-3) | 3 |\n| 6 | OFC (CF-5) | 0 |\n\n**Basis / rules used**\n- Source: `worldcup_en_team_appearances` (one row per team per match), joined to `worldcup_en_teams` via `wc_en_rel_team_appearances_team` for the confederation; counted rows with `win = 1`, grouped by tournament and confederation.\n- \"Win\" follows the `win` flag on team appearances, so shootout-decided matches count as draws, not wins (skill rule: the score excludes the shootout; wins/losses/draws follow the win/lose/draw flags).\n- Competition ranking per the skill rule; AFC and OFC both had 0 wins in 2014 and share rank 5 (rank 6 is skipped).\n- Totals reconcile with the match table: WC-2014 55 wins (64 matches, 9 draws), WC-2018 55 wins (64 matches, 9 draws), WC-2022 54 wins (64 matches, 10 draws).\n\n**Takeaway:** UEFA led all three editions (27 → 35 → 24), with CONMEBOL a clear second each time (19 → 11 → 11). CAF climbed from 3 wins (4th) in 2014 to 9 (3rd) in 2022, and AFC from 0 wins in 2014 to 4 (3rd, 2018) and 7 (4th, 2022), while CONCACAF and OFC declined."
+  },
+  {
+   "id": "R-12",
+   "passed": true,
+   "round": 1,
+   "seconds": 30.7,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "list_knowledge_networks",
+    "get_kn_detail",
+    "search_capabilities",
+    "get_skill_content",
+    "get_object_types",
+    "run_cypher",
+    "run_cypher",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Top five referees by World Cup matches officiated** (men's World Cups to 2022 + women's to 2019; counting distinct matches in *Referee Match Appearances*):\n\n| # | Referee | Country | Matches |\n|---|---|---|---|\n| 1 | Ravshan Irmatov (R-202) | Uzbekistan | 11 |\n| 2 | Nicole Petignat (R-342) | Switzerland | 10 |\n| 3 | Sonia Denoncourt (R-120) | Canada | 9 |\n| 4 | Tammy Ogston (R-322) | Australia | 9 |\n| 5 | Néstor Pitana (R-346) | Argentina | 9 |\n\n**Basis and rules used**\n- Source: `worldcup_en_referee_appearances`, where each row is the referee recorded for one match. The table holds 1,248 rows across 1,248 distinct matches, 493 referees and 30 tournaments (22 men's + 8 women's editions), so one row = one match officiated — no double counting.\n- Counting rule: \"matches count once each\" — `count(DISTINCT match_id)` per `referee_id`.\n- Tie handling: a request for a quantity returns exactly that many, ties broken by referee ID. Places 3–5 are a **four-way tie at 9 matches** (R-120 Denoncourt, R-322 Ogston, R-346 Pitana, R-400 Kari Seitz, USA). By ascending ID the first three take places 3–5, so **Kari Seitz (USA, 9) is ranked 6th and left out** of the five.\n\nFor context, the next tier is 8 matches each: Benito Archundia (Mexico), Jorge Larrionda (Uruguay), Joël Quiniou (France)."
+  },
+  {
+   "id": "R-13",
+   "passed": true,
+   "round": 1,
+   "seconds": 52.0,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_skill_content",
+    "run_code",
+    "run_code",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**There is no unique top five — at the 2022 World Cup the maximum is 7 appearances, shared by 27 players (all rank 1 under competition ranking).**\n\nBecause ranking questions keep ties (\"top N lists everyone ranked N or better, including ties\"), the top-5 band is all 27 players below, each with **7 appearances** (distinct `match_id`; source: `worldcup_en_player_appearances`, tournament WC-2022, 64 matches):\n\n| # | Player | Player ID | Apps |\n|---|---|---|---|\n| 1 | Mateo Kovačić | P-07670 | 7 |\n| 2 | Enzo Fernández | P-10739 | 7 |\n| 3 | Emiliano Martínez | P-13162 | 7 |\n| 4 | Lionel Messi | P-14758 | 7 |\n| 5 | Julián Álvarez | P-19776 | 7 |\n| 6 | Selim Amallah | P-23330 | 7 |\n| 7 | Luka Modrić | P-29491 | 7 |\n| 8 | Rodrigo De Paul | P-37314 | 7 |\n| 9 | Azzedine Ounahi | P-40619 | 7 |\n| 10 | Youssef En-Nesyri | P-42517 | 7 |\n| 11 | Achraf Hakimi | P-45288 | 7 |\n| 12 | Nicolás Otamendi | P-49114 | 7 |\n| 13 | Aurélien Tchouaméni | P-54517 | 7 |\n| 14 | Joško Gvardiol | P-58420 | 7 |\n| 15 | Sofiane Boufal | P-59033 | 7 |\n| 16 | Kylian Mbappé | P-64077 | 7 |\n| 17 | Lovro Majer | P-64353 | 7 |\n| 18 | Andrej Kramarić | P-65182 | 7 |\n| 19 | Hakim Ziyech | P-70715 | 7 |\n| 20 | Sofyan Amrabat | P-71023 | 7 |\n| 21 | Cristian Romero | P-79650 | 7 |\n| 22 | Nahuel Molina | P-84430 | 7 |\n| 23 | Mario Pašalić | P-89948 | 7 |\n| 24 | Antoine Griezmann | P-90908 | 7 |\n| 25 | Ivan Perišić | P-93884 | 7 |\n| 26 | Ousmane Dembélé | P-97778 | 7 |\n| 27 | Dominik Livaković | P-99988 | 7 |\n\nIf you truly want exactly five names, the fixed-quantity rule breaks ties by ID, giving: Mateo Kovačić (P-07670), Enzo Fernández (P-10739), Emiliano Martínez (P-13162), Lionel Messi (P-14758), Julián Álvarez (P-19776) — all on 7 appearances as well.\n\nRules used: men's WC-2022; appearances counted as distinct match IDs per player; competition ranking with ties retained. Distribution behind the cut: 27 players on 7, 23 on 6, 36 on 5, 112 on 4, 212 on 3, 134 on 2, 136 on 1 (680 players with recorded appearances)."
+  },
+  {
+   "id": "R-14",
+   "passed": true,
+   "round": 1,
+   "seconds": 43.3,
+   "tool_calls": [
+    "bkn_start_interaction",
+    "search_capabilities",
+    "get_kn_detail",
+    "get_skill_content",
+    "get_object_types",
+    "run_code",
+    "run_code",
+    "bkn_finish_interaction"
+   ],
+   "answer": "**Yellow cards at men's World Cups 2010–2022** (yellow cards counted separately from red cards, second yellows and sendings-off):\n\n| Tournament | Matches | Yellow cards | Yellow cards per match |\n|---|---|---|---|\n| 2010 FIFA Men's World Cup (WC-2010) | 64 | 254 | 3.969 |\n| 2014 FIFA Men's World Cup (WC-2014) | 64 | 184 | 2.875 |\n| 2018 FIFA Men's World Cup (WC-2018) | 64 | 221 | 3.453 |\n| 2022 FIFA Men's World Cup (WC-2022) | 64 | 224 | 3.500 |\n| **Total 2010–2022** | **256** | **883** | **3.449** |\n\n**Basis**\n- Yellow cards come from `worldcup_en_bookings`, counting records with `yellow_card = 1`, grouped by `tournament_id`.\n- Match denominators come from `worldcup_en_matches`, counting **distinct `match_id`** per tournament — each of the four editions had exactly 64 matches (256 in total).\n- Rule used: the network's business rule that yellow cards, red cards, second yellows and sendings-off are counted separately and never added together (per-match figures shown to three decimals).\n- For context, other booking flags in the same editions — red cards 9 / 7 / 2 / 1 and second yellows 8 / 3 / 2 / 3 for 2010 / 2014 / 2018 / 2022.\n- 2014 is the outlier low (184 cards, 2.875 per match); 2010 is the highest (254, 3.969 per match)."
+  }
+ ]
+}
