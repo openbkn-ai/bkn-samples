@@ -23,7 +23,7 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 
 - `flexibility_assessment`: how many kW an event can commit, which devices are excluded, and why capacity is undeterminable. Pass `event_ids`, `as_of_date`, `knowledge_date` (an earlier day for what was known then).
 - `dispatch_plan`: per event in a block, committed, new, shortfall and estimated cost, and which devices are added.
-- Use Cypher for assets, schedules, offer status, constraints, existing commitments and capacity snapshots; capacity snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the functions. `event_ids` takes up to 20 events per call across dates and blocks; for all or many events pass 20 at a time in date order, never one block per call. After a function returns, check `completeness` and `issues`.
+- Use Cypher for assets, schedules, offer status, constraints, existing commitments and capacity snapshots; capacity snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the functions: list the valid snapshot events with Cypher, then recompute them 20 at a time with `as_of_date` and `knowledge_date` both 2027-02-28 and compare directly, without first probing table dates. `event_ids` takes up to 20 events per call across dates and blocks; for all or many events pass 20 at a time in date order, never one block per call. After a function returns, check `completeness` and `issues`.
 
 ## Cypher patterns
 
