@@ -6,6 +6,12 @@ import argparse
 import copy
 import json
 import subprocess
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 import sys
 import tempfile
 from pathlib import Path
@@ -64,11 +70,11 @@ def _resource_name_candidates(table: str, schema: str | None) -> list[str]:
 
 def run_cmd(args: list[str]) -> str:
     """Run a subprocess command; raise RuntimeError on nonzero exit."""
-    proc = subprocess.run(args, capture_output=True, text=True, check=False)
+    proc = run_sample_command(args, capture_output=True, text=True, check=False)
     if proc.returncode != 0:
         detail = (proc.stderr or proc.stdout or "").strip()
         raise RuntimeError(
-            f"openbkn failed ({proc.returncode}): {' '.join(args)}\n{detail}"
+            f"openbkn failed ({proc.returncode}): {detail}"
         )
     return proc.stdout
 

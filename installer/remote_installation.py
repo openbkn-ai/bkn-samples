@@ -13,6 +13,7 @@ from installer.executor_compatibility import ExecutorCompatibility, ExecutorComp
 from installer.remote_bundle import compatibility, download_package, extract_package, load_release, validate_package
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, _write_failed, timestamp
+from installer import diagnostics
 
 
 def executor_digest(root):
@@ -41,6 +42,8 @@ class RemoteInstallation:
 
     def prepare(self, entry):
         sample = entry["sampleId"]
+        diagnostics.emit("progress", stage="preflight", step="release-requirements",
+                         sample_id=sample, version=entry.get("version"))
         if not re.fullmatch(r"[a-z][a-z0-9-]{0,31}", sample):
             raise ApiError(409, "runtime_upgrade_required", "unsupported runtime sample identity")
         if entry["releaseStatus"] != "published":
@@ -108,18 +111,23 @@ class RemoteInstallation:
             directory = Path(temporary)
             archive = directory / "package.tar.gz"
             try:
-                release = load_release(entry, self.root / "protocol/draft/schemas/sample.schema.json",
-                                       self.platform_version, self.architecture, self.capabilities,
-                                       **({"reader": reader} if reader else {}))
-                downloader(release["package"], archive)
+                with diagnostics.context(stage="download"), diagnostics.step("release-metadata"):
+                    release = load_release(entry, self.root / "protocol/draft/schemas/sample.schema.json",
+                                           self.platform_version, self.architecture, self.capabilities,
+                                           **({"reader": reader} if reader else {}))
+                with diagnostics.context(stage="download"), diagnostics.step("package-download",
+                        url=diagnostics.safe_url(release["package"]["locations"][0])):
+                    downloader(release["package"], archive)
             except (URLError, TimeoutError, ConnectionError, SSLError, HTTPException) as error:
                 message = "Sample download failed. Download an offline package and import it."
                 _write_failed(self.state_dir, sample, entry["version"], "release_download_failed", message)
                 raise ApiError(502, "release_download_failed", message) from error
             root = directory / "root"
             sample_dir = root / "samples" / sample
-            extract_package(archive, sample_dir, release["package"])
-            validate_package(sample_dir, release)
+            with diagnostics.context(stage="download"), diagnostics.step("extract-package"):
+                extract_package(archive, sample_dir, release["package"])
+            with diagnostics.context(stage="preflight"), diagnostics.step("validate-package"):
+                validate_package(sample_dir, release)
             (root / "VERSION").write_text(entry["version"], encoding="utf-8")
             current.update({"releaseNotesSnapshot": release["releaseNotes"],
                             "dataImageRef": release["dataImageRef"],

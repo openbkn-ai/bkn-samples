@@ -1,5 +1,11 @@
 """Native BKN import with explicit ownership, resource bindings and live queries."""
 import json,os,re,shutil,subprocess,sys,tempfile
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'))
@@ -9,7 +15,7 @@ MANIFEST=json.loads((ROOT/'sample.yaml').read_text());SAMPLE=MANIFEST['metadata'
 def require(ok,msg):
     if not ok:raise ValueError(msg)
 def cli(*args):
-    p=subprocess.run(['openbkn','--json',*args],capture_output=True,text=True)
+    p=run_sample_command(['openbkn','--json',*args],capture_output=True,text=True)
     if p.returncode:raise RuntimeError('OpenBKN call failed: '+re.sub(r'(?i)(password\s*[:=]\s*)[^\s,]+',r'\1***',(p.stderr or p.stdout))[:600])
     return json.loads(p.stdout or '{}')
 def entries(value):
@@ -45,7 +51,7 @@ def main():
     for table in specs:
         matches=[r for r in resources if r['name'].rsplit('.',1)[-1]==table];require(len(matches)==1,'missing/ambiguous resource '+table);bindings[table]=matches[0]['id']
     if sys.argv[1]=='install':
-        existing=subprocess.run(['openbkn','--json','bkn','get',KN],capture_output=True,text=True)
+        existing=run_sample_command(['openbkn','--json','bkn','get',KN],capture_output=True,text=True)
         if existing.returncode==0:
             current=json.loads(existing.stdout);require(tags<=set(current.get('tags',[])),'knowledge network ownership conflict')
         else:

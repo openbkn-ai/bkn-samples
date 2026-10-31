@@ -17,6 +17,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 from installer.studio_api import ApiError
 from installer.state_store import write_json
+from installer import diagnostics
 
 REF_URL = "https://api.github.com/repos/openbkn-ai/bkn-samples/git/ref/heads/main"
 RAW_PREFIX = "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/"
@@ -39,8 +40,11 @@ def object_pairs(pairs):
 
 def read_url(url: str, limit: int) -> bytes:
     request = Request(url, headers={"User-Agent": "OpenBKN-SampleCatalog", "Accept": "application/json"})
-    with build_opener(NoRedirect()).open(request, timeout=10) as response:
+    with diagnostics.step("metadata-http", url=diagnostics.safe_url(url), timeout_seconds=10), \
+            build_opener(NoRedirect()).open(request, timeout=10) as response:
+        diagnostics.emit("http.response", status=getattr(response, "status", None))
         data = response.read(limit + 1)
+        diagnostics.emit("progress", bytes_received=len(data))
         if len(data) > limit:
             raise ValueError("official metadata exceeds size limit")
         return data

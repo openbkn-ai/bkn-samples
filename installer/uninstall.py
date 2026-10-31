@@ -15,6 +15,7 @@ from installer.deploy_database import NAMESPACE, _workload_name, database_read_e
 from installer.history import read_installation_history, record_terminal_installation
 from installer.state_store import write_json
 from installer.studio_api import ApiError, _read_state, timestamp
+from installer import diagnostics
 
 class _NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, request, response, code, message, headers, new_url):
@@ -75,7 +76,11 @@ def platform_client(authorization):
                           headers={"Authorization": authorization, "Content-Type": "application/json"})
         for attempt in range(2):
             try:
-                with urlopen(request, timeout=30) as response:
+                with diagnostics.secrets([authorization, authorization.removeprefix("Bearer ")]), \
+                        diagnostics.step("http", method=method, url=diagnostics.safe_url(base + path),
+                                         attempt=attempt + 1, timeout_seconds=30), \
+                        urlopen(request, timeout=30) as response:
+                    diagnostics.emit("http.response", status=response.status)
                     raw = response.read()
                     return json.loads(raw) if raw else {}
             except HTTPError as error:
@@ -224,8 +229,11 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         remaining()
         return original_kubectl(*args, **kwargs)
     def checkpoint(stage, state):
+        previous = {**record, "stages": dict(record["stages"])}
         record["stages"][stage] = state
+        changes = diagnostics.stage_changes(previous, record)
         write_json(destination, record)
+        diagnostics.transitions(previous, record, changes=changes)
     try:
         checkpoint("preflight", "running")
         resources = record["resources"]
@@ -288,6 +296,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
             for path in paths:
                 resource = _single(api("GET", path))
                 if resource is None:
+                    diagnostics.emit("skipped", stage=stage, step="remove-resource", reason="resource already absent")
                     continue
                 if stage == "knowledge" and not required.issubset(set(resource.get("tags") or [])):
                     raise ApiError(409, "ownership_conflict", "The knowledge network no longer belongs to this sample; cleanup stopped.")
@@ -336,14 +345,20 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         for filename in ("owned-execution.json", "config.yaml", "database-credentials.json"):
             (state_dir / sample / filename).unlink(missing_ok=True)
     except Exception as error:
+        active_stage = next((name for name, state in record["stages"].items() if state == "running"), "uninstall")
+        diagnostics.record_failure(error, stage=active_stage, step="uninstall")
         record.update(status="uninstall_failed", finishedAt=timestamp(),
                       error={"code": getattr(error, "code", "uninstall_failed"),
-                             "message": getattr(error, "message", "Uninstall failed; retry the uninstall.")})
+                             "message": diagnostics.redact(getattr(error, "message", "Uninstall failed; retry the uninstall."))})
         if isinstance(error, ApiError) and hasattr(error, "upstream"):
             record["error"]["upstream"] = error.upstream
+        previous = {**record, "stages": dict(record["stages"])}
         for stage, value in record["stages"].items():
             if value == "running":
                 record["error"]["stage"] = stage
                 record["stages"][stage] = "failed"
+        changes = diagnostics.stage_changes(previous, record)
+        write_json(destination, record)
+        diagnostics.transitions(previous, record, changes=changes)
     write_json(destination, record)
     record_terminal_installation(state_dir, record)

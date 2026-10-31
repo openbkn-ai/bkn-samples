@@ -6,6 +6,12 @@ import argparse
 import json
 import re
 import subprocess
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 from pathlib import Path
 from typing import Any
 
@@ -32,7 +38,7 @@ def local_skills() -> list[tuple[str, Path]]:
 
 
 def run_cli(args: list[str]) -> dict[str, Any]:
-    completed = subprocess.run(["openbkn", "--json", *args], check=False, capture_output=True, text=True)
+    completed = run_sample_command(["openbkn", "--json", *args], check=False, capture_output=True, text=True)
     if completed.returncode:
         raise RuntimeError((completed.stderr or completed.stdout).strip() or "openbkn skill 调用失败")
     return json.loads(completed.stdout or "{}")

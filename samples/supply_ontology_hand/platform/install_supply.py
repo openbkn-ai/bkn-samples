@@ -7,6 +7,12 @@ import hashlib
 import json
 import os
 import subprocess
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 import sys
 from pathlib import Path
 
@@ -136,7 +142,7 @@ def main() -> int:
         write_output(payload, True)
         return 0
     for argv in commands(config_path):
-        result = subprocess.run(argv, check=False)
+        result = run_sample_command(argv, check=False)
         if result.returncode == 2 and Path(argv[1]).name == "import_kn.py":
             write_output(
                 payload,

@@ -45,8 +45,8 @@ class TaskRunnerTest(unittest.TestCase):
         def execute():
             record = _read_state(self.state, "supply-chain")
             record.update(status="installed", stages={"database": "succeeded", "discover": "running"})
-            expected.update(record)
             _write_state(self.state, record)
+            expected.update(record)
         self.runner.submit("supply-chain", lambda: _write_installing(self.state, "supply-chain", "0.1.0"), execute)
         self.assertTrue(self.runner.locks["supply-chain"].acquire(timeout=2))
         self.runner.locks["supply-chain"].release()
@@ -62,8 +62,8 @@ class TaskRunnerTest(unittest.TestCase):
                     record = _read_state(self.state, "supply-chain")
                     record.update(status="failed", stages={"database": "succeeded", "discover": "failed"},
                                   error={"code": "discover_incomplete", "message": "discovered 2 tables, expected 3"})
-                    expected.update(record)
                     _write_state(self.state, record)
+                    expected.update(record)
                     if raises:
                         raise ApiError(500, "discover_incomplete", record["error"]["message"])
                 self.runner.submit("supply-chain", lambda: _write_installing(self.state, "supply-chain", "0.1.0"), execute)

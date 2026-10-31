@@ -6,13 +6,14 @@ import base64
 from contextlib import ExitStack
 import json
 import os
-import re
 import subprocess
 import tempfile
 import signal
 import sys
 
 from installer.hook_process import run_hook
+from installer import diagnostics
+from installer.process_output import collect, OutputLimitExceeded
 
 from installer import experience_set, shared_database
 from pathlib import Path
@@ -65,8 +66,7 @@ def caller_env(authorization: str | None) -> dict:
 
 
 def _command_failure(completed) -> str:
-    detail = (completed.stderr or completed.stdout or "").strip().replace("\n", " ")
-    detail = re.sub(r'("password"\s*:\s*")(?:\\.|[^"\\])*"', r'\1***"', detail)
+    detail = diagnostics.command_failure(completed).replace("\n", " ")
     if len(detail) > 400:
         detail = detail[:400]
     if not detail:
@@ -74,16 +74,30 @@ def _command_failure(completed) -> str:
     return f"openbkn command failed: {detail}"
 
 
+command_details = diagnostics.command_details
+
+
 def openbkn_json(args: list[str], run, env: dict | None = None) -> dict:
-    completed = run(["openbkn", "--json", *args], env)
-    if completed.returncode != 0:
-        raise ControlError("install_failed", _command_failure(completed))
-    payload = json.loads(completed.stdout or "{}")
-    if payload is None:
-        return {}
-    if not isinstance(payload, (dict, list)):
-        raise ControlError("install_failed", "openbkn command failed")
-    return payload
+    # Only the command path is a label. Never log full argv (JSON bodies and
+    # connector configuration can contain credentials or business data).
+    values = [(env or {}).get("BKN_TOKEN")]
+    if "--connector-config" in args:
+        index = args.index("--connector-config") + 1
+        if index < len(args):
+            try:
+                values.extend(diagnostics.sensitive_values(json.loads(args[index])))
+            except (ValueError, TypeError):
+                pass
+    with diagnostics.secrets(values), diagnostics.step("cli", **command_details(args)):
+        completed = run(["openbkn", "--json", *args], env)
+        if completed.returncode != 0:
+            raise ControlError("install_failed", _command_failure(completed))
+        payload = json.loads(completed.stdout or "{}")
+        if payload is None:
+            return {}
+        if not isinstance(payload, (dict, list)):
+            raise ControlError("install_failed", "openbkn command failed")
+        return payload
 
 
 def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | None = None, state_dir: Path | None = None) -> dict:
@@ -96,23 +110,34 @@ def run_platform_hook(root: Path, stage: str, payload: dict, run, env: dict | No
         hook_env = dict(env or {})
         hook_env["BKN_SAMPLE_INPUT"] = "/dev/stdin"
         hook_env["BKN_SAMPLE_OUTPUT"] = str(output)
+        hook_env["BKN_SAMPLE_PHASE"] = stage
         if state_dir is not None:
             shared = state_dir / payload["sample"]
             shared.mkdir(parents=True, exist_ok=True, mode=0o700)
             shared.chmod(0o700)
             hook_env["BKN_SAMPLE_CONFIG"] = str(shared / "config.yaml")
             hook_env["BKN_SAMPLE_RECEIPT"] = str(shared / "owned-execution.json")
-        completed = run_hook(sample_dir, script, run, hook_env, input_data=json.dumps(payload))
-        if output.is_file():
-            try:
-                result = json.loads(output.read_text(encoding="utf-8"))
-            except json.JSONDecodeError:
-                result = None
-            if isinstance(result, dict) and (completed.returncode == 0 or result.get("ok") is False or result.get("code")):
-                return result
-        if completed.returncode != 0 or not output.is_file():
+        with diagnostics.context(stage=stage), diagnostics.secrets([
+                (env or {}).get("BKN_TOKEN"), (payload.get("database") or {}).get("password")]), \
+                diagnostics.step("hook", hook=script.name) as outcome:
+            completed = run_hook(sample_dir, script, run, hook_env, input_data=json.dumps(payload))
+            outcome.update(ok=False, returncode=completed.returncode)
+            diagnostics.emit("process.exited", returncode=completed.returncode)
+            if completed.returncode:
+                diagnostics.emit("failed", level="error", reason=completed.stderr or "platform hook failed")
+            if output.is_file():
+                try:
+                    result = json.loads(output.read_text(encoding="utf-8"))
+                except json.JSONDecodeError:
+                    result = None
+                if isinstance(result, dict) and (completed.returncode == 0 or result.get("ok") is False or result.get("code")):
+                    if isinstance(result.get("message"), str):
+                        result["message"] = diagnostics.redact(result["message"])
+                    outcome["ok"] = completed.returncode == 0 and result.get("ok") is True
+                    if not outcome["ok"]:
+                        outcome["reason"] = result.get("message") or "platform hook failed"
+                    return result
             return {"ok": False, "message": "platform hook failed"}
-        return {"ok": False, "message": "platform hook failed"}
 
 
 def _record_database_image(state_dir, sample, version, deployed):
@@ -144,6 +169,7 @@ def record_experience_set(root: Path, sample: str, state_dir: Path) -> None:
     write_json(state_dir / f"{sample}.json", current)
 
 
+@diagnostics.operation_context
 def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None) -> dict:
     if actor_role != "admin":
         raise ApiError(403, "forbidden", "an administrator must install the sample")
@@ -168,13 +194,14 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
         record_experience_set(root, sample, state_dir)
     except DeployError as exc:
         _write_failed(state_dir, sample, version, exc.code, exc.message, stage="database")
-        raise ApiError(500, exc.code, exc.message) from exc
+        raise ApiError(500, exc.code, diagnostics.redact(exc.message)) from exc
     except ControlError as exc:
         status = 403 if exc.code == "forbidden" else 409 if exc.code in {"already_installed", "use_retry", "ownership_conflict"} else 500
-        raise ApiError(status, exc.code, exc.message) from exc
+        raise ApiError(status, exc.code, diagnostics.redact(exc.message)) from exc
     return installation_view(record, actor_role)
 
 
+@diagnostics.operation_context
 def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_dir: Path, root: Path, version: str, deploy, kubectl, run, authorization: str | None = None, accepted: bool = False, data_image_ref: str | None = None) -> dict:
     current = _read_state(state_dir, sample)
     if not current or _installation_id(current) != installation_id:
@@ -211,7 +238,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             _write_failed(state_dir, sample, version, exc.code, exc.message, stage="database")
         code = getattr(exc, "code", "install_failed")
         status = 409 if code in {"already_installed", "use_retry", "ownership_conflict"} else 500
-        raise ApiError(status, code, exc.message) from exc
+        raise ApiError(status, code, diagnostics.redact(exc.message)) from exc
     return installation_view(record, actor_role)
 
 
@@ -248,14 +275,29 @@ def process_run(argv: list[str], env: dict | None) -> subprocess.CompletedProces
             os.fchown(descriptor, int(identity), int(identity))
             os.fchmod(descriptor, 0o400)
         process = stack.enter_context(subprocess.Popen(
-            argv, env=merged, text=True, stdin=source, stdout=subprocess.PIPE,
+            argv, env=merged, stdin=source, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, start_new_session=True, **identity_options))
-        try:
-            stdout, stderr = process.communicate(timeout=300)
-        except subprocess.TimeoutExpired:
-            os.killpg(process.pid, signal.SIGKILL)
-            process.communicate()
-            raise ControlError("operation_timeout", "Sample operation timed out; retry the operation.") from None
+        with diagnostics.secrets([merged.get("BKN_TOKEN"), merged.get("MYSQL_PASSWORD")]), \
+                diagnostics.step("process", executable=Path(argv[0]).name) as outcome:
+            try:
+                stdout, stderr = collect(process, timeout=300,
+                                         log_stdout=not (Path(argv[0]).name == "openbkn" and "--json" in argv))
+            except BaseException as error:
+                # Kill even when the leader exited but descendants still own pipes.
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                process.wait()
+                diagnostics.emit("process.terminated", returncode=process.returncode, signal="SIGKILL",
+                                 reason="timeout" if isinstance(error, subprocess.TimeoutExpired) else type(error).__name__)
+                if isinstance(error, subprocess.TimeoutExpired):
+                    raise ControlError("operation_timeout", "Sample operation timed out; retry the operation.") from None
+                if isinstance(error, OutputLimitExceeded):
+                    raise ControlError("operation_output_limit", str(error)) from None
+                raise
+            diagnostics.emit("process.exited", returncode=process.returncode)
+            outcome.update(ok=process.returncode == 0, returncode=process.returncode)
         return subprocess.CompletedProcess(argv, process.returncode, stdout, stderr)
 
 

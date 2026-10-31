@@ -7,6 +7,12 @@ import hashlib
 import json
 import os
 import subprocess
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 import sys
 from pathlib import Path
 
@@ -103,7 +109,7 @@ def _ownership_tags(payload: dict) -> set[str]:
 
 def _unclaimed_network(payload: dict) -> bool:
     """True when this sample's knowledge network exists but this installer did not create it."""
-    result = subprocess.run(
+    result = run_sample_command(
         ["openbkn", "--json", "bkn", "get", KN_ID],
         capture_output=True,
         text=True,
@@ -147,7 +153,7 @@ def main() -> int:
         receipt = Path(os.environ["BKN_SAMPLE_RECEIPT"])
         if not receipt.exists():
             receipt.write_text(json.dumps({"toolboxes": [], "skills": []}), encoding="utf-8")
-    result = subprocess.run(["./run.sh", "--from", "4"], cwd=SAMPLE_DIR, env=command_env(payload), check=False)
+    result = run_sample_command(["./run.sh", "--from", "4"], cwd=SAMPLE_DIR, env=command_env(payload), check=False)
     if result.returncode != 0:
         write_output(payload, False, "run.sh failed")
         return result.returncode

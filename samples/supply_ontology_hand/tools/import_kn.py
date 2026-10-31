@@ -7,6 +7,12 @@ import copy
 import json
 import os
 import subprocess
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 import sys
 from pathlib import Path
 
@@ -28,11 +34,11 @@ def _ownership_tags() -> list[str]:
 
 
 def run_cmd(args: list[str]) -> str:
-    proc = subprocess.run(args, capture_output=True, text=True, check=False)
+    proc = run_sample_command(args, capture_output=True, text=True, check=False)
     if proc.returncode != 0:
         detail = (proc.stderr or proc.stdout or "").strip()
         raise RuntimeError(
-            f"openbkn failed ({proc.returncode}): {' '.join(args)}\n{detail}"
+            f"openbkn failed ({proc.returncode}): {detail}"
         )
     return proc.stdout
 

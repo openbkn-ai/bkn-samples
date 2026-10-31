@@ -1,0 +1,95 @@
+{
+  "networkId": "supply_i217_0118_20261031",
+  "name": "中文供应链 0.1.18 验证（#217）",
+  "tags": [
+    "issue-217-validation",
+    "candidate-893b37ec8857"
+  ],
+  "candidateDigest": "sha256:893b37ec88571a0f611c086ee97d798318e57119ca8235c064f0e237f600ae97",
+  "createdAt": "2026-10-31T14:59:47.702436+00:00",
+  "originalNetworkId": "supply_ontology_hand",
+  "databaseMode": "reuse existing read-only resources",
+  "fullInstallAcceptance": false,
+  "importStatus": 201,
+  "objects": 11,
+  "relations": 14,
+  "skillsEntityPresent": false,
+  "objectQueries": [
+    {
+      "objectTypeId": "supply_ontology_hand_bom",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_forecast",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_inventory",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_material",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_mps",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_mrp",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_po",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_pr",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_product",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_salesorder",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    },
+    {
+      "objectTypeId": "supply_ontology_hand_supplier",
+      "bound": true,
+      "status": 200,
+      "rowsReturned": 1
+    }
+  ],
+  "originalModelUnchanged": true,
+  "installedSampleIdentitiesUnchanged": true,
+  "normalizations": [
+    "independent network ID/name/tags",
+    "remove deprecated index_config as the installer fallback does",
+    "reuse original resource bindings"
+  ],
+  "limitations": [
+    "model and resource-query validation only; no fresh installation or capability re-registration"
+  ]
+}

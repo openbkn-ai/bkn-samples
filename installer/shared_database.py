@@ -12,6 +12,7 @@ from installer.deploy_database import DeployError, _sample
 from installer.hook_process import run_hook
 from installer.state_store import write_json
 from installer.studio_api import _read_state
+from installer import diagnostics
 
 KIND = "shared-mariadb"
 IDENTIFIER = re.compile(r"[a-z0-9_]{1,64}")
@@ -39,6 +40,7 @@ def settings():
 def manager(database):
     import pymysql
     config = settings()
+    diagnostics.remember_secrets([config.get("password")])
     # Never continue against a different runtime after an operator changes configuration.
     if database["host"] != config["host"] or database["port"] != config["port"]:
         raise DeployError("ownership_conflict", "The sample database runtime differs from its installation receipt.")
@@ -97,15 +99,25 @@ def prepare(root, sample, version, state_dir, run):
         # Persist credentials before the resource receipt, and both before any DB mutation.
         write_json(credentials, {"password": secrets.token_urlsafe(32), "ownership": database["ownership"]})
         record["databaseRuntime"] = database
+        previous = {**record, "stages": dict(record.get("stages", {}))}
         record.setdefault("stages", {})["database"] = "running"
+        changes = diagnostics.stage_changes(previous, record)
         write_json(state_dir / f"{sample}.json", record)
+        diagnostics.transitions(previous, record, changes=changes)
     if database.get("kind") != KIND or database["name"] != name or database["staging"] != staging:
         raise DeployError("ownership_conflict", "Database identity differs from the accepted sample.")
     secret = json.loads(credentials.read_text())
     if secret.get("ownership") != database["ownership"]:
         raise DeployError("ownership_conflict", "Database credentials differ from the installation receipt.")
     password = secret["password"]
-    with manager(database) as cursor:
+    diagnostics.remember_secrets([password, config.get("password")])
+    previous = {**record, "stages": dict(record.get("stages", {}))}
+    record.setdefault("stages", {})["database"] = "running"
+    changes = diagnostics.stage_changes(previous, record)
+    write_json(state_dir / f"{sample}.json", record)
+    diagnostics.transitions(previous, record, changes=changes)
+    with diagnostics.context(stage="database"), diagnostics.secrets([password, config.get("password")]), \
+            diagnostics.step("prepare-database"), manager(database) as cursor:
         cursor.execute("SELECT database_name FROM sample_ownership WHERE deleted=FALSE AND (database_name=%s OR CONCAT(database_name, '_loading')=%s)", (staging, name))
         if cursor.fetchone():
             raise DeployError("ownership_conflict", "A staging database is reserved by another sample.")
@@ -130,10 +142,13 @@ def prepare(root, sample, version, state_dir, run):
                    "BKN_SAMPLE_ID": sample, "BKN_SAMPLE_VERSION": version,
                    "BKN_SAMPLE_CACHE": str(state_dir / sample / "cache")}
     for hook in ("dbInit", "dbVerify"):
-        result = run_hook(directory, directory / document["spec"]["hooks"][hook], run, environment)
-        if result.returncode:
-            # Hook output may contain credentials; retain a safe stage-level message.
-            raise DeployError("database_not_ready", "Sample database loading or verification failed; retry the installation.")
+        environment["BKN_SAMPLE_PHASE"] = hook
+        with diagnostics.context(stage="database"), diagnostics.secrets([password]), diagnostics.step(hook):
+            result = run_hook(directory, directory / document["spec"]["hooks"][hook], run, environment)
+            diagnostics.emit("process.exited", returncode=result.returncode)
+            if result.returncode:
+                diagnostics.emit("failed", level="error", reason=result.stderr)
+                raise DeployError("database_not_ready", "Sample database loading or verification failed; retry the installation.")
     return {"name": name, "host": database["host"], "port": database["port"],
             "user": database["user"], "password": password}
 

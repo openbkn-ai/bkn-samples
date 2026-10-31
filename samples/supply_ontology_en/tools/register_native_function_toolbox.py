@@ -11,6 +11,12 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 from typing import Any
 
 from ownership_receipt import require_owned, remember
@@ -50,7 +56,7 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
 
 
 def _call(args: list[str]) -> Any:
-    completed = subprocess.run(
+    completed = run_sample_command(
         ["openbkn", "--json", *args], check=False, capture_output=True, text=True
     )
     if completed.returncode:

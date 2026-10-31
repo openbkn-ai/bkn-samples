@@ -6,6 +6,12 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 import sys
 from pathlib import Path
 
@@ -62,7 +68,7 @@ def build_checks(*, data_ok: bool, tool_ok: bool | None) -> list[dict]:
 
 
 def _openbkn(args: list[str]) -> dict:
-    completed = subprocess.run(["openbkn", "--json", *args], check=False, capture_output=True, text=True)
+    completed = run_sample_command(["openbkn", "--json", *args], check=False, capture_output=True, text=True)
     if completed.returncode:
         raise RuntimeError("openbkn command failed")
     payload = json.loads(completed.stdout or "{}")
