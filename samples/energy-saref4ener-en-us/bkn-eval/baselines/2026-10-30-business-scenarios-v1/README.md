@@ -28,3 +28,9 @@ python3 samples/energy-saref4ener-en-us/bkn-eval/baselines/2026-10-30-business-s
 ## Exceptions in the data
 
 Of 100 events, 60 have happened (2 cancelled) and 40 are in March (1 cancelled). Among past events, 19 fall below their minimum delivery ratio and run at a net loss; EVT-021, EVT-029 and EVT-033 cannot be settled because of a baseline conflict, a missing reading and a missing receipt; EVT-005 has no commitment. EVT-025's recomputed revenue is 5 CNY below the ledger, and EVT-041 has two conflicting postings on one day. Capacity for EVT-013, EVT-053 and EVT-054 is undeterminable because the latest forecast is invalid or a cap has no value; one allocation in the 2027-02-24 block exceeds a device limit. 7 capacity snapshots are invalid and 3 disagree with recomputation; 1 settlement snapshot's revenue disagrees. DEV-136 also has a late reading correction and a duplicate submission, DEV-061's baseline was restated on March 3, and an EVT-073 offer was withdrawn on March 5.
+
+## Runs
+
+| Agent | Result | Record |
+|---|---|---|
+| External MCP agent (can call the sample functions), first round 49/50, targeted rerun after the Skill fix | 50/50 | [runs/2026-10-30-mcp-agent-r1](runs/2026-10-30-mcp-agent-r1/README.md) |
