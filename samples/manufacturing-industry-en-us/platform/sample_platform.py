@@ -3,6 +3,8 @@ import json,os,re,shutil,subprocess,sys,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'))
+from ownership_receipt import read as read_receipt,require_owned
+from register_skills import run as register_skills
 MANIFEST=json.loads((ROOT/'sample.yaml').read_text());SAMPLE=MANIFEST['metadata']['name'];KN=MANIFEST['spec']['knowledgeNetwork']['id']
 def require(ok,msg):
     if not ok:raise ValueError(msg)
@@ -60,7 +62,15 @@ def main():
     for table,spec in specs.items():
         obj=single(cli('bkn','object-type','get',KN,table));require(obj['data_source']['id']==bindings[table],'binding differs')
         data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
-    capabilities={'ownedExecution':{'toolboxes':[],'skills':[]}}
+    if sys.argv[1]=='install':skills=register_skills(apply=True,kn_id=KN)
+    else:
+        skills=register_skills(apply=False)
+        listed=entries(cli('skill','list','--all'))
+        for local in skills['skills']:
+            matches=[s for s in listed if s.get('name')==local['name']];require(len(matches)==1,'missing/ambiguous installed Skill')
+            require_owned('skills',matches[0].get('skill_id') or matches[0].get('id'));require(matches[0].get('status')=='published','unpublished Skill')
+    require(len(skills['skills'])==2,'skill count differs')
+    capabilities={'skills':skills,'ownedExecution':read_receipt()}
     result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership','40-object-types',str(71)+'-relations','40-resource-bindings','40-live-object-queries')],'degrade':[],'message':''}
     Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result));print(json.dumps(result))
 if __name__=='__main__':

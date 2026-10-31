@@ -84,6 +84,7 @@ jobs:
           python tools/energy_saref4ener/audit_sources.py
           python tools/energy_saref4ener/verify.py --sample en-us
           python tools/energy_saref4ener/verify.py --sample zh-cn
+          python tools/manufacturing_industry/generate_data.py --check
           for sample in manufacturing-industry-en-us manufacturing-industry-zh-cn; do
             python "samples/$sample/tools/verify_industry_links.py"
             python "samples/$sample/iof-reference/tools/verify_reference_instances.py"

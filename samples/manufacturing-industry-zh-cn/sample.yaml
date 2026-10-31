@@ -6,17 +6,18 @@
     "name": "manufacturing-industry-zh-cn",
     "aliases": [],
     "displayName": "制造业端到端运营（中文）",
-    "summary": "追溯虚构制造业需求从计划、生产、质量到发运的证据链。",
-    "version": "0.1.4"
+    "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
+    "version": "0.1.5"
   },
   "spec": {
     "studio": {
       "licenseNote": "MIT · 虚构样例数据，不得用于真实生产运营决策。",
       "questions": [
-        "哪些工单可以履约？",
-        "哪些发运因物料或质量被阻塞？",
-        "发运判断依据了哪些业务事实？"
-      ]
+        "现在哪些工单被阻塞了？各是因为什么？",
+        "已经完成的执行里，哪些不合规？各是什么原因？",
+        "有没有检验记成通过、测量值却超出规格的批次？这批货发出去了吗？"
+      ],
+      "experienceSet": "experience/experience-set.yaml"
     },
     "database": {
       "engine": "mariadb",
@@ -32,14 +33,14 @@
       "displayName": "制造业端到端运营（中文）"
     },
     "capabilities": {
-      "required": false
+      "required": true
     },
     "components": {
       "objects": true,
       "relations": true,
       "metrics": false,
       "functions": false,
-      "skills": false
+      "skills": true
     },
     "hooks": {
       "dbInit": "db/init.sh",

@@ -1,0 +1,264 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: zh-CN
+  source:
+    answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v1/answer-set-v1.yaml
+    setId: manufacturing-business-scenarios-v1
+spec:
+  businessDate: '2027-02-28'
+  cases:
+  - id: Q-02
+    title: 现行 BOM 用什么料
+    explanation: 状态为已冻结的 BOM 版本是现行版本，沿 BOM 组件 → 产品看每件用料。
+    question: PH200 高压泵壳现在用哪个 BOM 版本？每件要用哪些物料、各多少？
+    answer: PH200 现在用 BOMV-PH200-B 版 BOM：每件用灰铸铁毛坯 RM-CI250 1 件、密封圈套件 PC-SEAL 2 件、紧固件包 PC-BOLT 1 件。
+    expected:
+      bom_version: BOMV-PH200-B
+      components:
+        RM-CI250: 1
+        PC-SEAL: 2
+        PC-BOLT: 1
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (b:bom_components)-[:bom_components_component_product_id_to_products]->(p:products)
+        WHERE b.bom_version_id = 'BOMV-PH200-B'
+  - id: Q-03
+    title: 工艺路线怎么走
+    explanation: 按工艺路线工序顺序读取每道工序的工作中心。
+    question: VB080 阀体要经过哪几道工序？按顺序各在哪个工作中心做？
+    answer: VB080 依次经过 WC-SZ-TURN 数控车削、WC-SZ-CNC 五轴精铣、WC-SU-TEST 压力测试。
+    expected:
+      work_centers:
+      - WC-SZ-TURN
+      - WC-SZ-CNC
+      - WC-SU-TEST
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (r:routing_operations)
+        WHERE r.routing_id = 'ROUTE-VB080'
+        RETURN r.work_center_id AS work_centers
+  - id: Q-04
+    title: 谁能上五轴铣削
+    explanation: 资质合格、有效期不早于业务日期、人员在职才能上岗。
+    question: 现在有哪些操作员可以上五轴铣削？
+    answer: 现在能上五轴铣削的是 OPR-01、OPR-02、OPR-04、OPR-11；孙浩 OPR-05 的资质 2026-12-31 已到期。
+    expected:
+      operators:
+      - OPR-01
+      - OPR-02
+      - OPR-04
+      - OPR-11
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (q:operator_qualifications)-[:operator_qualifications_operator_id_to_operators]->(o:operators)
+        WHERE q.capability_id = 'CAP-MILL' AND q.qualification_status = '合格' AND q.valid_to >= '2027-02-28' AND o.employment_status = '在职'
+        RETURN q.operator_id AS operators
+      graph: |-
+        MATCH (q:operator_qualifications)-[:operator_qualifications_operator_id_to_operators]->(o:operators)
+        WHERE q.capability_id = 'CAP-MILL'
+  - id: Q-07
+    title: 哪些订单晚交了
+    explanation: 订单行全部发完后，最后一次发运晚于订单要求交期即延误。
+    question: 已经发完的订单行里，哪些是延误交付的？各晚了几天？
+    answer: 已发完的订单行里有 4 行延误：SOL-2610-02-1 晚 4 天，SOL-2610-06-1 晚 12 天，SOL-2611-04-1 晚 9 天，SOL-2612-05-1 晚 6 天。
+    expected:
+      lines:
+        SOL-2610-02-1: 4
+        SOL-2610-06-1: 12
+        SOL-2611-04-1: 9
+        SOL-2612-05-1: 6
+    surfaces:
+    - agent
+  - id: Q-09
+    title: 被拒之后怎么补交
+    explanation: 检验被拒的工单不能发货，由补做工单为同一订单行重做。
+    question: 华中智能流体 SO-2610-06 那批泵壳为什么晚交了？最后是怎么交上的？
+    answer: SO-2610-06 原工单 WO-2611-08 的关键孔径测得 50.09，超出上限被拒；补做工单 WO-2612-R1 做出 150 件并发运，比要求交期晚 12 天。
+    expected:
+      rejected_work_order: WO-2611-08
+      characteristic: 关键孔径
+      measured: 50.09
+      replacement_work_order: WO-2612-R1
+      shipped: 150
+      late_days: 12
+    surfaces:
+    - agent
+  - id: Q-16
+    title: 工单还缺多少料
+    explanation: 物料需求按 BOM 单耗加损耗计算，减去已发数量就是缺口。
+    question: WO-2702-03 需要多少 316L 不锈钢棒料？已经发了多少？还差多少？
+    answer: WO-2702-03 需要 316L 不锈钢棒料 320 千克，已发 200 千克，还差 120 千克。
+    expected:
+      required: 320
+      issued: 200
+      missing: 120
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (r:production_order_material_requirements)
+        WHERE r.production_order_id = 'WO-2702-03' AND r.product_id = 'RM-SS316'
+        RETURN r.required_quantity AS required, r.issued_quantity AS issued, r.required_quantity - r.issued_quantity AS missing
+  - id: Q-17
+    title: 哪些工单开不了工
+    explanation: BOM 未冻结，或计划开工日已到而物料不齐套，工单阻塞。
+    question: 现在哪些工单被阻塞了？各是因为什么？
+    answer: 现在阻塞的工单是 WO-2702-03（不锈钢棒料短交）、WO-2703-02（用了草稿版 BOM）、WO-2703-04（不锈钢采购逾期未到）、WO-2703-06（毛坯来料被拒收）。
+    expected:
+      work_orders:
+      - WO-2702-03
+      - WO-2703-02
+      - WO-2703-04
+      - WO-2703-06
+    surfaces:
+    - agent
+  - id: Q-29
+    title: 报废影响交付
+    explanation: 工单完成数量是最后一道工序的合格数，少做的件数就是订单欠交。
+    question: WO-2611-06 的良率是多少？少做的件数对客户交付有什么影响？
+    answer: WO-2611-06 完成 86 件，良率 0.9556；少做的 4 件让订单行 SOL-2610-04-2 至今欠交 4 件。
+    expected:
+      completed: 86
+      yield_ratio: 0.9556
+      sales_order_line: SOL-2610-04-2
+      backlog: 4
+    surfaces:
+    - agent
+  - id: Q-33
+    title: 设备做的活合规吗
+    explanation: 设备对所需能力的状态必须为合格，暂停的能力不能做该工序。
+    question: MACH-MILL-04 做过哪些活？这些执行合规吗？
+    answer: MACH-MILL-04 做过 EXE-2612-04-10 和 EXE-2701-07-10 两条执行，它的铣削能力处于暂停，这两条都不合规。
+    expected:
+      executions:
+      - EXE-2612-04-10
+      - EXE-2701-07-10
+      compliant: false
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (e:production_execution_records)-[:production_execution_records_machine_id_to_production_machines]->(m:production_machines)
+        WHERE m.machine_id = 'MACH-MILL-04'
+  - id: Q-34
+    title: 哪些执行不合规
+    explanation: 设备能力、保养当天、人员资质、排班四项任何一项不满足即不合规。
+    question: 已经完成的执行里，哪些不合规？各是什么原因？
+    answer: 8 条执行不合规：EXE-2612-04-10（WO-2612-04）、EXE-2701-07-10（WO-2701-07）设备能力暂停；EXE-2701-02-10（WO-2701-02）、EXE-2701-05-10（WO-2701-05）资质过期，EXE-2702-06-20（WO-2702-06）资质还在培训；EXE-2701-04-10（WO-2701-04）保养当天生产；EXE-2701-09-10（WO-2701-09）排班工作中心不符，EXE-2702-08-20（WO-2702-08）没有排班。
+    expected:
+      executions:
+        EXE-2612-04-10: WO-2612-04
+        EXE-2701-02-10: WO-2701-02
+        EXE-2701-04-10: WO-2701-04
+        EXE-2701-05-10: WO-2701-05
+        EXE-2701-07-10: WO-2701-07
+        EXE-2701-09-10: WO-2701-09
+        EXE-2702-06-20: WO-2702-06
+        EXE-2702-08-20: WO-2702-08
+    surfaces:
+    - agent
+  - id: Q-37
+    title: 哪些检验批被拒
+    explanation: 最终检验批状态为已拒绝即被拒收，不能入库发运。
+    question: 有哪些最终检验批被拒收了？
+    answer: 被拒收的最终检验批是 QIL-2611-08、QIL-2701-10、QIL-2702-10。
+    expected:
+      lots:
+      - QIL-2611-08
+      - QIL-2701-10
+      - QIL-2702-10
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (l:quality_inspection_lots)
+        WHERE l.status = '已拒绝'
+        RETURN l.inspection_lot_id AS lots
+  - id: Q-39
+    title: 有没有质量漏检
+    explanation: 结果记为通过但测量值超出所引用规格上下限，按不合格计。
+    question: 有没有检验记成通过、测量值却超出规格的批次？这批货发出去了吗？
+    answer: WO-2612-10 的检验批 QIL-2612-10 安装面平面度测得 0.04，超过上限 0.03 却记为通过，这批 130 件已经发运。
+    expected:
+      work_order: WO-2612-10
+      lot: QIL-2612-10
+      measured: 0.04
+      upper_limit: 0.03
+      shipped: 130
+    surfaces:
+    - agent
+  - id: Q-43
+    title: 哪些维护逾期
+    explanation: 计划日期早于业务日期且未完成的维护工单为逾期。
+    question: 哪些设备维护工单逾期了？
+    answer: 逾期的维护工单是 MWO-027、MWO-033、MWO-034。
+    expected:
+      maintenance_orders:
+      - MWO-027
+      - MWO-033
+      - MWO-034
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (m:maintenance_work_orders)
+        WHERE m.planned_date < '2027-02-28' AND m.status <> '已完成'
+        RETURN m.maintenance_work_order_id AS maintenance_orders
+  - id: Q-47
+    title: 订单到发运追溯
+    explanation: 沿发运 → 工单 → 订单行，再看发料、执行、检验和入库。
+    question: 把 SO-2612-05 从下单到发运的过程讲一下：哪个工单做的、发了什么料、谁在哪台设备上做的、检验和入库怎样、哪天发的货？
+    answer: SO-2612-05 由 WO-2701-06 生产：发料 MIT-062，OPR-04 在 MACH-MILL-03 精铣、OPR-09 在 MACH-LSR-01 打标，检验批 QIL-2701-06 接受，成品入库 FGR-2701-06，SHP-028 发运 260 件，晚 6 天。
+    expected:
+      work_order: WO-2701-06
+      issue: MIT-062
+      machines:
+      - MACH-LSR-01
+      - MACH-MILL-03
+      operators:
+      - OPR-04
+      - OPR-09
+      lot: QIL-2701-06
+      receipt: FGR-2701-06
+      shipment: SHP-028
+      shipped: 260
+      late_days: 6
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (s:shipments)-[:shipments_production_order_id_to_production_orders]->(w:production_orders)-[:production_orders_sales_order_line_id_to_sales_order_lines]->(l:sales_order_lines)
+        WHERE l.sales_order_id = 'SO-2612-05'
+  - id: Q-48
+    title: 库存还能用多少
+    explanation: 可用 = 在手 − 已分配。
+    question: 密封圈套件现在在手多少、已分配多少、可用多少？
+    answer: 密封圈套件 PC-SEAL 在手 348 件，已分配 220 件，可用 128 件。
+    expected:
+      on_hand: 348
+      allocated: 220
+      available: 128
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (b:inventory_balances)
+        WHERE b.product_id = 'PC-SEAL'
+        RETURN sum(b.on_hand_quantity) AS on_hand, sum(b.allocated_quantity) AS allocated, sum(b.available_quantity) AS available

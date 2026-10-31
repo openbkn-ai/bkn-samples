@@ -9,7 +9,23 @@ branch: main
 
 # End-to-End Manufacturing Operations Sample
 
-An end-to-end industry sample covering manufacturing master data, demand and supply, inventory, production execution, quality, and equipment maintenance. Every relationship maps a CSV foreign key to a direct BKN RelationType.
+A fictional precision machining company: two plants, Shenzhen and Suzhou, machine pump housings, valve bodies, impellers and flanges for ten customers, covering orders, planning, material, purchasing, production execution, quality, finished goods, shipment and machine maintenance.
+
+Business rules (defaults; when a user states a different condition, follow the user):
+- The business date is 2027-02-28; "now" and "today" mean this date. Records from November 2026 to February 2027 have happened and March work orders are the plan; inventory_balances is the 2027-02-28 snapshot.
+- The requested date is sales_orders.requested_delivery_date (one date per order). Units owed = order line ordered_quantity − shipped quantity; once fully shipped, a line is late if its last shipment is after the requested date, days late = last shipment date − requested date; a line still short after its requested date is also late. A work order rejected at inspection can be remade by a replacement work order for the same order line.
+- Material requirement = work order quantity × quantity_per × (1 + scrap_factor), rounded up; issued ≥ requirement is complete. Material may be issued only from receipts whose inspection_status is accepted; issuing from a receipt in inspection or rejected is an improper issue.
+- A work order is blocked when its BOM revision is not frozen, or when its production plan line's planned_start_date has arrived and material is incomplete. One whose planned start has not arrived and has no material issued yet is not blocked.
+- Execution compliance (all four must hold for every execution): the machine's capability for the step's required_capability_id is qualified; the machine has no maintenance work order on the start date (started_date); the operator's qualification for that capability is qualified with valid_to on or after the start date; the operator is assigned, in the weekly shift covering the start date, to the operation's work_center_id.
+- Work order completed quantity = good quantity of the last operation; operation yield = good ÷ (good + scrap); work order yield = completed quantity ÷ work order quantity.
+- Quality release: the lot is accepted and every measured value lies within the referenced specification's (quality_specification_id) limits, inclusive. A result recorded as pass with a value out of limits counts as a failure and is a quality escape. A product's current specification is the one whose status is active.
+- Only accepted finished goods receipts can ship. Purchase orders are measured against expected_receipt_date: a later receipt is late; an order whose expected date is before the business date and whose accepted quantity is below the ordered quantity is overdue, and rejected receipts do not count.
+- Available stock = on hand − allocated; stock in the inspection hold cannot be issued. A maintenance work order planned before the business date and not completed is overdue; a machine under repair cannot be scheduled.
+- Plans are summed from production plan lines by the month of each work order's due date and compared with that month's forecast; coverage = planned ÷ forecast.
+
+How to answer:
+- Answer every question with Cypher; this sample has no functions. Executions reach their work order and work centre through process_steps → manufacturing_operations; inspection lots, finished goods receipts and shipments carry production_order_id, and shipments also carry sales_order_line_id.
+- Cypher supports joins, WITH, CASE, aggregation and ORDER BY, not variable-length paths or UNWIND. Dates are YYYY-MM-DD strings and compare directly; numbers may come back as strings. Status values are English codes (completed, blocked, accepted, rejected, pending_inspection, qualified, suspended).
 
 ## Network Overview
 

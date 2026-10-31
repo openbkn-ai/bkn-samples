@@ -3,11 +3,6 @@
   "coverage": "all-source-samples",
   "candidates": [
     {
-      "sampleId": "order-basics",
-      "directory": "order-basics",
-      "version": "0.1.4"
-    },
-    {
       "sampleId": "supply-chain",
       "directory": "supply_ontology_hand",
       "version": "0.1.11"
@@ -30,12 +25,12 @@
     {
       "sampleId": "manufacturing-industry-en-us",
       "directory": "manufacturing-industry-en-us",
-      "version": "0.1.4"
+      "version": "0.1.5"
     },
     {
       "sampleId": "manufacturing-industry-zh-cn",
       "directory": "manufacturing-industry-zh-cn",
-      "version": "0.1.4"
+      "version": "0.1.5"
     },
     {
       "sampleId": "financial-fibo-en-us",
@@ -66,6 +61,12 @@
       "sampleId": "energy-saref4ener-zh-cn",
       "directory": "energy-saref4ener-zh-cn",
       "version": "0.1.6"
+    }
+  ],
+  "excluded": [
+    {
+      "directory": "order-basics",
+      "reason": "Not offered on OpenBKN 0.2.1; earlier product catalogs keep their published releases."
     }
   ]
 }

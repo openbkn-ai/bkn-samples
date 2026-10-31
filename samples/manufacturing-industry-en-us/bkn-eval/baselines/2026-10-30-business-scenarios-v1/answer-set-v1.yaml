@@ -1,0 +1,407 @@
+schema_version: '1.0'
+set_id: manufacturing-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+generation_method: independent CSV oracle (oracle.py + mfg_calc.py)
+answers:
+- id: Q-01
+  question: How many plants, work centres and production machines do we have, and how many machines does each plant have?
+  expected:
+    sites: 2
+    work_centers: 5
+    machines: 11
+    machines_by_site:
+      SITE-SZ: 8
+      SITE-SU: 3
+- id: Q-02
+  question: Which BOM version does the PH200 high-pressure pump housing use now, and which materials go into each unit, in what quantity?
+  expected:
+    bom_version: BOMV-PH200-B
+    components:
+      RM-CI250: 1
+      PC-SEAL: 2
+      PC-BOLT: 1
+- id: Q-03
+  question: Which operations does the VB080 valve body go through, and in which work centre is each done, in order?
+  expected:
+    work_centers:
+    - WC-SZ-TURN
+    - WC-SZ-CNC
+    - WC-SU-TEST
+- id: Q-04
+  question: Which operators can run 5-axis milling now?
+  expected:
+    operators:
+    - OPR-01
+    - OPR-02
+    - OPR-04
+    - OPR-11
+- id: Q-05
+  question: Which machines cannot be scheduled for production now, and why?
+  expected:
+    machines:
+    - MACH-MILL-03
+    - MACH-MILL-04
+- id: Q-06
+  question: Among order lines whose requested date has arrived, how many are not fully shipped, and how many units do we still owe customers in total?
+  expected:
+    lines: 9
+    units: 691
+- id: Q-07
+  question: Among fully shipped order lines, which were delivered late, and by how many days?
+  expected:
+    lines:
+      SOL-2610-02-1: 4
+      SOL-2610-06-1: 12
+      SOL-2611-04-1: 9
+      SOL-2612-05-1: 6
+- id: Q-08
+  question: 'How was SO-2611-04 shipped: in how many shipments, how many units each and on which dates, and was it late?'
+  expected:
+    shipments:
+      SHP-014:
+        quantity: 110
+        date: '2026-12-10'
+      SHP-015:
+        quantity: 70
+        date: '2026-12-19'
+    late_days: 9
+- id: Q-09
+  question: Why was the pump housing order SO-2610-06 for Central China Smart Fluids delivered late, and how was it finally delivered?
+  expected:
+    rejected_work_order: WO-2611-08
+    characteristic: Critical bore diameter
+    measured: 50.09
+    replacement_work_order: WO-2612-R1
+    shipped: 150
+    late_days: 12
+- id: Q-10
+  question: For each order line past its requested date and not fully shipped, how many units are missing and what is holding it up?
+  expected:
+    lines:
+      SOL-2610-04-2: 4
+      SOL-2611-05-1: 5
+      SOL-2612-03-1: 2
+      SOL-2612-08-2: 110
+      SOL-2701-03-1: 190
+      SOL-2701-05-1: 100
+      SOL-2701-07-1: 140
+      SOL-2701-09-2: 80
+      SOL-2701-10-1: 60
+- id: Q-11
+  question: By customer, how many units past their requested date are still owed, and which customer is owed the most?
+  expected:
+    customers:
+      CUST-03: 190
+      CUST-04: 100
+      CUST-05: 2
+      CUST-06: 250
+      CUST-07: 80
+      CUST-08: 4
+      CUST-09: 5
+      CUST-10: 60
+    top_customer: CUST-06
+- id: Q-12
+  question: How many PH100 units are planned for March, and what is the March forecast for PH100?
+  expected:
+    planned: 430
+    forecast: 450
+- id: Q-13
+  question: In February 2027, which products have a production plan below their forecast, and what is each coverage ratio?
+  expected:
+    products:
+      FG-PH100: 0.9
+      FG-PH200: 0.9
+      FG-VB050: 0.97
+- id: Q-14
+  question: Over November to March, which product's plan falls furthest below its forecast, and by how many units?
+  expected:
+    product: FG-PH200
+    shortfall: 30
+- id: Q-15
+  question: Taking blocked work orders out of the March plan, which products have an executable plan below forecast, and by how many units?
+  expected:
+    products:
+      FG-PH100: 160
+      FG-PH200: 20
+      FG-VB080: 90
+      FG-FL150: 220
+- id: Q-16
+  question: How much 316L stainless bar does WO-2702-03 need, how much has been issued, and how much is still missing?
+  expected:
+    required: 320
+    issued: 200
+    missing: 120
+- id: Q-17
+  question: Which work orders are blocked now, and why?
+  expected:
+    work_orders:
+    - WO-2702-03
+    - WO-2703-02
+    - WO-2703-04
+    - WO-2703-06
+- id: Q-18
+  question: How much of each material does WO-2703-01 need?
+  expected:
+    materials:
+      PC-SEAL: 170
+      RM-CI250: 174
+- id: Q-19
+  question: Why can WO-2703-02 not start, and if it switched to the frozen BOM revision A, would current aluminium billet stock be enough?
+  expected:
+    bom_version: BOMV-FL150-B
+    required_with_a: 225
+    available: 67
+    enough: false
+    missing: 158
+- id: Q-20
+  question: How many grey iron housing castings do the released March work orders that have not started still need, is available stock enough, and how far short is it?
+  expected:
+    work_orders:
+    - WO-2703-05
+    - WO-2703-09
+    - WO-2703-11
+    required: 185
+    available: 118
+    missing: 67
+- id: Q-21
+  question: Which purchase orders are overdue now?
+  expected:
+    purchase_orders:
+    - PO-2612-SS316-B
+    - PO-2701-SS316-B
+    - PO-2702-CI250-B
+    - PO-2702-SS316-B
+- id: Q-22
+  question: Which incoming receipts were rejected, and which work order did that affect?
+  expected:
+    receipts:
+    - GR-2702-CI250-B-1
+    work_orders:
+    - WO-2703-06
+- id: Q-23
+  question: Was any material issued from a receipt that had not passed incoming inspection? To which work order and how much, and was that order later completed and shipped?
+  expected:
+    issue: MIT-046
+    receipt: GR-2612-SS316-B-1
+    work_order: WO-2612-09
+    quantity: 177
+    shipped: 60
+- id: Q-24
+  question: Which suppliers delivered late, and by how many days?
+  expected:
+    suppliers:
+    - SUP-02
+    - SUP-06
+- id: Q-25
+  question: Which purchase orders from Baolian Special Steel are not fully delivered, how many kg is each short, and which work orders were they bought for?
+  expected:
+    purchase_orders:
+      PO-2612-SS316-B: 177
+      PO-2701-SS316-B: 120
+      PO-2702-SS316-B: 265
+- id: Q-26
+  question: How many work orders are in each status now?
+  expected:
+    statuses:
+      completed: 43
+      blocked: 4
+      in_production: 2
+      released: 6
+- id: Q-27
+  question: How far has WO-2702-05 progressed?
+  expected:
+    completed_operations: 1
+    current_step: STEP-2702-05-20
+    good_so_far: 100
+- id: Q-28
+  question: Which work orders had scrap, at which step, and how many units?
+  expected:
+    work_orders:
+      WO-2611-06:
+        step: STEP-2611-06-10
+        scrap: 4
+      WO-2612-06:
+        step: STEP-2612-06-10
+        scrap: 5
+      WO-2701-03:
+        step: STEP-2701-03-10
+        scrap: 2
+      WO-2702-11:
+        step: STEP-2702-11-30
+        scrap: 3
+- id: Q-29
+  question: What is the yield of WO-2611-06, and how did the missing units affect the customer delivery?
+  expected:
+    completed: 86
+    yield_ratio: 0.9556
+    sales_order_line: SOL-2610-04-2
+    backlog: 4
+- id: Q-30
+  question: How many good units did the work orders finished in January 2027 produce in total?
+  expected:
+    good_units: 1828
+- id: Q-31
+  question: When does Sun Hao's 5-axis milling qualification expire?
+  expected:
+    valid_to: '2026-12-31'
+- id: Q-32
+  question: Which executions were done by an operator who was not qualified or whose qualification had expired?
+  expected:
+    executions:
+    - EXE-2701-02-10
+    - EXE-2701-05-10
+    - EXE-2702-06-20
+- id: Q-33
+  question: What work has MACH-MILL-04 done, and were those executions compliant?
+  expected:
+    executions:
+    - EXE-2612-04-10
+    - EXE-2701-07-10
+    compliant: false
+- id: Q-34
+  question: Among completed executions, which are non-compliant, and why?
+  expected:
+    executions:
+      EXE-2612-04-10: WO-2612-04
+      EXE-2701-02-10: WO-2701-02
+      EXE-2701-04-10: WO-2701-04
+      EXE-2701-05-10: WO-2701-05
+      EXE-2701-07-10: WO-2701-07
+      EXE-2701-09-10: WO-2701-09
+      EXE-2702-06-20: WO-2702-06
+      EXE-2702-08-20: WO-2702-08
+- id: Q-35
+  question: Among work orders with a non-compliant execution, which have already been shipped, and to which customers?
+  expected:
+    work_orders:
+    - WO-2612-04
+    - WO-2701-02
+    - WO-2701-04
+    - WO-2701-05
+    - WO-2701-07
+    - WO-2701-09
+    - WO-2702-06
+    - WO-2702-08
+    customers:
+    - CUST-01
+    - CUST-02
+    - CUST-05
+    - CUST-06
+    - CUST-07
+    - CUST-09
+- id: Q-36
+  question: Who did the finish milling on WO-2701-09, and which work centre was that operator assigned to that week?
+  expected:
+    operator: OPR-11
+    assigned_work_center: WC-SZ-TURN
+    operation_work_center: WC-SZ-CNC
+- id: Q-37
+  question: Which final inspection lots were rejected?
+  expected:
+    lots:
+    - QIL-2611-08
+    - QIL-2701-10
+    - QIL-2702-10
+- id: Q-38
+  question: What are the current limits for the PH100 critical bore, and how do they differ from the previous revision?
+  expected:
+    current:
+      lower: 49.95
+      upper: 50.05
+      effective: '2027-01-01'
+    previous:
+      lower: 49.94
+      upper: 50.06
+- id: Q-39
+  question: Is there a lot whose result was recorded as pass although the measured value is outside the specification, and was it shipped?
+  expected:
+    work_order: WO-2612-10
+    lot: QIL-2612-10
+    measured: 0.04
+    upper_limit: 0.03
+    shipped: 130
+- id: Q-40
+  question: Why did WO-2701-10 fail inspection, and by how much?
+  expected:
+    characteristic: Residual unbalance
+    measured: 31.5
+    upper_limit: 25
+    exceeded_by: 6.5
+- id: Q-41
+  question: Which inspection lots have no decision yet?
+  expected:
+    lots:
+    - QIL-2702-07
+- id: Q-42
+  question: How many units do the rejected lots and the lot released despite an out-of-spec result involve, and which customers are affected, by how many units each?
+  expected:
+    units: 470
+    customers:
+      CUST-06: 390
+      CUST-07: 80
+- id: Q-43
+  question: Which maintenance work orders are overdue?
+  expected:
+    maintenance_orders:
+    - MWO-027
+    - MWO-033
+    - MWO-034
+- id: Q-44
+  question: Was CNC Lathe 1 used for production on the day of its January service?
+  expected:
+    maintenance_order: MWO-018
+    date: '2027-01-04'
+    executions:
+    - EXE-2701-04-10
+- id: Q-45
+  question: How long has Pressure Rig 1's service been overdue, and which pressure tests has it run since?
+  expected:
+    maintenance_order: MWO-027
+    planned: '2027-01-10'
+    days_overdue: 49
+    executions:
+    - EXE-2701-11-30
+    - EXE-2702-04-30
+    - EXE-2702-11-30
+- id: Q-46
+  question: How many machines are under repair now, and which?
+  expected:
+    machines:
+    - MACH-MILL-03
+- id: Q-47
+  question: 'Trace SO-2612-05 from order to shipment: which work order made it, what material was issued, who did the work on which machine, how inspection and receipt went, and when it shipped.'
+  expected:
+    work_order: WO-2701-06
+    issue: MIT-062
+    machines:
+    - MACH-LSR-01
+    - MACH-MILL-03
+    operators:
+    - OPR-04
+    - OPR-09
+    lot: QIL-2701-06
+    receipt: FGR-2701-06
+    shipment: SHP-028
+    shipped: 260
+    late_days: 6
+- id: Q-48
+  question: How many FKM seal kits are on hand, allocated and available now?
+  expected:
+    on_hand: 348
+    allocated: 220
+    available: 128
+- id: Q-49
+  question: Which finished goods are in stock now, and how many units of each?
+  expected:
+    products:
+      FG-VB080: 57
+      FG-PH100: 170
+- id: Q-50
+  question: Is WO-2703-01 finished and released by quality, where are the finished goods stored, and when does the customer want them?
+  expected:
+    completed: 170
+    quality_ok: true
+    location: LOC-SZ-FG
+    requested: '2027-03-05'
+    shipped: 0
