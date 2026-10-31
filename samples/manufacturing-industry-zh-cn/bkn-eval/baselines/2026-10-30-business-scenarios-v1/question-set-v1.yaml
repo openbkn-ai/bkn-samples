@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: manufacturing-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: 基础
+  role: 生产主管
+  question: 我们有几个工厂、几个工作中心、多少台生产设备？每个工厂各有多少台设备？
+  output_contract: 工厂数、工作中心数、设备数、各工厂设备数
+- id: Q-02
+  scenario: S01
+  difficulty: 基础
+  role: 采购与物料经理
+  question: PH200 高压泵壳现在用哪个 BOM 版本？每件要用哪些物料、各多少？
+  output_contract: BOM 版本、物料及单耗
+- id: Q-03
+  scenario: S01
+  difficulty: 基础
+  role: 生产主管
+  question: VB080 阀体要经过哪几道工序？按顺序各在哪个工作中心做？
+  output_contract: 工序及工作中心（按顺序）
+- id: Q-04
+  scenario: S01
+  difficulty: 中等
+  role: 生产主管
+  question: 现在有哪些操作员可以上五轴铣削？
+  output_contract: 操作员清单
+- id: Q-05
+  scenario: S01
+  difficulty: 中等
+  role: 生产主管
+  question: 现在哪些设备不能安排生产？各是什么原因？
+  output_contract: 设备及原因
+- id: Q-06
+  scenario: S02
+  difficulty: 基础
+  role: 订单交付经理
+  question: 交期已经到了的订单行里，有多少行还没发完？一共还欠客户多少件？
+  output_contract: 订单行数、欠交件数
+- id: Q-07
+  scenario: S02
+  difficulty: 中等
+  role: 订单交付经理
+  question: 已经发完的订单行里，哪些是延误交付的？各晚了几天？
+  output_contract: 订单行及延误天数
+- id: Q-08
+  scenario: S02
+  difficulty: 中等
+  role: 订单交付经理
+  question: SO-2611-04 是怎么发货的？分了几批、每批多少件、哪天发的？算不算延误？
+  output_contract: 各批发运数量与日期、延误天数
+- id: Q-09
+  scenario: S02
+  difficulty: 复杂
+  role: 订单交付经理
+  question: 华中智能流体 SO-2610-06 那批泵壳为什么晚交了？最后是怎么交上的？
+  output_contract: 原工单、超限项与测量值、补做工单、发运数量、延误天数
+- id: Q-10
+  scenario: S02
+  difficulty: 复杂
+  role: 订单交付经理
+  question: 交期已过还没发完的订单行各差多少件？各卡在哪里？
+  output_contract: 订单行、欠交件数及原因
+- id: Q-11
+  scenario: S02
+  difficulty: 复杂
+  role: 订单交付经理
+  question: 按客户看，交期已过还欠多少件？欠得最多的是哪家客户？
+  output_contract: 各客户欠交件数、欠得最多的客户
+- id: Q-12
+  scenario: S03
+  difficulty: 基础
+  role: 订单交付经理
+  question: 三月份计划生产多少件 PH100？三月 PH100 的需求预测是多少？
+  output_contract: 计划数量、预测数量
+- id: Q-13
+  scenario: S03
+  difficulty: 中等
+  role: 订单交付经理
+  question: 2027 年 2 月哪些产品的生产计划没有覆盖需求预测？覆盖率各是多少？
+  output_contract: 产品及覆盖率
+- id: Q-14
+  scenario: S03
+  difficulty: 中等
+  role: 订单交付经理
+  question: 十一月到三月合计，哪个产品的计划比预测少得最多？少多少件？
+  output_contract: 产品、差额
+- id: Q-15
+  scenario: S03
+  difficulty: 复杂
+  role: 订单交付经理
+  question: 三月的计划里去掉已经阻塞的工单，哪些产品的可执行计划低于预测？各差多少件？
+  output_contract: 产品及差额
+- id: Q-16
+  scenario: S04
+  difficulty: 基础
+  role: 采购与物料经理
+  question: WO-2702-03 需要多少 316L 不锈钢棒料？已经发了多少？还差多少？
+  output_contract: 需求、已发、缺口（千克）
+- id: Q-17
+  scenario: S04
+  difficulty: 复杂
+  role: 采购与物料经理
+  question: 现在哪些工单被阻塞了？各是因为什么？
+  output_contract: 工单及阻塞原因
+- id: Q-18
+  scenario: S04
+  difficulty: 中等
+  role: 采购与物料经理
+  question: WO-2703-01 每种物料各需要多少？
+  output_contract: 物料及需求量
+- id: Q-19
+  scenario: S04
+  difficulty: 复杂
+  role: 采购与物料经理
+  question: WO-2703-02 为什么开不了工？如果改用已冻结的 A 版 BOM，现有铝合金方坯够吗？
+  output_contract: BOM 版本原因、A 版需求、可用库存、是否够、缺口
+- id: Q-20
+  scenario: S04
+  difficulty: 复杂
+  role: 采购与物料经理
+  question: 三月已下达、还没开工的工单一共还需要多少灰铸铁泵壳毛坯？现在可用库存够吗？差多少？
+  output_contract: 涉及工单、需求、可用、缺口
+- id: Q-21
+  scenario: S05
+  difficulty: 中等
+  role: 采购与物料经理
+  question: 现在有哪些采购订单逾期未到？
+  output_contract: 采购订单清单
+- id: Q-22
+  scenario: S05
+  difficulty: 中等
+  role: 采购与物料经理
+  question: 哪些来料被拒收了？影响了哪个工单？
+  output_contract: 拒收来料、受影响工单
+- id: Q-23
+  scenario: S05
+  difficulty: 复杂
+  role: 采购与物料经理
+  question: 有没有从还没检验放行的来料里发料？发给了哪个工单、多少？那个工单后来做完发货了吗？
+  output_contract: 发料记录、来料、工单、数量、发运数量
+- id: Q-24
+  scenario: S05
+  difficulty: 中等
+  role: 采购与物料经理
+  question: 哪些供应商有延迟到货？各晚了几天？
+  output_contract: 供应商及延迟天数
+- id: Q-25
+  scenario: S05
+  difficulty: 复杂
+  role: 采购与物料经理
+  question: 宝联特钢现在有哪些采购没有交齐？各还差多少千克？分别是给哪些工单买的？
+  output_contract: 采购订单、缺少数量、对应工单
+- id: Q-26
+  scenario: S06
+  difficulty: 基础
+  role: 生产主管
+  question: 现在各种状态的工单各有多少张？
+  output_contract: 各状态工单数
+- id: Q-27
+  scenario: S06
+  difficulty: 中等
+  role: 生产主管
+  question: WO-2702-05 做到哪一步了？
+  output_contract: 已完成工序数、当前步骤、已产出合格数
+- id: Q-28
+  scenario: S06
+  difficulty: 中等
+  role: 生产主管
+  question: 哪些工单有报废？报废在哪一步、多少件？
+  output_contract: 工单、步骤、报废数
+- id: Q-29
+  scenario: S06
+  difficulty: 复杂
+  role: 生产主管
+  question: WO-2611-06 的良率是多少？少做的件数对客户交付有什么影响？
+  output_contract: 完成数量、良率、订单行、欠交件数
+- id: Q-30
+  scenario: S06
+  difficulty: 中等
+  role: 生产主管
+  question: 2027 年 1 月做完的工单一共产出多少件合格品？
+  output_contract: 合格品件数
+- id: Q-31
+  scenario: S07
+  difficulty: 基础
+  role: 生产主管
+  question: 孙浩的五轴铣削资质什么时候到期？
+  output_contract: 到期日
+- id: Q-32
+  scenario: S07
+  difficulty: 复杂
+  role: 生产主管
+  question: 有哪些执行是由资质不合格或资质已过期的操作员做的？
+  output_contract: 执行记录、操作员、原因
+- id: Q-33
+  scenario: S07
+  difficulty: 中等
+  role: 生产主管
+  question: MACH-MILL-04 做过哪些活？这些执行合规吗？
+  output_contract: 执行记录、是否合规及原因
+- id: Q-34
+  scenario: S07
+  difficulty: 复杂
+  role: 生产主管
+  question: 已经完成的执行里，哪些不合规？各是什么原因？
+  output_contract: 执行记录、工单、原因
+- id: Q-35
+  scenario: S07
+  difficulty: 复杂
+  role: 生产主管
+  question: 有不合规执行的工单里，哪些已经发货给客户了？发给了哪些客户？
+  output_contract: 工单、客户
+- id: Q-36
+  scenario: S07
+  difficulty: 中等
+  role: 生产主管
+  question: WO-2701-09 的精铣是谁做的？他那一周被安排在哪个工作中心？
+  output_contract: 操作员、排班工作中心、工序工作中心
+- id: Q-37
+  scenario: S08
+  difficulty: 基础
+  role: 质量经理
+  question: 有哪些最终检验批被拒收了？
+  output_contract: 检验批清单
+- id: Q-38
+  scenario: S08
+  difficulty: 中等
+  role: 质量经理
+  question: PH100 关键孔径现在的规格上下限是多少？和上一版有什么不同？
+  output_contract: 现行上下限与生效日期、上一版上下限
+- id: Q-39
+  scenario: S08
+  difficulty: 复杂
+  role: 质量经理
+  question: 有没有检验记成通过、测量值却超出规格的批次？这批货发出去了吗？
+  output_contract: 工单、检验批、测量值、上限、发运数量
+- id: Q-40
+  scenario: S08
+  difficulty: 中等
+  role: 质量经理
+  question: WO-2701-10 的检验为什么没过？超了多少？
+  output_contract: 超限项、测量值、上限、超出量
+- id: Q-41
+  scenario: S08
+  difficulty: 中等
+  role: 质量经理
+  question: 现在还有哪些检验批没出结论？
+  output_contract: 检验批清单
+- id: Q-42
+  scenario: S08
+  difficulty: 复杂
+  role: 质量经理
+  question: 被拒收和漏检的批次一共涉及多少件？分别影响了哪些客户、各多少件？
+  output_contract: 总件数、各客户件数
+- id: Q-43
+  scenario: S09
+  difficulty: 基础
+  role: 生产主管
+  question: 哪些设备维护工单逾期了？
+  output_contract: 维护工单清单
+- id: Q-44
+  scenario: S09
+  difficulty: 中等
+  role: 生产主管
+  question: 数控车床 1 号一月份保养那天有没有排生产？
+  output_contract: 维护工单、日期、同日执行
+- id: Q-45
+  scenario: S09
+  difficulty: 复杂
+  role: 生产主管
+  question: 压力测试台 1 号的保养逾期多久了？逾期以后它又做了哪些压力测试？
+  output_contract: 维护工单、计划日期、逾期天数、之后的执行
+- id: Q-46
+  scenario: S09
+  difficulty: 基础
+  role: 生产主管
+  question: 现在有几台设备在维修？是哪几台？
+  output_contract: 设备清单
+- id: Q-47
+  scenario: S10
+  difficulty: 复杂
+  role: 订单交付经理
+  question: 把 SO-2612-05 从下单到发运的过程讲一下：哪个工单做的、发了什么料、谁在哪台设备上做的、检验和入库怎样、哪天发的货？
+  output_contract: 工单、发料、设备、操作员、检验批、入库、发运、延误天数
+- id: Q-48
+  scenario: S10
+  difficulty: 基础
+  role: 采购与物料经理
+  question: 密封圈套件现在在手多少、已分配多少、可用多少？
+  output_contract: 在手、已分配、可用
+- id: Q-49
+  scenario: S10
+  difficulty: 中等
+  role: 采购与物料经理
+  question: 成品库里现在有哪些成品？各多少件？
+  output_contract: 成品及数量
+- id: Q-50
+  scenario: S10
+  difficulty: 复杂
+  role: 订单交付经理
+  question: WO-2703-01 做完了吗？质量放行了吗？成品放在哪个库？客户要求哪天交货？
+  output_contract: 完成数量、是否放行、库位、要求交期、已发数量

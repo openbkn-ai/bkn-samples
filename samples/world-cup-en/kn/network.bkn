@@ -7,10 +7,18 @@ tags: [worldcup, fjelstul, CSV]
 
 # World Cup
 
-Explore the locked Fjelstul World Cup Database: 27 object types, 410 properties, 29 relationships and four concept groups.
+Joshua C. Fjelstul's open World Cup database: men's World Cups to 2022 (22 editions) and women's to 2019 (8 editions), covering tournaments, teams, players, managers, referees, stadiums, matches, goals, bookings, substitutions, shootouts and awards. Names of people, teams and awards keep the source's original spelling and accents; full name = given_name + space + family_name.
 
-The snapshot covers 22 men's tournaments through 2022 and eight women's tournaments through 2019. Individual detail tables can have narrower coverage. Use explicit tournament IDs and refer to the snapshot rather than current events.
+Business rules (defaults; when a user states a different condition, follow the user):
+- Tournament IDs look like WC-2022; a tournament_name containing Women's is a women's tournament. Detail records cover different editions, and a missing record does not mean it did not happen (WC-1999 has no player appearances).
+- Matches count once each; team_appearances has two rows per match (one per side). Appearances count distinct match_id values.
+- Player goals exclude own_goal=1; team goals are credited by goals.team_id, including opponents' own goals. In-match penalties (penalty=1) are goals; shootout kicks are in penalty_kicks and are neither goals nor part of the score.
+- The score excludes the shootout, whose score is separate; wins, losses and draws follow the win, lose and draw flags on team_appearances, and shootout-decided matches are normally draws. Margin = absolute score difference.
+- Yellow cards, red cards, second yellows (second_yellow_card) and sendings-off (sending_off) are counted separately; one booking can carry several flags, never add them up.
+- Scoring and win tables use competition ranking (equal values share a rank, the next rank is skipped); "top N" returns everyone ranked N or better including ties; a request for a quantity such as "ten stadiums" returns exactly that many, ties broken by ID; statistics by confederation or another category list every category (all 6 confederations), with zero where nothing is recorded.
+- Match stages follow stage_name (group stage, final and so on); 1950 had no final and was decided by a final round. Each co-host is listed separately. Shootout kicks are scored or missed, never saves. Averages use three decimals.
 
-Use stable IDs for joins. Count matches from matches or distinct match_id, not the two rows per match in team_appearances. Exclude own_goal=1 from player scoring totals; penalty_kicks records shootout kicks separately. Names and historical team identities retain their source spelling.
+How to answer:
+- Answer every question with Cypher; this sample has no functions. Object type IDs are the labels (worldcup_en_matches and so on) and relation types are wc_en_rel_<source>_<key>. matches, team_appearances and goals already carry tournament, stage, team and match names.
+- Cypher supports joins, WITH, CASE, aggregation and ORDER BY, not variable-length paths or UNWIND. Numbers may come back as strings; convert before comparing.
 
-The 29 relationships form a minimal backbone. Additional joins can be computed by an external agent using validated source fields, including substitutions and player_team_id. Do not invent a missing relationship.

@@ -6,17 +6,18 @@
     "name": "manufacturing-industry-en-us",
     "aliases": [],
     "displayName": "Manufacturing Operations (EN)",
-    "summary": "Trace fictional manufacturing demand through plan, production, quality, and shipment.",
-    "version": "0.1.4"
+    "summary": "Order fulfilment, purchasing, execution compliance and quality release at a fictional precision machining company.",
+    "version": "0.1.5"
   },
   "spec": {
     "studio": {
       "licenseNote": "MIT · Fictional sample data; not for real operational decisions.",
       "questions": [
-        "Which work orders can be fulfilled?",
-        "Which shipments are blocked by material or quality?",
-        "What evidence supports the shipment decision?"
-      ]
+        "Which work orders are blocked now, and why?",
+        "Among completed executions, which are non-compliant, and why?",
+        "Is there a lot whose result was recorded as pass although the measured value is outside the specification, and was it shipped?"
+      ],
+      "experienceSet": "experience/experience-set.yaml"
     },
     "database": {
       "engine": "mariadb",
@@ -32,14 +33,14 @@
       "displayName": "Manufacturing Operations (EN)"
     },
     "capabilities": {
-      "required": false
+      "required": true
     },
     "components": {
       "objects": true,
       "relations": true,
       "metrics": false,
       "functions": false,
-      "skills": false
+      "skills": true
     },
     "hooks": {
       "dbInit": "db/init.sh",

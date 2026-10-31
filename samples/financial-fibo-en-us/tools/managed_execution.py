@@ -1,10 +1,4 @@
 """Bounded and complete BKN source loading through the official SDK only."""
-import json
-from datetime import date
-
-BATCH_PORTFOLIOS = 20
-BATCH_OBSERVATIONS = 12
-BATCH_OUTPUT_BYTES = 3 * 1024 * 1024
 
 def fetch_rows(query, kn_id, table, primary_key, field, values):
     if not values: return []
@@ -60,53 +54,9 @@ def load_sources(query, kn_id, contract, scope, operation=None):
     read('counterparty_exposures','portfolio_id',ids)
     return tables
 
-def run_request(query, kn_id, contract, operation, scope, execute, additional_observations=None):
-    """Keep scalar calls compatible; reuse one source pool for bounded dates.
-
-    Additional observations use JSON object strings containing exactly
-    as_of_date, knowledge_date and view_kind; dicts remain SDK-compatible.
-    The source loader is date/view independent for a fixed portfolio set.
-    Each kernel invocation copies/indexes source facts and keeps its own scope,
-    evidence and issues. Nothing is cached across requests or source changes.
-    """
-    if additional_observations is not None and not isinstance(additional_observations,list):
-        raise ValueError('ADDITIONAL_OBSERVATIONS_MUST_BE_ARRAY')
-    if not additional_observations:
-        tables=load_sources(query,kn_id,contract,scope,operation)
-        result=execute(operation,tables,contract,scope)
-        result['data_source']={'knowledge_network_id':kn_id,'loaded_counts':{t:len(v) for t,v in tables.items() if v}}
-        return result
-    ids=scope.get('portfolio_ids')
-    if not isinstance(ids,list) or not 1<=len(ids)<=BATCH_PORTFOLIOS or any(not isinstance(v,str) or not v for v in ids) or len(set(ids))!=len(ids):
-        raise ValueError('BATCH_REQUIRES_1_TO_20_UNIQUE_PORTFOLIOS')
-    if len(additional_observations)>=BATCH_OBSERVATIONS:
-        raise ValueError('AT_MOST_11_ADDITIONAL_OBSERVATIONS')
-    keys=('as_of_date','knowledge_date','view_kind')
-    observations=[{k:scope[k] for k in keys}]+additional_observations
-    scopes=[];seen=set()
-    for item in observations:
-        if isinstance(item,str):
-            # Keep object pairs until duplicate wire keys have been rejected.
-            item=json.loads(item,object_pairs_hook=tuple)
-            if not isinstance(item,tuple):raise ValueError('EXACT_OBSERVATION_FIELDS_REQUIRED')
-            if len({k for k,v in item})!=len(item):raise ValueError('DUPLICATE_OBSERVATION_FIELDS')
-            item=dict(item)
-        if not isinstance(item,dict) or set(item)!=set(keys):raise ValueError('EXACT_OBSERVATION_FIELDS_REQUIRED')
-        for key in ('as_of_date','knowledge_date'):
-            value=item[key]
-            if not isinstance(value,str) or len(value)!=10 or date.fromisoformat(value).isoformat()!=value:raise ValueError('OBSERVATION_DATE_ONLY_REQUIRED')
-        if item['view_kind'] not in ('actual','planned'):raise ValueError('OBSERVATION_VIEW_MUST_BE_ACTUAL_OR_PLANNED')
-        identity=(item['as_of_date'],item['knowledge_date'],item['view_kind'])
-        if identity in seen:raise ValueError('DUPLICATE_OBSERVATION')
-        seen.add(identity);scopes.append(dict(item,portfolio_ids=list(ids)))
-    tables=load_sources(query,kn_id,contract,scopes[0],operation)
-    origin={'knowledge_network_id':kn_id,'loaded_counts':{t:len(v) for t,v in tables.items() if v}}
-    response={'schema_version':1,'capability':operation,'mode':'observations','source_loads':1,'observations':[]}
-    size=len(json.dumps(response,ensure_ascii=False,separators=(',',':')).encode())
-    for current in scopes:
-        result=execute(operation,tables,contract,current)
-        result['data_source']={'knowledge_network_id':origin['knowledge_network_id'],'loaded_counts':dict(origin['loaded_counts'])}
-        size+=len(json.dumps(result,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode())+int(bool(response['observations']))
-        if size>BATCH_OUTPUT_BYTES:raise ValueError('BATCH_OUTPUT_EXCEEDED_REDUCE_PORTFOLIOS_OR_OBSERVATIONS')
-        response['observations'].append(result)
-    return response
+def run_request(query, kn_id, contract, operation, scope, execute):
+    """Load the facts for the requested portfolios and recompute one dated scope."""
+    tables=load_sources(query,kn_id,contract,scope,operation)
+    result=execute(operation,tables,contract,scope)
+    result['data_source']={'knowledge_network_id':kn_id,'loaded_counts':{t:len(v) for t,v in tables.items() if v}}
+    return result

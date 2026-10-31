@@ -41,8 +41,25 @@ def model_ready(run_cli) -> bool:
     return True
 
 
-def build_checks(*, data_ok: bool, model_ok: bool) -> list[dict]:
-    return [{"name": name, "ok": data_ok} for name in DATA_CHECKS] + [{"name": "model-imported", "ok": model_ok}]
+def skills_ready(run_cli) -> bool:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from ownership_receipt import read
+    from register_skills import local_skills
+
+    listing = run_cli(["skill", "list", "--all"])
+    listed = listing if isinstance(listing, list) else (listing.get("data") or listing.get("entries") or [])
+    owned = set(read()["skills"]) if os.environ.get("BKN_SAMPLE_RECEIPT") else None
+    for name, _ in local_skills():
+        matches = [item for item in listed if item.get("name") == name]
+        if len(matches) != 1 or matches[0].get("status") != "published":
+            return False
+        if owned is not None and (matches[0].get("skill_id") or matches[0].get("id")) not in owned:
+            return False
+    return True
+
+
+def build_checks(*, data_ok: bool, model_ok: bool, skills_ok: bool) -> list[dict]:
+    return [{"name": name, "ok": data_ok} for name in DATA_CHECKS] + [{"name": "model-imported", "ok": model_ok}, {"name": "skills-published", "ok": skills_ok}]
 
 
 def _openbkn(args: list[str]) -> dict:
@@ -64,13 +81,15 @@ def main() -> int:
     if os.environ.get("BKN_SAMPLE_PRINT_ONLY") == "1":
         data_ok = True
         model_ok = True
+        skills_ok = True
     else:
         sys.path.insert(0, str(SAMPLE_DIR))
         from db.verify_worldcup import main as verify_database
 
         data_ok = verify_database() == 0
         model_ok = model_ready(_openbkn)
-    checks = build_checks(data_ok=data_ok, model_ok=model_ok)
+        skills_ok = skills_ready(_openbkn)
+    checks = build_checks(data_ok=data_ok, model_ok=model_ok, skills_ok=skills_ok)
     passed = all(item["ok"] for item in checks)
     degrade = []
     if os.environ.get("BKN_SAMPLE_EMBEDDING", "1") == "0" or not os.environ.get("EMBEDDING_MODEL_NAME", "").strip():

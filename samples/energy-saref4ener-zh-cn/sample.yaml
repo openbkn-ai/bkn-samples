@@ -6,17 +6,18 @@
     "aliases": [],
     "displayName": "需求响应与柔性用能",
     "summary": "合成需求响应评估、共享资源计划与计量结算。",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "language": "zh-CN"
   },
   "spec": {
     "studio": {
       "licenseNote": "MIT synthetic sample; SAREF4ENER semantic attribution is documented separately.",
       "questions": [
-        "哪些设备可以参与响应？",
-        "共享场所容量如何分配？",
-        "计量交付是否达到补偿门槛？"
-      ]
+        "EVT-061 按现在的方案能凑够目标吗？还差多少千瓦？",
+        "EVT-001 实际核实的削减电量是多少千瓦时？交付比例多少？达标了吗？",
+        "已经发生的事件里，哪些的结算结果现在还确定不了？各卡在哪里？"
+      ],
+      "experienceSet": "experience/experience-set.yaml"
     },
     "database": {
       "engine": "mariadb",
@@ -37,7 +38,7 @@
     "components": {
       "objects": true,
       "relations": true,
-      "metrics": true,
+      "metrics": false,
       "functions": true,
       "skills": true
     },

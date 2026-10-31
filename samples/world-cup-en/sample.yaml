@@ -10,8 +10,12 @@ spec:
   studio:
     licenseNote: CC-BY-SA 4.0 · Joshua C. Fjelstul
     questions:
-    - Which awards did Lionel Messi receive in the 2014 and 2022 tournaments?
-    - Who won the 2014, 2018 and 2022 men’s tournaments?
+    - When was the 2022 World Cup final, who played, what was the score, and what
+      was the shootout score?
+    - Which awards did Lionel Messi win at the 2014 and 2022 World Cups?
+    - Did the 1950 World Cup have a final? How was the winner decided, and how many
+      matches were played in the deciding stage?
+    experienceSet: experience/experience-set.yaml
   database:
     engine: mariadb
     name: worldcup_en
@@ -22,13 +26,13 @@ spec:
     id: worldcup_en
     displayName: World Cup
   capabilities:
-    required: false
+    required: true
   components:
     objects: true
     relations: true
     metrics: false
     functions: false
-    skills: false
+    skills: true
   hooks:
     dbInit: db/init.sh
     dbVerify: db/verify.sh

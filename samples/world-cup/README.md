@@ -1,77 +1,37 @@
-# World Cup
+# World Cup (Chinese network)
 
-Explore a Chinese-language ontology over public World Cup history through object queries, joins, rankings and cross-tournament analysis. Install through standard one-click onboarding, then let an external agent read facts through MCP and perform the analysis.
+This package installs the Chinese knowledge network; [中文说明](README_cn.md). Query tournaments, teams, players, matches and events such as goals, cards, substitutions and shootouts from Joshua C. Fjelstul's open World Cup history data. Includes 27 data tables, the ontology and 1 business Skill. Business needs and rules are in the [PRD](docs/PRD.md).
 
-[中文文档](README_cn.md)
+## Install and try
 
-## Data and model
+1. Sign in to OpenBKN and open **Quick start** on the home page.
+2. Refresh the official catalog, choose **世界杯** and click **Install**; it needs **OpenBKN >=0.2.1 <0.3.0**.
+3. Wait for installation and verification to finish, then open the World Cup knowledge network.
+4. Try the experience cards in smart Q&A, data query and graph exploration, or connect an external agent over MCP to query objects and use the Skill.
 
-The locked snapshot contains **27 CSV tables and 81,200 rows**: 22 men's editions through 2022 and eight women's editions through 2019. Detail coverage varies by table. Names and historical identities retain their source spelling.
+Without access to the official catalog, download this sample's `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases) and install it with **Import offline package** in Quick start.
 
-- Sample ID: `world-cup`
-- Knowledge network: `worldcup_vega_catalog_bkn`
-- Database: `worldcup`
-- Model: 27 object types, 29 relationships and four concept groups
-- [Model overview](bkn-network-structure.html)
+The locked snapshot contains **27 CSV tables and 81,200 rows**: 22 men's World Cups through 2022 and 8 women's through 2019. Detail records cover different editions; names of people, teams and awards keep the source spelling.
 
-## One-click onboarding
+## Capabilities
 
-1. Open **Studio → One-click onboarding** and refresh the sample catalog.
-2. Select World Cup, check its version and release notes, and select **Install**.
-3. Wait for installation and verification to complete, then open the knowledge network.
-4. Connect an external agent through MCP to inspect object definitions, retrieve complete instance pages and perform joins and calculations.
-5. Use **Uninstall** to remove the sample. Reinstall after cleanup completes; installation history is retained.
+Every question can be answered with Cypher, so the sample ships no functions and no metrics, and the Community edition can use all of it.
 
-If the catalog is unreachable, download this sample’s `package.tar.gz` from [Releases](https://github.com/openbkn-ai/bkn-samples/releases) and use **Import offline package**, then install it. Its referenced data image must also be reachable or preloaded in the target cluster. See the [development and publication guide](../../docs/SAMPLE_DEVELOPMENT_GUIDE.md). The [official catalog](../../catalog.json) determines installable versions; new source-controlled evaluation material does not replace an existing release package.
+- **Cypher queries**: tournaments and hosts, teams and confederations, squads and players, managers and referees, stadiums, matches and scores, goals, cards, substitutions, shootouts, group tables and final standings, awards.
+- **Skill**: "World Cup history analysis" for sports editors, team analysts and tournament data stewards, stating the business rules, Cypher patterns and how to answer.
 
-## Questions to try
+## Experience cards
 
-- Which awards did Lionel Messi receive in WC-2014 and WC-2022?
-- Which players were in Argentina's WC-2022 squad, and how many appearances and goals did each record?
-- Which players share a top-five scorer rank at WC-2022?
-- How do Argentina's WC-2022 match goals and shootout records reconcile?
-- How many matches, squad entries, goals and player appearances are recorded for WC-1999?
+15 experience cards are taken from the test set, covering editions, the 2022 tournament, the final and its shootout, goals and cards, Messi's awards and goals, a co-hosted tournament, the 1950 format and the two Müllers. The cards' data-query and graph Cypher are checked online after installation with `tools/acceptance/experience_set.py`.
 
-## Chinese scenario evaluation
+## Acceptance and maintenance
 
-The suite provides **50 Chinese questions, reference answers, recalculation and grading scripts**:
+The test set is the [business-scenario test set v1](bkn-eval/baselines/2026-10-31-business-scenarios-v1/README.md); reference answers are computed by reference SQL directly from the locked CSV files and are not shipped in the package. After installation, an agent that has not seen the answers runs every question once; below 100%, record why it failed and change the ontology description or the Skill first, never the questions or answers.
 
-| Category | Questions |
-| --- | ---: |
-| Basic queries and statistics | 10 |
-| Multi-table joins | 12 |
-| Rankings and cross-tournament comparisons | 14 |
-| Combined analysis | 14 |
+The installation hooks call `run.sh` and register the Skill; users never run scripts by hand. To upgrade, uninstall the old sample before installing the new version.
 
-- [Evaluation guide and business semantics](bkn-eval/README.md)
-- [Question set](bkn-eval/datasets/question-set-v1.yaml)
-- [Reference answers](bkn-eval/gold/answer-set-v1.yaml)
+## Data and attribution
 
-An independent external agent answers through MCP without seeing the reference answers. Check its required fields, ordering and business values after completion. Evaluation uses standard object queries rather than a runtime SQL endpoint, an internal Vega query interface or the platform-internal agent.
+Data: [Fjelstul World Cup Database](https://github.com/jfjelstul/worldcup), commit `35a8667f518b07469182ae16d35574dd0e7a00fb`; the CSV hashes are recorded in [dataset.lock](dataset.lock).
 
-From the repository root:
-
-```sh
-python3 samples/world-cup/bkn-eval/scripts/recalculate.py --check
-python3 samples/world-cup/bkn-eval/scripts/grade_answers.py /absolute/path/answers.json
-```
-
-Evaluation suites and tests remain in source control and are excluded from runtime packages by the current packaging rules. Execution records and temporary calculation files remain local.
-
-## Query semantics
-
-Count matches from `matches` or distinct `match_id`. A team appearance represents one team in one match, so each match has two team records. Exclude own goals from individual scoring; include them for the credited team. Shootout kicks are separate from match-score goals. Booking flags may overlap and must be counted as requested.
-
-The current model omits ten CSV display fields each from matches and team appearances. Resolve labels and stages through declared team, referee-appearance, goal or manager-appearance objects. Convert numeric text before capacity comparisons, row-key ordering or calculations, and retrieve every required page.
-
-## Development and publication
-
-[sample.yaml](sample.yaml) declares the installed components and hooks. Installation hooks call `run.sh` internally; users install through one-click onboarding or offline package import. Historical SQL tool registration is not the query path described here.
-
-Follow the [Sample Development Guide](../../docs/SAMPLE_DEVELOPMENT_GUIDE.md) to build a fixed candidate, validate installation and business scenarios, and publish a new immutable version when changing data or models.
-
-## Data source and license
-
-Data: [Fjelstul World Cup Database](https://github.com/jfjelstul/worldcup), commit `35a8667f518b07469182ae16d35574dd0e7a00fb`. [dataset.lock](dataset.lock) records checksums for all 27 CSV files.
-
-© 2023 Joshua C. Fjelstul, Ph.D. Data is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Preserve attribution and share-alike requirements when sharing data or adaptations.
+© 2023 Joshua C. Fjelstul, Ph.D. Data is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Retain the attribution and license when sharing data or adaptations.

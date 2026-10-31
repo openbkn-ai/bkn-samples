@@ -522,7 +522,7 @@ class UninstallTest(unittest.TestCase):
         document = load_sample(root / "samples/world-cup")
         spec = document["spec"]
         sample, version = document["metadata"]["name"], "0.1.2"
-        self.assertTrue(spec["components"]["functions"])
+        self.assertTrue(spec["components"]["skills"])
         initial = {"id": "inst-world-cup", "attemptId": "initial", "sample": sample, "version": version,
                    "status": "installing", "dataImageRef": "image@sha256:abc", "historyComplete": True,
                    "offlineRelease": {"packageDigest": "fixed"}}

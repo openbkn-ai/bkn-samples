@@ -1,0 +1,244 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: zh-CN
+  source:
+    answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v1/answer-set-v1.yaml
+    setId: energy-business-scenarios-v1
+spec:
+  businessDate: '2027-02-28'
+  cases:
+  - id: Q-02
+    title: 场所能响应多少
+    explanation: 看场所响应上限，再沿设备 → 场所找出场所里的设备。
+    question: SIT-001 这个场所最多能响应多少千瓦？场所里有哪些设备？
+    answer: SIT-001 最多能响应 30 千瓦，场所里有 DEV-001、DEV-002、DEV-003 三台设备。
+    expected:
+      response_cap_kw: 30
+      devices:
+      - DEV-001
+      - DEV-002
+      - DEV-003
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (d:devices)-[:device_to_site]->(s:sites)
+        WHERE s.site_id = 'SIT-001'
+  - id: Q-03
+    title: 哪些设备停用了
+    explanation: 设备状态为停用的不能参与响应，可承诺量计零。
+    question: 现在有哪些设备是停用状态？
+    answer: 现在停用的设备是 DEV-143 和 DEV-149。
+    expected:
+      devices:
+      - DEV-143
+      - DEV-149
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (d:devices)
+        WHERE d.status_code = 'inactive'
+        RETURN d.device_id AS devices
+  - id: Q-04
+    title: 设备能削多少
+    explanation: 设备的最大削减量和最低保障负荷，沿电表 → 设备找到计量电表。
+    question: DEV-001 每次最多能削减多少千瓦？至少要保留多少千瓦保障运行？用哪块电表计量？
+    answer: DEV-001 每次最多削减 16 千瓦，至少保留 9 千瓦保障运行，用电表 MTR-001 计量。
+    expected:
+      max_reduction_kw: 16
+      min_service_kw: 9
+      meter_id: MTR-001
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (m:meters)-[:meter_to_device]->(d:devices)
+        WHERE d.device_id = 'DEV-001'
+        RETURN d.max_reduction_kw AS max_reduction_kw, d.min_service_kw AS min_service_kw, m.meter_id AS meter_id
+      graph: |-
+        MATCH (m:meters)-[:meter_to_device]->(d:devices)
+        WHERE d.device_id = 'DEV-001'
+  - id: Q-49
+    title: 设备属于谁
+    explanation: 沿设备 → 场所 → 客户，读场所响应上限。
+    question: DEV-016 属于哪个场所、哪家客户？这个场所最多能响应多少千瓦？
+    answer: DEV-016 属于场所 SIT-006、客户 CUS-006，这个场所最多能响应 55 千瓦。
+    expected:
+      site_id: SIT-006
+      customer_id: CUS-006
+      response_cap_kw: 55
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (d:devices)-[:device_to_site]->(s:sites)-[:site_to_customer]->(c:customers)
+        WHERE d.device_id = 'DEV-016'
+        RETURN s.site_id AS site_id, c.customer_id AS customer_id, s.response_cap_kw AS response_cap_kw
+      graph: |-
+        MATCH (d:devices)-[:device_to_site]->(s:sites)-[:site_to_customer]->(c:customers)
+        WHERE d.device_id = 'DEV-016'
+  - id: Q-44
+    title: 哪些事件取消了
+    explanation: 已取消的事件不调度、不结算。
+    question: 有哪些响应事件已经取消了？
+    answer: 已取消的响应事件是 EVT-009、EVT-052、EVT-084。
+    expected:
+      events:
+      - EVT-009
+      - EVT-052
+      - EVT-084
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (e:response_events)
+        WHERE e.status_code = 'cancelled'
+        RETURN e.event_id AS events
+  - id: Q-09
+    title: 事件能承诺多少
+    explanation: 每台设备取申报、最大削减、负荷余量和限额的最小值，场所合计不超过上限。
+    question: EVT-001 现在申报的设备里，按负荷和设备约束一共能承诺多少千瓦？
+    answer: EVT-001 现在申报的设备一共能承诺 331 千瓦。
+    expected:
+      eligible_kw: 331
+    surfaces:
+    - agent
+  - id: Q-14
+    title: 哪些场所被上限压住
+    explanation: 同一场所的设备可承诺量相加，超过场所响应上限就按上限计。
+    question: EVT-001 里，哪些场所的设备可承诺量加起来超过了场所响应上限？各被压到多少？
+    answer: EVT-001 有四个场所超过上限：SIT-002 设备合计 39 千瓦压到 35，SIT-003 48 压到 40，SIT-009 42 压到 30，SIT-010 41 压到 35。
+    expected:
+      sites:
+        SIT-002:
+          devices_kw: 39
+          capped_kw: 35
+        SIT-003:
+          devices_kw: 48
+          capped_kw: 40
+        SIT-009:
+          devices_kw: 42
+          capped_kw: 30
+        SIT-010:
+          devices_kw: 41
+          capped_kw: 35
+    surfaces:
+    - agent
+  - id: Q-18
+    title: 一台设备承诺给了谁
+    explanation: 同一天同一时段的事件共用设备，沿分配 → 事件找出已承诺的事件。
+    question: 2026-11-04 午后那个时段，DEV-016 同时承诺给了哪几个事件？
+    answer: DEV-016 在 2026-11-04 那个时段同时承诺给了 EVT-001 和 EVT-002。
+    expected:
+      events:
+      - EVT-001
+      - EVT-002
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (a:dispatch_allocations)-[:allocation_to_event]->(e:response_events)
+        WHERE a.device_id = 'DEV-016' AND e.response_date = '2026-11-04' AND e.block_code = 'peak_a' AND a.status_code = 'committed'
+        RETURN e.event_id AS events
+      graph: |-
+        MATCH (a:dispatch_allocations)-[:allocation_to_event]->(e:response_events)
+        WHERE a.device_id = 'DEV-016' AND e.response_date = '2026-11-04' AND e.block_code = 'peak_a' AND a.status_code = 'committed'
+  - id: Q-21
+    title: 能不能凑够目标
+    explanation: 同时段事件按优先级和成本共用设备，已承诺加新增和目标比较。
+    question: EVT-061 按现在的方案能凑够目标吗？还差多少千瓦？
+    answer: EVT-061 按现在的方案凑不够目标，还差 38 千瓦。
+    expected:
+      target_met: false
+      shortfall_kw: 38
+    surfaces:
+    - agent
+  - id: Q-23
+    title: 执行回执怎么样
+    explanation: 按回执状态计数：完成、失败、客户临时退出。
+    question: 执行回执里，有多少条执行完成、多少条失败、多少条客户临时退出？
+    answer: 执行回执里 333 条完成、5 条失败、3 条客户临时退出。
+    expected:
+      completed: 333
+      failed: 5
+      declined: 3
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (x:execution_logs)
+        RETURN sum(CASE WHEN x.status_code = 'completed' THEN 1 ELSE 0 END) AS completed, sum(CASE WHEN x.status_code = 'failed' THEN 1 ELSE 0 END) AS failed, sum(CASE WHEN x.status_code = 'declined' THEN 1 ELSE 0 END) AS declined
+  - id: Q-24
+    title: 交付达标了吗
+    explanation: 核实电量 = 基线 × 小时数 − 读数，除以承诺电量得交付比例，和最低要求比较。
+    question: EVT-001 实际核实的削减电量是多少千瓦时？交付比例多少？达标了吗？
+    answer: EVT-001 承诺 37.5 千瓦时，核实削减 30 千瓦时，交付比例 0.8，达到最低要求。
+    expected:
+      committed_kwh: 37.5
+      verified_kwh: 30
+      delivery_ratio: 0.8
+      met: true
+    surfaces:
+    - agent
+  - id: Q-33
+    title: 台账入账了多少
+    explanation: 按结算台账状态计数。
+    question: 结算台账里已经入账的有多少笔？还在待入账的有多少笔？
+    answer: 结算台账里已入账 56 笔，待入账 5 笔。
+    expected:
+      posted: 56
+      pending: 5
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (s:settlements)
+        RETURN sum(CASE WHEN s.status_code = 'posted' THEN 1 ELSE 0 END) AS posted, sum(CASE WHEN s.status_code = 'pending' THEN 1 ELSE 0 END) AS pending
+  - id: Q-35
+    title: 重算和台账差多少
+    explanation: 按核实电量和奖励单价重算收入，和最新已入账收入比较。
+    question: EVT-025 按核实电量算出来的收入和账上已入账的收入差多少？
+    answer: EVT-025 重算收入 37.2 元，账上已入账 42.2 元，差 -5 元。
+    expected:
+      recomputed_revenue_cny: 37.2
+      posted_revenue_cny: 42.2
+      difference_cny: -5.0
+    surfaces:
+    - agent
+  - id: Q-39
+    title: 结算合计多少
+    explanation: 只合计结算结果能确定的已发生事件；收入按达标判断，补偿不论达标都付。
+    question: 到今天为止，结算结果能确定的已发生事件，奖励收入和客户补偿合计各是多少？净额多少？涉及多少个事件？
+    answer: 能确定结算的已发生事件共 55 个，奖励收入合计 1823.34 元，客户补偿 665.52 元，净额 1157.82 元。
+    expected:
+      events: 55
+      revenue_cny: 1823.34
+      cost_cny: 665.52
+      net_cny: 1157.82
+    surfaces:
+    - agent
+  - id: Q-50
+    title: 哪些结算还定不了
+    explanation: 缺回执、缺读数或基线冲突时结算算不清，不能当成零。
+    question: 已经发生的事件里，哪些的结算结果现在还确定不了？各卡在哪里？
+    answer: 现在还确定不了结算的已发生事件是 EVT-021（基线冲突）、EVT-029（缺电表读数）、EVT-033（缺执行回执）。
+    expected:
+      events:
+      - EVT-021
+      - EVT-029
+      - EVT-033
+    surfaces:
+    - agent

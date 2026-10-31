@@ -1,0 +1,329 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: en-US
+  source:
+    answerSet: bkn-eval/baselines/2026-10-31-business-scenarios-v1/answer-set-v1.yaml
+    setId: worldcup-business-scenarios-v1
+spec:
+  businessDate: '2022-12-18'
+  cases:
+  - id: B-01
+    title: How many World Cups
+    explanation: A tournament name containing Women's is a women's World Cup; the rest are men's.
+    question: How many men's and how many women's World Cups are in the data?
+    answer: The data hold 22 men's and 8 women's World Cups.
+    expected:
+      men: 22
+      women: 8
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (t:worldcup_en_tournaments)
+        RETURN sum(CASE WHEN t.tournament_name CONTAINS 'Women' THEN 0 ELSE 1 END) AS men, sum(CASE WHEN t.tournament_name CONTAINS 'Women' THEN 1 ELSE 0 END) AS women
+  - id: B-03
+    title: The 2022 World Cup
+    explanation: The tournament record gives year, dates, host and winner.
+    question: When did the 2022 World Cup start and end, where was it held, and who won?
+    answer: The 2022 World Cup ran from 2022-11-20 to 2022-12-18 in Qatar, and Argentina won.
+    expected:
+      rows:
+      - year: 2022
+        start_date: '2022-11-20'
+        end_date: '2022-12-18'
+        host_country: Qatar
+        winner: Argentina
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (t:worldcup_en_tournaments)
+        WHERE t.tournament_id = 'WC-2022'
+        RETURN t.year AS year, t.start_date AS start_date, t.end_date AS end_date, t.host_country AS host_country, t.winner AS winner
+  - id: B-06
+    title: Cards at the 2022 World Cup
+    explanation: Yellow, red, second yellow and sending-off flags are counted separately, never added.
+    question: At the 2022 World Cup, how many yellow cards, red cards, second yellows and sendings-off were there?
+    answer: The 2022 World Cup had 224 yellow cards, 1 red card, 3 second yellows and 4 sendings-off.
+    expected:
+      rows:
+      - yellow_cards: 224
+        red_cards: 1
+        second_yellows: 3
+        sendings_off: 4
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (b:worldcup_en_bookings)
+        WHERE b.tournament_id = 'WC-2022'
+        RETURN sum(b.yellow_card) AS yellow_cards, sum(b.red_card) AS red_cards, sum(b.second_yellow_card) AS second_yellows, sum(b.sending_off) AS sendings_off
+  - id: B-07
+    title: The 2022 final
+    explanation: The score excludes the shootout, which is given separately.
+    question: When was the 2022 World Cup final, who played, what was the score, and what was the shootout score?
+    answer: 'The 2022 final, M-2022-64 on 2022-12-18, was Argentina against France: 3–3, with a 4–2 shootout.'
+    expected:
+      rows:
+      - match_id: M-2022-64
+        match_date: '2022-12-18'
+        home_team_name: Argentina
+        away_team_name: France
+        score: 3–3
+        score_penalties: 4–2
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (m:worldcup_en_matches)
+        WHERE m.tournament_id = 'WC-2022' AND m.stage_name = 'final'
+        RETURN m.match_id AS match_id, m.match_date AS match_date, m.home_team_name AS home_team_name, m.away_team_name AS away_team_name, m.score AS score, m.score_penalties AS score_penalties
+      graph: |-
+        MATCH (m:worldcup_en_matches)-[:wc_en_rel_matches_stadium]->(s:worldcup_en_stadiums)
+        WHERE m.tournament_id = 'WC-2022' AND m.stage_name = 'final'
+  - id: B-08
+    title: Goals at the 2022 World Cup
+    explanation: Player goals exclude own goals; in-match penalties count, shootout kicks do not.
+    question: How many goals were scored at the 2022 World Cup, and how many were scored by players for their own side, own goals and in-match penalties?
+    answer: 'The 2022 World Cup had 172 goals: 170 player goals and 2 own goals, with 17 in-match penalties.'
+    expected:
+      rows:
+      - all_goals: 172
+        personal_goals: 170
+        own_goals: 2
+        match_penalties: 17
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (g:worldcup_en_goals)
+        WHERE g.tournament_id = 'WC-2022'
+        RETURN count(*) AS all_goals, sum(CASE WHEN g.own_goal = 0 THEN 1 ELSE 0 END) AS personal_goals, sum(g.own_goal) AS own_goals, sum(g.penalty) AS match_penalties
+  - id: J-01
+    title: Messi's awards
+    explanation: Follow award winners → player to find every award.
+    question: Which awards did Lionel Messi win at the 2014 and 2022 World Cups?
+    answer: Lionel Messi (P-14758) won the A-1 Golden Ball at WC-2014 (2014 FIFA Men's World Cup), and the A-1 Golden Ball and A-5 Silver Boot at WC-2022 (2022 FIFA Men's World Cup).
+    expected:
+      rows:
+      - tournament_id: WC-2014
+        tournament_name: 2014 FIFA Men's World Cup
+        award_id: A-1
+        award_name: Golden Ball
+        player_id: P-14758
+        player_name: Lionel Messi
+      - tournament_id: WC-2022
+        tournament_name: 2022 FIFA Men's World Cup
+        award_id: A-1
+        award_name: Golden Ball
+        player_id: P-14758
+        player_name: Lionel Messi
+      - tournament_id: WC-2022
+        tournament_name: 2022 FIFA Men's World Cup
+        award_id: A-5
+        award_name: Silver Boot
+        player_id: P-14758
+        player_name: Lionel Messi
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (a:worldcup_en_award_winners)-[:wc_en_rel_award_winners_player]->(p:worldcup_en_players)
+        WHERE p.player_id = 'P-14758'
+  - id: J-04
+    title: Germany's 2014 manager
+    explanation: Manager appointments give each team's manager per edition.
+    question: Who managed Germany at the 2014 World Cup?
+    answer: Germany (T-31) was managed by Joachim Löw (M-234) at the 2014 World Cup.
+    expected:
+      rows:
+      - team_id: T-31
+        team_name: Germany
+        manager_id: M-234
+        manager_name: Joachim Löw
+    surfaces:
+    - agent
+  - id: J-05
+    title: The final's referee
+    explanation: Referee appearances give each match's referee.
+    question: Who refereed the 2022 World Cup final, and from which country?
+    answer: The 2022 final M-2022-64 was refereed by Szymon Marciniak (R-269) of Poland.
+    expected:
+      rows:
+      - match_id: M-2022-64
+        referee_id: R-269
+        referee_name: Szymon Marciniak
+        country_name: Poland
+    surfaces:
+    - agent
+  - id: J-07
+    title: A co-hosted World Cup
+    explanation: Each co-host is listed separately.
+    question: Which countries co-hosted the 2002 World Cup?
+    answer: WC-2002 (2002 FIFA Men's World Cup) was co-hosted by Japan and South Korea.
+    expected:
+      rows:
+      - tournament_id: WC-2002
+        tournament_name: 2002 FIFA Men's World Cup
+        host_country: Japan
+      - tournament_id: WC-2002
+        tournament_name: 2002 FIFA Men's World Cup
+        host_country: South Korea
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (h:worldcup_en_host_countries)
+        WHERE h.tournament_id = 'WC-2002'
+        RETURN h.tournament_id AS tournament_id, h.tournament_name AS tournament_name, h.team_name AS host_country
+  - id: J-08
+    title: The final shootout
+    explanation: Kicks are listed in record order as scored or missed.
+    question: In the 2022 World Cup final shootout, who took each kick and was it scored?
+    answer: In the 2022 final shootout, Argentina's Lionel Messi (PK-389, P-14758), Paulo Dybala (PK-390, P-28151), Leandro Paredes (PK-391, P-27582) and Gonzalo Montiel (PK-392, P-91431) all scored (1); for France, Kylian Mbappé (PK-393, P-64077) scored (1), Kingsley Coman (PK-394, P-06614) and Aurélien Tchouaméni (PK-395, P-54517) missed (0), and Randal Kolo Muani (PK-396, P-92987) scored (1).
+    expected:
+      rows:
+      - penalty_kick_id: PK-389
+        team_name: Argentina
+        player_id: P-14758
+        player_name: Lionel Messi
+        converted: 1
+      - penalty_kick_id: PK-390
+        team_name: Argentina
+        player_id: P-28151
+        player_name: Paulo Dybala
+        converted: 1
+      - penalty_kick_id: PK-391
+        team_name: Argentina
+        player_id: P-27582
+        player_name: Leandro Paredes
+        converted: 1
+      - penalty_kick_id: PK-392
+        team_name: Argentina
+        player_id: P-91431
+        player_name: Gonzalo Montiel
+        converted: 1
+      - penalty_kick_id: PK-393
+        team_name: France
+        player_id: P-64077
+        player_name: Kylian Mbappé
+        converted: 1
+      - penalty_kick_id: PK-394
+        team_name: France
+        player_id: P-06614
+        player_name: Kingsley Coman
+        converted: 0
+      - penalty_kick_id: PK-395
+        team_name: France
+        player_id: P-54517
+        player_name: Aurélien Tchouaméni
+        converted: 0
+      - penalty_kick_id: PK-396
+        team_name: France
+        player_id: P-92987
+        player_name: Randal Kolo Muani
+        converted: 1
+    surfaces:
+    - agent
+  - id: R-04
+    title: Top-scoring team per edition
+    explanation: Team goals are credited to the team, including opponents' own goals, excluding shootouts.
+    question: At the 2014, 2018 and 2022 World Cups, which team scored the most goals in each, and how many?
+    answer: 'Top-scoring teams: T-31 Germany with 18 at WC-2014, T-06 Belgium with 16 at WC-2018 and T-30 France with 16 at WC-2022.'
+    expected:
+      rows:
+      - tournament_id: WC-2014
+        team_id: T-31
+        goals: 18
+      - tournament_id: WC-2018
+        team_id: T-06
+        goals: 16
+      - tournament_id: WC-2022
+        team_id: T-30
+        goals: 16
+    surfaces:
+    - agent
+  - id: R-09
+    title: Messi's goals per edition
+    explanation: Player goals exclude own goals; only editions with goals are listed.
+    question: In which World Cups did Lionel Messi score, and how many goals in each?
+    answer: Messi scored 1 at WC-2006, 4 at WC-2014, 1 at WC-2018 and 7 at WC-2022.
+    expected:
+      rows:
+      - tournament_id: WC-2006
+        goals: 1
+      - tournament_id: WC-2014
+        goals: 4
+      - tournament_id: WC-2018
+        goals: 1
+      - tournament_id: WC-2022
+        goals: 7
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (g:worldcup_en_goals)
+        WHERE g.player_id = 'P-14758' AND g.own_goal = 0
+        RETURN g.tournament_id AS tournament_id, count(*) AS goals
+      graph: |-
+        MATCH (g:worldcup_en_goals)-[:wc_en_rel_goals_player]->(p:worldcup_en_players)
+        WHERE p.player_id = 'P-14758'
+  - id: A-07
+    title: Argentina's shootouts
+    explanation: Count the opponent's kick outcomes, never saves.
+    question: How many shootouts did Argentina play at the 2022 World Cup, and in each, how many kicks did the opponent score and miss?
+    answer: 'Argentina played two shootouts in 2022: in M-2022-58 Netherlands vs Argentina the opponent scored 3 and missed 2; in M-2022-64 Argentina vs France the opponent scored 2 and missed 2.'
+    expected:
+      rows:
+      - match_id: M-2022-58
+        match_name: Netherlands vs Argentina
+        opponent_scored: 3
+        opponent_unsuccessful: 2
+      - match_id: M-2022-64
+        match_name: Argentina vs France
+        opponent_scored: 2
+        opponent_unsuccessful: 2
+    surfaces:
+    - agent
+  - id: A-09
+    title: No final in 1950
+    explanation: The 1950 winner came from a final round; no final is invented.
+    question: Did the 1950 World Cup have a final? How was the winner decided, and how many matches were played in the deciding stage?
+    answer: 'WC-1950 had a final round (final_round 1) and no final (final 0): 6 final-round matches and 0 finals.'
+    expected:
+      rows:
+      - tournament_id: WC-1950
+        final_round: 1
+        final: 0
+        final_round_matches: 6
+        final_matches: 0
+    surfaces:
+    - agent
+  - id: A-10
+    title: The two Müllers
+    explanation: Goals exclude own goals; squad editions count distinct tournaments.
+    question: Who scored more World Cup goals, Gerd Müller or Thomas Müller, and how many World Cup squads was each named in?
+    answer: Gerd Müller (P-72441) was in 2 squads and scored 14; Thomas Müller (P-28154) was in 4 squads and scored 10, so Gerd scored more.
+    expected:
+      rows:
+      - player_id: P-28154
+        player_name: Thomas Müller
+        editions: 4
+        goals: 10
+      - player_id: P-72441
+        player_name: Gerd Müller
+        editions: 2
+        goals: 14
+    surfaces:
+    - agent

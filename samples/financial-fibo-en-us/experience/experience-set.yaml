@@ -1,0 +1,256 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: en-US
+  source:
+    answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v1/answer-set-v1.yaml
+    setId: fibo-business-scenarios-v1
+spec:
+  businessDate: '2027-02-28'
+  cases:
+  - id: Q-06
+    title: What is not settled yet
+    explanation: Add up incremental settled quantities per instruction and compare with the required quantity.
+    question: As of today, how many settlement instructions are not fully settled?
+    answer: 304 settlement instructions are not fully settled as of today.
+    expected:
+      instructions: 304
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (e:settlement_events)-[:settle_event_to_settle_instr]->(i:settlement_instructions)
+        WHERE e.view_kind = 'actual' AND e.event_date <= '2027-02-28'
+        WITH i, sum(e.settled_quantity) AS done
+        WHERE done < i.required_quantity
+        RETURN count(*) AS instructions
+  - id: Q-07
+    title: Why settlements failed
+    explanation: Look at the status and failure reason of each instruction's latest settlement event.
+    question: How many settlement instructions are currently failed, and how many fall under each failure reason?
+    answer: '144 instructions are currently failed: cash_mismatch 80, insufficient_securities 64.'
+    expected:
+      failed: 144
+      reasons:
+        cash_mismatch: 80
+        insufficient_securities: 64
+    surfaces:
+    - agent
+  - id: Q-04
+    title: What a portfolio holds
+    explanation: Follow portfolio → account → opening position → month-end position → valuation and count the February holdings.
+    question: How many securities does PF-001 hold at the end of February, and how many of them are bonds?
+    answer: PF-001 holds 8 securities at the end of February, 4 of them bonds.
+    expected:
+      securities: 8
+      bonds: 4
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (o)-[:opening_to_instrument]->(f:financial_instruments)
+        WHERE a.portfolio_id = 'PF-001' AND v.as_of_date = '2027-02-28' AND v.view_kind = 'actual'
+        RETURN count(*) AS securities, sum(CASE WHEN f.asset_class = 'bond' THEN 1 ELSE 0 END) AS bonds
+      graph: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (o)-[:opening_to_instrument]->(f:financial_instruments)
+        WHERE a.portfolio_id = 'PF-001' AND v.as_of_date = '2027-02-28' AND v.view_kind = 'actual'
+  - id: Q-13
+    title: Which valuations are blocked
+    explanation: A stale, unapproved or missing price blocks the valuation; the value is unknown, not zero.
+    question: How many position valuations at the end of February have no market value, and how many fall under each reason?
+    answer: '96 end-of-February valuations have no market value: missing 32, price_unapproved 32, stale 32.'
+    expected:
+      valuations: 96
+      reasons:
+        missing: 32
+        price_unapproved: 32
+        stale: 32
+    surfaces:
+    - agent
+  - id: Q-18
+    title: What a portfolio is worth
+    explanation: Add the February USD market values of the holdings; a blocked valuation makes the total unknown.
+    question: What is the total market value of PF-001 at the end of February, in USD?
+    answer: PF-001 is worth USD 71364.79 at the end of February.
+    expected:
+      market_value_usd: 71364.79
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts)
+        WHERE a.portfolio_id = 'PF-001' AND v.as_of_date = '2027-02-28' AND v.view_kind = 'actual'
+        RETURN sum(v.market_value_base) AS market_value_usd
+  - id: Q-19
+    title: How a market value is derived
+    explanation: Quantity × price × multiplier gives the local value; × FX gives the USD value, each rounded to the cent.
+    question: How is the end-of-February market value of the INS-002 bond held by PF-001 calculated? Give the quantity, price, price multiplier, FX rate, local market value and USD market value.
+    answer: 'INS-002 bond: 61154 face units × 100 × 0.01 = local 61154; × FX 0.1394 = USD 8524.87.'
+    expected:
+      quantity: 61154
+      price: 100
+      multiplier: 0.01
+      fx_rate: 0.1394
+      market_value_local: 61154
+      market_value_usd: 8524.87
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (v)-[:valuation_to_price]->(px:market_prices), (v)-[:valuation_to_fx]->(fx:fx_rates), (o)-[:opening_to_instrument]->(f:financial_instruments)
+        WHERE a.portfolio_id = 'PF-001' AND o.instrument_id = 'INS-002' AND v.as_of_date = '2027-02-28'
+        RETURN p.trade_basis_quantity AS quantity, px.price AS price, f.price_multiplier AS multiplier, fx.rate AS fx_rate, v.market_value_local AS market_value_local, v.market_value_base AS market_value_usd
+      graph: |-
+        MATCH (v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)-[:opening_to_account]->(a:accounts), (v)-[:valuation_to_price]->(px:market_prices), (v)-[:valuation_to_fx]->(fx:fx_rates)
+        WHERE a.portfolio_id = 'PF-001' AND o.instrument_id = 'INS-002' AND v.as_of_date = '2027-02-28'
+  - id: Q-21
+    title: Why a price cannot be used
+    explanation: A price more than 3 calendar days older than the valuation date is stale and cannot be used.
+    question: Why can INS-069 not be used for the end-of-February valuation? What date and price is its latest approved price?
+    answer: 'INS-069 cannot be valued at the end of February: its latest approved price is USD 26.4 from 2027-02-18, which is stale.'
+    expected:
+      issue: stale
+      latest_price_date: '2027-02-18'
+      latest_price: 26.4
+      currency: USD
+    surfaces:
+    - agent
+  - id: Q-25
+    title: Where a portfolio is most concentrated
+    explanation: Read the February issuer exposure shares and the applicable issuer limit.
+    question: Which issuer is PF-041 most concentrated in at the end of February, at what share, and what is the limit?
+    answer: PF-041 is most concentrated in ISS-041 (Alder Utilities Holdings) at 0.608018 against a limit of 0.3.
+    expected:
+      issuer_id: ISS-041
+      issuer: Alder Utilities Holdings
+      ratio: 0.608018
+      limit: 0.3
+    surfaces:
+    - agent
+  - id: Q-28
+    title: What makes up a breach
+    explanation: Follow the exposure contributions to valuations, positions and securities.
+    question: PF-041 breaches its ISS-041 limit. Which holdings make up that exposure, how much is each in USD, and what is the portfolio total?
+    answer: PF-041's USD 82799.04 in ISS-041 is INS-081 (44269.4) plus INS-082 (38529.64); the portfolio total is 136178.6, a share of 0.608018.
+    expected:
+      holdings:
+        INS-081: 44269.4
+        INS-082: 38529.64
+      exposure_usd: 82799.04
+      portfolio_total_usd: 136178.6
+      ratio: 0.608018
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (c:exposure_contributions)-[:contribution_to_issuer_exp]->(x:issuer_exposures), (c)-[:contribution_to_valuation]->(v:valuation_snapshots)-[:valuation_to_position]->(p:positions)-[:position_to_opening]->(o:opening_positions)
+        WHERE x.exposure_id = 'IE-041-3-4'
+  - id: Q-30
+    title: Counterparty receivable breaches
+    explanation: Read the February limit assessments for the receivable measure that are in breach.
+    question: How many portfolios breach a counterparty unsettled-sale receivable limit at the end of February?
+    answer: 12 portfolios breach a counterparty unsettled-sale receivable limit at the end of February.
+    expected:
+      portfolios: 12
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (a:limit_assessments)-[:assessment_to_limit]->(l:mandate_limits)
+        WHERE a.as_of_date = '2027-02-28' AND l.measure = 'receivable_amount' AND a.assessment_status = 'breach'
+        RETURN count(DISTINCT l.portfolio_id) AS portfolios
+  - id: Q-32
+    title: Trace a receivable breach to trades
+    explanation: Receivable = remaining sale quantity × price × multiplier × FX, summed then rounded, never offset by purchases.
+    question: PF-046's unsettled-sale receivable from CP-046 is over its limit. Which unsettled sales cause it, how much quantity remains on each, and what are the USD total and the excess?
+    answer: 'PF-046''s USD 2002.41 receivable from CP-046 comes from 4 failed sales: SI-046-2-4 with 3632 left, SI-046-4-4 450, SI-046-6-4 3492, SI-046-8-4 3632; the limit is 500, exceeded by 1502.41.'
+    expected:
+      instructions:
+        SI-046-2-4: 3632
+        SI-046-4-4: 450
+        SI-046-6-4: 3492
+        SI-046-8-4: 3632
+      receivable_usd: 2002.41
+      limit_usd: 500
+      excess_usd: 1502.41
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (e:settlement_events)-[:settle_event_to_settle_instr]->(i:settlement_instructions)-[:settle_instr_to_trade]->(t:securities_transactions)-[:trade_to_order]->(o:trade_orders)
+        WHERE o.counterparty_id = 'CP-046' AND e.event_status = 'failed' AND e.event_date <= '2027-02-28'
+  - id: Q-34
+    title: Limits not yet in force
+    explanation: Limit versions whose effective date is later than the start are new limits taking effect later.
+    question: How many limits only take effect later, and how many portfolios do they cover?
+    answer: 32 limits take effect later, covering 8 portfolios.
+    expected:
+      limits: 32
+      portfolios: 8
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (l:mandate_limits)
+        WHERE l.effective_from_date > '2026-11-01'
+        RETURN count(*) AS limits, count(DISTINCT l.portfolio_id) AS portfolios
+  - id: Q-36
+    title: New breaches in the plan month
+    explanation: Compare the March plan and February actual limit assessments for portfolios that breach only in the plan.
+    question: Under the March plan, which portfolios will breach a limit that they do not breach in February actuals?
+    answer: '8 portfolios newly breach under the March plan: PF-049, PF-050, PF-099, PF-100, PF-149, PF-150, PF-199, PF-200.'
+    expected:
+      portfolios:
+      - PF-049
+      - PF-050
+      - PF-099
+      - PF-100
+      - PF-149
+      - PF-150
+      - PF-199
+      - PF-200
+    surfaces:
+    - agent
+  - id: Q-40
+    title: Looking back to February 15
+    explanation: Recompute settlement status from the trades and settlement events known on February 15 only.
+    question: Standing on February 15 and using only what was known that day, which PF-029 instructions were not fully settled? Which were overdue and which had failed?
+    answer: 'On February 15, PF-029 had 3 instructions not fully settled: SI-029-4-4 had failed and was overdue; SI-029-6-4 and SI-029-7-4 were pending and not overdue.'
+    expected:
+      instructions:
+        SI-029-4-4:
+          status: failed
+          overdue: true
+        SI-029-6-4:
+          status: pending
+          overdue: false
+        SI-029-7-4:
+          status: pending
+          overdue: false
+    surfaces:
+    - agent
+  - id: Q-29
+    title: Confirmable issuer amounts
+    explanation: A blocked valuation makes the denominator unknown, but issuers whose holdings are all valued can still be confirmed.
+    question: Why can PF-035's issuer concentration not be judged at the end of February? Which issuers' USD amounts can still be confirmed, and how much each?
+    answer: PF-035's INS-069 price is stale, so ISS-035 is unknown and concentration cannot be judged; ISS-002 16738.19, ISS-014 17667.58 and ISS-042 17608.8 USD are still confirmed.
+    expected:
+      blocked_security: INS-069
+      reason: stale
+      unknown_issuer: ISS-035
+      known_issuers:
+        ISS-002: 16738.19
+        ISS-014: 17667.58
+        ISS-042: 17608.8
+    surfaces:
+    - agent

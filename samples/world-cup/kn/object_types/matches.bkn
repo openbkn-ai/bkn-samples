@@ -42,6 +42,16 @@ tags: [worldcup, fjelstul]
 | home_team_win | Home Team Win | integer | `home_team_win`：`matches` 表度量或描述字段；展示优先用同源 `*_name` / 布尔列语义。 | home_team_win |
 | away_team_win | Away Team Win | integer | `away_team_win`：`matches` 表度量或描述字段；展示优先用同源 `*_name` / 布尔列语义。 | away_team_win |
 | draw | Draw | integer | `draw`：`matches` 表度量或描述字段；展示优先用同源 `*_name` / 布尔列语义。 | draw |
+| tournament_name | 赛事名称 | string | 记录的赛事名称。 | tournament_name |
+| match_name | 比赛名称 | string | 记录的比赛名称，如“Argentina vs France”。 | match_name |
+| stage_name | 阶段名称 | string | 记录的赛事阶段，如 group stage、final。 | stage_name |
+| group_name | 小组名称 | string | 记录的小组名称，非小组赛为 not applicable。 | group_name |
+| stadium_name | 球场名称 | string | 记录的球场名称。 | stadium_name |
+| city_name | 城市 | string | 球场所在城市。 | city_name |
+| country_name | 国家 | string | 球场所在国家。 | country_name |
+| home_team_name | 主队名称 | string | 记录的主队名称。 | home_team_name |
+| away_team_name | 客队名称 | string | 记录的客队名称。 | away_team_name |
+| result | 比赛结果 | string | 记录的结果描述，如 home team win、draw。 | result |
 
 ### Keys
 

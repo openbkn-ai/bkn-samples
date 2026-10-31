@@ -1,3 +1,3 @@
-# World Cup functions
+# World Cup tools
 
-The installer registers `vega_sql_execute` from the OpenAPI specification in this directory.
+`tests/` checks the business-scenario test set against the locked CSV files, the shared answers of both language packages, and that the sample publishes its Skill without any SQL tool.

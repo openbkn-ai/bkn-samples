@@ -12,8 +12,6 @@ from pathlib import Path
 import yaml
 
 DATA_CHECKS = ("tables-discovered", "cross-table-query")
-BOX_NAME = "wc_vega_query"
-TOOL_NAME = "vega_sql_execute"
 KN_ID = "worldcup_vega_catalog_bkn"
 SAMPLE_DIR = Path(__file__).resolve().parents[1]
 
@@ -40,22 +38,26 @@ def _entries(payload: dict, *keys: str) -> list:
     return []
 
 
-def tool_ready(run_cli) -> bool:
-    listing = run_cli(["toolbox", "list", "--keyword", BOX_NAME, "--limit", "100"])
-    box = next((item for item in _entries(listing, "data", "entries") if item.get("box_name") == BOX_NAME), None)
-    if not box or not box.get("box_id"):
-        return False
-    tools = run_cli(["tool", "list", "--toolbox", box["box_id"], "--all"])
-    return any(
-        item.get("name") == TOOL_NAME and item.get("status") == "enabled"
-        for item in _entries(tools, "tools", "data", "entries")
-    )
+def skills_ready(run_cli) -> bool:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from ownership_receipt import read
+    from register_skills import local_skills
+
+    listed = _entries(run_cli(["skill", "list", "--all"]), "data", "entries")
+    owned = set(read()["skills"]) if os.environ.get("BKN_SAMPLE_RECEIPT") else None
+    for name, _ in local_skills():
+        matches = [item for item in listed if item.get("name") == name]
+        if len(matches) != 1 or matches[0].get("status") != "published":
+            return False
+        if owned is not None and (matches[0].get("skill_id") or matches[0].get("id")) not in owned:
+            return False
+    return True
 
 
 def build_checks(*, data_ok: bool, tool_ok: bool | None) -> list[dict]:
     checks = [{"name": name, "ok": data_ok} for name in DATA_CHECKS]
     if tool_ok is not None:
-        checks.append({"name": "capability-callable", "ok": tool_ok})
+        checks.append({"name": "skills-published", "ok": tool_ok})
     return checks
 
 
@@ -84,7 +86,7 @@ def main() -> int:
 
         data_ok = verify_database() == 0
         document = yaml.safe_load((SAMPLE_DIR / "sample.yaml").read_text(encoding="utf-8"))
-        tool_ok = tool_ready(_openbkn) if document["spec"]["components"].get("functions") else None
+        tool_ok = skills_ready(_openbkn) if document["spec"]["components"].get("skills") else None
     checks = build_checks(data_ok=data_ok, tool_ok=tool_ok)
     passed = all(item["ok"] for item in checks)
     degrade = []

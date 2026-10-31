@@ -14,15 +14,19 @@ def load(path,name):
 
 class IndustryEnergyTest(unittest.TestCase):
     def test_release_plan_covers_every_source_identity_and_missing_samples_fail(self):
-        plan=json.loads(PLAN.read_text());self.assertEqual(len(validate_plan(ROOT,plan)),13)
+        plan=json.loads(PLAN.read_text());self.assertEqual(len(validate_plan(ROOT,plan)),12)
         for name in ('energy-saref4ener-en-us','energy-saref4ener-zh-cn','manufacturing-industry-en-us','manufacturing-industry-zh-cn'):
             changed=copy.deepcopy(plan);changed['candidates']=[e for e in changed['candidates'] if e['sampleId']!=name]
             with self.assertRaisesRegex(ValueError,'coverage differs'):validate_plan(ROOT,changed)
+        changed=copy.deepcopy(plan);changed['excluded']=[]
+        with self.assertRaisesRegex(ValueError,'coverage differs'):validate_plan(ROOT,changed)
+        changed=copy.deepcopy(plan);changed['excluded'][0]['reason']=''
+        with self.assertRaisesRegex(ValueError,'needs a reason'):validate_plan(ROOT,changed)
         changed=copy.deepcopy(plan);changed['candidates'].append(changed['candidates'][0])
         with self.assertRaisesRegex(ValueError,'duplicate'):validate_plan(ROOT,changed)
 
     def test_four_typed_fixtures_match_locked_data_and_model(self):
-        for family,count,records in [('manufacturing-industry',40,2700),('energy-saref4ener',15,14787)]:
+        for family,count,records in [('manufacturing-industry',40,1529),('energy-saref4ener',15,14787)]:
             for language in ('en-us','zh-cn'):
                 root=ROOT/'samples'/(family+'-'+language);db=load(root/'db/database.py',family+language)
                 specs,rows,digest=db.fixture();self.assertEqual(len(rows),count);self.assertEqual(sum(map(len,rows.values())),records)
