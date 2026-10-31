@@ -1,0 +1,264 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: en-US
+  source:
+    answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v1/answer-set-v1.yaml
+    setId: manufacturing-business-scenarios-v1
+spec:
+  businessDate: '2027-02-28'
+  cases:
+  - id: Q-02
+    title: Current BOM materials
+    explanation: The frozen BOM revision is current; follow BOM component → product for each material.
+    question: Which BOM version does the PH200 high-pressure pump housing use now, and which materials go into each unit, in what quantity?
+    answer: 'PH200 uses BOM revision BOMV-PH200-B: per unit 1 RM-CI250 casting, 2 PC-SEAL seal kits and 1 PC-BOLT fastener pack.'
+    expected:
+      bom_version: BOMV-PH200-B
+      components:
+        RM-CI250: 1
+        PC-SEAL: 2
+        PC-BOLT: 1
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (b:bom_components)-[:bom_components_component_product_id_to_products]->(p:products)
+        WHERE b.bom_version_id = 'BOMV-PH200-B'
+  - id: Q-03
+    title: Routing path
+    explanation: Read each routing operation's work centre in sequence.
+    question: Which operations does the VB080 valve body go through, and in which work centre is each done, in order?
+    answer: VB080 goes through WC-SZ-TURN turning, WC-SZ-CNC 5-axis milling and WC-SU-TEST pressure testing, in that order.
+    expected:
+      work_centers:
+      - WC-SZ-TURN
+      - WC-SZ-CNC
+      - WC-SU-TEST
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (r:routing_operations)
+        WHERE r.routing_id = 'ROUTE-VB080'
+        RETURN r.work_center_id AS work_centers
+  - id: Q-04
+    title: Who can run milling
+    explanation: An operator needs a qualified, unexpired qualification and active employment.
+    question: Which operators can run 5-axis milling now?
+    answer: OPR-01, OPR-02, OPR-04 and OPR-11 can run 5-axis milling now; Sun Hao (OPR-05) expired on 2026-12-31.
+    expected:
+      operators:
+      - OPR-01
+      - OPR-02
+      - OPR-04
+      - OPR-11
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (q:operator_qualifications)-[:operator_qualifications_operator_id_to_operators]->(o:operators)
+        WHERE q.capability_id = 'CAP-MILL' AND q.qualification_status = 'qualified' AND q.valid_to >= '2027-02-28' AND o.employment_status = 'active'
+        RETURN q.operator_id AS operators
+      graph: |-
+        MATCH (q:operator_qualifications)-[:operator_qualifications_operator_id_to_operators]->(o:operators)
+        WHERE q.capability_id = 'CAP-MILL'
+  - id: Q-07
+    title: Which orders were late
+    explanation: Once a line is fully shipped, it is late if the last shipment is after the requested date.
+    question: Among fully shipped order lines, which were delivered late, and by how many days?
+    answer: 'Four fully shipped lines were late: SOL-2610-02-1 by 4 days, SOL-2610-06-1 by 12, SOL-2611-04-1 by 9 and SOL-2612-05-1 by 6.'
+    expected:
+      lines:
+        SOL-2610-02-1: 4
+        SOL-2610-06-1: 12
+        SOL-2611-04-1: 9
+        SOL-2612-05-1: 6
+    surfaces:
+    - agent
+  - id: Q-09
+    title: Remade after rejection
+    explanation: A rejected work order cannot ship; a replacement work order remakes the same order line.
+    question: Why was the pump housing order SO-2610-06 for Central China Smart Fluids delivered late, and how was it finally delivered?
+    answer: SO-2610-06's original WO-2611-08 measured 50.09 on the Critical bore diameter and was rejected; replacement WO-2612-R1 made and shipped 150 units, 12 days late.
+    expected:
+      rejected_work_order: WO-2611-08
+      characteristic: Critical bore diameter
+      measured: 50.09
+      replacement_work_order: WO-2612-R1
+      shipped: 150
+      late_days: 12
+    surfaces:
+    - agent
+  - id: Q-16
+    title: How much material is missing
+    explanation: Requirement comes from the BOM quantity plus scrap; minus issued is the gap.
+    question: How much 316L stainless bar does WO-2702-03 need, how much has been issued, and how much is still missing?
+    answer: WO-2702-03 needs 320 kg of 316L stainless bar; 200 kg were issued and 120 kg are missing.
+    expected:
+      required: 320
+      issued: 200
+      missing: 120
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (r:production_order_material_requirements)
+        WHERE r.production_order_id = 'WO-2702-03' AND r.product_id = 'RM-SS316'
+        RETURN r.required_quantity AS required, r.issued_quantity AS issued, r.required_quantity - r.issued_quantity AS missing
+  - id: Q-17
+    title: Which work orders cannot start
+    explanation: A draft BOM, or missing material once the planned start has arrived, blocks a work order.
+    question: Which work orders are blocked now, and why?
+    answer: 'Blocked now: WO-2702-03 (stainless bar delivered short), WO-2703-02 (draft BOM), WO-2703-04 (stainless purchase overdue) and WO-2703-06 (castings rejected at receipt).'
+    expected:
+      work_orders:
+      - WO-2702-03
+      - WO-2703-02
+      - WO-2703-04
+      - WO-2703-06
+    surfaces:
+    - agent
+  - id: Q-29
+    title: Scrap affects delivery
+    explanation: Completed quantity is the last operation's good quantity; the missing units stay owed.
+    question: What is the yield of WO-2611-06, and how did the missing units affect the customer delivery?
+    answer: WO-2611-06 completed 86 units, a yield of 0.9556; the 4 missing units leave order line SOL-2610-04-2 owing 4 units.
+    expected:
+      completed: 86
+      yield_ratio: 0.9556
+      sales_order_line: SOL-2610-04-2
+      backlog: 4
+    surfaces:
+    - agent
+  - id: Q-33
+    title: Was the machine work compliant
+    explanation: The machine's capability for the step must be qualified; a suspended capability cannot do that work.
+    question: What work has MACH-MILL-04 done, and were those executions compliant?
+    answer: MACH-MILL-04 ran EXE-2612-04-10 and EXE-2701-07-10; its milling capability is suspended, so both are non-compliant.
+    expected:
+      executions:
+      - EXE-2612-04-10
+      - EXE-2701-07-10
+      compliant: false
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (e:production_execution_records)-[:production_execution_records_machine_id_to_production_machines]->(m:production_machines)
+        WHERE m.machine_id = 'MACH-MILL-04'
+  - id: Q-34
+    title: Which executions are non-compliant
+    explanation: Failing any of capability, service day, qualification or shift makes an execution non-compliant.
+    question: Among completed executions, which are non-compliant, and why?
+    answer: 'Eight executions are non-compliant: EXE-2612-04-10 (WO-2612-04) and EXE-2701-07-10 (WO-2701-07) on a suspended capability; EXE-2701-02-10 (WO-2701-02) and EXE-2701-05-10 (WO-2701-05) with an expired qualification, EXE-2702-06-20 (WO-2702-06) by an operator in training; EXE-2701-04-10 (WO-2701-04) on a service day; EXE-2701-09-10 (WO-2701-09) assigned to another work centre and EXE-2702-08-20 (WO-2702-08) with no shift.'
+    expected:
+      executions:
+        EXE-2612-04-10: WO-2612-04
+        EXE-2701-02-10: WO-2701-02
+        EXE-2701-04-10: WO-2701-04
+        EXE-2701-05-10: WO-2701-05
+        EXE-2701-07-10: WO-2701-07
+        EXE-2701-09-10: WO-2701-09
+        EXE-2702-06-20: WO-2702-06
+        EXE-2702-08-20: WO-2702-08
+    surfaces:
+    - agent
+  - id: Q-37
+    title: Which lots were rejected
+    explanation: A rejected final inspection lot cannot be received or shipped.
+    question: Which final inspection lots were rejected?
+    answer: The rejected final inspection lots are QIL-2611-08, QIL-2701-10 and QIL-2702-10.
+    expected:
+      lots:
+      - QIL-2611-08
+      - QIL-2701-10
+      - QIL-2702-10
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (l:quality_inspection_lots)
+        WHERE l.status = 'rejected'
+        RETURN l.inspection_lot_id AS lots
+  - id: Q-39
+    title: Any quality escape
+    explanation: A result recorded as pass but outside the referenced limits counts as a failure.
+    question: Is there a lot whose result was recorded as pass although the measured value is outside the specification, and was it shipped?
+    answer: Lot QIL-2612-10 of WO-2612-10 measured 0.04 on mounting face flatness against an upper limit of 0.03 yet was recorded as pass, and all 130 units shipped.
+    expected:
+      work_order: WO-2612-10
+      lot: QIL-2612-10
+      measured: 0.04
+      upper_limit: 0.03
+      shipped: 130
+    surfaces:
+    - agent
+  - id: Q-43
+    title: Which services are overdue
+    explanation: A maintenance order planned before the business date and not completed is overdue.
+    question: Which maintenance work orders are overdue?
+    answer: The overdue maintenance orders are MWO-027, MWO-033 and MWO-034.
+    expected:
+      maintenance_orders:
+      - MWO-027
+      - MWO-033
+      - MWO-034
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (m:maintenance_work_orders)
+        WHERE m.planned_date < '2027-02-28' AND m.status <> 'completed'
+        RETURN m.maintenance_work_order_id AS maintenance_orders
+  - id: Q-47
+    title: Order-to-shipment trace
+    explanation: Follow shipment → work order → order line, then the issue, executions, inspection and receipt.
+    question: 'Trace SO-2612-05 from order to shipment: which work order made it, what material was issued, who did the work on which machine, how inspection and receipt went, and when it shipped.'
+    answer: 'SO-2612-05 was made by WO-2701-06: issue MIT-062, milled by OPR-04 on MACH-MILL-03 and marked by OPR-09 on MACH-LSR-01, lot QIL-2701-06 accepted, receipt FGR-2701-06, and SHP-028 shipped 260 units, 6 days late.'
+    expected:
+      work_order: WO-2701-06
+      issue: MIT-062
+      machines:
+      - MACH-LSR-01
+      - MACH-MILL-03
+      operators:
+      - OPR-04
+      - OPR-09
+      lot: QIL-2701-06
+      receipt: FGR-2701-06
+      shipment: SHP-028
+      shipped: 260
+      late_days: 6
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (s:shipments)-[:shipments_production_order_id_to_production_orders]->(w:production_orders)-[:production_orders_sales_order_line_id_to_sales_order_lines]->(l:sales_order_lines)
+        WHERE l.sales_order_id = 'SO-2612-05'
+  - id: Q-48
+    title: How much stock is usable
+    explanation: Available = on hand − allocated.
+    question: How many FKM seal kits are on hand, allocated and available now?
+    answer: 'FKM seal kits (PC-SEAL): 348 on hand, 220 allocated, 128 available.'
+    expected:
+      on_hand: 348
+      allocated: 220
+      available: 128
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (b:inventory_balances)
+        WHERE b.product_id = 'PC-SEAL'
+        RETURN sum(b.on_hand_quantity) AS on_hand, sum(b.allocated_quantity) AS allocated, sum(b.available_quantity) AS available

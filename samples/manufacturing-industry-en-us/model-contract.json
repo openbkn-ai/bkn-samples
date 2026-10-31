@@ -10,7 +10,7 @@
         "bom_name": "string",
         "quantity_basis": "decimal"
       },
-      "row_count": 50,
+      "row_count": 8,
       "unmodeled_string_columns": []
     },
     "bom_components": {
@@ -24,10 +24,8 @@
         "unit": "string",
         "scrap_factor": "decimal"
       },
-      "row_count": 50,
-      "unmodeled_string_columns": [
-        "bom_version_id"
-      ]
+      "row_count": 17,
+      "unmodeled_string_columns": []
     },
     "customers": {
       "primary_key": "customer_id",
@@ -36,7 +34,7 @@
         "customer_name": "string",
         "customer_segment": "string"
       },
-      "row_count": 50,
+      "row_count": 10,
       "unmodeled_string_columns": []
     },
     "demand_forecasts": {
@@ -48,7 +46,7 @@
         "forecast_quantity": "decimal",
         "unit": "string"
       },
-      "row_count": 50,
+      "row_count": 30,
       "unmodeled_string_columns": []
     },
     "equipment_capabilities": {
@@ -58,7 +56,7 @@
         "capability_name": "string",
         "capability_category": "string"
       },
-      "row_count": 150,
+      "row_count": 5,
       "unmodeled_string_columns": []
     },
     "finished_goods_receipts": {
@@ -72,7 +70,7 @@
         "receipt_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 39,
       "unmodeled_string_columns": []
     },
     "goods_receipts": {
@@ -86,7 +84,7 @@
         "received_date": "date",
         "inspection_status": "string"
       },
-      "row_count": 50,
+      "row_count": 31,
       "unmodeled_string_columns": []
     },
     "inventory_balances": {
@@ -101,7 +99,7 @@
         "unit": "string",
         "as_of_date": "date"
       },
-      "row_count": 100,
+      "row_count": 13,
       "unmodeled_string_columns": []
     },
     "inventory_locations": {
@@ -112,7 +110,7 @@
         "location_name": "string",
         "location_type": "string"
       },
-      "row_count": 100,
+      "row_count": 4,
       "unmodeled_string_columns": []
     },
     "machine_capability_assignments": {
@@ -123,7 +121,7 @@
         "capability_id": "string",
         "qualification_status": "string"
       },
-      "row_count": 100,
+      "row_count": 11,
       "unmodeled_string_columns": []
     },
     "maintenance_plans": {
@@ -135,7 +133,7 @@
         "frequency_days": "integer",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 11,
       "unmodeled_string_columns": []
     },
     "maintenance_work_orders": {
@@ -147,7 +145,7 @@
         "planned_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 45,
       "unmodeled_string_columns": []
     },
     "manufacturing_operations": {
@@ -161,7 +159,7 @@
         "sequence_number": "integer",
         "status": "string"
       },
-      "row_count": 100,
+      "row_count": 136,
       "unmodeled_string_columns": []
     },
     "manufacturing_sites": {
@@ -172,7 +170,7 @@
         "site_type": "string",
         "country_code": "string"
       },
-      "row_count": 50,
+      "row_count": 2,
       "unmodeled_string_columns": []
     },
     "material_issue_transactions": {
@@ -187,7 +185,7 @@
         "issue_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 108,
       "unmodeled_string_columns": []
     },
     "operator_qualifications": {
@@ -199,7 +197,7 @@
         "qualification_status": "string",
         "valid_to": "date"
       },
-      "row_count": 100,
+      "row_count": 16,
       "unmodeled_string_columns": []
     },
     "operator_shift_assignments": {
@@ -211,7 +209,7 @@
         "work_center_id": "string",
         "assignment_status": "string"
       },
-      "row_count": 100,
+      "row_count": 102,
       "unmodeled_string_columns": []
     },
     "operators": {
@@ -222,7 +220,7 @@
         "home_site_id": "string",
         "employment_status": "string"
       },
-      "row_count": 50,
+      "row_count": 12,
       "unmodeled_string_columns": []
     },
     "process_steps": {
@@ -235,7 +233,7 @@
         "required_capability_id": "string",
         "setup_class": "string"
       },
-      "row_count": 100,
+      "row_count": 136,
       "unmodeled_string_columns": []
     },
     "product_bom_versions": {
@@ -247,7 +245,7 @@
         "status": "string",
         "effective_from": "date"
       },
-      "row_count": 50,
+      "row_count": 8,
       "unmodeled_string_columns": []
     },
     "production_execution_records": {
@@ -263,7 +261,7 @@
         "scrap_quantity": "decimal",
         "status": "string"
       },
-      "row_count": 100,
+      "row_count": 107,
       "unmodeled_string_columns": []
     },
     "production_machines": {
@@ -276,7 +274,7 @@
         "machine_type": "string",
         "status": "string"
       },
-      "row_count": 100,
+      "row_count": 11,
       "unmodeled_string_columns": []
     },
     "production_order_material_requirements": {
@@ -291,7 +289,7 @@
         "unit": "string",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 124,
       "unmodeled_string_columns": []
     },
     "production_orders": {
@@ -307,7 +305,7 @@
         "due_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 55,
       "unmodeled_string_columns": []
     },
     "production_plan_lines": {
@@ -325,7 +323,7 @@
         "scenario_as_of_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 55,
       "unmodeled_string_columns": []
     },
     "production_plans": {
@@ -338,7 +336,7 @@
         "planning_end_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 5,
       "unmodeled_string_columns": []
     },
     "products": {
@@ -350,7 +348,7 @@
         "product_type": "string",
         "base_unit": "string"
       },
-      "row_count": 100,
+      "row_count": 12,
       "unmodeled_string_columns": []
     },
     "purchase_order_lines": {
@@ -362,7 +360,7 @@
         "ordered_quantity": "decimal",
         "unit": "string"
       },
-      "row_count": 50,
+      "row_count": 37,
       "unmodeled_string_columns": []
     },
     "purchase_orders": {
@@ -374,7 +372,7 @@
         "expected_receipt_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 37,
       "unmodeled_string_columns": []
     },
     "quality_inspection_lots": {
@@ -387,7 +385,7 @@
         "lot_quantity": "decimal",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 43,
       "unmodeled_string_columns": []
     },
     "quality_inspection_results": {
@@ -403,10 +401,8 @@
         "result_status": "string",
         "quality_specification_id": "string"
       },
-      "row_count": 50,
-      "unmodeled_string_columns": [
-        "quality_specification_id"
-      ]
+      "row_count": 86,
+      "unmodeled_string_columns": []
     },
     "quality_specifications": {
       "primary_key": "quality_specification_id",
@@ -420,7 +416,7 @@
         "effective_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 13,
       "unmodeled_string_columns": []
     },
     "routing_operations": {
@@ -434,7 +430,7 @@
         "work_center_id": "string",
         "required_capability_id": "string"
       },
-      "row_count": 100,
+      "row_count": 15,
       "unmodeled_string_columns": []
     },
     "routings": {
@@ -445,7 +441,7 @@
         "routing_name": "string",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 6,
       "unmodeled_string_columns": []
     },
     "sales_order_lines": {
@@ -457,7 +453,7 @@
         "ordered_quantity": "decimal",
         "unit": "string"
       },
-      "row_count": 50,
+      "row_count": 54,
       "unmodeled_string_columns": []
     },
     "sales_orders": {
@@ -469,7 +465,7 @@
         "requested_delivery_date": "date",
         "status": "string"
       },
-      "row_count": 50,
+      "row_count": 45,
       "unmodeled_string_columns": []
     },
     "shifts": {
@@ -481,7 +477,7 @@
         "starts_date": "date",
         "ends_date": "date"
       },
-      "row_count": 50,
+      "row_count": 31,
       "unmodeled_string_columns": []
     },
     "shipments": {
@@ -495,7 +491,7 @@
         "shipment_date": "date",
         "delivery_status": "string"
       },
-      "row_count": 50,
+      "row_count": 38,
       "unmodeled_string_columns": []
     },
     "suppliers": {
@@ -505,7 +501,7 @@
         "supplier_name": "string",
         "supplier_category": "string"
       },
-      "row_count": 50,
+      "row_count": 6,
       "unmodeled_string_columns": []
     },
     "work_centers": {
@@ -516,7 +512,7 @@
         "work_center_name": "string",
         "work_center_type": "string"
       },
-      "row_count": 100,
+      "row_count": 5,
       "unmodeled_string_columns": []
     }
   }
