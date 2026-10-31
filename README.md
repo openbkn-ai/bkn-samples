@@ -20,67 +20,35 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 
 ## Sample directory
 
-The OpenBKN 0.2.1 update covers **12 standard samples**: bilingual pairs for
-Supply Chain, World Cup, Manufacturing, Financial FIBO, Retail GS1 and Energy
-SAREF4ENER. All twelve are built and checked through one candidate plan; Order
-Basics is not offered on 0.2.1 and keeps its earlier release.
+OpenBKN 0.2.1 offers **12 standard samples**: bilingual pairs for Supply Chain, World Cup, Manufacturing, Financial FIBO, Retail GS1 and Energy SAREF4ENER, all registered in the [0.2.1 catalog](catalogs/0.2.1/catalog.json). Order Basics is not offered on 0.2.1 and keeps its earlier release. Each 0.2.1 release title starts with `[OpenBKN 0.2.1]`.
 
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |
-| [Order Basics](samples/order-basics/) | Chinese | A small starting point for orders, products and object relationships | Existing release 0.1.2; not offered on 0.2.1 |
-| [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Original 020: [0.1.16](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.16); 021 mainline: [0.1.14](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.14), requires experience-set support |
-| [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Original 020: [0.1.1](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.1); 021 mainline: [0.1.10](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.10), requires experience-set support |
-| [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Existing release 0.1.2; 0.2.1 candidate 0.1.6, platform acceptance pending |
-| [World Cup](samples/world-cup-en/) | English | Object queries, joins, rankings and cross-tournament analysis, with 50 evaluation questions | Existing release 0.1.0; 0.2.1 candidate 0.1.2, platform acceptance pending |
-| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Forecast-to-shipment manufacturing fulfillment, with 40 tables, 71 relations, and 100 bilingual evaluation questions | 0.2.1 candidate 0.1.3; self-contained, platform acceptance pending |
-| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 从预测到发运的制造履约，含 40 张表、71 条关系和 100 道中英对照评测题 | 0.2.1 candidate 0.1.3; self-contained, platform acceptance pending |
-| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | English | Securities trading, settlement, positions, valuation, issuer concentration and receivable limits; 20 tables, 78,356 records and 100 evaluation questions | Existing release 0.2.5; 0.2.1 candidate 0.2.6, platform acceptance pending |
-| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | Chinese | 证券交易、结算、持仓、估值、发行方集中度与未结算应收限额；20 张表、78,356 条记录和 100 道评测题 | Existing release 0.2.5; 0.2.1 candidate 0.2.6, platform acceptance pending |
-| [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | English | Receipt inspection, lot traceability, inventory, shared-stock fulfillment, March 2027 replenishment and recall; 15 tables, 2,911 records and 100 questions | Existing release 0.1.0; 0.2.1 candidate 0.1.1, platform acceptance pending |
-| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | Chinese | 到货质检、批次追溯、库存、共享库存履约、2027年3月补货及召回；15张表、2,911条记录、100题 | Existing release 0.1.0; 0.2.1 candidate 0.1.1, platform acceptance pending |
-| [Energy demand response (SAREF4ENER)](samples/energy-saref4ener-en-us/) | English | Eligibility, shared-capacity dispatch and metered settlement; 15 tables and 14,787 records | 0.2.1 candidate 0.1.5; self-contained, platform acceptance pending |
-| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | Chinese | Localized model and aligned facts; 3 functions, 2 snapshot metrics and 1 investigation Skill | 0.2.1 candidate 0.1.5; self-contained, platform acceptance pending |
+| [Order Basics](samples/order-basics/) | Chinese | A small starting point for orders, products and object relationships | Original 020: 0.1.2; not offered on 0.2.1 |
+| [Supply Chain](samples/supply_ontology_hand/) | Chinese | PMC planning and purchasing: backlog, buildable and promisable quantities, shortages and follow-up | Original 020: [0.1.16](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.16); 0.2.1: [0.1.17](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.17) |
+| [Supply Chain](samples/supply_ontology_en/) | English | The same PMC and purchasing scenarios in English | Original 020: [0.1.1](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.1); 0.2.1: [0.1.11](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.11) |
+| [World Cup](samples/world-cup/) | Chinese model; English data | Tournaments, teams, players and match events | Original 020: 0.1.2; 0.2.1: [0.1.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-world-cup-v0.1.7) |
+| [World Cup](samples/world-cup-en/) | English | Tournaments, teams, players and match events | Original 020: 0.1.0; 0.2.1: [0.1.3](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-world-cup-en-v0.1.3) |
+| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | English | Precision machining fulfilment: delivery, material, execution compliance, quality release, purchasing and maintenance | 0.2.1: [0.1.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-manufacturing-industry-en-us-v0.1.5) |
+| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | Chinese | 精密加工订单履约：交付、物料、执行合规、质量放行、采购与维护 | 0.2.1: [0.1.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-manufacturing-industry-zh-cn-v0.1.5) |
+| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | English | Post-trade operations, valuation, concentration and limits | 0.2.1: [0.2.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.7) |
+| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | Chinese | 交易后运营、估值、集中度与限额 | 0.2.1: [0.2.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.7) |
+| [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | English | Receipt quality, lot traceability, warehouse and store fulfilment, replenishment and recall | 0.2.1: [0.1.2](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.2) |
+| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | Chinese | 到货质检、批次追溯、仓库与门店履约、补货和召回 | 0.2.1: [0.1.2](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.2) |
+| [Energy demand response (SAREF4ENER)](samples/energy-saref4ener-en-us/) | English | Eligible capacity, shared-block dispatch, delivery verification and settlement | 0.2.1: [0.1.6](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-energy-saref4ener-en-us-v0.1.6) |
+| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | Chinese | 可承诺容量、同时段调度、交付核实与结算 | 0.2.1: [0.1.6](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-energy-saref4ener-zh-cn-v0.1.6) |
 
+Every 0.2.1 sample is organised around business roles with a business PRD, a 50-question business-scenario test set with independently computed reference answers, role-based Skills and 15 experience cards. Metrics are removed and only calculations that Cypher cannot express remain as functions, so the Community edition can use every sample. Each release was installed fresh on an OpenBKN 0.2.1 main build (arm64), its experience cards were checked online, and its `verification.json` records the evidence and limits.
 
-The earlier [complete thirteen-package candidate set](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r2) still includes
-Order Basics. The current [machine-readable plan](tools/publication/candidates-0.2.1.json) lists the 12 samples offered on
-0.2.1 and names Order Basics as excluded with a reason; it is checked against source manifests
-in both directions: missing, duplicate or unregistered samples fail the build. Fixed-source SHA-256 candidates are intended for offline
-import into a 0.2.1 test environment after local checks. Real product installation,
-MCP, function and business acceptance remain pending. Superseded releases are archived and removed under the [release retention and promotion plan](docs/release-retention-20261030.md). The r1/r2 complete candidate releases remain protected until acceptance and reference migration.
+Published 0.2.0 clients continue to use the root [official catalog](catalog.json). The updated sample service selects directories by product version: [0.2.0](catalogs/0.2.0/catalog.json) and [0.2.1](catalogs/0.2.1/catalog.json); see [directory selection](docs/product-version-catalogs.md). Earlier 0.2.1 releases are withdrawn in the catalogs and their assets removed; Git history keeps their sources.
 
-Published 0.2.0 clients continue to use the root [official catalog](catalog.json).
-The updated sample service selects directories by product version: [0.2.0](catalogs/0.2.0/catalog.json)
-and [0.2.1](catalogs/0.2.1/catalog.json); see [directory selection](docs/product-version-catalogs.md).
-The 0.2.1 directory retains FIBO/GS1 and adds the independently verified supply-chain
-patch releases. Other samples retain their stated candidate acceptance status. The OpenBKN 0.2.1 product is not
-formally released; the candidates are intended for offline import into its test environments.
-
-Manufacturing 0.1.3 and Energy 0.1.5 are now included as bilingual, content-only
-shared-MariaDB candidates without sample-specific database images. Manufacturing
-retains its 40 operational tables, 71 relations and IOF reference layer; Energy
-retains its 15 tables, 3 functions, 2 snapshot metrics and investigation Skill.
-See the [source integration record](docs/energy-saref4ener-readiness.md) for local
-validation scope and historical recovery provenance.
-
-The FIBO samples use selected MIT-licensed [FIBO sources](https://github.com/edmcouncil/fibo/tree/2d73435a4419b66b7c9f44cb9763e35fe8ac7890) as semantic references and fictional data, rather than claiming full-FIBO coverage. Fixed **[English 0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.5)** and **[Chinese 0.2.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.5)** packages each provide 3 functions, 2 recorded-snapshot metrics and 1 investigation Skill and require **OpenBKN 0.2.1 or later** (`>=0.2.1 <0.3.0`). Version 0.2.5 corrects publication notes and execution-capability requirements; business content and question banks are unchanged. Import the fixed package offline; online availability follows the merged official catalog. Validation of 0.2.5 is limited to fresh installation, compatibility gates and package parity, without new model QA. Historical results remain **96/100 financial fields per language**, **4/4 specified post-fix tool paths (100% of those paths)** and **16/16 representative 0.2.4 technical checks (100% of those checks)**; they are not a new 0.2.5 full-bank accuracy score. See the [0.2.5 release acceptance and limits](docs/financial-fibo-release-0.2.5.zh-CN.md). Superseded 0.2.4 and 0.1.x release assets are locally archived before cleanup; Git source history is preserved.
-
-World Cup data is a locked historical snapshot covering men's editions through 2022 and women's editions through 2019. Detailed coverage varies by table. See each sample's README for its data scope, license and scenario assumptions.
-
-The GS1 samples are two independently installable packages with fictional, aligned bilingual data, three functions, two dated snapshot metrics and one investigation Skill per language. They reference the Apache-2.0 [GS1 Web Vocabulary](https://github.com/gs1/WebVoc), with explicit local operational extensions. On local port 8081, the original single full pass scored **English 96/100 and Chinese 95/100**. After an event-deduplication repair and question-contract corrections, only the prior nonpassing cases were retested: **English 4/4 and Chinese 5/5**, all execution and evidence states complete. The revised full banks were not rerun; this is not a full-bank 100% claim. See the [acceptance report](docs/retail-gs1-acceptance.en-US.md). Source PR #186 is merged. Immutable [English 0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.0) and [Chinese 0.1.0](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.0) assets are published; catalog PR #187 is merged. Offline import requires OpenBKN 0.2.1 or later; no legacy 020 bundled index was changed.
+World Cup data is a locked historical snapshot covering men's editions through 2022 and women's editions through 2019. See each sample's README for its data scope, license and scenario assumptions.
 
 ## Scenario evaluation
 
-Samples with an evaluation suite keep questions, reference answers and baseline checks under `bkn-eval/`:
+Each sample keeps its business-scenario test set under `bkn-eval/baselines/`, with a PRD-mapped question set (12 basic, 20 medium, 18 complex), a withheld answer set, the oracle that computes it from the delivered data, and the recorded MCP agent run.
 
-- [Supply Chain evaluation](samples/supply_ontology_hand/bkn-eval/README.md)
-- [English Supply Chain evaluation](samples/supply_ontology_en/bkn-eval/README.md)
-- [World Cup evaluation](samples/world-cup/bkn-eval/README.md): 50 Chinese questions with explicit output fields, ordering, frozen answers and grading scripts.
-- [English World Cup evaluation](samples/world-cup-en/bkn-eval/README.md): 10 basic queries/statistics, 12 multi-table joins, 14 rankings/cross-tournament comparisons and 14 combined analyses.
-- [English FIBO evaluation](samples/financial-fibo-en-us/bkn-eval/README.md) and [Chinese FIBO evaluation](samples/financial-fibo-zh-cn/bkn-eval/README.md): 100 questions per sample across 10 scenarios, with 30 easy/basic, 40 intermediate and 30 hard/complex questions; frozen full answers and financial regression controls.
-- [English GS1 retail evaluation](samples/retail-gs1-en-us/bkn-eval/README.md) and [Chinese GS1 retail evaluation](samples/retail-gs1-zh-cn/bkn-eval/README.md): 100 questions each, PRD-mapped across 10 scenarios with 30 basic, 40 medium and 30 complex questions; original scores and the bounded nine-case retest are reported separately.
-
-An independent external agent answers the questions through MCP. Reference answers are withheld during evaluation, then used to check business values, result fields and ordering. Record the tested data baseline, package and actual results for each evaluation.
+An independent external agent answers the questions through MCP. Reference answers are withheld during evaluation, then used to check business values. Record the tested package and actual results for each evaluation.
 
 ## Develop and publish
 
@@ -115,4 +83,4 @@ Useful guides:
 
 [Supply shortage rule follow-up #190](docs/shortage-rule-190.md): retired; supply-chain 0.1.17 and supply-chain-en 0.1.11 no longer publish it.
 
-See the [release retention and 021 promotion plan](docs/release-retention-20261030.md). Energy and Manufacturing in both languages remain protected candidates until actual platform acceptance.
+See the [0.2.1 release record](docs/release-0.2.1-20261031.md) for the published set, the withdrawn versions and the deleted releases; the earlier plan is the [release retention and 021 promotion plan](docs/release-retention-20261030.md).
