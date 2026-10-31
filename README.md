@@ -42,10 +42,10 @@ Basics is not offered on 0.2.1 and keeps its earlier release.
 | [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | Chinese | Localized model and aligned facts; 3 functions, 2 snapshot metrics and 1 investigation Skill | 0.2.1 candidate 0.1.5; self-contained, platform acceptance pending |
 
 
-The [complete thirteen-package candidate set](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r2) includes every sample
-above. Its [machine-readable plan](tools/publication/candidates-0.2.1.json) is checked
-against source manifests in both directions: missing, duplicate or unregistered
-samples fail the build. Fixed-source SHA-256 candidates are intended for offline
+The earlier [complete thirteen-package candidate set](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-candidates-0.2.1-complete-20261025-r2) still includes
+Order Basics. The current [machine-readable plan](tools/publication/candidates-0.2.1.json) lists the 12 samples offered on
+0.2.1 and names Order Basics as excluded with a reason; it is checked against source manifests
+in both directions: missing, duplicate or unregistered samples fail the build. Fixed-source SHA-256 candidates are intended for offline
 import into a 0.2.1 test environment after local checks. Real product installation,
 MCP, function and business acceptance remain pending. Superseded releases are archived and removed under the [release retention and promotion plan](docs/release-retention-20261030.md). The r1/r2 complete candidate releases remain protected until acceptance and reference migration.
 

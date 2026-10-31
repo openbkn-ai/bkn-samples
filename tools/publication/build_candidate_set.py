@@ -53,7 +53,8 @@ def build_set(plan_path,output):
         filename=entry['sampleId']+'-'+entry['version']+'-package.tar.gz';shutil.copyfile(archive,downloads/filename)
         result['candidates'].append({**entry,'sample':entry['sampleId'],'file':filename,'package_digest':digest,'size':archive.stat().st_size,'source':report['source'],'offline_import_checks':{'amd64':'metadata-and-integrity-passed','arm64':'metadata-and-integrity-passed','product_0.2.0':'rejected'},'platform_acceptance':'not-run'})
         print(entry['sampleId'],entry['version'],digest,flush=True)
-    require({e['sampleId'] for e in result['candidates']}=={load_sample(p)['metadata']['name'] for p in discover_sample_dirs(ROOT)},'post-build coverage differs')
+    skipped={e['directory'] for e in plan.get('excluded',[])}
+    require({e['sampleId'] for e in result['candidates']}=={load_sample(p)['metadata']['name'] for p in discover_sample_dirs(ROOT) if p.name not in skipped},'post-build coverage differs')
     (downloads/'candidate-index.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     (downloads/'SHA256SUMS').write_text(''.join(e['package_digest'].removeprefix('sha256:')+'  '+e['file']+'\n' for e in result['candidates']))
     (downloads/'README.md').write_text('''# Complete OpenBKN 0.2.1 candidate set
