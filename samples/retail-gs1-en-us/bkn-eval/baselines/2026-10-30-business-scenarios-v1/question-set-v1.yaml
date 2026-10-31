@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: retail-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.en-US.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: basic
+  role: Warehouse and distribution lead
+  question: How many products do we carry, and in how many categories?
+  output_contract: product count, category count
+- id: Q-02
+  scenario: S01
+  difficulty: basic
+  role: Warehouse and distribution lead
+  question: Who supplies PRD-001, how many units are in a case, and how many days of shelf life must remain when it ships?
+  output_contract: supplier id and name, units per case, minimum remaining shelf-life days
+- id: Q-03
+  scenario: S01
+  difficulty: basic
+  role: Warehouse and distribution lead
+  question: How many warehouses and how many stores do we have?
+  output_contract: warehouse count, store count
+- id: Q-04
+  scenario: S03
+  difficulty: medium
+  role: Store manager
+  question: Which warehouse supplies STORE-001 by transfer?
+  output_contract: warehouse ids
+- id: Q-05
+  scenario: S02
+  difficulty: basic
+  role: Quality lead
+  question: Which lots have failed inspection, and which are still awaiting inspection?
+  output_contract: failed lots, pending lots
+- id: Q-06
+  scenario: S02
+  difficulty: medium
+  role: Quality lead
+  question: Where is stock of the lots that failed inspection still held, and how much at each place?
+  output_contract: list of lot, location, on-hand quantity
+- id: Q-07
+  scenario: S02
+  difficulty: basic
+  role: Warehouse and distribution lead
+  question: How many lots did we receive in February?
+  output_contract: lot count
+- id: Q-08
+  scenario: S02
+  difficulty: medium
+  role: Store manager
+  question: LOT-013-D is still awaiting inspection. Can it be sold now, and how much is available at each location?
+  output_contract: can sell or not, available per location
+- id: Q-09
+  scenario: S04
+  difficulty: basic
+  role: Warehouse and distribution lead
+  question: How many units of PRD-001 are available at WH-001 now?
+  output_contract: available units
+- id: Q-10
+  scenario: S04
+  difficulty: medium
+  role: Warehouse and distribution lead
+  question: How many units are currently in transit, dispatched but not yet arrived?
+  output_contract: units in transit
+- id: Q-11
+  scenario: S04
+  difficulty: medium
+  role: Quality lead
+  question: How many units are quarantined now, and across how many lot-location positions?
+  output_contract: quarantined units, lot-location count
+- id: Q-12
+  scenario: S04
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: PRD-001 has plenty on hand at WH-001. Why is so little available? Explain by lot.
+  output_contract: on-hand and available totals; per lot on-hand, expired, quarantined, recall-blocked, reserved, available
+- id: Q-13
+  scenario: S04
+  difficulty: basic
+  role: Store manager
+  question: How many units can STORE-001 sell now, and in how many lots?
+  output_contract: available units, lot count
+- id: Q-14
+  scenario: S05
+  difficulty: medium
+  role: Quality lead
+  question: How many lot-location positions hold expired stock that is still on hand, and how many units in total?
+  output_contract: position count, units
+- id: Q-15
+  scenario: S05
+  difficulty: medium
+  role: Store manager
+  question: Which lots at STORE-001 expire within two weeks and still have stock?
+  output_contract: lot ids
+- id: Q-16
+  scenario: S05
+  difficulty: basic
+  role: Store manager
+  question: Which lots at STORE-001 have expired but are still on hand?
+  output_contract: lot ids
+- id: Q-17
+  scenario: S06
+  difficulty: basic
+  role: Warehouse and distribution lead
+  question: How many orders are still open, and are any of them past their due date?
+  output_contract: open order count, overdue order ids
+- id: Q-18
+  scenario: S06
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Allocating available stock to open order lines by priority and due date, how many lines are fully covered, partly covered, and get nothing?
+  output_contract: full, partial, none and unknown line counts
+- id: Q-19
+  scenario: S06
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Can ORD-001-A ship in full? Which lots and how many units of each?
+  output_contract: ordered, allocated, lots and units
+- id: Q-20
+  scenario: S06
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: ORD-049-A is past its due date and not shipped. With its required shelf life, how many units can it still get, and from which lot?
+  output_contract: ordered, allocated, lots and units
+- id: Q-21
+  scenario: S06
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Which order lines cannot get a single unit, and how much is each short?
+  output_contract: order ids and units short
+- id: Q-22
+  scenario: S06
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: After allocating current stock, how many units are the open orders short in total?
+  output_contract: units short
+- id: Q-23
+  scenario: S07
+  difficulty: basic
+  role: Warehouse and distribution lead
+  question: What is the March demand forecast for PRD-001 at WH-001 in total?
+  output_contract: forecast units
+- id: Q-24
+  scenario: S07
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Against the March forecast, how many units of PRD-001 must WH-001 replenish in March, and from which demand does it start to fall short?
+  output_contract: units to replenish, shortfall by demand date
+- id: Q-25
+  scenario: S07
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Which product at which warehouse has the largest March replenishment gap, and how many units?
+  output_contract: product, warehouse, units
+- id: Q-26
+  scenario: S07
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Across all products, how many units must be replenished in March, and for how many product-warehouse pairs?
+  output_contract: units, pair count
+- id: Q-27
+  scenario: S07
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Why can the March 15 demand for PRD-001 at WH-001 be met only in part? How much usable stock is there then, and how much is short?
+  output_contract: demand, usable supply, shortfall
+- id: Q-28
+  scenario: S08
+  difficulty: basic
+  role: Quality lead
+  question: How many recalls are in progress, and are any closed?
+  output_contract: open recall count, closed recall ids
+- id: Q-29
+  scenario: S08
+  difficulty: medium
+  role: Quality lead
+  question: Which lots does REC-001 cover, including lots split from it?
+  output_contract: lot ids
+- id: Q-30
+  scenario: S08
+  difficulty: medium
+  role: Quality lead
+  question: Where is REC-001 stock now, and how many units are on hand at each place?
+  output_contract: locations and on-hand units
+- id: Q-31
+  scenario: S08
+  difficulty: medium
+  role: Store manager
+  question: How many units of REC-001 stock were sold and not returned, and at which store?
+  output_contract: units sold and not returned, stores
+- id: Q-32
+  scenario: S08
+  difficulty: complex
+  role: Quality lead
+  question: Which lots and products does REC-048 reach, and why does it involve another product?
+  output_contract: lots, products, reason (product transformation link)
+- id: Q-33
+  scenario: S08
+  difficulty: complex
+  role: Store manager
+  question: Which orders does REC-001 affect?
+  output_contract: order ids
+- id: Q-34
+  scenario: S09
+  difficulty: basic
+  role: Quality lead
+  question: For REC-001 as of today, how many units are controlled, how many are controllable, and what is the coverage?
+  output_contract: controlled, controllable, coverage
+- id: Q-35
+  scenario: S09
+  difficulty: medium
+  role: Quality lead
+  question: What is REC-001's coverage at WH-001?
+  output_contract: controlled, controllable, coverage
+- id: Q-36
+  scenario: S09
+  difficulty: medium
+  role: Store manager
+  question: How many units of REC-001 at STORE-001 are not yet under control?
+  output_contract: units not controlled
+- id: Q-37
+  scenario: S09
+  difficulty: medium
+  role: Quality lead
+  question: Which recalls have the lowest coverage, and what is it?
+  output_contract: recall ids, coverage
+- id: Q-38
+  scenario: S09
+  difficulty: medium
+  role: Quality lead
+  question: REC-050 is closed. Should its lots still be blocked as a recall now?
+  output_contract: still blocked or not
+- id: Q-39
+  scenario: S09
+  difficulty: complex
+  role: Quality lead
+  question: Is there a recall whose coverage cannot be calculated, and why?
+  output_contract: recall ids and reason
+- id: Q-40
+  scenario: S09
+  difficulty: complex
+  role: Quality lead
+  question: Of REC-001 stock at WH-001, how much is already quarantined and how much is blocked only by the recall?
+  output_contract: quarantined units, recall-blocked units
+- id: Q-41
+  scenario: S10
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Which lot-location positions have stock that cannot be determined now, and why?
+  output_contract: lot@location with reason codes
+- id: Q-42
+  scenario: S10
+  difficulty: medium
+  role: Warehouse and distribution lead
+  question: Is any stock movement recorded twice? Which lot does it involve, and is it counted twice?
+  output_contract: event ids, lots, identical or conflicting copies, counted twice or not
+- id: Q-43
+  scenario: S10
+  difficulty: medium
+  role: Warehouse and distribution lead
+  question: Are there transfers that arrived without a matching dispatch?
+  output_contract: transfer ids
+- id: Q-44
+  scenario: S10
+  difficulty: medium
+  role: Warehouse and distribution lead
+  question: Which reservations exceed the stock that can be used?
+  output_contract: lot@location list
+- id: Q-45
+  scenario: S10
+  difficulty: complex
+  role: Store manager
+  question: A sale of LOT-044-C at STORE-019 was reversed. After the reversal, how many units has the store sold and how many are on hand?
+  output_contract: reversed event, units sold, units on hand
+- id: Q-46
+  scenario: S10
+  difficulty: complex
+  role: Store manager
+  question: A February 26 sale of LOT-041-C at STORE-016 was only recorded on March 2. What is the store's on-hand quantity based on what is known today, and based on what is known on March 5?
+  output_contract: on hand as known today, on hand as known on March 5
+- id: Q-47
+  scenario: S10
+  difficulty: complex
+  role: Warehouse and distribution lead
+  question: Back on February 20, based on what was known then, how many units of PRD-001 were available at WH-001, and how does that compare with today?
+  output_contract: available on Feb 20, available today, change
+- id: Q-48
+  scenario: S03
+  difficulty: medium
+  role: Quality lead
+  question: Where did LOT-001-B go after it was received? Give the quantities by event.
+  output_contract: list of event type, source, destination, quantity, date
+- id: Q-49
+  scenario: S03
+  difficulty: medium
+  role: Quality lead
+  question: Which child lot was split from LOT-001-B, and how many units?
+  output_contract: child lot and units
+- id: Q-50
+  scenario: S03
+  difficulty: medium
+  role: Quality lead
+  question: Which locations has REC-001 stock been to?
+  output_contract: location ids
