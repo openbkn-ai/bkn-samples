@@ -28,7 +28,7 @@ the previous mainline inventory.
 
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |
-| [Order Basics](samples/order-basics/) | Chinese | A small starting point for orders, products and object relationships | Existing release 0.1.2; 0.2.1 candidate 0.1.4, platform acceptance pending |
+| [Order Basics](samples/order-basics/) | Chinese | A small starting point for orders, products and object relationships | Existing release 0.1.2; not offered on 0.2.1 |
 | [Supply Chain](samples/supply_ontology_hand/) | Chinese | Orders, forecasts, BOMs, inventory, procurement, shortages and delivery analysis | Original 020: [0.1.16](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.16); 021 mainline: [0.1.14](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.14), requires experience-set support |
 | [Supply Chain](samples/supply_ontology_en/) | English | Supply-chain analysis with English data, model definitions, functions, metrics and Skills | Original 020: [0.1.1](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.1); 021 mainline: [0.1.10](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.10), requires experience-set support |
 | [World Cup](samples/world-cup/) | Chinese model; English data | Tournament, team, player and match-event exploration, with 50 Chinese evaluation questions | Existing release 0.1.2; 0.2.1 candidate 0.1.6, platform acceptance pending |

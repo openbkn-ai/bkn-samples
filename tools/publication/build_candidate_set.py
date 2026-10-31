@@ -15,7 +15,11 @@ def validate_plan(root,plan):
     declared={p.name:load_sample(p) for p in discover_sample_dirs(root)}
     entries=plan.get('candidates',[]);directories=[e['directory'] for e in entries];ids=[e['sampleId'] for e in entries]
     require(len(directories)==len(set(directories)) and len(ids)==len(set(ids)),'duplicate sample in candidate set')
-    require(set(directories)==set(declared),'candidate coverage differs: missing='+str(sorted(set(declared)-set(directories)))+', unknown='+str(sorted(set(directories)-set(declared))))
+    excluded=plan.get('excluded',[]);skipped=[e['directory'] for e in excluded]
+    require(all(isinstance(e.get('reason'),str) and e['reason'].strip() for e in excluded),'every excluded sample needs a reason')
+    require(not set(skipped)&set(directories) and len(skipped)==len(set(skipped)),'a sample is both a candidate and excluded')
+    covered=set(directories)|set(skipped)
+    require(covered==set(declared),'candidate coverage differs: missing='+str(sorted(set(declared)-covered))+', unknown='+str(sorted(covered-set(declared))))
     for entry in entries:
         document=declared[entry['directory']]
         require(entry['sampleId']==document['metadata']['name'],'candidate sample identity differs')

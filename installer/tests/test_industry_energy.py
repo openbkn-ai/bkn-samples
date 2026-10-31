@@ -14,10 +14,14 @@ def load(path,name):
 
 class IndustryEnergyTest(unittest.TestCase):
     def test_release_plan_covers_every_source_identity_and_missing_samples_fail(self):
-        plan=json.loads(PLAN.read_text());self.assertEqual(len(validate_plan(ROOT,plan)),13)
+        plan=json.loads(PLAN.read_text());self.assertEqual(len(validate_plan(ROOT,plan)),12)
         for name in ('energy-saref4ener-en-us','energy-saref4ener-zh-cn','manufacturing-industry-en-us','manufacturing-industry-zh-cn'):
             changed=copy.deepcopy(plan);changed['candidates']=[e for e in changed['candidates'] if e['sampleId']!=name]
             with self.assertRaisesRegex(ValueError,'coverage differs'):validate_plan(ROOT,changed)
+        changed=copy.deepcopy(plan);changed['excluded']=[]
+        with self.assertRaisesRegex(ValueError,'coverage differs'):validate_plan(ROOT,changed)
+        changed=copy.deepcopy(plan);changed['excluded'][0]['reason']=''
+        with self.assertRaisesRegex(ValueError,'needs a reason'):validate_plan(ROOT,changed)
         changed=copy.deepcopy(plan);changed['candidates'].append(changed['candidates'][0])
         with self.assertRaisesRegex(ValueError,'duplicate'):validate_plan(ROOT,changed)
 
