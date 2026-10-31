@@ -1,0 +1,60 @@
+{
+  "sampleId": "retail-gs1-zh-cn",
+  "version": "0.1.2",
+  "packageDigest": "sha256:f685aa0d43193ba22d2d51f6c36707772af4a25e66ca4741f871668ca3865edc",
+  "sourceCommit": "097d941bb489d2349535648bcbd8c4ebadcf09ae",
+  "platformVersion": "0.2.1",
+  "platformBuild": "0.2.1-main.20261029210927.sha9156ec5",
+  "architectureTested": "arm64",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a670ad0b99cbfcb1513a3f1619091b4acb394d0a0122e206e02c494dc24aee7f",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-retail-gs1-zh-cn-9ab28592b20b440b88e23866d1859376",
+    "attemptId": "e601097450424d6d8ea2c400dac34011",
+    "sample": "retail-gs1-zh-cn",
+    "version": "0.1.2",
+    "startedAt": "2026-10-30T15:34:47.862501Z",
+    "finishedAt": "2026-10-30T15:35:38.961737Z",
+    "installedAt": "2026-10-30T15:35:38.961737Z",
+    "status": "installed",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    }
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "15 business tables loaded into the shared MariaDB; the sample database check passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh discover, knowledge and verify stages passed with every object type bound and queried."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Native functions and Skills registered, published, attached to the network and owned by this installation; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "15 experience cards pass online (5 reference queries, 4 graph patterns); the 50-question business-scenario set was answered 50/50 by an external MCP agent on this installed package (record: samples/retail-gs1-zh-cn/bkn-eval/baselines/2026-10-30-business-scenarios-v1/runs/2026-10-30-mcp-agent-r1/README.md)."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-retail-gs1-zh-cn-v0.1.2/acceptance.json",
+  "evidenceDigest": "sha256:67f52bc4114accd8dc6b8978fbd9b97787c7bd77bf96ad05d5dbf38ed58edbc7",
+  "modelQuestionsForThisArtifact": 50,
+  "retriedSameArtifacts": false,
+  "limits": [
+    "Existing arm64 8081 runtime with backend 0.2.1-main.20261029210927.sha9156ec5; no AMD64 execution or vanilla 0.2.1 certification.",
+    "The Studio experience cards were not exercised in a browser; their reference queries and graph patterns were run against the installed network."
+  ]
+}

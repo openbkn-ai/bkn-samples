@@ -1,0 +1,60 @@
+{
+  "sampleId": "manufacturing-industry-zh-cn",
+  "version": "0.1.5",
+  "packageDigest": "sha256:f044475f64cf9b3322a18660f1a4ba931d5396e9b1f1ed86cd74d29b09ec8f69",
+  "sourceCommit": "097d941bb489d2349535648bcbd8c4ebadcf09ae",
+  "platformVersion": "0.2.1",
+  "platformBuild": "0.2.1-main.20261029210927.sha9156ec5",
+  "architectureTested": "arm64",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a670ad0b99cbfcb1513a3f1619091b4acb394d0a0122e206e02c494dc24aee7f",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-manufacturing-industry-zh-cn-489c3acccbd9464fa868bbf0f144f818",
+    "attemptId": "1227eff71fe84026a9d4737a7dcca023",
+    "sample": "manufacturing-industry-zh-cn",
+    "version": "0.1.5",
+    "startedAt": "2026-10-31T02:28:51.851544Z",
+    "finishedAt": "2026-10-31T02:34:04.670678Z",
+    "installedAt": "2026-10-31T02:34:04.670678Z",
+    "status": "installed",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    }
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "40 business tables and 1,529 rows loaded into the shared MariaDB; the sample database check passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh discover, knowledge and verify stages passed with every object type bound and queried."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Skills registered, published, attached to the network and owned by this installation; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "15 experience cards pass online (6 reference queries, 4 graph patterns); the 50-question business-scenario set was answered 50/50 by an external MCP agent on this installed package (record: samples/manufacturing-industry-zh-cn/bkn-eval/baselines/2026-10-30-business-scenarios-v1/runs/2026-10-30-mcp-agent-r1/README.md)."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-zh-cn-v0.1.5/acceptance.json",
+  "evidenceDigest": "sha256:4c5a862435d728a758a8fad1c26ba7af210aef980c7a667d726421ac52483f8a",
+  "modelQuestionsForThisArtifact": 50,
+  "retriedSameArtifacts": false,
+  "limits": [
+    "Existing arm64 8081 runtime with backend 0.2.1-main.20261029210927.sha9156ec5; no AMD64 execution or vanilla 0.2.1 certification.",
+    "The Studio experience cards were not exercised in a browser; their reference queries and graph patterns were run against the installed network."
+  ]
+}

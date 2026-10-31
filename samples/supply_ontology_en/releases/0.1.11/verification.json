@@ -1,0 +1,60 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.11",
+  "packageDigest": "sha256:82fe3c95ae06a151beaf06115c84e3c2640af1f30059c91698fc96b7dd3d97c5",
+  "sourceCommit": "097d941bb489d2349535648bcbd8c4ebadcf09ae",
+  "platformVersion": "0.2.1",
+  "platformBuild": "0.2.1-main.20261029210927.sha9156ec5",
+  "architectureTested": "arm64",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a670ad0b99cbfcb1513a3f1619091b4acb394d0a0122e206e02c494dc24aee7f",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-supply-chain-en-7d1c2951cc7f46d99832f65a1634392c",
+    "attemptId": "d63c816182fd490d92357a5b92a55561",
+    "sample": "supply-chain-en",
+    "version": "0.1.11",
+    "startedAt": "2026-10-30T12:40:15.186595Z",
+    "finishedAt": "2026-10-30T12:44:23.461972Z",
+    "installedAt": "2026-10-30T12:44:23.461972Z",
+    "status": "installed",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    }
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables loaded into the shared MariaDB; the sample database check passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh discover, knowledge and verify stages passed with every object type bound and queried."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Native functions and Skills registered, published, attached to the network and owned by this installation; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "15 experience cards pass online (7 reference queries, 3 graph patterns); the 50-question business-scenario set was answered 50/50 by an external MCP agent on this installed package (record: samples/supply_ontology_en/bkn-eval/baselines/2026-10-30-business-scenarios-v4/runs/2026-10-30-mcp-agent-r1/README.md)."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.11/acceptance.json",
+  "evidenceDigest": "sha256:4947ac174e542e0693909aec5b5cb7a72b963349ce920537ed1c32287f795d65",
+  "modelQuestionsForThisArtifact": 50,
+  "retriedSameArtifacts": false,
+  "limits": [
+    "Existing arm64 8081 runtime with backend 0.2.1-main.20261029210927.sha9156ec5; no AMD64 execution or vanilla 0.2.1 certification.",
+    "The Studio experience cards were not exercised in a browser; their reference queries and graph patterns were run against the installed network."
+  ]
+}
