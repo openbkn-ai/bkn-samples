@@ -20,11 +20,10 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 
 ## Sample directory
 
-The OpenBKN 0.2.1 update covers **13 standard samples**: one Order Basics sample
-and bilingual pairs for Supply Chain, World Cup, Manufacturing, Financial FIBO,
-Retail GS1 and Energy SAREF4ENER. Energy source is integrated in this change. All
-thirteen are built and checked through one candidate plan, rather than using only
-the previous mainline inventory.
+The OpenBKN 0.2.1 update covers **12 standard samples**: bilingual pairs for
+Supply Chain, World Cup, Manufacturing, Financial FIBO, Retail GS1 and Energy
+SAREF4ENER. All twelve are built and checked through one candidate plan; Order
+Basics is not offered on 0.2.1 and keeps its earlier release.
 
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |
