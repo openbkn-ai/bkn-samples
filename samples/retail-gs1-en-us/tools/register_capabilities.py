@@ -1,5 +1,11 @@
 """Register/verify the three retail functions and the Skills."""
 import hashlib,json,subprocess
+
+try:
+    from installer.sample_logging import run as run_sample_command
+except ImportError:
+    # Older installers retain the original subprocess behavior.
+    run_sample_command = subprocess.run
 from pathlib import Path
 from ownership_receipt import read, remember, require_owned
 from register_skills import run as register_skills
@@ -7,7 +13,7 @@ ROOT=Path(__file__).resolve().parents[1]
 API='/api/agent-operator-integration/v1'
 OPERATIONS=('inventory_asof','fulfillment_plan','recall_assessment')
 def cli(*args):
-    p=subprocess.run(['openbkn','--json',*args],capture_output=True,text=True)
+    p=run_sample_command(['openbkn','--json',*args],capture_output=True,text=True)
     if p.returncode:raise RuntimeError('capability CLI failed: '+(p.stderr or p.stdout)[:1000])
     return json.loads(p.stdout or '{}')
 def entries(p,*keys):

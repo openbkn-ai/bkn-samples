@@ -9,6 +9,7 @@ from pathlib import Path
 
 from installer.state_store import write_json
 from installer.history import record_terminal_installation
+from installer import diagnostics
 
 OWNERSHIP_MANAGED_BY = "bkn-samples"
 CATALOG_NAME = "bkn-sample-{sample}"
@@ -50,7 +51,15 @@ def _read_state(state_dir: Path, sample: str) -> dict | None:
 
 
 def _write_state(state_dir: Path, record: dict) -> None:
+    try:
+        previous = _read_state(state_dir, record["sample"])
+    except (OSError, ValueError):
+        previous = None
+    if record.get("error"):
+        record["error"]["message"] = diagnostics.redact(record["error"].get("message", ""))
+    changes = diagnostics.stage_changes(previous, record)
     write_json(_state_path(state_dir, record["sample"]), record)
+    diagnostics.transitions(previous, record, changes=changes)
     record_terminal_installation(state_dir, record)
 
 
@@ -61,6 +70,8 @@ def _checkpoint(state_dir: Path, record: dict, **stage_updates: str) -> None:
     stages = record.setdefault("stages", {})
     for name, state in stage_updates.items():
         if state == "running" and stages.get(name) == "succeeded":
+            diagnostics.emit("skipped", stage=name, step=name, reason="completed stage reused",
+                             source_attempt_id=record.get("stageDetails", {}).get(name, {}).get("attemptId"))
             continue
         stages[name] = state
     _write_state(state_dir, record)
@@ -178,11 +189,13 @@ def scan_catalog(catalog: dict, expected_tables: int, openbkn, attempts: int = 3
     openbkn(["vega", "catalog", "test-connection", catalog_id])
     openbkn(["vega", "catalog", "discover", catalog_id])
     found = 0
-    for _ in range(attempts):
+    for attempt in range(attempts):
         resources = openbkn(
             ["vega", "catalog", "resources", catalog_id, "--category", "table", "--limit", "-1"]
         )
         found = _table_count(resources)
+        diagnostics.emit("progress", stage="discover", step="scan", attempt=attempt + 1,
+                         found=found, expected=expected_tables)
         if found == expected_tables:
             return
         pause(2)
@@ -226,6 +239,7 @@ def _run_hook(hook_runner, payload: dict, stage: str) -> dict:
     return result
 
 
+@diagnostics.operation_context
 def create_installation(
     *,
     sample: str,
@@ -261,6 +275,7 @@ def create_installation(
     )
 
 
+@diagnostics.operation_context
 def retry_installation(
     *,
     sample: str,
@@ -296,6 +311,7 @@ def retry_installation(
 
 
 def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, current, expected_tables, knowledge_network, components=None) -> dict:
+    diagnostics.remember_secrets([database.get("password")])
     record = current or {
         "id": f"inst-{sample}",
         "sample": sample,
@@ -311,10 +327,12 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
     record.pop("finishedAt", None)
     _checkpoint(state_dir, record, database="succeeded", discover="running")
     try:
-        catalog = ensure_catalog(sample, version, database, openbkn)
+        with diagnostics.context(stage="discover"), diagnostics.step("ensure-catalog"):
+            catalog = ensure_catalog(sample, version, database, openbkn)
         record["catalogId"] = catalog["id"]
         _write_state(state_dir, record)
-        scan_catalog(catalog, expected_tables, openbkn)
+        with diagnostics.context(stage="discover"), diagnostics.step("scan-catalog", catalog_id=catalog["id"]):
+            scan_catalog(catalog, expected_tables, openbkn)
         resources = record.setdefault("resources", {})
         if not resources.get("knowledgeNetworkId"):
             resources.update(knowledgeNetworkId=knowledge_network["id"], knowledgeNetworkPlanned=True)
@@ -322,6 +340,10 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
             resources.setdefault("ownedExecution", {"toolboxes": [], "skills": []})
         _checkpoint(state_dir, record, discover="succeeded", knowledge="running")
         payload = _hook_input(sample, version, database, catalog["id"], knowledge_network, components)
+        for component, enabled in (components or {}).items():
+            if enabled is False:
+                diagnostics.emit("skipped", stage="capabilities", step=component,
+                                 reason="component is not enabled by this sample")
         if record["stages"].get("knowledge") != "succeeded" or record["stages"].get("capabilities") != "succeeded":
             try:
                 network = openbkn(["bkn", "get", knowledge_network["id"]])
@@ -338,7 +360,15 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
                 raise ControlError("ownership_conflict", "knowledge network already exists and is not managed by this installer")
             if record.get("capabilitySummary"):
                 payload = {**payload, "capabilitySummary": record["capabilitySummary"]}
-            installed = _run_hook(hook_runner, payload, "platform-install")
+            # The existing contract combines import and capability registration.
+            # Name this timing scope explicitly rather than inventing a new hook.
+            started_at = timestamp()
+            with diagnostics.context(stage="capabilities"), diagnostics.step(
+                    "platform-install", timing_scope="shared-platform-hook") as outcome:
+                installed = _run_hook(hook_runner, payload, "platform-install")
+            record.setdefault("stageDetails", {})["capabilities"] = {
+                "startedAt": started_at, "finishedAt": timestamp(), "durationMs": outcome["elapsed_ms"],
+                "timingScope": "shared-platform-hook", "attemptId": record.get("attemptId")}
             reported = (installed.get("resources") or {}).get("capabilitySummary")
             previous = record.get("capabilitySummary")
             if previous and reported != previous:
@@ -350,9 +380,15 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
             if reported:
                 record["capabilitySummary"] = reported
             _checkpoint(state_dir, record, knowledge="succeeded", capabilities="succeeded")
+        else:
+            diagnostics.emit("skipped", stage="platform-install", step="platform-install",
+                             reason="knowledge and capabilities are already complete")
         _checkpoint(state_dir, record, verify="running")
         verified = _run_hook(hook_runner, payload, "platform-verify")
         record["checks"] = verified.get("checks") or []
+        for check in record["checks"]:
+            diagnostics.emit("succeeded" if check.get("ok") else "failed", stage="verify",
+                             step="check", check_name=str(check.get("name", "unnamed")))
         record["stages"]["verify"] = "succeeded"
         record["status"] = "installed"
         record["installedAt"] = timestamp()

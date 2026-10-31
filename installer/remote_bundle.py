@@ -19,6 +19,7 @@ import yaml
 
 from installer.catalog_source import object_pairs, pinned_url, read_url
 from installer.contract import load_sample, validate_document
+from installer import diagnostics
 
 MAX_ARCHIVE = 128 * 1024 * 1024
 MAX_CONTENT = 512 * 1024 * 1024
@@ -93,7 +94,8 @@ def compatibility(requires, platform_version, architecture, capabilities):
 def checked_json(reference, reader=read_url):
     pinned_url(reference["url"])
     data = reader(reference["url"], 2 * 1024 * 1024)
-    require(sha(data) == reference["digest"], "release metadata digest mismatch")
+    with diagnostics.step("verify-metadata", url=diagnostics.safe_url(reference["url"]), bytes_received=len(data)):
+        require(sha(data) == reference["digest"], "release metadata digest mismatch")
     document = json.loads(data.decode("utf-8"), object_pairs_hook=object_pairs)
     require(isinstance(document, dict), "release metadata must be a JSON object")
     return document
@@ -177,8 +179,9 @@ def load_release(entry, schema_path, platform_version, architecture, capabilitie
         safe_path(original["path"])
         require(note["digest"] == original["digest"], "notes digest differs")
         pinned_url(note["url"])
-        data = reader(note["url"], 256 * 1024)
-        require(sha(data) == note["digest"] and data.decode("utf-8").strip(), "invalid release notes")
+        with diagnostics.step("release-notes", url=diagnostics.safe_url(note["url"]), locale=note["locale"]):
+            data = reader(note["url"], 256 * 1024)
+            require(sha(data) == note["digest"] and data.decode("utf-8").strip(), "invalid release notes")
         notes[note["locale"]] = {"locale": note["locale"], "content": data.decode("utf-8"), "digest": note["digest"]}
     require(spec["release"]["defaultLocale"] in notes, "missing default release notes")
     return {"manifest": sample, "package": package, "dataImageRef": image_ref,
@@ -197,6 +200,7 @@ def asset_url(url, initial=False):
 class AssetRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         asset_url(newurl)
+        diagnostics.emit("http.redirect", status=code, target_host=urlsplit(newurl).hostname)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
@@ -206,7 +210,9 @@ def download_package(package, destination):
     require(not destination.exists(), "package destination already exists")
     hasher, total = hashlib.sha256(), 0
     try:
-        with build_opener(AssetRedirect()).open(Request(url), timeout=30) as response, destination.open("xb") as output:
+        with diagnostics.step("package-http", url=diagnostics.safe_url(url), timeout_seconds=30), \
+                build_opener(AssetRedirect()).open(Request(url), timeout=30) as response, destination.open("xb") as output:
+            diagnostics.emit("http.response", status=getattr(response, "status", None))
             while True:
                 chunk = response.read(1024 * 1024)
                 if not chunk:
@@ -215,11 +221,16 @@ def download_package(package, destination):
                 require(total <= MAX_ARCHIVE, "release archive exceeds size limit")
                 hasher.update(chunk)
                 output.write(chunk)
-        require("sha256:" + hasher.hexdigest() == package["digest"], "release archive digest mismatch")
-        if "sizeBytes" in package:
-            require(total == package["sizeBytes"], "release archive size differs")
+                diagnostics.emit("progress", bytes_received=total)
+        with diagnostics.step("verify-download", bytes_received=total, expected_digest=package["digest"],
+                              actual_digest="sha256:" + hasher.hexdigest()):
+            require("sha256:" + hasher.hexdigest() == package["digest"], "release archive digest mismatch")
+            if "sizeBytes" in package:
+                require(total == package["sizeBytes"], "release archive size differs")
         destination.chmod(0o600)
+        diagnostics.emit("checksum.succeeded", bytes_received=total, digest=package["digest"])
     except Exception:
+        diagnostics.emit("download.failed", level="error", bytes_received=total)
         destination.unlink(missing_ok=True)
         raise
 
@@ -294,8 +305,14 @@ def validate_package(sample_dir, release):
         # validator for model semantics; frontmatter below only binds identities.
         result = subprocess.run(["openbkn", "--json", "bkn", "validate", str(network_root)],
                                 capture_output=True, text=True, timeout=60, check=False)
+        if result.returncode:
+            diagnostics.emit("failed", stage="preflight", step="native-bkn-validation",
+                             returncode=result.returncode, reason=diagnostics.command_failure(result))
         require(result.returncode == 0, "native BKN validation failed")
         validation = json.loads(result.stdout, object_pairs_hook=object_pairs)
+        if isinstance(validation, dict) and validation.get("valid") is not True:
+            diagnostics.emit("failed", stage="preflight", step="native-bkn-validation",
+                             issues=validation.get("issues", validation.get("errors", [])))
         require(isinstance(validation, dict) and validation.get("valid") is True,
                 "native BKN validation failed")
         text = path.read_text(encoding="utf-8")

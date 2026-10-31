@@ -6,6 +6,7 @@ import stat
 import tempfile
 from pathlib import Path
 from threading import Lock
+from installer import diagnostics
 
 # Each invocation receives a different identity, including concurrent samples.
 # Container restart terminates the old process tree before this counter restarts.
@@ -35,8 +36,11 @@ def run_hook(sample_dir, script, run, environment, *, input_data=None):
         work.mkdir(mode=0o700)
         env = {key: value for key, value in environment.items() if key in _ENV}
         env.setdefault('PATH', os.environ.get('PATH', os.defpath))
-        env.update(HOME=str(work), TMPDIR=str(work), PYTHONPATH='/opt/bkn-samples',
-                   BKN_SAMPLE_CACHE=str(work / 'cache'), _BKN_HOOK_UID=str(uid))
+        env.update(HOME=str(work), TMPDIR=str(work), PYTHONPATH='/opt/bkn-samples', PYTHONUNBUFFERED='1',
+                   BKN_SAMPLE_CACHE=str(work / 'cache'), _BKN_HOOK_UID=str(uid),
+                   BKN_SAMPLE_DIAGNOSTIC_CONTEXT=diagnostics.hook_context())
+        if environment.get('BKN_SAMPLE_PHASE') in {'dbInit', 'dbVerify', 'platform-install', 'platform-verify'}:
+            env['BKN_SAMPLE_PHASE'] = environment['BKN_SAMPLE_PHASE']
         for key, name in _FILES.items():
             if key not in environment:
                 continue

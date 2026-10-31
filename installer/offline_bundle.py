@@ -10,6 +10,7 @@ from threading import Lock
 from installer.catalog_source import object_pairs
 from installer.contract import load_sample, validate_document
 from installer.remote_bundle import compatibility, extract_package, require, safe_path, sha
+from installer import diagnostics
 from installer.remote_installation import executor_digest
 from installer.offline_image import (file_sha, validate_layout, MAX_OFFLINE_ARCHIVE,
                                      MAX_OFFLINE_CONTENT, MAX_OFFLINE_FILE)
@@ -78,13 +79,15 @@ class OfflinePackages:
         if role != "admin":
             raise ApiError(403, "forbidden", "an administrator must import the sample")
         self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
-        with self.lock, tempfile.TemporaryDirectory(dir=self.directory) as temporary:
+        with diagnostics.context(operation="import", stage="download"), diagnostics.step("offline-import"), \
+                self.lock, tempfile.TemporaryDirectory(dir=self.directory) as temporary:
             try:
                 digest = file_sha(archive)
                 extracted = Path(temporary) / "sample"
                 extract_package(archive, extracted, {"digest": digest},
                                 max_archive=MAX_OFFLINE_ARCHIVE, max_content=MAX_OFFLINE_CONTENT, max_file=MAX_OFFLINE_FILE)
                 release = self.inspect(extracted, digest)
+                diagnostics.emit("offline.validated", sample_id=release["sample"], version=release["version"], digest=digest)
                 destination = self.directory / release["sample"]
                 if destination.exists():
                     existing = json.loads((destination / "release.json").read_text())
@@ -179,9 +182,11 @@ class OfflinePackages:
         with tempfile.TemporaryDirectory(dir=self.directory) as temporary:
             root = Path(temporary)
             sample_dir = root / "samples" / release["sample"]
-            extract_package(self.directory / release["sample"] / "package.tar.gz", sample_dir,
-                            {"digest": release["packageDigest"]},
-                            max_archive=MAX_OFFLINE_ARCHIVE, max_content=MAX_OFFLINE_CONTENT, max_file=MAX_OFFLINE_FILE)
-            require(self.inspect(sample_dir, release["packageDigest"]) == release, "cached offline package changed")
+            with diagnostics.context(stage="download"), diagnostics.step("offline-extract"):
+                extract_package(self.directory / release["sample"] / "package.tar.gz", sample_dir,
+                                {"digest": release["packageDigest"]},
+                                max_archive=MAX_OFFLINE_ARCHIVE, max_content=MAX_OFFLINE_CONTENT, max_file=MAX_OFFLINE_FILE)
+            with diagnostics.context(stage="preflight"), diagnostics.step("offline-validate"):
+                require(self.inspect(sample_dir, release["packageDigest"]) == release, "cached offline package changed")
             (root / "VERSION").write_text(release["version"])
             return install(root, release["version"], release.get("dataImageRef"), retry)

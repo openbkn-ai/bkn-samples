@@ -11,6 +11,7 @@ from installer.control_plane import ControlError, create_installation, note_data
 from installer.state_store import write_json
 from installer.history import read_installation_history, record_terminal_installation
 from installer.contract import read_version, sample_version
+from installer import diagnostics
 from installer.release import merge_catalog
 
 NAME_RE = re.compile(r"^[a-z0-9-]{1,32}$")
@@ -352,6 +353,7 @@ def _write_installing(state_dir: Path, sample: str, version: str, release_notes:
 
 
 def _write_failed(state_dir: Path, sample: str, version: str, code: str, message: str, *, stage: str | None = None) -> None:
+    message = diagnostics.redact(message)
     state_dir.mkdir(parents=True, exist_ok=True)
     database_codes = {
         "database_not_ready",

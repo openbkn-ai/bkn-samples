@@ -45,7 +45,8 @@ class SetupCatalogSecretTest(unittest.TestCase):
                 SETUP.run_cmd(args)
         message = str(caught.exception)
         self.assertNotIn(password, message)
-        self.assertIn('"password":"***"', message)
+        self.assertNotIn("--connector-config", message)
+        self.assertNotIn('"host":"db"', message)
         self.assertIn("refused ***", message)
 
 
