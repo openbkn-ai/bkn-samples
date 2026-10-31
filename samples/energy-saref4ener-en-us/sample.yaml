@@ -6,17 +6,18 @@
     "aliases": [],
     "displayName": "Demand response and flexible energy",
     "summary": "Synthetic response readiness, shared-resource planning and measured settlement.",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "language": "en-US"
   },
   "spec": {
     "studio": {
       "licenseNote": "MIT synthetic sample; SAREF4ENER semantic attribution is documented separately.",
       "questions": [
-        "Which devices are ready?",
-        "How is shared capacity allocated?",
-        "Does measured delivery meet the payment threshold?"
-      ]
+        "Can EVT-061 reach its target with the current plan, and how many kW short is it?",
+        "How many kWh of reduction were verified for EVT-001, what is the delivery ratio, and did it meet the threshold?",
+        "Which past events cannot have their settlement determined yet, and what is blocking each?"
+      ],
+      "experienceSet": "experience/experience-set.yaml"
     },
     "database": {
       "engine": "mariadb",
@@ -37,7 +38,7 @@
     "components": {
       "objects": true,
       "relations": true,
-      "metrics": true,
+      "metrics": false,
       "functions": true,
       "skills": true
     },

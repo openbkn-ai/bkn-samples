@@ -1,0 +1,308 @@
+schema_version: '1.0'
+set_id: energy-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: basic
+  role: Aggregator operations lead
+  question: How many enterprise customers, sites and controllable devices do we have under contract, and how many of each device type?
+  output_contract: customers, sites, devices, devices by type
+- id: Q-02
+  scenario: S01
+  difficulty: basic
+  role: Site energy manager
+  question: What is the most SIT-001 can respond in kW, and which devices does it have?
+  output_contract: site response cap, device ids
+- id: Q-03
+  scenario: S01
+  difficulty: basic
+  role: Site energy manager
+  question: Which devices are currently inactive?
+  output_contract: device ids
+- id: Q-04
+  scenario: S01
+  difficulty: basic
+  role: Site energy manager
+  question: How much can DEV-001 reduce at most, how much load must it keep for safe operation, and which meter measures it?
+  output_contract: max reduction, minimum service load, meter id
+- id: Q-05
+  scenario: S02
+  difficulty: basic
+  role: Aggregator operations lead
+  question: How many response events are scheduled for March, and have any been cancelled?
+  output_contract: active event count, cancelled event ids
+- id: Q-06
+  scenario: S02
+  difficulty: basic
+  role: Aggregator operations lead
+  question: When is EVT-061 and in which block? What reduction is targeted, for how many hours, at what reward per kWh, and what delivery ratio is required?
+  output_contract: date, block, target, hours, reward rate, minimum delivery ratio
+- id: Q-07
+  scenario: S02
+  difficulty: medium
+  role: Site energy manager
+  question: Can the latest load forecast for DEV-046 on 2026-11-25 be used?
+  output_contract: usable or not, latest forecast id, revision, quality
+- id: Q-08
+  scenario: S02
+  difficulty: medium
+  role: Aggregator operations lead
+  question: Which March date has the largest total response target, and how many kW?
+  output_contract: date, total target
+- id: Q-09
+  scenario: S03
+  difficulty: medium
+  role: Aggregator operations lead
+  question: Of the devices offered for EVT-001, how many kW can be committed under load and device constraints?
+  output_contract: eligible kW
+- id: Q-10
+  scenario: S03
+  difficulty: medium
+  role: Site energy manager
+  question: Which devices are barred from EVT-001 because of maintenance or similar constraints?
+  output_contract: device ids
+- id: Q-11
+  scenario: S03
+  difficulty: complex
+  role: Aggregator operations lead
+  question: Why can EVT-013's eligible capacity not be calculated? Which device and what reason?
+  output_contract: device, reason
+- id: Q-12
+  scenario: S03
+  difficulty: complex
+  role: Site energy manager
+  question: DEV-061 has a cap constraint on 2027-02-10 with no cap value. Which events does it affect, and can their eligible capacity still be calculated?
+  output_contract: affected events, calculable or not, constraint id
+- id: Q-13
+  scenario: S03
+  difficulty: medium
+  role: Site energy manager
+  question: How many device offers are currently withdrawn, and across how many events?
+  output_contract: withdrawn offer count, event count
+- id: Q-14
+  scenario: S04
+  difficulty: complex
+  role: Site energy manager
+  question: In EVT-001, which sites have device eligibility that adds up to more than the site response cap, and what are they limited to?
+  output_contract: site, device total, site cap
+- id: Q-15
+  scenario: S04
+  difficulty: basic
+  role: Site energy manager
+  question: How many meters does each device have, and is a site meter added on top of device meters?
+  output_contract: meters per device, site meter added or not
+- id: Q-16
+  scenario: S05
+  difficulty: complex
+  role: Aggregator operations lead
+  question: Which events share the 2027-02-24 block? Do existing commitments exceed what a device can reduce, and if so on which device and allocation?
+  output_contract: event ids, over-reserved device, allocation id
+- id: Q-17
+  scenario: S05
+  difficulty: complex
+  role: Aggregator operations lead
+  question: Can a complete new allocation plan still be produced for the events in the 2027-02-24 block, and why?
+  output_contract: complete or not, events with an unknown plan
+- id: Q-18
+  scenario: S05
+  difficulty: medium
+  role: Response duty officer
+  question: In the 2026-11-04 peak_a block, which events was DEV-016 committed to at the same time?
+  output_contract: event ids
+- id: Q-19
+  scenario: S05
+  difficulty: complex
+  role: Aggregator operations lead
+  question: In EVT-061's block, with events served by priority, how much has each committed, how much more can be scheduled, and what is each shortfall?
+  output_contract: per event committed, new, shortfall
+- id: Q-20
+  scenario: S06
+  difficulty: complex
+  role: Aggregator operations lead
+  question: Scheduling EVT-061 from the cheapest offer up, which devices are added and how many kW each? What is the estimated cost of the whole plan?
+  output_contract: added devices and kW, estimated cost
+- id: Q-21
+  scenario: S06
+  difficulty: medium
+  role: Aggregator operations lead
+  question: Can EVT-061 reach its target with the current plan, and how many kW short is it?
+  output_contract: target met or not, shortfall
+- id: Q-22
+  scenario: S06
+  difficulty: medium
+  role: Aggregator operations lead
+  question: How many kW has EVT-074 committed, how many more must be scheduled to reach its target, and what is the estimated total cost?
+  output_contract: committed, new, shortfall, estimated cost
+- id: Q-23
+  scenario: S07
+  difficulty: basic
+  role: Response duty officer
+  question: In the execution receipts, how many completed, how many failed and how many were declined by the customer?
+  output_contract: completed, failed, declined counts
+- id: Q-24
+  scenario: S07
+  difficulty: medium
+  role: Response duty officer
+  question: How many kWh of reduction were verified for EVT-001, what is the delivery ratio, and did it meet the threshold?
+  output_contract: committed kWh, verified kWh, delivery ratio, met or not
+- id: Q-25
+  scenario: S07
+  difficulty: complex
+  role: Response duty officer
+  question: EVT-033 has an allocation with no execution receipt. What does that affect?
+  output_contract: allocation id, settlement determinable or not, committed kWh
+- id: Q-26
+  scenario: S07
+  difficulty: complex
+  role: Response duty officer
+  question: Which past events fell short of their minimum delivery ratio?
+  output_contract: event ids
+- id: Q-27
+  scenario: S07
+  difficulty: medium
+  role: Response duty officer
+  question: For allocations that failed or were declined, what were the reasons and how many of each?
+  output_contract: reasons and counts
+- id: Q-28
+  scenario: S08
+  difficulty: complex
+  role: Response duty officer
+  question: DEV-136's meter reading for 2027-01-06 was corrected later. Based on what was known on January 10 and based on today, what verified energy do the events using this device have?
+  output_contract: verified energy as known on Jan 10 and today, corrected reading id
+- id: Q-29
+  scenario: S08
+  difficulty: complex
+  role: Settlement clerk
+  question: DEV-061's 2027-02-24 baseline was restated on March 3. Based on what was known on March 5, how do EVT-057's verified energy and revenue change?
+  output_contract: verified energy and revenue as known today and on March 5
+- id: Q-30
+  scenario: S08
+  difficulty: medium
+  role: Response duty officer
+  question: DEV-076 has two same-revision baselines that disagree for 2026-12-09. Which event's settlement does that affect?
+  output_contract: event ids
+- id: Q-31
+  scenario: S08
+  difficulty: medium
+  role: Response duty officer
+  question: DEV-136's 2026-12-30 reading was submitted twice. Is it counted twice?
+  output_contract: counted twice or not, reading ids
+- id: Q-32
+  scenario: S08
+  difficulty: medium
+  role: Response duty officer
+  question: DEV-106 has no meter reading for 2026-12-23. Which event's settlement does that affect?
+  output_contract: event ids
+- id: Q-33
+  scenario: S09
+  difficulty: basic
+  role: Settlement clerk
+  question: How many settlements are posted in the ledger, and how many are still pending?
+  output_contract: posted, pending counts
+- id: Q-34
+  scenario: S09
+  difficulty: medium
+  role: Settlement clerk
+  question: EVT-003 missed its threshold. How much reward does the aggregator get, how much compensation is owed to customers, and what is the net?
+  output_contract: revenue, customer compensation, net
+- id: Q-35
+  scenario: S09
+  difficulty: medium
+  role: Settlement clerk
+  question: How much does EVT-025's revenue from verified energy differ from the revenue posted in the ledger?
+  output_contract: recomputed revenue, posted revenue, difference (recomputed minus posted)
+- id: Q-36
+  scenario: S09
+  difficulty: complex
+  role: Settlement clerk
+  question: Can EVT-041's ledger be reconciled, and why?
+  output_contract: reconcilable or not, conflicting settlement ids, recomputed revenue
+- id: Q-37
+  scenario: S09
+  difficulty: complex
+  role: Settlement clerk
+  question: Which past events ran at a net loss, with compensation above revenue?
+  output_contract: event ids
+- id: Q-38
+  scenario: S09
+  difficulty: complex
+  role: Settlement clerk
+  question: Why is EVT-005's delivery ratio empty, and what are its revenue and compensation?
+  output_contract: committed kWh, delivery ratio, revenue, compensation
+- id: Q-39
+  scenario: S09
+  difficulty: complex
+  role: Settlement clerk
+  question: Up to today, for past events whose settlement can be determined, what are total revenue and total customer compensation, the net, and how many events are included?
+  output_contract: event count, revenue, compensation, net
+- id: Q-40
+  scenario: S10
+  difficulty: basic
+  role: Aggregator operations lead
+  question: How many capacity snapshots are marked invalid, and for which events?
+  output_contract: event ids
+- id: Q-41
+  scenario: S10
+  difficulty: medium
+  role: Aggregator operations lead
+  question: How does the eligible capacity recorded in EVT-017's snapshot compare with a recalculation from current data?
+  output_contract: snapshot, recomputed, difference (snapshot minus recomputed)
+- id: Q-42
+  scenario: S10
+  difficulty: complex
+  role: Aggregator operations lead
+  question: Among capacity snapshots marked valid, which disagree with a recalculation from current data?
+  output_contract: event ids
+- id: Q-43
+  scenario: S10
+  difficulty: basic
+  role: Settlement clerk
+  question: Can EVT-061 be settled now?
+  output_contract: settle now or not, response date
+- id: Q-44
+  scenario: S10
+  difficulty: basic
+  role: Aggregator operations lead
+  question: Which response events have been cancelled?
+  output_contract: event ids
+- id: Q-45
+  scenario: S10
+  difficulty: complex
+  role: Aggregator operations lead
+  question: One of EVT-073's offers was withdrawn on March 5. Based on what was known on March 5, can the plan for the 2027-03-12 block still be given in full, and does EVT-073's existing commitment still
+    stand?
+  output_contract: plan complete or not, EVT-073 committed kW, withdrawn offer
+- id: Q-46
+  scenario: S10
+  difficulty: medium
+  role: Settlement clerk
+  question: Among settlement snapshots marked valid, which events record revenue that differs from a recalculation from current data, and by how much?
+  output_contract: event, snapshot revenue, recomputed revenue
+- id: Q-47
+  scenario: S03
+  difficulty: medium
+  role: Aggregator operations lead
+  question: How many kW can EVT-061's offered devices commit now, and how far is that from the target?
+  output_contract: eligible, target, gap
+- id: Q-48
+  scenario: S09
+  difficulty: medium
+  role: Settlement clerk
+  question: How much reward does EVT-001 earn, how much compensation goes to customers, and does it match the ledger?
+  output_contract: revenue, compensation, matches ledger or not
+- id: Q-49
+  scenario: S01
+  difficulty: medium
+  role: Site energy manager
+  question: Which site and customer does DEV-016 belong to, and what is that site's response cap?
+  output_contract: site, customer, site cap
+- id: Q-50
+  scenario: S10
+  difficulty: complex
+  role: Settlement clerk
+  question: Which past events cannot have their settlement determined yet, and what is blocking each?
+  output_contract: event ids and reasons

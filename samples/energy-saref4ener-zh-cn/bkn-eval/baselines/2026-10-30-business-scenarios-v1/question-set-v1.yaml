@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: energy-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: Q-01
+  scenario: S01
+  difficulty: 基础
+  role: 聚合商运营负责人
+  question: 我们签约了多少家企业客户、多少个场所、多少台可调设备？三类设备各多少台？
+  output_contract: 客户数、场所数、设备数、各类设备数
+- id: Q-02
+  scenario: S01
+  difficulty: 基础
+  role: 企业能源经理
+  question: SIT-001 这个场所最多能响应多少千瓦？场所里有哪些设备？
+  output_contract: 场所响应上限、设备清单
+- id: Q-03
+  scenario: S01
+  difficulty: 基础
+  role: 企业能源经理
+  question: 现在有哪些设备是停用状态？
+  output_contract: 设备清单
+- id: Q-04
+  scenario: S01
+  difficulty: 基础
+  role: 企业能源经理
+  question: DEV-001 每次最多能削减多少千瓦？至少要保留多少千瓦保障运行？用哪块电表计量？
+  output_contract: 最大削减、最低保障负荷、电表编号
+- id: Q-05
+  scenario: S02
+  difficulty: 基础
+  role: 聚合商运营负责人
+  question: 三月份还安排了多少场响应事件？有没有已经取消的？
+  output_contract: 有效事件数、已取消事件清单
+- id: Q-06
+  scenario: S02
+  difficulty: 基础
+  role: 聚合商运营负责人
+  question: EVT-061 是哪天、哪个时段？要削减多少千瓦、持续几小时？每千瓦时奖励多少？达标要求多少？
+  output_contract: 日期、时段、目标、小时数、奖励单价、最低交付比例
+- id: Q-07
+  scenario: S02
+  difficulty: 中等
+  role: 企业能源经理
+  question: DEV-046 在 2026-11-25 那个时段的负荷预测，最新一版能用吗？
+  output_contract: 能否使用、最新预测编号、版本、质量
+- id: Q-08
+  scenario: S02
+  difficulty: 中等
+  role: 聚合商运营负责人
+  question: 三月份按日期看，哪几天的响应目标合计最大？合计多少千瓦？
+  output_contract: 日期、目标合计
+- id: Q-09
+  scenario: S03
+  difficulty: 中等
+  role: 聚合商运营负责人
+  question: EVT-001 现在申报的设备里，按负荷和设备约束一共能承诺多少千瓦？
+  output_contract: 可承诺千瓦
+- id: Q-10
+  scenario: S03
+  difficulty: 中等
+  role: 企业能源经理
+  question: EVT-001 有哪些设备因为检修等原因被禁止响应？
+  output_contract: 设备清单
+- id: Q-11
+  scenario: S03
+  difficulty: 复杂
+  role: 聚合商运营负责人
+  question: EVT-013 的可承诺容量为什么算不出来？是哪台设备、什么原因？
+  output_contract: 设备、原因
+- id: Q-12
+  scenario: S03
+  difficulty: 复杂
+  role: 企业能源经理
+  question: DEV-061 在 2027-02-10 有一条限额约束没填上限，影响哪些事件？这些事件的可承诺容量还能算吗？
+  output_contract: 受影响事件、能否计算、约束编号
+- id: Q-13
+  scenario: S03
+  difficulty: 中等
+  role: 企业能源经理
+  question: 现在有多少份设备申报处于撤回状态？涉及多少个事件？
+  output_contract: 撤回申报数、涉及事件数
+- id: Q-14
+  scenario: S04
+  difficulty: 复杂
+  role: 企业能源经理
+  question: EVT-001 里，哪些场所的设备可承诺量加起来超过了场所响应上限？各被压到多少？
+  output_contract: 场所、设备合计、场所上限
+- id: Q-15
+  scenario: S04
+  difficulty: 基础
+  role: 企业能源经理
+  question: 每台设备有几块电表？场所总表会不会和设备电表重复计量？
+  output_contract: 每台设备电表数、是否叠加场所电表
+- id: Q-16
+  scenario: S05
+  difficulty: 复杂
+  role: 聚合商运营负责人
+  question: 2027-02-24 那个时段有哪几个事件？已承诺的分配有没有超出设备能削减的上限？超的是哪台设备、哪条分配？
+  output_contract: 事件清单、超额设备、分配编号
+- id: Q-17
+  scenario: S05
+  difficulty: 复杂
+  role: 聚合商运营负责人
+  question: 2027-02-24 那个时段的事件现在还能给出完整的新增分配方案吗？为什么？
+  output_contract: 能否给出、计划未知的事件
+- id: Q-18
+  scenario: S05
+  difficulty: 中等
+  role: 响应值班员
+  question: 2026-11-04 午后那个时段，DEV-016 同时承诺给了哪几个事件？
+  output_contract: 事件清单
+- id: Q-19
+  scenario: S05
+  difficulty: 复杂
+  role: 聚合商运营负责人
+  question: EVT-061 所在时段几个事件按优先级先后排，各自已承诺多少、还能新安排多少、缺口多少？
+  output_contract: 各事件已承诺、新增、缺口
+- id: Q-20
+  scenario: S06
+  difficulty: 复杂
+  role: 聚合商运营负责人
+  question: EVT-061 按成本从低到高安排，新增的设备有哪些、各多少千瓦？整个方案预计成本多少？
+  output_contract: 新增设备及千瓦、预计成本
+- id: Q-21
+  scenario: S06
+  difficulty: 中等
+  role: 聚合商运营负责人
+  question: EVT-061 按现在的方案能凑够目标吗？还差多少千瓦？
+  output_contract: 能否达标、缺口
+- id: Q-22
+  scenario: S06
+  difficulty: 中等
+  role: 聚合商运营负责人
+  question: EVT-074 已经承诺了多少千瓦？再新安排多少就能凑够？预计总成本多少？
+  output_contract: 已承诺、新增、缺口、预计成本
+- id: Q-23
+  scenario: S07
+  difficulty: 基础
+  role: 响应值班员
+  question: 执行回执里，有多少条执行完成、多少条失败、多少条客户临时退出？
+  output_contract: 完成、失败、退出条数
+- id: Q-24
+  scenario: S07
+  difficulty: 中等
+  role: 响应值班员
+  question: EVT-001 实际核实的削减电量是多少千瓦时？交付比例多少？达标了吗？
+  output_contract: 承诺电量、核实电量、交付比例、是否达标
+- id: Q-25
+  scenario: S07
+  difficulty: 复杂
+  role: 响应值班员
+  question: EVT-033 有一条分配没有执行回执，会影响什么？
+  output_contract: 分配编号、结算能否确定、承诺电量
+- id: Q-26
+  scenario: S07
+  difficulty: 复杂
+  role: 响应值班员
+  question: 已经发生的事件里，哪些没有达到最低交付比例？
+  output_contract: 事件清单
+- id: Q-27
+  scenario: S07
+  difficulty: 中等
+  role: 响应值班员
+  question: 执行失败或客户退出的分配，各是什么原因？分别有几条？
+  output_contract: 原因及条数
+- id: Q-28
+  scenario: S08
+  difficulty: 复杂
+  role: 响应值班员
+  question: DEV-136 在 2027-01-06 的电表读数后来更正过。按 1 月 10 日掌握的信息和按今天的信息，用到这台设备的事件核实电量各是多少？
+  output_contract: 1 月 10 日口径、今天口径的核实电量，更正读数编号
+- id: Q-29
+  scenario: S08
+  difficulty: 复杂
+  role: 结算专员
+  question: DEV-061 在 2027-02-24 的基线 3 月 3 日被重新核定了。按 3 月 5 日掌握的信息，EVT-057 的核实电量和应收收入会怎么变？
+  output_contract: 今天口径与 3 月 5 日口径的核实电量和收入
+- id: Q-30
+  scenario: S08
+  difficulty: 中等
+  role: 响应值班员
+  question: DEV-076 在 2026-12-09 的基线有两条同版本记录内容不一致，影响哪个事件的结算？
+  output_contract: 事件清单
+- id: Q-31
+  scenario: S08
+  difficulty: 中等
+  role: 响应值班员
+  question: DEV-136 在 2026-12-30 的读数提交了两次，会被算两次吗？
+  output_contract: 是否重复计算、读数编号
+- id: Q-32
+  scenario: S08
+  difficulty: 中等
+  role: 响应值班员
+  question: DEV-106 在 2026-12-23 缺电表读数，影响哪个事件的结算？
+  output_contract: 事件清单
+- id: Q-33
+  scenario: S09
+  difficulty: 基础
+  role: 结算专员
+  question: 结算台账里已经入账的有多少笔？还在待入账的有多少笔？
+  output_contract: 已入账、待入账笔数
+- id: Q-34
+  scenario: S09
+  difficulty: 中等
+  role: 结算专员
+  question: EVT-003 没有达标，平台能拿到多少奖励？还要付给客户多少补偿？净额多少？
+  output_contract: 奖励收入、客户补偿、净额
+- id: Q-35
+  scenario: S09
+  difficulty: 中等
+  role: 结算专员
+  question: EVT-025 按核实电量算出来的收入和账上已入账的收入差多少？
+  output_contract: 重算收入、已入账收入、差额（重算减入账）
+- id: Q-36
+  scenario: S09
+  difficulty: 复杂
+  role: 结算专员
+  question: EVT-041 的账目能核对吗？为什么？
+  output_contract: 能否核对、冲突入账编号、重算收入
+- id: Q-37
+  scenario: S09
+  difficulty: 复杂
+  role: 结算专员
+  question: 已经发生的事件里，哪些是净亏损的（补偿比收入多）？
+  output_contract: 事件清单
+- id: Q-38
+  scenario: S09
+  difficulty: 复杂
+  role: 结算专员
+  question: EVT-005 的交付比例为什么是空的？收入和补偿是多少？
+  output_contract: 承诺电量、交付比例、收入、补偿
+- id: Q-39
+  scenario: S09
+  difficulty: 复杂
+  role: 结算专员
+  question: 到今天为止，结算结果能确定的已发生事件，奖励收入和客户补偿合计各是多少？净额多少？涉及多少个事件？
+  output_contract: 事件数、收入合计、补偿合计、净额
+- id: Q-40
+  scenario: S10
+  difficulty: 基础
+  role: 聚合商运营负责人
+  question: 容量快照里有几条被标记为无效？是哪些事件？
+  output_contract: 事件清单
+- id: Q-41
+  scenario: S10
+  difficulty: 中等
+  role: 聚合商运营负责人
+  question: EVT-017 的容量快照记录的可承诺量，和按现在的数据重算的相比差多少？
+  output_contract: 快照值、重算值、差额（快照减重算）
+- id: Q-42
+  scenario: S10
+  difficulty: 复杂
+  role: 聚合商运营负责人
+  question: 标为有效的容量快照里，哪些和按现在数据重算的结果对不上？
+  output_contract: 事件清单
+- id: Q-43
+  scenario: S10
+  difficulty: 基础
+  role: 结算专员
+  question: EVT-061 现在能结算吗？
+  output_contract: 能否结算、响应日期
+- id: Q-44
+  scenario: S10
+  difficulty: 基础
+  role: 聚合商运营负责人
+  question: 有哪些响应事件已经取消了？
+  output_contract: 事件清单
+- id: Q-45
+  scenario: S10
+  difficulty: 复杂
+  role: 聚合商运营负责人
+  question: EVT-073 的一份申报 3 月 5 日撤回了。按 3 月 5 日掌握的信息，2027-03-12 那个时段的计划还能完整给出吗？EVT-073 原来已承诺的量还算数吗？
+  output_contract: 计划能否完整、EVT-073 已承诺量、撤回的申报
+- id: Q-46
+  scenario: S10
+  difficulty: 中等
+  role: 结算专员
+  question: 标为有效的结算快照里，哪些事件记录的收入和按现在数据重算的不一致？各差多少？
+  output_contract: 事件、快照收入、重算收入
+- id: Q-47
+  scenario: S03
+  difficulty: 中等
+  role: 聚合商运营负责人
+  question: EVT-061 的申报设备现在一共能承诺多少千瓦？比目标差多少？
+  output_contract: 可承诺、目标、差额
+- id: Q-48
+  scenario: S09
+  difficulty: 中等
+  role: 结算专员
+  question: EVT-001 能拿到多少奖励？付给客户多少补偿？和账上一致吗？
+  output_contract: 收入、补偿、是否与台账一致
+- id: Q-49
+  scenario: S01
+  difficulty: 中等
+  role: 企业能源经理
+  question: DEV-016 属于哪个场所、哪家客户？这个场所最多能响应多少千瓦？
+  output_contract: 场所、客户、场所上限
+- id: Q-50
+  scenario: S10
+  difficulty: 复杂
+  role: 结算专员
+  question: 已经发生的事件里，哪些的结算结果现在还确定不了？各卡在哪里？
+  output_contract: 事件清单及原因
