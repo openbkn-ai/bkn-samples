@@ -26,10 +26,10 @@ directory contains the already published bilingual FIBO/GS1 releases declaring
 tools/publication/candidates-0.2.1.json (Order Basics is excluded) and added to stable
 directories only after fixed-candidate platform acceptance.
 
-Release tags and titles carry the product version, for example the tag
-`openbkn-0.2.1-world-cup-v0.1.7` titled `[OpenBKN 0.2.1] 世界杯 0.1.7`, so a release
-list shows which product each package targets. `prepare_shared_release.py` writes this
-tag into the manifest's download location and rebuilds the manifest from `sample.yaml`. Missing entries are not replaced with an
+Release titles carry the product version, for example `[OpenBKN 0.2.1] 世界杯 0.1.7`, so a
+release list shows which product each package targets. Tags stay `sample-<id>-v<version>`,
+because deployed installers accept only that download URL. `prepare_shared_release.py`
+rebuilds the manifest from `sample.yaml` and returns the tag and title to publish with. Missing entries are not replaced with an
 unverified bundled development sample in the online listing.
 
 ## Publish and verify

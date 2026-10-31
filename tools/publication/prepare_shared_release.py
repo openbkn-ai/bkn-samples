@@ -1,12 +1,15 @@
 """Prepare one self-contained archive for online/offline installation and its release manifest; never publish.
 
 The manifest is rebuilt from sample.yaml for every release (names, experience questions, content
-packages), so it follows what the sample ships now. Only the data-dependency and binding identities
-are carried over from the latest earlier manifest, when there is one. Release tags carry the product
-version, for example openbkn-0.2.1-world-cup-v0.1.7, so a release list shows which product it targets.
+packages, knowledge network format), so it follows what the sample ships now. Only the data-dependency
+and binding identities are carried over from the latest earlier manifest, keeping bindings whose object
+types still exist. The release tag stays sample-<id>-v<version>, which deployed installers require for
+the download URL; the release title carries the product version, for example
+"[OpenBKN 0.2.1] 世界杯 0.1.7", so a release list shows which product each package targets.
 """
 import argparse
 import json
+import re
 import tarfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -22,8 +25,25 @@ def product_version():
     return (ROOT / 'VERSION').read_text(encoding='utf-8').strip()
 
 
-def release_tag(sample_id, version, product=None):
-    return f"openbkn-{product or product_version()}-{sample_id}-v{version}"
+def release_tag(sample_id, version):
+    return f"sample-{sample_id}-v{version}"
+
+
+def release_title(display_name, version, product=None):
+    return f"[OpenBKN {product or product_version()}] {display_name} {version}"
+
+
+def _network(sample_dir):
+    """Knowledge network format, entrypoint and object type IDs, as the installer reads them."""
+    kn = sample_dir / 'kn'
+    if (kn / 'network.bkn').is_file():
+        ids = {m.group(1) for path in (kn / 'object_types').glob('*.bkn')
+               if (m := re.search(r'^id:\s*(\S+)\s*$', path.read_text(encoding='utf-8'), re.M))}
+        return 'bkn-directory', 'network.bkn', ids
+    files = sorted(kn.glob('*.json'))
+    require(len(files) == 1, 'a kn-json sample needs exactly one model file under kn/')
+    model = json.loads(files[0].read_text(encoding='utf-8'))
+    return 'kn-json', files[0].name, {o.get('id') for o in model.get('object_types', [])}
 
 
 def _version_key(value):
@@ -52,10 +72,11 @@ def prepare(sample_dir, version, output):
     components = spec.get('components', {})
     database = spec['database']
     tag = release_tag(sample_id, version)
+    kn_format, entrypoint, object_ids = _network(sample_dir)
     archive = {'id': 'package', 'type': 'archive', 'digest': report['package']['digest'], 'sizeBytes': report['package']['size'],
                'locations': [f'https://github.com/openbkn-ai/bkn-samples/releases/download/{tag}/package.tar.gz']}
     contents = {
-        'knowledgeNetworks': [{'artifactId': 'package', 'directory': 'kn', 'format': 'bkn-directory', 'entrypoint': 'network.bkn', 'contentId': network_id}],
+        'knowledgeNetworks': [{'artifactId': 'package', 'directory': 'kn', 'format': kn_format, 'entrypoint': entrypoint, 'contentId': network_id}],
         'functionPackages': [{'artifactId': 'package', 'directory': 'tools', 'contentId': f'{sample_id}-functions'}] if components.get('functions') else [],
         'skillPackages': [{'artifactId': 'package', 'directory': 'skills', 'contentId': f'{sample_id}-skills'}] if components.get('skills') else [],
     }
@@ -77,11 +98,11 @@ def prepare(sample_dir, version, output):
                          'dataDependencies': [{'id': dependency_id, 'artifactId': 'package', 'engine': database['engine'],
                                                'databaseName': database['name'], 'expectedTables': database['expectedTables']}],
                          'bindings': [b for b in old.get('delivery', {}).get('bindings', []) if b.get('contentId') == network_id
-                                      and b.get('dataDependencyId') == dependency_id]},
+                                      and b.get('dataDependencyId') == dependency_id and b.get('objectTypeId') in object_ids]},
         },
     }
     (candidate / 'sample.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
-    return {'sample': sample_id, 'version': version, 'tag': tag,
+    return {'sample': sample_id, 'version': version, 'tag': tag, 'title': release_title(meta['displayName'], version),
             'package': str(candidate / 'package.tar.gz'),
             'manifest': str(candidate / 'sample.json'), 'status': 'candidate-not-verified'}
 
