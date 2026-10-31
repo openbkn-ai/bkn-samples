@@ -1,5 +1,5 @@
-# Standard object-query path
+# World Cup tools
 
-This sample publishes no custom function tools. External agents use the standard network-scoped MCP tools to inspect the schema and query object instances. They perform joins, rankings and calculations independently, using ordinary Python or the standard sandbox capability as needed.
+The sample publishes no functions. Agents answer with Cypher over the published object model, guided by the World Cup history analysis Skill.
 
-No runtime SQL endpoint, internal Vega query interface or platform-internal agent is part of the sample.
+`tests/` checks the business-scenario test set against the locked CSV files, the model, and the installation entry point.

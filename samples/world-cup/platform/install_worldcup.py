@@ -42,13 +42,13 @@ def degrade_notes() -> list[dict]:
 
 
 def capability_summary(payload: dict) -> str:
-    """Hash the platform script that publishes this sample's functions."""
+    """Hash the Skills this sample publishes."""
     components = payload.get("components") or {}
     digest = hashlib.sha256()
-    if components.get("functions"):
-        script = SAMPLE_DIR / "run.sh"
-        digest.update(b"run.sh\0")
-        digest.update(script.read_bytes())
+    if components.get("skills"):
+        for skill in sorted((SAMPLE_DIR / "skills").glob("*/SKILL.md")):
+            digest.update(skill.parent.name.encode() + b"\0")
+            digest.update(skill.read_bytes())
     return digest.hexdigest()
 
 
@@ -151,6 +151,10 @@ def main() -> int:
     if result.returncode != 0:
         write_output(payload, False, "run.sh failed")
         return result.returncode
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from register_skills import run as register_skills
+
+    register_skills(apply=True, kn_id=KN_ID)
     write_output(payload, True)
     return 0
 

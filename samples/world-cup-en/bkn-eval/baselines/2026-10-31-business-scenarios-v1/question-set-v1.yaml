@@ -1,0 +1,307 @@
+schema_version: '1.0'
+set_id: worldcup-business-scenarios-v1
+business_date: '2022-12-18'
+prd: docs/PRD.md
+audience: evaluated_agent
+answer_set_access: forbidden
+questions:
+- id: B-01
+  scenario: S01
+  difficulty: basic
+  role: Sports editor
+  question: How many men's and how many women's World Cups are in the data?
+  output_contract: men's editions, women's editions
+- id: B-02
+  scenario: S01
+  difficulty: basic
+  role: Tournament data steward
+  question: How many World Cup matches are recorded in the data?
+  output_contract: match count
+- id: B-03
+  scenario: S01
+  difficulty: basic
+  role: Sports editor
+  question: When did the 2022 World Cup start and end, where was it held, and who won?
+  output_contract: year, start date, end date, host, winner
+- id: B-04
+  scenario: S02
+  difficulty: basic
+  role: Tournament data steward
+  question: How many national teams in the data have only a men's side, only a women's side, or both?
+  output_contract: team counts per men's/women's flag combination
+- id: B-05
+  scenario: S03
+  difficulty: basic
+  role: Tournament data steward
+  question: How many male and female players are in the data?
+  output_contract: male and female player counts (female flag 0/1)
+- id: B-06
+  scenario: S06
+  difficulty: basic
+  role: Sports editor
+  question: At the 2022 World Cup, how many yellow cards, red cards, second yellows and sendings-off were there?
+  output_contract: yellow cards, red cards, second yellows, sendings-off
+- id: B-07
+  scenario: S05
+  difficulty: basic
+  role: Sports editor
+  question: When was the 2022 World Cup final, who played, what was the score, and what was the shootout score?
+  output_contract: match ID, date, home team, away team, score, shootout score
+- id: B-08
+  scenario: S04
+  difficulty: basic
+  role: Sports editor
+  question: How many goals were scored at the 2022 World Cup, and how many were scored by players for their own side, own goals and in-match penalties?
+  output_contract: all goals, player goals, own goals, in-match penalties
+- id: B-09
+  scenario: S10
+  difficulty: basic
+  role: Tournament data steward
+  question: How many player-appearance records does the data hold for the 1999 Women's World Cup?
+  output_contract: recorded appearance rows
+- id: B-10
+  scenario: S10
+  difficulty: basic
+  role: Sports editor
+  question: Which stadium in the data has the largest capacity, and how many people does it hold?
+  output_contract: stadium ID, name, capacity (all ties)
+- id: J-01
+  scenario: S03
+  difficulty: medium
+  role: Sports editor
+  question: Which awards did Lionel Messi win at the 2014 and 2022 World Cups?
+  output_contract: tournament, award, player (IDs and names)
+- id: J-02
+  scenario: S05
+  difficulty: medium
+  role: Tournament data steward
+  question: In the 2022 World Cup final, who were the home and away teams, and in which stadium, city and country was it played?
+  output_contract: match ID, home and away team IDs and names, stadium ID and name, city, country
+- id: J-03
+  scenario: S03
+  difficulty: medium
+  role: Team analyst
+  question: Who was in Argentina's 2022 World Cup squad, with shirt numbers and positions?
+  output_contract: player ID, name, shirt number, position (complete list)
+- id: J-04
+  scenario: S07
+  difficulty: basic
+  role: Sports editor
+  question: Who managed Germany at the 2014 World Cup?
+  output_contract: team ID and name, manager ID and name
+- id: J-05
+  scenario: S07
+  difficulty: medium
+  role: Tournament data steward
+  question: Who refereed the 2022 World Cup final, and from which country?
+  output_contract: match ID, referee ID, name, country
+- id: J-06
+  scenario: S08
+  difficulty: medium
+  role: Team analyst
+  question: What was the final Group A table at the 2022 World Cup?
+  output_contract: team, position, played, won, drawn, lost, goals for and against, points, teams in group
+- id: J-07
+  scenario: S01
+  difficulty: basic
+  role: Sports editor
+  question: Which countries co-hosted the 2002 World Cup?
+  output_contract: tournament ID and name, each host country
+- id: J-08
+  scenario: S09
+  difficulty: medium
+  role: Team analyst
+  question: In the 2022 World Cup final shootout, who took each kick and was it scored?
+  output_contract: kick ID, team, player ID and name, scored or not (in kick order)
+- id: J-09
+  scenario: S07
+  difficulty: medium
+  role: Team analyst
+  question: For each Argentina match at the 2022 World Cup, who was the opponent, on which date, at which stage, and who managed from the touchline?
+  output_contract: match ID, date, stage number, opponent, manager ID and name
+- id: J-10
+  scenario: S04
+  difficulty: medium
+  role: Sports editor
+  question: In which matches, at which stage and in which minute did Kylian Mbappé score at the 2022 World Cup, and which were penalties?
+  output_contract: goal ID, match ID and name, stage, minute, penalty or not
+- id: J-11
+  scenario: S02
+  difficulty: medium
+  role: Tournament data steward
+  question: Which teams played at the 2022 World Cup, and which confederation does each belong to?
+  output_contract: team ID and name, confederation ID and name (complete list)
+- id: J-12
+  scenario: S09
+  difficulty: medium
+  role: Team analyst
+  question: 'How did both sides make substitutions in the 2022 World Cup final: who came on or went off, and when?'
+  output_contract: substitution ID, team, player ID and name, minute, coming on or going off
+- id: R-01
+  scenario: S04
+  difficulty: complex
+  role: Sports editor
+  question: Who are the top ten scorers in men's World Cup history, and how many goals did each score?
+  output_contract: player ID, goals, rank (with ties)
+- id: R-02
+  scenario: S04
+  difficulty: complex
+  role: Sports editor
+  question: Who are the top ten scorers in women's World Cup history, and how many goals did each score?
+  output_contract: player ID, goals, rank (with ties)
+- id: R-03
+  scenario: S04
+  difficulty: medium
+  role: Sports editor
+  question: Who were the top five scorers at the 2022 World Cup?
+  output_contract: player ID, goals, rank (with ties)
+- id: R-04
+  scenario: S02
+  difficulty: medium
+  role: Team analyst
+  question: At the 2014, 2018 and 2022 World Cups, which team scored the most goals in each, and how many?
+  output_contract: tournament, team ID, goals (all ties)
+- id: R-05
+  scenario: S02
+  difficulty: complex
+  role: Team analyst
+  question: Across the last three men's World Cups (2014, 2018, 2022), which five teams won the most matches, and how many each?
+  output_contract: team ID, wins, rank (with ties)
+- id: R-06
+  scenario: S10
+  difficulty: medium
+  role: Tournament data steward
+  question: Which are the ten largest stadiums in the data by capacity?
+  output_contract: stadium ID, name, capacity (exactly ten)
+- id: R-07
+  scenario: S05
+  difficulty: medium
+  role: Team analyst
+  question: Which five matches at the 2022 World Cup had the largest winning margins?
+  output_contract: match ID, margin, rank (with ties)
+- id: R-08
+  scenario: S05
+  difficulty: medium
+  role: Sports editor
+  question: How many matches and goals did the 2014, 2018 and 2022 World Cups have, and how many goals per match?
+  output_contract: tournament, matches, goals, goals per match (three decimals)
+- id: R-09
+  scenario: S04
+  difficulty: medium
+  role: Sports editor
+  question: In which World Cups did Lionel Messi score, and how many goals in each?
+  output_contract: tournament, goals
+- id: R-10
+  scenario: S04
+  difficulty: medium
+  role: Sports editor
+  question: How many Women's World Cup goals did Sun Wen score, and where does she rank among all-time women's scorers?
+  output_contract: player ID, name, goals, rank
+- id: R-11
+  scenario: S02
+  difficulty: complex
+  role: Team analyst
+  question: At each of the 2014, 2018 and 2022 World Cups, how many matches did each confederation's teams win, and how do they rank?
+  output_contract: tournament, confederation ID, wins, rank (every confederation, including zero wins)
+- id: R-12
+  scenario: S07
+  difficulty: medium
+  role: Tournament data steward
+  question: Which five referees have officiated the most World Cup matches, and how many each?
+  output_contract: referee ID, matches, rank (with ties)
+- id: R-13
+  scenario: S03
+  difficulty: medium
+  role: Team analyst
+  question: Which five players made the most appearances at the 2022 World Cup, and how many each?
+  output_contract: player ID, appearances, rank (with ties)
+- id: R-14
+  scenario: S06
+  difficulty: medium
+  role: Sports editor
+  question: How many yellow cards were shown at each men's World Cup from 2010 to 2022, and how many per match?
+  output_contract: tournament, yellow cards, matches, per match (three decimals)
+- id: A-01
+  scenario: S08
+  difficulty: complex
+  role: Team analyst
+  question: 'Walk through every Argentina match at the 2022 World Cup: date, stage, opponent, score, any shootout, and the result.'
+  output_contract: date, match ID, stage, opponent ID and name, goals for and against, shootout score, win/loss/draw flags
+- id: A-02
+  scenario: S08
+  difficulty: complex
+  role: Team analyst
+  question: For each France match at the 2022 World Cup, give the stage, opponent, stadium, score and whether it went to a shootout.
+  output_contract: match ID, stage, opponent, stadium, goals for and against, shootout or not
+- id: A-03
+  scenario: S04
+  difficulty: complex
+  role: Team analyst
+  question: Who scored Argentina's goals at the 2022 World Cup, how many each, how many from penalties, and how many goals did the team score in total?
+  output_contract: player ID, goals, penalty goals, team total
+- id: A-04
+  scenario: S05
+  difficulty: complex
+  role: Sports editor
+  question: 'How did the goals in the 2022 World Cup final unfold: who scored for which side, and when?'
+  output_contract: goal ID, minute, period, scorer, credited team, scorer's team, own goal, penalty
+- id: A-05
+  scenario: S03
+  difficulty: complex
+  role: Team analyst
+  question: For every player in Argentina's 2022 World Cup squad, how many appearances and goals did they have, including those with none?
+  output_contract: player ID, appearances, goals (whole squad)
+- id: A-06
+  scenario: S04
+  difficulty: complex
+  role: Team analyst
+  question: At the 2022 World Cup, how many goals were scored by starters and how many by substitutes?
+  output_contract: starter/substitute flags, goals
+- id: A-07
+  scenario: S09
+  difficulty: complex
+  role: Team analyst
+  question: How many shootouts did Argentina play at the 2022 World Cup, and in each, how many kicks did the opponent score and miss?
+  output_contract: match ID and name, opponent kicks scored, opponent kicks missed
+- id: A-08
+  scenario: S03
+  difficulty: complex
+  role: Sports editor
+  question: Who won the Golden Boot at the 2019 Women's and 2022 Men's World Cups, and how many goals did each score that tournament?
+  output_contract: tournament, player ID and name, award, goals
+- id: A-09
+  scenario: S01
+  difficulty: complex
+  role: Tournament data steward
+  question: Did the 1950 World Cup have a final? How was the winner decided, and how many matches were played in the deciding stage?
+  output_contract: tournament ID, final round flag, final flag, final-round matches, final matches
+- id: A-10
+  scenario: S03
+  difficulty: complex
+  role: Sports editor
+  question: Who scored more World Cup goals, Gerd Müller or Thomas Müller, and how many World Cup squads was each named in?
+  output_contract: player ID, name, squad editions, goals
+- id: A-11
+  scenario: S08
+  difficulty: complex
+  role: Team analyst
+  question: 'Compare France at the 2018 and 2022 World Cups: final position, matches, wins, losses, draws, goals for and against.'
+  output_contract: tournament, position, matches, wins, losses, draws, goals for, goals against
+- id: A-12
+  scenario: S06
+  difficulty: complex
+  role: Team analyst
+  question: For the 2022 World Cup top four, how many goals did each score and concede, and how many yellow cards, red cards, second yellows and sendings-off did each get?
+  output_contract: position, team, goals for, goals against, yellow, red, second yellow, sendings-off
+- id: A-13
+  scenario: S10
+  difficulty: complex
+  role: Tournament data steward
+  question: How many records does the data hold for the 1999 Women's World Cup in matches, squads, goals and player appearances?
+  output_contract: record type and row count
+- id: A-14
+  scenario: S05
+  difficulty: complex
+  role: Tournament data steward
+  question: For the 2014, 2018 and 2022 World Cups, how many goals do the scores add up to, how many goal records, own goals and shootout kicks are there, and do scores and goal records agree?
+  output_contract: tournament, score goals, goal records, own goals, shootout kicks

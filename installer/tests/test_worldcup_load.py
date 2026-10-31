@@ -156,13 +156,13 @@ class WorldCupLoadTest(unittest.TestCase):
                 else:
                     os.environ[key] = value
 
-    def test_database_success_does_not_mark_the_tool_ready(self):
+    def test_database_success_does_not_mark_the_skill_ready(self):
         checks = VERIFY.build_checks(data_ok=True, tool_ok=False)
         by_name = {item["name"]: item["ok"] for item in checks}
         self.assertTrue(by_name["tables-discovered"])
         self.assertTrue(by_name["cross-table-query"])
-        self.assertFalse(by_name["capability-callable"])
-        self.assertNotIn("skill-discoverable", by_name)
+        self.assertFalse(by_name["skills-published"])
+        self.assertNotIn("capability-callable", by_name)
 
 
 if __name__ == "__main__":
