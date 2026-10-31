@@ -19,7 +19,7 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Player goals exclude own goals (own_goal=1); team goals are credited by goals.team_id, including opponents' own goals. In-match penalties (penalty=1) are goals; shootout kicks are in penalty_kicks, are not goals and are not part of the score.
 - The score excludes the shootout, whose score is separate; wins, losses and draws follow win, lose and draw on team_appearances, and shootout-decided matches are normally draws. Margin is the absolute score difference.
 - Yellow cards, red cards, second yellows and sendings-off are counted separately, never added up.
-- Scoring and win tables use competition ranking: equal values share a rank and the next rank is skipped; "top N" lists everyone ranked N or better, including ties; a request for a quantity such as "ten stadiums" returns exactly that many, ties broken by ID.
+- Scoring and win tables use competition ranking: equal values share a rank and the next rank is skipped; "top N" lists everyone ranked N or better, including ties; a request for a quantity such as "ten stadiums" returns exactly that many, ties broken by ID. Statistics by confederation or another category list every category (all 6 confederations), with zero where no team entered or nothing is recorded.
 - Stages follow stage_name; 1950 had no final and was decided by a final round. Each co-host is listed separately. Shootout kicks are scored or missed. Averages use three decimals.
 - Use the source's names; full name = given_name + space + family_name, and always include IDs.
 

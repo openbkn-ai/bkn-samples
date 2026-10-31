@@ -15,7 +15,7 @@ Business rules (defaults; when a user states a different condition, follow the u
 - Player goals exclude own_goal=1; team goals are credited by goals.team_id, including opponents' own goals. In-match penalties (penalty=1) are goals; shootout kicks are in penalty_kicks and are neither goals nor part of the score.
 - The score excludes the shootout, whose score is separate; wins, losses and draws follow the win, lose and draw flags on team_appearances, and shootout-decided matches are normally draws. Margin = absolute score difference.
 - Yellow cards, red cards, second yellows (second_yellow_card) and sendings-off (sending_off) are counted separately; one booking can carry several flags, never add them up.
-- Scoring and win tables use competition ranking (equal values share a rank, the next rank is skipped); "top N" returns everyone ranked N or better including ties; a request for a quantity such as "ten stadiums" returns exactly that many, ties broken by ID.
+- Scoring and win tables use competition ranking (equal values share a rank, the next rank is skipped); "top N" returns everyone ranked N or better including ties; a request for a quantity such as "ten stadiums" returns exactly that many, ties broken by ID; statistics by confederation or another category list every category (all 6 confederations), with zero where nothing is recorded.
 - Match stages follow stage_name (group stage, final and so on); 1950 had no final and was decided by a final round. Each co-host is listed separately. Shootout kicks are scored or missed, never saves. Averages use three decimals.
 
 How to answer:
