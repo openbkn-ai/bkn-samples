@@ -1,0 +1,105 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "world-cup",
+    "version": "0.1.7",
+    "displayName": "世界杯",
+    "summary": "用公开的世界杯历史数据查询赛事、球队、球员和比赛事件。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "CC-BY-SA 4.0 · Joshua C. Fjelstul"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-31T06:09:29Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:71bffee25ad186381befdba933a6ba98ce718fd7031d83bfc0c808c63b649a80"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:f79cbda93354e84eb2ccdb25ea1e3613bdfc8fd6bc0601648c1081eec1f68816"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:fe68a64303b26affa7549d190c896de4f7095ef2db3d88d11349aa3a28b1a5ae",
+        "sizeBytes": 1876045,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-v0.1.7/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "worldcup-network",
+        "questions": [
+          "2022 年世界杯决赛是哪天、谁对谁？比分多少？点球大战比分多少？",
+          "梅西在 2014 年和 2022 年世界杯拿过哪些奖？",
+          "1950 年世界杯有决赛吗？冠军是怎么决出的？最后阶段踢了几场？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "worldcup-network"
+        }
+      ],
+      "functionPackages": [],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "world-cup-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "worldcup-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "worldcup",
+          "expectedTables": 27
+        }
+      ],
+      "bindings": []
+    }
+  }
+}

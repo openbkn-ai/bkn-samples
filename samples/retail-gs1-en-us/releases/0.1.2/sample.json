@@ -1,0 +1,203 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "retail-gs1-en-us",
+    "version": "0.1.2",
+    "displayName": "Food Supply and Recall",
+    "summary": "Synthetic food distribution, fulfillment and recall operations.",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT synthetic assets; GS1 WebVoc Apache-2.0 semantic references"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-31T06:09:34Z",
+      "defaultLocale": "en-US",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:aa43555335ff106fc6750cd934aa9febf201657ca3df9575b2129aa3be1fdfb3"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:22e51a26f44b81e0a26f106012cd695b4ab9ef6ade2fb49c5dfcd1ca10023c8d"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.function",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:5cdeb15a0795e792e7b9573f168d0b5167df360c83ce516a6c39346910aa0da3",
+        "sizeBytes": 85676,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-retail-gs1-en-us-v0.1.2/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "retail-gs1-en-us-network",
+        "questions": [
+          "PRD-001 has plenty on hand at WH-001. Why is so little available? Explain by lot.",
+          "Where is REC-001 stock now, and how many units are on hand at each place?",
+          "Against the March forecast, how many units of PRD-001 must WH-001 replenish in March?"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "retail-gs1-en-us-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "retail-gs1-en-us-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "retail-gs1-en-us-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "retail-gs1-en-us-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "retail_gs1_en_us",
+          "expectedTables": 15
+        }
+      ],
+      "bindings": [
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "organizations",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "organizations"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "locations",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "locations"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "products",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "products"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "lots",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "lots"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "movements",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "movements"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "inspections",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "inspections"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "holds",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "holds"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "orders",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "orders"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "order_lines",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "order_lines"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "reservations",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "reservations"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "demand_forecasts",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "demand_forecasts"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "recalls",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "recalls"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "lot_links",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "lot_links"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "inventory_snapshots",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "inventory_snapshots"
+        },
+        {
+          "contentId": "retail-gs1-en-us-network",
+          "objectTypeId": "recall_snapshots",
+          "dataDependencyId": "retail-gs1-en-us-data",
+          "tableName": "recall_snapshots"
+        }
+      ]
+    }
+  }
+}

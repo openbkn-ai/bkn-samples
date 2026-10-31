@@ -1,0 +1,105 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "manufacturing-industry-zh-cn",
+    "version": "0.1.5",
+    "displayName": "制造业端到端运营（中文）",
+    "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT · 虚构样例数据，不得用于真实生产运营决策。"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-10-31T06:09:31Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:e9c3c4ba994d2fe2b566065ae8a57408fb156d2e124be9f3280f76881b8c53fe"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:00de17e96e1a47e8de5415f39fe39a740fd58e9036b236c80173088887c2a7d8"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:f044475f64cf9b3322a18660f1a4ba931d5396e9b1f1ed86cd74d29b09ec8f69",
+        "sizeBytes": 109705,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-zh-cn-v0.1.5/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "manufacturing-industry-zh-cn-network",
+        "questions": [
+          "现在哪些工单被阻塞了？各是因为什么？",
+          "已经完成的执行里，哪些不合规？各是什么原因？",
+          "有没有检验记成通过、测量值却超出规格的批次？这批货发出去了吗？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "manufacturing-industry-zh-cn-network"
+        }
+      ],
+      "functionPackages": [],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "manufacturing-industry-zh-cn-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "manufacturing-industry-zh-cn-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "manufacturing_industry_zh_cn",
+          "expectedTables": 40
+        }
+      ],
+      "bindings": []
+    }
+  }
+}

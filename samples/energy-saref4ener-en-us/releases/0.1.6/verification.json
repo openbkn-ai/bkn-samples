@@ -1,0 +1,60 @@
+{
+  "sampleId": "energy-saref4ener-en-us",
+  "version": "0.1.6",
+  "packageDigest": "sha256:786aa6a800fa0a88a923d5809dac036b1556b916946ae8a32673a86337d459ed",
+  "sourceCommit": "097d941bb489d2349535648bcbd8c4ebadcf09ae",
+  "platformVersion": "0.2.1",
+  "platformBuild": "0.2.1-main.20261029210927.sha9156ec5",
+  "architectureTested": "arm64",
+  "executorImage": "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@sha256:a670ad0b99cbfcb1513a3f1619091b4acb394d0a0122e206e02c494dc24aee7f",
+  "freshInstallation": true,
+  "installation": {
+    "id": "inst-energy-saref4ener-en-us-95c33f1c0f3a4d16a19ba41d438f5522",
+    "attemptId": "74249a40a7aa43c48584153444638841",
+    "sample": "energy-saref4ener-en-us",
+    "version": "0.1.6",
+    "startedAt": "2026-10-31T00:54:43.211446Z",
+    "finishedAt": "2026-10-31T00:55:33.961390Z",
+    "installedAt": "2026-10-31T00:55:33.961390Z",
+    "status": "installed",
+    "stages": {
+      "database": "succeeded",
+      "discover": "succeeded",
+      "knowledge": "succeeded",
+      "capabilities": "succeeded",
+      "verify": "succeeded"
+    }
+  },
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "15 business tables loaded into the shared MariaDB; the sample database check passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "Fresh discover, knowledge and verify stages passed with every object type bound and queried."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Native functions and Skills registered, published, attached to the network and owned by this installation; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "15 experience cards pass online (7 reference queries, 4 graph patterns); the 50-question business-scenario set was answered 50/50 by an external MCP agent on this installed package (record: samples/energy-saref4ener-en-us/bkn-eval/baselines/2026-10-30-business-scenarios-v1/runs/2026-10-30-mcp-agent-r1/README.md)."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-energy-saref4ener-en-us-v0.1.6/acceptance.json",
+  "evidenceDigest": "sha256:aabd40bddc1b9cc16c586dec028e79e74dfa99b4ad100ecf961b0e2994dea9fd",
+  "modelQuestionsForThisArtifact": 50,
+  "retriedSameArtifacts": false,
+  "limits": [
+    "Existing arm64 8081 runtime with backend 0.2.1-main.20261029210927.sha9156ec5; no AMD64 execution or vanilla 0.2.1 certification.",
+    "The Studio experience cards were not exercised in a browser; their reference queries and graph patterns were run against the installed network."
+  ]
+}
