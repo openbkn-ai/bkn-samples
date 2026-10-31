@@ -1,0 +1,295 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: zh-CN
+  source:
+    answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v1/answer-set-v1.yaml
+    setId: retail-business-scenarios-v1
+spec:
+  businessDate: '2027-02-28'
+  cases:
+  - id: Q-01
+    title: 卖什么
+    explanation: 数一数商品和品类。
+    question: 我们一共经营多少个商品？分在几个品类？
+    answer: 我们经营 50 个商品，分在 5 个品类。
+    expected:
+      products: 50
+      categories: 5
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (p:products)
+        RETURN count(*) AS products, count(DISTINCT p.category) AS categories
+  - id: Q-05
+    title: 哪些批次有质量问题
+    explanation: 看每个批次最近一次质检的结果，不合格和待检的都不能卖。
+    question: 现在有哪些批次质检不合格？哪些还没检完？
+    answer: 不合格的批次有 LOT-011-C、LOT-022-C、LOT-033-C、LOT-044-C；还没检完的有 LOT-013-D、LOT-026-D、LOT-039-D。
+    expected:
+      failed:
+      - LOT-011-C
+      - LOT-022-C
+      - LOT-033-C
+      - LOT-044-C
+      pending:
+      - LOT-013-D
+      - LOT-026-D
+      - LOT-039-D
+    surfaces:
+    - agent
+  - id: Q-09
+    title: 仓里能用多少
+    explanation: 读 2 月 28 日库存快照，按商品和仓库汇总可用量。
+    question: PRD-001 现在在 WH-001 能用的库存有多少件？
+    answer: PRD-001 现在在 WH-001 能用的库存是 111 件。
+    expected:
+      available: 111
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (s:inventory_snapshots)
+        WHERE s.product_id = 'PRD-001' AND s.location_id = 'WH-001'
+        RETURN sum(s.available) AS available
+  - id: Q-11
+    title: 隔离了多少
+    explanation: 汇总快照里的隔离数量和有隔离的批次库位。
+    question: 现在被隔离、不能用的库存一共多少件？分布在多少个批次库位？
+    answer: 现在被隔离的库存一共 2292 件，分布在 157 个批次库位。
+    expected:
+      quarantined: 2292
+      positions: 157
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (s:inventory_snapshots)
+        WHERE s.quarantined > 0
+        RETURN sum(s.quarantined) AS quarantined, count(*) AS positions
+  - id: Q-12
+    title: 为什么在库多能用少
+    explanation: 按批次拆开：过期、隔离、召回封存、预留各扣了多少。
+    question: PRD-001 在 WH-001 在库不少，为什么能用的只有这么些？按批次说明。
+    answer: PRD-001 在 WH-001 在库 374 件，能用 111 件：LOT-001-A 81 件已过期；LOT-001-B 91 件里隔离 20、召回封存 71；LOT-001-D 61 件被召回封存；LOT-001-C 141 件预留 30，可用 111。
+    expected:
+      on_hand: 374
+      available: 111
+      lots:
+        LOT-001-A:
+          on_hand: 81
+          expired: true
+          quarantined: 0
+          recall_blocked: 0
+          reserved: 0
+          available: 0
+        LOT-001-B:
+          on_hand: 91
+          expired: false
+          quarantined: 20
+          recall_blocked: 71
+          reserved: 0
+          available: 0
+        LOT-001-C:
+          on_hand: 141
+          expired: false
+          quarantined: 0
+          recall_blocked: 0
+          reserved: 30
+          available: 111
+        LOT-001-D:
+          on_hand: 61
+          expired: false
+          quarantined: 0
+          recall_blocked: 61
+          reserved: 0
+          available: 0
+    surfaces:
+    - agent
+  - id: Q-14
+    title: 过期还在库的货
+    explanation: 批次到期日早于今天、仍有在库的就是过期库存。
+    question: 现在有多少个批次库位的货已经过期但还在库？合计多少件？
+    answer: 现在有 100 个批次库位的货已经过期还在库，合计 5347 件。
+    expected:
+      positions: 100
+      units: 5347
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (s:inventory_snapshots)-[:inventory_snapshots_by_lot_id]->(l:lots)
+        WHERE l.expiry_date < '2027-02-28' AND s.on_hand > 0
+        RETURN count(*) AS positions, sum(s.on_hand) AS units
+      graph: |-
+        MATCH (s:inventory_snapshots)-[:inventory_snapshots_by_lot_id]->(l:lots)
+        WHERE l.expiry_date < '2027-02-28' AND s.on_hand > 0 AND s.location_id = 'STORE-001'
+  - id: Q-17
+    title: 还有多少单没完成
+    explanation: 统计未完成订单，交期早于今天的就是逾期。
+    question: 现在还有多少张订单没完成？其中有没有已经过了交期的？
+    answer: 还有 100 张订单没完成，已经过了交期的是 ORD-049-A。
+    expected:
+      open_orders: 100
+      overdue:
+      - ORD-049-A
+    surfaces:
+    - agent
+  - id: Q-18
+    title: 订单能配多少
+    explanation: 按优先级和交期共用一份库存，先到期先出，并检查剩余保质期。
+    question: 按优先级和交期用现有可用库存给未完成的订单行配货，能全部满足、部分满足和一件都配不到的各有多少行？
+    answer: 按现有库存配货，全部满足的 47 行、部分满足的 45 行、一件都配不到的 8 行，无法判断的 0 行。
+    expected:
+      full: 47
+      partial: 45
+      none: 8
+      unknown: 0
+    surfaces:
+    - agent
+  - id: Q-24
+    title: 三月要补多少
+    explanation: 按三月预测逐次扣减可用库存和计划到货，缺口就是要补的量。
+    question: 按三月预测，PRD-001 在 WH-001 三月份需要补多少件？分别从哪次需求开始缺？
+    answer: PRD-001 在 WH-001 三月要补 106 件：2027-03-15 缺 25 件，2027-03-31 缺 81 件。
+    expected:
+      replenish: 106
+      shortages:
+        '2027-03-15': 25
+        '2027-03-31': 81
+    surfaces:
+    - agent
+  - id: Q-48
+    title: 一个批次去了哪里
+    explanation: 按日期列出批次的收货、消耗、调拨、销售和退货事件。
+    question: LOT-001-B 收货以后都去了哪里？按事件说明数量。
+    answer: LOT-001-B：2027-02-02 在 WH-001 收货（receive）151 件；2027-02-21 消耗（consume）20 件；2027-02-22 从 WH-001 发往 STORE-001（dispatch）40 件，2027-02-23 到货（arrive）；2027-02-24 在 STORE-001 销售（sale）16 件；2027-02-25
+      退回（return）3 件。
+    expected:
+      events:
+      - event: receive
+        source: null
+        destination: WH-001
+        quantity: 151
+        date: '2027-02-02'
+      - event: consume
+        source: WH-001
+        destination: null
+        quantity: 20
+        date: '2027-02-21'
+      - event: dispatch
+        source: WH-001
+        destination: STORE-001
+        quantity: 40
+        date: '2027-02-22'
+      - event: arrive
+        source: null
+        destination: STORE-001
+        quantity: 40
+        date: '2027-02-23'
+      - event: sale
+        source: STORE-001
+        destination: null
+        quantity: 16
+        date: '2027-02-24'
+      - event: return
+        source: null
+        destination: STORE-001
+        quantity: 3
+        date: '2027-02-25'
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (m:movements)-[:movements_by_lot_id]->(l:lots)
+        WHERE l.lot_id = 'LOT-001-B' AND m.view_code = 'actual'
+  - id: Q-29
+    title: 召回涉及哪些批次
+    explanation: 从召回根批次沿拆分关系找到下游批次。
+    question: REC-001 涉及哪些批次？包括拆分出去的。
+    answer: REC-001 涉及 LOT-001-B 和从它拆出的 LOT-001-D。
+    expected:
+      lots:
+      - LOT-001-B
+      - LOT-001-D
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (r:recalls)-[:recalls_by_root_lot_id]->(p:lots), (k:lot_links)-[:lot_links_by_parent_lot_id]->(p)
+        WHERE r.recall_id = 'REC-001'
+  - id: Q-32
+    title: 召回为什么牵连别的商品
+    explanation: 商品转换把一个商品的批次变成另一个商品的批次，召回会跟着走。
+    question: REC-048 会牵连到哪些批次和商品？为什么会涉及别的商品？
+    answer: REC-048 涉及 LOT-047-D、LOT-048-B、LOT-048-D，牵连 PRD-047 和 PRD-048，原因是商品转换记录 LINK-047-MULTI。
+    expected:
+      lots:
+      - LOT-047-D
+      - LOT-048-B
+      - LOT-048-D
+      products:
+      - PRD-047
+      - PRD-048
+      via_link:
+      - LINK-047-MULTI
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (k:lot_links)-[:lot_links_by_child_lot_id]->(c:lots), (k)-[:lot_links_by_parent_lot_id]->(p:lots)
+        WHERE k.link_id = 'LINK-047-MULTI'
+  - id: Q-34
+    title: 召回控制住多少
+    explanation: 读召回快照：已控制 ÷ 可控制（在库 + 在途）。
+    question: REC-001 截至今天已经控制住多少件？可控制的一共多少件？控制比例多少？
+    answer: REC-001 已控制 23 件，可控制 203 件，控制比例 0.1133。
+    expected:
+      controlled: 23
+      controllable: 203
+      coverage: 0.1133
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (r:recall_snapshots)
+        WHERE r.recall_id = 'REC-001'
+        RETURN r.controlled_quantity AS controlled, r.controllable_quantity AS controllable, r.coverage_ratio AS coverage
+  - id: Q-41
+    title: 哪些库存算不清
+    explanation: 事件冲突、负库存、退货多于销售时库存算不清，不能当成零。
+    question: 现在有哪些批次库位的库存算不清楚？各是什么原因？
+    answer: 4 个批次库位的库存算不清：LOT-043-C@STORE-018（conflicting_event、returns_exceed_sales），LOT-045-C@STORE-020、LOT-045-D@STORE-020、LOT-046-C@STORE-021（negative_inventory）。
+    expected:
+      positions:
+        LOT-043-C@STORE-018:
+        - conflicting_event
+        - returns_exceed_sales
+        LOT-045-C@STORE-020:
+        - negative_inventory
+        LOT-045-D@STORE-020:
+        - negative_inventory
+        LOT-046-C@STORE-021:
+        - negative_inventory
+    surfaces:
+    - agent
+  - id: Q-46
+    title: 补录前后看到的不一样
+    explanation: 按当天已知的信息看，补录的事件还不算；按更晚的信息看就算。
+    question: LOT-041-C 在 STORE-016 有一笔 2 月 26 日的销售 3 月 2 日才补录。按今天掌握的信息和按 3 月 5 日掌握的信息，这家店的在库分别是多少？
+    answer: 按今天的信息，LOT-041-C 在 STORE-016 在库 26 件；算上 3 月 2 日补录的销售、按 3 月 5 日的信息看，在库 19 件。
+    expected:
+      known_today: 26
+      known_march_5: 19
+    surfaces:
+    - agent

@@ -1,0 +1,296 @@
+apiVersion: samples.openbkn.ai/v1alpha1
+kind: ExperienceSet
+metadata:
+  language: en-US
+  source:
+    answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v1/answer-set-v1.yaml
+    setId: retail-business-scenarios-v1
+spec:
+  businessDate: '2027-02-28'
+  cases:
+  - id: Q-01
+    title: What we sell
+    explanation: Count products and their categories.
+    question: How many products do we carry, and in how many categories?
+    answer: We carry 50 products in 5 categories.
+    expected:
+      products: 50
+      categories: 5
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (p:products)
+        RETURN count(*) AS products, count(DISTINCT p.category) AS categories
+  - id: Q-05
+    title: Lots with quality problems
+    explanation: Check each lot's latest inspection; failed and pending lots cannot be sold.
+    question: Which lots have failed inspection, and which are still awaiting inspection?
+    answer: 'Failed: LOT-011-C, LOT-022-C, LOT-033-C, LOT-044-C. Awaiting inspection: LOT-013-D, LOT-026-D, LOT-039-D.'
+    expected:
+      failed:
+      - LOT-011-C
+      - LOT-022-C
+      - LOT-033-C
+      - LOT-044-C
+      pending:
+      - LOT-013-D
+      - LOT-026-D
+      - LOT-039-D
+    surfaces:
+    - agent
+  - id: Q-09
+    title: What a warehouse can use
+    explanation: Read the February 28 inventory snapshot and total the available stock for the product and warehouse.
+    question: How many units of PRD-001 are available at WH-001 now?
+    answer: PRD-001 has 111 units available at WH-001 now.
+    expected:
+      available: 111
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (s:inventory_snapshots)
+        WHERE s.product_id = 'PRD-001' AND s.location_id = 'WH-001'
+        RETURN sum(s.available) AS available
+  - id: Q-11
+    title: How much is quarantined
+    explanation: Total the quarantined quantity and the lot-locations that carry it in the snapshot.
+    question: How many units are quarantined now, and across how many lot-location positions?
+    answer: 2292 units are quarantined now, across 157 lot-locations.
+    expected:
+      quarantined: 2292
+      positions: 157
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (s:inventory_snapshots)
+        WHERE s.quarantined > 0
+        RETURN sum(s.quarantined) AS quarantined, count(*) AS positions
+  - id: Q-12
+    title: Why on hand is high but available is low
+    explanation: 'Split by lot: how much expiry, quarantine, recall block and reservations take away.'
+    question: PRD-001 has plenty on hand at WH-001. Why is so little available? Explain by lot.
+    answer: 'PRD-001 has 374 on hand at WH-001 but only 111 available: LOT-001-A 81 expired; LOT-001-B 91 with 20 quarantined and 71 recall-blocked; LOT-001-D 61 recall-blocked; LOT-001-C 141 with 30 reserved,
+      111 available.'
+    expected:
+      on_hand: 374
+      available: 111
+      lots:
+        LOT-001-A:
+          on_hand: 81
+          expired: true
+          quarantined: 0
+          recall_blocked: 0
+          reserved: 0
+          available: 0
+        LOT-001-B:
+          on_hand: 91
+          expired: false
+          quarantined: 20
+          recall_blocked: 71
+          reserved: 0
+          available: 0
+        LOT-001-C:
+          on_hand: 141
+          expired: false
+          quarantined: 0
+          recall_blocked: 0
+          reserved: 30
+          available: 111
+        LOT-001-D:
+          on_hand: 61
+          expired: false
+          quarantined: 0
+          recall_blocked: 61
+          reserved: 0
+          available: 0
+    surfaces:
+    - agent
+  - id: Q-14
+    title: Expired stock still on hand
+    explanation: Lots whose expiry date is before today and still have stock on hand.
+    question: How many lot-location positions hold expired stock that is still on hand, and how many units in total?
+    answer: 100 lot-locations hold expired stock still on hand, 5347 units in total.
+    expected:
+      positions: 100
+      units: 5347
+    surfaces:
+    - agent
+    - query
+    - graph
+    cypher:
+      query: |-
+        MATCH (s:inventory_snapshots)-[:inventory_snapshots_by_lot_id]->(l:lots)
+        WHERE l.expiry_date < '2027-02-28' AND s.on_hand > 0
+        RETURN count(*) AS positions, sum(s.on_hand) AS units
+      graph: |-
+        MATCH (s:inventory_snapshots)-[:inventory_snapshots_by_lot_id]->(l:lots)
+        WHERE l.expiry_date < '2027-02-28' AND s.on_hand > 0 AND s.location_id = 'STORE-001'
+  - id: Q-17
+    title: Open orders
+    explanation: Count open orders; those due before today are overdue.
+    question: How many orders are still open, and are any of them past their due date?
+    answer: 100 orders are still open; ORD-049-A is past its due date.
+    expected:
+      open_orders: 100
+      overdue:
+      - ORD-049-A
+    surfaces:
+    - agent
+  - id: Q-18
+    title: How far orders can be filled
+    explanation: Orders share one stock pool by priority and due date, earliest expiry first, with shelf-life checks.
+    question: Allocating available stock to open order lines by priority and due date, how many lines are fully covered, partly covered, and get nothing?
+    answer: With current stock, 47 lines are filled in full, 45 in part and 8 get nothing; 0 cannot be judged.
+    expected:
+      full: 47
+      partial: 45
+      none: 8
+      unknown: 0
+    surfaces:
+    - agent
+  - id: Q-24
+    title: March replenishment
+    explanation: Walk the March forecast against available stock and planned receipts; the shortfall is what to replenish.
+    question: Against the March forecast, how many units of PRD-001 must WH-001 replenish in March, and from which demand does it start to fall short?
+    answer: 'PRD-001 at WH-001 needs 106 units in March: 25 short on 2027-03-15 and 81 short on 2027-03-31.'
+    expected:
+      replenish: 106
+      shortages:
+        '2027-03-15': 25
+        '2027-03-31': 81
+    surfaces:
+    - agent
+  - id: Q-48
+    title: Where a lot went
+    explanation: List the lot's receipt, consumption, transfer, sale and return events by date.
+    question: Where did LOT-001-B go after it was received? Give the quantities by event.
+    answer: 'LOT-001-B: receive 151 at WH-001 on 2027-02-02; consume 20 on 2027-02-21; dispatch 40 from WH-001 to STORE-001 on 2027-02-22; arrive at STORE-001 on 2027-02-23; sale of 16 at STORE-001 on 2027-02-24;
+      return of 3 on 2027-02-25.'
+    expected:
+      events:
+      - event: receive
+        source: null
+        destination: WH-001
+        quantity: 151
+        date: '2027-02-02'
+      - event: consume
+        source: WH-001
+        destination: null
+        quantity: 20
+        date: '2027-02-21'
+      - event: dispatch
+        source: WH-001
+        destination: STORE-001
+        quantity: 40
+        date: '2027-02-22'
+      - event: arrive
+        source: null
+        destination: STORE-001
+        quantity: 40
+        date: '2027-02-23'
+      - event: sale
+        source: STORE-001
+        destination: null
+        quantity: 16
+        date: '2027-02-24'
+      - event: return
+        source: null
+        destination: STORE-001
+        quantity: 3
+        date: '2027-02-25'
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (m:movements)-[:movements_by_lot_id]->(l:lots)
+        WHERE l.lot_id = 'LOT-001-B' AND m.view_code = 'actual'
+  - id: Q-29
+    title: Lots a recall covers
+    explanation: Follow the splits from the recall's root lot to its downstream lots.
+    question: Which lots does REC-001 cover, including lots split from it?
+    answer: REC-001 covers LOT-001-B and LOT-001-D, which was split from it.
+    expected:
+      lots:
+      - LOT-001-B
+      - LOT-001-D
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (r:recalls)-[:recalls_by_root_lot_id]->(p:lots), (k:lot_links)-[:lot_links_by_parent_lot_id]->(p)
+        WHERE r.recall_id = 'REC-001'
+  - id: Q-32
+    title: Why a recall reaches another product
+    explanation: A transformation turns one product's lot into another product's lot, and the recall follows it.
+    question: Which lots and products does REC-048 reach, and why does it involve another product?
+    answer: REC-048 reaches LOT-047-D, LOT-048-B and LOT-048-D, so PRD-047 and PRD-048, through transformation LINK-047-MULTI.
+    expected:
+      lots:
+      - LOT-047-D
+      - LOT-048-B
+      - LOT-048-D
+      products:
+      - PRD-047
+      - PRD-048
+      via_link:
+      - LINK-047-MULTI
+    surfaces:
+    - agent
+    - graph
+    cypher:
+      graph: |-
+        MATCH (k:lot_links)-[:lot_links_by_child_lot_id]->(c:lots), (k)-[:lot_links_by_parent_lot_id]->(p:lots)
+        WHERE k.link_id = 'LINK-047-MULTI'
+  - id: Q-34
+    title: How much of a recall is controlled
+    explanation: 'Read the recall snapshot: controlled ÷ controllable (on hand + in transit).'
+    question: For REC-001 as of today, how many units are controlled, how many are controllable, and what is the coverage?
+    answer: REC-001 has 23 units controlled out of 203 controllable, coverage 0.1133.
+    expected:
+      controlled: 23
+      controllable: 203
+      coverage: 0.1133
+    surfaces:
+    - agent
+    - query
+    cypher:
+      query: |-
+        MATCH (r:recall_snapshots)
+        WHERE r.recall_id = 'REC-001'
+        RETURN r.controlled_quantity AS controlled, r.controllable_quantity AS controllable, r.coverage_ratio AS coverage
+  - id: Q-41
+    title: Stock that cannot be determined
+    explanation: Conflicting events, negative stock or returns exceeding sales make stock undeterminable, never zero.
+    question: Which lot-location positions have stock that cannot be determined now, and why?
+    answer: '4 lot-locations cannot be determined: LOT-043-C@STORE-018 (conflicting_event, returns_exceed_sales); LOT-045-C@STORE-020, LOT-045-D@STORE-020 and LOT-046-C@STORE-021 (negative_inventory).'
+    expected:
+      positions:
+        LOT-043-C@STORE-018:
+        - conflicting_event
+        - returns_exceed_sales
+        LOT-045-C@STORE-020:
+        - negative_inventory
+        LOT-045-D@STORE-020:
+        - negative_inventory
+        LOT-046-C@STORE-021:
+        - negative_inventory
+    surfaces:
+    - agent
+  - id: Q-46
+    title: Before and after a late record
+    explanation: Based on what was known that day the late record does not count; based on later knowledge it does.
+    question: A February 26 sale of LOT-041-C at STORE-016 was only recorded on March 2. What is the store's on-hand quantity based on what is known today, and based on what is known on March 5?
+    answer: As known today, LOT-041-C at STORE-016 has 26 on hand; as known on March 5, including the sale recorded on March 2, it has 19.
+    expected:
+      known_today: 26
+      known_march_5: 19
+    surfaces:
+    - agent

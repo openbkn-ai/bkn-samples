@@ -1,0 +1,399 @@
+schema_version: '1.0'
+set_id: retail-business-scenarios-v1
+business_date: '2027-02-28'
+prd: docs/PRD.zh-CN.md
+generation_method: independent CSV oracle (oracle.py with tools/retail_eval reference)
+answers:
+- id: Q-01
+  question: 我们一共经营多少个商品？分在几个品类？
+  expected:
+    products: 50
+    categories: 5
+- id: Q-02
+  question: PRD-001 是哪家供应商供货？一箱几件？发货时至少要留几天保质期？
+  expected:
+    supplier_id: ORG-001
+    supplier: 杭州青禾食品有限公司
+    pack_multiplier: 6
+    min_shelf_days: 4
+- id: Q-03
+  question: 我们有多少个仓库、多少家门店？
+  expected:
+    warehouses: 25
+    stores: 25
+- id: Q-04
+  question: STORE-001 的货是从哪个仓库调过来的？
+  expected:
+    warehouses:
+    - WH-001
+- id: Q-05
+  question: 现在有哪些批次质检不合格？哪些还没检完？
+  expected:
+    failed:
+    - LOT-011-C
+    - LOT-022-C
+    - LOT-033-C
+    - LOT-044-C
+    pending:
+    - LOT-013-D
+    - LOT-026-D
+    - LOT-039-D
+- id: Q-06
+  question: 质检不合格的批次现在还在哪些地方有货？各多少件？
+  expected:
+    stock:
+    - lot_id: LOT-011-C
+      location_id: STORE-011
+      on_hand: 26
+    - lot_id: LOT-011-C
+      location_id: WH-011
+      on_hand: 140
+    - lot_id: LOT-022-C
+      location_id: STORE-022
+      on_hand: 27
+    - lot_id: LOT-022-C
+      location_id: WH-022
+      on_hand: 140
+    - lot_id: LOT-033-C
+      location_id: STORE-008
+      on_hand: 28
+    - lot_id: LOT-033-C
+      location_id: WH-008
+      on_hand: 140
+    - lot_id: LOT-044-C
+      location_id: STORE-019
+      on_hand: 26
+    - lot_id: LOT-044-C
+      location_id: WH-019
+      on_hand: 140
+- id: Q-07
+  question: 二月份一共收进了多少个批次的货？
+  expected:
+    lots: 100
+- id: Q-08
+  question: LOT-013-D 还没检完，现在能卖吗？各地点能用的库存是多少？
+  expected:
+    can_sell: false
+    available:
+      STORE-013: 0
+      WH-013: 0
+- id: Q-09
+  question: PRD-001 现在在 WH-001 能用的库存有多少件？
+  expected:
+    available: 111
+- id: Q-10
+  question: 现在已经发出、还没到货的在途货一共有多少件？
+  expected:
+    in_transit: 50
+- id: Q-11
+  question: 现在被隔离、不能用的库存一共多少件？分布在多少个批次库位？
+  expected:
+    quarantined: 2292
+    positions: 157
+- id: Q-12
+  question: PRD-001 在 WH-001 在库不少，为什么能用的只有这么些？按批次说明。
+  expected:
+    on_hand: 374
+    available: 111
+    lots:
+      LOT-001-A:
+        on_hand: 81
+        expired: true
+        quarantined: 0
+        recall_blocked: 0
+        reserved: 0
+        available: 0
+      LOT-001-B:
+        on_hand: 91
+        expired: false
+        quarantined: 20
+        recall_blocked: 71
+        reserved: 0
+        available: 0
+      LOT-001-C:
+        on_hand: 141
+        expired: false
+        quarantined: 0
+        recall_blocked: 0
+        reserved: 30
+        available: 111
+      LOT-001-D:
+        on_hand: 61
+        expired: false
+        quarantined: 0
+        recall_blocked: 61
+        reserved: 0
+        available: 0
+- id: Q-13
+  question: STORE-001 现在能卖的货有多少件？分在几个批次？
+  expected:
+    available: 43
+    lots: 2
+- id: Q-14
+  question: 现在有多少个批次库位的货已经过期但还在库？合计多少件？
+  expected:
+    positions: 100
+    units: 5347
+- id: Q-15
+  question: STORE-001 有哪些批次两周内到期、还有货？
+  expected:
+    lots:
+    - LOT-001-B
+    - LOT-001-D
+    - LOT-026-B
+    - LOT-026-D
+- id: Q-16
+  question: STORE-001 有哪些批次已经过期但还在架上？
+  expected:
+    lots:
+    - LOT-001-A
+    - LOT-026-A
+- id: Q-17
+  question: 现在还有多少张订单没完成？其中有没有已经过了交期的？
+  expected:
+    open_orders: 100
+    overdue:
+    - ORD-049-A
+- id: Q-18
+  question: 按优先级和交期用现有可用库存给未完成的订单行配货，能全部满足、部分满足和一件都配不到的各有多少行？
+  expected:
+    full: 47
+    partial: 45
+    none: 8
+    unknown: 0
+- id: Q-19
+  question: ORD-001-A 能全部发出吗？用哪些批次、各多少件？
+  expected:
+    requested: 111
+    allocated: 111
+    lots:
+      LOT-001-C: 111
+- id: Q-20
+  question: ORD-049-A 已经过了交期还没发，按要求保质期它还能配到多少件？用哪个批次？
+  expected:
+    requested: 111
+    allocated: 111
+    lots:
+      LOT-049-C: 111
+- id: Q-21
+  question: 哪些订单行一件都配不到？各缺多少件？
+  expected:
+    lines:
+      ORD-011-A: 113
+      ORD-011-B: 101
+      ORD-022-A: 116
+      ORD-022-B: 102
+      ORD-033-A: 111
+      ORD-033-B: 103
+      ORD-044-A: 114
+      ORD-044-B: 104
+- id: Q-22
+  question: 按现有库存配货后，未完成订单一共还缺多少件？
+  expected:
+    shortage: 4024
+- id: Q-23
+  question: PRD-001 在 WH-001 三月份的需求预测一共多少件？
+  expected:
+    forecast: 243
+- id: Q-24
+  question: 按三月预测，PRD-001 在 WH-001 三月份需要补多少件？分别从哪次需求开始缺？
+  expected:
+    replenish: 106
+    shortages:
+      '2027-03-15': 25
+      '2027-03-31': 81
+- id: Q-25
+  question: 三月份补货缺口最大的是哪个商品、在哪个仓？要补多少件？
+  expected:
+    product_id: PRD-044
+    location_id: WH-019
+    replenish: 257
+- id: Q-26
+  question: 三月份所有商品按预测一共需要补多少件？涉及多少个商品仓库组合？
+  expected:
+    replenish: 6524
+    pairs: 50
+- id: Q-27
+  question: PRD-001 在 WH-001 3 月 15 日那次需求为什么只能满足一部分？那时能用的货有多少、缺多少？
+  expected:
+    demand: 81
+    usable_supply: 56
+    shortage: 25
+- id: Q-28
+  question: 现在有多少个召回在进行？有没有已经关闭的？
+  expected:
+    open: 49
+    closed:
+    - REC-050
+- id: Q-29
+  question: REC-001 涉及哪些批次？包括拆分出去的。
+  expected:
+    lots:
+    - LOT-001-B
+    - LOT-001-D
+- id: Q-30
+  question: REC-001 的问题货现在在哪些地方？各有多少件在库？
+  expected:
+    locations:
+      STORE-001: 51
+      WH-001: 152
+- id: Q-31
+  question: REC-001 的问题货已经卖出去、没退回来的有多少件？在哪家门店卖的？
+  expected:
+    sold: 29
+    stores:
+    - STORE-001
+- id: Q-32
+  question: REC-048 会牵连到哪些批次和商品？为什么会涉及别的商品？
+  expected:
+    lots:
+    - LOT-047-D
+    - LOT-048-B
+    - LOT-048-D
+    products:
+    - PRD-047
+    - PRD-048
+    via_link:
+    - LINK-047-MULTI
+- id: Q-33
+  question: REC-001 影响哪些订单？
+  expected:
+    orders:
+    - ORD-001-H
+- id: Q-34
+  question: REC-001 截至今天已经控制住多少件？可控制的一共多少件？控制比例多少？
+  expected:
+    controlled: 23
+    controllable: 203
+    coverage: 0.1133
+- id: Q-35
+  question: REC-001 在 WH-001 的控制比例是多少？
+  expected:
+    controlled: 20
+    controllable: 152
+    coverage: 0.131579
+- id: Q-36
+  question: REC-001 在 STORE-001 还有多少件没控制住？
+  expected:
+    pending: 48
+- id: Q-37
+  question: 哪些召回的控制比例最低？是多少？
+  expected:
+    recalls:
+    - REC-048
+    coverage: 0
+- id: Q-38
+  question: REC-050 已经关闭，现在还要按召回去封存它的批次吗？
+  expected:
+    still_blocked: false
+    assessment_rows: 0
+- id: Q-39
+  question: 有没有召回的控制比例算不出来？为什么？
+  expected:
+    recalls:
+    - REC-045
+- id: Q-40
+  question: REC-001 在 WH-001 被召回封存的库存里，有多少件同时还被预隔离了？
+  expected:
+    quarantined: 20
+    recall_blocked: 132
+- id: Q-41
+  question: 现在有哪些批次库位的库存算不清楚？各是什么原因？
+  expected:
+    positions:
+      LOT-043-C@STORE-018:
+      - conflicting_event
+      - returns_exceed_sales
+      LOT-045-C@STORE-020:
+      - negative_inventory
+      LOT-045-D@STORE-020:
+      - negative_inventory
+      LOT-046-C@STORE-021:
+      - negative_inventory
+- id: Q-42
+  question: 有没有被重复记录的出入库事件？涉及哪个批次？会不会被算两次？
+  expected:
+    events:
+      EV-00875:
+        lot_id: LOT-042-C
+        copies: identical
+      EV-00897:
+        lot_id: LOT-043-C
+        copies: conflicting
+    counted_twice: false
+- id: Q-43
+  question: 有没有到货了却找不到发货记录的调拨？
+  expected:
+    transfers:
+    - TRF-MISSING
+    - TRF-MISSING-D
+- id: Q-44
+  question: 哪些预留超过了能用的库存？
+  expected:
+    positions:
+    - LOT-011-C@WH-011
+    - LOT-022-C@WH-022
+    - LOT-033-C@WH-008
+    - LOT-044-C@WH-019
+- id: Q-45
+  question: LOT-044-C 在 STORE-019 有一笔销售被冲正了。冲正后这家店卖出了多少件、还剩多少件在库？
+  expected:
+    reversed_event: EV-00921
+    sold: 14
+    on_hand: 26
+- id: Q-46
+  question: LOT-041-C 在 STORE-016 有一笔 2 月 26 日的销售 3 月 2 日才补录。按今天掌握的信息和按 3 月 5 日掌握的信息，这家店的在库分别是多少？
+  expected:
+    known_today: 26
+    known_march_5: 19
+- id: Q-47
+  question: 回到 2 月 20 日，按当时掌握的信息，PRD-001 在 WH-001 能用的库存是多少？和今天比差多少？
+  expected:
+    feb20: 534
+    today: 111
+    change: -423
+- id: Q-48
+  question: LOT-001-B 收货以后都去了哪里？按事件说明数量。
+  expected:
+    events:
+    - event: receive
+      source: null
+      destination: WH-001
+      quantity: 151
+      date: '2027-02-02'
+    - event: consume
+      source: WH-001
+      destination: null
+      quantity: 20
+      date: '2027-02-21'
+    - event: dispatch
+      source: WH-001
+      destination: STORE-001
+      quantity: 40
+      date: '2027-02-22'
+    - event: arrive
+      source: null
+      destination: STORE-001
+      quantity: 40
+      date: '2027-02-23'
+    - event: sale
+      source: STORE-001
+      destination: null
+      quantity: 16
+      date: '2027-02-24'
+    - event: return
+      source: null
+      destination: STORE-001
+      quantity: 3
+      date: '2027-02-25'
+- id: Q-49
+  question: LOT-001-B 拆出了哪个子批次？拆了多少件？
+  expected:
+    children:
+      LOT-001-D: 20
+- id: Q-50
+  question: REC-001 的问题批次一共到过哪些地点？
+  expected:
+    locations:
+    - STORE-001
+    - WH-001
