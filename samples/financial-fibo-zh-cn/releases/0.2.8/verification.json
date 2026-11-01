@@ -1,0 +1,43 @@
+{
+  "sampleId": "financial-fibo-zh-cn",
+  "version": "0.2.8",
+  "packageDigest": "sha256:f77afb0f0f86d88fe88ae38bb161296e2f00435c1dfca8a98d70c0b72006cd29",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "20 business tables; 78356 records match independent fixture row counts, plus the package's DB verification hooks."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 20 objects have resource bindings and returned one live row; 29 relations exported."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "3 real read-only native function calls; 2 mounted Skills read and checked against source contents and file inventories; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "6 reference Cypher queries and 4 graph patterns passed. 7 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-financial-fibo-zh-cn-v0.2.8/acceptance.json",
+  "evidenceDigest": "sha256:638121a04dd9b473a021799b6d4e53a815596c191d7f124ca5323d3f0b75844b",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": true,
+  "uninstalledWithoutPackageOrCatalog": true,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ]
+}

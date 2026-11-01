@@ -22,7 +22,7 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 
 OpenBKN 0.2.1 offers **12 standard samples**: bilingual pairs for Supply Chain, World Cup, Manufacturing, Financial FIBO, Retail GS1 and Energy SAREF4ENER, all registered in the [0.2.1 catalog](catalogs/0.2.1/catalog.json). Order Basics is not offered on 0.2.1 and keeps its earlier release. Each 0.2.1 release title starts with `[OpenBKN 0.2.1]`.
 
-Twelve draft Releases are prepared from merged PR #236 for the installation diagnostics update; Chinese Supply Chain also includes the #217 model correction. See the [draft versions, package digests and acceptance status](docs/release-diagnostics-20261031.md) (draft links require repository access). Installation acceptance and formal publication are pending; the release links below identify the current published set.
+All twelve diagnostics candidates have completed fixed-package installation, failure/retry, uninstall/reinstall and declared-capability acceptance. English Supply Chain uses 0.1.13 after its 0.1.12 candidate failed the independent object-query check; PR #238 is merged. See the [actual checks and limits](docs/diagnostics-release-acceptance-20261031.md). Formal publication and catalog registration are pending; the release links below still identify the current published set.
 
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |

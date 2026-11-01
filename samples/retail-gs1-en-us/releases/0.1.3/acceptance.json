@@ -1,0 +1,87 @@
+{
+  "reportType": "public-acceptance-summary",
+  "sampleId": "retail-gs1-en-us",
+  "version": "0.1.3",
+  "packageDigest": "sha256:92b241d646f07c96a619fdec93133bce9273db09ce55fd9cc15ee9511b2fd180",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "verificationDate": "2026-11-01",
+  "testedPlatformVersion": "0.2.1",
+  "testedArchitecture": "arm64",
+  "databaseRuntime": "shared-mariadb",
+  "freshInstallation": true,
+  "checks": {
+    "database": {
+      "businessTables": 15,
+      "fixtureRecords": 2911,
+      "sourceFixtureRowCountsMatched": true
+    },
+    "knowledge": {
+      "objectTypes": 15,
+      "relations": 30,
+      "liveBoundObjectQueriesPassed": 15
+    },
+    "capabilities": {
+      "nativeFunctionsInvoked": [
+        {
+          "name": "inventory_asof",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        },
+        {
+          "name": "fulfillment_plan",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        },
+        {
+          "name": "recall_assessment",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        }
+      ],
+      "mountedSkillsVerified": [
+        {
+          "name": "retail-inventory-fulfilment-en-us",
+          "sourceContentDigest": "sha256:d64827aaea10851066a449830112a63c6e27a18da6aaec460e2d96e086ee721a",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        },
+        {
+          "name": "retail-quality-recall-en-us",
+          "sourceContentDigest": "sha256:f5b72cb2d028828519a928e995b800a301654d70ad178075200c88190fd55c7e",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        }
+      ],
+      "functionsNotDeclared": false,
+      "metricsNotDeclared": true
+    },
+    "scenario": {
+      "declaredCards": 15,
+      "referenceCypherQueriesPassed": 5,
+      "graphPatternsPassed": 4,
+      "fullQuestionCardsNotExercised": 7,
+      "modelQuestionsRun": 0
+    }
+  },
+  "lifecycle": {
+    "offlineImportPassed": true,
+    "boundedInternalDependencyFailureObserved": true,
+    "unchangedArtifactAndExecutorRetryPassed": true,
+    "uninstallWithoutActivePackageCacheOrExternalHttpPassed": true,
+    "samePackageReinstallationPassed": true,
+    "retainedOtherSampleQueriesPassed": true
+  },
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ],
+  "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

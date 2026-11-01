@@ -1,0 +1,233 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "financial-fibo-zh-cn",
+    "version": "0.2.8",
+    "displayName": "金融投资组合运营（中文）",
+    "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT · Synthetic demonstration data / 虚构演示数据"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-11-01T03:57:07Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:ed389d726fe42866f0ebb4b6b0a0a596d903977d9540400e0f82b96905d26287"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:1e8811dd7f8d600ddf6d8ec175752e958f3bf05ce4d1f8b4ebea6378fcb3fc69"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.function",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:f77afb0f0f86d88fe88ae38bb161296e2f00435c1dfca8a98d70c0b72006cd29",
+        "sizeBytes": 991849,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-financial-fibo-zh-cn-v0.2.8/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "financial-fibo-zh-cn-network",
+        "questions": [
+          "到今天为止，还有多少笔结算指令没有交收完？",
+          "PF-046 对 CP-046 的未结算卖出应收超限了，是哪些卖出没交收造成的？",
+          "按三月计划，哪些组合会出现超限而二月实际并没有超限？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "financial-fibo-zh-cn-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "financial-fibo-zh-cn-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "financial-fibo-zh-cn-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "financial-fibo-zh-cn-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "financial_fibo_zh_cn",
+          "expectedTables": 20
+        }
+      ],
+      "bindings": [
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "legal_entities",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "legal_entities"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "legal_entity_identifiers",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "legal_entity_identifiers"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "financial_instruments",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "financial_instruments"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "security_identifiers",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "security_identifiers"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "portfolios",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "portfolios"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "accounts",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "accounts"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "opening_positions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "opening_positions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "trade_orders",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "trade_orders"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "securities_transactions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "securities_transactions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "settlement_instructions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "settlement_instructions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "settlement_events",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "settlement_events"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "positions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "positions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "market_prices",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "market_prices"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "fx_rates",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "fx_rates"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "valuation_snapshots",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "valuation_snapshots"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "issuer_exposures",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "issuer_exposures"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "exposure_contributions",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "exposure_contributions"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "counterparty_exposures",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "counterparty_exposures"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "mandate_limits",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "mandate_limits"
+        },
+        {
+          "contentId": "financial-fibo-zh-cn-network",
+          "objectTypeId": "limit_assessments",
+          "dataDependencyId": "financial-fibo-zh-cn-data",
+          "tableName": "limit_assessments"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "manufacturing-industry-en-us",
+    "version": "0.1.6",
+    "displayName": "Manufacturing Operations (EN)",
+    "summary": "Order fulfilment, purchasing, execution compliance and quality release at a fictional precision machining company.",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT · Fictional sample data; not for real operational decisions."
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-11-01T03:57:07Z",
+      "defaultLocale": "en-US",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:115d2a932cae410f51c535cc2ca4703a77948af91033df23adf0fb72958f6ccf"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:e03a3cc04dda4a9078462a4ba4ff614ed506a1317b98ffba43d13f8e03e4d95c"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:bb8a773cd33ec80041e045f3df41d163ccde12bc03d296f673ff91022cdcdb9f",
+        "sizeBytes": 104274,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-en-us-v0.1.6/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "manufacturing-industry-en-us-network",
+        "questions": [
+          "Which work orders are blocked now, and why?",
+          "Among completed executions, which are non-compliant, and why?",
+          "Is there a lot whose result was recorded as pass although the measured value is outside the specification, and was it shipped?"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "manufacturing-industry-en-us-network"
+        }
+      ],
+      "functionPackages": [],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "manufacturing-industry-en-us-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "manufacturing-industry-en-us-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "manufacturing_industry_en_us",
+          "expectedTables": 40
+        }
+      ],
+      "bindings": []
+    }
+  }
+}

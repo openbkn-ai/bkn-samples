@@ -1,0 +1,43 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.13",
+  "packageDigest": "sha256:c42d9f7596e164f4fe1dbfdddffa7137e9fa07fa29f4dc68253a31a9b96f2512",
+  "sourceCommit": "1b4d3ea0f4fb50761af68e2a4fc954ef1e5abddf",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables; 78635 records match independent fixture row counts, plus the package's DB verification hooks."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 11 objects have resource bindings and returned one live row; 14 relations exported."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "2 real read-only native function calls; 2 mounted Skills read and checked against source contents and file inventories; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries and 3 graph patterns passed. 8 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.13/acceptance.json",
+  "evidenceDigest": "sha256:e8c3d3ce85321ed0c1c37717a5d2650f733c6f3f90c76a5e052b9d52e3f92547",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": true,
+  "uninstalledWithoutPackageOrCatalog": true,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "sampleId": "energy-saref4ener-zh-cn",
+  "version": "0.1.7",
+  "packageDigest": "sha256:192092c4c95b6601d01622685fa2ec2f85c1fe2ba01e3e7b7f3096a07fda2267",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "15 business tables; 14787 records match independent fixture row counts, plus the package's DB verification hooks."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 15 objects have resource bindings and returned one live row; 15 relations exported."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "3 real read-only native function calls; 2 mounted Skills read and checked against source contents and file inventories; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries and 4 graph patterns passed. 7 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-energy-saref4ener-zh-cn-v0.1.7/acceptance.json",
+  "evidenceDigest": "sha256:a2c8ca131ec50a8b0f566372ddf7f94c3761d3286324d62cd1bddda445c74289",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": true,
+  "uninstalledWithoutPackageOrCatalog": true,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ]
+}

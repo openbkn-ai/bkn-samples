@@ -1,0 +1,43 @@
+{
+  "sampleId": "world-cup",
+  "version": "0.1.8",
+  "packageDigest": "sha256:21ad47f7079e7788a5a52b6d449d7d448bd35abef9f07a02900fad3e757fa50a",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "27 business tables; 81200 records match independent fixture row counts, plus the package's DB verification hooks."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 27 objects have resource bindings and returned one live row; 29 relations exported."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "0 real read-only native function calls; 1 mounted Skills read and checked against source contents and file inventories; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries and 3 graph patterns passed. 7 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-v0.1.8/acceptance.json",
+  "evidenceDigest": "sha256:b459a86fd987061ffe1d422fdbfecf72dc3abc73be7b9ff432b9873573d9c6fb",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": true,
+  "uninstalledWithoutPackageOrCatalog": true,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ]
+}
