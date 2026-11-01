@@ -1,6 +1,6 @@
 # Diagnostics sample release acceptance — 2026-10-31
 
-Status: **all twelve fixed packages accepted; formal publication and catalog registration pending**.
+Status: **all twelve fixed packages accepted and published; product 0.2.1 catalog sequence 6**.
 
 PR #237 is merged. Native package acceptance found the English counterpart of #217: the 0.1.12 candidate retained an unbound Skills object. PR #238 removes only that object and prepares 0.1.13. The failed 0.1.12 draft and archive are retained and must not be published. The other eleven package digests are unchanged.
 
@@ -26,3 +26,7 @@ Each release directory contains its immutable manifest, verification metadata an
 The environment was Linux arm64 on an OpenBKN 0.2.1 main build; this does not certify an unpatched 0.2.1 release or native amd64 execution. Only the listed reference Cypher queries and graph patterns were checked. Cards without a direct reference check were not exercised as full questions; no browser UI or model-question benchmark was run for these artifacts. All samples declare metrics disabled. Paid-license transitions and the original invalid-metric publication chain are outside this acceptance.
 
 Publication follows the [fixed-package standard](candidate-publication.md): preserve historical assets, publish the accepted archive and public proof unchanged, then register metadata pinned to a retained commit with a higher catalog sequence. Product 0.2.0 catalogs remain unchanged. After registration, refresh the product directory and verify the same packages through online installation.
+
+The directory pins release metadata to `02ce10305a8f476497efad8acde5b5bbd5fc891d`. Prior published manifests and proofs are unchanged. Supply Chain 0.1.17 and Supply Chain EN 0.1.11 remain as withdrawn directory entries, with their Release assets retained; the failed EN 0.1.12 remains an unpublished draft. The 0.2.0 directories remain unchanged.
+
+Online-delivery receipts are added separately as `online-acceptance.json` Release attachments after product-catalog installation; they do not replace the fixed prepublication proof.
