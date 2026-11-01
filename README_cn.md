@@ -25,22 +25,22 @@ OpenBKN 0.2.1 提供 **12 个标准样例**：供应链、世界杯、制造业�
 | 样例 | 语言 | 场景 | 可用版本 |
 | --- | --- | --- | --- |
 | [Order Basics](samples/order-basics/) | 中文 | A small starting point for orders, products and object relationships | 原始 020： 0.1.2；0.2.1 不提供 |
-| [Supply Chain](samples/supply_ontology_hand/) | 中文 | PMC 生产计划与采购：欠货、可做与可承诺数量、缺料与跟进 | 原始 020： [0.1.16](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.16)；0.2.1： [0.1.17](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.17) |
-| [Supply Chain](samples/supply_ontology_en/) | 英文 | 英文版 PMC 与采购场景 | 原始 020： [0.1.1](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.1)；0.2.1： [0.1.11](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.11) |
-| [World Cup](samples/world-cup/) | 中文模型、英文数据 | 赛事、球队、球员和比赛事件 | 原始 020： 0.1.2；0.2.1： [0.1.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-world-cup-v0.1.7) |
-| [World Cup](samples/world-cup-en/) | 英文 | 赛事、球队、球员和比赛事件 | 原始 020： 0.1.0；0.2.1： [0.1.3](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-world-cup-en-v0.1.3) |
-| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 精密加工订单履约：交付、物料、执行合规、质量放行、采购与维护 | 0.2.1：[0.1.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-manufacturing-industry-en-us-v0.1.5) |
-| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | 中文 | 精密加工订单履约：交付、物料、执行合规、质量放行、采购与维护 | 0.2.1：[0.1.5](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-manufacturing-industry-zh-cn-v0.1.5) |
-| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | 英文 | 交易后运营、估值、集中度与限额 | 0.2.1：[0.2.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.7) |
-| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 交易后运营、估值、集中度与限额 | 0.2.1：[0.2.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.7) |
-| [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | 英文 | 到货质检、批次追溯、仓库与门店履约、补货和召回 | 0.2.1：[0.1.2](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.2) |
-| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | 中文 | 到货质检、批次追溯、仓库与门店履约、补货和召回 | 0.2.1：[0.1.2](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.2) |
-| [Energy demand response (SAREF4ENER)](samples/energy-saref4ener-en-us/) | 英文 | 可承诺容量、同时段调度、交付核实与结算 | 0.2.1：[0.1.6](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-energy-saref4ener-en-us-v0.1.6) |
-| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | 中文 | 可承诺容量、同时段调度、交付核实与结算 | 0.2.1：[0.1.6](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-energy-saref4ener-zh-cn-v0.1.6) |
+| [Supply Chain](samples/supply_ontology_hand/) | 中文 | PMC 生产计划与采购：欠货、可做与可承诺数量、缺料与跟进 | 原始 020： [0.1.16](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.16)；0.2.1： [0.1.18](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-v0.1.18) |
+| [Supply Chain](samples/supply_ontology_en/) | 英文 | 英文版 PMC 与采购场景 | 原始 020： [0.1.1](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.1)；0.2.1： [0.1.13](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-supply-chain-en-v0.1.13) |
+| [World Cup](samples/world-cup/) | 中文模型、英文数据 | 赛事、球队、球员和比赛事件 | 原始 020： 0.1.2；0.2.1： [0.1.8](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-world-cup-v0.1.8) |
+| [World Cup](samples/world-cup-en/) | 英文 | 赛事、球队、球员和比赛事件 | 原始 020： 0.1.0；0.2.1： [0.1.4](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-world-cup-en-v0.1.4) |
+| [Manufacturing Operations](samples/manufacturing-industry-en-us/) | 英文 | 精密加工订单履约：交付、物料、执行合规、质量放行、采购与维护 | 0.2.1：[0.1.6](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-manufacturing-industry-en-us-v0.1.6) |
+| [制造业端到端运营](samples/manufacturing-industry-zh-cn/) | 中文 | 精密加工订单履约：交付、物料、执行合规、质量放行、采购与维护 | 0.2.1：[0.1.6](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-manufacturing-industry-zh-cn-v0.1.6) |
+| [Financial Portfolio Operations (FIBO)](samples/financial-fibo-en-us/) | 英文 | 交易后运营、估值、集中度与限额 | 0.2.1：[0.2.8](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-en-us-v0.2.8) |
+| [金融投资组合运营（FIBO）](samples/financial-fibo-zh-cn/) | 中文 | 交易后运营、估值、集中度与限额 | 0.2.1：[0.2.8](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-financial-fibo-zh-cn-v0.2.8) |
+| [Food Supply and Recall (GS1)](samples/retail-gs1-en-us/) | 英文 | 到货质检、批次追溯、仓库与门店履约、补货和召回 | 0.2.1：[0.1.3](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-en-us-v0.1.3) |
+| [食品供应链追溯与召回（GS1）](samples/retail-gs1-zh-cn/) | 中文 | 到货质检、批次追溯、仓库与门店履约、补货和召回 | 0.2.1：[0.1.3](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-retail-gs1-zh-cn-v0.1.3) |
+| [Energy demand response (SAREF4ENER)](samples/energy-saref4ener-en-us/) | 英文 | 可承诺容量、同时段调度、交付核实与结算 | 0.2.1：[0.1.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-energy-saref4ener-en-us-v0.1.7) |
+| [需求响应与柔性用能（SAREF4ENER）](samples/energy-saref4ener-zh-cn/) | 中文 | 可承诺容量、同时段调度、交付核实与结算 | 0.2.1：[0.1.7](https://github.com/openbkn-ai/bkn-samples/releases/tag/sample-energy-saref4ener-zh-cn-v0.1.7) |
 
-0.2.1 的每个样例都按业务角色重整：有业务 PRD、50 题业务场景测试集（参考答案独立计算）、按角色编写的 Skill 和 15 张体验卡；去掉指标，只为 Cypher 表达不了的计算保留函数，社区版即可完整使用。每个 Release 都在 OpenBKN 0.2.1 主线构建（arm64）上全新安装，在线核验了体验卡，验收证据与边界记录在各自的 `verification.json`。
+0.2.1 的每个样例都按业务角色重整：有业务 PRD、50 题业务场景测试集（参考答案独立计算）、按角色编写的 Skill 和 15 张体验卡；去掉指标，只为 Cypher 表达不了的计算保留函数，社区版即可完整使用。每个 Release 都在 OpenBKN 0.2.1 主线构建（arm64）上全新安装，通过 API 核验了参考 Cypher 查询、图模式、声明的原生函数及挂载 Skill；未执行完整问答卡、浏览器 UI 或模型问答评分。验收证据与边界记录在各自的 `verification.json` 和 `online-acceptance.json`。
 
-已发布 0.2.0 客户端继续使用根[官方目录](catalog.json)。更新后的样例服务按产品版本选择目录，见 [0.2.0 目录](catalogs/0.2.0/catalog.json)、[0.2.1 目录](catalogs/0.2.1/catalog.json)和[目录选择说明](docs/product-version-catalogs.md)。此前面向 0.2.1 的版本已在目录中标为撤回并删除附件，源码保留在 Git 历史中。
+已发布 0.2.0 客户端继续使用根[官方目录](catalog.json)。更新后的样例服务按产品版本选择目录，见 [0.2.0 目录](catalogs/0.2.0/catalog.json)、[0.2.1 目录](catalogs/0.2.1/catalog.json)和[目录选择说明](docs/product-version-catalogs.md)。每个 0.2.1 样例只保留当前通过验收的 Release。已删除本轮替代的 12 个旧 Release 及附件，也删除了失败的英文供应链 0.1.12 草稿。旧目录条目仅以撤回状态保留，供既有安装历史识别；源码保留在 Git 历史中。0.2.0 Release 不受影响。详见[清理记录](docs/release-cleanup-021-20261031.md)。
 
 世界杯数据是冻结的历史快照，包含截至 2022 年的男足赛事和截至 2019 年的女足赛事。各样例的数据范围、许可和场景假设见对应 README。
 
