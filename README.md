@@ -22,7 +22,7 @@ For an offline candidate, use **Import offline package** to import its fixed `.t
 
 OpenBKN 0.2.1 offers **12 standard samples**: bilingual pairs for Supply Chain, World Cup, Manufacturing, Financial FIBO, Retail GS1 and Energy SAREF4ENER, all registered in the [0.2.1 catalog](catalogs/0.2.1/catalog.json). Order Basics is not offered on 0.2.1 and keeps its earlier release. Each 0.2.1 release title starts with `[OpenBKN 0.2.1]`.
 
-The twelve diagnostics releases are published and registered below; English Supply Chain uses 0.1.13. Its failed 0.1.12 candidate remains a draft. See the [fixed-package acceptance and limits](docs/diagnostics-release-acceptance-20261031.md).
+The twelve diagnostics releases are published and registered below; English Supply Chain uses 0.1.13. Its failed 0.1.12 draft has been deleted. See the [fixed-package acceptance and limits](docs/diagnostics-release-acceptance-20261031.md).
 
 | Sample | Language | Scenarios | Availability |
 | --- | --- | --- | --- |
@@ -42,7 +42,7 @@ The twelve diagnostics releases are published and registered below; English Supp
 
 Every 0.2.1 sample is organised around business roles with a business PRD, a 50-question business-scenario test set with independently computed reference answers, role-based Skills and 15 experience cards. Metrics are removed and only calculations that Cypher cannot express remain as functions, so the Community edition can use every sample. Each release was installed fresh on an OpenBKN 0.2.1 main build (arm64). Reference Cypher queries, graph patterns and declared native functions were checked through APIs; full model-question cards and browser UI were not exercised for these artifacts. Its `verification.json` records the evidence and limits.
 
-Published 0.2.0 clients continue to use the root [official catalog](catalog.json). The updated sample service selects directories by product version: [0.2.0](catalogs/0.2.0/catalog.json) and [0.2.1](catalogs/0.2.1/catalog.json); see [directory selection](docs/product-version-catalogs.md). Previously withdrawn 0.2.1 releases and their earlier asset cleanup are recorded in the [first promotion record](docs/release-0.2.1-20261031.md). This diagnostics publication retains historical assets; the prior bilingual supply versions are withdrawn from new installation because they contain the unbound Skills object.
+Published 0.2.0 clients continue to use the root [official catalog](catalog.json). The updated sample service selects directories by product version: [0.2.0](catalogs/0.2.0/catalog.json) and [0.2.1](catalogs/0.2.1/catalog.json); see [directory selection](docs/product-version-catalogs.md). Previously withdrawn 0.2.1 releases and their earlier asset cleanup are recorded in the [first promotion record](docs/release-0.2.1-20261031.md). Each 0.2.1 sample retains only its current accepted Release. The twelve superseded Releases and their assets, together with the failed English Supply Chain 0.1.12 draft, have been deleted to avoid ambiguous data-asset choices. Withdrawn catalog entries remain only to identify existing installation history; 0.2.0 Releases are unaffected. See the [cleanup record](docs/release-cleanup-021-20261031.md).
 
 World Cup data is a locked historical snapshot covering men's editions through 2022 and women's editions through 2019. See each sample's README for its data scope, license and scenario assumptions.
 

@@ -30,7 +30,7 @@ PYTHONPATH=. python3 tools/publication/prepare_shared_release.py \
 
 通过验收后，将验收过的同一份 `package.tar.gz` 上传为新版本 Release 附件，并核对上传摘要。提交 `sample.json` 和真实的 `verification.json`；后者绑定 sampleId、version、packageDigest、`databaseRuntime: shared-mariadb`、全新安装结果及 `database`、`knowledge`、`capabilities`、`scenario` 四项检查。未声明的可选能力要说明不适用，不能伪造调用成功。
 
-元数据先形成可保留的完整提交 SHA，再通过 PR 更新 `catalog.json` 的固定引用、版本说明和递增 sequence。保留旧条目，不覆盖旧版本资产或证明。发布提交须在主线或保留 tag 中可达。
+元数据先形成可保留的完整提交 SHA，再通过 PR 更新 `catalog.json` 的固定引用、版本说明和递增 sequence。每个产品版本下，每个 sample 仅保留当前通过验收的 Release；新版本完成正式在线安装验收后，删除被替代的旧 Release 及其全部附件，验收失败的草稿也删除，避免数据资产多版本误导。其他产品版本的有效 Release 不受影响。旧目录条目标为 withdrawn，仅供既有安装历史识别，不覆盖资产或证明内容；源码通过 Git 历史及固定引用保留。发布提交须在主线或保留 tag 中可达。
 
 ```sh
 git show origin/main:catalog.json > /tmp/baseline-catalog.json
