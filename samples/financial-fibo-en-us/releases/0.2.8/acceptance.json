@@ -1,0 +1,97 @@
+{
+  "reportType": "public-acceptance-summary",
+  "sampleId": "financial-fibo-en-us",
+  "version": "0.2.8",
+  "packageDigest": "sha256:29e787be8bb1fe860bd188a4d76b2b36f2b39586b73515448a3039a5325216c1",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "verificationDate": "2026-11-01",
+  "testedPlatformVersion": "0.2.1",
+  "testedArchitecture": "arm64",
+  "databaseRuntime": "shared-mariadb",
+  "freshInstallation": true,
+  "checks": {
+    "database": {
+      "businessTables": 20,
+      "fixtureRecords": 78356,
+      "sourceFixtureRowCountsMatched": true
+    },
+    "knowledge": {
+      "objectTypes": 20,
+      "relations": 29,
+      "liveBoundObjectQueriesPassed": 20
+    },
+    "capabilities": {
+      "nativeFunctionsInvoked": [
+        {
+          "name": "settlement_asof",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        },
+        {
+          "name": "valuation_asof",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        },
+        {
+          "name": "limit_assessment_asof",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        }
+      ],
+      "mountedSkillsVerified": [
+        {
+          "name": "fibo-post-trade-operations-en-us",
+          "sourceContentDigest": "sha256:843555b87aa02ce0f7486cd4e07e5404882804a403d38a81642a8716c1c50abd",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        },
+        {
+          "name": "fibo-risk-limits-en-us",
+          "sourceContentDigest": "sha256:fc60608a35079565627d2f0b90a066a17afe895f48ab985b0c5a9fcce183921a",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        }
+      ],
+      "functionsNotDeclared": false,
+      "metricsNotDeclared": true
+    },
+    "scenario": {
+      "declaredCards": 15,
+      "referenceCypherQueriesPassed": 6,
+      "graphPatternsPassed": 4,
+      "fullQuestionCardsNotExercised": 7,
+      "modelQuestionsRun": 0
+    }
+  },
+  "lifecycle": {
+    "offlineImportPassed": true,
+    "boundedInternalDependencyFailureObserved": true,
+    "unchangedArtifactAndExecutorRetryPassed": true,
+    "uninstallWithoutActivePackageCacheOrExternalHttpPassed": true,
+    "samePackageReinstallationPassed": true,
+    "retainedOtherSampleQueriesPassed": true
+  },
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ],
+  "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets.",
+  "snapshotChecks": {
+    "sourceCsvParity": true,
+    "datesCheckedPerObject": 3,
+    "objects": [
+      "issuer_exposures",
+      "counterparty_exposures"
+    ],
+    "crossDateAggregation": false,
+    "installedMetrics": 0
+  }
+}

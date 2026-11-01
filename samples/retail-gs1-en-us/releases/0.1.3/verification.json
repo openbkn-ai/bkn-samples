@@ -1,0 +1,43 @@
+{
+  "sampleId": "retail-gs1-en-us",
+  "version": "0.1.3",
+  "packageDigest": "sha256:92b241d646f07c96a619fdec93133bce9273db09ce55fd9cc15ee9511b2fd180",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "15 business tables; 2911 records match independent fixture row counts, plus the package's DB verification hooks."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 15 objects have resource bindings and returned one live row; 30 relations exported."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "3 real read-only native function calls; 2 mounted Skills read and checked against source contents and file inventories; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "5 reference Cypher queries and 4 graph patterns passed. 7 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-retail-gs1-en-us-v0.1.3/acceptance.json",
+  "evidenceDigest": "sha256:096aff6cbfb9fda5860f2f794092b01a1f3e8b76d5d14d461b72347847ed2a50",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": true,
+  "uninstalledWithoutPackageOrCatalog": true,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ]
+}

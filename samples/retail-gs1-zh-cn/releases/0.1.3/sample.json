@@ -1,0 +1,203 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "retail-gs1-zh-cn",
+    "version": "0.1.3",
+    "displayName": "食品供应链追溯与召回",
+    "summary": "虚构食品流通、履约和召回闭环。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT synthetic assets; GS1 WebVoc Apache-2.0 semantic references"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-11-01T03:57:07Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:f023e1358c1a723b6efb53503c0702d096a9415a524e4eac9e24528c2f4409bc"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:609fb3119069357f009aa51767d7b9f3f49ea9e6b6021897535f6594b6086b08"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.function",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:e5dd8bd1b5fe0e403beca64e8a742ec7b67bfa8641e3bea021471be4a1c4baee",
+        "sizeBytes": 86073,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-retail-gs1-zh-cn-v0.1.3/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "retail-gs1-zh-cn-network",
+        "questions": [
+          "PRD-001 在 WH-001 在库不少，为什么能用的只有这么些？按批次说明。",
+          "REC-001 的问题货现在在哪些地方？各有多少件在库？",
+          "按三月预测，PRD-001 在 WH-001 三月份需要补多少件？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "retail-gs1-zh-cn-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "retail-gs1-zh-cn-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "retail-gs1-zh-cn-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "retail-gs1-zh-cn-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "retail_gs1_zh_cn",
+          "expectedTables": 15
+        }
+      ],
+      "bindings": [
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "organizations",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "organizations"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "locations",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "locations"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "products",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "products"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "lots",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "lots"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "movements",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "movements"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "inspections",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "inspections"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "holds",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "holds"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "orders",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "orders"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "order_lines",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "order_lines"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "reservations",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "reservations"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "demand_forecasts",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "demand_forecasts"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "recalls",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "recalls"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "lot_links",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "lot_links"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "inventory_snapshots",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "inventory_snapshots"
+        },
+        {
+          "contentId": "retail-gs1-zh-cn-network",
+          "objectTypeId": "recall_snapshots",
+          "dataDependencyId": "retail-gs1-zh-cn-data",
+          "tableName": "recall_snapshots"
+        }
+      ]
+    }
+  }
+}

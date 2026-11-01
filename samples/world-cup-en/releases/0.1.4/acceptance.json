@@ -1,0 +1,60 @@
+{
+  "reportType": "public-acceptance-summary",
+  "sampleId": "world-cup-en",
+  "version": "0.1.4",
+  "packageDigest": "sha256:aaa94753bc5af7a994af7370cbbea440532fcbccaa24fcd52acf0f334f9c61c8",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "verificationDate": "2026-11-01",
+  "testedPlatformVersion": "0.2.1",
+  "testedArchitecture": "arm64",
+  "databaseRuntime": "shared-mariadb",
+  "freshInstallation": true,
+  "checks": {
+    "database": {
+      "businessTables": 27,
+      "fixtureRecords": 81200,
+      "sourceFixtureRowCountsMatched": true
+    },
+    "knowledge": {
+      "objectTypes": 27,
+      "relations": 29,
+      "liveBoundObjectQueriesPassed": 27
+    },
+    "capabilities": {
+      "nativeFunctionsInvoked": [],
+      "mountedSkillsVerified": [
+        {
+          "name": "worldcup-analysis-en-us",
+          "sourceContentDigest": "sha256:2762ed285c23cb981a0eaecf7a52ec98cb6a81a07281b99b2cbc5200f6bde283",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        }
+      ],
+      "functionsNotDeclared": true,
+      "metricsNotDeclared": true
+    },
+    "scenario": {
+      "declaredCards": 15,
+      "referenceCypherQueriesPassed": 7,
+      "graphPatternsPassed": 3,
+      "fullQuestionCardsNotExercised": 7,
+      "modelQuestionsRun": 0
+    }
+  },
+  "lifecycle": {
+    "offlineImportPassed": true,
+    "boundedInternalDependencyFailureObserved": true,
+    "unchangedArtifactAndExecutorRetryPassed": true,
+    "uninstallWithoutActivePackageCacheOrExternalHttpPassed": true,
+    "samePackageReinstallationPassed": true,
+    "retainedOtherSampleQueriesPassed": true
+  },
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ],
+  "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

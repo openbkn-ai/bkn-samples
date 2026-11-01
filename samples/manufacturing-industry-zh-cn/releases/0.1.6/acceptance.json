@@ -1,0 +1,68 @@
+{
+  "reportType": "public-acceptance-summary",
+  "sampleId": "manufacturing-industry-zh-cn",
+  "version": "0.1.6",
+  "packageDigest": "sha256:277c82d272c373b02bfe92e3fc72f68683d9f988a6601c424b0b359c6db30e74",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "verificationDate": "2026-11-01",
+  "testedPlatformVersion": "0.2.1",
+  "testedArchitecture": "arm64",
+  "databaseRuntime": "shared-mariadb",
+  "freshInstallation": true,
+  "checks": {
+    "database": {
+      "businessTables": 40,
+      "fixtureRecords": 1529,
+      "sourceFixtureRowCountsMatched": true
+    },
+    "knowledge": {
+      "objectTypes": 40,
+      "relations": 71,
+      "liveBoundObjectQueriesPassed": 40
+    },
+    "capabilities": {
+      "nativeFunctionsInvoked": [],
+      "mountedSkillsVerified": [
+        {
+          "name": "manufacturing-order-supply-zh-cn",
+          "sourceContentDigest": "sha256:31c903e7e3d0a89c911248f9905d0cbb0f5c30d0ae01f1a2858ba253b7949cd2",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        },
+        {
+          "name": "manufacturing-production-quality-zh-cn",
+          "sourceContentDigest": "sha256:232bccc5b94ae259d85f19e75d02911ed12628e83e2fe44bd56a6670d784e625",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        }
+      ],
+      "functionsNotDeclared": true,
+      "metricsNotDeclared": true
+    },
+    "scenario": {
+      "declaredCards": 15,
+      "referenceCypherQueriesPassed": 6,
+      "graphPatternsPassed": 4,
+      "fullQuestionCardsNotExercised": 6,
+      "modelQuestionsRun": 0
+    }
+  },
+  "lifecycle": {
+    "offlineImportPassed": true,
+    "boundedInternalDependencyFailureObserved": true,
+    "unchangedArtifactAndExecutorRetryPassed": true,
+    "uninstallWithoutActivePackageCacheOrExternalHttpPassed": true,
+    "samePackageReinstallationPassed": true,
+    "retainedOtherSampleQueriesPassed": true
+  },
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ],
+  "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

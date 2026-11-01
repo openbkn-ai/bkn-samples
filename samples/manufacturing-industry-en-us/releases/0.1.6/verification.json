@@ -1,0 +1,43 @@
+{
+  "sampleId": "manufacturing-industry-en-us",
+  "version": "0.1.6",
+  "packageDigest": "sha256:bb8a773cd33ec80041e045f3df41d163ccde12bc03d296f673ff91022cdcdb9f",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "platformVersion": "0.2.1",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "40 business tables; 1529 records match independent fixture row counts, plus the package's DB verification hooks."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 40 objects have resource bindings and returned one live row; 71 relations exported."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "0 real read-only native function calls; 2 mounted Skills read and checked against source contents and file inventories; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "6 reference Cypher queries and 4 graph patterns passed. 6 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-en-us-v0.1.6/acceptance.json",
+  "evidenceDigest": "sha256:ba2606bad63cea47717e32db04d66920941d2212b08614fc738fd612600e21d6",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": true,
+  "uninstalledWithoutPackageOrCatalog": true,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ]
+}

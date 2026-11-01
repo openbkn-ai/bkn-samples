@@ -1,0 +1,105 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "world-cup-en",
+    "version": "0.1.4",
+    "displayName": "World Cup (EN)",
+    "summary": "Explore World Cup tournaments, teams, players and match events.",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "CC-BY-SA 4.0 · Joshua C. Fjelstul"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-11-01T03:57:07Z",
+      "defaultLocale": "en-US",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:4af39517facd32e39e861f2d4767a0e211278fc2b0fa18919edc186e031094f1"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:37871887fa421f685ce6f7acc801cda68d1ef28bffa8225f1c7d69bc95fda643"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.1 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:aaa94753bc5af7a994af7370cbbea440532fcbccaa24fcd52acf0f334f9c61c8",
+        "sizeBytes": 1873779,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-en-v0.1.4/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "worldcup-en-network",
+        "questions": [
+          "When was the 2022 World Cup final, who played, what was the score, and what was the shootout score?",
+          "Which awards did Lionel Messi win at the 2014 and 2022 World Cups?",
+          "Did the 1950 World Cup have a final? How was the winner decided, and how many matches were played in the deciding stage?"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "worldcup-en-network"
+        }
+      ],
+      "functionPackages": [],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "world-cup-en-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "worldcup-en-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "worldcup_en",
+          "expectedTables": 27
+        }
+      ],
+      "bindings": []
+    }
+  }
+}

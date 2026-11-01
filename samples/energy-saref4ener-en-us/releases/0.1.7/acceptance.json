@@ -1,0 +1,87 @@
+{
+  "reportType": "public-acceptance-summary",
+  "sampleId": "energy-saref4ener-en-us",
+  "version": "0.1.7",
+  "packageDigest": "sha256:5b4932c44014448abea5a378656b804ef9fae0cf73b4bc50258feefb1c895e0a",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "verificationDate": "2026-11-01",
+  "testedPlatformVersion": "0.2.1",
+  "testedArchitecture": "arm64",
+  "databaseRuntime": "shared-mariadb",
+  "freshInstallation": true,
+  "checks": {
+    "database": {
+      "businessTables": 15,
+      "fixtureRecords": 14787,
+      "sourceFixtureRowCountsMatched": true
+    },
+    "knowledge": {
+      "objectTypes": 15,
+      "relations": 15,
+      "liveBoundObjectQueriesPassed": 15
+    },
+    "capabilities": {
+      "nativeFunctionsInvoked": [
+        {
+          "name": "flexibility_assessment",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        },
+        {
+          "name": "dispatch_plan",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        },
+        {
+          "name": "settlement_assessment",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": true,
+          "passed": true
+        }
+      ],
+      "mountedSkillsVerified": [
+        {
+          "name": "energy-capacity-dispatch-en-us",
+          "sourceContentDigest": "sha256:fbd63e6cd7102bcdd1b917024747dd59b8ef2e7229bb8fcbe4fe12db6cdf4c81",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        },
+        {
+          "name": "energy-delivery-settlement-en-us",
+          "sourceContentDigest": "sha256:ca1c0bebbc2263c634144e1cd0dbb013bc2046d3157c00c94dfd1e08eafabb1d",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        }
+      ],
+      "functionsNotDeclared": false,
+      "metricsNotDeclared": true
+    },
+    "scenario": {
+      "declaredCards": 15,
+      "referenceCypherQueriesPassed": 7,
+      "graphPatternsPassed": 4,
+      "fullQuestionCardsNotExercised": 7,
+      "modelQuestionsRun": 0
+    }
+  },
+  "lifecycle": {
+    "offlineImportPassed": true,
+    "boundedInternalDependencyFailureObserved": true,
+    "unchangedArtifactAndExecutorRetryPassed": true,
+    "uninstallWithoutActivePackageCacheOrExternalHttpPassed": true,
+    "samePackageReinstallationPassed": true,
+    "retainedOtherSampleQueriesPassed": true
+  },
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.1; no native amd64 certification.",
+    "Reference queries, graph patterns and read-only native functions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "No paid-license transition or original invalid-metric publication-path certification."
+  ],
+  "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
