@@ -1,6 +1,6 @@
 # Sample diagnostics draft releases — 2026-10-31
 
-Status: **platform acceptance in progress; publication pending**. The published versions in the README and catalogs remain authoritative.
+Historical preparation record. Current publication and acceptance status: [twelve verified diagnostics releases](diagnostics-release-acceptance-20261031.md). The published versions in the README and catalogs remain authoritative.
 
 PR [#236](https://github.com/openbkn-ai/bkn-samples/pull/236) merged as `5fea3c2b01293e6baf9056fed22edd3d2c2e6c59`. The diagnostic hooks changed in all 12 samples offered on OpenBKN 0.2.1, so each needs a new immutable package. Chinese Supply Chain also removes the Skills entity for #217; its Skill files remain included. Order Basics is outside this release.
 
