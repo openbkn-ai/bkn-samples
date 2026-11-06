@@ -28,13 +28,14 @@ class GatewayChartTest(unittest.TestCase):
         env={e['name']:e.get('value','') for e in pod['containers'][0]['env']}
         self.assertEqual(env['BKN_BASE_URL'],'http://custom-internal.example')
         self.assertEqual(env['BKN_BACKEND_URL'],'http://backend.example')
-    def test_gateway_change_does_not_modify_installer_or_data_image_selection(self):
+    def test_gateway_change_preserves_executor_without_legacy_data_image(self):
         _,pod=self.render('--set','image.tag=0.2.1','--set','dataImage.reference=registry.example/data@sha256:'+'b'*64)
         studio=pod['containers'][0]
         env={e['name']:e.get('value','') for e in studio['env']}
         self.assertTrue(studio['image'].endswith(':0.2.1'))
         self.assertEqual(env['BKN_SAMPLE_EXECUTOR_IMAGE_REF'],studio['image'])
-        self.assertEqual(env['BKN_SAMPLE_DATA_IMAGE_REF'],'registry.example/data@sha256:'+'b'*64)
+        self.assertNotIn('BKN_SAMPLE_DATA_IMAGE_REF',env)
+        self.assertNotIn('BKN_SAMPLE_DATA_IMAGE_TAG',env)
 
     def test_hook_privilege_and_service_credentials_are_protected(self):
         docs, pod = self.render()

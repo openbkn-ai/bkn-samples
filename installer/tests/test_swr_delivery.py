@@ -51,23 +51,39 @@ class SWRDeliveryTest(unittest.TestCase):
         database = next(d for d in documents if d and d['kind'] == 'StatefulSet')
         self.assertEqual(database['spec']['template']['spec']['containers'][0]['image'], 'mariadb:11.4.7')
 
+    def test_chart_uses_shared_database_without_legacy_data_image_configuration(self):
+        defaults = yaml.safe_load((ROOT / 'deploy/charts/bkn-sample-studio/values.yaml').read_text())
+        self.assertNotIn('dataImage', defaults)
+        pod = self.render('dataImage.tag=old', 'dataImage.reference=registry.example/data@' + DIGEST)
+        env = {e['name']: e.get('value') for e in pod['containers'][0]['env']}
+        self.assertNotIn('BKN_SAMPLE_DATA_IMAGE_TAG', env)
+        self.assertNotIn('BKN_SAMPLE_DATA_IMAGE_REF', env)
+        self.assertEqual(env['BKN_SAMPLE_DB_HOST'], 'bkn-sample-database.default.svc.cluster.local')
+
     def test_pull_secrets_reach_service(self):
         self.assertEqual(self.render('imagePullSecrets[0].name=registry-key')['imagePullSecrets'], [{'name': 'registry-key'}])
 
 
 class TargetManifestTest(unittest.TestCase):
-    def test_tag_release_has_one_ordered_data_producer(self):
+    def test_release_builds_only_service_images_for_both_architectures(self):
         path = ROOT / '.github/workflows'
         workflow = yaml.load((path / 'publish-sample-studio.yml').read_text(), Loader=yaml.BaseLoader)
         self.assertIn('v*', workflow['on']['push']['tags'])
-        steps = workflow['jobs']['publish']['steps']
-        data_builds = [s for s in steps if s.get('with', {}).get('file') == 'installer/image/Dockerfile']
-        self.assertEqual(len(data_builds), 2)
-        for step in data_builds:
+        job = workflow['jobs']['publish']
+        steps = job['steps']
+        builds = [s for s in steps if s.get('uses', '').startswith('docker/build-push-action@')]
+        self.assertEqual(len(builds), 2)
+        self.assertEqual({s['with']['platforms'] for s in builds}, {'linux/amd64', 'linux/arm64'})
+        for step in builds:
+            self.assertEqual(step['with']['file'], 'installer/studio/Dockerfile')
             self.assertNotIn('if', step)
             self.assertLess(steps.index(step), next(i for i, s in enumerate(steps) if s.get('id') == 'manifest'))
+        self.assertNotIn('data_digest', job['outputs'])
+        self.assertNotIn('DATA_DIGEST', workflow['jobs']['candidate-cold-pull']['steps'][1]['env'])
         for step in steps:
-            self.assertNotIn('"${GITHUB_REF_TYPE}" != "tag"', step.get('run', ''))
+            self.assertNotIn('openbkn-ai bkn-samples', step.get('run', ''))
+            self.assertNotIn('openbkn-ai/bkn-samples:', step.get('run', ''))
+            self.assertNotIn('DATA_DIGEST', step.get('env', {}))
         self.assertFalse((path / 'publish-sample-image.yml').exists())
 
     def manifest(self):
@@ -121,8 +137,7 @@ class PublishedChartGateTest(unittest.TestCase):
     def test_rendered_chart_rejects_wrong_registry_tag_and_executor(self):
         rendered = subprocess.check_output([
             'helm', 'template', 'sample', str(ROOT / 'deploy/charts/bkn-sample-studio'),
-            '--set', 'image.tag=0.2.1',
-            '--set', 'dataImage.tag=0.2.1'], text=True)
+            '--set', 'image.tag=0.2.1'], text=True)
         documents = list(yaml.safe_load_all(rendered))
         verify_chart(rendered, '0.2.1')
         for target in ('service-ghcr', 'executor-ghcr', 'service-wrong-tag', 'executor-wrong-tag'):

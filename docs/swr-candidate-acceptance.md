@@ -5,7 +5,7 @@ The sample service publishing workflow also accepts a reviewed commit pushed to
 uses `VERSION-rc.66.<run_id>.<run_attempt>`; it never updates `latest`, a stable
 version, or a main/release build tag. A rerun gets a new candidate version.
 
-This publishes service and sample-data architecture tags and manifest lists to
+This publishes service architecture tags and a manifest list to
 the existing SWR and GHCR repositories, followed by a matching OCI Chart in
 `ghcr.io/openbkn-ai/charts`. It uses the existing repository publishing secrets.
 It does not deploy a release or alter a cluster. Candidate images/Charts remain
@@ -16,7 +16,7 @@ After publication, native GitHub-hosted `ubuntu-24.04` (amd64) and
 Builds retain the normal workflow's QEMU support; **cold-pull verification is
 native, not emulated**. The script refuses a mismatched host architecture.
 
-Each of the two images gets a separate privileged Docker-in-Docker harness,
+The service image gets a privileged Docker-in-Docker harness,
 network, and empty named volume on a disposable CI runner. The harness uses
 containerd's image store, with no host image/content mounts. Evidence records
 empty image and blob listings before the target pull. The harness image itself
@@ -32,7 +32,7 @@ redirect/CDN destinations fail closed; do not loosen the firewall to all HTTPS
 to make a failed run pass. If a redirect is required, review the actual endpoint
 and add a narrow explicit policy in a follow-up change before rerunning.
 
-Both pulls use the independently verified SWR index digest from publication.
+The service pull uses the independently verified SWR index digest from publication.
 Evidence includes the exact index, native child manifest, image config, image
 inspection, every compressed layer's measured SHA256 and size, pull progress,
 and firewall rules/counters. The verifier fails on missing content, mismatched
@@ -48,6 +48,10 @@ rollout, future-node prewarming, or application behavior. Earlier local kind
 acceptance used cached arm64 layers and cannot substitute for these CI results.
 
 ## Retesting the same published content
+
+The historical retest retains both existing service and data-image digests.
+Only that legacy path supplies `DATA_DIGEST` to verify the old data image; new
+publications and their cold-pull jobs verify the service image alone.
 
 `retest-swr-candidate.yml` accepts only `validation/66-cold-*` branch pushes.
 This pattern does not trigger publication. Its reviewed environment pins the

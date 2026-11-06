@@ -57,10 +57,6 @@ spec:
               value: /var/lib/bkn-samples/state
             - name: BKN_SAMPLE_IMAGE_INDEX
               value: /opt/bkn-samples/manifest-index.json
-            - name: BKN_SAMPLE_DATA_IMAGE_TAG
-              value: {{ .Values.dataImage.tag | quote }}
-            - name: BKN_SAMPLE_DATA_IMAGE_REF
-              value: {{ .Values.dataImage.reference | quote }}
             - name: BKN_SAMPLE_PLATFORM_VERSION
               value: {{ .Values.platform.version | quote }}
             - name: BKN_SAMPLE_PLATFORM_CAPABILITIES

@@ -20,10 +20,7 @@ def verify(rendered, version):
         raise ValueError("Chart service/executor must use the matching SWR version tag")
     if pod.get("imagePullSecrets"):
         raise ValueError("standard anonymous acceptance requires no pullSecrets")
-    if env["BKN_SAMPLE_DATA_IMAGE_TAG"] != version or env["BKN_SAMPLE_DATA_IMAGE_REF"]:
-        raise ValueError("legacy data image must resolve the verified candidate tag")
-    return {"service": expected, "executor": expected, "pullSecrets": [],
-            "data_tag": version, "data_reference_override": ""}
+    return {"service": expected, "executor": expected, "pullSecrets": []}
 
 
 if __name__ == "__main__":
