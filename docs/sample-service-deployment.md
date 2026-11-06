@@ -1,8 +1,8 @@
 # Deploying the one-click sample service
 
-Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and pin the image digest. The service currently supports one replica with `Recreate`.
+Install this service in the existing OpenBKN cluster. Studio uses the same gateway at `/api/studio`; no second platform instance is required. Use the published Chart and service image from the same main build or release, and select the matching image tag. The service currently supports one replica with `Recreate`.
 
-The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart. The sample service uses the existing internal ingress-nginx HTTP entrypoint by default, independently of the public HTTPS address. It does not create another gateway or change public Ingress/TLS settings. The publication workflow stamps the built service image digest into the Chart. Default installation no longer needs manually filled platform version or API capability values.
+The standard product deployment entry in `openbkn-ai/openbkn-deploy` includes this Chart. The sample service uses the existing internal ingress-nginx HTTP entrypoint by default, independently of the public HTTPS address. It does not create another gateway or change public Ingress/TLS settings. The publication workflow stamps the built service image version tag into the Chart. Default installation no longer needs manually filled platform version or API capability values.
 
 The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint used by the SDK, when listing releases, accepting a selected installation, importing an offline package or retrying. Missing or malformed version information keeps fixed-package installation unavailable. It does not infer a version from a Chart tag.
 
@@ -21,7 +21,7 @@ Create a values file using the actual platform addresses. Leave the optional pla
 ```yaml
 image:
   repository: ghcr.io/openbkn-ai/bkn-sample-studio
-  digest: sha256:<service-image-digest>
+  tag: "<service-image-version>"
 safeURL: http://bkn-safe:3000
 # Default internal gateway; no manual value is needed in the standard product topology.
 baseURL: http://ingress-nginx-controller.ingress-nginx.svc.cluster.local
@@ -83,7 +83,7 @@ Use a published Chart/image pair compatible with the current platform version. T
 
 The patched Chart provisions one `bkn-sample-database` MariaDB server in the product namespace, separate from system MariaDB. All online and offline sample installs use it; sample installation does not create another database Pod. Existing per-sample databases are kept until their recorded installations are uninstalled.
 
-Configure `sampleDatabase.image` using the same MariaDB distribution included in the product delivery. Its repository/tag or digest, persistence StorageClass/size and resource limits are Chart values. Offline product delivery must provision this server before sample installation. Sample installation never attempts to pull or start a missing runtime.
+Configure `sampleDatabase.image` using the same MariaDB distribution included in the product delivery. Its repository/tag, persistence StorageClass/size and resource limits are Chart values. Offline product delivery must provision this server before sample installation. Sample installation never attempts to pull or start a missing runtime.
 
 The Chart creates and preserves the database Secret across Helm upgrades; `sampleDatabase.existingSecret` may supply an existing Secret with key `mariadb-root-password`. Administrative credentials are mounted into the sample service, never stored in installation responses or passed to sample loaders. Loader accounts have privileges only on their exact target and staging databases. The service records database ownership before creating resources and preserves it on failures for cleanup.
 
@@ -97,13 +97,12 @@ Standard service and executor images use SWR. The release workflow requires SWR
 credentials, resolves the digest from SWR itself and checks the Linux amd64/arm64
 manifest before packaging the Chart. GHCR may still receive a copy; equal digests
 between different registries are not required. The executor runs in the installed
-service process and records the same immutable image identity for retry checks.
+service process and records the same versioned image reference for retry checks.
 
 `image.registry` defaults to `swr.cn-east-3.myhuaweicloud.com/openbkn-ai`;
 `image.repository` defaults to `bkn-sample-studio`. An explicit full repository
-(such as `private.example/team/service`) remains supported, as do tag/digest and
-`imagePullSecrets` overrides. Preserve the correct digest for that repository;
-do not copy a digest from an unrelated registry without verification.
+(such as `private.example/team/service`) remains supported, as do tag and
+`imagePullSecrets` overrides. Select the matching version tag for that repository.
 
 The legacy bundled database installer now discovers only SWR and never switches
 to GHCR after a pull error. An administrator's explicit fixed image reference,

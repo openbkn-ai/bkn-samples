@@ -189,13 +189,10 @@ jobs:
       - name: Package the chart for the same version
         env:
           VERSION: ${{ steps.version.outputs.value }}
-          SERVICE_IMAGE_DIGEST: ${{ steps.manifest.outputs.service_digest }}
         run: |
-          [[ "${SERVICE_IMAGE_DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]
           sed -i "s/^version: .*/version: ${VERSION}/" deploy/charts/bkn-sample-studio/Chart.yaml
           sed -i "s/^appVersion: .*/appVersion: \"${VERSION}\"/" deploy/charts/bkn-sample-studio/Chart.yaml
           sed -i "s/__VERSION__/${VERSION}/g" deploy/charts/bkn-sample-studio/values.yaml
-          sed -i "s/^  digest: .*/  digest: \"${SERVICE_IMAGE_DIGEST}\"/" deploy/charts/bkn-sample-studio/values.yaml
           helm lint deploy/charts/bkn-sample-studio
           helm package deploy/charts/bkn-sample-studio --destination /tmp/charts
       - name: Verify published Chart identities
@@ -206,7 +203,7 @@ jobs:
         run: |
           mkdir publication-evidence
           helm template candidate "/tmp/charts/bkn-sample-studio-${VERSION}.tgz" > /tmp/candidate-rendered.yaml
-          python installer/ci/verify_candidate_chart.py /tmp/candidate-rendered.yaml "$SERVICE_DIGEST" "$VERSION" publication-evidence/chart-images.json
+          python installer/ci/verify_candidate_chart.py /tmp/candidate-rendered.yaml "$VERSION" publication-evidence/chart-images.json
           cp /tmp/charts/*.tgz /tmp/swr-*-manifest.json publication-evidence/
           printf 'version=%s\nsource=%s\nservice_digest=%s\ndata_digest=%s\n' "$VERSION" "$GITHUB_SHA" "$SERVICE_DIGEST" "$DATA_DIGEST" > publication-evidence/identities.txt
           sha256sum publication-evidence/*.tgz > publication-evidence/chart-sha256.txt
