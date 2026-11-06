@@ -10,9 +10,9 @@ The service reads `GET /api/bkn-backend/v1/health`, the same version endpoint us
 
 Explicit `platform.version` and nonempty `platform.capabilities` values remain supported for existing deployments and operator restrictions. A version override is an operator declaration rather than a health check; use the empty defaults for automatic version reading. These overrides do not bypass platform API authorization.
 
-The repository `VERSION` is the product service and image base version, aligned with OpenBKN 0.2.0. Both `bkn-sample-studio` and `bkn-samples` images, and the service Chart, use this base version; main builds append `-main.<UTC timestamp>.sha<commit>`. Individual sample packages retain their own independently published versions and immutable artifact references.
+The repository `VERSION` is the product service and image base version, aligned with OpenBKN 0.2.0. The `bkn-sample-studio` image and service Chart use this base version; main builds append `-main.<UTC timestamp>.sha<commit>`. Individual sample packages retain their own independently published versions and immutable artifact references.
 
-For a release candidate, open GitHub Actions → **Publish sample catalog service** → **Run workflow** on the default branch, then enter `release/X.Y.Z` in **source_branch**. The workflow checks out that branch and publishes both images and the service Chart as `X.Y.Z-release.<UTC timestamp>.sha<commit>`; the branch version must match `VERSION`. A normal `main` push still creates a main build. A final `vX.Y.Z` tag uses the same workflow, which builds both images before publishing their manifests and the Chart.
+For a release candidate, open GitHub Actions → **Publish sample catalog service** → **Run workflow** on the default branch, then enter `release/X.Y.Z` in **source_branch**. The workflow checks out that branch and publishes the service image and Chart as `X.Y.Z-release.<UTC timestamp>.sha<commit>`; the branch version must match `VERSION`. A normal `main` push still creates a main build. A final `vX.Y.Z` tag uses the same workflow, which builds the service image for amd64 and arm64 before publishing its manifest list and Chart.
 
 ## Configuration and installation
 
@@ -36,7 +36,7 @@ persistence:
   existingClaim: ""
 ```
 
-Leave `catalogURL` empty to scan official main when the administrator clicks **Refresh samples**. A page GET reads the existing cache; it does not scan GitHub on every request. A new environment has no remote cache. Network failure preserves an existing cache and installed records; a new environment can use the built-in entries or import a compatible offline package, using a self-contained offline.v2 package. Prepare the bundled image locally on each eligible node; install and retry never pull it.
+Leave `catalogURL` empty to scan official main when the administrator clicks **Refresh samples**. A page GET reads the existing cache; it does not scan GitHub on every request. A new environment has no remote cache. Network failure preserves an existing cache and installed records; a new environment can use the built-in entries or import a compatible offline package, using a self-contained offline.v2 package. Provision the shared sample database before installing samples; install and retry do not pull a sample database image.
 
 ```bash
 helm upgrade --install bkn-sample-studio \
@@ -118,7 +118,10 @@ remove it or set `image.registry` and the short repository when migrating to SWR
 Release publication and cold-node pulls must be verified in the target registry
 and cluster after review; local template tests do not publish or synchronize images.
 
-Tag publication builds the matching service and data images in the same workflow,
-then verifies both SWR manifests before publishing the Chart. There is no parallel
-data-image producer or GHCR fallback. For independently reviewable prerelease
-artifacts and native anonymous cold pulls, see [candidate acceptance](swr-candidate-acceptance.md).
+Tag publication builds only the service image for amd64 and arm64, verifies the
+SWR manifest, then publishes the matching Chart. The legacy `bkn-samples` data
+image is no longer built or published. The Chart no longer exposes `dataImage`
+configuration or its environment variables; use `sampleDatabase.image` for the
+shared MariaDB runtime. Already-published images and historical package references
+are retained. For independently reviewable prerelease artifacts and native
+anonymous cold pulls, see [candidate acceptance](swr-candidate-acceptance.md).

@@ -3,7 +3,7 @@
 set -euo pipefail
 umask 077
 : "${EXPECTED_ARCH:?}"
-: "${SERVICE_DIGEST:?}" "${DATA_DIGEST:?}" "${CANDIDATE_VERSION:?}"
+: "${SERVICE_DIGEST:?}" "${CANDIDATE_VERSION:?}"
 : "${CANDIDATE_SOURCE:?}" "${PUBLICATION_RUN:?}"
 [[ "$CANDIDATE_SOURCE" =~ ^[0-9a-f]{40}$ ]]
 [[ "$PUBLICATION_RUN" =~ ^[0-9]+$ ]]
@@ -51,7 +51,10 @@ cleanup() {
 }
 trap 'status=$?; cleanup || status=1; exit "$status"' EXIT
 
-for image in bkn-sample-studio bkn-samples; do
+# Historical fixed-candidate retests may still verify an already-published data image.
+images=(bkn-sample-studio)
+if [[ -n "${DATA_DIGEST:-}" ]]; then images+=(bkn-samples); fi
+for image in "${images[@]}"; do
   if [[ "$image" = bkn-sample-studio ]]; then digest="$SERVICE_DIGEST"; else digest="$DATA_DIGEST"; fi
   [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]
   directory="$evidence/$image"

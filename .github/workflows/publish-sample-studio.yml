@@ -22,7 +22,6 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.value }}
       service_digest: ${{ steps.manifest.outputs.service_digest }}
-      data_digest: ${{ steps.manifest.outputs.data_digest }}
     env:
       # Standard charts may only reference verified SWR artifacts.
       SWR_PASSWORD: ${{ secrets.SWR_PASSWORD }}
@@ -79,18 +78,9 @@ jobs:
               fi
               echo "EOF"
             } >> "$GITHUB_OUTPUT"
-            {
-              echo "data_${arch}_tags<<EOF"
-              echo "ghcr.io/openbkn-ai/bkn-samples:${version}-${arch}"
-              if [[ -n "${SWR_PASSWORD}" ]]; then
-                echo "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples:${version}-${arch}"
-              fi
-              echo "EOF"
-            } >> "$GITHUB_OUTPUT"
           done
       - name: Write the manifest index for this commit
-        # Match the samples actually copied by installer/image/Dockerfile.
-        # Other samples are delivered through fixed packages and the catalog.
+        # Preserve the bundled service catalog; other samples use fixed packages.
         run: PYTHONPATH=. python installer/build_manifest_index.py --revision "$(git rev-parse HEAD)" --output manifest-index.json --samples supply-chain world-cup
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
@@ -127,26 +117,6 @@ jobs:
           sbom: false
           tags: ${{ steps.version.outputs.service_arm64_tags }}
           outputs: type=image,oci-mediatypes=false,push=true
-      - name: Build and push the sample data image (amd64)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: installer/image/Dockerfile
-          platforms: linux/amd64
-          provenance: false
-          sbom: false
-          tags: ${{ steps.version.outputs.data_amd64_tags }}
-          outputs: type=image,oci-mediatypes=false,push=true
-      - name: Build and push the sample data image (arm64)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: installer/image/Dockerfile
-          platforms: linux/arm64
-          provenance: false
-          sbom: false
-          tags: ${{ steps.version.outputs.data_arm64_tags }}
-          outputs: type=image,oci-mediatypes=false,push=true
       - name: Publish Docker manifest lists
         id: manifest
         env:
@@ -169,23 +139,12 @@ jobs:
             publish_manifest swr.cn-east-3.myhuaweicloud.com/openbkn-ai bkn-sample-studio
           fi
 
-          publish_manifest ghcr.io/openbkn-ai bkn-samples
-          if [[ "${SWR_ENABLED}" == "true" ]]; then
-            publish_manifest swr.cn-east-3.myhuaweicloud.com/openbkn-ai bkn-samples
-          fi
-
           service_ref="swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio:${VERSION}"
           service_digest="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "${service_ref}")"
           [[ "${service_digest}" =~ ^sha256:[0-9a-f]{64}$ ]]
           docker buildx imagetools inspect --raw "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@${service_digest}" > /tmp/swr-service-manifest.json
           PYTHONPATH=. python installer/verify_image_manifest.py /tmp/swr-service-manifest.json
           printf 'service_digest=%s\n' "${service_digest}" >> "$GITHUB_OUTPUT"
-          data_repository=swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-samples
-          data_digest="$(docker buildx imagetools inspect --format '{{.Manifest.Digest}}' "${data_repository}:${VERSION}")"
-          [[ "${data_digest}" =~ ^sha256:[0-9a-f]{64}$ ]]
-          docker buildx imagetools inspect --raw "${data_repository}@${data_digest}" > /tmp/swr-data-manifest.json
-          PYTHONPATH=. python installer/verify_image_manifest.py /tmp/swr-data-manifest.json
-          printf 'data_digest=%s\n' "${data_digest}" >> "$GITHUB_OUTPUT"
       - name: Package the chart for the same version
         env:
           VERSION: ${{ steps.version.outputs.value }}
@@ -199,13 +158,12 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.value }}
           SERVICE_DIGEST: ${{ steps.manifest.outputs.service_digest }}
-          DATA_DIGEST: ${{ steps.manifest.outputs.data_digest }}
         run: |
           mkdir publication-evidence
           helm template candidate "/tmp/charts/bkn-sample-studio-${VERSION}.tgz" > /tmp/candidate-rendered.yaml
           python installer/ci/verify_candidate_chart.py /tmp/candidate-rendered.yaml "$VERSION" publication-evidence/chart-images.json
           cp /tmp/charts/*.tgz /tmp/swr-*-manifest.json publication-evidence/
-          printf 'version=%s\nsource=%s\nservice_digest=%s\ndata_digest=%s\n' "$VERSION" "$GITHUB_SHA" "$SERVICE_DIGEST" "$DATA_DIGEST" > publication-evidence/identities.txt
+          printf 'version=%s\nsource=%s\nservice_digest=%s\n' "$VERSION" "$GITHUB_SHA" "$SERVICE_DIGEST" > publication-evidence/identities.txt
           sha256sum publication-evidence/*.tgz > publication-evidence/chart-sha256.txt
       - name: Push the chart
         run: |
@@ -235,10 +193,9 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - name: Pull both immutable candidates into separate empty stores
+      - name: Pull the immutable service candidate into an empty store
         env:
           SERVICE_DIGEST: ${{ needs.publish.outputs.service_digest }}
-          DATA_DIGEST: ${{ needs.publish.outputs.data_digest }}
           EXPECTED_ARCH: ${{ matrix.arch }}
           CANDIDATE_VERSION: ${{ needs.publish.outputs.version }}
           CANDIDATE_SOURCE: ${{ github.sha }}

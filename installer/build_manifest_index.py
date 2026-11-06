@@ -16,7 +16,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--revision", required=True, help="40-character source commit")
     parser.add_argument("--output", required=True, type=Path)
-    parser.add_argument("--samples", nargs="+", help="Only index samples included in the bundled data image")
+    parser.add_argument("--samples", nargs="+", help="Only index selected bundled service samples")
     args = parser.parse_args()
     try:
         index = write_manifest_index(ROOT, args.output, args.revision)
