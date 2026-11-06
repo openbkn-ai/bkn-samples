@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: mariadb
-          image: "{{ .Values.sampleDatabase.image.repository }}{{ if .Values.sampleDatabase.image.digest }}@{{ .Values.sampleDatabase.image.digest }}{{ else }}:{{ .Values.sampleDatabase.image.tag }}{{ end }}"
+          image: "{{ .Values.sampleDatabase.image.repository }}:{{ .Values.sampleDatabase.image.tag }}"
           imagePullPolicy: {{ .Values.sampleDatabase.image.pullPolicy }}
           env:
             - name: MARIADB_DATABASE

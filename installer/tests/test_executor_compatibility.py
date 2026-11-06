@@ -24,6 +24,22 @@ class ExecutorCompatibilityTest(unittest.TestCase):
         return RemoteInstallation(ROOT, state, '0.2.1', 'arm64', ENTRY['requires']['capabilities'],
                                   'example.test/executor@sha256:' + 'a' * 64)
 
+    def test_executor_requires_explicit_well_formed_image_reference(self):
+        with tempfile.TemporaryDirectory() as d:
+            runtime = self.runtime(Path(d))
+            for reference in ('example.test/executor@sha256:' + 'a' * 64,
+                              'example.test/executor:0.2.1',
+                              'localhost:5000/team/executor:0.2.1-main.20261106.shaabc'):
+                with self.subTest(reference=reference):
+                    runtime.executor_image = reference
+                    runtime.require_executor()
+            for reference in ('', 'example.test/executor', 'localhost:5000/team/executor',
+                              'example.test/executor:', 'example.test/executor@sha256:bad',
+                              'https://example.test/executor:0.2.1', 'example.test/executor:bad tag'):
+                with self.subTest(reference=reference), self.assertRaises(ValueError):
+                    runtime.executor_image = reference
+                    runtime.require_executor()
+
     def test_default_sdk_blocks_card_and_prepare_before_state_or_resources(self):
         with tempfile.TemporaryDirectory() as d, patch('installer.executor_compatibility.cli_capabilities', return_value=False) as probe:
             state = Path(d)

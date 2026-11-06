@@ -1,6 +1,7 @@
 """Standard deployment must not require a runtime GHCR pull."""
 import json
 from installer.verify_image_manifest import verify_manifest
+from installer.remote_installation import RemoteInstallation
 from installer.ci.verify_candidate_chart import verify as verify_chart
 from copy import deepcopy
 import subprocess
@@ -20,16 +21,35 @@ class SWRDeliveryTest(unittest.TestCase):
         documents = yaml.safe_load_all(subprocess.check_output(command, text=True))
         return next(d for d in documents if d and d['kind'] == 'Deployment')['spec']['template']['spec']
 
-    def test_standard_service_and_executor_use_same_swr_digest(self):
-        pod = self.render('image.digest=' + DIGEST)
+    def test_standard_service_and_executor_use_same_swr_tag(self):
+        pod = self.render()
         container = pod['containers'][0]
-        expected = SWR + '/bkn-sample-studio@' + DIGEST
+        expected = SWR + '/bkn-sample-studio:0.2.1'
         self.assertEqual(container['image'], expected)
         self.assertEqual(next(e['value'] for e in container['env'] if e['name'] == 'BKN_SAMPLE_EXECUTOR_IMAGE_REF'), expected)
 
+    def test_rendered_executor_is_accepted_by_runtime(self):
+        pod = self.render()
+        image = next(e['value'] for e in pod['containers'][0]['env']
+                     if e['name'] == 'BKN_SAMPLE_EXECUTOR_IMAGE_REF')
+        runtime = RemoteInstallation(ROOT, ROOT / 'unused-state', '0.2.1', 'arm64', [], image)
+        runtime.require_executor()
+
     def test_registry_and_full_repository_overrides_remain_explicit(self):
-        self.assertEqual(self.render('image.registry=private.example/team', 'image.digest=' + DIGEST)['containers'][0]['image'], 'private.example/team/bkn-sample-studio@' + DIGEST)
-        self.assertEqual(self.render('image.repository=custom.example/other', 'image.digest=' + DIGEST)['containers'][0]['image'], 'custom.example/other@' + DIGEST)
+        self.assertEqual(self.render('image.registry=private.example/team')['containers'][0]['image'], 'private.example/team/bkn-sample-studio:0.2.1')
+        self.assertEqual(self.render('image.repository=custom.example/other')['containers'][0]['image'], 'custom.example/other:0.2.1')
+
+    def test_legacy_digest_values_do_not_override_tags(self):
+        command = ['helm', 'template', 'sample', str(ROOT / 'deploy/charts/bkn-sample-studio'),
+                   '--set', 'image.tag=0.2.1', '--set', 'image.digest=' + DIGEST,
+                   '--set', 'sampleDatabase.image.digest=' + DIGEST]
+        documents = list(yaml.safe_load_all(subprocess.check_output(command, text=True)))
+        pod = next(d for d in documents if d and d['kind'] == 'Deployment')['spec']['template']['spec']
+        studio = pod['containers'][0]
+        self.assertEqual(studio['image'], SWR + '/bkn-sample-studio:0.2.1')
+        self.assertEqual(next(e['value'] for e in studio['env'] if e['name'] == 'BKN_SAMPLE_EXECUTOR_IMAGE_REF'), studio['image'])
+        database = next(d for d in documents if d and d['kind'] == 'StatefulSet')
+        self.assertEqual(database['spec']['template']['spec']['containers'][0]['image'], 'mariadb:11.4.7')
 
     def test_pull_secrets_reach_service(self):
         self.assertEqual(self.render('imagePullSecrets[0].name=registry-key')['imagePullSecrets'], [{'name': 'registry-key'}])
@@ -67,7 +87,7 @@ class TargetManifestTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             verify_manifest(manifest)
 
-    def test_standard_release_requires_swr_before_build_and_packages_swr_digest(self):
+    def test_standard_release_requires_swr_before_build_and_packages_version_tag(self):
         workflow = yaml.load((ROOT / '.github/workflows/publish-sample-studio.yml').read_text(), Loader=yaml.BaseLoader)
         steps = workflow['jobs']['publish']['steps']
         version = next(s for s in steps if s.get('id') == 'version')['run']
@@ -76,7 +96,8 @@ class TargetManifestTest(unittest.TestCase):
         self.assertIn('swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@${service_digest}', manifest)
         self.assertIn('verify_image_manifest.py', manifest)
         package = next(s for s in steps if s.get('name') == 'Package the chart for the same version')
-        self.assertEqual(package['env']['SERVICE_IMAGE_DIGEST'], '${{ steps.manifest.outputs.service_digest }}')
+        self.assertEqual(package['env']['VERSION'], '${{ steps.version.outputs.value }}')
+        self.assertNotIn('SERVICE_IMAGE_DIGEST', package['env'])
 
 
 class PublishedChartGateTest(unittest.TestCase):
@@ -97,22 +118,22 @@ class PublishedChartGateTest(unittest.TestCase):
         self.assertIn('mkdir publication-evidence', gate['run'])
         self.assertIn('helm template candidate "/tmp/charts/bkn-sample-studio-${VERSION}.tgz"', gate['run'])
 
-    def test_rendered_chart_rejects_wrong_registry_digest_and_executor(self):
+    def test_rendered_chart_rejects_wrong_registry_tag_and_executor(self):
         rendered = subprocess.check_output([
             'helm', 'template', 'sample', str(ROOT / 'deploy/charts/bkn-sample-studio'),
-            '--set', 'image.tag=0.2.1', '--set', 'image.digest=' + DIGEST,
+            '--set', 'image.tag=0.2.1',
             '--set', 'dataImage.tag=0.2.1'], text=True)
         documents = list(yaml.safe_load_all(rendered))
-        verify_chart(rendered, DIGEST, '0.2.1')
-        for target in ('service-ghcr', 'executor-ghcr', 'service-wrong-digest', 'executor-wrong-digest'):
+        verify_chart(rendered, '0.2.1')
+        for target in ('service-ghcr', 'executor-ghcr', 'service-wrong-tag', 'executor-wrong-tag'):
             with self.subTest(target=target):
                 changed = deepcopy(documents)
                 deployment = next(d for d in changed if d and d['kind'] == 'Deployment' and d['metadata']['name'] == 'bkn-sample-studio')
                 studio = next(c for c in deployment['spec']['template']['spec']['containers'] if c['name'] == 'studio')
-                bad = 'ghcr.io/openbkn-ai/bkn-sample-studio@' + DIGEST if target.endswith('ghcr') else SWR + '/bkn-sample-studio@sha256:' + 'b' * 64
+                bad = 'ghcr.io/openbkn-ai/bkn-sample-studio@' + DIGEST if target.endswith('ghcr') else SWR + '/bkn-sample-studio:0.2.2'
                 if target.startswith('service'):
                     studio['image'] = bad
                 else:
                     next(e for e in studio['env'] if e['name'] == 'BKN_SAMPLE_EXECUTOR_IMAGE_REF')['value'] = bad
-                with self.assertRaisesRegex(ValueError, 'verified SWR digest'):
-                    verify_chart(yaml.safe_dump_all(changed), DIGEST, '0.2.1')
+                with self.assertRaisesRegex(ValueError, 'matching SWR version tag'):
+                    verify_chart(yaml.safe_dump_all(changed), '0.2.1')

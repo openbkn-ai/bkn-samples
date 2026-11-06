@@ -6,7 +6,7 @@ import sys
 import yaml
 
 
-def verify(rendered, service_digest, version):
+def verify(rendered, version):
     deployments = [item for item in yaml.safe_load_all(rendered)
                    if item and item.get("kind") == "Deployment"
                    and item["metadata"]["name"] == "bkn-sample-studio"]
@@ -15,9 +15,9 @@ def verify(rendered, service_digest, version):
     pod = deployments[0]["spec"]["template"]["spec"]
     studio = next(c for c in pod["containers"] if c["name"] == "studio")
     env = {e["name"]: e.get("value") for e in studio["env"]}
-    expected = "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio@" + service_digest
+    expected = "swr.cn-east-3.myhuaweicloud.com/openbkn-ai/bkn-sample-studio:" + version
     if studio["image"] != expected or env["BKN_SAMPLE_EXECUTOR_IMAGE_REF"] != expected:
-        raise ValueError("Chart service/executor must use the verified SWR digest")
+        raise ValueError("Chart service/executor must use the matching SWR version tag")
     if pod.get("imagePullSecrets"):
         raise ValueError("standard anonymous acceptance requires no pullSecrets")
     if env["BKN_SAMPLE_DATA_IMAGE_TAG"] != version or env["BKN_SAMPLE_DATA_IMAGE_REF"]:
@@ -27,5 +27,5 @@ def verify(rendered, service_digest, version):
 
 
 if __name__ == "__main__":
-    value = verify(Path(sys.argv[1]).read_text(), sys.argv[2], sys.argv[3])
-    Path(sys.argv[4]).write_text(json.dumps(value, indent=2) + "\n")
+    value = verify(Path(sys.argv[1]).read_text(), sys.argv[2])
+    Path(sys.argv[3]).write_text(json.dumps(value, indent=2) + "\n")
