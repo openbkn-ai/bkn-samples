@@ -98,6 +98,8 @@ credentials, resolves the digest from SWR itself and checks the Linux amd64/arm6
 manifest before packaging the Chart. GHCR may still receive a copy; equal digests
 between different registries are not required. The executor runs in the installed
 service process and records the same versioned image reference for retry checks.
+The runtime accepts explicit tags and legacy digest references. Retries require
+both the original image reference and the same installed executor source hash.
 
 `image.registry` defaults to `swr.cn-east-3.myhuaweicloud.com/openbkn-ai`;
 `image.repository` defaults to `bkn-sample-studio`. An explicit full repository

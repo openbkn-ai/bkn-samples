@@ -1,6 +1,7 @@
 """Standard deployment must not require a runtime GHCR pull."""
 import json
 from installer.verify_image_manifest import verify_manifest
+from installer.remote_installation import RemoteInstallation
 from installer.ci.verify_candidate_chart import verify as verify_chart
 from copy import deepcopy
 import subprocess
@@ -26,6 +27,13 @@ class SWRDeliveryTest(unittest.TestCase):
         expected = SWR + '/bkn-sample-studio:0.2.1'
         self.assertEqual(container['image'], expected)
         self.assertEqual(next(e['value'] for e in container['env'] if e['name'] == 'BKN_SAMPLE_EXECUTOR_IMAGE_REF'), expected)
+
+    def test_rendered_executor_is_accepted_by_runtime(self):
+        pod = self.render()
+        image = next(e['value'] for e in pod['containers'][0]['env']
+                     if e['name'] == 'BKN_SAMPLE_EXECUTOR_IMAGE_REF')
+        runtime = RemoteInstallation(ROOT, ROOT / 'unused-state', '0.2.1', 'arm64', [], image)
+        runtime.require_executor()
 
     def test_registry_and_full_repository_overrides_remain_explicit(self):
         self.assertEqual(self.render('image.registry=private.example/team')['containers'][0]['image'], 'private.example/team/bkn-sample-studio:0.2.1')

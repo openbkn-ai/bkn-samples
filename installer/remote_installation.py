@@ -37,8 +37,12 @@ class RemoteInstallation:
         self.compatibility = ExecutorCompatibility()
 
     def require_executor(self):
-        if not re.fullmatch(r"[a-z0-9][a-z0-9./:_-]*@sha256:[0-9a-f]{64}", self.executor_image):
-            raise ValueError("remote installation requires a fixed executor image")
+        # Chart deployments use explicit tags; older deployments may still use digests.
+        # Retry identity also includes executor_digest, computed from installed source.
+        repository = r"[a-z0-9][a-z0-9._-]*(?::[0-9]+)?(?:/[a-z0-9][a-z0-9._-]*)*"
+        reference = repository + r"(?:@sha256:[0-9a-f]{64}|:[A-Za-z0-9_][A-Za-z0-9_.-]{0,127})"
+        if not re.fullmatch(reference, self.executor_image):
+            raise ValueError("remote installation requires an explicit executor image tag or digest")
 
     def prepare(self, entry):
         sample = entry["sampleId"]
