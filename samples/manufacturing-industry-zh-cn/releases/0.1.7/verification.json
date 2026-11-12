@@ -1,0 +1,44 @@
+{
+  "sampleId": "manufacturing-industry-zh-cn",
+  "version": "0.1.7",
+  "packageDigest": "sha256:32d03379e308b8c6b9d3f1d5e2e1d9d28b84daf591f90ccec8321390c0898798",
+  "sourceCommit": "67ccba67ff9f716a7328db99dd703b9b0aa0f6c3",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "38 business tables, 1390 fixture records, the package's database verification hook passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "40 objects (2 on datasets of the sample catalog, 181 rows loaded) and 73 relations; every binding and a live query per object verified by the platform hook; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "4 mounted rule functions called through Context Loader execute_tool and through the toolbox proxy, matching local runs on the package fixtures; 2 object actions executed, written values read back and restored, a cross-work-centre move refused; 2 mounted Skills checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "The experience set's reference Cypher queries and graph patterns passed. No model answered the questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-zh-cn-v0.1.7/acceptance.json",
+  "evidenceDigest": "sha256:71333f3dd5a1eac360b53edeb2bb000b69130fa2fed34993ff7533284873ebd2",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build on a local kind cluster (sample service 022-9e2d8d18); no native amd64 certification and no released vanilla 0.2.2.",
+    "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
+    "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
+    "Reference queries, graph patterns, functions and actions were checked through APIs; no model answered the questions, and the Workshop app is not part of this version."
+  ]
+}
