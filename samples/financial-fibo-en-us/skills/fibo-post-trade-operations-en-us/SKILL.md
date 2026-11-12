@@ -9,7 +9,7 @@ description: >
 
 # Post-trade operations
 
-Answer middle-office and accounting questions about settlement, positions, valuation and month end. Use Cypher for lookups, totals, relations and month-end snapshots; call a function for a date that is not a month end or for what was known on an earlier day.
+Answer middle-office and accounting questions about settlement, positions, valuation and month end. Use Cypher for lookups, totals, relations and month-end snapshots; run a calculation action for a date that is not a month end or for what was known on an earlier day.
 
 ## Default rules
 
@@ -23,12 +23,14 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Unknown is not zero: with a blocked valuation the portfolio total is unknown; the other securities' amounts can still be given.
 - Month end: totals by trade month and local currency, buys positive and sells negative; unsettled sale notional (remaining quantity × execution price × multiplier, local currency) is shown separately.
 
-## When to call a function
+## When to run a calculation action
+
+The calculations are actions: call `get_action_info` for the parameters, run `execute_action`, then read the result with `get_action_execution`. Pass every parameter: the dates and scope are the assumptions of the answer, so pass them explicitly and say in the answer what they were.
 
 - `settlement_asof`: settlement status, remaining quantity, overdue and failed for a day other than February 28, or based on what was known on an earlier day. Pass `portfolio_ids`, `as_of_date`, `knowledge_date` (the same as `as_of_date` for "as known that day") and `view_kind` (actual or planned).
 - `valuation_asof`: positions, cost, P&L or market value on a date that is not a month end, or explaining a cost change from the original trades.
 - Today's (February 28) settlement status and month-end positions and valuations can be read with Cypher: the month-end snapshots match recomputation from the original records.
-- After a function returns, check `completeness` and `issues`; a failed call never means there are no records.
+- After the execution completes, check `completeness` and `issues`; a failed execution never means there are no records.
 
 ## Cypher patterns
 

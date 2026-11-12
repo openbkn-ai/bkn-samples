@@ -44,6 +44,8 @@ def managed_query(*args, **kwargs):
 @tool
 def retail_function(as_of_date: str, knowledge_date: str, product_ids: list=None, location_ids: list=None, lot_ids: list=None, order_ids: list=None, recall_id: str='', trace_lot_id: str='', mode: str='orders', horizon_date: str='2027-03-31') -> dict:
     scope=dict(product_ids=product_ids,as_of_date=as_of_date,knowledge_date=knowledge_date,location_ids=location_ids,lot_ids=lot_ids,order_ids=order_ids,recall_id=recall_id,trace_lot_id=trace_lot_id,mode=mode,horizon_date=horizon_date)
+    # An action sends every declared input; an empty string means not set, so the default applies.
+    scope={k:v for k,v in scope.items() if v!=''}
     return run_request(managed_query,KN_ID,CONTRACT,OPERATION,scope,execute)
 """
     return core+'\n'+loader+'\nKN_ID='+repr(kn_id)+'\nOPERATION='+repr(operation)+'\nCONTRACT='+repr(c)+'\n'+entry
@@ -53,14 +55,14 @@ COMMON=[('as_of_date','string',True,'Business date YYYY-MM-DD.','业务日期 YY
         ('knowledge_date','string',True,'Count only records known by this date, YYYY-MM-DD; usually the business date.','只计这一天及以前已记录的事件，YYYY-MM-DD；一般与业务日期相同。')]
 INPUTS={
     'inventory_asof':[('product_ids','array',True,'1 to 50 product IDs.','1 到 50 个商品编号。'),
-                      ('location_ids','array',False,'Optional locations to report.','可选，只看这些地点。'),
-                      ('lot_ids','array',False,'Optional lots to report.','可选，只看这些批次。'),
-                      ('trace_lot_id','string',False,'Optional lot whose connected upstream and downstream lots to trace.','可选，追溯这个批次上下游相连的批次。')],
+                      ('location_ids','array',False,'Locations to report; pass an empty list for all.','只看这些地点；传空列表表示不限。'),
+                      ('lot_ids','array',False,'Lots to report; pass an empty list for all.','只看这些批次；传空列表表示不限。'),
+                      ('trace_lot_id','string',False,'Lot whose connected upstream and downstream lots to trace; pass an empty string for none.','要追溯上下游相连批次的批次；不追溯时传空字符串。')],
     'fulfillment_plan':[('product_ids','array',True,'1 to 50 product IDs.','1 到 50 个商品编号。'),
-                        ('mode','string',False,'orders (default) allocates open orders; replenishment walks the forecast.','orders（默认）为未完成订单配货；replenishment 按预测算补货。'),
-                        ('order_ids','array',False,'Optional orders to report; other orders keep their place in the queue.','可选，只看这些订单；其他订单仍按原顺序占用库存。'),
-                        ('location_ids','array',False,'Optional locations to report.','可选，只看这些地点。'),
-                        ('horizon_date','string',False,'Replenishment horizon, default 2027-03-31.','补货计算截至日期，默认 2027-03-31。')],
+                        ('mode','string',False,'orders allocates open orders; replenishment walks the forecast. Pass orders unless the question is about replenishment.','orders 为未完成订单配货；replenishment 按预测算补货。问补货时传 replenishment，其他传 orders。'),
+                        ('order_ids','array',False,'Orders to report, pass an empty list for all; other orders keep their place in the queue.','只看这些订单，传空列表表示全部；其他订单仍按原顺序占用库存。'),
+                        ('location_ids','array',False,'Locations to report; pass an empty list for all.','只看这些地点；传空列表表示不限。'),
+                        ('horizon_date','string',False,'Replenishment horizon YYYY-MM-DD; 2027-03-31 for the March plan.','补货计算截至日期 YYYY-MM-DD；三月计划传 2027-03-31。')],
     'recall_assessment':[('recall_id','string',True,'Recall ID.','召回编号。')],
 }
 DESCRIPTIONS={
@@ -75,6 +77,32 @@ DESCRIPTIONS={
                          '从召回根批次沿拆分和转换追到所有下游批次，按商品和地点给出在库、在途、已售、退回、已控制、可控制、控制比例和受影响订单。'),
 }
 
+ACTION_NAMES={'inventory_asof':('Inventory as of a date','按日期回放库存'),
+              'fulfillment_plan':('Order allocation and replenishment','订单配货与补货'),
+              'recall_assessment':('Recall control assessment','召回控制评估')}
+
+BKN_API='/api/bkn-backend/v1'
+ACTION_RULE=('Run as an action: get_action_info for the parameters, execute_action, then get_action_execution for the result. '
+             'Pass every parameter: the dates and scope are the assumptions of the answer, so pass them explicitly and state them in the answer. '
+             'Check completeness and issues in the result; a completed execution does not mean the calculation succeeded.',
+             '作为行动执行：先用 get_action_info 取参数定义，再用 execute_action 执行，最后用 get_action_execution 取结果。'
+             '每个参数都要传：日期和范围是这次计算的假设，要显式传入，并在回答里说明按什么假设算的。'
+             '检查结果里的 completeness 和 issues，执行状态 completed 不等于计算成功。')
+
+def action_definitions(kn_id,box_id,tool_ids,inputs,zh):
+    """One tool action per function. The platform requires every input, so each execution records the dates and scope it assumed."""
+    return [{'id':kn_id+'_'+op,'name':ACTION_NAMES[op][1 if zh else 0],'branch':'main','operation_config':{'type':'tool'},'object_type_id':'',
+             'action_type':'modify','action_intent':'modify','action_source':{'type':'tool','box_id':box_id,'tool_id':tool_ids[op]},
+             'parameters':[{'name':i['name'],'type':i['type'],'value_from':'input','comment':i['description']} for i in inputs[op]],
+             'comment':DESCRIPTIONS[op][1 if zh else 0]+'\n'+ACTION_RULE[1 if zh else 0]} for op in OPERATIONS]
+
+def actions_ready(kn_id,box_id,tool_ids):
+    """Every enabled function is the source of a tool action in the network."""
+    listing=entries(cli('bkn','action-type','list',kn_id),'entries','data')
+    sources={(a.get('action_source') or {}).get('tool_id') for a in listing
+             if (a.get('operation_config') or {}).get('type')=='tool' and (a.get('action_source') or {}).get('box_id')==box_id}
+    return set(tool_ids.values())<=sources
+
 def run(kn_id,apply):
     manifest=json.loads((ROOT/'sample.yaml').read_text());name='RETAIL_'+manifest['metadata']['name'].rsplit('gs1-',1)[1].replace('-','_')+'_Functions'
     boxes=entries(cli('toolbox','list','--keyword',name,'--limit','100'),'data','entries');matches=[b for b in boxes if b['box_name']==name]
@@ -84,10 +112,11 @@ def run(kn_id,apply):
         box=cli('call',API+'/tool-box','-X','POST','-d',json.dumps(dict(box_name=name,box_desc='Retail traceability, inventory and recall controls',box_category='data_process',metadata_type='function',source='custom')));remember('toolboxes',box['box_id'])
     else:box=matches[0];require_owned('toolboxes',box['box_id'])
     zh=json.loads((ROOT/'model-contract.json').read_text()).get('language')=='zh-cn'
-    bid=box['box_id'];tools=entries(cli('tool','list','--toolbox',bid,'--all'),'tools','data','entries');tids={};hashes={}
+    bid=box['box_id'];tools=entries(cli('tool','list','--toolbox',bid,'--all'),'tools','data','entries');tids={};hashes={};op_inputs={}
     for operation in OPERATIONS:
         code=tool_code(operation,kn_id);hashes[operation]=hashlib.sha256(code.encode()).hexdigest();found=next((t for t in tools if t['name']==operation),None)
         inputs=[{'name':n,'type':typ,'required':req,'description':zh_d if zh else en_d} for n,typ,req,en_d,zh_d in COMMON+INPUTS[operation]]
+        op_inputs[operation]=inputs
         body=dict(name=operation,description=DESCRIPTIONS[operation][1 if zh else 0],script_type='python',code=code,inputs=inputs,outputs=[dict(name='result',type='object',required=True,description='Typed retail rows, completeness, issues and source evidence; null remains unknown')])
         if apply:
             if found:
@@ -105,9 +134,11 @@ def run(kn_id,apply):
     if apply:
 
         if box.get('status')!='published':cli('toolbox','publish',bid)
-        cli('bkn','capability','attach',kn_id,'--box',bid,'--tool',','.join(tids.values()))
+        # Each function runs as a tool action; overwrite keeps a repeated install idempotent and follows re-created tool IDs.
+        cli('call',BKN_API+'/knowledge-networks/'+kn_id+'/action-types?import_mode=overwrite','-X','POST','-d',json.dumps({'entries':action_definitions(kn_id,bid,tids,op_inputs,zh)},ensure_ascii=False))
+    elif not actions_ready(kn_id,bid,tids):raise ValueError('missing function action')
     if apply:skills=register_skills(apply=True,kn_id=kn_id)
     else:
         skills={'owned':read()['skills']}
         if not skills['owned']:raise ValueError('missing owned Skill')
-    return {'toolbox_id':bid,'tool_ids':tids,'source_sha256':hashes,'skills':skills,'ownedExecution':read()}
+    return {'toolbox_id':bid,'tool_ids':tids,'action_ids':[kn_id+'_'+op for op in OPERATIONS],'source_sha256':hashes,'skills':skills,'ownedExecution':read()}

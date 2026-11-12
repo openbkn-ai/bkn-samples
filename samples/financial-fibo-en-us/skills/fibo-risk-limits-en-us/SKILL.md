@@ -9,7 +9,7 @@ description: >
 
 # Risk and limits
 
-Answer risk and portfolio-manager questions about concentration, counterparty receivables, limits and the plan. Use Cypher to read month-end exposures and limit assessments and to trace their contributions; call a function for a date that is not a month end or for what was known on an earlier day.
+Answer risk and portfolio-manager questions about concentration, counterparty receivables, limits and the plan. Use Cypher to read month-end exposures and limit assessments and to trace their contributions; run a calculation action for a date that is not a month end or for what was known on an earlier day.
 
 ## Default rules
 
@@ -22,12 +22,14 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Applicable limit: approved by the day, effective on it and unique; a new limit applies only from its effective date, and the old limit applies until then. Greater than the limit is a breach, equal is within; excess = observed value − limit.
 - A portfolio total market value needs a value for every security; with a blocked valuation the total is unknown.
 
-## When to call a function
+## When to run a calculation action
+
+The calculations are actions: call `get_action_info` for the parameters, run `execute_action`, then read the result with `get_action_execution`. Pass every parameter: the dates and scope are the assumptions of the answer, so pass them explicitly and say in the answer what they were.
 
 - `limit_assessment_asof`: concentration, counterparty receivables and breaches for a date that is not a month end, or based on what was known on an earlier day. Pass `portfolio_ids`, `as_of_date`, `knowledge_date` and `view_kind` (actual or planned).
 - `settlement_asof`: explaining which sales made up a counterparty receivable on a given day.
 - Month-end (including the March plan) exposures, limit assessments and valuations can be read with Cypher: they match recomputation from the original records.
-- After a function returns, check `completeness` and `issues`; a failed call never means within the limit.
+- After the execution completes, check `completeness` and `issues`; a failed execution never means within the limit.
 
 ## Cypher patterns
 
