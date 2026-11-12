@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000006",
-    "sequence": 6,
+    "revision": "catalog-000007",
+    "sequence": 7,
     "channel": "stable",
-    "publishedAt": "2026-11-12T23:40:50Z",
+    "publishedAt": "2026-11-12T23:48:36Z",
     "productVersion": "0.2.2"
   },
   "spec": {
@@ -225,7 +225,7 @@
         "displayName": "制造业端到端运营（中文）",
         "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
         "publishedAt": "2026-11-01T03:57:07Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
@@ -268,7 +268,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-zh-cn/releases/0.1.6/verification-openbkn-0.2.2.json",
           "digest": "sha256:a2275ddd7207fce5165f2777b47195e5e203b81870e05aeb89214b8d641582c3"
         },
-        "language": "zh-CN"
+        "language": "zh-CN",
+        "withdrawalReason": "Superseded by manufacturing-industry-zh-cn 0.1.7 for OpenBKN 0.2.2, which adds machine scheduling. The 0.1.6 package remains published for OpenBKN 0.2.1."
       },
       {
         "sampleId": "manufacturing-industry-en-us",
@@ -276,7 +277,7 @@
         "displayName": "Manufacturing Operations (EN)",
         "summary": "Order fulfilment, purchasing, execution compliance and quality release at a fictional precision machining company.",
         "publishedAt": "2026-11-01T03:57:07Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
@@ -319,7 +320,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-en-us/releases/0.1.6/verification-openbkn-0.2.2.json",
           "digest": "sha256:e256ca759e7b6078330f8e48e36f473c03f2a58e01c2641f82945218ca637ebd"
         },
-        "language": "en-US"
+        "language": "en-US",
+        "withdrawalReason": "Superseded by manufacturing-industry-en-us 0.1.7 for OpenBKN 0.2.2, which adds machine scheduling. The 0.1.6 package remains published for OpenBKN 0.2.1."
       },
       {
         "sampleId": "financial-fibo-zh-cn",
@@ -1476,6 +1478,110 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/09518e9f916e28f32deacc6c30b35f05d24919ef/samples/energy-saref4ener-en-us/releases/0.1.9/verification.json",
           "digest": "sha256:9d577689e27acc1e03cfb4079cae4586778904504548958c846f6a0b7d052582"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "manufacturing-industry-zh-cn",
+        "version": "0.1.7",
+        "displayName": "制造业端到端运营（中文）",
+        "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
+        "publishedAt": "2026-11-12T14:20:41Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "机台排程：生产工序和维修工单共用机台排产，补齐计划机台、计划日期、前序和三月排班；工单齐套、设备能力、人员资质与班次、换型提示四个规则函数直接挂载，“调整工序排程”“调整维修工单”两个行动写回；在 OpenBKN 0.2.2 上完成固定包全新安装验收。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/ab228b307fa2347506f684c9802d2ecac553dc17/samples/manufacturing-industry-zh-cn/releases/0.1.7/release-notes.en-US.md",
+              "digest": "sha256:1fee24293a0f3e3a42d66d4d77b8ad294a0ebec5be36ee2f4688a9310f75508c"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/ab228b307fa2347506f684c9802d2ecac553dc17/samples/manufacturing-industry-zh-cn/releases/0.1.7/release-notes.zh-CN.md",
+              "digest": "sha256:72a80e373d9b29c369b25bc6ffdae3ff0422b8b8671574a0e5432ba8a93360c6"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/ab228b307fa2347506f684c9802d2ecac553dc17/samples/manufacturing-industry-zh-cn/releases/0.1.7/sample.json",
+          "digest": "sha256:38b74f5b663d72611c7d635294a5424ff4cefd5b7785518d5ea378f3eaa17758"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/ab228b307fa2347506f684c9802d2ecac553dc17/samples/manufacturing-industry-zh-cn/releases/0.1.7/verification.json",
+          "digest": "sha256:a52894729392a2719f51fa0cc501fe1f17cb150cfbda8208f1cafb6532f1d094"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "manufacturing-industry-en-us",
+        "version": "0.1.7",
+        "displayName": "Manufacturing Operations (EN)",
+        "summary": "Order fulfilment, purchasing, execution compliance and quality release at a fictional precision machining company.",
+        "publishedAt": "2026-11-12T14:20:41Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Machine scheduling: operations and maintenance work orders share machines, with planned machines, days, predecessors and the March roster; four mounted rule functions (work order kit, machine capability, operator qualification and shift, changeover) and two adjust actions; fresh installation of the fixed package accepted on OpenBKN 0.2.2.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/ab228b307fa2347506f684c9802d2ecac553dc17/samples/manufacturing-industry-en-us/releases/0.1.7/release-notes.en-US.md",
+              "digest": "sha256:1fee24293a0f3e3a42d66d4d77b8ad294a0ebec5be36ee2f4688a9310f75508c"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/ab228b307fa2347506f684c9802d2ecac553dc17/samples/manufacturing-industry-en-us/releases/0.1.7/release-notes.zh-CN.md",
+              "digest": "sha256:72a80e373d9b29c369b25bc6ffdae3ff0422b8b8671574a0e5432ba8a93360c6"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/ab228b307fa2347506f684c9802d2ecac553dc17/samples/manufacturing-industry-en-us/releases/0.1.7/sample.json",
+          "digest": "sha256:34e379a1e9208793ecef2dc88ffcdfd485907f4a4664a90e95f707484d740cb7"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/ab228b307fa2347506f684c9802d2ecac553dc17/samples/manufacturing-industry-en-us/releases/0.1.7/verification.json",
+          "digest": "sha256:2ff21d92689dbc3b493ef91d28fd255b15662eec2952fc357a42ff1e7f9e46fe"
         },
         "language": "en-US"
       }
