@@ -217,10 +217,18 @@ unk = sorted((r['lot_id'], r['location_id']) for r in INV if r['available'] is N
 # position's in-transit negative, and setting a conflicting sale aside leaves returns above the remaining sales.
 transfer_qty = defaultdict(lambda: [ZERO, ZERO])
 arrival_cell = {}
+
+
+def units(m):
+    # Same conversion as the reference replay: cases count as pack_multiplier units.
+    product = R.products[R.lots[m['lot_id']]['product_id']]
+    return number(m['quantity']) * (number(product['pack_multiplier']) if m['unit'] in ('case', '箱') else 1)
+
+
 for m in EVENTS:
     if m['transfer_id'] and m['event_type_code'] in ('dispatch', 'arrive'):
         key = (m['transfer_id'], m['lot_id'])
-        transfer_qty[key][0 if m['event_type_code'] == 'dispatch' else 1] += number(m['quantity'])
+        transfer_qty[key][0 if m['event_type_code'] == 'dispatch' else 1] += units(m)
         if m['event_type_code'] == 'arrive':
             arrival_cell[key] = (m['lot_id'], m['destination_location_id'])
 no_dispatch = {arrival_cell[k] for k, (sent, arrived) in transfer_qty.items() if arrived > sent and k in arrival_cell}
