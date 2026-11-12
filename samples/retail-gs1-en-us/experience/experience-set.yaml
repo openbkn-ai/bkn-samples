@@ -268,18 +268,17 @@ spec:
         RETURN r.controlled_quantity AS controlled, r.controllable_quantity AS controllable, r.coverage_ratio AS coverage
   - id: Q-41
     title: Stock that cannot be determined
-    explanation: Conflicting events, negative stock or returns exceeding sales make stock undeterminable, never zero.
+    explanation: 'Stock cannot be determined when its records contradict each other: one event recorded with different contents, an arrival with no matching dispatch, or more sold than held. Give the cause; never treat it as zero.'
     question: Which lot-location positions have stock that cannot be determined now, and why?
-    answer: '4 lot-locations cannot be determined: LOT-043-C@STORE-018 (conflicting_event, returns_exceed_sales); LOT-045-C@STORE-020, LOT-045-D@STORE-020 and LOT-046-C@STORE-021 (negative_inventory).'
+    answer: '4 lot-locations cannot be determined: LOT-043-C@STORE-018 (conflicting_event: the same sale is recorded twice with different quantities, 16 and 99); LOT-045-C@STORE-020 and LOT-045-D@STORE-020 (arrival_without_dispatch: each has an 8-unit arrival with no matching dispatch); LOT-046-C@STORE-021 (negative_inventory: a 999-unit sale against 27 units on hand).'
     expected:
       positions:
         LOT-043-C@STORE-018:
         - conflicting_event
-        - returns_exceed_sales
         LOT-045-C@STORE-020:
-        - negative_inventory
+        - arrival_without_dispatch
         LOT-045-D@STORE-020:
-        - negative_inventory
+        - arrival_without_dispatch
         LOT-046-C@STORE-021:
         - negative_inventory
     surfaces:

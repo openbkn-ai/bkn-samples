@@ -1,0 +1,112 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "energy-saref4ener-zh-cn",
+    "version": "0.1.8",
+    "displayName": "需求响应与柔性用能",
+    "summary": "合成需求响应评估、共享资源计划与计量结算。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT synthetic sample; SAREF4ENER semantic attribution is documented separately."
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-11-12T09:25:39Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:74ffa80edc79e3e60df3fc8e0ed0ee1c5a268d5427f20d6fbb74f0967bcb7c5c"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:042f4e057e13397850e28d035ebdf2ad42a28c67cc285359d670ea4c3a463362"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.function",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.2 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:a515f0695cde8fcd9a4a7ba9f5b4efe0cd8eb2cd147d06e382d3504d5b774f9f",
+        "sizeBytes": 191462,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-energy-saref4ener-zh-cn-v0.1.8/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "energy-saref4ener-zh-cn-network",
+        "questions": [
+          "EVT-061 按现在的方案能凑够目标吗？还差多少千瓦？",
+          "EVT-001 实际核实的削减电量是多少千瓦时？交付比例多少？达标了吗？",
+          "已经发生的事件里，哪些的结算结果现在还确定不了？各卡在哪里？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "energy-saref4ener-zh-cn-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "energy-saref4ener-zh-cn-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "energy-saref4ener-zh-cn-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "energy-saref4ener-zh-cn-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "energy_saref4ener_zh_cn",
+          "expectedTables": 15
+        }
+      ],
+      "bindings": []
+    }
+  }
+}

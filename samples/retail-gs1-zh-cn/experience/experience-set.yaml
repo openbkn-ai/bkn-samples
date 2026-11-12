@@ -267,18 +267,17 @@ spec:
         RETURN r.controlled_quantity AS controlled, r.controllable_quantity AS controllable, r.coverage_ratio AS coverage
   - id: Q-41
     title: 哪些库存算不清
-    explanation: 事件冲突、负库存、退货多于销售时库存算不清，不能当成零。
+    explanation: 记录互相矛盾时库存算不清：同一笔事件记了两种内容、到货找不到对应的发货、卖出比在库还多。要说明原因，不能当成零。
     question: 现在有哪些批次库位的库存算不清楚？各是什么原因？
-    answer: 4 个批次库位的库存算不清：LOT-043-C@STORE-018（conflicting_event、returns_exceed_sales），LOT-045-C@STORE-020、LOT-045-D@STORE-020、LOT-046-C@STORE-021（negative_inventory）。
+    answer: 4 个批次库位的库存算不清：LOT-043-C@STORE-018（conflicting_event：同一笔销售记了两次、数量不同，16 件和 99 件）；LOT-045-C@STORE-020、LOT-045-D@STORE-020（arrival_without_dispatch：各有一笔 8 件的到货找不到对应的发货）；LOT-046-C@STORE-021（negative_inventory：在库只有 27 件却记了一笔 999 件的销售）。
     expected:
       positions:
         LOT-043-C@STORE-018:
         - conflicting_event
-        - returns_exceed_sales
         LOT-045-C@STORE-020:
-        - negative_inventory
+        - arrival_without_dispatch
         LOT-045-D@STORE-020:
-        - negative_inventory
+        - arrival_without_dispatch
         LOT-046-C@STORE-021:
         - negative_inventory
     surfaces:
