@@ -85,10 +85,13 @@ KIT_ACTION_PARAMETERS = {
 def rule_tool_inputs() -> list[dict[str, Any]]:
     """The schedule-Gantt rule-tool contract: tasks in, one result per task out."""
     task = {"name": "items", "type": "object", "required": True, "description": "一条任务：key、start、end、resource、values。"}
-    tasks = _input("tasks", "array", "要检查的任务，一次最多 200 条；values 里有 bill_no、product_code、line_code、planned_start、plan_status。",
-                   required=True)
+    tasks = _input("tasks", "array", "要检查的任务，一次最多 200 条；values 里有 bill_no、product_code、line_code、planned_start、plan_status。")
     tasks["sub_parameters"] = [task]
-    return [tasks, _input("scenario", "object", "方案改动（edits）；任务里已经是改动后的值，可不传。")]
+    return [tasks, _input("scenario", "object", "方案改动（edits）；任务里已经是改动后的值，可不传。"),
+            _input("mode", "string", "传 detail 取一条任务的明细（仅齐套检查）；不传为批量检查。"),
+            _input("task", "object", "明细调用的那条任务，格式同 tasks 的一条。"),
+            _input("locale", "string", "明细标签的语言：zh-CN 或 en-US。"),
+            _input("query", "object", "明细的筛选与分页：group、keyOnly、search、offset、limit（默认 50）。")]
 
 
 def rule_action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str]) -> list[dict[str, Any]]:
@@ -198,8 +201,8 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
         tools[operation] = {
             "name": spec["name"], "description": spec["description"], "script_type": "python",
             "code": build_native_function_code(fixed_operation=operation), "inputs": rule_tool_inputs(),
-            "outputs": [{"name": "results", "type": "array", "required": True,
-                         "description": "每条任务一个结果：key、pass、severity、text、related。"}],
+            "outputs": [{"name": "results", "type": "array", "required": False,
+                         "description": "检查：每条任务一个结果（key、pass、severity、text、related、at、counts、detail）；明细调用返回明细表。"}],
         }
     return tools
 

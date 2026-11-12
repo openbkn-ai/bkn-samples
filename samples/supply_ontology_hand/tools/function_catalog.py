@@ -59,15 +59,15 @@ KIT_SCHEDULE = {
                 "计划开工、计划完工、计划状态〔通常为已排〕、来源方案、排产人）、调整（修改实例，选中计划后传新的产线、计划开工、"
                 "计划完工、来源方案、排产人）、取消（修改实例，选中计划后传排产人）。只查已排计划、齐套结论时用 Cypher 查齐套排产计划。",
 }
-RULE_USE = ("排程甘特的规则工具：输入 tasks（每条含 key、start、end、resource、values，values 里有 bill_no、product_code、"
-            "line_code、planned_start、plan_status），一次最多 200 条；返回每条任务的 pass、severity（hard 或 soft）、text 和 related。"
-            "问答里检查已排计划时，先用 Cypher 取齐套排产计划，再把计划转成 tasks 传入。")
+RULE_USE = ("排程甘特的规则工具：tasks 每条含 key、start、end、resource、values（bill_no、product_code、line_code、"
+            "planned_start、plan_status），一次最多 200 条，返回每条的 pass、severity、text、related。"
+            "问答里先用 Cypher 取齐套排产计划再转成 tasks；齐套检查传 mode=detail、task、query 取一张计划的缺料明细。")
 SCHEDULE_RULES = {
     "kit_check_rule": {
         "name": "齐套检查",
-        "description": "检查一批排产计划在计划开工时是否齐套：先保已签约欠货，再按开工先后在同一库存池上分配库存和按期到货的在途；"
-                       "缺料时点名关键物料、缺口和预计到货，没下单的按采购提前期预估并提示尚未下采购申请。"
-                       "开工早于最早可开工日为硬约束；related 是争同一物料的计划。已确认的计划已领料，视为齐套。",
+        "description": "检查一批排产计划在计划开工时是否齐套：先保已签约欠货，再按已确认、已排和开工先后分配库存和按期在途；"
+                       "缺料时点名关键物料、缺口和预计到货，没下单的按采购提前期预估。开工早于最早可开工日为硬约束。"
+                       "传 mode=detail 和一条 task 时返回该计划的缺料明细表。",
         "use_rule": RULE_USE,
     },
     "line_check_rule": {

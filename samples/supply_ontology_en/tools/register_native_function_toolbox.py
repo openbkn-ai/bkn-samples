@@ -85,10 +85,13 @@ KIT_ACTION_PARAMETERS = {
 def rule_tool_inputs() -> list[dict[str, Any]]:
     """The schedule-Gantt rule-tool contract: tasks in, one result per task out."""
     task = {"name": "items", "type": "object", "required": True, "description": "One task: key, start, end, resource, values."}
-    tasks = _input("tasks", "array", "Tasks to check, at most 200 per call; values carry bill_no, product_code, line_code, planned_start, plan_status.",
-                   required=True)
+    tasks = _input("tasks", "array", "Tasks to check, at most 200 per call; values carry bill_no, product_code, line_code, planned_start, plan_status.")
     tasks["sub_parameters"] = [task]
-    return [tasks, _input("scenario", "object", "Scenario edits; the tasks already carry the edited values, so it may be omitted.")]
+    return [tasks, _input("scenario", "object", "Scenario edits; the tasks already carry the edited values, so it may be omitted."),
+            _input("mode", "string", "detail for one task's detail table (Kit_Check only); omit for the batch check."),
+            _input("task", "object", "The task of a detail call, shaped like one item of tasks."),
+            _input("locale", "string", "Label language of the detail: zh-CN or en-US."),
+            _input("query", "object", "Detail filter and paging: group, keyOnly, search, offset, limit (default 50).")]
 
 
 def rule_action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str]) -> list[dict[str, Any]]:
@@ -198,8 +201,8 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
         tools[operation] = {
             "name": spec["name"], "description": spec["description"], "script_type": "python",
             "code": build_native_function_code(fixed_operation=operation), "inputs": rule_tool_inputs(),
-            "outputs": [{"name": "results", "type": "array", "required": True,
-                         "description": "One result per task: key, pass, severity, text, related."}],
+            "outputs": [{"name": "results", "type": "array", "required": False,
+                         "description": "Check: one result per task (key, pass, severity, text, related, at, counts, detail); a detail call returns the table."}],
         }
     return tools
 

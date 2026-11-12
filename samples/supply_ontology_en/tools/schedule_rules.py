@@ -2,8 +2,13 @@
 
 The rule-tool contract: input ``{tasks: [{key, start, end, resource, values}], scenario: {edits}}``
 (at most 200 tasks; the tasks already carry the scenario's changes); output ``{results: [{key, pass,
-severity, text, related}]}``. The Functions read the facts they need through ``sandbox_sdk.bkn``;
-anything they cannot check raises, so the caller marks the tasks "not checked" instead of passing them.
+severity, text, related, at?, counts?, detail?}]}``. The kit check also answers a detail call for one
+task, ``{mode: "detail", task, scenario, locale, query: {group?, keyOnly?, search?, offset, limit}}``,
+with a paged table of the plan's short materials; it checks the task against the other active plans
+of the network, with the scenario's edits of those plans applied.
+
+The Functions read the facts they need through ``sandbox_sdk.bkn``; anything they cannot check raises,
+so the caller marks the tasks "not checked" instead of passing them.
 """
 
 from __future__ import annotations
@@ -12,13 +17,17 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 from fn import DEFAULT_BUSINESS_DATE
-from fn.kitrules import check_tasks, demands_of, kit_rule, line_rule, task_fields
+from fn.kitrules import CANCELLED, _labels, check_tasks, demands_of, kit_detail, kit_rule, line_rule, task_fields
 from fn.read_complete import read_complete
 from managed_execution import KN_ID, _in, _page_rows, load_bkn_rows
 
 OT_FORECAST = f"{KN_ID}_forecast"
 OT_MATERIAL = f"{KN_ID}_material"
 OT_LINE = f"{KN_ID}_line"
+OT_PLAN = f"{KN_ID}_kitplan"
+OT_PRODUCT = f"{KN_ID}_product"
+OT_WORK = f"{KN_ID}_mps"
+PLAN_FIELDS = ("bill_no", "product_code", "line_code", "planned_start", "planned_finish", "plan_status")
 CHUNK = 500
 
 
@@ -39,12 +48,13 @@ def _forecasts(read, tasks) -> list[dict[str, Any]]:
     return read(OT_FORECAST, "billno", bills) if bills else []
 
 
-def kit_check(tasks: Any, query: Callable[..., Mapping[str, Any]], *, business_date: str = DEFAULT_BUSINESS_DATE) -> dict[str, Any]:
-    tasks = check_tasks(tasks)
-    read = _reader(query)
+def _facts(read, query, tasks, business_date):
     forecasts = _forecasts(read, tasks)
     demands = [d for t in tasks for d in demands_of(task_fields(t), forecasts)]
-    rows: dict[str, list[dict[str, Any]]] = {"forecast": forecasts}
+    bills = sorted({str(r.get("billno")) for r in forecasts})
+    # Production orders of these forecasts: a started one has drawn its plan's materials.
+    rows: dict[str, list[dict[str, Any]]] = {"forecast": forecasts,
+                                             "work_order": read(OT_WORK, "sourcebillnumber", bills) if bills else []}
     materials: dict[str, dict[str, Any]] = {}
     if demands:
         starts = [task_fields(t)["start"] for t in tasks if task_fields(t)["start"]]
@@ -52,7 +62,46 @@ def kit_check(tasks: Any, query: Callable[..., Mapping[str, Any]], *, business_d
                                                              "reserve_signed_backlog": True}))
         codes = sorted({str(r.get("material_code")) for r in rows["bom"]})
         materials = {str(m["material_code"]): m for m in read(OT_MATERIAL, "material_code", codes)}
-    return {"results": kit_rule(tasks, rows, materials=materials, business_date=business_date)}
+    return rows, materials
+
+
+def kit_check(tasks: Any, query: Callable[..., Mapping[str, Any]], *, business_date: str = DEFAULT_BUSINESS_DATE,
+              locale: str | None = None) -> dict[str, Any]:
+    tasks = check_tasks(tasks, locale)
+    read = _reader(query)
+    rows, materials = _facts(read, query, tasks, business_date)
+    return {"results": kit_rule(tasks, rows, materials=materials, business_date=business_date, locale=locale)}
+
+
+def _active_plans(read, scenario: Any) -> list[dict[str, Any]]:
+    """The network's active plans as tasks, with the scenario's edits of those plans applied."""
+    edits = {}
+    for edit in (scenario or {}).get("edits") or [] if isinstance(scenario, Mapping) else []:
+        params = edit.get("params") if isinstance(edit, Mapping) else None
+        if isinstance(params, Mapping) and edit.get("key"):
+            edits.setdefault(str(edit["key"]), {}).update({k: v for k, v in params.items() if k in PLAN_FIELDS})
+    tasks = []
+    for plan in read(OT_PLAN):
+        key = str(plan.get("plan_id") or "")
+        values = {**plan, **edits.get(key, {})}
+        if key and values.get("plan_status") != CANCELLED:
+            tasks.append({"key": key, "start": values.get("planned_start"), "end": values.get("planned_finish"),
+                          "resource": values.get("line_code"), "values": values})
+    return tasks
+
+
+def kit_check_detail(task: Any, query: Callable[..., Mapping[str, Any]], *, scenario: Any = None, locale: str | None = None,
+                     page: Mapping[str, Any] | None = None, business_date: str = DEFAULT_BUSINESS_DATE) -> dict[str, Any]:
+    if not isinstance(task, Mapping) or not task.get("key"):
+        raise ValueError(_labels(locale)["bad_task"])
+    read = _reader(query)
+    others = _active_plans(read, scenario)
+    rows, materials = _facts(read, query, [*others, task], business_date)
+    product = task_fields(task)["product"]
+    names = {str(p.get("material_number")): str(p.get("material_name") or "")
+             for p in (read(OT_PRODUCT, "material_number", [product]) if product else [])}
+    return kit_detail(task, others, rows, materials=materials, products=names, business_date=business_date,
+                      locale=locale, query=page, kn_id=KN_ID)
 
 
 def line_check(tasks: Any, query: Callable[..., Mapping[str, Any]]) -> dict[str, Any]:
@@ -66,4 +115,4 @@ def line_check(tasks: Any, query: Callable[..., Mapping[str, Any]]) -> dict[str,
     return {"results": line_rule(tasks, forecasts=forecasts, lines=lines, product_lines=product_lines)}
 
 
-__all__ = ["kit_check", "line_check"]
+__all__ = ["kit_check", "kit_check_detail", "line_check"]

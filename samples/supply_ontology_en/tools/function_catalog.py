@@ -61,15 +61,15 @@ KIT_SCHEDULE = {
                 "source_scenario, planner), adjust (modify the selected plan: new line, start, finish, scenario, planner) and cancel "
                 "(modify the selected plan: planner). Use Cypher on the kit schedule plan to look up scheduled plans and kit results.",
 }
-RULE_USE = ("Schedule Gantt rule tool: tasks in (key, start, end, resource, values; values carry bill_no, product_code, "
-            "line_code, planned_start, plan_status), at most 200 per call; one result per task out: pass, severity (hard or soft), "
-            "text and related. To check scheduled plans in Q&A, read the kit schedule plans with Cypher and pass them as tasks.")
+RULE_USE = ("Schedule Gantt rule tool: tasks (key, start, end, resource, values: bill_no, product_code, line_code, "
+            "planned_start, plan_status), at most 200; returns pass, severity, text, related. "
+            "Kit_Check with mode=detail, task, query lists a plan's shortages.")
 SCHEDULE_RULES = {
     "kit_check_rule": {
         "name": "Kit_Check",
-        "description": "Checks whether plans are kitted at their planned start: signed backlog first, then stock and on-time "
-                       "purchases shared in start order. Names the short material, gap and arrival; unordered ones are estimated "
-                       "by lead time.",
+        "description": "Checks whether plans are kitted at their planned start: backlog first, then confirmed and scheduled "
+                       "plans in start order share stock and on-time purchases. Names the key shortage and its arrival; "
+                       "mode=detail with one task returns its shortage table.",
         "use_rule": RULE_USE,
     },
     "line_check_rule": {

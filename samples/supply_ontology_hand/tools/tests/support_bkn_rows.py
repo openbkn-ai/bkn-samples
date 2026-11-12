@@ -16,6 +16,8 @@ TABLES = {
     "supply_ontology_hand_line": "production_line",
     "supply_ontology_hand_product": "hd_product_view",
     "supply_ontology_hand_material": "erp_material",
+    "supply_ontology_hand_kitplan": "kit_schedule_plan",
+    "supply_ontology_hand_mps": "erp_production_work_order",
 }
 # Object property names that differ from the table column they map.
 RENAMED = {"supply_ontology_hand_product": {"material_code": "material_number"}}

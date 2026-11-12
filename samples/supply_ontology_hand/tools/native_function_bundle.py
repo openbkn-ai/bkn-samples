@@ -71,10 +71,15 @@ from sandbox_sdk import bkn, tool
 import schedule_rules
 
 @tool
-def schedule_rule(tasks: list | None = None, scenario: dict | None = None) -> dict:
-    """Check schedule-Gantt tasks (kit-schedule plans); returns one result per task."""
+def schedule_rule(tasks: list | None = None, scenario: dict | None = None, mode: str | None = None,
+                  task: dict | None = None, locale: str | None = None, query: dict | None = None) -> dict:
+    """Check schedule-Gantt tasks (kit-schedule plans), or with mode "detail" explain one task as a table."""
     # The tasks already carry the scenario's changes; the edits only say which ones moved.
-    return getattr(schedule_rules, _FIXED_OPERATION.removesuffix("_rule"))(tasks, bkn.query_object_instance)
+    if _FIXED_OPERATION == "kit_check_rule" and mode == "detail":
+        return schedule_rules.kit_check_detail(task, bkn.query_object_instance, scenario=scenario, locale=locale, page=query)
+    if _FIXED_OPERATION == "kit_check_rule":
+        return schedule_rules.kit_check(tasks, bkn.query_object_instance, locale=locale)
+    return schedule_rules.line_check(tasks, bkn.query_object_instance)
 '''
 
 

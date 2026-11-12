@@ -5,7 +5,7 @@ import types
 
 import pytest
 
-from fn.kitrules import HARD, SOFT, kit_rule, line_rule
+from fn.kitrules import HARD, SOFT, kit_detail, kit_rule, line_rule
 from native_function_bundle import build_native_function_code
 from support_bkn_rows import FakeObjectQuery
 
@@ -23,7 +23,7 @@ def bom(product, *materials):
 ROWS = {
     "bom": bom("P1", "M1") + bom("P2", "M1") + bom("P3", "M3"),
     "inventory": [dict(material_code="M1", stock_status="Available", warehouse="Suzhou Assembly", available_inventory_qty=100)],
-    "purchase_order": [dict(material_number="M1", qty=50, actqty=0, deliverdate="2027-03-10", billno="PO-A",
+    "purchase_order": [dict(material_number="M1", qty=50, actqty=0, deliverdate="2027-03-10", billno="PO-A", entry_id="E-A",
                             rowclosestatus_title="Open", rowterminatestatus_title="Open")],
     "sales_order": [],
     "forecast": [dict(billno="B1", material_number="P1", qty=80, closestatus_title="Open"),
@@ -44,40 +44,98 @@ def check(*tasks):
 
 
 def test_a_plan_covered_by_stock_passes():
-    assert check(task("a", "B1", "2027-03-01"))["a"]["pass"] is True
+    result = check(task("a", "B1", "2027-03-01"))["a"]
+    assert result["pass"] is True and result["at"] == "2027-03-01"
 
 
 def test_the_later_plan_is_short_and_names_the_plan_that_took_the_material():
     result = check(task("a", "B1", "2027-03-01"), task("b", "B2", "2027-03-05"))
     assert result["a"]["pass"] is True
     b = result["b"]
-    assert (b["pass"], b["severity"], b["related"]) == (False, HARD, ["a"])
-    assert "Control chip M1 short 40" in b["text"] and "PO-A brings 50 on 3/10" in b["text"] and "Earliest start 2027-03-10" in b["text"]
+    assert (b["pass"], b["severity"], b["related"], b["at"], b["detail"]) == (False, HARD, ["a"], "2027-03-10", True)
+    assert b["text"] == "1 short; key: Control chip M1 due 3/10" and len(b["text"]) <= 60
+    assert b["counts"] == [{"label": "Short materials", "value": 1}, {"label": "On order, arriving late", "value": 1}]
 
 
 def test_moving_a_plan_earlier_hands_the_shortage_to_the_other():
     result = check(task("a", "B1", "2027-03-01"), task("b", "B2", "2027-02-28"))
     assert result["b"]["pass"] is True
+    assert (result["a"]["pass"], result["a"]["related"], result["a"]["at"]) == (False, ["b"], "2027-03-10")
+
+
+def test_confirmed_plans_draw_before_scheduled_ones_whatever_their_start():
+    result = check(task("a", "B1", "2027-03-01"), task("b", "B2", "2027-03-05", status="Confirmed"))
+    assert result["b"]["pass"] is True
     assert (result["a"]["pass"], result["a"]["related"]) == (False, ["b"])
-    assert "Earliest start 2027-03-10" in result["a"]["text"]
+
+
+def test_a_plan_whose_production_started_has_drawn_its_materials():
+    rows = {**ROWS, "work_order": [dict(sourcebillnumber="B2", material_number="P2", taskstatus_title="Started")]}
+    result = {r["key"]: r for r in kit_rule([task("a", "B1", "2027-03-01"), task("b", "B2", "2027-02-28", status="Confirmed")],
+                                            rows, materials=MATERIALS, business_date=BD)}
+    assert result["b"]["pass"] is True and result["a"]["pass"] is True
 
 
 def test_material_not_on_order_is_estimated_by_lead_time():
     early = check(task("c", "B3", "2027-03-01"))["c"]
-    assert (early["pass"], early["severity"]) == (False, HARD)
-    assert "no purchase request yet" in early["text"] and "about 3/7" in early["text"] and "Earliest start 2027-03-07" in early["text"]
+    assert (early["pass"], early["severity"], early["at"]) == (False, HARD, "2027-03-07")
+    assert early["text"] == "1 short; key: Carton M3 no purchase request"
+    assert {"label": "No purchase request yet", "value": 1} in early["counts"]
     late = check(task("c", "B3", "2027-03-08"))["c"]
     assert (late["pass"], late["severity"]) == (False, SOFT)
 
 
-def test_cancelled_is_not_applicable_and_confirmed_has_drawn_its_materials():
-    result = check(task("x", "B1", "2027-03-01", status="Cancelled"), task("y", "B2", "2027-03-01", status="Confirmed"),
-                   task("z", "B1", "2027-03-02"))
-    assert result["x"]["pass"] is None and result["y"]["pass"] is True and result["z"]["pass"] is True
+def test_cancelled_is_not_applicable():
+    result = check(task("x", "B1", "2027-03-01", status="Cancelled"), task("z", "B1", "2027-03-02"))
+    assert result["x"]["pass"] is None and result["z"]["pass"] is True
 
 
 def test_unknown_demand_fails_instead_of_passing():
     assert check(task("u", "NOPE", "2027-03-01"))["u"]["pass"] is False
+
+
+# A product with many short materials, for the detail table.
+MANY = {**ROWS, "bom": ROWS["bom"] + bom("P4", *[f"X{i:02d}" for i in range(12)]),
+        "forecast": ROWS["forecast"] + [dict(billno="B4", material_number="P4", qty=10, closestatus_title="Open")],
+        "purchase_order": ROWS["purchase_order"] + [
+            dict(material_number="X00", qty=10, actqty=0, deliverdate="2027-04-20", billno="PO-L", entry_id="E-L",
+                 rowclosestatus_title="Open", rowterminatestatus_title="Open"),
+            dict(material_number="X01", qty=10, actqty=0, deliverdate="2027-01-20", billno="PO-O", entry_id="E-O",
+                 rowclosestatus_title="Open", rowterminatestatus_title="Open")]}
+MANY_MATERIALS = {**MATERIALS, **{f"X{i:02d}": {"material_name": f"Part {i:02d}", "purchase_fixedleadtime": i} for i in range(12)}}
+
+
+def detail(query=None, locale="en-US"):
+    return kit_detail(task("d", "B4", "2027-03-01"), [], MANY, materials=MANY_MATERIALS, business_date=BD,
+                      locale=locale, query=query, kn_id="kn")
+
+
+def test_detail_lists_short_materials_latest_ready_first_with_groups_and_links():
+    table = detail()
+    assert table["total"] == 12 and len(table["rows"]) == 12 and table["at"] == "2027-04-20"
+    first = table["rows"][0]
+    assert (first["id"], first["group"], first["key"]) == ("X00", "late_po", True)
+    assert first["links"]["source"] == {"objectType": "kn_po", "key": "E-L"}
+    groups = {g["id"]: g["count"] for g in table["groups"]}
+    assert groups == {"late_po": 1, "overdue_po": 1, "no_pr": 10}
+    assert [c["key"] for c in table["columns"]] == ["material", "parent", "need", "available", "short", "ready", "source"]
+    assert table["conclusion"] == "12 materials short; kitted 4/20 at the earliest"
+    readies = [r["cells"]["ready"] for r in table["rows"]]
+    assert readies == sorted(readies, reverse=True)
+
+
+def test_detail_pages_filters_by_group_key_and_search():
+    page = detail({"offset": 5, "limit": 5})
+    assert page["total"] == 12 and [r["id"] for r in page["rows"]] == [r["id"] for r in detail()["rows"][5:10]]
+    assert [r["id"] for r in detail({"group": "overdue_po"})["rows"]] == ["X01"]
+    assert [r["id"] for r in detail({"keyOnly": True})["rows"]] == ["X00"]
+    assert [r["id"] for r in detail({"search": "part 07"})["rows"]] == ["X07"]
+    assert detail({"search": "nothing"})["total"] == 0
+
+
+def test_detail_labels_follow_the_locale():
+    table = detail(locale="zh-CN")
+    assert table["columns"][0]["label"] == "物料" and table["groups"][0]["label"] == "在途晚到"
 
 
 def test_line_must_build_every_product_of_the_plan():
@@ -117,6 +175,11 @@ def test_bundled_rule_tools_read_the_network_and_answer_per_task(monkeypatch):
         assert [r["key"] for r in results] == ["p", "q"] and all(r["pass"] in (True, False) for r in results)
         if operation == "line_check_rule":
             assert [r["pass"] for r in results] == [True, False]
+        else:
+            table = namespace["schedule_rule"](mode="detail", task=tasks[0], scenario={"edits": []}, locale="en-US",
+                                               query={"offset": 0, "limit": 5})
+            assert {"title", "conclusion", "at", "summary", "groups", "columns", "rows", "total"} <= set(table)
+            assert table["title"].startswith("YCD2026102100000073 · ")
 
 
 def test_rule_tool_names_and_descriptions_fit_the_platform_limits():
@@ -124,3 +187,8 @@ def test_rule_tool_names_and_descriptions_fit_the_platform_limits():
     from function_catalog import SCHEDULE_RULES
     for spec in SCHEDULE_RULES.values():
         assert re.fullmatch(r"[\w\u4e00-\u9fff]{1,50}", spec["name"]) and len(spec["description"]) <= 255
+
+
+def test_rule_tool_use_rule_fits_the_platform_limit():
+    from function_catalog import SCHEDULE_RULES
+    assert all(len(spec["use_rule"]) <= 255 for spec in SCHEDULE_RULES.values())
