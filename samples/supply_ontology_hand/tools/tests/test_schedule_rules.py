@@ -192,10 +192,6 @@ def test_rule_tool_names_and_descriptions_fit_the_platform_limits():
         assert re.fullmatch(r"[\w\u4e00-\u9fff]{1,50}", spec["name"]) and len(spec["description"]) <= 255
 
 
-def test_rule_tool_use_rule_fits_the_platform_limit():
-    from function_catalog import SCHEDULE_RULES
-    assert all(len(spec["use_rule"]) <= 255 for spec in SCHEDULE_RULES.values())
-
 def test_a_partly_started_plan_still_checks_its_other_products():
     rows = {**ROWS, "forecast": ROWS["forecast"] + [dict(billno="B5", material_number="P1", qty=80, closestatus_title="正常"),
                                                     dict(billno="B5", material_number="P2", qty=60, closestatus_title="正常")],
@@ -261,3 +257,8 @@ def test_other_reader_errors_are_not_hidden():
         raise RuntimeError("object type not found")
     with pytest.raises(RuntimeError):
         tool_query(broken, lambda *a, **k: {})(kn_id="kn", ot_id="x", limit=1, offset=0)
+
+
+def test_a_date_outside_the_business_year_shows_its_year():
+    from fn.kitrules import _short
+    assert (_short("2027-03-10"), _short("2028-03-23")) == ("3/10", "2028/3/23")

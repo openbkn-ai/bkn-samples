@@ -26,8 +26,6 @@ from native_function_bundle import build_native_function_code
 
 API = "/api/agent-operator-integration/v1"
 BKN_API = "/api/bkn-backend/v1"
-# Inputs the sample fixes instead of asking for: every run uses the sample's business date.
-FIXED_INPUTS = {"business_date"}
 
 
 def _input(name: str, type_: str, description: str, *, required: bool = False) -> dict[str, Any]:
@@ -94,17 +92,6 @@ def rule_tool_inputs() -> list[dict[str, Any]]:
             _input("query", "object", "明细的筛选与分页：group、keyOnly、search、offset、limit（默认 50）。")]
 
 
-def rule_action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str]) -> list[dict[str, Any]]:
-    """The rule tools as tool actions, so Q&A and Skills check plans with the same code as the Gantt."""
-    return [{
-        "id": f"{kn_id}_{operation}", "name": spec["name"], "branch": "main",
-        "operation_config": {"type": "tool"}, "object_type_id": "", "action_type": "modify", "action_intent": "modify",
-        "action_source": {"type": "tool", "box_id": box_id, "tool_id": tool_ids[operation]},
-        "parameters": [{"name": "tasks", "type": "array", "value_from": "input", "comment": rule_tool_inputs()[0]["description"]}],
-        "comment": f"{spec['description']}\n{spec['use_rule']}",
-    } for operation, spec in SCHEDULE_RULES.items()]
-
-
 def kit_tool_inputs() -> list[dict[str, Any]]:
     return [_input(name, "string", description) for name, description in KIT_INPUTS]
 
@@ -131,32 +118,10 @@ def kit_action_definitions(kn_id: str, box_id: str, tool_id: str) -> list[dict[s
     return actions
 
 
-def action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str]) -> list[dict[str, Any]]:
-    """One tool action per function: a business judgement whose assumptions are explicit inputs.
-
-    The platform requires every input parameter, so the Agent states each assumption (or its
-    documented default) on every run and the execution record shows what the answer assumed.
-    """
-    actions = []
-    for operation, spec in FUNCTION_CATALOG.items():
-        parameters = [
-            {"name": item["name"], "type": item["type"], "value_from": "input", "comment": item["description"]}
-            for item in _operation_inputs(operation)
-            if item["name"] not in FIXED_INPUTS
-        ]
-        actions.append({
-            "id": f"{kn_id}_{operation}",
-            "name": spec["name"],
-            "branch": "main",
-            "operation_config": {"type": "tool"},
-            "object_type_id": "",
-            "action_type": "modify",
-            "action_intent": "modify",
-            "action_source": {"type": "tool", "box_id": box_id, "tool_id": tool_ids[operation]},
-            "parameters": parameters,
-            "comment": f"{spec['description']}\n{spec['use_rule']}",
-        })
-    return actions
+def mounted_operations() -> list[str]:
+    """Functions that only calculate are mounted on the network and run with execute_tool; only what
+    changes objects (the plan actions) is an action."""
+    return [*FUNCTION_CATALOG, *SCHEDULE_RULES]
 
 
 def _call(args: list[str]) -> Any:
@@ -297,14 +262,15 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
         _call(["tool", "disable", "--toolbox", box_id, item["tool_id"]])
     actions: list[dict[str, Any]] = []
     if kn_id:
-        actions = [*action_definitions(kn_id, box_id, {k: v for k, v in tool_ids.items() if k in FUNCTION_CATALOG}),
-                   *kit_action_definitions(kn_id, box_id, tool_ids["kit_schedule"]),
-                   *rule_action_definitions(kn_id, box_id, tool_ids)]
+        _call(["bkn", "capability", "attach", kn_id, "--box", box_id,
+               "--tool", ",".join(tool_ids[operation] for operation in mounted_operations())])
+        actions = kit_action_definitions(kn_id, box_id, tool_ids["kit_schedule"])
         # Overwrite keeps a repeated install idempotent and follows re-created tool IDs.
         _call(["call", f"{BKN_API}/knowledge-networks/{kn_id}/action-types?import_mode=overwrite",
                "-X", "POST", "-d", json.dumps({"entries": actions}, ensure_ascii=False)])
     return {**preview, "box_id": box_id, "tool_ids": tool_ids,
             "action_ids": [item["id"] for item in actions] if kn_id else [],
+            "mounted_tools": [tool_ids[operation] for operation in mounted_operations()] if kn_id else [],
             "retired_tools": [item["name"] for item in retired]}
 
 

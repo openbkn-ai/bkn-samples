@@ -10,7 +10,7 @@ description: >
 
 # Purchase follow-up
 
-Answer the purchasing manager's questions about open purchases, expediting, new orders and document trace. Use Cypher for open purchases, suppliers and lead times; run a calculation action when you first need to know which materials are short.
+Answer the purchasing manager's questions about open purchases, expediting, new orders and document trace. Use Cypher for open purchases, suppliers and lead times; call a calculation function when you first need to know which materials are short.
 
 ## Default rules
 
@@ -24,13 +24,13 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - A supplier's responsible buyer is `purchaserid_name` on the supplier record.
 - Shortages are the bottom-level gaps after netting the BOM level by level: finished goods first, then component stock at each level, expanding only the net shortage. A material with open purchases at least as large as its shortage can be expedited; with too little or nothing on order it needs a new order.
 
-## When to run a calculation action
+## When to call a calculation function
 
-Both calculations are actions: get their parameters with `get_action_info`, run them with `execute_action`, then read the result with `get_action_execution`. Pass every parameter each time: substitutes (default false), warehouse scope (default all), need-by date (empty string when none) and overdue purchases (default false) are business assumptions; when the user does not say, pass the default explicitly and state in the answer what the result assumes.
+The calculation functions are mounted on the network: call them directly with Context Loader `execute_tool`, copying `toolbox_id` (owner_id) and `tool_id` (capability_id) from discovery as they are. Substitutes (default false), warehouse scope (default all), need-by date and overdue purchases (default false) are business assumptions; when the user does not say, pass the default explicitly and state in the answer what the result assumes. Check `body.exit_code` and `result`: HTTP 200 alone does not mean the calculation succeeded.
 
-- To know which materials a product's backlog, new order or work order is short of and by how much, run **Demand_Coverage_and_Shortages** (`demand_coverage`), then use Cypher for those materials' open purchases and lead times. Omit `reserve_signed_backlog` when evaluating the backlog itself; pass `true` for a new order that must protect backlog; pass `chase_overdue_po=true` when assuming overdue purchases are chased in.
-- To know how many units a product can build, which material blocks it, or how many more chasing overdue purchases would allow, run **Buildable_Quantity_and_ATP** (`build_capacity`) with `products` as a list of product codes, all in one call.
-- Use Cypher, not a calculation action, for open purchases, overdue lines, suppliers, buyers, lead times, arrival dates and document trace.
+- To know which materials a product's backlog, new order or work order is short of and by how much, call **Demand_Coverage_and_Shortages** (`demand_coverage`), then use Cypher for those materials' open purchases and lead times. Omit `reserve_signed_backlog` when evaluating the backlog itself; pass `true` for a new order that must protect backlog; pass `chase_overdue_po=true` when assuming overdue purchases are chased in.
+- To know how many units a product can build, which material blocks it, or how many more chasing overdue purchases would allow, call **Buildable_Quantity_and_ATP** (`build_capacity`) with `products` as a list of product codes, all in one call.
+- Use Cypher, not a calculation function, for open purchases, overdue lines, suppliers, buyers, lead times, arrival dates and document trace.
 
 ## Cypher patterns
 
