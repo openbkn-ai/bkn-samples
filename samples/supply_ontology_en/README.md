@@ -1,6 +1,6 @@
 # Supply Chain
 
-Explore order backlog, order acceptance, BOMs, stock, purchase follow-up and lead times with fictional historical sample data. The sample includes 12 tables, an ontology, native functions and business Skills. Business requirements and rules are in the [PRD](docs/PRD.en-US.md).
+Explore order backlog, order acceptance, BOMs, stock, purchase follow-up, lead times and kit scheduling with fictional historical sample data. The sample includes 14 tables, a schedule-plan dataset, an ontology, native functions and business Skills. The business date is 2027-02-25. Business requirements and rules are in the [PRD](docs/PRD.en-US.md).
 
 ## Install and explore
 
@@ -13,7 +13,7 @@ If the official catalog is unreachable, download this sample's `package.tar.gz` 
 
 Users do not need to configure Python, the CLI or database connections. See the [installation and acceptance guide](docs/import-guide.en-US.md) and [FAQ](docs/faq.md).
 
-The sample is a historical replay. It does not represent live stock or real delivery commitments, and it never creates purchase orders or writes to an ERP.
+The sample is a historical replay. It does not represent live stock or real delivery commitments, and it never creates purchase orders or writes to an ERP. Scheduling writes only the sample's own kit schedule plans and never changes the demand forecasts or other source documents.
 
 ## Capabilities
 
@@ -23,6 +23,8 @@ Anything Cypher can answer has no function; functions are kept only for calculat
 - **Native functions**:
   - `Buildable_Quantity_and_ATP` (buildable quantity and available to promise): nets the BOM level by level by the PRD rules, can add open purchases due by a date, and returns buildable quantity, available to promise and the blocking materials for one or several products.
   - `Demand_Coverage_and_Shortages`: evaluates several demands in order against one shared stock pool and returns coverage and the shortage list.
+  - `Kit_Schedule`: places a demand forecast (whole bill or one product) on a production line, reserves signed backlog, kit-checks the planned start and writes the kit schedule plan. It runs the Create, Adjust and Cancel Kit Schedule Plan actions; a forecast and product keep one active plan.
+- **Lines and schedule plans**: production lines (plants are parent rows that are never scheduled), line stoppages and kit schedule plans can be queried with Cypher for scheduled plans, kit results and line load, and serve as the data for the demand and line views of a Workshop schedule Gantt.
 - **Skills**: organized for the two users, PMC planning and purchase follow-up, stating the business rules, when to use Cypher, when to call a function, and how to answer.
 
 ## Experience cards

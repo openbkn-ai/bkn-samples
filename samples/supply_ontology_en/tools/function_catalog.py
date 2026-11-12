@@ -50,12 +50,33 @@ FUNCTION_CATALOG = {
 }
 
 
+KIT_SCHEDULE = {
+    "name": "Kit_Schedule",
+    "operation": "kit_schedule",
+    "description": "Schedules a forecast (whole bill) or one product on a line, kit-checks the planned start and writes "
+                   "a kit schedule plan without changing the forecast. An active plan for the same forecast and product is "
+                   "updated; status Cancelled cancels it.",
+    "use_rule": "Run only through the three kit schedule plan actions: create (new instance; object_input carries bill_no, "
+                "product_code [empty string for the whole bill], line_code, planned_start, planned_finish, plan_status [usually Scheduled], "
+                "source_scenario, planner), adjust (modify the selected plan: new line, start, finish, scenario, planner) and cancel "
+                "(modify the selected plan: planner). Use Cypher on the kit schedule plan to look up scheduled plans and kit results.",
+}
+KIT_PLAN_ACTIONS = {
+    "create": ("Create Kit Schedule Plan", "add",
+               "Schedule: create a kit schedule plan for a forecast (whole bill) or one of its products and record the kit check "
+               "of the planned start. If the forecast + product already has an active plan, that plan is updated instead."),
+    "adjust": ("Adjust Kit Schedule Plan", "modify",
+               "Reschedule or move the selected plan to another line and kit-check it again; moving the finish adds a reschedule."),
+    "cancel": ("Cancel Kit Schedule Plan", "modify", "Set the selected plan to Cancelled; the demand can be scheduled again."),
+}
+
+
 def native_tool_description() -> str:
     """Return a concise description of the native Function collection."""
     operations = "；".join(f"{operation}（{spec['name']}）" for operation, spec in FUNCTION_CATALOG.items())
     return (
         f"Supply planning functions: {operations}. "
-        "They read the bound knowledge network through sandbox_sdk.bkn at run time; business_date defaults to 2026-08-25."
+        "They read the bound knowledge network through sandbox_sdk.bkn at run time; business_date defaults to 2027-02-25."
     )
 
 
@@ -63,4 +84,4 @@ def native_operation_description() -> str:
     return "Named functions: " + ", ".join(FUNCTION_CATALOG)
 
 
-__all__ = ["FUNCTION_CATALOG", "native_operation_description", "native_tool_description"]
+__all__ = ["FUNCTION_CATALOG", "KIT_PLAN_ACTIONS", "KIT_SCHEDULE", "native_operation_description", "native_tool_description"]

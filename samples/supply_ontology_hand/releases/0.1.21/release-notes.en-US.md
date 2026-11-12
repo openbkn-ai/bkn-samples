@@ -1,0 +1,15 @@
+# 0.1.21: kit scheduling and 2027 data
+
+Based on 0.1.20. Adds demand-driven scheduling: a demand forecast is placed on a production line and the result, with the kit check made at that moment, is written to the new kit schedule plan; the source documents are not changed.
+
+**Data**: every date moves six months; the business date is 2027-02-25. Open forecasts roll over 2027-03 to 2027-08, all products of a bill delivered on the same day (the forecast delivery date), with 4 open lines past their delivery date. The documents are reconciled: production orders link to the forecasts they serve, orders in production span the business date and finished ones are all earlier; every open forecast line has a make MRP planned order; purchase orders arrive purchase lead time after they are placed, closed lines on or before the business date, 105 of the 517 open lines overdue; 72 of the 192 owed sales orders are past their promised date; products carry a production lead time by product line. Row counts match 0.1.20.
+
+**New objects**: production lines (plants as parent rows that are never scheduled, with max parallel and product lines), line stoppages (the next three months, two of them plant-wide) and the kit schedule plan (a dataset installed with 11 scheduled and confirmed plans for the coming weeks as scheduling history). Products gain a default line code. Six new relations.
+
+**New function and actions**: the kit-schedule function takes the demand of a forecast (whole bill or one product), reserves signed backlog, kit-checks the planned start and writes or updates the plan; an active plan for the same forecast number + product code is updated and its reschedule count grows. It runs three object actions: create (new instance), adjust (modify) and cancel (modify, status Cancelled). The two calculation actions are unchanged.
+
+The Skills describe the kit schedule plan queries and actions; the 15 experience cards and the v4 reference answers are recomputed on the new data, and 3 questions tied to a date window use the new business date.
+
+**Platform requirements**: the function writes the dataset as the caller and needs the OpenBKN 0.2.2 sandbox deployment (the sandbox injects `BKN_BASE_URL` and `BKN_TOKEN`, and its network policy allows the gateway); uninstalling needs a sample service that removes the sample's datasets first.
+
+Existing installations keep their version; changing versions follows the standard uninstall/install flow, which removes sample-owned data and resources. No in-place migration is provided.

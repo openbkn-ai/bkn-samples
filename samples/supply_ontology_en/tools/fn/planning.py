@@ -22,7 +22,7 @@ from typing import Any
 from .errors import CannotCompute
 from .warehouse import resolve_warehouse_scope
 
-DEFAULT_BUSINESS_DATE = "2026-08-25"
+DEFAULT_BUSINESS_DATE = "2027-02-25"
 _MAX_BUILD = 10_000_000
 
 

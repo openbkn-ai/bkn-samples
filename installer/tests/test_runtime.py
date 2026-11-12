@@ -89,7 +89,7 @@ class RuntimeTest(unittest.TestCase):
             if argv[0] == "openbkn":
                 seen["token"] = (env or {}).get("BKN_TOKEN")
                 if "resources" in argv:
-                    return completed(json.dumps({"entries": [{}] * 12}))
+                    return completed(json.dumps({"entries": [{}] * 14}))
                 if "list" in argv:
                     return completed(json.dumps({"entries": []}))
                 return completed(json.dumps({"id": "cat-1", "name": "bkn-sample-supply-chain"}))
