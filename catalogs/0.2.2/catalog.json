@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000003",
-    "sequence": 3,
+    "revision": "catalog-000004",
+    "sequence": 4,
     "channel": "stable",
-    "publishedAt": "2026-11-12T06:06:47Z",
+    "publishedAt": "2026-11-12T09:48:46Z",
     "productVersion": "0.2.2"
   },
   "spec": {
@@ -17,7 +17,7 @@
         "displayName": "供应链",
         "summary": "用脱敏的订单、库存、BOM 和采购数据体验欠货补发、接单承诺和采购跟进。",
         "publishedAt": "2026-11-12T04:18:52Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "生产计划直接关联所生产的产品（全部 605 条），排产与物料齐套可沿“生产计划 → 产品 → BOM → 物料”查询；在 OpenBKN 0.2.2 上完成固定包全新安装验收。",
@@ -61,7 +61,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/cab652c7b1e3778024f5d62650ec8c0b6af5b03d/samples/supply_ontology_hand/releases/0.1.19/verification.json",
           "digest": "sha256:3df56e3bcab88c04908ffa018674362567f827928cf902b96882663a26b02c48"
         },
-        "language": "zh-CN"
+        "language": "zh-CN",
+        "withdrawalReason": "Superseded by supply-chain 0.1.20 for OpenBKN 0.2.2. Obsolete GitHub Release and package assets deleted to avoid ambiguity; metadata retained only for existing installation history."
       },
       {
         "sampleId": "supply-chain-en",
@@ -69,7 +70,7 @@
         "displayName": "Supply Chain (EN)",
         "summary": "Use sample orders, stock, BOMs and purchases to fill backlog, accept orders and follow up purchases.",
         "publishedAt": "2026-11-12T04:18:52Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "Production plans link directly to the products they make (all 605 plans), so scheduling and material readiness can go plan → product → BOM → material; fixed-package fresh installation accepted on OpenBKN 0.2.2.",
@@ -113,7 +114,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/cab652c7b1e3778024f5d62650ec8c0b6af5b03d/samples/supply_ontology_en/releases/0.1.14/verification.json",
           "digest": "sha256:6e334612ac560fe4540c89d3284317546b20a0176fc0c68832a0d80ef62e5e4c"
         },
-        "language": "en-US"
+        "language": "en-US",
+        "withdrawalReason": "Superseded by supply-chain-en 0.1.15 for OpenBKN 0.2.2. Obsolete GitHub Release and package assets deleted to avoid ambiguity; metadata retained only for existing installation history."
       },
       {
         "sampleId": "world-cup",
@@ -325,7 +327,7 @@
         "displayName": "金融投资组合运营（中文）",
         "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
         "publishedAt": "2026-11-01T03:57:07Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
@@ -369,7 +371,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-zh-cn/releases/0.2.8/verification-openbkn-0.2.2.json",
           "digest": "sha256:6cd58dbff9ba9b7ba5bb1b187fc57bddd25d58bf190dfc70e70c92820443cdbf"
         },
-        "language": "zh-CN"
+        "language": "zh-CN",
+        "withdrawalReason": "Superseded by financial-fibo-zh-cn 0.2.9 for OpenBKN 0.2.2, where the calculations run as tool actions. The 0.2.8 package remains published for OpenBKN 0.2.1."
       },
       {
         "sampleId": "financial-fibo-en-us",
@@ -377,7 +380,7 @@
         "displayName": "Financial Portfolio Operations (EN)",
         "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
         "publishedAt": "2026-11-01T03:57:07Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
@@ -421,7 +424,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-en-us/releases/0.2.8/verification-openbkn-0.2.2.json",
           "digest": "sha256:8bdb420f4f686830d008982d17bb9691986833ebf92386a56db22aa9260d8508"
         },
-        "language": "en-US"
+        "language": "en-US",
+        "withdrawalReason": "Superseded by financial-fibo-en-us 0.2.9 for OpenBKN 0.2.2, where the calculations run as tool actions. The 0.2.8 package remains published for OpenBKN 0.2.1."
       },
       {
         "sampleId": "retail-gs1-zh-cn",
@@ -429,7 +433,7 @@
         "displayName": "食品供应链追溯与召回",
         "summary": "虚构食品流通、履约和召回闭环。",
         "publishedAt": "2026-11-01T03:57:07Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
@@ -473,7 +477,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-zh-cn/releases/0.1.3/verification-openbkn-0.2.2.json",
           "digest": "sha256:0dba6810c53476a503575a82a846828fba6d9710af4303502d059ade99e75ec2"
         },
-        "language": "zh-CN"
+        "language": "zh-CN",
+        "withdrawalReason": "Superseded by retail-gs1-zh-cn 0.1.4 for OpenBKN 0.2.2, where the calculations run as tool actions. The 0.1.3 package remains published for OpenBKN 0.2.1."
       },
       {
         "sampleId": "retail-gs1-en-us",
@@ -481,7 +486,7 @@
         "displayName": "Food Supply and Recall",
         "summary": "Synthetic food distribution, fulfillment and recall operations.",
         "publishedAt": "2026-11-01T03:57:07Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
@@ -525,7 +530,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-en-us/releases/0.1.3/verification-openbkn-0.2.2.json",
           "digest": "sha256:cba651e30f705368ea0d8d30d08953bc682694e71bdb5a2a605c7bcba474d414"
         },
-        "language": "en-US"
+        "language": "en-US",
+        "withdrawalReason": "Superseded by retail-gs1-en-us 0.1.4 for OpenBKN 0.2.2, where the calculations run as tool actions. The 0.1.3 package remains published for OpenBKN 0.2.1."
       },
       {
         "sampleId": "energy-saref4ener-zh-cn",
@@ -533,7 +539,7 @@
         "displayName": "需求响应与柔性用能",
         "summary": "合成需求响应评估、共享资源计划与计量结算。",
         "publishedAt": "2026-11-01T03:57:07Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
@@ -577,7 +583,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-zh-cn/releases/0.1.7/verification-openbkn-0.2.2.json",
           "digest": "sha256:f1c85e0111b5bc51abb45296e69131e3f966528c10bb520255eb9d62dfa3d1ff"
         },
-        "language": "zh-CN"
+        "language": "zh-CN",
+        "withdrawalReason": "Superseded by energy-saref4ener-zh-cn 0.1.8 for OpenBKN 0.2.2, where the calculations run as tool actions. The 0.1.7 package remains published for OpenBKN 0.2.1."
       },
       {
         "sampleId": "energy-saref4ener-en-us",
@@ -585,7 +592,7 @@
         "displayName": "Demand response and flexible energy",
         "summary": "Synthetic response readiness, shared-resource planning and measured settlement.",
         "publishedAt": "2026-11-01T03:57:07Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
@@ -628,6 +635,423 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-en-us/releases/0.1.7/verification-openbkn-0.2.2.json",
           "digest": "sha256:4321e1bcf808a6b8034a29b5b38dfed411e0a77ba54012893c5f3f9d6039c8e8"
+        },
+        "language": "en-US",
+        "withdrawalReason": "Superseded by energy-saref4ener-en-us 0.1.8 for OpenBKN 0.2.2, where the calculations run as tool actions. The 0.1.7 package remains published for OpenBKN 0.2.1."
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.20",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和采购数据体验欠货补发、接单承诺和采购跟进。",
+        "publishedAt": "2026-11-12T08:20:44Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "产品可做数量与可承诺量、需求齐套与缺料两个计算改为工具调用类行动，每次执行都显式说明替代料、仓范围、需求日期等假设；在 OpenBKN 0.2.2 上完成固定包全新安装验收。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/supply_ontology_hand/releases/0.1.20/release-notes.en-US.md",
+              "digest": "sha256:8dcc3841312d28367529ed0e9671ad572a2dbae5286d748f0ce85616e9822d43"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/supply_ontology_hand/releases/0.1.20/release-notes.zh-CN.md",
+              "digest": "sha256:5f075082ce38251820cacf0dfef20cb9a6c0a1efdd110f6801e80c0ade68a8cf"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/supply_ontology_hand/releases/0.1.20/sample.json",
+          "digest": "sha256:c0acc150bf2df70f33d4f04ecf4edb23ad67d82f1a0ba174ebd0ce03d8d0dcf9"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/supply_ontology_hand/releases/0.1.20/verification.json",
+          "digest": "sha256:a75c2f0188a684f1dc924e174c745121faedb5b73b43058473339d180fa221a8"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "supply-chain-en",
+        "version": "0.1.15",
+        "displayName": "Supply Chain (EN)",
+        "summary": "Use sample orders, stock, BOMs and purchases to fill backlog, accept orders and follow up purchases.",
+        "publishedAt": "2026-11-12T08:20:45Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "The buildable-quantity and demand-coverage calculations run as tool actions, with substitutes, warehouse scope, need-by date and other assumptions explicit on every run; fresh installation of the fixed package accepted on OpenBKN 0.2.2.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/supply_ontology_en/releases/0.1.15/release-notes.en-US.md",
+              "digest": "sha256:b06226a6f5cb9b757a579232abfcd5ae35110f31ee932ecf568e149598121e66"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/supply_ontology_en/releases/0.1.15/release-notes.zh-CN.md",
+              "digest": "sha256:3057dedf5861aada0946ed4b3f34c76e407c529a2082e42ccf2d2b940a928bc1"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/supply_ontology_en/releases/0.1.15/sample.json",
+          "digest": "sha256:410a6231cd0028de9c0215fb839c8b0809c25c5edd26daff1a9a508541afa231"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/supply_ontology_en/releases/0.1.15/verification.json",
+          "digest": "sha256:8c15899d331e7d013e8d8ba8b8c1bc1db8f72258ab20ebe9a757133513213f29"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "financial-fibo-zh-cn",
+        "version": "0.2.9",
+        "displayName": "金融投资组合运营（中文）",
+        "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
+        "publishedAt": "2026-11-12T09:25:38Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "交收状态、估值和限额评估三个计算改为工具调用类行动，每次执行都显式传入组合、业务日期、知识截止日和口径；在 OpenBKN 0.2.2 上完成固定包全新安装验收，15 张体验卡全部核对一致。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/financial-fibo-zh-cn/releases/0.2.9/release-notes.en-US.md",
+              "digest": "sha256:f6799c983ccb5b6cdd00d59b19b5e7bf882b3ff60cec23b3f9b4f09d134b7d79"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/financial-fibo-zh-cn/releases/0.2.9/release-notes.zh-CN.md",
+              "digest": "sha256:e82de34703287941500d85ff2b7bdd8edfba4f47525b1a0c12a10c424bbb798b"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/financial-fibo-zh-cn/releases/0.2.9/sample.json",
+          "digest": "sha256:4657025cecd91d664793d08651ddbb34d05c05d89c5232a105fae89326cb32f0"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/financial-fibo-zh-cn/releases/0.2.9/verification.json",
+          "digest": "sha256:eaf8eed2a9173be5b7de09c955b03cfc648ac0cdcab2183de66a203f3bcd46e4"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "financial-fibo-en-us",
+        "version": "0.2.9",
+        "displayName": "Financial Portfolio Operations (EN)",
+        "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
+        "publishedAt": "2026-11-12T09:25:38Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Settlement status, valuation and limit assessment run as tool actions, with portfolios, business date, knowledge cutoff and view explicit on every run; fresh installation accepted on OpenBKN 0.2.2 and all 15 experience cards checked.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/financial-fibo-en-us/releases/0.2.9/release-notes.en-US.md",
+              "digest": "sha256:45ffdebebb390701808aa4f5eecba72fbe3fc692e6c012a70c35981173676ccf"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/financial-fibo-en-us/releases/0.2.9/release-notes.zh-CN.md",
+              "digest": "sha256:c90d13976d6123cee984f74cc15db229e03aaa9f8822294ef53b46c5b49ad98b"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/financial-fibo-en-us/releases/0.2.9/sample.json",
+          "digest": "sha256:c3ede1d23b1e5f29d3f42ab3db2e3f27f5ff34b9898fa6443b8860977cfe5da3"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/financial-fibo-en-us/releases/0.2.9/verification.json",
+          "digest": "sha256:d38793c1befdee3c7cfb601de6328e352d07dd713216a7a5830bc574ad785fe3"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "retail-gs1-zh-cn",
+        "version": "0.1.4",
+        "displayName": "食品供应链追溯与召回",
+        "summary": "虚构食品流通、履约和召回闭环。",
+        "publishedAt": "2026-11-12T09:25:38Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "库存回放、订单配货与补货、召回控制评估三个计算改为工具调用类行动，执行时显式传入日期和范围；“哪些库存算不清”改为给出根本原因；在 OpenBKN 0.2.2 上完成全新安装验收，15 张体验卡全部核对一致。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/retail-gs1-zh-cn/releases/0.1.4/release-notes.en-US.md",
+              "digest": "sha256:826c79689398ae12f63b968225be23062d839bea2a30312c22fa54fc065c5f0c"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/retail-gs1-zh-cn/releases/0.1.4/release-notes.zh-CN.md",
+              "digest": "sha256:f774a738a16de47b5e46ad1edcb3e07dd0e119f765b5b64cc1edfc025282243e"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/retail-gs1-zh-cn/releases/0.1.4/sample.json",
+          "digest": "sha256:95a29645aa99e437dd2118c287564040c4ff59ba17974c10e4fd61a6bf1694b3"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/retail-gs1-zh-cn/releases/0.1.4/verification.json",
+          "digest": "sha256:716982b9d9cebd167f02330de1e2222be05342c793e33929fd1badea9358591b"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "retail-gs1-en-us",
+        "version": "0.1.4",
+        "displayName": "Food Supply and Recall",
+        "summary": "Synthetic food distribution, fulfillment and recall operations.",
+        "publishedAt": "2026-11-12T09:25:39Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Inventory replay, order allocation and replenishment, and recall control run as tool actions with dates and scope explicit; the undeterminable-stock card now gives root causes; fresh installation accepted on OpenBKN 0.2.2 and all 15 experience cards checked.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/retail-gs1-en-us/releases/0.1.4/release-notes.en-US.md",
+              "digest": "sha256:003b49d339897d5f99e3504d77e31d1f5d698a6b5f988323ba819dc0f7f3cd64"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/retail-gs1-en-us/releases/0.1.4/release-notes.zh-CN.md",
+              "digest": "sha256:25e5738c0301a08f00d14a6e49b14c880a50fc6b9b71b4e52431cb378b377d5c"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/retail-gs1-en-us/releases/0.1.4/sample.json",
+          "digest": "sha256:3bcba955853a2ae93599f479018e3fa5a0242d549a15ad2c6017aa742514471d"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/retail-gs1-en-us/releases/0.1.4/verification.json",
+          "digest": "sha256:766d5b3412c475197e29aab6aa380d7254d9dfde5316f4d0a105593a2903e46c"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "energy-saref4ener-zh-cn",
+        "version": "0.1.8",
+        "displayName": "需求响应与柔性用能",
+        "summary": "合成需求响应评估、共享资源计划与计量结算。",
+        "publishedAt": "2026-11-12T09:25:39Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "可承诺削减、调度方案和结算三个计算改为工具调用类行动，执行时显式传入事件、业务日期和知识截止日；在 OpenBKN 0.2.2 上完成全新安装验收，15 张体验卡全部核对一致。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/energy-saref4ener-zh-cn/releases/0.1.8/release-notes.en-US.md",
+              "digest": "sha256:74ffa80edc79e3e60df3fc8e0ed0ee1c5a268d5427f20d6fbb74f0967bcb7c5c"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/energy-saref4ener-zh-cn/releases/0.1.8/release-notes.zh-CN.md",
+              "digest": "sha256:042f4e057e13397850e28d035ebdf2ad42a28c67cc285359d670ea4c3a463362"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/energy-saref4ener-zh-cn/releases/0.1.8/sample.json",
+          "digest": "sha256:53839ec8a473cbbf1799c66c6e3c8cdc001534c54d896553932466fba1e1e0ef"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/energy-saref4ener-zh-cn/releases/0.1.8/verification.json",
+          "digest": "sha256:a878442cdd440fc4d98879bc442de9dfb398f1eb74ab5e081015433c8dee949c"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "energy-saref4ener-en-us",
+        "version": "0.1.8",
+        "displayName": "Demand response and flexible energy",
+        "summary": "Synthetic response readiness, shared-resource planning and measured settlement.",
+        "publishedAt": "2026-11-12T09:25:39Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Eligible reduction, dispatch plan and settlement run as tool actions with events, business date and knowledge cutoff explicit; fresh installation accepted on OpenBKN 0.2.2 and all 15 experience cards checked.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/energy-saref4ener-en-us/releases/0.1.8/release-notes.en-US.md",
+              "digest": "sha256:14440977aac70c60401db4fa69ea97c7c33e15f13fd0d4db62590f836d417135"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/energy-saref4ener-en-us/releases/0.1.8/release-notes.zh-CN.md",
+              "digest": "sha256:d4ee59b79bd1cbe0caa546780e0ee46210ea1d51b95a53365f6cc2ba2a0d1f6f"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/energy-saref4ener-en-us/releases/0.1.8/sample.json",
+          "digest": "sha256:df2a36008dd18cc801ac8a7149320166da89d8186815219b4a3042362d8c567a"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/587211fb53fa82be66ca7dccf0874c40c02b2e8b/samples/energy-saref4ener-en-us/releases/0.1.8/verification.json",
+          "digest": "sha256:bfc9f97b53804834d96e75b77dd5dc6e59a559550e43ab3f63344f226673bffd"
         },
         "language": "en-US"
       }
