@@ -30,7 +30,8 @@ def supply_function(
     business_date: str | None = None,
 ) -> dict:
     """Run the fixed calculation with facts the Function reads itself."""
-    params = {key: value for key, value in locals().items() if value is not None}
+    # An action sends every declared input; an empty string means "not set" (e.g. no need_by).
+    params = {key: value for key, value in locals().items() if value is not None and value != ""}
     rows = load_bkn_rows(_FIXED_OPERATION, bkn.query_object_instance, params)
     result = execute_from_bkn_rows(_FIXED_OPERATION, rows, params)
     result["data_source"] = {"knowledge_network_id": KN_ID,

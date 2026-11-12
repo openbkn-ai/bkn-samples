@@ -9,7 +9,7 @@ description: >
 
 # PMC production planning
 
-Answer the planner's questions about backlog, order acceptance, scheduling and material preparation. Use Cypher for lookups, totals and following relations; call a function when the BOM must be netted level by level.
+Answer the planner's questions about backlog, order acceptance, scheduling and material preparation. Use Cypher for lookups, totals and following relations; run a calculation action when the BOM must be netted level by level.
 
 ## Default rules
 
@@ -26,17 +26,19 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - "Stock on hand" is finished-goods stock only, not what can still be built: stock on hand still promisable = finished-goods stock − signed backlog − the quantity being shipped now.
 - Open forecast = close status is not Closed. One forecast can cover several products. How much forecast current stock can support is the available to promise, not finished-goods stock alone.
 
-## When to call a function
+## When to run a calculation action
+
+Both calculations are actions: get their parameters with `get_action_info`, run them with `execute_action`, then read the result with `get_action_execution`. Pass every parameter each time: substitutes (default false), warehouse scope (default all), need-by date (empty string when none) and overdue purchases (default false) are business assumptions; when the user does not say, pass the default explicitly and state in the answer what the result assumes.
 
 - **Buildable_Quantity_and_ATP** (`build_capacity`): how many units a product can still build, how much it can promise, how much more it can accept, which material blocks it; with alternates, a warehouse scope, open purchases due by a date, or overdue purchases chased in. Pass `products` as a list of product codes; each is calculated on its own. When several products are needed, pass them in one call instead of calling once per product.
-  - Which products' backlog neither stock on hand nor production can cover: first use Cypher to find products whose backlog exceeds finished-goods stock, then pass them all to this function in one call. A product is uncovered when `finished_goods_qty + buildable_qty < signed_backlog_qty`, and the gap is `signed_backlog_qty − finished_goods_qty − buildable_qty` (`available_to_promise` never goes below 0, so do not use it for this).
-  - How many more units open purchases due by a date allow: call again for the same products with `need_by` and subtract the two `buildable_qty` values.
+  - Which products' backlog neither stock on hand nor production can cover: first use Cypher to find products whose backlog exceeds finished-goods stock, then pass them all to this action in one run. A product is uncovered when `finished_goods_qty + buildable_qty < signed_backlog_qty`, and the gap is `signed_backlog_qty − finished_goods_qty − buildable_qty` (`available_to_promise` never goes below 0, so do not use it for this).
+  - How many more units open purchases due by a date allow: run it again for the same products with `need_by` and subtract the two `buildable_qty` values.
 - **Demand_Coverage_and_Shortages** (`demand_coverage`): whether one or more demands are covered, what is short and by how much.
   - Evaluating the backlog itself: omit `reserve_signed_backlog`.
   - New orders that must protect backlog: `reserve_signed_backlog=true`.
   - Planning a work order without touching finished goods: `use_finished_goods=false`.
   - Several orders at once: put them in `demands` in the order the user gives.
-- Use Cypher, not a function, for everything else (backlog, stock, forecasts, work orders, BOM lists, where-used, common parts). The functions' `limiting_materials` and `shortages` are bottom-level shortages; to say whether they have open purchases or how long they take, query purchase orders and materials with Cypher.
+- Use Cypher, not a calculation action, for everything else (backlog, stock, forecasts, work orders, BOM lists, where-used, common parts). The functions' `limiting_materials` and `shortages` are bottom-level shortages; to say whether they have open purchases or how long they take, query purchase orders and materials with Cypher.
 
 ## Cypher patterns
 
