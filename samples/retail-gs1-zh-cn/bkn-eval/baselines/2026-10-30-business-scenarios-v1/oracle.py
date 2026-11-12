@@ -213,10 +213,40 @@ q('Q-40', 'S09', 'complex', 'QA', 'REC-001 在 WH-001 被召回封存的库存�
 
 # S10 data trust and look-back
 unk = sorted((r['lot_id'], r['location_id']) for r in INV if r['available'] is None)
+# Report root causes, not their consequences: an arrival without a matching dispatch also drives the
+# position's in-transit negative, and setting a conflicting sale aside leaves returns above the remaining sales.
+transfer_qty = defaultdict(lambda: [ZERO, ZERO])
+arrival_cell = {}
+
+
+def units(m):
+    # Same conversion as the reference replay: cases count as pack_multiplier units.
+    product = R.products[R.lots[m['lot_id']]['product_id']]
+    return number(m['quantity']) * (number(product['pack_multiplier']) if m['unit'] in ('case', '箱') else 1)
+
+
+for m in EVENTS:
+    if m['transfer_id'] and m['event_type_code'] in ('dispatch', 'arrive'):
+        key = (m['transfer_id'], m['lot_id'])
+        transfer_qty[key][0 if m['event_type_code'] == 'dispatch' else 1] += units(m)
+        if m['event_type_code'] == 'arrive':
+            arrival_cell[key] = (m['lot_id'], m['destination_location_id'])
+no_dispatch = {arrival_cell[k] for k, (sent, arrived) in transfer_qty.items() if arrived > sent and k in arrival_cell}
+
+
+def undeterminable_reasons(a, b):
+    codes = ({d['code'] for d in DIAG if d.get('lot_id') == a and d.get('location_id') == b}
+             | {'conflicting_event' for d in DIAG if d['code'] == 'conflicting_event'
+                and any(m['event_id'] == d['event_id'] and m['lot_id'] == a for m in T['movements'])})
+    if (a, b) in no_dispatch:
+        codes = (codes - {'negative_inventory'}) | {'arrival_without_dispatch'}
+    if 'conflicting_event' in codes:
+        codes.discard('returns_exceed_sales')
+    return sorted(codes)
+
+
 q('Q-41', 'S10', 'complex', 'WH', '现在有哪些批次库位的库存算不清楚？各是什么原因？', 'Which lot-location positions have stock that cannot be determined now, and why?',
-  dict(positions={f'{a}@{b}': sorted({d['code'] for d in DIAG if d.get('lot_id') == a and d.get('location_id') == b}
-                                     | {'conflicting_event' for d in DIAG if d['code'] == 'conflicting_event'
-                                        and any(m['event_id'] == d['event_id'] and m['lot_id'] == a for m in T['movements'])}) for a, b in unk}),
+  dict(positions={f'{a}@{b}': undeterminable_reasons(a, b) for a, b in unk}),
   '批次@地点及原因代码', 'lot@location with reason codes')
 q('Q-42', 'S10', 'medium', 'WH', '有没有被重复记录的出入库事件？涉及哪个批次？会不会被算两次？',
   'Is any stock movement recorded twice? Which lot does it involve, and is it counted twice?',

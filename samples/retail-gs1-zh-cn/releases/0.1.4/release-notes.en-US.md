@@ -6,4 +6,6 @@ Every input of an action is required: products, business date, knowledge cutoff,
 
 The Agent reads the parameters with `get_action_info`, runs `execute_action` and reads the result with `get_action_execution`. Requires OpenBKN 0.2.2 or later with openbkn-ai/bkn-foundry#3125 (interaction context for function actions).
 
+The experience card on stock that cannot be determined (Q-41) now gives root causes, matching what the inventory calculation reports: a sale recorded twice with different quantities, arrivals with no matching dispatch, and stock going negative. Its answer explains each reason in business terms.
+
 Existing installations keep their version. To change versions, uninstall and install as usual; uninstalling removes the sample data and owned resources. No in-place migration is provided.
