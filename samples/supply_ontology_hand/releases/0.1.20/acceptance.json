@@ -1,0 +1,105 @@
+{
+  "reportType": "public-acceptance-summary",
+  "sampleId": "supply-chain",
+  "version": "0.1.20",
+  "packageDigest": "sha256:1df7b335baf386113bd1e0e6113742f309a449cd241a9322567de260f2a89359",
+  "sourceCommit": "3e0caeb8c353312232e2b17aab8386aa9af56c0e",
+  "verificationDate": "2026-11-12",
+  "testedPlatformVersion": "0.2.2",
+  "testedArchitecture": "arm64",
+  "databaseRuntime": "shared-mariadb",
+  "freshInstallation": true,
+  "checks": {
+    "database": {
+      "businessTables": 12,
+      "fixtureRecords": 78635,
+      "boundObjectRowCountsMatched": true,
+      "packageDatabaseVerificationHookPassed": true
+    },
+    "knowledge": {
+      "objectTypes": 11,
+      "relations": 15,
+      "liveBoundObjectQueriesPassed": 11,
+      "productionPlansReachingProducts": 605,
+      "productionPlans": 605
+    },
+    "capabilities": {
+      "toolActionsExecuted": [
+        {
+          "action": "supply_ontology_hand_build_capacity",
+          "name": "产品可做数量与可承诺量",
+          "inputs": [
+            "products",
+            "substitute_enabled",
+            "warehouse_scope",
+            "need_by",
+            "chase_overdue_po"
+          ],
+          "invokedThrough": "context-loader execute_action in a managed interaction",
+          "exitCode": 0,
+          "passed": true
+        },
+        {
+          "action": "supply_ontology_hand_demand_coverage",
+          "name": "需求齐套与缺料",
+          "inputs": [
+            "demands",
+            "substitute_enabled",
+            "warehouse_scope",
+            "need_by",
+            "chase_overdue_po",
+            "reserve_signed_backlog",
+            "use_finished_goods"
+          ],
+          "invokedThrough": "context-loader execute_action in a managed interaction",
+          "exitCode": 0,
+          "passed": true
+        }
+      ],
+      "mountedSkillsVerified": [
+        {
+          "name": "pmc-supply-planning",
+          "sourceContentDigest": "sha256:f8b2dca91679172bc871762c48da344c766611fa0e0efa70ae85b7690ac051e0",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        },
+        {
+          "name": "procurement-follow-up",
+          "sourceContentDigest": "sha256:b6282d0cdba3680a5008c77fb1c49ff75865856cf50207882ee015f360bd326a",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        }
+      ],
+      "functionsNotDeclared": false,
+      "metricsNotDeclared": true
+    },
+    "scenario": {
+      "declaredCards": 15,
+      "referenceCypherQueriesPassed": 7,
+      "graphPatternsPassed": 0,
+      "fullQuestionCardsNotExercised": 8,
+      "modelQuestionsRun": 0
+    }
+  },
+  "lifecycle": {
+    "offlineImportPassed": true,
+    "samePackageReinstallationPassed": true,
+    "actionsRunAfterReinstallation": true,
+    "retainedOtherSampleQueriesPassed": true,
+    "notExercised": [
+      "bounded internal-dependency failure",
+      "retry with the same artifacts",
+      "uninstall without an active package cache or external HTTP"
+    ]
+  },
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (bkn-backend-ee sha2d2a597, ontology-query-ee with bkn-foundry#3125, agent-retrieval sha2d466bc); no native amd64 certification and no released vanilla 0.2.2.",
+    "The calculations ran as tool actions through Context Loader execute_action inside a managed interaction, with every business assumption passed explicitly (defaults: no substitutes, all warehouses, no need-by date, overdue purchases excluded).",
+    "Reference queries and actions were checked through APIs; browser UI and full model-question cards were not exercised."
+  ],
+  "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
