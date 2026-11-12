@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "baseline_id": "supply-en-frozen-v1",
   "snapshot_kind": "repository_fixture_freeze",
-  "business_date": "2026-08-25",
+  "business_date": "2027-02-25",
   "files": [
     {
       "path": "data/customer_entity.csv",
@@ -12,42 +12,42 @@
     {
       "path": "data/erp_material.csv",
       "rows": 3497,
-      "sha256": "74d03abb3958443ed9dcf58adc3b47a1a53783c2165973cecd23ff4b3175502c"
+      "sha256": "10188391be0c4cdd93e71b46db43b04e40a50d119e976aa2b103bd3ee56f91cb"
     },
     {
       "path": "data/erp_material_bom.csv",
       "rows": 31423,
-      "sha256": "b2c90fbf8d05b25715c5509f59a4db9b7191835311bda87db19727ed8a3c7dc0"
+      "sha256": "83edd77af1399bc57400a76c47a319b310e22fb7bc51f27b786fa660783f8d57"
     },
     {
       "path": "data/erp_mds_forecast.csv",
       "rows": 137,
-      "sha256": "0a41a9ea15b66672ff5543c0eac48d17e60fabfd3bfce7a2e1f4d88a0b0fc9b3"
+      "sha256": "05fe6954e0db563436fd9c507a73c3692c0795dfbd3875fbab9b775ad5de71d9"
     },
     {
       "path": "data/erp_mrp_plan_order.csv",
       "rows": 824,
-      "sha256": "4a18a88cb8368401b15d40a959fbe3e6d46717c37bc7b3af83595022cb43dd1d"
+      "sha256": "0d51d18abfe2b104de1263e4c92fb08aca2d6ca6b8a88a84aff260292e23e256"
     },
     {
       "path": "data/erp_production_work_order.csv",
       "rows": 605,
-      "sha256": "f82154cebc8cc7021756575d5c21d4eb1a69635da18b846676e2bff541f44f4d"
+      "sha256": "0fb66b0f04aca9a8bc2b6f3b2d72c47adac26fa870f9d6990f5ec9ade44ed4e8"
     },
     {
       "path": "data/erp_purchase_order.csv",
       "rows": 1972,
-      "sha256": "ba6a048da33cdbcce95966cf551bd314734e6e3a8a833cf1994ebe8f2c274b2a"
+      "sha256": "4617efaa3d93eb841a2317b51a0e51e1f68cca451c8ec99b9cb7eb18bd8161aa"
     },
     {
       "path": "data/erp_purchase_request.csv",
       "rows": 19333,
-      "sha256": "bb32f3576503d5b2a314b7af64a786ad8a250b8feed60f4ed102a10cccbce0e3"
+      "sha256": "05e6b6461f4539fee9c99e93723915c3b1a87f20980df238e7e8642a0c107eb6"
     },
     {
       "path": "data/erp_real_time_inventory.csv",
       "rows": 19724,
-      "sha256": "b8ede9368c09b5085c708c7acf9bcb838e58d17c81256c84d760b97d618e68bf"
+      "sha256": "04c84e4e37a538e037af8d9912b67d8f89799b64e770962a7a1dd257504fa934"
     },
     {
       "path": "data/erp_supplier.csv",
@@ -57,12 +57,28 @@
     {
       "path": "data/hd_product_view.csv",
       "rows": 30,
-      "sha256": "72bd1508e6565cf9bf60ed047093fac0ead379965cd7333effdca3b6d37ef728"
+      "sha256": "c46c65c53455e1a66cc2ffb2ae5638bb091d286cd20382a3a7583097a9cc8ff9"
+    },
+    {
+      "path": "data/kit_schedule_plan.csv",
+      "rows": 13,
+      "sha256": "d3426d73ac65b4ac2ba9ed8c7a0c924003384280a5fc2e26449aaab4c7d849e6"
+    },
+    {
+      "path": "data/line_stoppage.csv",
+      "rows": 5,
+      "sha256": "ae0e53fb8cfcba1d32e7f708b9e591497de1ff0bcf2b9dba64e814a83e068660"
+    },
+    {
+      "path": "data/production_line.csv",
+      "rows": 7,
+      "sha256": "db6fb090f017db92d758151c16129068ea53cbea44a2d53c81b2e9fb04d8ab01"
     },
     {
       "path": "data/sales_order.csv",
       "rows": 800,
-      "sha256": "23ad2c124007eed99be2273c25a0224302758e21c3e1b1796adf68b719aa936e"
+      "sha256": "43cf14d12caf497e945777f1aefa182a65d8e5feb7e45be8b5b54d5c6c484953"
     }
-  ]
+  ],
+  "preserved": "IDs and quantities of the 0.1.20 fixture; dates and date-bearing numbers moved six months; open demand, production orders, MRP make lines, purchase arrivals and signed backlog re-dated around the business date by tools/supply_chain/rebuild_2027.py"
 }

@@ -40,13 +40,16 @@ class SupplyVerifyTest(unittest.TestCase):
 
         sys.path.insert(0, str(VERIFY.SAMPLE_DIR / "tools"))
         from register_skills import local_skills
-        from function_catalog import FUNCTION_CATALOG
+        from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE, SCHEDULE_RULES
 
         names = [{"name": name, "skill_id": name, "status": "published"} for name, _path in local_skills()]
-        tools = [{"name": spec["name"], "tool_id": operation, "status": "enabled"} for operation, spec in FUNCTION_CATALOG.items()]
+        tools = [{"name": spec["name"], "tool_id": operation, "status": "enabled"}
+                 for operation, spec in [*FUNCTION_CATALOG.items(), ("kit_schedule", KIT_SCHEDULE), *SCHEDULE_RULES.items()]]
         bindings = [{"capability_type": "skill", "capability_id": item["skill_id"]} for item in names]
         actions = [{"operation_config": {"type": "tool"}, "action_source": {"type": "tool", "box_id": "box-1", "tool_id": operation}}
-                   for operation in FUNCTION_CATALOG]
+                   for operation in [*FUNCTION_CATALOG, *SCHEDULE_RULES]]
+        actions += [{"id": f"supply_ontology_hand_kitplan_{key}", "operation_config": {"type": "object"},
+                     "action_source": {"type": "tool", "box_id": "box-1", "tool_id": "kit_schedule"}} for key in KIT_PLAN_ACTIONS]
         checks = VERIFY.build_checks(
             data_ok=True,
             components={"functions": True, "skills": True},

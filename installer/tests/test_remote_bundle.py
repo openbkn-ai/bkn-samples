@@ -10,6 +10,8 @@ from ssl import SSLError
 from unittest.mock import Mock
 from urllib.error import HTTPError, URLError
 
+import yaml
+
 from installer.remote_bundle import (AssetRedirect, compatibility, extract_package,
                                      load_release, sha, validate_package)
 from installer.remote_installation import RemoteInstallation
@@ -30,6 +32,9 @@ class RemoteBundleTest(unittest.TestCase):
         self.entry = json.loads((EXAMPLES / "catalog.json").read_text())["spec"]["entries"][0]
         self.sample = json.loads((EXAMPLES / "supply-chain/releases/1.0.0/sample.json").read_text())
         self.sample["spec"]["contents"]["knowledgeNetworks"][0]["directory"] = "kn"
+        # The fixture release packages the live supply sample.yaml, so it declares that sample's table count.
+        self.sample["spec"]["delivery"]["dataDependencies"][0]["expectedTables"] = yaml.safe_load(
+            (ROOT / "samples/supply_ontology_hand/sample.yaml").read_text())["spec"]["database"]["expectedTables"]
         self.package = self.sample["spec"]["artifacts"][0]
         self.package["locations"] = ["https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v1.0.0/package.tar.gz"]
         self.sample["spec"]["artifacts"][1]["locations"] = ["oci://ghcr.io/openbkn-ai/bkn-samples"]

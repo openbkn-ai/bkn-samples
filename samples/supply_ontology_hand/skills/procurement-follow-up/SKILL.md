@@ -16,7 +16,7 @@ description: >
 
 使用者没有另说时，按以下口径回答，并在结论里简短说明用了哪条口径。
 
-- 业务日期 2026-08-25，“现在、今天、当前”都指这一天。
+- 业务日期 2027-02-25，“现在、今天、当前”都指这一天。
 - 在途采购行 = 关闭状态 `rowclosestatus_title` 和终止状态 `rowterminatestatus_title` 都是“正常”，且未到数量 `qty - actqty > 0`。
 - 交期 `deliverdate` 早于业务日期的是逾期在途：交期已经失信，要催，但不算确定能到。交期不早于业务日期的按交期计入，交期等于今天算今天应到。
 - “某段时间内应到货”按交期落在该区间统计，含两端；“接下来 30 天”从业务日期次日算到第 30 天。
@@ -36,7 +36,7 @@ description: >
 
 对象类型带前缀 `supply_ontology_hand_`。日期是 `YYYY-MM-DD` 字符串，直接比较大小。平台不支持变长路径和 `UNWIND`。
 
-- 在途与逾期：`MATCH (po:supply_ontology_hand_po) WHERE po.rowclosestatus_title = '正常' AND po.rowterminatestatus_title = '正常' AND po.qty - po.actqty > 0 RETURN po.billno, po.supplier_name, po.supplier_number, po.material_number, po.qty - po.actqty AS open_qty, po.deliverdate`；逾期加 `AND po.deliverdate < '2026-08-25'`。
+- 在途与逾期：`MATCH (po:supply_ontology_hand_po) WHERE po.rowclosestatus_title = '正常' AND po.rowterminatestatus_title = '正常' AND po.qty - po.actqty > 0 RETURN po.billno, po.supplier_name, po.supplier_number, po.material_number, po.qty - po.actqty AS open_qty, po.deliverdate`；逾期加 `AND po.deliverdate < '2027-02-25'`。
 - 按供应商统计：`RETURN po.supplier_name, count(*) AS lines, sum(po.qty - po.actqty) AS open_qty ORDER BY lines DESC`；家数用 `count(DISTINCT po.supplier_number)`。
 - 某采购员负责的供应商：`MATCH (s:supply_ontology_hand_supplier) WHERE s.purchaserid_name = '<姓名>' RETURN s.supplier_code`；再用 `po.supplier_number IN [...]` 关联采购行。
 - 一组物料的在途：`WHERE po.material_number IN ['<物料1>', '<物料2>']`。

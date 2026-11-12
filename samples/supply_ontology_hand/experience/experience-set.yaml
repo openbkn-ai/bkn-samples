@@ -6,7 +6,7 @@ metadata:
     answerSet: bkn-eval/baselines/2026-10-30-business-scenarios-v4/answer-set-v4.yaml
     setId: supply-business-scenarios-v4
 spec:
-  businessDate: '2026-08-25'
+  businessDate: '2027-02-25'
   cases:
   - id: Q-05
     title: 欠客户多少货
@@ -61,13 +61,13 @@ spec:
         RETURN count(*) AS count, sum(f.qty) AS qty
   - id: Q-09
     title: 拖得最久的欠单
-    explanation: 比较欠单的承诺交期和业务日期 2026-08-25，找出逾期最久的一张。
+    explanation: 比较欠单的承诺交期和业务日期 2027-02-25，找出逾期最久的一张。
     question: 欠货的订单里有多少张已经过了承诺交期？拖得最久的是哪张单，拖了多少天？
-    answer: 192 张欠单全部已过承诺交期；拖得最久的是 SO0000538，承诺 2026-03-16 交货，已经逾期 162 天。
+    answer: 192 张欠单里有 72 张已过承诺交期；拖得最久的是 SO0000200，承诺 2027-01-11 交货，已经逾期 45 天。
     expected:
-      overdue_orders: 192
-      oldest_order: SO0000538
-      days_late: 162
+      overdue_orders: 72
+      oldest_order: SO0000200
+      days_late: 45
     surfaces:
     - agent
   - id: Q-14
@@ -98,34 +98,34 @@ spec:
     title: 逾期没到的采购
     explanation: 未关闭、未终止且没收完的采购行里，交期早于业务日期的就是逾期在途。
     question: 已经过了交期还没到齐的采购行有多少？涉及多少家供应商？
-    answer: 有 483 条采购行已经过了交期还没到齐，涉及 133 家供应商。
+    answer: 有 105 条采购行已经过了交期还没到齐，涉及 49 家供应商。
     expected:
-      lines: 483
-      suppliers: 133
+      lines: 105
+      suppliers: 49
     surfaces:
     - agent
     - query
     cypher:
       query: |-
         MATCH (po:supply_ontology_hand_po)
-        WHERE po.rowclosestatus_title = '正常' AND po.rowterminatestatus_title = '正常' AND po.qty - po.actqty > 0 AND po.deliverdate < '2026-08-25'
+        WHERE po.rowclosestatus_title = '正常' AND po.rowterminatestatus_title = '正常' AND po.qty - po.actqty > 0 AND po.deliverdate < '2027-02-25'
         RETURN count(*) AS lines, count(DISTINCT po.supplier_number) AS suppliers
   - id: Q-12
     title: 先催哪家供应商
     explanation: 按供应商汇总逾期在途的行数和未到数量，找出最该催的一家。
     question: 逾期没到货的采购行最多的是哪家供应商？共多少行、还欠我们多少数量？
-    answer: 逾期最多的是俅门信和达电子有限公司：50 行没到，还欠 2844000 个。
+    answer: 逾期最多的是俅门信和达电子有限公司：24 行没到，还欠 1924000 个。
     expected:
       supplier: 俅门信和达电子有限公司
-      lines: 50
-      open_qty: 2844000
+      lines: 24
+      open_qty: 1924000
     surfaces:
     - agent
     - query
     cypher:
       query: |-
         MATCH (po:supply_ontology_hand_po)
-        WHERE po.rowclosestatus_title = '正常' AND po.rowterminatestatus_title = '正常' AND po.qty - po.actqty > 0 AND po.deliverdate < '2026-08-25'
+        WHERE po.rowclosestatus_title = '正常' AND po.rowterminatestatus_title = '正常' AND po.qty - po.actqty > 0 AND po.deliverdate < '2027-02-25'
         RETURN po.supplier_name AS supplier, count(*) AS lines, sum(po.qty - po.actqty) AS open_qty
         ORDER BY lines DESC
         LIMIT 1
@@ -133,20 +133,20 @@ spec:
     title: 今天下单哪天到
     explanation: 物料的标准采购提前期从业务日期起算，就是最早到货日。
     question: 贴片无源晶振 527-000017 今天下单的话，最早哪天能到？
-    answer: 贴片无源晶振 527-000017 采购提前期 70 天，今天（2026-08-25）下单最早 2026-11-03 到货。
+    answer: 贴片无源晶振 527-000017 采购提前期 70 天，今天（2027-02-25）下单最早 2027-05-06 到货。
     expected:
-      arrival_date: '2026-11-03'
+      arrival_date: '2027-05-06'
     surfaces:
     - agent
   - id: Q-35
     title: 这批料为谁备的
     explanation: 沿采购订单行 → 请购单行 → MRP 计划订单 → 需求预测，一路追到源头。
-    question: 采购订单 02-KSHA-CGDD-260402-012958 里 849-000904 这一行是从哪张请购单来的？请购又是哪张 MRP 计划订单生成的？最终是为哪张需求预测、哪个产品备的料？
-    answer: 这一行来自请购单 CGSQ-260331-000026，请购由 MRP 计划订单 JHJY-20260331-00045866 生成，最终为需求预测 YCD2026020500000045 中的产品 P69-000060 备料。
+    question: 采购订单 02-KSHA-CGDD-261002-012958 里 849-000904 这一行是从哪张请购单来的？请购又是哪张 MRP 计划订单生成的？最终是为哪张需求预测、哪个产品备的料？
+    answer: 这一行来自请购单 CGSQ-260930-000026，请购由 MRP 计划订单 JHJY-20260930-00045866 生成，最终为需求预测 YCD2026080500000045 中的产品 P69-000060 备料。
     expected:
-      purchase_request: CGSQ-260331-000026
-      mrp_plan_order: JHJY-20260331-00045866
-      forecast: YCD2026020500000045
+      purchase_request: CGSQ-260930-000026
+      mrp_plan_order: JHJY-20260930-00045866
+      forecast: YCD2026080500000045
       product_codes:
       - P69-000060
     surfaces:
@@ -155,9 +155,9 @@ spec:
     - graph
     cypher:
       query: |-
-        MATCH (po:supply_ontology_hand_po {billno: '02-KSHA-CGDD-260402-012958', material_number: '849-000904'})-[:supply_ontology_hand_pr2po]->(pr:supply_ontology_hand_pr)-[:supply_ontology_hand_pr2mrp]->(m:supply_ontology_hand_mrp)-[:supply_ontology_hand_mrp2fcst]->(f:supply_ontology_hand_forecast)
+        MATCH (po:supply_ontology_hand_po {billno: '02-KSHA-CGDD-261002-012958', material_number: '849-000904'})-[:supply_ontology_hand_pr2po]->(pr:supply_ontology_hand_pr)-[:supply_ontology_hand_pr2mrp]->(m:supply_ontology_hand_mrp)-[:supply_ontology_hand_mrp2fcst]->(f:supply_ontology_hand_forecast)
         RETURN DISTINCT pr.billno AS purchase_request, m.billno AS mrp_plan_order, f.billno AS forecast, f.material_number AS product_codes
-      graph: 'MATCH (po:supply_ontology_hand_po {billno: ''02-KSHA-CGDD-260402-012958'', material_number: ''849-000904''})-[:supply_ontology_hand_pr2po]->(pr:supply_ontology_hand_pr)-[:supply_ontology_hand_pr2mrp]->(m:supply_ontology_hand_mrp)-[:supply_ontology_hand_mrp2fcst]->(f:supply_ontology_hand_forecast)'
+      graph: 'MATCH (po:supply_ontology_hand_po {billno: ''02-KSHA-CGDD-261002-012958'', material_number: ''849-000904''})-[:supply_ontology_hand_pr2po]->(pr:supply_ontology_hand_pr)-[:supply_ontology_hand_pr2mrp]->(m:supply_ontology_hand_mrp)-[:supply_ontology_hand_mrp2fcst]->(f:supply_ontology_hand_forecast)'
   - id: Q-23
     title: 现货不够补欠货
     explanation: 把每个产品的欠交套数和全公司成品可用库存相比，找出现货补不上的产品。
@@ -219,7 +219,7 @@ spec:
     title: 卡在哪颗料
     explanation: 欠货先用现货，剩下的按 BOM 逐层净扣找出最底层缺料，再看每颗料有没有在途。
     question: 625 农业无人飞机 367-000097 的欠单还差几套补不上？卡在哪些料？哪些可以催在途，哪些得新下单、最早哪天到？
-    answer: 还差 4 套补不上，卡在 3 颗包装料，各缺 4 个：165-002619、606-000691、606-000692。606-000692 有逾期在途可以催；165-002619 和 606-000691 没有在途要新下单，最早 2026-09-08 到。
+    answer: 还差 4 套补不上，卡在 3 颗包装料，各缺 4 个：165-002619、606-000691、606-000692。606-000692 有在途 10 个，按交期 2027-03-04 到货，可以跟催；165-002619 和 606-000691 没有在途要新下单，最早 2027-03-11 到。
     expected:
       short_sets: 4
       blocking_materials:
@@ -231,18 +231,18 @@ spec:
       new_order_needed:
       - 165-002619
       - 606-000691
-      earliest_new_order_arrival: '2026-09-08'
+      earliest_new_order_arrival: '2027-03-11'
     surfaces:
     - agent
   - id: Q-46
-    title: 催回在途能多做多少
-    explanation: 先算现有库存可做数量和卡住的物料，再假设逾期在途全部催回，对比可做数量。
-    question: U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果逾期没到的采购都能催回来，最多能做多少套？
-    answer: U00-000080 用现有库存最多还能做 141 套，再多做一套卡在 994-000328；如果逾期没到的采购都能催回来，最多能做 2972 套。
+    title: 在途到货能多做多少
+    explanation: 先算现有库存可做数量和卡住的物料，再计入 3 月 15 日前按交期到货的在途，对比可做数量。
+    question: U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果 3 月 15 日前按交期到货的在途都到了，最多能做多少套？
+    answer: U00-000080 用现有库存最多还能做 141 套，再多做一套卡在 994-000328；计入 3 月 15 日前按交期到货的在途（994-000328 有 2881 个 3 月 11 日到货），最多能做 2972 套。
     expected:
       stock_only_buildable: 141
       first_blocking_materials:
       - 994-000328
-      with_overdue_po_chased: 2972
+      with_po_by_2027_03_15: 2972
     surfaces:
     - agent

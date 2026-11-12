@@ -19,7 +19,7 @@ Out of scope: actually placing orders, shipping, scheduling or closing documents
 
 These are the default rules; users do not need to repeat them. When a user states a different condition, the user's condition wins.
 
-1. **Business date**: 2026-08-25. "Now", "today" and "current" all mean this date; the data snapshot date is 2026-08-13.
+1. **Business date**: 2027-02-25. "Now", "today" and "current" all mean this date; the data snapshot date is 2027-02-13.
 2. **Available stock**: only the available quantity of stock with status Available counts; Defective stock cannot be used in production or shipped. By default every warehouse in the company counts. "Finished-goods warehouses" means Suzhou Finished Goods, Urumqi Finished Goods and Harbin Finished Goods; "the seven Suzhou plant production warehouses" means Suzhou Subassemblies, Suzhou Finished Goods, Suzhou Electronics, Suzhou Drone Materials, Suzhou Assembly, Urumqi Finished Goods and Harbin Finished Goods.
 3. **Backlog**: a sales order whose signed quantity exceeds its shipped quantity is owed; owed orders whose promised date is before the business date are overdue. Owed orders are filled by promised date, then by order number.
 4. **Open purchases**: a purchase order line that is neither closed nor terminated and whose ordered quantity exceeds its received quantity. Lines due on or after the business date count as supply on their due date; "the next N days" means the day after the business date through day N inclusive. Lines due before the business date are overdue: the supplier missed the date, so they are not firm supply. They are listed for expediting and count only when the user explicitly assumes they can be chased in.

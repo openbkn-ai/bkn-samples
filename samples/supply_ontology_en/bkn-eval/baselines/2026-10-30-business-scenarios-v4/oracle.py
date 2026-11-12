@@ -18,7 +18,7 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 DATA = HERE.parents[2] / 'data'
-BUSINESS_DATE = '2026-08-25'
+BUSINESS_DATE = '2027-02-25'
 FG = ['Suzhou Finished Goods', 'Urumqi Finished Goods', 'Harbin Finished Goods']
 PRODUCTION = ['Suzhou Subassemblies', 'Suzhou Finished Goods', 'Suzhou Electronics',
               'Suzhou Drone Materials', 'Suzhou Assembly', 'Urumqi Finished Goods', 'Harbin Finished Goods']
@@ -359,22 +359,24 @@ q('Q-32', 'S04', 'complex', 'PMC', "Which finished products use SMD crystal 527-
   dict(product_codes=users,
        must_build={p: BACKLOG[p] - num(fg[p]) for p in users if BACKLOG[p] > fg[p]}),
   'full product list, products that must build and units')
+_blocked = allocate('382-000005', capacity('382-000005', pool, alternatives=True) + 1, pool(), True, finished=False)['gaps']
+LIMITING_382 = max(_blocked, key=lambda k: (_blocked[k], k))
 q('Q-33', 'S09', 'complex', 'Purchasing', 'With alternates allowed, how many units of 382-000005 can we still build at most? Which material is the bottleneck, and does it have any open purchase order?',
-  dict(buildable_qty=capacity('382-000005', pool, alternatives=True), limiting_material='606-000989',
-       limiting_stock=num(pool()['606-000989']), has_open_po=bool(po_lines('606-000989'))),
+  dict(buildable_qty=capacity('382-000005', pool, alternatives=True), limiting_material=LIMITING_382,
+       limiting_stock=num(pool()[LIMITING_382]), has_open_po=bool(po_lines(LIMITING_382))),
   'buildable units, bottleneck material, its stock, open purchase order or not')
 need = allocate('367-000131', 100, pool(), finished=False)
 q('Q-34', 'S10', 'complex', 'PMC', 'Next week we want to schedule another work order for 100 units of YN580 367-000131. Is current stock enough? If not, how many materials are short, and which is short the most?',
   dict(covered=need['covered'], shortage_material_count=len(need['gaps']),
        largest_shortage=max(need['gaps'], key=lambda k: (need['gaps'][k], k)) if need['gaps'] else None),
   'can it start, short material count, largest shortage')
-trace_po, trace_material = '02-KSHA-CGDD-260402-012958', '849-000904'
+trace_po, trace_material = '02-KSHA-CGDD-261002-012958', '849-000904'
 po_row = next(r for r in PO if r['billno'] == trace_po and r['material_number'] == trace_material)
 # Purchase request lines link to PO lines by line ID and material, as the knowledge network relation does.
 pr_row = next(r for r in PR_LINES if r['entry_id'] == po_row['srcbillentryid'] and r['material_number'] == trace_material)
 mrp_row = MRP[pr_row['srcbillnumber']]
 fc_rows = [r for r in FORECASTS if r['billno'] == mrp_row['rootdemandbillno']]
-q('Q-35', 'S10', 'complex', 'Purchasing', 'Purchase order 02-KSHA-CGDD-260402-012958, line 849-000904: which purchase requisition did it come from? Which MRP planned order generated that requisition? In the end, which forecast and which product was the material bought for?',
+q('Q-35', 'S10', 'complex', 'Purchasing', 'Purchase order 02-KSHA-CGDD-261002-012958, line 849-000904: which purchase requisition did it come from? Which MRP planned order generated that requisition? In the end, which forecast and which product was the material bought for?',
   dict(purchase_request=pr_row['billno'], mrp_plan_order=mrp_row['billno'],
        forecast=mrp_row['rootdemandbillno'], product_codes=sorted({r['material_number'] for r in fc_rows})),
   'requisition number, MRP order number, forecast number, product codes')
@@ -395,9 +397,9 @@ today = [r for r in OPEN_PO if r['deliverdate'] == BUSINESS_DATE]
 q('Q-40', 'S08', 'medium', 'Purchasing', 'Which purchases are due to arrive today? From which supplier, which material, and how much is still outstanding?',
   dict(lines=[dict(po=r['billno'], supplier=r['supplier_name'], material_code=r['material_number'],
                    open_qty=num(open_qty(r))) for r in today]), 'full list of purchase lines')
-september = [r for r in OPEN_PO if r['deliverdate'][:7] == '2026-09']
-q('Q-41', 'S08', 'medium', 'Purchasing', 'How many purchase lines are due to arrive in September, and from how many suppliers?',
-  dict(lines=len(september), suppliers=len({r['supplier_number'] for r in september})), 'line count, supplier count')
+march = [r for r in OPEN_PO if r['deliverdate'][:7] == '2027-03']
+q('Q-41', 'S08', 'medium', 'Purchasing', 'How many purchase lines are due to arrive in March, and from how many suppliers?',
+  dict(lines=len(march), suppliers=len({r['supplier_number'] for r in march})), 'line count, supplier count')
 top3 = sorted(BACKLOG, key=lambda p: (-BACKLOG[p], p))[:3]
 q('Q-42', 'S02', 'medium', 'PMC', 'Which three products have the biggest backlog, and how many units does each owe?',
   dict(products={p: BACKLOG[p] for p in top3}), 'product codes and units owed, largest first')
@@ -413,11 +415,11 @@ q('Q-45', 'S03', 'medium', 'PMC', 'Among products with open forecasts, which hav
   dict(product_codes=zero), 'full list of product codes')
 
 stock_only = capacity('U00-000080', pool)
-chased = capacity('U00-000080', lambda: pool_with_po(chase_overdue=True))
+by_mid_march = capacity('U00-000080', lambda: pool_with_po(need_by='2027-03-15'))
 first_gap = allocate('U00-000080', stock_only + 1, pool(), finished=False)['gaps']
-q('Q-46', 'S09', 'complex', 'PMC', 'How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?',
+q('Q-46', 'S09', 'complex', 'PMC', 'How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every purchase due by March 15 arrives on schedule, how many could we build?',
   dict(stock_only_buildable=stock_only, first_blocking_materials=sorted(first_gap),
-       with_overdue_po_chased=chased), 'buildable from stock, blocking material, buildable with overdue purchases chased')
+       with_po_by_2027_03_15=by_mid_march), 'buildable from stock, blocking material, buildable with purchases due by March 15')
 stocks = pool_with_po(need_by=EVERY_OPEN_LINE, chase_overdue=True)
 for r in BACKLOG_ORDERS:
     if r['product_code'] == 'P61-000351':
@@ -429,11 +431,11 @@ amp = '972-000677'
 def enough(need, by):
     have = pool_with_po(need_by=by)[amp]
     return dict(available=num(have), covered=have >= need, short=num(max(D(0), D(need) - have)))
-q('Q-48', 'S09', 'complex', 'PMC', 'For class-D audio amplifier 972-000677, we need to issue 500 to production by September 5 and 5,000 cumulative by September 15. With stock plus purchases arriving on schedule, is there enough at each point?',
-  dict(by_2026_09_05=enough(500, '2026-09-05'), by_2026_09_15=enough(5000, '2026-09-15')),
+q('Q-48', 'S09', 'complex', 'PMC', 'For class-D audio amplifier 972-000677, we need to issue 500 to production by March 1 and 5,000 cumulative by March 10. With stock plus purchases arriving on schedule, is there enough at each point?',
+  dict(by_2027_03_01=enough(500, '2027-03-01'), by_2027_03_10=enough(5000, '2027-03-10')),
   'available quantity, coverage and gap at each date')
-gain = {p: capacity(p, lambda: pool_with_po(need_by='2026-09-30')) - capacity(p, pool) for p in sorted(stuck)}
-q('Q-49', 'S06', 'complex', 'PMC', "For the products whose backlog can't be covered, how many more units would purchases due by the end of September let each of them build?",
+gain = {p: capacity(p, lambda: pool_with_po(need_by='2027-03-31')) - capacity(p, pool) for p in sorted(stuck)}
+q('Q-49', 'S06', 'complex', 'PMC', "For the products whose backlog can't be covered, how many more units would purchases due by the end of March let each of them build?",
   dict(extra_buildable=gain), 'extra units per product')
 result, items = blockers('367-000130', BACKLOG['367-000130'])
 with_po = [i for i in items if i['open_po']]
@@ -447,7 +449,7 @@ q('Q-50', 'S08', 'complex', 'Purchasing', 'Among the short materials for the YN5
 
 def main():
     meta = dict(schema_version='4.0', set_id='supply-business-scenarios-v4', business_date=BUSINESS_DATE,
-                source_snapshot_date='2026-08-13', prd='docs/PRD.en-US.md')
+                source_snapshot_date='2027-02-13', prd='docs/PRD.en-US.md')
     questions = [{k: v for k, v in x.items() if k != 'expected'} for x in QUESTIONS]
     answers = [dict(id=x['id'], question=x['question'], expected=x['expected'],
                     answer=json.dumps(x['expected'], ensure_ascii=False, default=str)) for x in QUESTIONS]

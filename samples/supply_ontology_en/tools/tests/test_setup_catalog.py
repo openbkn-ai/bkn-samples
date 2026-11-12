@@ -103,7 +103,7 @@ def test_expected_tables_count():
     import yaml
 
     mapping = yaml.safe_load(MAP.read_text(encoding="utf-8"))
-    assert len(expected_tables(mapping)) == 12
+    assert len(expected_tables(mapping)) == 14
 
 
 def test_run_catalog_setup_create_enable_discover():
@@ -212,4 +212,4 @@ def test_verify_tables_missing():
     result = verify_tables("cat-1", mapping, run_cmd=fake_run_cmd)
     assert result["ok"] is False
     assert "erp_material" not in result["missing"]
-    assert len(result["missing"]) == 11
+    assert len(result["missing"]) == 13

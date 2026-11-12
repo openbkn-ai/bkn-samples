@@ -18,7 +18,7 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 DATA = HERE.parents[2] / 'data'
-BUSINESS_DATE = '2026-08-25'
+BUSINESS_DATE = '2027-02-25'
 FG = ['苏州成品仓', '乌鲁木齐成品仓', '哈尔滨成品仓']
 PRODUCTION = ['苏州半成品仓', '苏州成品仓', '苏州电子原料仓',
               '苏州无人机原料仓', '苏州装配原料仓', '乌鲁木齐成品仓', '哈尔滨成品仓']
@@ -359,16 +359,18 @@ q('Q-32', 'S04', '复杂', 'PMC', '贴片无源晶振 527-000017 用在哪些成
   dict(product_codes=users,
        must_build={p: BACKLOG[p] - num(fg[p]) for p in users if BACKLOG[p] > fg[p]}),
   '完整成品清单、需生产补欠货的产品及套数')
+_blocked = allocate('382-000005', capacity('382-000005', pool, alternatives=True) + 1, pool(), True, finished=False)['gaps']
+LIMITING_382 = max(_blocked, key=lambda k: (_blocked[k], k))
 q('Q-33', 'S09', '复杂', '采购', '382-000005 允许用替代料时最多还能做多少套？是哪颗料卡住的？这颗料有没有在途？',
-  dict(buildable_qty=capacity('382-000005', pool, alternatives=True), limiting_material='606-000989',
-       limiting_stock=num(pool()['606-000989']), has_open_po=bool(po_lines('606-000989'))),
+  dict(buildable_qty=capacity('382-000005', pool, alternatives=True), limiting_material=LIMITING_382,
+       limiting_stock=num(pool()[LIMITING_382]), has_open_po=bool(po_lines(LIMITING_382))),
   '可做套数、卡脖子物料、其库存、是否有在途')
 need = allocate('367-000131', 100, pool(), finished=False)
 q('Q-34', 'S10', '复杂', 'PMC', '下周想再排一张 100 套的 YN580 367-000131 生产工单，现有库存够不够？不够的话缺几种料、缺得最多的是哪颗？',
   dict(covered=need['covered'], shortage_material_count=len(need['gaps']),
        largest_shortage=max(need['gaps'], key=lambda k: (need['gaps'][k], k)) if need['gaps'] else None),
   '能否开工、缺料种数、缺量最大的物料')
-trace_po, trace_material = '02-KSHA-CGDD-260402-012958', '849-000904'
+trace_po, trace_material = '02-KSHA-CGDD-261002-012958', '849-000904'
 po_row = next(r for r in PO if r['billno'] == trace_po and r['material_number'] == trace_material)
 # Purchase request lines link to PO lines by line ID and material, as the knowledge network relation does.
 pr_row = next(r for r in PR_LINES if r['entry_id'] == po_row['srcbillentryid'] and r['material_number'] == trace_material)
@@ -395,9 +397,9 @@ today = [r for r in OPEN_PO if r['deliverdate'] == BUSINESS_DATE]
 q('Q-40', 'S08', '中等', '采购', '今天按交期应该到货的采购有哪些？是哪家供应商、什么料、还差多少没到？',
   dict(lines=[dict(po=r['billno'], supplier=r['supplier_name'], material_code=r['material_number'],
                    open_qty=num(open_qty(r))) for r in today]), '完整采购行清单')
-september = [r for r in OPEN_PO if r['deliverdate'][:7] == '2026-09']
-q('Q-41', 'S08', '中等', '采购', '9 月份按交期要到货的采购行有多少行？来自几家供应商？',
-  dict(lines=len(september), suppliers=len({r['supplier_number'] for r in september})), '行数、供应商数')
+march = [r for r in OPEN_PO if r['deliverdate'][:7] == '2027-03']
+q('Q-41', 'S08', '中等', '采购', '3 月份按交期要到货的采购行有多少行？来自几家供应商？',
+  dict(lines=len(march), suppliers=len({r['supplier_number'] for r in march})), '行数、供应商数')
 top3 = sorted(BACKLOG, key=lambda p: (-BACKLOG[p], p))[:3]
 q('Q-42', 'S02', '中等', 'PMC', '欠货最多的三个产品是哪几个？各欠多少套？',
   dict(products={p: BACKLOG[p] for p in top3}), '产品编码及欠交套数，按欠交从多到少')
@@ -413,11 +415,11 @@ q('Q-45', 'S03', '中等', 'PMC', '有未关闭预测的产品里，哪些现在
   dict(product_codes=zero), '完整产品编码清单')
 
 stock_only = capacity('U00-000080', pool)
-chased = capacity('U00-000080', lambda: pool_with_po(chase_overdue=True))
+by_mid_march = capacity('U00-000080', lambda: pool_with_po(need_by='2027-03-15'))
 first_gap = allocate('U00-000080', stock_only + 1, pool(), finished=False)['gaps']
-q('Q-46', 'S09', '复杂', 'PMC', 'U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果逾期没到的采购都能催回来，最多能做多少套？',
+q('Q-46', 'S09', '复杂', 'PMC', 'U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果 3 月 15 日前按交期到货的在途都到了，最多能做多少套？',
   dict(stock_only_buildable=stock_only, first_blocking_materials=sorted(first_gap),
-       with_overdue_po_chased=chased), '现有库存可做、卡住的物料、催回逾期在途后可做')
+       with_po_by_2027_03_15=by_mid_march), '现有库存可做、卡住的物料、3 月 15 日前在途到货后可做')
 stocks = pool_with_po(need_by=EVERY_OPEN_LINE, chase_overdue=True)
 for r in BACKLOG_ORDERS:
     if r['product_code'] == 'P61-000351':
@@ -429,11 +431,11 @@ amp = '972-000677'
 def enough(need, by):
     have = pool_with_po(need_by=by)[amp]
     return dict(available=num(have), covered=have >= need, short=num(max(D(0), D(need) - have)))
-q('Q-48', 'S09', '复杂', 'PMC', f'D 类音频功放 {amp}，9 月 5 日前要投 500 个、9 月 15 日前累计要投 5000 个。库存加上按期到货的在途，两个时间点分别够不够？',
-  dict(by_2026_09_05=enough(500, '2026-09-05'), by_2026_09_15=enough(5000, '2026-09-15')),
+q('Q-48', 'S09', '复杂', 'PMC', f'D 类音频功放 {amp}，3 月 1 日前要投 500 个、3 月 10 日前累计要投 5000 个。库存加上按期到货的在途，两个时间点分别够不够？',
+  dict(by_2027_03_01=enough(500, '2027-03-01'), by_2027_03_10=enough(5000, '2027-03-10')),
   '两个时间点各自的可用量、能否满足、缺口')
-gain = {p: capacity(p, lambda: pool_with_po(need_by='2026-09-30')) - capacity(p, pool) for p in sorted(stuck)}
-q('Q-49', 'S06', '复杂', 'PMC', '9 月底前按期到货的在途采购，能让欠货补不上的那几个产品各多做出几套？',
+gain = {p: capacity(p, lambda: pool_with_po(need_by='2027-03-31')) - capacity(p, pool) for p in sorted(stuck)}
+q('Q-49', 'S06', '复杂', 'PMC', '3 月底前按期到货的在途采购，能让欠货补不上的那几个产品各多做出几套？',
   dict(extra_buildable=gain), '每个产品可多做的套数')
 result, items = blockers('367-000130', BACKLOG['367-000130'])
 with_po = [i for i in items if i['open_po']]
@@ -447,7 +449,7 @@ q('Q-50', 'S08', '复杂', '采购', 'YN580 367-000130 欠单的缺料里，哪�
 
 def main():
     meta = dict(schema_version='4.0', set_id='supply-business-scenarios-v4', business_date=BUSINESS_DATE,
-                source_snapshot_date='2026-08-13', prd='docs/PRD.zh-CN.md')
+                source_snapshot_date='2027-02-13', prd='docs/PRD.zh-CN.md')
     questions = [{k: v for k, v in x.items() if k != 'expected'} for x in QUESTIONS]
     answers = [dict(id=x['id'], question=x['question'], expected=x['expected'],
                     answer=json.dumps(x['expected'], ensure_ascii=False, default=str)) for x in QUESTIONS]

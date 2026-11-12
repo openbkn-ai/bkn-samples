@@ -20,7 +20,7 @@ except ImportError:
 from typing import Any
 
 from ownership_receipt import require_owned, remember
-from function_catalog import FUNCTION_CATALOG
+from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE, SCHEDULE_RULES
 from native_function_bundle import build_native_function_code
 
 
@@ -41,7 +41,7 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
         _input("warehouse_scope", "string", "Warehouse scope: all (default, every warehouse), finished_goods (the three finished-goods warehouses), production_available (the seven Suzhou plant production warehouses)."),
         _input("need_by", "string", "Need-by date YYYY-MM-DD; adds open purchase lines due from the business date through that date. Omit to use current stock only."),
         _input("chase_overdue_po", "boolean", "Assume every overdue open purchase line is chased back and count it; default false."),
-        _input("business_date", "string", "Business date; default 2026-08-25."),
+        _input("business_date", "string", "Business date; default 2027-02-25."),
     ]
     if operation == "build_capacity":
         products = _input("products", "array", 'Product codes, e.g. ["382-000005"]; each product is calculated on its own, without sharing stock.', required=True)
@@ -56,6 +56,79 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     return [demands, *common,
             _input("reserve_signed_backlog", "boolean", "Reserve these products' signed backlog by promised date first; pass true for new orders that must protect backlog, omit when evaluating the backlog itself."),
             _input("use_finished_goods", "boolean", "Use finished goods first; default true, pass false when planning a work order.")]
+
+
+KIT_INPUTS = [
+    ("bill_no", "Forecast number."),
+    ("product_code", "Product code; an empty string schedules the whole bill."),
+    ("line_code", "Line code; the products must belong to the line's product lines."),
+    ("planned_start", "Planned start, a date or date-time; a date alone starts at 08:00."),
+    ("planned_finish", "Planned finish, a date or date-time; a date alone finishes at 20:00."),
+    ("plan_status", "Plan status: Scheduled, Confirmed or Cancelled; new plans are usually Scheduled, Cancelled cancels the plan."),
+    ("source_scenario", "Name of the adopted scenario, for traceability."),
+    ("planner", "Planner."),
+    ("plan_id", "Plan to adjust or cancel; omit when creating."),
+]
+# Parameters of the three plan actions: property = the new object's input (create) or the selected
+# plan's value (adjust, cancel); input = what the caller decides; const = fixed by the action.
+KIT_ACTION_PARAMETERS = {
+    "create": {"bill_no": "property", "product_code": "property", "line_code": "property", "planned_start": "property",
+               "planned_finish": "property", "plan_status": "property", "source_scenario": "property", "planner": "property"},
+    "adjust": {"plan_id": "property", "bill_no": "property", "product_code": "property", "plan_status": "property",
+               "line_code": "input", "planned_start": "input", "planned_finish": "input", "source_scenario": "input",
+               "planner": "input"},
+    "cancel": {"plan_id": "property", "bill_no": "property", "product_code": "property", "plan_status": ("const", "Cancelled"),
+               "planner": "input"},
+}
+
+
+def rule_tool_inputs() -> list[dict[str, Any]]:
+    """The schedule-Gantt rule-tool contract: tasks in, one result per task out."""
+    task = {"name": "items", "type": "object", "required": True, "description": "One task: key, start, end, resource, values."}
+    tasks = _input("tasks", "array", "Tasks to check, at most 200 per call; values carry bill_no, product_code, line_code, planned_start, plan_status.")
+    tasks["sub_parameters"] = [task]
+    return [tasks, _input("scenario", "object", "Scenario edits; the tasks already carry the edited values, so it may be omitted."),
+            _input("mode", "string", "detail for one task's detail table (Kit_Check only); omit for the batch check."),
+            _input("task", "object", "The task of a detail call, shaped like one item of tasks."),
+            _input("locale", "string", "Label language of the detail: zh-CN or en-US."),
+            _input("query", "object", "Detail filter and paging: group, keyOnly, search, offset, limit (default 50).")]
+
+
+def rule_action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str]) -> list[dict[str, Any]]:
+    """The rule tools as tool actions, so Q&A and Skills check plans with the same code as the Gantt."""
+    return [{
+        "id": f"{kn_id}_{operation}", "name": spec["name"], "branch": "main",
+        "operation_config": {"type": "tool"}, "object_type_id": "", "action_type": "modify", "action_intent": "modify",
+        "action_source": {"type": "tool", "box_id": box_id, "tool_id": tool_ids[operation]},
+        "parameters": [{"name": "tasks", "type": "array", "value_from": "input", "comment": rule_tool_inputs()[0]["description"]}],
+        "comment": f"{spec['description']}\n{spec['use_rule']}",
+    } for operation, spec in SCHEDULE_RULES.items()]
+
+
+def kit_tool_inputs() -> list[dict[str, Any]]:
+    return [_input(name, "string", description) for name, description in KIT_INPUTS]
+
+
+def kit_action_definitions(kn_id: str, box_id: str, tool_id: str) -> list[dict[str, Any]]:
+    """Three object actions on the plan object, all run by the kit-schedule Function."""
+    descriptions = dict(KIT_INPUTS)
+    actions = []
+    for key, (name, action_type, comment) in KIT_PLAN_ACTIONS.items():
+        parameters = []
+        for param, source in KIT_ACTION_PARAMETERS[key].items():
+            kind, value = source if isinstance(source, tuple) else (source, param)
+            item = {"name": param, "type": "string", "value_from": kind, "comment": descriptions[param]}
+            if kind != "input":
+                item["value"] = value
+            parameters.append(item)
+        actions.append({
+            "id": f"{kn_id}_kitplan_{key}", "name": name, "branch": "main",
+            "operation_config": {"type": "object"}, "object_type_id": f"{kn_id}_kitplan",
+            "action_type": action_type, "action_intent": action_type,
+            "action_source": {"type": "tool", "box_id": box_id, "tool_id": tool_id},
+            "parameters": parameters, "comment": f"{comment}\n{KIT_SCHEDULE['use_rule']}",
+        })
+    return actions
 
 
 def action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str]) -> list[dict[str, Any]]:
@@ -100,7 +173,7 @@ def _call(args: list[str]) -> Any:
 
 
 def _tool_inputs() -> dict[str, dict[str, Any]]:
-    return {
+    tools = {
         operation: {
         "name": spec["name"],
         "description": spec["description"],
@@ -118,6 +191,26 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
         }
         for operation, spec in FUNCTION_CATALOG.items()
     }
+    tools["kit_schedule"] = {
+        "name": KIT_SCHEDULE["name"], "description": KIT_SCHEDULE["description"], "script_type": "python",
+        "code": build_native_function_code(fixed_operation="kit_schedule"), "inputs": kit_tool_inputs(),
+        "outputs": [{"name": "result", "type": "object", "required": True,
+                     "description": "The plan written (plan ID, kit status, kit date, key material, shortage note) and the shortages."}],
+    }
+    for operation, spec in SCHEDULE_RULES.items():
+        tools[operation] = {
+            "name": spec["name"], "description": spec["description"], "script_type": "python",
+            "code": build_native_function_code(fixed_operation=operation), "inputs": rule_tool_inputs(),
+            "outputs": [{"name": "results", "type": "array", "required": False,
+                         "description": "Check: one result per task (key, pass, severity, text, related, at, counts, detail); a detail call returns the table."}],
+        }
+    return tools
+
+
+def _use_rule(operation: str) -> str:
+    if operation in SCHEDULE_RULES:
+        return SCHEDULE_RULES[operation]["use_rule"]
+    return KIT_SCHEDULE["use_rule"] if operation == "kit_schedule" else FUNCTION_CATALOG[operation]["use_rule"]
 
 
 def _find_exact_box(name: str) -> dict[str, Any] | None:
@@ -165,7 +258,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
                 json.dumps(
                     {
                         "box_name": box_name,
-                        "box_desc": "Supply EN functions executed by OpenBKN Function Runtime.",
+                        "box_desc": "Supply EN calculation and kit-schedule functions executed by OpenBKN Function Runtime.",
                         "box_category": "data_process",
                         "metadata_type": "function",
                         "source": "custom",
@@ -182,7 +275,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
         if tool is None:
             created = _call([
                 "call", f"{API}/tool-box/{box_id}/tool", "-X", "POST", "-d",
-                json.dumps({"metadata_type": "function", "use_rule": FUNCTION_CATALOG[operation]["use_rule"], "function_input": tool_input}, ensure_ascii=False),
+                json.dumps({"metadata_type": "function", "use_rule": _use_rule(operation), "function_input": tool_input}, ensure_ascii=False),
             ])
             tool_id = created["success_ids"][0]
             _call(["tool", "enable", "--toolbox", box_id, tool_id])
@@ -190,7 +283,7 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
             tool_id = tool["tool_id"]
             _call([
                 "call", f"{API}/tool-box/{box_id}/tool/{tool_id}", "-X", "POST", "-d",
-                json.dumps({"name": tool_input["name"], "description": tool_input["description"], "use_rule": FUNCTION_CATALOG[operation]["use_rule"], "metadata_type": "function", "function_input": tool_input}, ensure_ascii=False),
+                json.dumps({"name": tool_input["name"], "description": tool_input["description"], "use_rule": _use_rule(operation), "metadata_type": "function", "function_input": tool_input}, ensure_ascii=False),
             ])
             if tool.get("status") != "enabled":
                 _call(["tool", "enable", "--toolbox", box_id, tool_id])
@@ -202,13 +295,16 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
                if item.get("name") not in current and item.get("status") != "disabled"]
     for item in retired:
         _call(["tool", "disable", "--toolbox", box_id, item["tool_id"]])
+    actions: list[dict[str, Any]] = []
     if kn_id:
-        actions = action_definitions(kn_id, box_id, tool_ids)
+        actions = [*action_definitions(kn_id, box_id, {k: v for k, v in tool_ids.items() if k in FUNCTION_CATALOG}),
+                   *kit_action_definitions(kn_id, box_id, tool_ids["kit_schedule"]),
+                   *rule_action_definitions(kn_id, box_id, tool_ids)]
         # Overwrite keeps a repeated install idempotent and follows re-created tool IDs.
         _call(["call", f"{BKN_API}/knowledge-networks/{kn_id}/action-types?import_mode=overwrite",
                "-X", "POST", "-d", json.dumps({"entries": actions}, ensure_ascii=False)])
     return {**preview, "box_id": box_id, "tool_ids": tool_ids,
-            "action_ids": [f"{kn_id}_{operation}" for operation in tool_ids] if kn_id else [],
+            "action_ids": [item["id"] for item in actions] if kn_id else [],
             "retired_tools": [item["name"] for item in retired]}
 
 

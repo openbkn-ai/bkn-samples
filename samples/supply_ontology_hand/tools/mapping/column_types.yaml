@@ -67,7 +67,17 @@ overrides:
     societycreditcode: {type: VARCHAR, length: 64}
   hd_product_view:
     material_code: {type: VARCHAR, length: 64}
+    line_code: {type: VARCHAR, length: 32}
   sales_order:
     sales_order_id: {type: VARCHAR, length: 64}
     contract_number: {type: VARCHAR, length: 64}
     product_code: {type: VARCHAR, length: 64}
+  production_line:
+    line_code: {type: VARCHAR, length: 32}
+    parent_code: {type: VARCHAR, length: 32}
+    max_parallel: {type: BIGINT}
+  line_stoppage:
+    stoppage_id: {type: VARCHAR, length: 32}
+    resource_code: {type: VARCHAR, length: 32}
+    start_time: {type: TIMESTAMP}
+    end_time: {type: TIMESTAMP}

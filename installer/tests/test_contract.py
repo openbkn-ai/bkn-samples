@@ -75,7 +75,7 @@ class SupplyContractTest(unittest.TestCase):
         self.assertEqual(index["sourceRepo"], OFFICIAL_SOURCE_REPO)
         supply = next(item for item in index["samples"] if item["name"] == "supply-chain")
         self.assertEqual(supply["name"], "supply-chain")
-        self.assertEqual(supply["expectedTables"], 12)
+        self.assertEqual(supply["expectedTables"], 14)
         self.assertTrue(supply["components"]["skills"])
         self.assertTrue(next(item for item in index["samples"] if item["name"] == "world-cup")["components"]["skills"])
         self.assertFalse(next(item for item in index["samples"] if item["name"] == "order-basics")["components"]["skills"])

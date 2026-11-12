@@ -4,7 +4,8 @@ description: >
   Use for PMC production-planning questions on knowledge network supply_ontology_en:
   sales backlog and overdue orders, finished-goods stock, forecasts, BOM structure and
   where-used, how many units can be built or promised, whether new orders or work orders
-  are covered, and which materials block them.
+  are covered, which materials block them, and kit schedule plans (which demand is
+  scheduled on which line, its kit result, rescheduling and cancelling).
 ---
 
 # PMC production planning
@@ -15,7 +16,7 @@ Answer the planner's questions about backlog, order acceptance, scheduling and m
 
 Unless the user says otherwise, answer with these rules and name the rule you used in one short phrase.
 
-- The business date is 2026-08-25; "now", "today" and "current" mean this date.
+- The business date is 2027-02-25; "now", "today" and "current" mean this date.
 - Stock counts only `available_inventory_qty` with stock status Available, across every warehouse by default; Defective stock cannot be used in production or shipped. "Finished-goods warehouses" means Suzhou Finished Goods, Urumqi Finished Goods and Harbin Finished Goods; "the seven Suzhou plant production warehouses" means Suzhou Subassemblies, Suzhou Finished Goods, Suzhou Electronics, Suzhou Drone Materials, Suzhou Assembly, Urumqi Finished Goods and Harbin Finished Goods.
 - Owed = signed quantity − shipped quantity > 0; owed orders with a promised date before the business date are overdue. Fill owed orders by promised date, then order number.
 - Open purchase = purchase order line whose close status and terminate status are both Open, with ordered − received > 0. Lines due on or after the business date count on their due date; lines due earlier are overdue: they are not firm supply and count only when the user says to assume they are chased in.
@@ -24,7 +25,7 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Available to promise = finished-goods stock + what current stock can still build − the product's signed backlog. New orders and forecasts must protect signed backlog first; give only the backlog-protected figure.
 - "Finished-goods stock" and "stock on hand" mean the product's own Available stock across every warehouse; restrict to the three finished-goods warehouses only when the user says "finished-goods warehouses".
 - "Stock on hand" is finished-goods stock only, not what can still be built: stock on hand still promisable = finished-goods stock − signed backlog − the quantity being shipped now.
-- Open forecast = close status is not Closed. One forecast can cover several products. How much forecast current stock can support is the available to promise, not finished-goods stock alone.
+- Open forecast = close status is not Closed. One forecast can cover several products, all delivered on the same day: the delivery date is `startdate` (Forecast Delivery Date) and `enddate` closes the demand window. An open forecast whose delivery date is before the business date is late. How much forecast current stock can support is the available to promise, not finished-goods stock alone.
 
 ## When to run a calculation action
 
@@ -39,6 +40,17 @@ Both calculations are actions: get their parameters with `get_action_info`, run 
   - Planning a work order without touching finished goods: `use_finished_goods=false`.
   - Several orders at once: put them in `demands` in the order the user gives.
 - Use Cypher, not a calculation action, for everything else (backlog, stock, forecasts, work orders, BOM lists, where-used, common parts). The functions' `limiting_materials` and `shortages` are bottom-level shortages; to say whether they have open purchases or how long they take, query purchase orders and materials with Cypher.
+
+## Kit schedule plans
+
+Scheduling results live in the kit schedule plan (`supply_ontology_en_kitplan`); the demand forecast itself is not changed. A plan covers a whole forecast bill (`product_code` empty) or one of its products on one production line; a forecast number + product code has at most one active plan (`plan_status` not Cancelled).
+
+- Fields: `plan_id`, forecast number `bill_no`, `product_code`, line `line_code`, `planned_start`, `planned_finish`, `quantity` (empty for a whole bill), `kit_status` (Covered, Short), `kit_date`, `key_material`, `shortage_note`, `plan_status` (Scheduled, Confirmed, Cancelled; Confirmed means released to production), `reschedule_count`, `previous_finish`, `source_scenario`, `planner`, `planned_at`.
+- The kit result was checked when the plan was written, for its planned start: signed backlog first, no finished goods, open purchases due by the start, the same rules as Demand_Coverage_and_Shortages. When covered, the kit date is the earliest start; when short, it is the date open purchases close the gap, empty when they cannot. For "is it still covered now", run Demand_Coverage_and_Shortages again instead of reading the stored result.
+- Active plans: `MATCH (k:supply_ontology_en_kitplan) WHERE k.plan_status <> 'Cancelled' RETURN k.plan_id, k.bill_no, k.product_code, k.line_code, k.planned_start, k.planned_finish, k.kit_status, k.kit_date, k.key_material, k.plan_status`. Whether a forecast is scheduled: add `AND k.bill_no = '<forecast number>'`; no active plan means it still has to be scheduled.
+- Lines are `supply_ontology_en_line`: plants are rows too (`line_kind` Plant, never scheduled); a line's `parent_code` is its plant, `max_parallel` is how many plans it can run at once and `product_lines` what it builds; a product's default line is its `line_code`. Stoppages are `supply_ontology_en_stoppage`; `resource_code` is a line or plant code, and a plant stoppage applies to all its lines.
+- Run one of the three actions only when the user explicitly asks to schedule, reschedule or cancel: Create Kit Schedule Plan (new instance; `object_input` carries `bill_no`, `product_code` [empty string for the whole bill], `line_code`, `planned_start`, `planned_finish`, `plan_status` [usually Scheduled], `source_scenario`, `planner`), Adjust Kit Schedule Plan (modify; `_instance_identities` holds the selected `plan_id`, then the new line, start, finish, scenario and planner) and Cancel Kit Schedule Plan (modify; the plan ID and planner). Say what will be written first; afterwards report the plan ID, kit status, kit date and key material from the result. Creating the same forecast (and product) again updates the existing plan instead of adding one.
+- For "can these plans run as scheduled, which one will be short, can the line build it", run the Kit_Check and Line_Can_Build actions (the schedule Gantt uses the same rules): each item of `tasks` is `{key, start, resource, values}` with the plan ID as key, the planned start as start, the line code as resource, and `bill_no`, `product_code`, `line_code`, `planned_start`, `plan_status` in values. Kit_Check reserves signed backlog first, then allocates confirmed plans and then scheduled plans, each in start order, on one shared pool, so send all related plans in one call; a plan whose production has started (a started work order) has drawn its materials and passes. `at` is the earliest start and `related` lists the plans competing for the same material. To list what one plan is short of, call Kit_Check with `mode=detail`, one `task` and `query` (`group` one of late_po, overdue_po, no_pr, reserved; `keyOnly`, `search`, `offset`, `limit`) and list the returned table in full.
 
 ## Cypher patterns
 
@@ -56,4 +68,4 @@ Object types are prefixed `supply_ontology_en_`, e.g. `supply_ontology_en_saleso
 
 ## How to answer
 
-Lead with the conclusion (yes or no, how many, how far short), then the basis: rules used, the orders or materials, key quantities. List every item in list questions; never truncate. When the data has no answer or the rule is unclear, say so; never guess. Every conclusion is planning advice and does not place, ship or schedule anything.
+Lead with the conclusion (yes or no, how many, how far short), then the basis: rules used, the orders or materials, key quantities. List every item in list questions; never truncate. When the data has no answer or the rule is unclear, say so; never guess. Every conclusion is planning advice and does not place or ship anything; only a kit schedule plan action schedules.
