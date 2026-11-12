@@ -159,13 +159,17 @@ _OPEN_WORK = {
     "KSHA-20260728-002": ("YCD2026051400000075", -1, 8),     # 367-000130
 }
 # Kit-schedule history installed with the sample besides the confirmed plans of orders in production
-# (those were kitted when they were confirmed and have since drawn their materials).
+# (those were kitted when they were confirmed and have since drawn their materials). The two confirmed
+# U00-000080 plans are not in production yet: both are kitted only by open PO 994-000328 due 2027-03-11,
+# so moving that delivery shows confirmed plans turning short.
 _SCHEDULED = [
-    # source bill, product ('' = whole bill), line, start, finish
-    ("YCD2026030400000052", "", "L-SZ-UGV", "2027-03-29", "2027-04-05"),
-    ("YCD2026042100000073", "P61-000331", "L-SZ-UGV", "2027-04-12", "2027-04-14"),
-    ("YCD2026031600000057", "382-000005", "L-UR-AD", "2027-03-08", "2027-03-12"),
-    ("YCD2026040200000061", "U00-000159", "L-UR-NAV", "2027-03-15", "2027-03-18"),
+    # source bill, product ('' = whole bill), line, start, finish, confirmed
+    ("YCD2026030400000052", "", "L-SZ-UGV", "2027-03-29", "2027-04-05", False),
+    ("YCD2026042100000073", "P61-000331", "L-SZ-UGV", "2027-04-12", "2027-04-14", False),
+    ("YCD2026031600000057", "382-000005", "L-UR-AD", "2027-03-08", "2027-03-12", False),
+    ("YCD2026040200000061", "U00-000159", "L-UR-NAV", "2027-03-15", "2027-03-18", False),
+    ("YCD2026040200000061", "U00-000080", "L-UR-NAV", "2027-03-22", "2027-03-26", True),
+    ("YCD2026040200000062", "U00-000080", "L-UR-NAV", "2027-04-19", "2027-04-22", True),
 ]
 DELIVERY = {shift_value(k): v for k, v in _DELIVERY.items()}
 OPEN_WORK = {shift_value(k): (shift_value(b), o, n) for k, (b, o, n) in _OPEN_WORK.items()}
@@ -496,14 +500,14 @@ def kit_plan_seed(lang: str, data_dir: Path) -> list[dict[str, str]]:
         seen.add(key)
         begin = min(x["planbegintime"] for x in group)[:10]
         end = max(x["planendtime"] for x in group)[:10]
-        plans.append((key[0], key[1], products[key[1]]["line_code"], begin, end, status["confirmed"]))
-    for bill, product, line, begin, end in SCHEDULED:
-        plans.append((bill, product, line, begin, end, status["scheduled"]))
+        plans.append((key[0], key[1], products[key[1]]["line_code"], begin, end, status["confirmed"], True))
+    for bill, product, line, begin, end, confirmed in SCHEDULED:
+        plans.append((bill, product, line, begin, end, status["confirmed" if confirmed else "scheduled"], False))
     seed = []
-    for bill, product, line, begin, end, plan_status in plans:
+    for bill, product, line, begin, end, plan_status, in_production in plans:
         lines = [r for r in forecasts if r["billno"] == bill and (not product or r["material_number"] == product)]
         demands = [{"product": r["material_number"], "qty": r["qty"]} for r in lines]
-        if plan_status == status["confirmed"]:
+        if in_production:
             kit = {"kit_status": kitplan.KIT_COVERED, "kit_date": begin, "key_material": "", "shortage_note": ""}
         else:
             kit = kitplan.kit_check(rows, demands, begin, business_date=BD, names=names)

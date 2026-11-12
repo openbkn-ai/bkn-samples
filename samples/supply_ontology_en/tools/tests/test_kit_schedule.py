@@ -43,14 +43,14 @@ def test_dates_are_normalised_to_the_plant_time_zone():
 
 def test_scheduling_a_demand_creates_one_plan_with_its_kit_check():
     store = Store()
-    result = run(store, bill_no="YCD2026100200000062", product_code="U00-000080", line_code="L-UR-NAV",
+    result = run(store, bill_no="YCD2026100200000062", product_code="U00-000151", line_code="L-UR-NAV",
                  planned_start="2027-05-10", planned_finish="2027-05-14", plan_status="Scheduled",
                  source_scenario="May schedule", planner="Owen Brooks")
     plan = result["plan"]
-    assert result["action"] == "created" and plan["plan_id"] == "KP-2026100200000062-U00-000080-01"
+    assert result["action"] == "created" and plan["plan_id"] == "KP-2026100200000062-U00-000151-01"
     assert plan["quantity"] == 500 and plan["reschedule_count"] == 0 and "previous_finish" not in plan
     assert plan["planned_at"] == f"{DEFAULT_BUSINESS_DATE}T10:30:00+08:00"
-    expected = kit_check(csv_rows(), [{"product": "U00-000080", "qty": "500.000000"}], "2027-05-10",
+    expected = kit_check(csv_rows(), [{"product": "U00-000151", "qty": "500.000000"}], "2027-05-10",
                          business_date=DEFAULT_BUSINESS_DATE)
     assert (plan["kit_status"], plan.get("kit_date", "")) == (expected["kit_status"], expected["kit_date"])
     assert [w[0] for w in store.writes] == [plan["plan_id"]]
@@ -58,9 +58,9 @@ def test_scheduling_a_demand_creates_one_plan_with_its_kit_check():
 
 def test_scheduling_the_same_demand_again_updates_it_and_counts_the_move():
     store = Store()
-    first = run(store, bill_no="YCD2026100200000062", product_code="U00-000080", line_code="L-UR-NAV",
+    first = run(store, bill_no="YCD2026100200000062", product_code="U00-000151", line_code="L-UR-NAV",
                 planned_start="2027-05-10", planned_finish="2027-05-14", plan_status="Scheduled")["plan"]
-    again = run(store, bill_no="YCD2026100200000062", product_code="U00-000080", line_code="L-UR-NAV",
+    again = run(store, bill_no="YCD2026100200000062", product_code="U00-000151", line_code="L-UR-NAV",
                 planned_start="2027-05-11", planned_finish="2027-05-15", plan_status="Scheduled")
     assert again["action"] == "updated" and again["plan"]["plan_id"] == first["plan_id"]
     assert again["plan"]["reschedule_count"] == 1 and again["plan"]["previous_finish"] == first["planned_finish"]
@@ -92,7 +92,7 @@ def test_cancelling_frees_the_demand_for_a_new_plan():
 @pytest.mark.parametrize("line", ["L-UR-AD", "F-SZ", "L-NOPE"])
 def test_a_demand_goes_only_to_a_line_that_builds_it(line):
     with pytest.raises(CannotCompute):
-        run(Store(), bill_no="YCD2026100200000062", product_code="U00-000080", line_code=line,
+        run(Store(), bill_no="YCD2026100200000062", product_code="U00-000151", line_code=line,
             planned_start="2027-05-10", planned_finish="2027-05-14")
 
 
@@ -102,7 +102,7 @@ def test_closed_or_unknown_demand_and_reversed_dates_are_refused():
         run(store, bill_no="YCD2025120300000014", product_code="", line_code="L-UR-AD",
             planned_start="2027-03-01", planned_finish="2027-03-05")
     with pytest.raises(CannotCompute):
-        run(store, bill_no="YCD2026100200000062", product_code="U00-000080", line_code="L-UR-NAV",
+        run(store, bill_no="YCD2026100200000062", product_code="U00-000151", line_code="L-UR-NAV",
             planned_start="2027-05-14", planned_finish="2027-05-10")
     assert store.writes == []
 

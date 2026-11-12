@@ -7,9 +7,13 @@ Kit check, on one shared pool for all the plans checked together:
 - then confirmed plans in planned-start order, then scheduled plans in planned-start order (ties by
   key); a plan uses available stock plus open purchase lines due from the business date to its
   start, without finished goods (it is a production plan); overdue lines are not supply;
-- only real issue and production records hold material: a plan whose products all have a started
-  production order for its forecast has drawn its materials (they are out of stock already), so it
-  passes and draws nothing; a confirmed plan without one competes like any other;
+- only real issue and production records hold material: a product of the plan with a started
+  production order for the plan's forecast has drawn its materials (they are out of stock already)
+  and is not checked again; the plan's other products, and confirmed plans without one, compete like
+  any other; a plan all of whose products have started passes and draws nothing;
+- the plans checked are the network's active plans with the tasks sent laid over them (a task
+  replaces the plan with the same plan ID or key, a new task is added), so a batch check and the
+  detail of one plan give the same answer whatever part of the schedule is on screen;
 - for every material a plan is short of, the ready date is the open-purchase arrival after the start
   that closes its gap, or else the business date plus its purchase lead time (no purchase request
   yet; an overdue line counts as needing a new order). The plan's earliest start ``at`` is the latest
@@ -159,9 +163,11 @@ def analyse(tasks: list[Mapping[str, Any]], rows: Mapping[str, Iterable[Mapping[
             out[fields["key"]] = {"fields": fields, "state": "cancelled"}
             continue
         demands = demands_of(fields, forecasts)
-        if demands and all((fields["bill"], d["product"]) in started for d in demands):
+        waiting = [d for d in demands if (fields["bill"], d["product"]) not in started]
+        if demands and not waiting:
             out[fields["key"]] = {"fields": fields, "state": "issued", "at": fields["start"]}
             continue
+        demands = waiting
         if not fields["start"] or not demands:
             out[fields["key"]] = {"fields": fields, "state": "no_start" if not fields["start"] else "no_demand"}
             continue
@@ -256,12 +262,24 @@ def _reason(line: Mapping[str, Any], labels: Mapping[str, str]) -> str:
     return labels["overdue"] if line["group"] == "overdue_po" else labels["need_pr"]
 
 
+def _identity(task: Mapping[str, Any]) -> str:
+    return str((task.get("values") or {}).get("plan_id") or task.get("key") or "")
+
+
+def overlay(others: Iterable[Mapping[str, Any]], tasks: Iterable[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    """The network's plans with the tasks sent laid over them: same plan ID or key replaces, new ones are added."""
+    tasks = list(tasks)
+    sent = {_identity(t) for t in tasks} | {str(t.get("key")) for t in tasks}
+    return [o for o in others if _identity(o) not in sent and str(o.get("key")) not in sent] + tasks
+
+
 def kit_rule(tasks: list[Mapping[str, Any]], rows: Mapping[str, Iterable[Mapping[str, Any]]], *,
              materials: Mapping[str, Mapping[str, Any]], business_date: str = DEFAULT_BUSINESS_DATE,
-             locale: str | None = None) -> list[dict[str, Any]]:
-    """One result per task: ``{key, pass, severity, text, related, at, counts, detail}``; pass None when not applicable."""
+             locale: str | None = None, others: Iterable[Mapping[str, Any]] = ()) -> list[dict[str, Any]]:
+    """One result per task sent: ``{key, pass, severity, text, related, at, counts, detail}``; pass None when not
+    applicable. ``others`` are the network's active plans the tasks are checked with."""
     labels, limit = _labels(locale), TEXT_LIMIT.get(str(locale or DEFAULT_LOCALE), 40)
-    analysis = analyse(tasks, rows, materials=materials, business_date=business_date)
+    analysis = analyse(overlay(others, tasks), rows, materials=materials, business_date=business_date)
     results = []
     for task in tasks:
         key = str(task.get("key") or "")
@@ -306,8 +324,7 @@ def kit_detail(task: Mapping[str, Any], others: list[Mapping[str, Any]], rows: M
     if not isinstance(task, Mapping) or not task.get("key"):
         raise ValueError(labels["bad_task"])
     key = str(task["key"])
-    tasks = [t for t in others if str(t.get("key")) != key] + [task]
-    item = analyse(tasks, rows, materials=materials, business_date=business_date)[key]
+    item = analyse(overlay(others, [task]), rows, materials=materials, business_date=business_date)[key]
     fields = item["fields"]
     product = fields["product"]
     title = " · ".join([fields["bill"] or "-", (products or {}).get(product) or product if product else labels["whole_bill"],
@@ -397,5 +414,5 @@ def line_rule(tasks: list[Mapping[str, Any]], *, forecasts: Iterable[Mapping[str
     return out
 
 
-__all__ = ["CONFIRMED", "HARD", "MAX_TASKS", "SCHEDULED", "SOFT", "check_tasks", "demands_of", "kit_detail", "kit_rule",
+__all__ = ["CONFIRMED", "overlay", "HARD", "MAX_TASKS", "SCHEDULED", "SOFT", "check_tasks", "demands_of", "kit_detail", "kit_rule",
            "line_rule", "split_lines", "task_fields"]

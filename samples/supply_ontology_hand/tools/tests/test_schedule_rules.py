@@ -192,3 +192,42 @@ def test_rule_tool_names_and_descriptions_fit_the_platform_limits():
 def test_rule_tool_use_rule_fits_the_platform_limit():
     from function_catalog import SCHEDULE_RULES
     assert all(len(spec["use_rule"]) <= 255 for spec in SCHEDULE_RULES.values())
+
+def test_a_partly_started_plan_still_checks_its_other_products():
+    rows = {**ROWS, "forecast": ROWS["forecast"] + [dict(billno="B5", material_number="P1", qty=80, closestatus_title="正常"),
+                                                    dict(billno="B5", material_number="P2", qty=60, closestatus_title="正常")],
+            "work_order": [dict(sourcebillnumber="B5", material_number="P1", taskstatus_title="开工")]}
+    result = kit_rule([task("w", "B5", "2027-03-01", status="已确认")], rows, materials=MATERIALS, business_date=BD)[0]
+    assert result["pass"] is True  # P1 has started; P2 alone (60) fits the 100 in stock
+
+
+def test_batch_check_and_detail_agree_whatever_part_of_the_schedule_is_sent():
+    network = [task("a", "B1", "2027-03-01"), task("b", "B2", "2027-03-05")]
+    alone = kit_rule([network[1]], ROWS, materials=MATERIALS, business_date=BD, others=network)[0]
+    table = kit_detail(network[1], network, ROWS, materials=MATERIALS, business_date=BD)
+    assert (alone["pass"], alone["at"], alone["related"]) == (False, "2027-03-10", ["a"])
+    assert table["at"] == alone["at"] and table["total"] == 1 and table["rows"][0]["id"] == "M1"
+    moved = dict(network[0], start="2027-03-20T08:00:00+08:00")  # sent with the scenario's new start
+    assert kit_rule([moved], ROWS, materials=MATERIALS, business_date=BD, others=network)[0]["pass"] is True
+    assert kit_rule([network[1]], ROWS, materials=MATERIALS, business_date=BD, others=[moved, network[1]])[0]["pass"] is True
+
+
+def test_confirmed_plans_turn_short_when_their_purchase_is_delayed():
+    """The installed history: two confirmed U00-000080 plans rely on open PO 994-000328 due 3/11."""
+    import csv
+    from support_bkn_rows import DATA, csv_rows
+    rows = {**csv_rows(), "forecast": list(csv.DictReader((DATA / "erp_mds_forecast.csv").open(encoding="utf-8"))),
+            "work_order": list(csv.DictReader((DATA / "erp_production_work_order.csv").open(encoding="utf-8")))}
+    materials = {r["material_code"]: r for r in csv.DictReader((DATA / "erp_material.csv").open(encoding="utf-8"))}
+    plans = [{"key": p["plan_id"], "start": p["planned_start"], "resource": p["line_code"], "values": p}
+             for p in csv.DictReader((DATA / "kit_schedule_plan.csv").open(encoding="utf-8"))]
+    watched = [p for p in plans if p["values"]["product_code"] == "U00-000080" and p["values"]["plan_status"] == "已确认"
+               and p["values"]["bill_no"] != "YCD2027020200000060" and "0060-" not in p["key"]]
+    assert len(watched) == 2
+    before = {r["key"]: r for r in kit_rule(plans, rows, materials=materials, business_date=BD)}
+    assert all(before[p["key"]]["pass"] is True for p in watched)
+    delayed = [dict(r, deliverdate="2027-06-30") if r["material_number"] == "994-000328" and r["deliverdate"] == "2027-03-11" else r
+               for r in rows["purchase_order"]]
+    after = {r["key"]: r for r in kit_rule(plans, {**rows, "purchase_order": delayed}, materials=materials, business_date=BD)}
+    for plan in watched:
+        assert (after[plan["key"]]["pass"], after[plan["key"]]["severity"], after[plan["key"]]["at"]) == (False, HARD, "2027-06-30")

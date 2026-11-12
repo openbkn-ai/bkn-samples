@@ -78,7 +78,7 @@ def schedule_rule(tasks: list | None = None, scenario: dict | None = None, mode:
     if _FIXED_OPERATION == "kit_check_rule" and mode == "detail":
         return schedule_rules.kit_check_detail(task, bkn.query_object_instance, scenario=scenario, locale=locale, page=query)
     if _FIXED_OPERATION == "kit_check_rule":
-        return schedule_rules.kit_check(tasks, bkn.query_object_instance, locale=locale)
+        return schedule_rules.kit_check(tasks, bkn.query_object_instance, scenario=scenario, locale=locale)
     return schedule_rules.line_check(tasks, bkn.query_object_instance)
 '''
 

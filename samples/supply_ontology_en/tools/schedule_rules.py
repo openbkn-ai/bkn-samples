@@ -4,8 +4,8 @@ The rule-tool contract: input ``{tasks: [{key, start, end, resource, values}], s
 (at most 200 tasks; the tasks already carry the scenario's changes); output ``{results: [{key, pass,
 severity, text, related, at?, counts?, detail?}]}``. The kit check also answers a detail call for one
 task, ``{mode: "detail", task, scenario, locale, query: {group?, keyOnly?, search?, offset, limit}}``,
-with a paged table of the plan's short materials; it checks the task against the other active plans
-of the network, with the scenario's edits of those plans applied.
+with a paged table of the plan's short materials. Both check the tasks against the network's other
+active plans (with the scenario's edits of those plans applied), so they agree with each other.
 
 The Functions read the facts they need through ``sandbox_sdk.bkn``; anything they cannot check raises,
 so the caller marks the tasks "not checked" instead of passing them.
@@ -17,7 +17,7 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 from fn import DEFAULT_BUSINESS_DATE
-from fn.kitrules import CANCELLED, _labels, check_tasks, demands_of, kit_detail, kit_rule, line_rule, task_fields
+from fn.kitrules import CANCELLED, _labels, check_tasks, demands_of, kit_detail, kit_rule, line_rule, overlay, task_fields
 from fn.read_complete import read_complete
 from managed_execution import KN_ID, _in, _page_rows, load_bkn_rows
 
@@ -65,12 +65,15 @@ def _facts(read, query, tasks, business_date):
     return rows, materials
 
 
-def kit_check(tasks: Any, query: Callable[..., Mapping[str, Any]], *, business_date: str = DEFAULT_BUSINESS_DATE,
-              locale: str | None = None) -> dict[str, Any]:
+def kit_check(tasks: Any, query: Callable[..., Mapping[str, Any]], *, scenario: Any = None,
+              business_date: str = DEFAULT_BUSINESS_DATE, locale: str | None = None) -> dict[str, Any]:
+    """The tasks sent, checked with the network's other active plans, as the detail is."""
     tasks = check_tasks(tasks, locale)
     read = _reader(query)
-    rows, materials = _facts(read, query, tasks, business_date)
-    return {"results": kit_rule(tasks, rows, materials=materials, business_date=business_date, locale=locale)}
+    others = _active_plans(read, scenario)
+    rows, materials = _facts(read, query, overlay(others, tasks), business_date)
+    return {"results": kit_rule(tasks, rows, materials=materials, business_date=business_date, locale=locale,
+                                others=others)}
 
 
 def _active_plans(read, scenario: Any) -> list[dict[str, Any]]:
@@ -96,7 +99,7 @@ def kit_check_detail(task: Any, query: Callable[..., Mapping[str, Any]], *, scen
         raise ValueError(_labels(locale)["bad_task"])
     read = _reader(query)
     others = _active_plans(read, scenario)
-    rows, materials = _facts(read, query, [*others, task], business_date)
+    rows, materials = _facts(read, query, overlay(others, [task]), business_date)
     product = task_fields(task)["product"]
     names = {str(p.get("material_number")): str(p.get("material_name") or "")
              for p in (read(OT_PRODUCT, "material_number", [product]) if product else [])}
