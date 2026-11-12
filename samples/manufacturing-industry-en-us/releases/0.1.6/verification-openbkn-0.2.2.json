@@ -1,0 +1,43 @@
+{
+  "sampleId": "manufacturing-industry-en-us",
+  "version": "0.1.6",
+  "packageDigest": "sha256:bb8a773cd33ec80041e045f3df41d163ccde12bc03d296f673ff91022cdcdb9f",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "40 business tables; 1529 fixture records; every object returns its fixture row count, plus the package's DB verification hook."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 40 objects returned their fixture row counts live; all 71 relations have links; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "No native functions; 2 mounted Skills read and checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "6 reference Cypher queries and 4 graph patterns passed. 6 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-en-us-v0.1.6/acceptance-openbkn-0.2.2.json",
+  "evidenceDigest": "sha256:b94ada4c1056b040d9d2bbd684410e8fe74293934369592c6d5773fb61f2af7c",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (0.2.2-main.20261112104645.sha2d2a597); no native amd64 certification and no released vanilla 0.2.2.",
+    "This is the unchanged 0.1.6 package first verified on OpenBKN 0.2.1; its sample source has not changed on main since then (195a268), so it is reused rather than rebuilt.",
+    "Reference queries, graph patterns were checked through APIs; browser UI and full model-question cards were not exercised."
+  ]
+}
