@@ -1,0 +1,64 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "world-cup-en",
+ "version": "0.1.4",
+ "packageDigest": "sha256:aaa94753bc5af7a994af7370cbbea440532fcbccaa24fcd52acf0f334f9c61c8",
+ "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 27,
+   "fixtureRecords": 81200,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 27,
+   "relations": 29,
+   "liveObjectQueriesPassed": 27,
+   "relationsWithLinks": 29
+  },
+  "capabilities": {
+   "nativeFunctionsInvoked": [],
+   "mountedSkillsVerified": [
+    {
+     "name": "worldcup-analysis-en-us",
+     "sourceContentDigest": "sha256:2762ed285c23cb981a0eaecf7a52ec98cb6a81a07281b99b2cbc5200f6bde283",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": true,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 7,
+   "graphPatternsPassed": 3,
+   "fullQuestionCardsNotExercised": 7,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (0.2.2-main.20261112104645.sha2d2a597); no native amd64 certification and no released vanilla 0.2.2.",
+  "This is the unchanged 0.1.4 package first verified on OpenBKN 0.2.1; its sample source has not changed on main since then (195a268), so it is reused rather than rebuilt.",
+  "Reference queries, graph patterns were checked through APIs; browser UI and full model-question cards were not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

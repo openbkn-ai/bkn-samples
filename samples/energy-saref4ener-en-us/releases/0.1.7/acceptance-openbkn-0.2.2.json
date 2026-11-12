@@ -1,0 +1,95 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "energy-saref4ener-en-us",
+ "version": "0.1.7",
+ "packageDigest": "sha256:5b4932c44014448abea5a378656b804ef9fae0cf73b4bc50258feefb1c895e0a",
+ "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 15,
+   "fixtureRecords": 14787,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 15,
+   "relations": 15,
+   "liveObjectQueriesPassed": 15,
+   "relationsWithLinks": 15
+  },
+  "capabilities": {
+   "nativeFunctionsInvoked": [
+    {
+     "name": "flexibility_assessment",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "dispatch_plan",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "settlement_assessment",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "energy-capacity-dispatch-en-us",
+     "sourceContentDigest": "sha256:fbd63e6cd7102bcdd1b917024747dd59b8ef2e7229bb8fcbe4fe12db6cdf4c81",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "energy-delivery-settlement-en-us",
+     "sourceContentDigest": "sha256:ca1c0bebbc2263c634144e1cd0dbb013bc2046d3157c00c94dfd1e08eafabb1d",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 7,
+   "graphPatternsPassed": 4,
+   "fullQuestionCardsNotExercised": 7,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (0.2.2-main.20261112104645.sha2d2a597); no native amd64 certification and no released vanilla 0.2.2.",
+  "This is the unchanged 0.1.7 package first verified on OpenBKN 0.2.1; its sample source has not changed on main since then (195a268), so it is reused rather than rebuilt.",
+  "Native functions were called through Context Loader execute_tool inside a managed interaction and matched the same generated code run locally on the package fixtures; on this build a Python function run as a tool action does not receive that context (openbkn-ai/bkn-foundry#3123), so the functions stay mounted capabilities.",
+  "Reference queries, graph patterns and functions were checked through APIs; browser UI and full model-question cards were not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

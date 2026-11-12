@@ -1,0 +1,95 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "financial-fibo-en-us",
+ "version": "0.2.8",
+ "packageDigest": "sha256:29e787be8bb1fe860bd188a4d76b2b36f2b39586b73515448a3039a5325216c1",
+ "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 20,
+   "fixtureRecords": 78356,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 20,
+   "relations": 29,
+   "liveObjectQueriesPassed": 20,
+   "relationsWithLinks": 29
+  },
+  "capabilities": {
+   "nativeFunctionsInvoked": [
+    {
+     "name": "settlement_asof",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "valuation_asof",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "limit_assessment_asof",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "fibo-post-trade-operations-en-us",
+     "sourceContentDigest": "sha256:843555b87aa02ce0f7486cd4e07e5404882804a403d38a81642a8716c1c50abd",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "fibo-risk-limits-en-us",
+     "sourceContentDigest": "sha256:fc60608a35079565627d2f0b90a066a17afe895f48ab985b0c5a9fcce183921a",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 6,
+   "graphPatternsPassed": 4,
+   "fullQuestionCardsNotExercised": 7,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (0.2.2-main.20261112104645.sha2d2a597); no native amd64 certification and no released vanilla 0.2.2.",
+  "This is the unchanged 0.2.8 package first verified on OpenBKN 0.2.1; its sample source has not changed on main since then (195a268), so it is reused rather than rebuilt.",
+  "Native functions were called through Context Loader execute_tool inside a managed interaction and matched the same generated code run locally on the package fixtures; on this build a Python function run as a tool action does not receive that context (openbkn-ai/bkn-foundry#3123), so the functions stay mounted capabilities.",
+  "Reference queries, graph patterns and functions were checked through APIs; browser UI and full model-question cards were not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
