@@ -9,7 +9,7 @@ description: >
 
 # Quality and recall
 
-Answer quality-lead questions about inspection, quarantine, recalls and data trust. Use Cypher for inspection results, lot splits and recall snapshots; run a calculation action to trace a recall from its root lot, to work out control by location, or to look back at what was known on a day.
+Answer quality-lead questions about inspection, quarantine, recalls and data trust. Use Cypher for inspection results, lot splits and recall snapshots; call a function to trace a recall from its root lot, to work out control by location, or to look back at what was known on a day.
 
 ## Default rules
 
@@ -22,13 +22,13 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Affected orders: orders that shipped affected lots, and open orders holding a reservation on an affected lot.
 - An event recorded twice counts once and a reversed event does not count; conflicting event copies, arrivals without dispatch, negative stock and returns exceeding sales make the related stock undeterminable.
 
-## When to run a calculation action
+## When to call a function
 
-The calculations are actions: call `get_action_info` for the parameters, run `execute_action`, then read the result with `get_action_execution`. Pass every parameter: the dates and scope are the assumptions of the answer, so pass them explicitly and say in the answer what they were.
+The calculations are functions mounted on the knowledge network: call them with Context Loader `execute_tool`, using the toolbox and tool IDs that discovery returns.
 
 - `recall_assessment`: a recall's on hand, in transit, sold, returned, controlled, controllable, coverage, uncontrolled quantity and affected orders by product and location. Pass `recall_id`, `as_of_date`, `knowledge_date`.
 - `inventory_asof`: stock of problem lots by location; stock as known on an earlier day; `trace_lot_id` to trace a lot's connected upstream and downstream lots; why stock cannot be determined (see `issues`).
-- Today's recall control by product can be read from `recall_snapshots`. After the execution completes, check `completeness` and `issues`.
+- Today's recall control by product can be read from `recall_snapshots`. After a function returns, check `completeness` and `issues`.
 
 ## Cypher patterns
 
