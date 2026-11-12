@@ -1,0 +1,43 @@
+{
+  "sampleId": "energy-saref4ener-en-us",
+  "version": "0.1.9",
+  "packageDigest": "sha256:daae57ae698d63e0be3980b13bbed29e56ea58795153b67590a05669dd768295",
+  "sourceCommit": "d2e200ba4a092103a6fec9bba06ec535deb3dbb7",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "15 business tables; 14787 fixture records; every object returns its fixture row count, plus the package's DB verification hook."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 15 objects returned their fixture row counts live; all 15 relations have links; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "3 functions mounted on the network called through Context Loader execute_tool in a managed interaction, before and after reinstalling, each matching a local run on the package fixtures; 2 mounted Skills read and checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries and 4 graph patterns passed; the other 8 of 15 cards were checked against function results and Cypher queries run with each card's parameters, all matching. No model answered the questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-energy-saref4ener-en-us-v0.1.9/acceptance.json",
+  "evidenceDigest": "sha256:34cfe809d24f39198d20c5f198b21a8793d6203c5e2e7f213f9aea94b379c277",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 build (bkn-backend 0.2.2-local.702, ontology-query act3125-d089a55a, agent-retrieval act-2d466bc, agent-operator-integration c24-fix2-reviewed2, sample service 022-9e2d8d18); no native amd64 certification and no released vanilla 0.2.2.",
+    "The calculations are functions mounted on the knowledge network and were called through Context Loader execute_tool inside a managed interaction; every result matched the same generated function code run locally on the package fixtures.",
+    "Reference queries, graph patterns, functions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+  ]
+}

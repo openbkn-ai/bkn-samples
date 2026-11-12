@@ -1,0 +1,99 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "financial-fibo-zh-cn",
+ "version": "0.2.10",
+ "packageDigest": "sha256:d40418bf15afbf372ee11a02bcd1b7917826574f3e26af9d4ec17818e8e56711",
+ "sourceCommit": "d2e200ba4a092103a6fec9bba06ec535deb3dbb7",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 20,
+   "fixtureRecords": 78356,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 20,
+   "relations": 29,
+   "liveObjectQueriesPassed": 20,
+   "relationsWithLinks": 29
+  },
+  "capabilities": {
+   "nativeFunctionsInvoked": [
+    {
+     "name": "settlement_asof",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "valuation_asof",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "limit_assessment_asof",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "fibo-post-trade-operations-zh-cn",
+     "sourceContentDigest": "sha256:14a2e5172f7fb253bb98a8aebbc4327be9a5c6c4d1732b86aee09a3107480a31",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "fibo-risk-limits-zh-cn",
+     "sourceContentDigest": "sha256:5763aa24fb4b2b5f2072ed50592f5c30ac36348cfc60de9a227ffedb87e1d9a3",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 6,
+   "graphPatternsPassed": 4,
+   "cardsCheckedAgainstActionsAndCypher": 9,
+   "cardsMatched": 9,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "functionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 build (bkn-backend 0.2.2-local.702, ontology-query act3125-d089a55a, agent-retrieval act-2d466bc, agent-operator-integration c24-fix2-reviewed2, sample service 022-9e2d8d18); no native amd64 certification and no released vanilla 0.2.2.",
+  "The calculations are functions mounted on the knowledge network and were called through Context Loader execute_tool inside a managed interaction; every result matched the same generated function code run locally on the package fixtures.",
+  "Reference queries, graph patterns, functions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
