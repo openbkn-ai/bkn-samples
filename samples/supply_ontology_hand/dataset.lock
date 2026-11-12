@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "baseline_id": "supply-localized-source-v1",
   "snapshot_kind": "revised_repository_fixture",
-  "business_date": "2026-08-25",
-  "preserved": "IDs, codes, row order, BOM links, all quantities, prices, ratios, dates; three future forecasts retained",
+  "business_date": "2027-02-25",
+  "preserved": "IDs and quantities of the 0.1.20 fixture; dates and date-bearing numbers moved six months; open demand, production orders, MRP make lines, purchase arrivals and signed backlog re-dated around the business date by tools/supply_chain/rebuild_2027.py",
   "files": [
     {
       "path": "data/customer_entity.csv",
@@ -13,42 +13,42 @@
     {
       "path": "data/erp_material.csv",
       "rows": 3497,
-      "sha256": "b053a39849ce62826e563222764aea5d17efaad4240d8aa2fc44b45798fe67b7"
+      "sha256": "142862b20b13ba9e6a8dd83c1b8646fc9b97197fe55771e65889f961584b2bc7"
     },
     {
       "path": "data/erp_material_bom.csv",
       "rows": 31423,
-      "sha256": "16e842f39cae75feb454a3c0f12080cc8ce1ef559d2b304cb48abaa29e51136a"
+      "sha256": "153913393d72215982463d02f27636190b5961e90f49918c419c023801f8e072"
     },
     {
       "path": "data/erp_mds_forecast.csv",
       "rows": 137,
-      "sha256": "d3ebd1919bfdaeefd8ef63251cc6d2a111523ba76c209ef60b1587f5f2173112"
+      "sha256": "fbc56e3f66b59d5f9eade9e5cbbb4cc97d87279ca3418641c8786133f40daea1"
     },
     {
       "path": "data/erp_mrp_plan_order.csv",
       "rows": 824,
-      "sha256": "07ba000a91777e6effdd24f98a924f9532870aa45f8e45075576604f447475ce"
+      "sha256": "418f930a048335fda71751df339c126f4e9dbede0db4827aaa4d573120a2bb97"
     },
     {
       "path": "data/erp_production_work_order.csv",
       "rows": 605,
-      "sha256": "502d92f15a3041f46c36f9c184bbbf5f5c3122c2fa6a865e6bbd1eefca7018c5"
+      "sha256": "45c85f13c816bd0cf0a9e6acd6083e2989245f2647613d5bd6b4c8e204ca296a"
     },
     {
       "path": "data/erp_purchase_order.csv",
       "rows": 1972,
-      "sha256": "5a79f60130b435367b247c10a5a9c682a0237485fc7bf0efa252d7960bc18503"
+      "sha256": "3a851ae8f14a3d33f2528b14b6d6c201e898f1364d48aa4dc7c950067a7e5e65"
     },
     {
       "path": "data/erp_purchase_request.csv",
       "rows": 19333,
-      "sha256": "342e3d353aec83f5033666fe9f647749b9c16333802e2e9e4c3ca49b4bfdae34"
+      "sha256": "8c3711a8f7ac1b59af8ff61ba1964cf86cd0ccbce72a63bce0d589cac635b124"
     },
     {
       "path": "data/erp_real_time_inventory.csv",
       "rows": 19724,
-      "sha256": "17feaeafa1136fcaca4ecc1213fe8d6a0d605a8f955ed29b625d944039adc8cc"
+      "sha256": "866eccc8eaec9deede11515397ebbc5a82c6abe87c5e625a565f82682bc2a019"
     },
     {
       "path": "data/erp_supplier.csv",
@@ -58,12 +58,27 @@
     {
       "path": "data/hd_product_view.csv",
       "rows": 30,
-      "sha256": "173554e255fbf54f42ad0fd9ffb6c30c2091391993fa86db1a421fec681c70f6"
+      "sha256": "9fd0d69c7dd3288774f03c464f9a936a991549d0712e41f0da7623957a147f1a"
+    },
+    {
+      "path": "data/kit_schedule_plan.csv",
+      "rows": 11,
+      "sha256": "08daa2192f8e0c620278ab9aab0a5735f34b264b1ac0604474bc96e354fcd66c"
+    },
+    {
+      "path": "data/line_stoppage.csv",
+      "rows": 5,
+      "sha256": "ff05c7fe5705852fc9c2be2e61af238990b9f4cc91ddfd03183b83f32609e094"
+    },
+    {
+      "path": "data/production_line.csv",
+      "rows": 7,
+      "sha256": "9c6d09d54e158e112aa1d7ffd85beadcbaf8c26b74de1cd72480bc445fce8de4"
     },
     {
       "path": "data/sales_order.csv",
       "rows": 800,
-      "sha256": "523852fbb6a4bcc872268782a3fbc65c3c16680e09dfbf33e47c493ab6637947"
+      "sha256": "d7cf360fdd9f982378274026184d4de78a85ca6ef894e5e6435c1c916c0e8388"
     }
   ]
 }
