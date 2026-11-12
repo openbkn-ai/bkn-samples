@@ -1,0 +1,120 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "financial-fibo-en-us",
+ "version": "0.2.9",
+ "packageDigest": "sha256:976b938ac2302907b642914a5305fb16d69753679e30c6e835f4acd8532da0ad",
+ "sourceCommit": "3b123a9d7bfd02b5f5d0658dd045f778391d70f3",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 20,
+   "fixtureRecords": 78356,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 20,
+   "relations": 29,
+   "liveObjectQueriesPassed": 20,
+   "relationsWithLinks": 29
+  },
+  "capabilities": {
+   "toolActionsExecuted": [
+    {
+     "action": "financial_fibo_en_us_limit_assessment_asof",
+     "name": "Limit assessment as of a date",
+     "parameters": [
+      "portfolio_ids",
+      "as_of_date",
+      "knowledge_date",
+      "view_kind"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "financial_fibo_en_us_settlement_asof",
+     "name": "Settlement status as of a date",
+     "parameters": [
+      "portfolio_ids",
+      "as_of_date",
+      "knowledge_date",
+      "view_kind"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "financial_fibo_en_us_valuation_asof",
+     "name": "Valuation as of a date",
+     "parameters": [
+      "portfolio_ids",
+      "as_of_date",
+      "knowledge_date",
+      "view_kind"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "fibo-post-trade-operations-en-us",
+     "sourceContentDigest": "sha256:ecd37e1b40b95e99edd8dd36957da946591e2cf087a5d926c97f709f9b25f5e3",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "fibo-risk-limits-en-us",
+     "sourceContentDigest": "sha256:b593da624b55a7e1eb58b189d0b5bfd2e7c7ac2929854a6df7942baab3e682f6",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 6,
+   "graphPatternsPassed": 4,
+   "cardsCheckedAgainstActionsAndCypher": 9,
+   "cardsMatched": 9,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "actionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build with bkn-foundry#3125 (bkn-backend 702-act-2d2a597, ontology-query act3125-d089a55a, agent-retrieval sha2d466bc, sample service 022-388d9501); no native amd64 certification and no released vanilla 0.2.2.",
+  "Each calculation runs as a tool action through Context Loader (get_action_info, execute_action with every parameter explicit, get_action_execution); every result matched the same generated function code run locally on the package fixtures. Executing these actions needs a platform with bkn-foundry#3125.",
+  "Reference queries, graph patterns, actions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

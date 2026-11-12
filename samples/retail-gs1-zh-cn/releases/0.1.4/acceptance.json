@@ -1,0 +1,124 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "retail-gs1-zh-cn",
+ "version": "0.1.4",
+ "packageDigest": "sha256:4bffbb77d730b60b5ccaf865ecd657cb04349e7894049cc79aad81f1ca0c9dd7",
+ "sourceCommit": "3b123a9d7bfd02b5f5d0658dd045f778391d70f3",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 15,
+   "fixtureRecords": 2911,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 15,
+   "relations": 30,
+   "liveObjectQueriesPassed": 15,
+   "relationsWithLinks": 30
+  },
+  "capabilities": {
+   "toolActionsExecuted": [
+    {
+     "action": "retail_gs1_zh_cn_fulfillment_plan",
+     "name": "订单配货与补货",
+     "parameters": [
+      "as_of_date",
+      "knowledge_date",
+      "product_ids",
+      "mode",
+      "order_ids",
+      "location_ids",
+      "horizon_date"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "retail_gs1_zh_cn_inventory_asof",
+     "name": "按日期回放库存",
+     "parameters": [
+      "as_of_date",
+      "knowledge_date",
+      "product_ids",
+      "location_ids",
+      "lot_ids",
+      "trace_lot_id"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "retail_gs1_zh_cn_recall_assessment",
+     "name": "召回控制评估",
+     "parameters": [
+      "as_of_date",
+      "knowledge_date",
+      "recall_id"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "retail-inventory-fulfilment-zh-cn",
+     "sourceContentDigest": "sha256:325231176405221737be6c3fca4622fcfca42f057d1e2825426b8cd1ab2a7725",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "retail-quality-recall-zh-cn",
+     "sourceContentDigest": "sha256:a44e8d95e6e25cd9b1296bd962911f1a8ba69f957cdc806a9abb0df77780d8a8",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 5,
+   "graphPatternsPassed": 4,
+   "cardsCheckedAgainstActionsAndCypher": 10,
+   "cardsMatched": 10,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "actionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build with bkn-foundry#3125 (bkn-backend 702-act-2d2a597, ontology-query act3125-d089a55a, agent-retrieval sha2d466bc, sample service 022-388d9501); no native amd64 certification and no released vanilla 0.2.2.",
+  "Each calculation runs as a tool action through Context Loader (get_action_info, execute_action with every parameter explicit, get_action_execution); every result matched the same generated function code run locally on the package fixtures. Executing these actions needs a platform with bkn-foundry#3125.",
+  "Reference queries, graph patterns, actions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

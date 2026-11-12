@@ -1,0 +1,117 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "energy-saref4ener-en-us",
+ "version": "0.1.8",
+ "packageDigest": "sha256:59194119c049ba52bbafc7ecf935f9d5448a65fc5affa452617b4c3c745e7acd",
+ "sourceCommit": "3b123a9d7bfd02b5f5d0658dd045f778391d70f3",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 15,
+   "fixtureRecords": 14787,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 15,
+   "relations": 15,
+   "liveObjectQueriesPassed": 15,
+   "relationsWithLinks": 15
+  },
+  "capabilities": {
+   "toolActionsExecuted": [
+    {
+     "action": "energy_saref4ener_en_us_dispatch_plan",
+     "name": "Dispatch plan for events",
+     "parameters": [
+      "event_ids",
+      "as_of_date",
+      "knowledge_date"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "energy_saref4ener_en_us_flexibility_assessment",
+     "name": "Eligible reduction for events",
+     "parameters": [
+      "event_ids",
+      "as_of_date",
+      "knowledge_date"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "energy_saref4ener_en_us_settlement_assessment",
+     "name": "Settlement for past events",
+     "parameters": [
+      "event_ids",
+      "as_of_date",
+      "knowledge_date"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "energy-capacity-dispatch-en-us",
+     "sourceContentDigest": "sha256:de590c9e60b0cec4bdf9bbc9a05d7043686ecb2e533c251b8a1b9b413886b653",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "energy-delivery-settlement-en-us",
+     "sourceContentDigest": "sha256:1a39e1b8e0f596cd0e0149505b938a15b62f171c087bbe2ba24492db8513663b",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 7,
+   "graphPatternsPassed": 4,
+   "cardsCheckedAgainstActionsAndCypher": 8,
+   "cardsMatched": 8,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "actionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build with bkn-foundry#3125 (bkn-backend 702-act-2d2a597, ontology-query act3125-d089a55a, agent-retrieval sha2d466bc, sample service 022-388d9501); no native amd64 certification and no released vanilla 0.2.2.",
+  "Each calculation runs as a tool action through Context Loader (get_action_info, execute_action with every parameter explicit, get_action_execution); every result matched the same generated function code run locally on the package fixtures. Executing these actions needs a platform with bkn-foundry#3125.",
+  "Reference queries, graph patterns, actions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

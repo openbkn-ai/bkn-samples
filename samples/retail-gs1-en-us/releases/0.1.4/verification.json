@@ -1,0 +1,43 @@
+{
+  "sampleId": "retail-gs1-en-us",
+  "version": "0.1.4",
+  "packageDigest": "sha256:544e99d512fee629eeb228f4f693caf5058b5dc783e887f961abe6c8e228d09b",
+  "sourceCommit": "3b123a9d7bfd02b5f5d0658dd045f778391d70f3",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "15 business tables; 2911 fixture records; every object returns its fixture row count, plus the package's DB verification hook."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 15 objects returned their fixture row counts live; all 30 relations have links; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "3 tool actions executed through Context Loader in a managed interaction with every parameter explicit, before and after reinstalling, each matching a local run on the package fixtures; 2 mounted Skills read and checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "5 reference Cypher queries and 4 graph patterns passed; the other 10 of 15 cards were checked against action results and Cypher queries run with each card's parameters, all matching. No model answered the questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-retail-gs1-en-us-v0.1.4/acceptance.json",
+  "evidenceDigest": "sha256:7a15c5ca36eee5be72fde24fa53ed591fa344bf5779da729f43f9af092098ec2",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build with bkn-foundry#3125 (bkn-backend 702-act-2d2a597, ontology-query act3125-d089a55a, agent-retrieval sha2d466bc, sample service 022-388d9501); no native amd64 certification and no released vanilla 0.2.2.",
+    "Each calculation runs as a tool action through Context Loader (get_action_info, execute_action with every parameter explicit, get_action_execution); every result matched the same generated function code run locally on the package fixtures. Executing these actions needs a platform with bkn-foundry#3125.",
+    "Reference queries, graph patterns, actions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+  ]
+}
