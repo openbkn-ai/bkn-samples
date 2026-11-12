@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000002",
-    "sequence": 2,
+    "revision": "catalog-000003",
+    "sequence": 3,
     "channel": "stable",
-    "publishedAt": "2026-11-12T05:19:54Z",
+    "publishedAt": "2026-11-12T06:06:47Z",
     "productVersion": "0.2.2"
   },
   "spec": {
@@ -112,6 +112,522 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/cab652c7b1e3778024f5d62650ec8c0b6af5b03d/samples/supply_ontology_en/releases/0.1.14/verification.json",
           "digest": "sha256:6e334612ac560fe4540c89d3284317546b20a0176fc0c68832a0d80ef62e5e4c"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "world-cup",
+        "version": "0.1.8",
+        "displayName": "世界杯",
+        "summary": "用公开的世界杯历史数据查询赛事、球队、球员和比赛事件。",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/world-cup/releases/0.1.8/release-notes.en-US.md",
+              "digest": "sha256:bd235c4adac3bec444709ac6d1f9ca647d39883568a7f496488814fbdfbfdd47"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/world-cup/releases/0.1.8/release-notes.zh-CN.md",
+              "digest": "sha256:656a89c2b0092acd0f04ec51d47a40b0151d2d010b0bbae3e0613b327c990bb0"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/world-cup/releases/0.1.8/sample.json",
+          "digest": "sha256:8adff910408ddf899d56e29e82f2345d825910d97c775f5179726cb93681015c"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/world-cup/releases/0.1.8/verification-openbkn-0.2.2.json",
+          "digest": "sha256:72771d9df293da80673264af3c1f43d18fd9cf729cd67ba9b9c45889cbcdd1dc"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "world-cup-en",
+        "version": "0.1.4",
+        "displayName": "World Cup (EN)",
+        "summary": "Explore World Cup tournaments, teams, players and match events.",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/world-cup-en/releases/0.1.4/release-notes.en-US.md",
+              "digest": "sha256:4af39517facd32e39e861f2d4767a0e211278fc2b0fa18919edc186e031094f1"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/world-cup-en/releases/0.1.4/release-notes.zh-CN.md",
+              "digest": "sha256:37871887fa421f685ce6f7acc801cda68d1ef28bffa8225f1c7d69bc95fda643"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/world-cup-en/releases/0.1.4/sample.json",
+          "digest": "sha256:0c7c12237a2ca66e5620ac5e58cdefa3c24a3fe88670a33667bf2984a9c2a3de"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/world-cup-en/releases/0.1.4/verification-openbkn-0.2.2.json",
+          "digest": "sha256:65b643f76481934a7e646b89fd2ca9dd9885f87ee5607ac43225668015484dd4"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "manufacturing-industry-zh-cn",
+        "version": "0.1.6",
+        "displayName": "制造业端到端运营（中文）",
+        "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-zh-cn/releases/0.1.6/release-notes.en-US.md",
+              "digest": "sha256:115d2a932cae410f51c535cc2ca4703a77948af91033df23adf0fb72958f6ccf"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-zh-cn/releases/0.1.6/release-notes.zh-CN.md",
+              "digest": "sha256:e03a3cc04dda4a9078462a4ba4ff614ed506a1317b98ffba43d13f8e03e4d95c"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-zh-cn/releases/0.1.6/sample.json",
+          "digest": "sha256:d06592ba328771e2a4628db2622a7e70d0dbb44165918f6474c6ddf4734a841d"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-zh-cn/releases/0.1.6/verification-openbkn-0.2.2.json",
+          "digest": "sha256:a2275ddd7207fce5165f2777b47195e5e203b81870e05aeb89214b8d641582c3"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "manufacturing-industry-en-us",
+        "version": "0.1.6",
+        "displayName": "Manufacturing Operations (EN)",
+        "summary": "Order fulfilment, purchasing, execution compliance and quality release at a fictional precision machining company.",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-en-us/releases/0.1.6/release-notes.en-US.md",
+              "digest": "sha256:115d2a932cae410f51c535cc2ca4703a77948af91033df23adf0fb72958f6ccf"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-en-us/releases/0.1.6/release-notes.zh-CN.md",
+              "digest": "sha256:e03a3cc04dda4a9078462a4ba4ff614ed506a1317b98ffba43d13f8e03e4d95c"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-en-us/releases/0.1.6/sample.json",
+          "digest": "sha256:3dd16065f5382f8a923f506922b3f4ace149568a783b5245691179a09423f4c7"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/manufacturing-industry-en-us/releases/0.1.6/verification-openbkn-0.2.2.json",
+          "digest": "sha256:e256ca759e7b6078330f8e48e36f473c03f2a58e01c2641f82945218ca637ebd"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "financial-fibo-zh-cn",
+        "version": "0.2.8",
+        "displayName": "金融投资组合运营（中文）",
+        "summary": "虚构证券交易、结算、持仓、估值、敞口与限额控制。",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-zh-cn/releases/0.2.8/release-notes.en-US.md",
+              "digest": "sha256:ed389d726fe42866f0ebb4b6b0a0a596d903977d9540400e0f82b96905d26287"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-zh-cn/releases/0.2.8/release-notes.zh-CN.md",
+              "digest": "sha256:1e8811dd7f8d600ddf6d8ec175752e958f3bf05ce4d1f8b4ebea6378fcb3fc69"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-zh-cn/releases/0.2.8/sample.json",
+          "digest": "sha256:91ad679c744d31d3fae66bd7a6a2a358dffd78c7a85aac381c64bfe77b56cd4e"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-zh-cn/releases/0.2.8/verification-openbkn-0.2.2.json",
+          "digest": "sha256:6cd58dbff9ba9b7ba5bb1b187fc57bddd25d58bf190dfc70e70c92820443cdbf"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "financial-fibo-en-us",
+        "version": "0.2.8",
+        "displayName": "Financial Portfolio Operations (EN)",
+        "summary": "Fictional securities trading, settlement, positions, valuation, exposure and mandate controls.",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-en-us/releases/0.2.8/release-notes.en-US.md",
+              "digest": "sha256:ed389d726fe42866f0ebb4b6b0a0a596d903977d9540400e0f82b96905d26287"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-en-us/releases/0.2.8/release-notes.zh-CN.md",
+              "digest": "sha256:1e8811dd7f8d600ddf6d8ec175752e958f3bf05ce4d1f8b4ebea6378fcb3fc69"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-en-us/releases/0.2.8/sample.json",
+          "digest": "sha256:d762f240bc9f0b321cb8ad2a5221ea80bd71f6ae523a786e5fb7da37944dc44b"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/financial-fibo-en-us/releases/0.2.8/verification-openbkn-0.2.2.json",
+          "digest": "sha256:8bdb420f4f686830d008982d17bb9691986833ebf92386a56db22aa9260d8508"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "retail-gs1-zh-cn",
+        "version": "0.1.3",
+        "displayName": "食品供应链追溯与召回",
+        "summary": "虚构食品流通、履约和召回闭环。",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-zh-cn/releases/0.1.3/release-notes.en-US.md",
+              "digest": "sha256:f023e1358c1a723b6efb53503c0702d096a9415a524e4eac9e24528c2f4409bc"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-zh-cn/releases/0.1.3/release-notes.zh-CN.md",
+              "digest": "sha256:609fb3119069357f009aa51767d7b9f3f49ea9e6b6021897535f6594b6086b08"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-zh-cn/releases/0.1.3/sample.json",
+          "digest": "sha256:6d37d26f2eac26eba0209fc14815eb46c7c0e6c1a68638df868b94faeea3b0da"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-zh-cn/releases/0.1.3/verification-openbkn-0.2.2.json",
+          "digest": "sha256:0dba6810c53476a503575a82a846828fba6d9710af4303502d059ade99e75ec2"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "retail-gs1-en-us",
+        "version": "0.1.3",
+        "displayName": "Food Supply and Recall",
+        "summary": "Synthetic food distribution, fulfillment and recall operations.",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-en-us/releases/0.1.3/release-notes.en-US.md",
+              "digest": "sha256:f023e1358c1a723b6efb53503c0702d096a9415a524e4eac9e24528c2f4409bc"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-en-us/releases/0.1.3/release-notes.zh-CN.md",
+              "digest": "sha256:609fb3119069357f009aa51767d7b9f3f49ea9e6b6021897535f6594b6086b08"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-en-us/releases/0.1.3/sample.json",
+          "digest": "sha256:2d8cde90a8d7e9a65fceac9d4f171e8b770d78930ae1bf82d49206091bcf536d"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/retail-gs1-en-us/releases/0.1.3/verification-openbkn-0.2.2.json",
+          "digest": "sha256:cba651e30f705368ea0d8d30d08953bc682694e71bdb5a2a605c7bcba474d414"
+        },
+        "language": "en-US"
+      },
+      {
+        "sampleId": "energy-saref4ener-zh-cn",
+        "version": "0.1.7",
+        "displayName": "需求响应与柔性用能",
+        "summary": "合成需求响应评估、共享资源计划与计量结算。",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-zh-cn/releases/0.1.7/release-notes.en-US.md",
+              "digest": "sha256:237eb975c810b902f21b22b924100240b1bb09fef13b79f9ccf3b9f85d4e7489"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-zh-cn/releases/0.1.7/release-notes.zh-CN.md",
+              "digest": "sha256:eef43a073768640f974b88dd85b4212f4c66ed40886fb536a4ed5454b8d538be"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-zh-cn/releases/0.1.7/sample.json",
+          "digest": "sha256:94d6793a2242ed5a22a8d5ae48b349363b34c270d7131ba967e0966e6ec9c8b5"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-zh-cn/releases/0.1.7/verification-openbkn-0.2.2.json",
+          "digest": "sha256:f1c85e0111b5bc51abb45296e69131e3f966528c10bb520255eb9d62dfa3d1ff"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "energy-saref4ener-en-us",
+        "version": "0.1.7",
+        "displayName": "Demand response and flexible energy",
+        "summary": "Synthetic response readiness, shared-resource planning and measured settlement.",
+        "publishedAt": "2026-11-01T03:57:07Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "Installation diagnostics; fixed-package import, retry, offline cleanup and fresh reinstallation accepted.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-en-us/releases/0.1.7/release-notes.en-US.md",
+              "digest": "sha256:237eb975c810b902f21b22b924100240b1bb09fef13b79f9ccf3b9f85d4e7489"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-en-us/releases/0.1.7/release-notes.zh-CN.md",
+              "digest": "sha256:eef43a073768640f974b88dd85b4212f4c66ed40886fb536a4ed5454b8d538be"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-en-us/releases/0.1.7/sample.json",
+          "digest": "sha256:2e2e3bfabc379fa3628df0139d442c0bfd5c4dbf04b26bbfb229af480c0002cc"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.1 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/eb933ef324076f48195326396a0d78234e46b83c/samples/energy-saref4ener-en-us/releases/0.1.7/verification-openbkn-0.2.2.json",
+          "digest": "sha256:4321e1bcf808a6b8034a29b5b38dfed411e0a77ba54012893c5f3f9d6039c8e8"
         },
         "language": "en-US"
       }
