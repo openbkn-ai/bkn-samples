@@ -4,8 +4,22 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import time
 
 from installer import diagnostics
+
+# Right after a network is pushed or its objects are rebound, OpenBKN may refuse queries
+# with 503 OntologyQuery.Proxy.SyncPending until its proxy permissions catch up. The
+# request is refused before it runs, so a bounded wait and retry is safe.
+SYNC_PENDING = "OntologyQuery.Proxy.SyncPending"
+SYNC_RETRY_DELAYS = (2, 4, 8, 8, 8)
+
+
+def _sync_pending(result):
+    output = [result.stderr, result.stdout]
+    text = "".join(item.decode(errors="replace") if isinstance(item, bytes) else item
+                   for item in output if isinstance(item, (str, bytes)))
+    return SYNC_PENDING in text
 
 
 def run(argv, **kwargs):
@@ -43,6 +57,16 @@ def run(argv, **kwargs):
             diagnostics.secrets([os.environ.get("BKN_TOKEN"), os.environ.get("MYSQL_PASSWORD")]), \
             diagnostics.step(name, **details) as outcome:
         result = subprocess.run(argv, **kwargs)
+        retries = 0
+        if executable == "openbkn":
+            for delay in SYNC_RETRY_DELAYS:
+                if not result.returncode or not _sync_pending(result):
+                    break
+                time.sleep(delay)
+                retries += 1
+                result = subprocess.run(argv, **kwargs)
+        if retries:
+            outcome["sync_pending_retries"] = retries
         outcome.update(ok=result.returncode == 0, returncode=result.returncode)
         if result.returncode:
             outcome["reason"] = diagnostics.command_failure(result)
