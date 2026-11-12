@@ -8,7 +8,7 @@ description: >
 
 # Delivery and settlement
 
-Answer duty and settlement questions about execution, metering and settlement. Use Cypher for receipts, readings, the ledger and settlement snapshots; call a function to work out verified energy, delivery ratio, revenue and compensation.
+Answer duty and settlement questions about execution, metering and settlement. Use Cypher for receipts, readings, the ledger and settlement snapshots; run a calculation action to work out verified energy, delivery ratio, revenue and compensation.
 
 ## Default rules
 
@@ -20,10 +20,12 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Revenue = verified energy × reward rate only when the delivery ratio meets the minimum (equal counts); customer compensation = shared energy × offer cost, paid regardless; revenue and compensation are each rounded to the cent, and net may be negative.
 - The ledger uses the latest posted row dated on or before the day; two conflicting postings on one date cannot be reconciled; no posting is empty, not zero.
 
-## When to call a function
+## When to run a calculation action
+
+The calculations are actions: call `get_action_info` for the parameters, run `execute_action`, then read the result with `get_action_execution`. Pass every parameter: the dates and scope are the assumptions of the answer, so pass them explicitly and say in the answer what they were.
 
 - `settlement_assessment`: an event's committed energy, verified energy, delivery ratio, revenue, compensation, net and ledger difference. Pass `event_ids`, `as_of_date`, `knowledge_date` (an earlier day, or a date before or after a correction, to see what was known then).
-- Use Cypher for receipt counts, reading versions, ledger rows and settlement snapshots; settlement snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the function: recompute them 20 at a time with `as_of_date` and `knowledge_date` both 2027-02-28 and compare directly. `event_ids` takes up to 20 events per call across dates and blocks; for all past events pass 20 at a time in date order, about three calls, never one block per call. After a function returns, check `completeness` and `issues`.
+- Use Cypher for receipt counts, reading versions, ledger rows and settlement snapshots; settlement snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the calculation: recompute them 20 at a time with `as_of_date` and `knowledge_date` both 2027-02-28 and compare directly. `event_ids` takes up to 20 events per execution across dates and blocks; for all past events pass 20 at a time in date order, about three calls, never one block per execution. After the execution completes, check `completeness` and `issues`.
 
 ## Cypher patterns
 

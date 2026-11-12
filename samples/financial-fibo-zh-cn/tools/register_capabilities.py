@@ -43,6 +43,32 @@ DESCRIPTIONS={
         '按某天重算发行方集中度和交易对手未结算卖出应收，选出唯一适用的已批准限额，给出是否超限、超出多少或无法判定的原因。'),
 }
 
+ACTION_NAMES={'settlement_asof':('Settlement status as of a date','按日期计算交收状态'),
+              'valuation_asof':('Valuation as of a date','按日期计算估值'),
+              'limit_assessment_asof':('Limit assessment as of a date','按日期评估限额')}
+
+BKN_API='/api/bkn-backend/v1'
+ACTION_RULE=('Run as an action: get_action_info for the parameters, execute_action, then get_action_execution for the result. '
+             'Pass every parameter: the dates and scope are the assumptions of the answer, so pass them explicitly and state them in the answer. '
+             'Check completeness and issues in the result; a completed execution does not mean the calculation succeeded.',
+             '作为行动执行：先用 get_action_info 取参数定义，再用 execute_action 执行，最后用 get_action_execution 取结果。'
+             '每个参数都要传：日期和范围是这次计算的假设，要显式传入，并在回答里说明按什么假设算的。'
+             '检查结果里的 completeness 和 issues，执行状态 completed 不等于计算成功。')
+
+def action_definitions(kn_id,box_id,tool_ids,inputs,zh):
+    """One tool action per function. The platform requires every input, so each execution records the dates and scope it assumed."""
+    return [{'id':kn_id+'_'+op,'name':ACTION_NAMES[op][1 if zh else 0],'branch':'main','operation_config':{'type':'tool'},'object_type_id':'',
+             'action_type':'modify','action_intent':'modify','action_source':{'type':'tool','box_id':box_id,'tool_id':tool_ids[op]},
+             'parameters':[{'name':i['name'],'type':i['type'],'value_from':'input','comment':i['description']} for i in inputs[op]],
+             'comment':DESCRIPTIONS[op][1 if zh else 0]+'\n'+ACTION_RULE[1 if zh else 0]} for op in OPERATIONS]
+
+def actions_ready(kn_id,box_id,tool_ids):
+    """Every enabled function is the source of a tool action in the network."""
+    listing=entries(cli('bkn','action-type','list',kn_id),'entries','data')
+    sources={(a.get('action_source') or {}).get('tool_id') for a in listing
+             if (a.get('operation_config') or {}).get('type')=='tool' and (a.get('action_source') or {}).get('box_id')==box_id}
+    return set(tool_ids.values())<=sources
+
 def run(kn_id,apply):
     manifest=json.loads((ROOT/'sample.yaml').read_text());name='FIBO_'+manifest['metadata']['name'].rsplit('fibo-',1)[1].replace('-','_')+'_Functions'
     boxes=entries(cli('toolbox','list','--keyword',name,'--limit','100'),'data','entries');matches=[b for b in boxes if b['box_name']==name]
@@ -52,10 +78,11 @@ def run(kn_id,apply):
         box=cli('call',API+'/tool-box','-X','POST','-d',json.dumps(dict(box_name=name,box_desc='Atomic post-trade controls / 原始事实交易后控制',box_category='data_process',metadata_type='function',source='custom')));remember('toolboxes',box['box_id'])
     else:box=matches[0];require_owned('toolboxes',box['box_id'])
     zh=json.loads((ROOT/'model-contract.json').read_text()).get('language')=='zh-cn'
-    bid=box['box_id'];tools=entries(cli('tool','list','--toolbox',bid,'--all'),'tools','data','entries');tids={};hashes={}
+    bid=box['box_id'];tools=entries(cli('tool','list','--toolbox',bid,'--all'),'tools','data','entries');tids={};hashes={};op_inputs={}
     for operation in OPERATIONS:
         code=tool_code(operation,kn_id);hashes[operation]=hashlib.sha256(code.encode()).hexdigest();found=next((t for t in tools if t['name']==operation),None)
         inputs=[{'name':n,'type':typ,'required':True,'description':desc} for n,typ,desc in [('portfolio_ids','array','Nonempty portfolio IDs / 组合主键'),('as_of_date','string','Business date YYYY-MM-DD / 业务日期'),('knowledge_date','string','Knowledge cutoff YYYY-MM-DD / 知识截止日期'),('view_kind','string','actual or planned / 实际或计划')]]
+        op_inputs[operation]=inputs
         body=dict(name=operation,description=DESCRIPTIONS[operation][1 if zh else 0],script_type='python',code=code,inputs=inputs,outputs=[dict(name='result',type='object',required=True,description='Typed rows, completeness, issues and evidence; blocked can retain independent known fields; USD identity may have null fx_id / 业务结果及证据；blocked仍可保留独立已知值，美元恒等换算可无fx_id')])
         if apply:
             if found:
@@ -73,9 +100,11 @@ def run(kn_id,apply):
     if apply:
 
         if box.get('status')!='published':cli('toolbox','publish',bid)
-        cli('bkn','capability','attach',kn_id,'--box',bid,'--tool',','.join(tids.values()))
+        # Each function runs as a tool action; overwrite keeps a repeated install idempotent and follows re-created tool IDs.
+        cli('call',BKN_API+'/knowledge-networks/'+kn_id+'/action-types?import_mode=overwrite','-X','POST','-d',json.dumps({'entries':action_definitions(kn_id,bid,tids,op_inputs,zh)},ensure_ascii=False))
+    elif not actions_ready(kn_id,bid,tids):raise ValueError('missing function action')
     if apply:skills=register_skills(apply=True,kn_id=kn_id)
     else:
         skills={'owned':read()['skills']}
         if not skills['owned']:raise ValueError('missing owned Skill')
-    return {'toolbox_id':bid,'tool_ids':tids,'source_sha256':hashes,'skills':skills,'ownedExecution':read()}
+    return {'toolbox_id':bid,'tool_ids':tids,'action_ids':[kn_id+'_'+op for op in OPERATIONS],'source_sha256':hashes,'skills':skills,'ownedExecution':read()}
