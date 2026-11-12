@@ -1,0 +1,11 @@
+# 0.1.7: machine scheduling (OpenBKN 0.2.2)
+
+Production operations and maintenance work orders become schedulable tasks that share machines (one thing per machine per day, grouped by work centre), for the "machine scheduling" scenario of the Workshop scheduler.
+
+- **Data**: operations gain a planned machine, planned start and end day, standard duration (days) and a predecessor (the previous sequence in the same work order, with a new self relation) plus a planned-machine relation. Completed operations take their execution record; operations not started are pre-scheduled from 2027-03-01 by plan-line start and sequence, with a few deliberate conflicts: an operation on 5-axis Mill 4 whose capability is suspended, an operation overlapping Mill 1's service on 3/07, no qualified CMM operator in the metrology lab in the week of 3/15, and fewer turners and testers than parallel operations in the week of 3/01. Maintenance work orders gain planned start and end days; the planned date stays the due day and the two overdue orders are caught up on 3/01. The March 2027 shifts and roster are added.
+- **Storage**: operations and maintenance work orders are stored in datasets of the sample catalog (loaded from the package at install) so actions can change them; the database holds the other 38 tables. Reinstalling restores the package schedule. Uninstalling needs a sample service with #260 (datasets deleted before the catalog).
+- **Rule functions** (one toolbox; the four are also actions, so Q&A and Skills use the same code): Work order kit, Machine capability, Operator qualification and shift, Changeover. A check answers per task through the rule-tool contract (pass, severity, text, related, and optional at, counts, detail); `mode: "detail"` returns one task's paged table (materials, machine capabilities, operators) labelled in zh-CN or en-US.
+- **Actions**: "Adjust operation schedule" and "Adjust maintenance work order", modify-instance actions whose inputs are named like the fields.
+- **Network description and Skills** describe the schedule rules and how to use the functions. The 50 existing bkn-eval answers are unchanged.
+
+The sample's own Workshop "machine scheduling" app follows once the Workshop scheduling wizard (M1) lands.

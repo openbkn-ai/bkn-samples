@@ -15,9 +15,12 @@ All data are fictional and synthetic, covering November 2026 to March 2027 with 
 
 ## Capabilities
 
-Every question can be answered with Cypher, so the sample ships no functions and no metrics, and the Community edition can use all of it.
+Every question can be answered with Cypher; the sample uses no metrics. From 0.1.7 (OpenBKN 0.2.2) it also carries machine scheduling: operations and maintenance work orders are planned on machines and share them, and four rule functions plus two adjust actions check and change the plan.
 
 - **Cypher queries**: products, BOM revisions, routings, machine capabilities and operator qualifications, orders, shipments and units owed, forecasts and plans, material requirements and issues, purchasing and receipts, executions and shifts, inspection results and specifications, inventory and maintenance.
+- **Machine scheduling**: operations carry a planned machine, start and end day, standard duration and predecessor; maintenance work orders carry planned start and end days (the planned date stays the due day); the March roster is filled in. Operations and maintenance work orders are stored in datasets of the sample catalog so the schedule can be changed.
+- **Rule functions** (one toolbox, also actions for Q&A and Skills): Work order kit (material by the network formula, competing work orders in start order, BOM frozen; hard), Machine capability (hard), Operator qualification and shift (none is hard, too few for parallel operations is soft), Changeover (soft). Each answers per operation with pass, severity, text and related operations, and returns a paged detail table on request; they are the rule tools of the Workshop schedule Gantt.
+- **Actions** "Adjust operation schedule" and "Adjust maintenance work order": modify the planned fields of the selected object.
 - **Skills**: organised by user as "Orders and materials" (order fulfilment manager, purchasing and materials manager) and "Production and quality" (production lead, quality manager), stating the business rules, Cypher patterns and how to answer.
 
 ## Experience cards
