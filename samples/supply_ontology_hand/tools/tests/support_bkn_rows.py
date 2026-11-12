@@ -12,7 +12,12 @@ TABLES = {
     "supply_ontology_hand_inventory": "erp_real_time_inventory",
     "supply_ontology_hand_po": "erp_purchase_order",
     "supply_ontology_hand_salesorder": "sales_order",
+    "supply_ontology_hand_forecast": "erp_mds_forecast",
+    "supply_ontology_hand_line": "production_line",
+    "supply_ontology_hand_product": "hd_product_view",
 }
+# Object property names that differ from the table column they map.
+RENAMED = {"supply_ontology_hand_product": {"material_code": "material_number"}}
 
 
 @lru_cache(maxsize=None)
@@ -43,11 +48,18 @@ def _matches(row: dict, condition: dict | None) -> bool:
 class FakeObjectQuery:
     """Records each query and pages through matching CSV rows in reverse, unlike file order."""
 
-    def __init__(self):
+    def __init__(self, objects: dict[str, list[dict]] | None = None):
         self.calls: list[dict] = []
+        self.objects = objects or {}
+
+    def _rows(self, ot_id: str) -> list[dict]:
+        if ot_id in self.objects:
+            return [dict(r) for r in self.objects[ot_id]]
+        rename = RENAMED.get(ot_id, {})
+        return [{rename.get(k, k): v for k, v in r.items()} for r in table(TABLES[ot_id])]
 
     def __call__(self, **query):
         self.calls.append(query)
-        rows = [r for r in reversed(table(TABLES[query["ot_id"]])) if _matches(r, query.get("condition"))]
+        rows = [r for r in reversed(self._rows(query["ot_id"])) if _matches(r, query.get("condition"))]
         start = query.get("offset", 0)
         return {"datas": [dict(r) for r in rows[start:start + query["limit"]]], "total_count": len(rows)}

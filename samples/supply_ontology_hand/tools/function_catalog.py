@@ -48,12 +48,33 @@ FUNCTION_CATALOG = {
 }
 
 
+KIT_SCHEDULE = {
+    "name": "齐套排产",
+    "operation": "kit_schedule",
+    "description": "把一张需求预测单（整单）或其中一个产品排到一条产线的计划开工、完工时段，按计划开工日做齐套检查"
+                   "（先保已签约欠货、不用成品、计入计划开工日前按期到货的在途），把结果写进齐套排产计划，不修改预测单。"
+                   "同一预测单号 + 产品编码已有未取消的计划时修改这条计划（计划完工变了改期次数加一），否则新建；"
+                   "计划状态传已取消时取消这条计划。返回计划号、齐套状态、齐套日和缺料。",
+    "use_rule": "只通过三个齐套排产计划行动执行：建立（新建实例，object_input 传预测单号、产品编码〔整单传空字符串〕、产线编码、"
+                "计划开工、计划完工、计划状态〔通常为已排〕、来源方案、排产人）、调整（修改实例，选中计划后传新的产线、计划开工、"
+                "计划完工、来源方案、排产人）、取消（修改实例，选中计划后传排产人）。只查已排计划、齐套结论时用 Cypher 查齐套排产计划。",
+}
+KIT_PLAN_ACTIONS = {
+    "create": ("建立齐套排产计划", "add",
+               "排产：为一张预测单（整单）或其中一个产品新建齐套排产计划，按计划开工日记录齐套结论。"
+               "同一预测单号 + 产品编码已有未取消的计划时改为修改这条计划，不会重复新建。"),
+    "adjust": ("调整齐套排产计划", "modify",
+               "改期或换线：对选中的计划改产线、计划开工、计划完工，重新做齐套检查；计划完工变了改期次数加一。"),
+    "cancel": ("取消齐套排产计划", "modify", "把选中的计划状态改为已取消；已取消的计划不再有效，可以重新排产。"),
+}
+
+
 def native_tool_description() -> str:
     """Return a concise description of the native Function collection."""
     operations = "；".join(f"{operation}（{spec['name']}）" for operation, spec in FUNCTION_CATALOG.items())
     return (
         f"供应链计划计算函数：{operations}。"
-        "函数在运行时通过 sandbox_sdk.bkn 读取已绑定的知识网络；未传 business_date 时按 2026-08-25 计算。"
+        "函数在运行时通过 sandbox_sdk.bkn 读取已绑定的知识网络；未传 business_date 时按 2027-02-25 计算。"
     )
 
 
@@ -61,4 +82,4 @@ def native_operation_description() -> str:
     return "可用具名函数：" + "、".join(FUNCTION_CATALOG)
 
 
-__all__ = ["FUNCTION_CATALOG", "native_operation_description", "native_tool_description"]
+__all__ = ["FUNCTION_CATALOG", "KIT_PLAN_ACTIONS", "KIT_SCHEDULE", "native_operation_description", "native_tool_description"]

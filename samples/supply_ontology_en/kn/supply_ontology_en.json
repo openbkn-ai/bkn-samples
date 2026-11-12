@@ -3614,6 +3614,31 @@
             "<=",
             "regex"
           ]
+        },
+        {
+          "name": "line_code",
+          "display_name": "Default Line Code",
+          "type": "string",
+          "comment": "Production line assigned by product line; matches the line code.",
+          "mapped_field": {
+            "name": "line_code",
+            "type": "string",
+            "display_name": "line_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
         }
       ],
       "logic_properties": [],
@@ -4118,6 +4143,659 @@
       "color": "#0e5fc5",
       "branch": "main",
       "logic_properties": []
+    },
+    {
+      "id": "supply_ontology_en_line",
+      "name": "Production Line",
+      "data_properties": [
+        {
+          "name": "line_code",
+          "display_name": "Line Code",
+          "type": "string",
+          "comment": "Plant or line code; plants start with F-, lines with L-.",
+          "mapped_field": {
+            "name": "line_code",
+            "type": "string",
+            "display_name": "line_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "line_name",
+          "display_name": "Line Name",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "line_name",
+            "type": "string",
+            "display_name": "line_name"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "line_kind",
+          "display_name": "Type",
+          "type": "string",
+          "comment": "Plant or Line. Plants are not scheduled; they group lines.",
+          "mapped_field": {
+            "name": "line_kind",
+            "type": "string",
+            "display_name": "line_kind"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "parent_code",
+          "display_name": "Parent Code",
+          "type": "string",
+          "comment": "Plant code of the line; empty for a plant.",
+          "mapped_field": {
+            "name": "parent_code",
+            "type": "string",
+            "display_name": "parent_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "factory_name",
+          "display_name": "Plant",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "factory_name",
+            "type": "string",
+            "display_name": "factory_name"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "max_parallel",
+          "display_name": "Max Parallel",
+          "type": "integer",
+          "comment": "Most kit-schedule plans that can run at the same time; empty for a plant.",
+          "mapped_field": {
+            "name": "max_parallel",
+            "type": "integer",
+            "display_name": "max_parallel"
+          }
+        },
+        {
+          "name": "product_lines",
+          "display_name": "Product Lines",
+          "type": "string",
+          "comment": "Product lines the line can build, comma separated; matches the product line of each product.",
+          "mapped_field": {
+            "name": "product_lines",
+            "type": "string",
+            "display_name": "product_lines"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        }
+      ],
+      "logic_properties": [],
+      "primary_keys": [
+        "line_code"
+      ],
+      "display_key": "line_name",
+      "incremental_key": "",
+      "tags": [
+        "Approved"
+      ],
+      "comment": "A schedulable production resource. Plants are rows too (type Plant, no parent): they are the parents of lines and are not scheduled themselves; a stoppage on a plant applies to all of its lines. Max parallel is how many kit-schedule plans a line can run at the same time. Products are assigned to lines by product line, see Line Products.",
+      "icon": "icon-dip-suanziguanli",
+      "color": "#0e5fc5",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_stoppage",
+      "name": "Line Stoppage",
+      "data_properties": [
+        {
+          "name": "stoppage_id",
+          "display_name": "Stoppage ID",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "stoppage_id",
+            "type": "string",
+            "display_name": "stoppage_id"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "resource_code",
+          "display_name": "Line or Plant Code",
+          "type": "string",
+          "comment": "Stopped line; a plant-wide stoppage carries the plant code.",
+          "mapped_field": {
+            "name": "resource_code",
+            "type": "string",
+            "display_name": "resource_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "resource_kind",
+          "display_name": "Scope",
+          "type": "string",
+          "comment": "Line or Plant.",
+          "mapped_field": {
+            "name": "resource_kind",
+            "type": "string",
+            "display_name": "resource_kind"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "start_time",
+          "display_name": "Start",
+          "type": "timestamp",
+          "comment": "",
+          "mapped_field": {
+            "name": "start_time",
+            "type": "timestamp",
+            "display_name": "start_time"
+          }
+        },
+        {
+          "name": "end_time",
+          "display_name": "End",
+          "type": "timestamp",
+          "comment": "",
+          "mapped_field": {
+            "name": "end_time",
+            "type": "timestamp",
+            "display_name": "end_time"
+          }
+        },
+        {
+          "name": "reason",
+          "display_name": "Reason",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "reason",
+            "type": "string",
+            "display_name": "reason"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        }
+      ],
+      "logic_properties": [],
+      "primary_keys": [
+        "stoppage_id"
+      ],
+      "display_key": "reason",
+      "incremental_key": "",
+      "tags": [
+        "Approved"
+      ],
+      "comment": "A planned stop of a line or plant (maintenance, power work, holidays); nothing can be scheduled in it. A stoppage on a plant applies to every line of that plant.",
+      "icon": "icon-dip-suanziguanli",
+      "color": "#0e5fc5",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_kitplan",
+      "name": "Kit Schedule Plan",
+      "data_properties": [
+        {
+          "name": "plan_id",
+          "display_name": "Plan ID",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "plan_id",
+            "type": "string",
+            "display_name": "plan_id"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "bill_no",
+          "display_name": "Forecast Number",
+          "type": "string",
+          "comment": "Forecast number of the demand.",
+          "mapped_field": {
+            "name": "bill_no",
+            "type": "string",
+            "display_name": "bill_no"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "product_code",
+          "display_name": "Product Code",
+          "type": "string",
+          "comment": "Empty when the whole bill is scheduled.",
+          "mapped_field": {
+            "name": "product_code",
+            "type": "string",
+            "display_name": "product_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "line_code",
+          "display_name": "Line Code",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "line_code",
+            "type": "string",
+            "display_name": "line_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "planned_start",
+          "display_name": "Planned Start",
+          "type": "datetime",
+          "comment": "",
+          "mapped_field": {
+            "name": "planned_start",
+            "type": "datetime",
+            "display_name": "planned_start"
+          }
+        },
+        {
+          "name": "planned_finish",
+          "display_name": "Planned Finish",
+          "type": "datetime",
+          "comment": "",
+          "mapped_field": {
+            "name": "planned_finish",
+            "type": "datetime",
+            "display_name": "planned_finish"
+          }
+        },
+        {
+          "name": "quantity",
+          "display_name": "Quantity",
+          "type": "decimal",
+          "comment": "Forecast quantity of the line for a single-product plan; empty for a whole bill.",
+          "mapped_field": {
+            "name": "quantity",
+            "type": "decimal",
+            "display_name": "quantity"
+          }
+        },
+        {
+          "name": "kit_date",
+          "display_name": "Kit Date",
+          "type": "date",
+          "comment": "Earliest start date when covered; when short, the date open purchases close the gap, empty when they cannot.",
+          "mapped_field": {
+            "name": "kit_date",
+            "type": "date",
+            "display_name": "kit_date"
+          }
+        },
+        {
+          "name": "kit_status",
+          "display_name": "Kit Status",
+          "type": "string",
+          "comment": "Covered or Short, checked for the planned start.",
+          "mapped_field": {
+            "name": "kit_status",
+            "type": "string",
+            "display_name": "kit_status"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "key_material",
+          "display_name": "Key Material",
+          "type": "string",
+          "comment": "Material with the largest shortage.",
+          "mapped_field": {
+            "name": "key_material",
+            "type": "string",
+            "display_name": "key_material"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "shortage_note",
+          "display_name": "Shortage Note",
+          "type": "text",
+          "comment": "Largest shortages, quantities and when the plan can be kitted.",
+          "mapped_field": {
+            "name": "shortage_note",
+            "type": "text",
+            "display_name": "shortage_note"
+          }
+        },
+        {
+          "name": "plan_status",
+          "display_name": "Plan Status",
+          "type": "string",
+          "comment": "Scheduled, Confirmed or Cancelled. Confirmed means released to production; a cancelled plan is no longer valid.",
+          "mapped_field": {
+            "name": "plan_status",
+            "type": "string",
+            "display_name": "plan_status"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "reschedule_count",
+          "display_name": "Reschedule Count",
+          "type": "integer",
+          "comment": "How many times the planned finish was moved.",
+          "mapped_field": {
+            "name": "reschedule_count",
+            "type": "integer",
+            "display_name": "reschedule_count"
+          }
+        },
+        {
+          "name": "previous_finish",
+          "display_name": "Previous Finish",
+          "type": "datetime",
+          "comment": "Planned finish before the last reschedule.",
+          "mapped_field": {
+            "name": "previous_finish",
+            "type": "datetime",
+            "display_name": "previous_finish"
+          }
+        },
+        {
+          "name": "source_scenario",
+          "display_name": "Source Scenario",
+          "type": "string",
+          "comment": "Scenario adopted when the plan was written.",
+          "mapped_field": {
+            "name": "source_scenario",
+            "type": "string",
+            "display_name": "source_scenario"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "planner",
+          "display_name": "Planner",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "planner",
+            "type": "string",
+            "display_name": "planner"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "planned_at",
+          "display_name": "Planned At",
+          "type": "datetime",
+          "comment": "Last time the plan was written; the date follows the sample business date.",
+          "mapped_field": {
+            "name": "planned_at",
+            "type": "datetime",
+            "display_name": "planned_at"
+          }
+        }
+      ],
+      "logic_properties": [],
+      "primary_keys": [
+        "plan_id"
+      ],
+      "display_key": "plan_id",
+      "incremental_key": "",
+      "tags": [
+        "Approved"
+      ],
+      "comment": "A scheduling result: one demand forecast (whole bill) or one of its products placed on a production line with a planned start and finish, together with the kit check made for the planned start. The Create Kit Schedule Plan action writes it when a schedule is adopted; the forecast itself is not changed. A forecast number + product code has at most one active plan (status not Cancelled); scheduling it again updates that plan and adds one to its reschedule count. An empty product code means the whole bill. The kit check reserves signed backlog first, does not use finished goods and counts open purchase lines due by the planned start, the same rules as Demand Coverage and Shortages.",
+      "icon": "icon-dip-suanziguanli",
+      "color": "#52C41A",
+      "branch": "main"
     }
   ],
   "relation_types": [
@@ -4515,6 +5193,150 @@
         "Approved"
       ],
       "comment": "",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_line2parent",
+      "name": "Line Plant",
+      "source_object_type_id": "supply_ontology_en_line",
+      "target_object_type_id": "supply_ontology_en_line",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "parent_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "line_code",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "Plant a line belongs to; plants have no parent.",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_line2prod",
+      "name": "Line Products",
+      "source_object_type_id": "supply_ontology_en_line",
+      "target_object_type_id": "supply_ontology_en_product",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "line_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "line_code",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "Assigned by product line: the product's default line code equals the line code.",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_stop2line",
+      "name": "Stoppage Line",
+      "source_object_type_id": "supply_ontology_en_stoppage",
+      "target_object_type_id": "supply_ontology_en_line",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "resource_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "line_code",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "Line or plant of the stoppage; a plant-wide stoppage applies to all its lines.",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_plan2fcst",
+      "name": "Kit Schedule Plan Forecast",
+      "source_object_type_id": "supply_ontology_en_kitplan",
+      "target_object_type_id": "supply_ontology_en_forecast",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "bill_no",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "billno",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "Forecast the plan schedules; a whole-bill plan relates to every line of the bill.",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_plan2prod",
+      "name": "Kit Schedule Plan Product",
+      "source_object_type_id": "supply_ontology_en_kitplan",
+      "target_object_type_id": "supply_ontology_en_product",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "product_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "material_number",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "Product of a single-product plan; a whole-bill plan has none.",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_en_plan2line",
+      "name": "Kit Schedule Plan Line",
+      "source_object_type_id": "supply_ontology_en_kitplan",
+      "target_object_type_id": "supply_ontology_en_line",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "line_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "line_code",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "Line the plan is scheduled on.",
       "icon": "",
       "color": "",
       "branch": "main"

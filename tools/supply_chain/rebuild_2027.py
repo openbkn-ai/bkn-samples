@@ -126,11 +126,11 @@ LINES = [
 ]
 STOPPAGES = [
     # id, resource, kind, start, end, zh reason, en reason
-    ("ST-2703-01", "L-SZ-UAV", "产线", "2027-03-22T08:00:00+08:00", "2027-03-24T20:00:00+08:00", "总装工装年度校准", "Annual calibration of assembly fixtures"),
-    ("ST-2704-01", "F-SZ", "工厂", "2027-04-09T00:00:00+08:00", "2027-04-11T23:59:59+08:00", "园区配电改造停电", "Site power distribution upgrade"),
-    ("ST-2704-02", "L-UR-AD", "产线", "2027-04-19T08:00:00+08:00", "2027-04-21T20:00:00+08:00", "产线节拍改造", "Line takt-time retrofit"),
-    ("ST-2705-01", "F-UR", "工厂", "2027-05-01T00:00:00+08:00", "2027-05-05T23:59:59+08:00", "劳动节停产", "Labour Day shutdown"),
-    ("ST-2705-02", "L-SZ-ELE", "产线", "2027-05-17T08:00:00+08:00", "2027-05-18T20:00:00+08:00", "回流焊设备检修", "Reflow oven maintenance"),
+    ("ST-2703-01", "L-SZ-UAV", "产线", "2027-03-22 08:00:00", "2027-03-24 20:00:00", "总装工装年度校准", "Annual calibration of assembly fixtures"),
+    ("ST-2704-01", "F-SZ", "工厂", "2027-04-09 00:00:00", "2027-04-11 23:59:59", "园区配电改造停电", "Site power distribution upgrade"),
+    ("ST-2704-02", "L-UR-AD", "产线", "2027-04-19 08:00:00", "2027-04-21 20:00:00", "产线节拍改造", "Line takt-time retrofit"),
+    ("ST-2705-01", "F-UR", "工厂", "2027-05-01 00:00:00", "2027-05-05 23:59:59", "劳动节停产", "Labour Day shutdown"),
+    ("ST-2705-02", "L-SZ-ELE", "产线", "2027-05-17 08:00:00", "2027-05-18 20:00:00", "回流焊设备检修", "Reflow oven maintenance"),
 ]
 # Open bills (source numbers): four single-line bills stay overdue; the rest roll over 2027-03..08, near-term first.
 _DELIVERY = {
@@ -203,9 +203,10 @@ def main() -> int:
         if row["closestatus_title"] != "正常":
             assert row["enddate"] < BD
             continue
+        # startdate is the delivery date (预测交货日期); enddate closes the demand window at month end.
         due = DELIVERY[row["billno"]]
-        row["enddate"] = due
-        row["startdate"] = due[:8] + "01" if due > BD else plus(due, -20)
+        row["startdate"] = due
+        row["enddate"] = date(d(due).year, d(due).month, calendar.monthrange(d(due).year, d(due).month)[1]).isoformat()
         assert row["bizdate"] <= BD and row["auditdate"][:10] <= BD
     bill_rows = defaultdict(list)
     for row in forecasts:
@@ -231,7 +232,7 @@ def main() -> int:
             row["qty"] = qty(D(line["qty"]))
         begin = plus(BD, offset)
         end = plus(begin, days)
-        assert end < line["enddate"], (row["billno"], end, line["enddate"])
+        assert end < line["startdate"], (row["billno"], end, line["startdate"])
         number = f"{row['billno'][:5]}{d(begin):%Y%m%d}-{row['billno'][-3:]}"
         while number in used_numbers:
             number = number[:-3] + f"{int(number[-3:]) + 1:03d}"
@@ -290,14 +291,14 @@ def main() -> int:
              and (r["rootdemandbillno"], r["materialplanid_number"]) not in {(b, p) for b, p in have if p in products}]
     spare.sort(key=lambda r: (r["rootdemandbillno"] != "", r["materialattr_title"] != "自制", r["billno"]))
     make_lines = 0
-    for line in sorted((r for r in forecasts if r["closestatus_title"] == "正常"), key=lambda r: (r["enddate"], r["id"])):
+    for line in sorted((r for r in forecasts if r["closestatus_title"] == "正常"), key=lambda r: (r["startdate"], r["id"])):
         key = (line["billno"], line["material_number"])
         row = have.get(key)
         if row is None:
             row = spare.pop(0)
             have[key] = row
         make_lines += 1
-        due = line["enddate"]
+        due = line["startdate"]
         finish = plus(due, -1)
         start = plus(finish, -lead_of(line["material_number"]))
         released = key in started

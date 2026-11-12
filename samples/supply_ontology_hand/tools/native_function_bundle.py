@@ -39,6 +39,32 @@ def supply_function(
     return result
 '''
 
+KIT_ENTRY_SOURCE = r'''
+from sandbox_sdk import bkn, tool
+import bkn_osdk
+from kit_schedule import OT_PLAN, schedule
+from managed_execution import KN_ID
+
+@tool
+def kit_schedule(
+    bill_no: str | None = None, product_code: str | None = None, line_code: str | None = None,
+    planned_start: str | None = None, planned_finish: str | None = None, plan_status: str | None = None,
+    source_scenario: str | None = None, planner: str | None = None, plan_id: str | None = None,
+) -> dict:
+    """Create, reschedule or cancel one kit-schedule plan and record its kit check."""
+    params = {key: value for key, value in locals().items() if value is not None}
+    definition = bkn_osdk.call(f"/api/bkn-backend/v1/knowledge-networks/{KN_ID}/object-types/{OT_PLAN}")
+    entries = definition.get("entries") if isinstance(definition, dict) else None
+    resource = ((entries[0] if entries else definition) or {}).get("data_source", {}).get("id")
+    if not resource:
+        raise ValueError("kit-schedule plan object has no dataset")
+
+    def write(plan_id: str, row: dict):
+        return bkn_osdk.call(f"/api/vega-backend/v1/resources/{resource}/data/{plan_id}", method="PUT", body=row)
+
+    return schedule(params, bkn.query_object_instance, write)
+'''
+
 
 def _archive_source() -> str:
     buffer = io.BytesIO()
@@ -46,6 +72,7 @@ def _archive_source() -> str:
         for file_path in sorted((TOOLS / "fn").rglob("*.py")):
             archive.write(file_path, file_path.relative_to(TOOLS))
         archive.write(TOOLS / "managed_execution.py", "managed_execution.py")
+        archive.write(TOOLS / "kit_schedule.py", "kit_schedule.py")
     return base64.b64encode(buffer.getvalue()).decode("ascii")
 
 
@@ -67,4 +94,5 @@ def build_native_function_code(*, fixed_operation: str) -> str:
         sys.path.insert(0, root)
         '''
     )
-    return bootstrap + "\n" + textwrap.dedent(ENTRY_SOURCE).lstrip()
+    entry = KIT_ENTRY_SOURCE if fixed_operation == "kit_schedule" else ENTRY_SOURCE
+    return bootstrap + "\n" + textwrap.dedent(entry).lstrip()

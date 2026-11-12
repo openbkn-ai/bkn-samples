@@ -31,11 +31,12 @@ def _entries(payload: dict, *keys: str) -> list:
 
 
 def capability_ready(run_cli) -> bool:
+    """Both calculation tools back tool actions; the kit-schedule tool backs the three plan object actions."""
     sys.path.insert(0, str(SAMPLE_DIR / "tools"))
-    from function_catalog import FUNCTION_CATALOG
+    from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE
 
-    expected = {spec["name"] for spec in FUNCTION_CATALOG.values()}
-    if not expected:
+    calculations = {spec["name"] for spec in FUNCTION_CATALOG.values()}
+    if not calculations:
         return False
     listing = run_cli(["toolbox", "list", "--keyword", BOX_NAME, "--limit", "100"])
     box = next((item for item in _entries(listing, "data", "entries") if item.get("box_name") == BOX_NAME), None)
@@ -45,13 +46,16 @@ def capability_ready(run_cli) -> bool:
     enabled = {item.get("name"): item.get("tool_id")
                for item in _entries(tools, "tools", "data", "entries")
                if item.get("status") == "enabled" and item.get("tool_id")}
-    if not expected <= enabled.keys():
+    if not calculations | {KIT_SCHEDULE["name"]} <= enabled.keys():
         return False
     listing = run_cli(["bkn", "action-type", "list", "supply_ontology_hand"])
-    actions = {(item.get("action_source") or {}).get("tool_id") for item in _entries(listing, "entries")
-               if (item.get("operation_config") or {}).get("type") == "tool"
-               and (item.get("action_source") or {}).get("box_id") == box["box_id"]}
-    return {enabled[name] for name in expected} <= actions
+    owned = [item for item in _entries(listing, "entries") if (item.get("action_source") or {}).get("box_id") == box["box_id"]]
+    tool_actions = {(item.get("action_source") or {}).get("tool_id") for item in owned
+                    if (item.get("operation_config") or {}).get("type") == "tool"}
+    plan_actions = {item.get("id") for item in owned if (item.get("operation_config") or {}).get("type") == "object"
+                    and (item.get("action_source") or {}).get("tool_id") == enabled[KIT_SCHEDULE["name"]]}
+    return ({enabled[name] for name in calculations} <= tool_actions
+            and {f"supply_ontology_hand_kitplan_{key}" for key in KIT_PLAN_ACTIONS} <= plan_actions)
 
 def skills_ready(run_cli) -> bool:
     sys.path.insert(0, str(SAMPLE_DIR / "tools"))

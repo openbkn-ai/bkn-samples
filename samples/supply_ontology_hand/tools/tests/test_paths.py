@@ -25,6 +25,7 @@ def test_pack_layout_exists():
     assert (TOOLS / "README.md").is_file()
 
 
-def test_sample_has_twelve_csv():
+def test_sample_has_fourteen_tables_and_the_plan_history():
     csvs = sorted(SAMPLE.glob("*.csv"))
-    assert len(csvs) == 12
+    assert len(csvs) == 15
+    assert (SAMPLE / "kit_schedule_plan.csv") in csvs

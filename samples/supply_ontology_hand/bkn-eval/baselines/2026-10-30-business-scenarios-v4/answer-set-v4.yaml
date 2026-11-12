@@ -1,7 +1,7 @@
 schema_version: '4.0'
 set_id: supply-business-scenarios-v4
-business_date: '2026-08-25'
-source_snapshot_date: '2026-08-13'
+business_date: '2027-02-25'
+source_snapshot_date: '2027-02-13'
 prd: docs/PRD.zh-CN.md
 generation_method: independent raw CSV Decimal oracle (oracle.py)
 answers:
@@ -52,15 +52,15 @@ answers:
 - id: Q-08
   question: MRP 算出来但还没投放的计划订单有多少张？
   expected:
-    count: 262
-  answer: '{"count": 262}'
+    count: 313
+  answer: '{"count": 313}'
 - id: Q-09
   question: 欠货的订单里有多少张已经过了承诺交期？拖得最久的是哪张单，拖了多少天？
   expected:
-    overdue_orders: 192
-    oldest_order: SO0000538
-    days_late: 162
-  answer: '{"overdue_orders": 192, "oldest_order": "SO0000538", "days_late": 162}'
+    overdue_orders: 72
+    oldest_order: SO0000200
+    days_late: 45
+  answer: '{"overdue_orders": 72, "oldest_order": "SO0000200", "days_late": 45}'
 - id: Q-10
   question: 武汉农兴农业科技有限公司还有哪些订单没发完？一共欠他们多少套？
   expected:
@@ -77,22 +77,22 @@ answers:
 - id: Q-11
   question: 已经过了交期还没到齐的采购行有多少？涉及多少家供应商？
   expected:
-    lines: 483
-    suppliers: 133
-  answer: '{"lines": 483, "suppliers": 133}'
+    lines: 105
+    suppliers: 49
+  answer: '{"lines": 105, "suppliers": 49}'
 - id: Q-12
   question: 逾期没到货的采购行最多的是哪家供应商？共多少行、还欠我们多少数量？
   expected:
     supplier: 俅门信和达电子有限公司
-    lines: 50
-    open_qty: 2844000
-  answer: '{"supplier": "俅门信和达电子有限公司", "lines": 50, "open_qty": 2844000}'
+    lines: 24
+    open_qty: 1924000
+  answer: '{"supplier": "俅门信和达电子有限公司", "lines": 24, "open_qty": 1924000}'
 - id: Q-13
   question: 杨强云负责的供应商里，有几家现在有逾期未到的采购行？
   expected:
     suppliers: 51
-    with_overdue: 25
-  answer: '{"suppliers": 51, "with_overdue": 25}'
+    with_overdue: 8
+  answer: '{"suppliers": 51, "with_overdue": 8}'
 - id: Q-14
   question: 密封圈 165-002537 用在哪些成品上？
   expected:
@@ -123,9 +123,9 @@ answers:
 - id: Q-17
   question: 还没完工的生产工单有多少张？合计还有多少套没入库？
   expected:
-    work_orders: 23
-    remaining_qty: 6336
-  answer: '{"work_orders": 23, "remaining_qty": 6336}'
+    work_orders: 8
+    remaining_qty: 505
+  answer: '{"work_orders": 8, "remaining_qty": 505}'
 - id: Q-18
   question: 没关闭的预测里，哪个产品的预测量最大？是它现有成品库存的多少倍？
   expected:
@@ -137,14 +137,14 @@ answers:
 - id: Q-19
   question: 接下来 30 天内按交期应到货的采购行有几行？来自几家供应商？
   expected:
-    lines: 31
-    suppliers: 23
-  answer: '{"lines": 31, "suppliers": 23}'
+    lines: 301
+    suppliers: 110
+  answer: '{"lines": 301, "suppliers": 110}'
 - id: Q-20
   question: 贴片无源晶振 527-000017 今天下单的话，最早哪天能到？
   expected:
-    arrival_date: '2026-11-03'
-  answer: '{"arrival_date": "2026-11-03"}'
+    arrival_date: '2027-05-06'
+  answer: '{"arrival_date": "2027-05-06"}'
 - id: Q-21
   question: 客户要 50 套 382-000005，能直接用现有成品发吗？发完以后还能再承诺多少套现货？
   expected:
@@ -194,9 +194,9 @@ answers:
     new_order_needed:
     - 165-002619
     - 606-000691
-    earliest_new_order_arrival: '2026-09-08'
+    earliest_new_order_arrival: '2027-03-11'
   answer: '{"short_sets": 4, "blocking_materials": {"165-002619": 4, "606-000691": 4, "606-000692": 4}, "chase_open_po": ["606-000692"], "new_order_needed": ["165-002619", "606-000691"], "earliest_new_order_arrival":
-    "2026-09-08"}'
+    "2027-03-11"}'
 - id: Q-26
   question: 要补齐 YN580 农业无人飞机 367-000130 的欠单，哪些缺料完全没有在途、必须马上下单？其中最慢的是哪颗料、最早哪天到？
   expected:
@@ -212,9 +212,9 @@ answers:
     - 795-000761
     - 795-000776
     slowest_material: 527-000017
-    arrival_date: '2026-11-03'
+    arrival_date: '2027-05-06'
   answer: '{"no_open_po": ["165-002076", "165-003483", "165-003484", "165-003486", "501-000002", "527-000017", "606-001069", "606-001070", "795-000761", "795-000776"], "slowest_material": "527-000017",
-    "arrival_date": "2026-11-03"}'
+    "arrival_date": "2027-05-06"}'
 - id: Q-27
   question: 526-000006 的欠单按承诺交期先后用现货补发，哪几张单补不上？差的部分能不能用现有库存生产出来？
   expected:
@@ -303,14 +303,14 @@ answers:
     largest_shortage: 606-001059
   answer: '{"covered": false, "shortage_material_count": 16, "largest_shortage": "606-001059"}'
 - id: Q-35
-  question: 采购订单 02-KSHA-CGDD-260402-012958 里 849-000904 这一行是从哪张请购单来的？请购又是哪张 MRP 计划订单生成的？最终是为哪张需求预测、哪个产品备的料？
+  question: 采购订单 02-KSHA-CGDD-261002-012958 里 849-000904 这一行是从哪张请购单来的？请购又是哪张 MRP 计划订单生成的？最终是为哪张需求预测、哪个产品备的料？
   expected:
-    purchase_request: CGSQ-260331-000026
-    mrp_plan_order: JHJY-20260331-00045866
-    forecast: YCD2026020500000045
+    purchase_request: CGSQ-260930-000026
+    mrp_plan_order: JHJY-20260930-00045866
+    forecast: YCD2026080500000045
     product_codes:
     - P69-000060
-  answer: '{"purchase_request": "CGSQ-260331-000026", "mrp_plan_order": "JHJY-20260331-00045866", "forecast": "YCD2026020500000045", "product_codes": ["P69-000060"]}'
+  answer: '{"purchase_request": "CGSQ-260930-000026", "mrp_plan_order": "JHJY-20260930-00045866", "forecast": "YCD2026080500000045", "product_codes": ["P69-000060"]}'
 - id: Q-36
   question: 我们现在一共有多少家供应商建了档？
   expected:
@@ -337,17 +337,122 @@ answers:
   question: 今天按交期应该到货的采购有哪些？是哪家供应商、什么料、还差多少没到？
   expected:
     lines:
-    - po: 01-HDKJ-CGDD-260729-016176
+    - po: 01-HDKJ-CGDD-270224-014286
+      supplier: 浙江巨传电子股份有限公司
+      material_code: 588-000828
+      open_qty: 580
+    - po: 01-HDKJ-CGDD-270214-014227
       supplier: 昆山诚意智能科技有限公司
-      material_code: 606-001059
-      open_qty: 800
-  answer: '{"lines": [{"po": "01-HDKJ-CGDD-260729-016176", "supplier": "昆山诚意智能科技有限公司", "material_code": "606-001059", "open_qty": 800}]}'
+      material_code: 606-000009
+      open_qty: 350
+    - po: 01-HDKJ-CGDD-270131-013848
+      supplier: 深圳市扬展康电子有限公司
+      material_code: 356-000587
+      open_qty: 10500
+    - po: 01-HDKJ-CGDD-270224-013817
+      supplier: 支付宝(中国)网络技术有限公司
+      material_code: 849-001306
+      open_qty: 120
+    - po: 01-HDKJ-CGDD-270208-013680
+      supplier: 仗兴科技（深圳）有限公司
+      material_code: 165-002416
+      open_qty: 20800
+    - po: 01-HDKJ-CGDD-270224-013565
+      supplier: 浙江巨传电子股份有限公司
+      material_code: 588-000836
+      open_qty: 33
+    - po: 01-HDKJ-CGDD-270224-013501
+      supplier: 支付宝(中国)网络技术有限公司
+      material_code: 849-001308
+      open_qty: 550
+    - po: 01-HDKJ-CGDD-270208-013444
+      supplier: 兴化市兏远不锈钢制品有限公司
+      material_code: 849-000075
+      open_qty: 20000
+    - po: HD20260407-D01
+      supplier: 苏州誉腾模塑科技有限公司
+      material_code: 525-000140
+      open_qty: 15
+    - po: 01-HDKJ-CGDD-270224-012764
+      supplier: 苏州华誉智能科技有限公司
+      material_code: 588-000736
+      open_qty: 9
+    - po: 01-HDKJ-CGDD-270217-012615
+      supplier: 苏州华誉智能科技有限公司
+      material_code: 588-000545
+      open_qty: 598
+    - po: 01-HDKJ-CGDD-270224-012611
+      supplier: 浙江巨传电子股份有限公司
+      material_code: 588-000829
+      open_qty: 4
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: 浙江巨传电子股份有限公司
+      material_code: 588-000835
+      open_qty: 420
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: 浙江巨传电子股份有限公司
+      material_code: 588-000836
+      open_qty: 420
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: 浙江巨传电子股份有限公司
+      material_code: 588-000835
+      open_qty: 3310
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: 浙江巨传电子股份有限公司
+      material_code: 588-000836
+      open_qty: 3310
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: 浙江巨传电子股份有限公司
+      material_code: 588-000836
+      open_qty: 54
+    - po: 01-HDKJ-CGDD-270224-016250
+      supplier: 上海量讯物联计术有限公司
+      material_code: 182-000028
+      open_qty: 600
+    - po: 01-HDKJ-CGDD-270224-016221
+      supplier: 超城紧固系统（苏州）有限公司
+      material_code: 849-001389
+      open_qty: 200
+    - po: 01-HDKJ-CGDD-270224-016221
+      supplier: 超城紧固系统（苏州）有限公司
+      material_code: 849-001322
+      open_qty: 200
+    - po: 01-HDKJ-CGDD-270127-016121
+      supplier: 东莞市旺洋五金电子科技有限公司
+      material_code: 165-002704
+      open_qty: 67
+    - po: 01-HDKJ-CGDD-270127-016121
+      supplier: 东莞市旺洋五金电子科技有限公司
+      material_code: 549-001813
+      open_qty: 2
+    - po: 01-HDKJ-CGDD-270207-015899
+      supplier: 苏州蓝欣橡塑五金有限公司
+      material_code: 468-000565
+      open_qty: 1000
+    - po: 01-HDKJ-CGDD-270204-015584
+      supplier: 上海南森兾智能科技有限公司
+      material_code: 165-000647
+      open_qty: 5000
+  answer: '{"lines": [{"po": "01-HDKJ-CGDD-270224-014286", "supplier": "浙江巨传电子股份有限公司", "material_code": "588-000828", "open_qty": 580}, {"po": "01-HDKJ-CGDD-270214-014227", "supplier": "昆山诚意智能科技有限公司", "material_code":
+    "606-000009", "open_qty": 350}, {"po": "01-HDKJ-CGDD-270131-013848", "supplier": "深圳市扬展康电子有限公司", "material_code": "356-000587", "open_qty": 10500}, {"po": "01-HDKJ-CGDD-270224-013817", "supplier": "支付宝(中国)网络技术有限公司",
+    "material_code": "849-001306", "open_qty": 120}, {"po": "01-HDKJ-CGDD-270208-013680", "supplier": "仗兴科技（深圳）有限公司", "material_code": "165-002416", "open_qty": 20800}, {"po": "01-HDKJ-CGDD-270224-013565",
+    "supplier": "浙江巨传电子股份有限公司", "material_code": "588-000836", "open_qty": 33}, {"po": "01-HDKJ-CGDD-270224-013501", "supplier": "支付宝(中国)网络技术有限公司", "material_code": "849-001308", "open_qty": 550}, {"po":
+    "01-HDKJ-CGDD-270208-013444", "supplier": "兴化市兏远不锈钢制品有限公司", "material_code": "849-000075", "open_qty": 20000}, {"po": "HD20260407-D01", "supplier": "苏州誉腾模塑科技有限公司", "material_code": "525-000140", "open_qty":
+    15}, {"po": "01-HDKJ-CGDD-270224-012764", "supplier": "苏州华誉智能科技有限公司", "material_code": "588-000736", "open_qty": 9}, {"po": "01-HDKJ-CGDD-270217-012615", "supplier": "苏州华誉智能科技有限公司", "material_code":
+    "588-000545", "open_qty": 598}, {"po": "01-HDKJ-CGDD-270224-012611", "supplier": "浙江巨传电子股份有限公司", "material_code": "588-000829", "open_qty": 4}, {"po": "01-HDKJ-CGDD-270224-012610", "supplier": "浙江巨传电子股份有限公司",
+    "material_code": "588-000835", "open_qty": 420}, {"po": "01-HDKJ-CGDD-270224-012610", "supplier": "浙江巨传电子股份有限公司", "material_code": "588-000836", "open_qty": 420}, {"po": "01-HDKJ-CGDD-270224-012610",
+    "supplier": "浙江巨传电子股份有限公司", "material_code": "588-000835", "open_qty": 3310}, {"po": "01-HDKJ-CGDD-270224-012610", "supplier": "浙江巨传电子股份有限公司", "material_code": "588-000836", "open_qty": 3310}, {"po":
+    "01-HDKJ-CGDD-270224-012610", "supplier": "浙江巨传电子股份有限公司", "material_code": "588-000836", "open_qty": 54}, {"po": "01-HDKJ-CGDD-270224-016250", "supplier": "上海量讯物联计术有限公司", "material_code": "182-000028",
+    "open_qty": 600}, {"po": "01-HDKJ-CGDD-270224-016221", "supplier": "超城紧固系统（苏州）有限公司", "material_code": "849-001389", "open_qty": 200}, {"po": "01-HDKJ-CGDD-270224-016221", "supplier": "超城紧固系统（苏州）有限公司",
+    "material_code": "849-001322", "open_qty": 200}, {"po": "01-HDKJ-CGDD-270127-016121", "supplier": "东莞市旺洋五金电子科技有限公司", "material_code": "165-002704", "open_qty": 67}, {"po": "01-HDKJ-CGDD-270127-016121",
+    "supplier": "东莞市旺洋五金电子科技有限公司", "material_code": "549-001813", "open_qty": 2}, {"po": "01-HDKJ-CGDD-270207-015899", "supplier": "苏州蓝欣橡塑五金有限公司", "material_code": "468-000565", "open_qty": 1000}, {"po":
+    "01-HDKJ-CGDD-270204-015584", "supplier": "上海南森兾智能科技有限公司", "material_code": "165-000647", "open_qty": 5000}]}'
 - id: Q-41
-  question: 9 月份按交期要到货的采购行有多少行？来自几家供应商？
+  question: 3 月份按交期要到货的采购行有多少行？来自几家供应商？
   expected:
-    lines: 28
-    suppliers: 20
-  answer: '{"lines": 28, "suppliers": 20}'
+    lines: 268
+    suppliers: 106
+  answer: '{"lines": 268, "suppliers": 106}'
 - id: Q-42
   question: 欠货最多的三个产品是哪几个？各欠多少套？
   expected:
@@ -361,24 +466,24 @@ answers:
   expected:
     orders: 71
     unshipped_qty: 181
-    overdue: 71
-  answer: '{"orders": 71, "unshipped_qty": 181, "overdue": 71}'
+    overdue: 27
+  answer: '{"orders": 71, "unshipped_qty": 181, "overdue": 27}'
 - id: Q-44
   question: 纸护角 606-001059 还有哪些采购没到？哪些已经逾期？
   expected:
     lines:
-    - po: 01-HDKJ-CGDD-260706-015729
-      supplier: 昆山诚意智能科技有限公司
-      open_qty: 8
-      deliver_date: '2026-07-06'
-      overdue: true
-    - po: 01-HDKJ-CGDD-260729-016176
+    - po: 01-HDKJ-CGDD-270208-016176
       supplier: 昆山诚意智能科技有限公司
       open_qty: 800
-      deliver_date: '2026-08-25'
+      deliver_date: '2027-03-06'
       overdue: false
-  answer: '{"lines": [{"po": "01-HDKJ-CGDD-260706-015729", "supplier": "昆山诚意智能科技有限公司", "open_qty": 8, "deliver_date": "2026-07-06", "overdue": true}, {"po": "01-HDKJ-CGDD-260729-016176", "supplier": "昆山诚意智能科技有限公司",
-    "open_qty": 800, "deliver_date": "2026-08-25", "overdue": false}]}'
+    - po: 01-HDKJ-CGDD-270213-015729
+      supplier: 昆山诚意智能科技有限公司
+      open_qty: 8
+      deliver_date: '2027-03-13'
+      overdue: false
+  answer: '{"lines": [{"po": "01-HDKJ-CGDD-270208-016176", "supplier": "昆山诚意智能科技有限公司", "open_qty": 800, "deliver_date": "2027-03-06", "overdue": false}, {"po": "01-HDKJ-CGDD-270213-015729", "supplier":
+    "昆山诚意智能科技有限公司", "open_qty": 8, "deliver_date": "2027-03-13", "overdue": false}]}'
 - id: Q-45
   question: 有未关闭预测的产品里，哪些现在一套成品库存都没有？
   expected:
@@ -390,13 +495,13 @@ answers:
     - P61-000351
   answer: '{"product_codes": ["367-000102", "367-000130", "367-000131", "734-000003", "P61-000351"]}'
 - id: Q-46
-  question: U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果逾期没到的采购都能催回来，最多能做多少套？
+  question: U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果 3 月 15 日前按交期到货的在途都到了，最多能做多少套？
   expected:
     stock_only_buildable: 141
     first_blocking_materials:
     - 994-000328
-    with_overdue_po_chased: 2972
-  answer: '{"stock_only_buildable": 141, "first_blocking_materials": ["994-000328"], "with_overdue_po_chased": 2972}'
+    with_po_by_2027_03_15: 2972
+  answer: '{"stock_only_buildable": 141, "first_blocking_materials": ["994-000328"], "with_po_by_2027_03_15": 2972}'
 - id: Q-47
   question: P61-000351 新来 60 套的单。先保它的欠货，如果所有没到的采购（包括逾期的）都能催回来，料够不够？还缺什么、缺多少？
   expected:
@@ -405,19 +510,19 @@ answers:
       994-000645: 32
   answer: '{"covered": false, "shortages": {"994-000645": 32}}'
 - id: Q-48
-  question: D 类音频功放 972-000677，9 月 5 日前要投 500 个、9 月 15 日前累计要投 5000 个。库存加上按期到货的在途，两个时间点分别够不够？
+  question: D 类音频功放 972-000677，3 月 1 日前要投 500 个、3 月 10 日前累计要投 5000 个。库存加上按期到货的在途，两个时间点分别够不够？
   expected:
-    by_2026_09_05:
+    by_2027_03_01:
       available: 65
       covered: false
       short: 435
-    by_2026_09_15:
+    by_2027_03_10:
       available: 12515
       covered: true
       short: 0
-  answer: '{"by_2026_09_05": {"available": 65, "covered": false, "short": 435}, "by_2026_09_15": {"available": 12515, "covered": true, "short": 0}}'
+  answer: '{"by_2027_03_01": {"available": 65, "covered": false, "short": 435}, "by_2027_03_10": {"available": 12515, "covered": true, "short": 0}}'
 - id: Q-49
-  question: 9 月底前按期到货的在途采购，能让欠货补不上的那几个产品各多做出几套？
+  question: 3 月底前按期到货的在途采购，能让欠货补不上的那几个产品各多做出几套？
   expected:
     extra_buildable:
       367-000097: 0

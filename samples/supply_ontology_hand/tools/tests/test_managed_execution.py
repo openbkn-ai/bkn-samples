@@ -33,7 +33,7 @@ def test_several_products_are_computed_independently_in_one_call():
 
 
 def test_purchase_orders_are_read_only_when_in_transit_is_asked_for():
-    query, rows, result = run("build_capacity", {"products": ["U00-000080"], "chase_overdue_po": True})
+    query, rows, result = run("build_capacity", {"products": ["U00-000080"], "need_by": "2027-03-15"})
     assert "po" in object_types(query)
     assert result["products"][0]["buildable_qty"] == 2972
 

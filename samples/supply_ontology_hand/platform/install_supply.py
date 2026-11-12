@@ -69,6 +69,7 @@ def commands(config_path: Path) -> list[list[str]]:
         [python, str(TOOLS / "import_kn.py")],
         [python, str(TOOLS / "setup_catalog.py"), "--config", str(config_path)],
         [python, str(TOOLS / "bind_kn_resources.py"), "--config", str(config_path)],
+        [python, str(TOOLS / "setup_kit_plan_dataset.py"), "--config", str(config_path)],
         [python, str(TOOLS / "register_native_function_toolbox.py"), "--apply", "--kn-id", KN_ID],
         [python, str(TOOLS / "register_skills.py"), "--apply", "--kn-id", KN_ID],
     ]
@@ -79,7 +80,7 @@ def capability_summary(payload: dict) -> str:
     components = payload.get("components") or {}
     digest = hashlib.sha256()
     if components.get("functions"):
-        for name in ("function_catalog.py", "native_function_bundle.py"):
+        for name in ("function_catalog.py", "native_function_bundle.py", "kit_schedule.py"):
             path = TOOLS / name
             digest.update(name.encode())
             digest.update(b"\0")

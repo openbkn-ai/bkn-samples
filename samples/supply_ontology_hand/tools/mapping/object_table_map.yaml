@@ -67,6 +67,18 @@ objects:
       - sales_order_id
     bind: true
 
+  - object_type_id: supply_ontology_hand_line
+    table: production_line
+    primary_keys:
+      - line_code
+    bind: true
+
+  - object_type_id: supply_ontology_hand_stoppage
+    table: line_stoppage
+    primary_keys:
+      - stoppage_id
+    bind: true
+
 load_only_tables:
   - customer_entity
 
@@ -83,6 +95,8 @@ load_order:
   - erp_production_work_order
   - customer_entity
   - sales_order
+  - production_line
+  - line_stoppage
 
 join_checks:
   - name: so_to_product
@@ -119,4 +133,18 @@ join_checks:
     left_key: material_code
     right_table: erp_mds_forecast
     right_key: material_number
+    expect_hit_rate: 1.0
+
+  - name: product_to_line
+    left_table: hd_product_view
+    left_key: line_code
+    right_table: production_line
+    right_key: line_code
+    expect_hit_rate: 1.0
+
+  - name: stoppage_to_line
+    left_table: line_stoppage
+    left_key: resource_code
+    right_table: production_line
+    right_key: line_code
     expect_hit_rate: 1.0
