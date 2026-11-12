@@ -11,7 +11,7 @@ from installer.catalog_source import object_pairs
 from installer.contract import load_sample, validate_document
 from installer.remote_bundle import compatibility, extract_package, require, safe_path, sha
 from installer import diagnostics
-from installer.remote_installation import executor_digest
+from installer.remote_installation import _retry_with_current_executor, executor_digest
 from installer.offline_image import (file_sha, validate_layout, MAX_OFFLINE_ARCHIVE,
                                      MAX_OFFLINE_CONTENT, MAX_OFFLINE_FILE)
 from installer.state_store import write_json
@@ -155,13 +155,18 @@ class OfflinePackages:
     def _prepare(self, release, retry=False):
         sample = release["sample"]
         current = _read_state(self.state_dir, sample)
-        self.runtime.require_executor()
+        try:
+            self.runtime.require_executor()
+        except ValueError as error:
+            raise ApiError(409, "runtime_upgrade_required", str(error)) from error
         if retry:
-            require(current and current.get("status") == "failed", "only a failed installation can be retried")
+            if not current or current.get("status") != "failed":
+                raise ApiError(409, "already_installing", "only a failed installation can be retried")
             fixed = current.get("offlineRelease") or {}
-            require(fixed.get("packageDigest") == release["packageDigest"] and
-                    fixed.get("executorDigest") == executor_digest(self.root) and
-                    fixed.get("executorImage") == self.runtime.executor_image, "retry requires original artifacts")
+            if fixed.get("packageDigest") != release["packageDigest"]:
+                raise ApiError(409, "version_changed", "retry requires the original package")
+            _retry_with_current_executor(fixed, executor_digest(self.root), self.runtime.executor_image, sample)
+            current["offlineRelease"] = fixed
             current["status"] = "installing"
             current.pop("error", None)
         else:

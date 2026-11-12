@@ -268,12 +268,28 @@ class RemoteBundleTest(unittest.TestCase):
             coordinator.execute("supply-chain", install, reader=self.reader, downloader=downloader)
         self.assertNotIn("error", _read_state(coordinator.state_dir, "supply-chain"))
 
-    def test_retry_refuses_a_changed_executor_without_replacing_the_record(self):
+    def test_retry_after_a_service_upgrade_uses_the_current_executor_for_the_same_release(self):
         self.load()
         coordinator = self.coordinator()
         coordinator.prepare(self.entry)
         failed = _read_state(coordinator.state_dir, "supply-chain")
         failed["status"] = "failed"
+        write_json(coordinator.state_dir / "supply-chain.json", failed)
+        coordinator.executor_digest = "sha256:" + "e" * 64
+        coordinator.prepare_retry("supply-chain", failed["id"])
+        retried = _read_state(coordinator.state_dir, "supply-chain")
+        self.assertEqual(retried["status"], "installing")
+        self.assertEqual(retried["remoteRelease"]["executorDigest"], "sha256:" + "e" * 64)
+        self.assertEqual(retried["remoteRelease"]["entry"], failed["remoteRelease"]["entry"])
+        self.assertEqual(retried["id"], failed["id"])
+
+    def test_retry_still_refuses_another_release_without_replacing_the_record(self):
+        self.load()
+        coordinator = self.coordinator()
+        coordinator.prepare(self.entry)
+        failed = _read_state(coordinator.state_dir, "supply-chain")
+        failed["status"] = "failed"
+        failed["remoteRelease"]["entry"]["version"] = "9.9.9"
         write_json(coordinator.state_dir / "supply-chain.json", failed)
         coordinator.executor_digest = "changed"
         with self.assertRaises(ApiError) as error:
