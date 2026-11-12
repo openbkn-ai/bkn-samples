@@ -1,0 +1,43 @@
+{
+  "sampleId": "world-cup-en",
+  "version": "0.1.4",
+  "packageDigest": "sha256:aaa94753bc5af7a994af7370cbbea440532fcbccaa24fcd52acf0f334f9c61c8",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "27 business tables; 81200 fixture records; every object returns its fixture row count, plus the package's DB verification hook."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 27 objects returned their fixture row counts live; all 29 relations have links; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "No native functions; 1 mounted Skill read and checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries and 3 graph patterns passed. 7 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-world-cup-en-v0.1.4/acceptance-openbkn-0.2.2.json",
+  "evidenceDigest": "sha256:ee68ca23f2def260ee931a97d5181563832b8bce41e785010b770c8a516328fb",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (0.2.2-main.20261112104645.sha2d2a597); no native amd64 certification and no released vanilla 0.2.2.",
+    "This is the unchanged 0.1.4 package first verified on OpenBKN 0.2.1; its sample source has not changed on main since then (195a268), so it is reused rather than rebuilt.",
+    "Reference queries, graph patterns were checked through APIs; browser UI and full model-question cards were not exercised."
+  ]
+}

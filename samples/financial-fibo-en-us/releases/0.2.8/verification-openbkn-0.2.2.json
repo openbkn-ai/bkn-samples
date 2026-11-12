@@ -1,0 +1,44 @@
+{
+  "sampleId": "financial-fibo-en-us",
+  "version": "0.2.8",
+  "packageDigest": "sha256:29e787be8bb1fe860bd188a4d76b2b36f2b39586b73515448a3039a5325216c1",
+  "sourceCommit": "5fea3c2b01293e6baf9056fed22edd3d2c2e6c59",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "20 business tables; 78356 fixture records; every object returns its fixture row count, plus the package's DB verification hook."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 20 objects returned their fixture row counts live; all 29 relations have links; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "3 real native function calls through Context Loader execute_tool in a managed interaction, each matching a local run on the package fixtures; 2 mounted Skills read and checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "6 reference Cypher queries and 4 graph patterns passed. 7 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-financial-fibo-en-us-v0.2.8/acceptance-openbkn-0.2.2.json",
+  "evidenceDigest": "sha256:b5bade18af09b8499591de22e7f6fee44ff0bc1a11badbce3e32db75269743b4",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (0.2.2-main.20261112104645.sha2d2a597); no native amd64 certification and no released vanilla 0.2.2.",
+    "This is the unchanged 0.2.8 package first verified on OpenBKN 0.2.1; its sample source has not changed on main since then (195a268), so it is reused rather than rebuilt.",
+    "Native functions were called through Context Loader execute_tool inside a managed interaction and matched the same generated code run locally on the package fixtures; on this build a Python function run as a tool action does not receive that context (openbkn-ai/bkn-foundry#3123), so the functions stay mounted capabilities.",
+    "Reference queries, graph patterns and functions were checked through APIs; browser UI and full model-question cards were not exercised."
+  ]
+}
