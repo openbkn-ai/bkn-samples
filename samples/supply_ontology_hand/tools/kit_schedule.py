@@ -125,7 +125,7 @@ def schedule(params: Mapping[str, Any], query: Callable[..., Mapping[str, Any]],
         row = {"plan_id": number, "reschedule_count": 0, "previous_finish": None, "plan_status": status}
         action = "created"
     row.update(bill_no=bill, product_code=product, line_code=line_code, planned_start=start, planned_finish=finish,
-               quantity=sum(float(r["qty"]) for r in lines) if product else None,
+               quantity=round(sum(float(r["qty"]) for r in lines)) if product else None,
                kit_date=kit["kit_date"] or None, kit_status=kit["kit_status"], key_material=kit["key_material"],
                shortage_note=kit["shortage_note"], source_scenario=_text(params, "source_scenario") or row.get("source_scenario"),
                planner=planner, planned_at=stamp)
@@ -141,10 +141,7 @@ def _clean(row: Mapping[str, Any]) -> dict[str, Any]:
         value = row.get(key)
         if value is None or value == "":
             continue
-        if key == "quantity":
-            value = float(value)
-            value = int(value) if value.is_integer() else value
-        elif key == "reschedule_count":
+        if key in ("quantity", "reschedule_count"):
             value = int(value)
         out[key] = value
     return out

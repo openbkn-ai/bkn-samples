@@ -25,7 +25,7 @@ def test_dataset_schema_follows_the_plan_object():
     plan = plan_object("supply_ontology_hand")
     schema = {f["name"]: f["type"] for f in dataset_schema(plan)}
     assert schema["plan_id"] == "string" and schema["planned_start"] == "datetime"
-    assert schema["reschedule_count"] == "integer" and schema["quantity"] == "decimal" and schema["kit_date"] == "date"
+    assert schema["reschedule_count"] == "integer" and schema["quantity"] == "integer" and schema["kit_date"] == "date"
     rows = history_rows(plan)
     assert len(rows) == 11 and all(isinstance(r["reschedule_count"], int) for r in rows)
     assert all("product_code" not in r for r in rows if r["plan_id"].endswith("-ALL-01"))
