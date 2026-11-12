@@ -22,13 +22,20 @@ branch: main
 - 只有已接受的成品入库能发运。采购订单按 expected_receipt_date 考核：到货晚于预计为延迟；预计日早于业务日期且已接受数量不足订购数量为逾期未到，拒收不算到货。
 - 可用库存 = 在手 − 已分配，待检区库存不能发料。计划日期早于业务日期且未完成的维护工单为逾期；维修中的设备不能排产。
 - 计划按工单交期所在月汇总生产计划行，与当月预测比较；覆盖率 = 计划 ÷ 预测。
+- 机台排程：工序 manufacturing_operations 的 planned_machine_id、planned_start_date、planned_end_date 是排程计划（按天，含首尾两天），已完成的取执行记录；standard_duration_days 是标准工期；predecessor_operation_id 是同一工单内序号上一道的工序，前序完工后才能开工。维护工单的 planned_start_date、planned_end_date 是占用机台的计划日期，planned_date 是应保养日。同一台设备同一天只能做一件事（工序或维护）；工序计划完工晚于工单 due_date 为延误，维护计划开始晚于 planned_date 为逾期保养。
+- 排程规则（工序未完成、未开工时检查，口径与执行合规一致）：
+  - 工单齐套：物料需求按上面的算法；可用 = 已发料 + 可用库存（在手 − 已分配，不含待检区）+ 开工日前（含当天）预计到货、未逾期的采购订单余量（订购 − 已收货，拒收不算收货）。各未完工单按首道未完成工序的开工日先后分用同一批库存和在途，先开工的先用；BOM 版本不是已冻结也不齐套。不齐套为硬约束。
+  - 设备能力：计划机台对工步 required_capability_id 的能力状态为合格。不合格为硬约束。
+  - 人员资质与班次：覆盖开工日的周班次里，该工作中心有资质合格、valid_to 不早于开工日的在职操作员。没有为硬约束；人数少于同一时段在该工作中心开工的工序数为软提示。
+  - 换型提示：同一台设备上按开工先后相邻的两道工序，工步 setup_class 不同即需换型，为软提示。
 
 回答方式：
-- 全部问题都用 Cypher 查询，本样例没有函数。执行记录经 process_steps → manufacturing_operations 找到工单和工作中心；检验批、成品入库、发运都带 production_order_id；发运同时带 sales_order_line_id。
+- 排程检查用行动：工单齐套、设备能力、人员资质与班次、换型提示四个规则函数都作为行动执行（get_action_info → execute_action → get_action_execution），参数 tasks 传工序列表，如 [{"key":"OP-2703-06-10"}]，只给 key 时按已存的计划机台和计划日期检查，传空列表检查全部未完成工序；也可以在每条里带 start、end（YYYY-MM-DD）和 resource（机台编号）试算改排。调整排程用“调整工序排程”“调整维修工单”两个行动，只改计划字段。
+- 其余问题用 Cypher 查询。执行记录经 process_steps → manufacturing_operations 找到工单和工作中心；检验批、成品入库、发运都带 production_order_id；发运同时带 sales_order_line_id。
 - Cypher 支持关联、WITH、CASE、聚合和 ORDER BY，不支持变长路径和 UNWIND。日期是 YYYY-MM-DD 字符串，可直接比较；数值可能以字符串返回。中文网络的状态取值是中文（如已完成、已阻塞、已接受、已拒收、待检、合格、暂停）。
 
 ## Network Overview
 
 - **ObjectTypes** (40)
-- **RelationTypes** (71)
+- **RelationTypes** (73)
 - **ConceptGroups** (3)

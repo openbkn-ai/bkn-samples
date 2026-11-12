@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: manufacturing_operations_planned_machine_id_to_production_machines
+name: manufacturing_operations_planned_machine_id_to_production_machines
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: manufacturing_operations_planned_machine_id_to_production_machines
+
+The machine an operation is planned on.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| manufacturing_operations | production_machines | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| planned_machine_id | machine_id |

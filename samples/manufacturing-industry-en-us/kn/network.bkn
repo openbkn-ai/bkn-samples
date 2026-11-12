@@ -22,13 +22,20 @@ Business rules (defaults; when a user states a different condition, follow the u
 - Only accepted finished goods receipts can ship. Purchase orders are measured against expected_receipt_date: a later receipt is late; an order whose expected date is before the business date and whose accepted quantity is below the ordered quantity is overdue, and rejected receipts do not count.
 - Available stock = on hand − allocated; stock in the inspection hold cannot be issued. A maintenance work order planned before the business date and not completed is overdue; a machine under repair cannot be scheduled.
 - Plans are summed from production plan lines by the month of each work order's due date and compared with that month's forecast; coverage = planned ÷ forecast.
+- Machine schedule: an operation's (manufacturing_operations) planned_machine_id, planned_start_date and planned_end_date are the schedule (whole days, both ends inclusive); completed operations take their execution record. standard_duration_days is the standard duration; predecessor_operation_id is the previous operation by sequence in the same work order, which must finish first. A maintenance work order's planned_start_date and planned_end_date are the days it occupies the machine; planned_date is the due date. A machine does one thing a day (an operation or maintenance). An operation planned to end after its work order's due_date is late; maintenance planned to start after planned_date is overdue.
+- Schedule rules (checked for operations not completed and not started; same basis as execution compliance):
+  - Work order kit: material requirement as above; available = issued + available stock (on hand − allocated, not the inspection hold) + the open quantity (ordered − received, rejected receipts do not count) of purchase orders expected on or before the start day and not overdue. Open work orders draw on the same stock and incoming orders in the order of their first open operation's start day, earliest first; a BOM revision that is not frozen is also incomplete. Incomplete is a hard constraint.
+  - Machine capability: the planned machine's capability for the step's required_capability_id is qualified. Otherwise hard.
+  - Operator qualification and shift: in the weekly shift covering the start day, the work centre has an active operator with a qualified qualification whose valid_to is not before the start day. None is hard; fewer than the operations starting at that work centre in the same period is a soft warning.
+  - Changeover: two operations next to each other on a machine, by start day, whose steps have different setup_class need a changeover; soft.
 
 How to answer:
-- Answer every question with Cypher; this sample has no functions. Executions reach their work order and work centre through process_steps → manufacturing_operations; inspection lots, finished goods receipts and shipments carry production_order_id, and shipments also carry sales_order_line_id.
+- Schedule checks run as actions: the four rule functions work order kit, machine capability, operator qualification and shift, and changeover are each executed as an action (get_action_info → execute_action → get_action_execution). Pass operations in tasks, e.g. [{"key":"OP-2703-06-10"}]; with only a key the stored planned machine and dates are checked, an empty list checks every open operation, and each item may carry start, end (YYYY-MM-DD) and resource (machine ID) to try a change. The actions "Adjust operation schedule" and "Adjust maintenance work order" change the planned fields only.
+- Answer every other question with Cypher. Executions reach their work order and work centre through process_steps → manufacturing_operations; inspection lots, finished goods receipts and shipments carry production_order_id, and shipments also carry sales_order_line_id.
 - Cypher supports joins, WITH, CASE, aggregation and ORDER BY, not variable-length paths or UNWIND. Dates are YYYY-MM-DD strings and compare directly; numbers may come back as strings. Status values are English codes (completed, blocked, accepted, rejected, pending_inspection, qualified, suspended).
 
 ## Network Overview
 
 - **ObjectTypes** (40)
-- **RelationTypes** (71)
+- **RelationTypes** (73)
 - **ConceptGroups** (3)
