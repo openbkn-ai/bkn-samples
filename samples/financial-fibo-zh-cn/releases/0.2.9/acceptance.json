@@ -1,0 +1,120 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "financial-fibo-zh-cn",
+ "version": "0.2.9",
+ "packageDigest": "sha256:78fec08215233f4c324b3766597e5d36eb4118c9cf7b8b21358b41c960a21427",
+ "sourceCommit": "3b123a9d7bfd02b5f5d0658dd045f778391d70f3",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 20,
+   "fixtureRecords": 78356,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 20,
+   "relations": 29,
+   "liveObjectQueriesPassed": 20,
+   "relationsWithLinks": 29
+  },
+  "capabilities": {
+   "toolActionsExecuted": [
+    {
+     "action": "financial_fibo_zh_cn_limit_assessment_asof",
+     "name": "按日期评估限额",
+     "parameters": [
+      "portfolio_ids",
+      "as_of_date",
+      "knowledge_date",
+      "view_kind"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "financial_fibo_zh_cn_settlement_asof",
+     "name": "按日期计算交收状态",
+     "parameters": [
+      "portfolio_ids",
+      "as_of_date",
+      "knowledge_date",
+      "view_kind"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "financial_fibo_zh_cn_valuation_asof",
+     "name": "按日期计算估值",
+     "parameters": [
+      "portfolio_ids",
+      "as_of_date",
+      "knowledge_date",
+      "view_kind"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "fibo-post-trade-operations-zh-cn",
+     "sourceContentDigest": "sha256:9c54e67dd0abee7b1d9ef929a45565d03fe5c65f10dd0a92c95ac2bbcda0a707",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "fibo-risk-limits-zh-cn",
+     "sourceContentDigest": "sha256:a0c7d4d80554c681ce3ab017e1e6c44600db6af4d97efb8041241e302f3af611",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 6,
+   "graphPatternsPassed": 4,
+   "cardsCheckedAgainstActionsAndCypher": 9,
+   "cardsMatched": 9,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "actionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build with bkn-foundry#3125 (bkn-backend 702-act-2d2a597, ontology-query act3125-d089a55a, agent-retrieval sha2d466bc, sample service 022-388d9501); no native amd64 certification and no released vanilla 0.2.2.",
+  "Each calculation runs as a tool action through Context Loader (get_action_info, execute_action with every parameter explicit, get_action_execution); every result matched the same generated function code run locally on the package fixtures. Executing these actions needs a platform with bkn-foundry#3125.",
+  "Reference queries, graph patterns, actions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

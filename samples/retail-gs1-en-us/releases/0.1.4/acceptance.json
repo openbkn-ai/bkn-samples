@@ -1,0 +1,124 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "retail-gs1-en-us",
+ "version": "0.1.4",
+ "packageDigest": "sha256:544e99d512fee629eeb228f4f693caf5058b5dc783e887f961abe6c8e228d09b",
+ "sourceCommit": "3b123a9d7bfd02b5f5d0658dd045f778391d70f3",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 15,
+   "fixtureRecords": 2911,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 15,
+   "relations": 30,
+   "liveObjectQueriesPassed": 15,
+   "relationsWithLinks": 30
+  },
+  "capabilities": {
+   "toolActionsExecuted": [
+    {
+     "action": "retail_gs1_en_us_fulfillment_plan",
+     "name": "Order allocation and replenishment",
+     "parameters": [
+      "as_of_date",
+      "knowledge_date",
+      "product_ids",
+      "mode",
+      "order_ids",
+      "location_ids",
+      "horizon_date"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "retail_gs1_en_us_inventory_asof",
+     "name": "Inventory as of a date",
+     "parameters": [
+      "as_of_date",
+      "knowledge_date",
+      "product_ids",
+      "location_ids",
+      "lot_ids",
+      "trace_lot_id"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "action": "retail_gs1_en_us_recall_assessment",
+     "name": "Recall control assessment",
+     "parameters": [
+      "as_of_date",
+      "knowledge_date",
+      "recall_id"
+     ],
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution in a managed interaction",
+     "status": "completed",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "retail-inventory-fulfilment-en-us",
+     "sourceContentDigest": "sha256:3d055b2f848353fc4268bcef510ce855b7fb4755c2fe08e73eec16553704a1f1",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "retail-quality-recall-en-us",
+     "sourceContentDigest": "sha256:d60726560a1d643dbbabf373cc0e62cd57d421899019f0a68097c27640bd5154",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 5,
+   "graphPatternsPassed": 4,
+   "cardsCheckedAgainstActionsAndCypher": 10,
+   "cardsMatched": 10,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "actionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build with bkn-foundry#3125 (bkn-backend 702-act-2d2a597, ontology-query act3125-d089a55a, agent-retrieval sha2d466bc, sample service 022-388d9501); no native amd64 certification and no released vanilla 0.2.2.",
+  "Each calculation runs as a tool action through Context Loader (get_action_info, execute_action with every parameter explicit, get_action_execution); every result matched the same generated function code run locally on the package fixtures. Executing these actions needs a platform with bkn-foundry#3125.",
+  "Reference queries, graph patterns, actions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
