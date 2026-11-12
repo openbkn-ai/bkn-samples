@@ -27,6 +27,15 @@ def executor_digest(root):
     return "sha256:" + hasher.hexdigest()
 
 
+def _retry_with_current_executor(fixed, digest, image, sample):
+    """An upgraded sample service no longer has the original executor, so a failed
+    installation of the same package is retried with the current one; the change is logged."""
+    if fixed.get("executorDigest") != digest or fixed.get("executorImage") != image:
+        diagnostics.emit("progress", stage="preflight", step="retry-executor-changed", sample_id=sample,
+                         previous_executor_image=fixed.get("executorImage"), executor_image=image)
+        fixed.update(executorDigest=digest, executorImage=image)
+
+
 class RemoteInstallation:
     def __init__(self, root, state_dir, platform_version, architecture, capabilities, executor_image=""):
         self.root, self.state_dir = root, state_dir
@@ -78,8 +87,6 @@ class RemoteInstallation:
         if current.get("status") != "failed":
             raise ApiError(409, "already_installing", "only a failed installation can be retried")
         fixed = current.get("remoteRelease") or {}
-        if fixed.get("executorDigest") != self.executor_digest or fixed.get("executorImage") != self.executor_image:
-            raise ApiError(409, "version_changed", "retry requires the original executor source")
         entry = fixed.get("entry") or {}
         if entry.get("sampleId") != sample or entry.get("version") != current.get("version"):
             raise ApiError(409, "version_changed", "retry release identity differs")
@@ -91,6 +98,9 @@ class RemoteInstallation:
             raise ApiError(409, "runtime_upgrade_required", str(error)) from error
         except ValueError as error:
             raise ApiError(409, "runtime_upgrade_required", "release requirements are not supported") from error
+        # The same release is retried with the current executor once it passes the checks above.
+        _retry_with_current_executor(fixed, self.executor_digest, self.executor_image, sample)
+        current["remoteRelease"] = fixed
         current["status"] = "installing"
         current.pop("error", None)
         current.pop("finishedAt", None)

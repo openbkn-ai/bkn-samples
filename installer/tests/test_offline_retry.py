@@ -1,5 +1,7 @@
+import io
 import json
 import tempfile
+from contextlib import redirect_stderr
 import unittest
 from unittest.mock import patch
 from pathlib import Path
@@ -89,6 +91,66 @@ class OfflineRetryTest(unittest.TestCase):
                     self.assertEqual(failed[key], original[key])
                 offline.prepare(release, retry=True)
                 self.assertEqual(_read_state(state, "supply-chain")["status"], "installing")
+
+    def _failed_offline(self, state, executor_image="ghcr.io/openbkn-ai/executor@sha256:" + "a" * 64):
+        runtime = RemoteInstallation(ROOT, state, "0.2.0", "arm64", [], executor_image)
+        offline = OfflinePackages(ROOT, state, runtime)
+        release = {"sample": "supply-chain", "version": "0.1.0", "packageDigest": "sha256:" + "b" * 64,
+                   "manifestSha256": "c" * 64, "dataImageRef": None,
+                   "releaseNotes": {"version": "0.1.0", "documents": []}}
+        cached = offline.directory / "supply-chain"
+        cached.mkdir(parents=True)
+        (cached / "release.json").write_text(json.dumps(release))
+        offline.prepare(release)
+        failed = _read_state(state, "supply-chain")
+        failed.update(status="failed", error={"code": "install_failed", "message": "proxy sync pending"})
+        (state / "supply-chain.json").write_text(json.dumps(failed))
+        return offline, release, failed
+
+    def test_retry_after_a_service_upgrade_uses_the_current_executor_for_the_same_package(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state = Path(directory)
+            offline, release, failed = self._failed_offline(state)
+            failed["offlineRelease"].update(executorDigest="sha256:" + "0" * 64,
+                                            executorImage="ghcr.io/openbkn-ai/executor:old")
+            (state / "supply-chain.json").write_text(json.dumps(failed))
+            output = io.StringIO()
+            with redirect_stderr(output):
+                offline.prepare(release, retry=True)
+            retried = _read_state(state, "supply-chain")
+            self.assertEqual(retried["status"], "installing")
+            self.assertNotIn("error", retried)
+            self.assertEqual(retried["id"], failed["id"])
+            self.assertEqual(retried["offlineRelease"]["packageDigest"], release["packageDigest"])
+            self.assertEqual(retried["offlineRelease"]["executorImage"], offline.runtime.executor_image)
+            self.assertEqual(retried["offlineRelease"]["executorDigest"], offline.runtime.executor_digest)
+            events = [json.loads(line) for line in output.getvalue().splitlines()]
+            self.assertEqual([e["step"] for e in events], ["retry-executor-changed"])
+            self.assertEqual(events[0]["previous_executor_image"], "ghcr.io/openbkn-ai/executor:old")
+
+    def test_retry_refusals_are_conflicts_and_leave_the_record_unchanged(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state = Path(directory)
+            offline, release, failed = self._failed_offline(state)
+            other = {**failed, "offlineRelease": {**failed["offlineRelease"], "packageDigest": "sha256:" + "f" * 64}}
+            installed = {**failed, "status": "installed"}
+            for record, code in ((other, "version_changed"), (installed, "already_installing")):
+                with self.subTest(code=code):
+                    (state / "supply-chain.json").write_text(json.dumps(record))
+                    with self.assertRaises(ApiError) as caught:
+                        offline.prepare(release, retry=True)
+                    self.assertEqual((caught.exception.status, caught.exception.code), (409, code))
+                    self.assertEqual(_read_state(state, "supply-chain"), record)
+
+    def test_missing_executor_image_is_a_conflict_not_a_server_error(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state = Path(directory)
+            offline, release, failed = self._failed_offline(state)
+            offline.runtime.executor_image = ""
+            with self.assertRaises(ApiError) as caught:
+                offline.prepare(release, retry=True)
+            self.assertEqual((caught.exception.status, caught.exception.code), (409, "runtime_upgrade_required"))
+            self.assertEqual(_read_state(state, "supply-chain"), failed)
 
     def test_failure_does_not_copy_artifact_identity_from_another_version(self):
         with tempfile.TemporaryDirectory() as directory:
