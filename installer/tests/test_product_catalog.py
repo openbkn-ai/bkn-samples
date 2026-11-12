@@ -54,7 +54,7 @@ class ProductCatalogTests(unittest.TestCase):
                 self.assertEqual(self.source.entries(), [])
                 self.assertEqual(self.source.refresh()['code'], 'platform_version_unavailable')
                 network.assert_not_called()
-        self.version = '0.2.2'
+        self.version = '0.2.9'  # a product with no published directory
         self.assertEqual(self.source.entries(), [])
         with patch('installer.catalog_source.read_url', side_effect=OSError('not published')):
             self.assertEqual(self.source.refresh()['status'], 'failed')
