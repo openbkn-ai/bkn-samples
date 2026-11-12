@@ -9,7 +9,7 @@ description: >
 
 # Inventory and fulfilment
 
-Answer warehouse and store questions about stock, orders and replenishment. Use Cypher for master data and the 2027-02-28 inventory snapshot; call a function for another date, for why stock is reduced, for order allocation or for replenishment.
+Answer warehouse and store questions about stock, orders and replenishment. Use Cypher for master data and the 2027-02-28 inventory snapshot; run a calculation action for another date, for why stock is reduced, for order allocation or for replenishment.
 
 ## Default rules
 
@@ -23,11 +23,13 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Open orders share one stock pool by priority, due date and order number; each line uses only lots at its location for its product that passed inspection and stay in date at the later of today and the due date plus the minimum shelf days, earliest expiry first. Overdue open orders are still allocated.
 - Replenishment walks the March forecast by date against available stock and eligible planned receipts; the shortfall is the recommended replenishment.
 
-## When to call a function
+## When to run a calculation action
+
+The calculations are actions: call `get_action_info` for the parameters, run `execute_action`, then read the result with `get_action_execution`. Pass every parameter: the dates and scope are the assumptions of the answer, so pass them explicitly and say in the answer what they were. Locations, lots, orders or a trace lot the user did not ask for are passed as an empty list or empty string; pass `mode=orders` unless the question is about replenishment, and `horizon_date=2027-03-31` for the March plan.
 
 - `inventory_asof`: stock on another date or as known on an earlier day; why availability is reduced by lot (quarantine, recall block, reservation, expiry); which stock cannot be determined and why. Pass `product_ids`, `as_of_date`, `knowledge_date` (the same as the business date for "as known then"; a later date to include events recorded afterwards), optional `location_ids`, `lot_ids`.
 - `fulfillment_plan`: order allocation (`mode=orders`, optional `order_ids`) or March replenishment (`mode=replenishment`). For company-wide figures pass all products, up to 50.
-- Today's on hand, in transit, quarantined, reserved and available totals can be read from `inventory_snapshots`. After a function returns, check `completeness` and `issues`.
+- Today's on hand, in transit, quarantined, reserved and available totals can be read from `inventory_snapshots`. After the execution completes, check `completeness` and `issues`.
 
 ## Cypher patterns
 
