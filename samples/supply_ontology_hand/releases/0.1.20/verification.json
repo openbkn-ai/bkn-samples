@@ -1,0 +1,43 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.20",
+  "packageDigest": "sha256:1df7b335baf386113bd1e0e6113742f309a449cd241a9322567de260f2a89359",
+  "sourceCommit": "3e0caeb8c353312232e2b17aab8386aa9af56c0e",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables; the 11 bound objects return the fixture row counts, plus the package's DB verification hook."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 11 objects have resource bindings and returned their fixture row counts live; 15 relations; all 605 production plans reach their products."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Both calculations installed as tool actions and executed through Context Loader execute_action in a managed interaction, before and after reinstallation; 2 mounted Skills checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries passed. 8 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.20/acceptance.json",
+  "evidenceDigest": "sha256:c8f4b046753b7e33d3b58443bea66beabaeac26aeea9a179ca67b0e9ed21d9b6",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (bkn-backend-ee sha2d2a597, ontology-query-ee with bkn-foundry#3125, agent-retrieval sha2d466bc); no native amd64 certification and no released vanilla 0.2.2.",
+    "The calculations ran as tool actions through Context Loader execute_action inside a managed interaction, with every business assumption passed explicitly (defaults: no substitutes, all warehouses, no need-by date, overdue purchases excluded).",
+    "Reference queries and actions were checked through APIs; browser UI and full model-question cards were not exercised."
+  ]
+}
