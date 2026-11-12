@@ -20,6 +20,11 @@ Business object in the end-to-end manufacturing sample.
 | operation_name | operation_name | string | Stable business identifier or business attribute. | operation_name |
 | sequence_number | sequence_number | integer | Stable business identifier or business attribute. | sequence_number |
 | status | status | string | Stable business identifier or business attribute. | status |
+| planned_machine_id | planned_machine_id | string | Planned machine: the machine (production_machines.machine_id) the schedule puts this operation on; for completed operations the machine of the execution record. | planned_machine_id |
+| planned_start_date | planned_start_date | date | Planned start day YYYY-MM-DD (inclusive); for completed operations the execution start date. | planned_start_date |
+| planned_end_date | planned_end_date | date | Planned end day YYYY-MM-DD (inclusive); for completed operations the execution completion date. | planned_end_date |
+| standard_duration_days | standard_duration_days | integer | Standard duration in days, 2 from the execution history. | standard_duration_days |
+| predecessor_operation_id | predecessor_operation_id | string | Predecessor: the operation one sequence step earlier in the same work order; empty for the first operation. | predecessor_operation_id |
 
 ### Keys
 

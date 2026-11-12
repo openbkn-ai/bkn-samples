@@ -4,12 +4,13 @@ description: >
   Use for production lead and quality manager questions on knowledge network manufacturing_industry_en_us:
   BOMs, routings, machine capabilities and operator qualifications, work order progress, completed quantity, scrap
   and yield, execution compliance (capability, service day, qualification, shift), rejected lots, out-of-limit results,
-  quality escapes and specification revisions, overdue maintenance and machines under repair.
+  quality escapes and specification revisions, overdue maintenance and machines under repair, and checking and adjusting
+  the March machine schedule (work order kit, machine capability, operator qualification and shift, changeover).
 ---
 
 # Production and quality
 
-Answer production lead and quality manager questions. This sample has no functions; query with Cypher and judge by the rules below.
+Answer production lead and quality manager questions. Check the schedule with functions and adjust it with actions (see "Machine schedule"); answer everything else with Cypher and judge by the rules below.
 
 ## Default rules
 
@@ -25,6 +26,15 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Quality release: the lot is accepted and every measured value lies within the referenced specification's (`quality_specification_id`) limits, inclusive. A result recorded as pass with a value out of limits counts as a failure and is a quality escape; say whether that lot shipped. A product's current specification is the one whose status is active; older revisions are superseded.
 - Maintenance: a maintenance work order planned before the business date and not completed is overdue; a machine under repair cannot be scheduled; a machine whose capability is suspended cannot do that work.
 - Operators who can run a capability now: qualified, valid on or after the business date, and employed.
+
+## Machine schedule
+
+An operation's (`manufacturing_operations`) `planned_machine_id`, `planned_start_date` and `planned_end_date` are the schedule (whole days, both ends inclusive) and `predecessor_operation_id` its predecessor; a maintenance work order's `planned_start_date` and `planned_end_date` are the days it occupies the machine and `planned_date` its due day. A machine does one thing a day.
+
+- Check with the four rule functions mounted on the network: Work order kit, Machine capability, Operator qualification and shift, Changeover. Call each with Context Loader execute_tool, passing `tasks` listing operations, e.g. `[{"key":"OP-2703-06-10"}]`; a key alone checks the stored plan, `[]` checks every operation not started; to try a change add `start`, `end` (YYYY-MM-DD) and `resource` (machine ID) to an item.
+- Each result has `pass` (null = not applicable, e.g. completed or started operations; the kit is judged on a work order's first open operation), `severity` (hard blocks, soft warns), `text`, `related` (operations that affect each other), and optionally `at` (earliest feasible day) and `counts`.
+- Adjust with the actions (get_action_info → execute_action → get_action_execution) "Adjust operation schedule" (the selected operation; `planned_machine_id` in the same work centre, `planned_start_date`, `planned_end_date`) and "Adjust maintenance work order" (the selected order; `planned_start_date`, `planned_end_date`). Check before adjusting and give the values before and after; only planned fields change and nothing is dispatched.
+- Overlaps (two things on a machine on one day, maintenance included), a predecessor not finished first and ending after the work order's due date are read from the planned fields with Cypher.
 
 ## Cypher patterns
 

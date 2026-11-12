@@ -657,7 +657,109 @@ def build():
     out['shifts'] = sorted(shift_rows.values(), key=lambda r: (r['starts_date'], r['site_id']))
     for k, (operator, shift, wc) in enumerate(sorted(assignments), 1):
         out['operator_shift_assignments'].append(dict(operator_shift_assignment_id=f'OSA-{k:03d}', operator_id=operator, shift_id=shift, work_center_id=wc, assignment_status='assigned'))
+    machine_schedule(out)
     return out
+
+
+# --- machine scheduling ----------------------------------------------------------------------------
+# Every recorded execution took two calendar days; it is the standard duration of every operation.
+STANDARD_DAYS = 2
+FIRST_OPEN_DAY = day(BUSINESS_DATE, 1)
+# Conflicts left in the pre-schedule on purpose, for the scheduler's rules to find:
+SCHEDULE_CONFLICTS = {
+    'MACH-MILL-04': ('OP-2703-09-10', None),                  # capability suspended on 5-axis Mill 4
+    'MACH-MILL-01': ('OP-2703-05-10', D('2027-03-07')),       # runs into MWO-036, Mill 1 serviced on 03-07
+}
+REPAIR_END = D('2027-03-03')                                  # the repair on 5-axis Mill 3 that is under way
+# March roster: week -> work centre -> operators. Week of 03-01 has one turner for three parallel
+# turning operations; in the week of 03-15 the metrology lab only has OPR-07, still in training.
+MARCH_ROSTER = {
+    D('2027-03-01'): {'WC-SZ-CNC': ['OPR-01', 'OPR-02'], 'WC-SZ-TURN': ['OPR-03'], 'WC-SZ-QC': ['OPR-06'], 'WC-SU-TEST': ['OPR-08'], 'WC-SU-MARK': ['OPR-09']},
+    D('2027-03-08'): {'WC-SZ-CNC': ['OPR-02', 'OPR-05'], 'WC-SZ-TURN': ['OPR-03', 'OPR-04'], 'WC-SZ-QC': ['OPR-06'], 'WC-SU-TEST': ['OPR-12'], 'WC-SU-MARK': ['OPR-09']},
+    D('2027-03-15'): {'WC-SZ-CNC': ['OPR-01', 'OPR-11'], 'WC-SZ-TURN': ['OPR-03'], 'WC-SZ-QC': ['OPR-07'], 'WC-SU-TEST': ['OPR-08'], 'WC-SU-MARK': ['OPR-09']},
+    D('2027-03-22'): {'WC-SZ-CNC': ['OPR-02', 'OPR-04'], 'WC-SZ-TURN': ['OPR-11'], 'WC-SZ-QC': ['OPR-01', 'OPR-06'], 'WC-SU-TEST': ['OPR-08', 'OPR-12'], 'WC-SU-MARK': ['OPR-09']},
+    D('2027-03-29'): {'WC-SZ-CNC': ['OPR-01'], 'WC-SZ-TURN': ['OPR-03'], 'WC-SZ-QC': ['OPR-06'], 'WC-SU-TEST': ['OPR-12'], 'WC-SU-MARK': ['OPR-09']},
+}
+
+
+def machine_schedule(out):
+    """Planned machine, start, end and predecessor of every operation; planned span of every maintenance work order.
+
+    Done operations take their execution record. Open ones are pre-scheduled order by order (plan-line
+    start, then sequence), each after its predecessor and no earlier than the day after the business
+    date, on the first qualified, available machine of its work centre that is free (other operations
+    and maintenance occupy a machine). Overdue maintenance is caught up on the first open day; the
+    planned date stays the due date.
+    """
+    span = {}
+    for w in out['maintenance_work_orders']:
+        due = D(w['planned_date'])
+        if w['status'] == 'in_progress':
+            span[w['maintenance_work_order_id']] = (due, REPAIR_END)
+        elif w['status'] == 'planned' and due < FIRST_OPEN_DAY:
+            span[w['maintenance_work_order_id']] = (FIRST_OPEN_DAY, FIRST_OPEN_DAY)
+        else:
+            span[w['maintenance_work_order_id']] = (due, due)
+        w['planned_start_date'], w['planned_end_date'] = (x.isoformat() for x in span[w['maintenance_work_order_id']])
+    busy = defaultdict(list)
+    for w in out['maintenance_work_orders']:
+        if w['status'] != 'completed':
+            busy[w['machine_id']].append(span[w['maintenance_work_order_id']])
+    steps = {s['operation_id']: s for s in out['process_steps']}
+    runs = {e['process_step_id']: e for e in out['production_execution_records']}
+    plan_start = {p['production_order_id']: D(p['planned_start_date']) for p in out['production_plan_lines']}
+    capable = {(m[0], m[6]) for m in MACHINES if m[7] == 'qualified' and m[5] == 'available'}
+    forced = {op: (machine, start) for machine, (op, start) in SCHEDULE_CONFLICTS.items()}
+    by_order = defaultdict(list)
+    for o in out['manufacturing_operations']:
+        by_order[o['production_order_id']].append(o)
+    planned = {}
+    for o in out['manufacturing_operations']:
+        run = runs.get(steps[o['operation_id']]['process_step_id'])
+        if run:
+            start = D(run['started_date'])
+            end = D(run['completed_date']) if run['completed_date'] else max(day(start, STANDARD_DAYS - 1), FIRST_OPEN_DAY)
+            planned[o['operation_id']] = (run['machine_id'], start, end)
+            if end >= FIRST_OPEN_DAY:
+                busy[run['machine_id']].append((start, end))
+    free = lambda m, s, e: all(e < a or s > b for a, b in busy[m])
+    for wo in sorted((wo for wo, ops in by_order.items() if any(o['operation_id'] not in planned for o in ops)), key=lambda wo: (plan_start[wo], wo)):
+        after = None
+        for o in sorted(by_order[wo], key=lambda o: o['sequence_number']):
+            if o['operation_id'] in planned:
+                after = planned[o['operation_id']][2]
+                continue
+            start = max(plan_start[wo], FIRST_OPEN_DAY, day(after, 1) if after else FIRST_OPEN_DAY)
+            machine, at = forced.get(o['operation_id'], (None, None))
+            start = at or start
+            cap = steps[o['operation_id']]['required_capability_id']
+            while machine is None:
+                fit = [m[0] for m in MACHINES if m[2] == o['work_center_id'] and (m[0], cap) in capable and free(m[0], start, day(start, STANDARD_DAYS - 1))]
+                machine = fit[0] if fit else None
+                start = start if fit else day(start, 1)
+            end = day(start, STANDARD_DAYS - 1)
+            planned[o['operation_id']] = (machine, start, end)
+            busy[machine].append((start, end))
+            after = end
+    for wo, ops in by_order.items():
+        ops.sort(key=lambda o: o['sequence_number'])
+        for i, o in enumerate(ops):
+            machine, start, end = planned[o['operation_id']]
+            o.update(planned_machine_id=machine, planned_start_date=start.isoformat(), planned_end_date=end.isoformat(),
+                     standard_duration_days=STANDARD_DAYS, predecessor_operation_id=ops[i - 1]['operation_id'] if i else '')
+    # March weeks: shifts and the roster, after the history so existing identifiers stay put
+    number = len(out['operator_shift_assignments'])
+    for week, roster in MARCH_ROSTER.items():
+        for site in ('SITE-SU', 'SITE-SZ'):
+            shift = f'SHIFT-{site[5:]}-{week:%Y%m%d}'
+            out['shifts'].append(dict(shift_id=shift, site_id=site, shift_name=(f'{week:%m-%d} 当周日班', f'Day shift week of {week:%b %d}'),
+                                      starts_date=week.isoformat(), ends_date=day(week, 6).isoformat()))
+        for wc, operators in roster.items():
+            site = next(s for c, s, *_ in WORK_CENTERS if c == wc)
+            for operator in operators:
+                number += 1
+                out['operator_shift_assignments'].append(dict(operator_shift_assignment_id=f'OSA-{number:03d}', operator_id=operator,
+                                                              shift_id=f'SHIFT-{site[5:]}-{week:%Y%m%d}', work_center_id=wc, assignment_status='assigned'))
 
 
 def _num(v):
