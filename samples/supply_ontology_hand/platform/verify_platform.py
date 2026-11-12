@@ -47,10 +47,11 @@ def capability_ready(run_cli) -> bool:
                if item.get("status") == "enabled" and item.get("tool_id")}
     if not expected <= enabled.keys():
         return False
-    bindings = run_cli(["bkn", "capability", "list", "supply_ontology_hand", "--limit", "100"])
-    mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
-               if item.get("capability_type") == "function" and item.get("box_id") == box["box_id"]}
-    return {enabled[name] for name in expected} <= mounted
+    listing = run_cli(["bkn", "action-type", "list", "supply_ontology_hand"])
+    actions = {(item.get("action_source") or {}).get("tool_id") for item in _entries(listing, "entries")
+               if (item.get("operation_config") or {}).get("type") == "tool"
+               and (item.get("action_source") or {}).get("box_id") == box["box_id"]}
+    return {enabled[name] for name in expected} <= actions
 
 def skills_ready(run_cli) -> bool:
     sys.path.insert(0, str(SAMPLE_DIR / "tools"))

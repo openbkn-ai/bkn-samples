@@ -1,0 +1,9 @@
+# 0.1.15：计算函数改为行动
+
+基于 0.1.14。“Buildable_Quantity_and_ATP”“Demand_Coverage_and_Shortages”两个计算不再挂载到知识网络，改为两个工具调用类行动（`supply_ontology_en_build_capacity`、`supply_ontology_en_demand_coverage`），配合 OpenBKN 0.2.2 的行动类模型。实体、关系、业务数据、函数算法和 Skill 的业务范围不变。
+
+替代料、仓范围、需求日期、是否计入逾期在途、是否先保欠货、是否先用成品都是行动的输入：它们是业务假设，每次执行都要传，执行记录里能看到这次按什么假设算。用户没有说明时，Agent 按 Skill 里写的默认值显式传入；需求日期不设时传空字符串。业务日期固定为样例日期，不作为输入。
+
+Agent 用 `get_action_info` 取参数定义、`execute_action` 执行、`get_action_execution` 取结果。需要平台包含 openbkn-ai/bkn-foundry#3125（函数类行动的会话上下文）。
+
+现有安装继续使用原版本；更换版本须按标准卸载、安装流程进行，卸载会清理样例数据及归属资源。本版本不提供原地迁移。

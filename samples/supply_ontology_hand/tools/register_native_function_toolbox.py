@@ -25,6 +25,9 @@ from native_function_bundle import build_native_function_code
 
 
 API = "/api/agent-operator-integration/v1"
+BKN_API = "/api/bkn-backend/v1"
+# Inputs the sample fixes instead of asking for: every run uses the sample's business date.
+FIXED_INPUTS = {"business_date"}
 
 
 def _input(name: str, type_: str, description: str, *, required: bool = False) -> dict[str, Any]:
@@ -53,6 +56,34 @@ def _operation_inputs(operation: str) -> list[dict[str, Any]]:
     return [demands, *common,
             _input("reserve_signed_backlog", "boolean", "是否先按承诺交期扣掉这些产品的已签约欠货；评估新单且要先保欠货时传 true，评估欠单本身时不传。"),
             _input("use_finished_goods", "boolean", "是否先用成品库存；默认 true，排生产工单时传 false。")]
+
+
+def action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str]) -> list[dict[str, Any]]:
+    """One tool action per function: a business judgement whose assumptions are explicit inputs.
+
+    The platform requires every input parameter, so the Agent states each assumption (or its
+    documented default) on every run and the execution record shows what the answer assumed.
+    """
+    actions = []
+    for operation, spec in FUNCTION_CATALOG.items():
+        parameters = [
+            {"name": item["name"], "type": item["type"], "value_from": "input", "comment": item["description"]}
+            for item in _operation_inputs(operation)
+            if item["name"] not in FIXED_INPUTS
+        ]
+        actions.append({
+            "id": f"{kn_id}_{operation}",
+            "name": spec["name"],
+            "branch": "main",
+            "operation_config": {"type": "tool"},
+            "object_type_id": "",
+            "action_type": "modify",
+            "action_intent": "modify",
+            "action_source": {"type": "tool", "box_id": box_id, "tool_id": tool_ids[operation]},
+            "parameters": parameters,
+            "comment": f"{spec['description']}\n{spec['use_rule']}",
+        })
+    return actions
 
 
 def _call(args: list[str]) -> Any:
@@ -172,9 +203,13 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
     for item in retired:
         _call(["tool", "disable", "--toolbox", box_id, item["tool_id"]])
     if kn_id:
-        _call(["bkn", "capability", "attach", kn_id, "--box", box_id,
-               "--tool", ",".join(tool_ids.values())])
-    return {**preview, "box_id": box_id, "tool_ids": tool_ids, "retired_tools": [item["name"] for item in retired]}
+        actions = action_definitions(kn_id, box_id, tool_ids)
+        # Overwrite keeps a repeated install idempotent and follows re-created tool IDs.
+        _call(["call", f"{BKN_API}/knowledge-networks/{kn_id}/action-types?import_mode=overwrite",
+               "-X", "POST", "-d", json.dumps({"entries": actions}, ensure_ascii=False)])
+    return {**preview, "box_id": box_id, "tool_ids": tool_ids,
+            "action_ids": [f"{kn_id}_{operation}" for operation in tool_ids] if kn_id else [],
+            "retired_tools": [item["name"] for item in retired]}
 
 
 def main() -> int:

@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 EXECUTION_USE_RULE = (
-    '通过 execute_tool 直接调用；从发现结果原样复制 toolbox_id=owner_id、tool_id=capability_id，不重构 ID。'
-    '检查 body.exit_code 和 result，HTTP 200 不等于计算成功。'
+    '作为行动执行：先用 get_action_info 取参数定义，再用 execute_action 执行，最后用 get_action_execution 取结果。'
+    '每个参数都要传：替代料、仓范围、需求日期、逾期在途等是业务假设，用户没说时按说明里的默认值显式传入，需求日期不设时传空字符串。'
+    '检查执行结果里的 exit_code 和 result，执行状态 completed 不等于计算成功。'
     '只查数、汇总、追关系的问题用 Cypher，不要调用函数。'
 )
 
