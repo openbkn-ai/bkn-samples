@@ -173,23 +173,23 @@ def datasets(cli: Callable[..., Any], kn_id: str, catalog_id: str, apply: bool) 
             resource = cli("call", f"{VEGA}/resources", "-X", "POST", "-d", json.dumps(
                 {"catalog_id": catalog_id, "name": table, "category": "dataset", "description": table,
                  "schema_definition": dataset_schema(table)}, ensure_ascii=False))["id"]
+        if not apply:  # the platform hook checks every binding from the network export
+            out[table] = resource
+            continue
         obj = cli("bkn", "object-type", "get", kn_id, table)
         obj = (obj.get("entries") or [obj])[0] if isinstance(obj, dict) else obj[0]
         if (obj.get("data_source") or {}).get("id") != resource:
-            if not apply:
-                raise ValueError("object not bound to its dataset: " + table)
             obj["data_source"] = {"type": "resource", "id": resource}
             with tempfile.TemporaryDirectory() as directory:
                 path = Path(directory) / (table + ".json")
                 path.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
                 cli("bkn", "object-type", "update", kn_id, table, "--body-file", str(path))
-        if apply:
-            # Installing puts the package's schedule in place; a full replace by key is idempotent.
-            rows = dataset_rows(table)
-            answer = cli("call", f"{VEGA}/resources/{resource}/data", "-X", "PUT", "-d", json.dumps({"entries": rows}, ensure_ascii=False))
-            results = answer.get("entries", []) if isinstance(answer, dict) else []
-            if len(results) != len(rows) or any(int(r.get("status") or 0) >= 300 for r in results):
-                raise ValueError("dataset load incomplete: " + table)
+        # Installing puts the package's schedule in place; a full replace by key is idempotent.
+        rows = dataset_rows(table)
+        answer = cli("call", f"{VEGA}/resources/{resource}/data", "-X", "PUT", "-d", json.dumps({"entries": rows}, ensure_ascii=False))
+        results = answer.get("entries", []) if isinstance(answer, dict) else []
+        if len(results) != len(rows) or any(int(r.get("status") or 0) >= 300 for r in results):
+            raise ValueError("dataset load incomplete: " + table)
         out[table] = resource
     return out
 

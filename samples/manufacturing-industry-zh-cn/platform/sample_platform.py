@@ -64,14 +64,15 @@ def main():
                 n=dest/'network.bkn';n.write_text(re.sub(r'^tags:.*$', 'tags: '+json.dumps(sorted(tags|{'manufacturing','iof'})),n.read_text(),flags=re.M))
                 cli('bkn','validate',str(dest));cli('bkn','push',str(dest))
         bind_resources(tables,bindings,apply=True)
-    elif sys.argv[1]=='verify':bind_resources(tables,bindings,apply=False)
-    else:raise ValueError('expected install or verify')
-    network=cli('bkn','get',KN,'--export');require(tags<=set(network.get('tags',[])),'network ownership differs')
-    require(len(network['object_types'])==len(specs) and len(network['relation_types'])==RELATIONS,'model counts differ')
+    elif sys.argv[1]!='verify':raise ValueError('expected install or verify')
     # Operations and maintenance work orders on their datasets; the scheduling functions and actions.
     schedule=register_schedule(cli,KN,apply=sys.argv[1]=='install',catalog_id=raw['catalog']['id'])
+    # One export carries every object's binding; reading it once keeps verify within the hook's time budget.
+    network=cli('bkn','get',KN,'--export');require(tags<=set(network.get('tags',[])),'network ownership differs')
+    require(len(network['object_types'])==len(specs) and len(network['relation_types'])==RELATIONS,'model counts differ')
+    sources={o['id']:(o.get('data_source') or {}) for o in network['object_types']}
     for table,spec in specs.items():
-        obj=single(cli('bkn','object-type','get',KN,table));require(obj['data_source']['id']==(bindings.get(table) or schedule['datasets'][table]),'binding differs')
+        require(sources.get(table,{}).get('type')=='resource' and sources[table].get('id')==(bindings.get(table) or schedule['datasets'][table]),'binding differs: '+table)
         data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
     if sys.argv[1]=='install':skills=register_skills(apply=True,kn_id=KN)
     else:
