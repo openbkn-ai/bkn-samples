@@ -25,6 +25,9 @@ directory contains the already published bilingual FIBO/GS1 releases declaring
 0.2.1 compatibility. The twelve samples offered on 0.2.1 are tracked by
 tools/publication/candidates-0.2.1.json (Order Basics is excluded) and added to stable
 directories only after fixed-candidate platform acceptance.
+The 0.2.2 directory starts empty: the sample service for 0.2.2 bundles a 0.2.2 SDK, which
+rejects 0.2.1 platforms, so each sample is added only after its candidate in
+tools/publication/candidates-0.2.2.json passes acceptance on a 0.2.2 platform.
 
 Release titles carry the product version, for example `[OpenBKN 0.2.1] 世界杯 0.1.7`, so a
 release list shows which product each package targets. Tags stay `sample-<id>-v<version>`,
