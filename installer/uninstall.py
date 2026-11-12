@@ -149,6 +149,19 @@ def _path(prefix, resource_id):
     return prefix + quote(resource_id, safe="")
 
 
+def _catalog_datasets(api, catalog_id):
+    """Datasets the sample wrote into its own catalog. Vega does not delete them with the catalog
+    (``protected_resources``), so they are removed first; they belong to the sample with its catalog."""
+    found = api("GET", "/api/vega-backend/v1/resources?catalog_id=" + quote(catalog_id, safe="") + "&category=dataset&limit=-1")
+    if found is None:
+        return []
+    if not isinstance(found, dict) or not isinstance(found.get("entries"), list) or any(
+            not isinstance(item, dict) or item.get("catalog_id") != catalog_id or item.get("category") != "dataset"
+            for item in found["entries"]):
+        raise ApiError(500, "uninstall_failed", "Cannot check the sample catalog datasets.")
+    return [_path("/api/vega-backend/v1/resources/", item.get("id")) for item in found["entries"]]
+
+
 def _failed_resources(state_dir, sample, record):
     """Recover only this installation's local receipts, never infer ownership from a new package."""
     resources = dict(record.get("resources") or {})
@@ -265,6 +278,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                     network_path = None
                     continue
                 raise ApiError(409, "ownership_conflict", "A resource no longer belongs to this sample; nothing will be deleted.")
+        dataset_paths = _catalog_datasets(api, record["catalogId"]) if catalog_path else []
         execution_paths = [_path("/api/agent-operator-integration/v1/skills/", id_)
                            for id_ in resources["ownedExecution"]["skills"]]
         execution_paths += [_path("/api/agent-operator-integration/v1/tool-box/", id_)
@@ -291,7 +305,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         # Published metric versions are immutable and cannot be deleted through
         # the draft API. Ownership is checked above before deleting this scope.
         checkpoint("preflight", "succeeded")
-        for stage, paths in (("knowledge", [network_path] if network_path else []), ("capabilities", execution_paths), ("discover", [catalog_path] if catalog_path else [])):
+        for stage, paths in (("knowledge", [network_path] if network_path else []), ("capabilities", execution_paths), ("discover", [*dataset_paths, catalog_path] if catalog_path else [])):
             checkpoint(stage, "running")
             for path in paths:
                 resource = _single(api("GET", path))
