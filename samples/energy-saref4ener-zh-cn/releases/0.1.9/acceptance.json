@@ -1,0 +1,99 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "energy-saref4ener-zh-cn",
+ "version": "0.1.9",
+ "packageDigest": "sha256:1adc47a0a966359e3179b1b0b62a95a65479ae8899baa0f83ab2a0fd862ec911",
+ "sourceCommit": "d2e200ba4a092103a6fec9bba06ec535deb3dbb7",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 15,
+   "fixtureRecords": 14787,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 15,
+   "relations": 15,
+   "liveObjectQueriesPassed": 15,
+   "relationsWithLinks": 15
+  },
+  "capabilities": {
+   "nativeFunctionsInvoked": [
+    {
+     "name": "flexibility_assessment",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "dispatch_plan",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "settlement_assessment",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "energy-capacity-dispatch-zh-cn",
+     "sourceContentDigest": "sha256:879383c4877d6cc533c6c5be5b083ded3bd35bca535ae3f88305031f2e94a5d5",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "energy-delivery-settlement-zh-cn",
+     "sourceContentDigest": "sha256:3f2ac9d198ff4c34fd9c9095abed8754e609af8bc4164a4b42673aa00b3996f0",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 7,
+   "graphPatternsPassed": 4,
+   "cardsCheckedAgainstActionsAndCypher": 8,
+   "cardsMatched": 8,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "functionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 build (bkn-backend 0.2.2-local.702, ontology-query act3125-d089a55a, agent-retrieval act-2d466bc, agent-operator-integration c24-fix2-reviewed2, sample service 022-9e2d8d18); no native amd64 certification and no released vanilla 0.2.2.",
+  "The calculations are functions mounted on the knowledge network and were called through Context Loader execute_tool inside a managed interaction; every result matched the same generated function code run locally on the package fixtures.",
+  "Reference queries, graph patterns, functions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

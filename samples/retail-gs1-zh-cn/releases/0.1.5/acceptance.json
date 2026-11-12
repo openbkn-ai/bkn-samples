@@ -1,0 +1,99 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "retail-gs1-zh-cn",
+ "version": "0.1.5",
+ "packageDigest": "sha256:59b84593bd60495b2086db9cb51a5d12889725b28b89b2ecb33b03721f5db3c9",
+ "sourceCommit": "d2e200ba4a092103a6fec9bba06ec535deb3dbb7",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 15,
+   "fixtureRecords": 2911,
+   "objectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 15,
+   "relations": 30,
+   "liveObjectQueriesPassed": 15,
+   "relationsWithLinks": 30
+  },
+  "capabilities": {
+   "nativeFunctionsInvoked": [
+    {
+     "name": "inventory_asof",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "fulfillment_plan",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "recall_assessment",
+     "mountedOnNetwork": true,
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "exitCode": 0,
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "retail-inventory-fulfilment-zh-cn",
+     "sourceContentDigest": "sha256:42ad0f416ab2d1f3a0dd9e15f0de95f857306dc9aa7ec70f3383db7af6b2cb53",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "retail-quality-recall-zh-cn",
+     "sourceContentDigest": "sha256:6236f8ff6b6fb8f13e5ffaa68bf94ece44a616fc76971dccb423759192c0ccd9",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "functionsNotDeclared": false,
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 5,
+   "graphPatternsPassed": 4,
+   "cardsCheckedAgainstActionsAndCypher": 10,
+   "cardsMatched": 10,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "functionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 build (bkn-backend 0.2.2-local.702, ontology-query act3125-d089a55a, agent-retrieval act-2d466bc, agent-operator-integration c24-fix2-reviewed2, sample service 022-9e2d8d18); no native amd64 certification and no released vanilla 0.2.2.",
+  "The calculations are functions mounted on the knowledge network and were called through Context Loader execute_tool inside a managed interaction; every result matched the same generated function code run locally on the package fixtures.",
+  "Reference queries, graph patterns, functions and every experience card were checked through APIs; no model answered the questions and the browser UI was not exercised."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

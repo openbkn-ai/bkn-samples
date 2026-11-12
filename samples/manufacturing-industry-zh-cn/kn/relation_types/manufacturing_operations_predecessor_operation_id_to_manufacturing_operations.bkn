@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+name: manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+
+工序的前序工序：同一工单内序号上一道的工序。
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| manufacturing_operations | manufacturing_operations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| predecessor_operation_id | operation_id |

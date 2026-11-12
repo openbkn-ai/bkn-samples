@@ -8,7 +8,7 @@ description: >
 
 # Capacity and dispatch
 
-Answer operations and energy-manager questions about assets, eligible capacity and dispatch. Use Cypher for assets, events, offers, constraints, allocations and capacity snapshots; run a calculation action to work out eligible capacity or a dispatch plan.
+Answer operations and energy-manager questions about assets, eligible capacity and dispatch. Use Cypher for assets, events, offers, constraints, allocations and capacity snapshots; call a function to work out eligible capacity or a dispatch plan.
 
 ## Default rules
 
@@ -19,13 +19,13 @@ Unless the user says otherwise, answer with these rules and name the rule you us
 - Eligibility: per device the minimum of offered kW, maximum reduction, the lower of forecast and baseline minus minimum service load (not below zero), and active caps; inactive, barred, withdrawn or expired count zero; a cap without a value, an invalid forecast or a conflicting baseline is undeterminable, never zero. Each site total is limited to its response cap. Each device has one meter, never added to a site meter.
 - Dispatch: active events on one date and block share device and site limits; committed allocations take their share first, new allocation goes by event priority then offer cost from lowest; if any event in the block has undeterminable capacity or a commitment exceeds a limit, the block's new plan is undeterminable. A withdrawn offer or changed cap never cancels a committed allocation, which still counts in full; when it exceeds current eligible capacity, only the block's new plan is undeterminable, and "the existing commitment" is still answered with all committed allocations. Estimated cost includes existing commitments.
 
-## When to run a calculation action
+## When to call a function
 
-The calculations are actions: call `get_action_info` for the parameters, run `execute_action`, then read the result with `get_action_execution`. Pass every parameter: the dates and scope are the assumptions of the answer, so pass them explicitly and say in the answer what they were.
+The calculations are functions mounted on the knowledge network: call them with Context Loader `execute_tool`, using the toolbox and tool IDs that discovery returns.
 
 - `flexibility_assessment`: how many kW an event can commit, which devices are excluded, and why capacity is undeterminable. Pass `event_ids`, `as_of_date`, `knowledge_date` (an earlier day for what was known then).
 - `dispatch_plan`: per event in a block, committed, new, shortfall and estimated cost, and which devices are added.
-- Use Cypher for assets, schedules, offer status, constraints, existing commitments and capacity snapshots; capacity snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the calculations: list the valid snapshot events with Cypher, then recompute them 20 at a time with `as_of_date` and `knowledge_date` both 2027-02-28 and compare directly, without first probing table dates. `event_ids` takes up to 20 events per execution across dates and blocks; for all or many events pass 20 at a time in date order, never one block per execution. After the execution completes, check `completeness` and `issues`.
+- Use Cypher for assets, schedules, offer status, constraints, existing commitments and capacity snapshots; capacity snapshots only record 2027-02-28, invalid ones cannot be used and valid ones still need checking against the functions: list the valid snapshot events with Cypher, then recompute them 20 at a time with `as_of_date` and `knowledge_date` both 2027-02-28 and compare directly, without first probing table dates. `event_ids` takes up to 20 events per call across dates and blocks; for all or many events pass 20 at a time in date order, never one block per call. After a function returns, check `completeness` and `issues`.
 
 ## Cypher patterns
 

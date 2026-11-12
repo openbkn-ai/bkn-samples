@@ -8,7 +8,7 @@ description: >
 
 # Orders and materials
 
-Answer order fulfilment and purchasing/materials questions. This sample has no functions; query with Cypher and apply the rules below.
+Answer order fulfilment and purchasing/materials questions. Query with Cypher and apply the rules below (schedule checks and adjustments are in the production and quality Skill).
 
 ## Default rules
 
