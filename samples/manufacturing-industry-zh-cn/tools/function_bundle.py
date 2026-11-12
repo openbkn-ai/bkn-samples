@@ -20,6 +20,7 @@ SCHEDULED = ("manufacturing_operations", "maintenance_work_orders")
 
 RULE_ENTRY = r'''
 from sandbox_sdk import bkn, tool
+import bkn_osdk
 import schedule_runtime
 
 
@@ -27,7 +28,7 @@ import schedule_runtime
 def schedule_rule(tasks: list | None = None, scenario: dict | None = None, mode: str | None = None,
                   task: dict | None = None, locale: str | None = None, query: dict | None = None) -> dict:
     """Check schedule tasks (operations) against one rule; mode "detail" returns one task's paged table."""
-    return schedule_runtime.rule(_OPERATION, bkn.query_object_instance, tasks=tasks, scenario=scenario, mode=mode,
+    return schedule_runtime.rule(_OPERATION, bkn.query_object_instance, call=bkn_osdk.call, tasks=tasks, scenario=scenario, mode=mode,
                                  task=task, locale=locale, detail_query=query)
 '''
 

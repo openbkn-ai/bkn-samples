@@ -858,43 +858,61 @@ def detail(rule: str, tables: Mapping[str, Iterable[Mapping[str, Any]]], task: A
 
 
 # --- writes ------------------------------------------------------------------------------------------
+REFUSALS = {
+    "zh": {"no_op": "没有工序 {key}", "op_done": "{key} 已完成，计划以执行记录为准，不能调整", "no_machine": "没有机台 {key}",
+           "other_centre": "{machine} 不属于工序的工作中心 {wc}", "no_start": "请给出计划开工日", "end_before": "计划结束日不能早于计划开始日",
+           "no_mwo": "没有维护工单 {key}", "mwo_done": "{key} 已完成，不能调整"},
+    "en": {"no_op": "No operation {key}", "op_done": "{key} is completed; its schedule is its execution record", "no_machine": "No machine {key}",
+           "other_centre": "{machine} is not in the operation's work centre {wc}", "no_start": "A planned start day is required",
+           "end_before": "The planned end day is before the planned start day", "no_mwo": "No maintenance work order {key}",
+           "mwo_done": "{key} is completed"},
+}
+
+
+def refuse(language: str, reason: str, **names: Any) -> CannotCheck:
+    return CannotCheck(REFUSALS["zh" if language == "zh" else "en"][reason].format(**names))
+
+
 def adjust_operation(f: Facts, params: Mapping[str, Any]) -> dict[str, Any]:
     """The operation row after moving it: planned machine (same work centre), start and end days."""
+    lang = f.language
     op = str(params.get("operation_id") or "").strip()
     if op not in f.ops:
-        raise CannotCheck(f"no operation {op!r}")
+        raise refuse(lang, "no_op", key=op)
     row = dict(f.ops[op])
     if f.state(op) == "completed":
-        raise CannotCheck(f"{op} is completed; its schedule is its execution record")
+        raise refuse(lang, "op_done", key=op)
     machine = str(params.get(MACHINE_FIELD) or row.get(MACHINE_FIELD) or "").strip()
     if machine not in f.machines:
-        raise CannotCheck(f"no machine {machine!r}")
+        raise refuse(lang, "no_machine", key=machine)
     if f.machines[machine].get("work_center_id") != row.get("work_center_id"):
-        raise CannotCheck(f"{machine} is not in work centre {row.get('work_center_id')}")
+        raise refuse(lang, "other_centre", machine=f.name("machine", machine), wc=f.name("wc", str(row.get("work_center_id") or "")))
     start = day(params.get(START_FIELD)) or day(row.get(START_FIELD))
     if not start:
-        raise CannotCheck("planned_start_date is required")
+        raise refuse(lang, "no_start")
     end = day(params.get(END_FIELD)) or (plus(start, int(num(row.get("standard_duration_days") or 1)) - 1)
                                           if params.get(START_FIELD) else day(row.get(END_FIELD)))
     if end < start:
-        raise CannotCheck("planned_end_date is before planned_start_date")
+        raise refuse(lang, "end_before")
     previous = {k: row.get(k) for k in (MACHINE_FIELD, START_FIELD, END_FIELD)}
     row.update({MACHINE_FIELD: machine, START_FIELD: start, END_FIELD: end})
     return {"row": row, "previous": previous}
 
 
-def adjust_maintenance(rows: Iterable[Mapping[str, Any]], params: Mapping[str, Any]) -> dict[str, Any]:
+def adjust_maintenance(rows: Iterable[Mapping[str, Any]], params: Mapping[str, Any], *, language: str = "zh") -> dict[str, Any]:
     """The maintenance work order after moving its planned days; planned_date (the due day) is kept."""
     key = str(params.get("maintenance_work_order_id") or "").strip()
     found = next((dict(r) for r in rows if str(r.get("maintenance_work_order_id")) == key), None)
     if found is None:
-        raise CannotCheck(f"no maintenance work order {key!r}")
+        raise refuse(language, "no_mwo", key=key)
     if code(found.get("status")) == "completed":
-        raise CannotCheck(f"{key} is completed")
+        raise refuse(language, "mwo_done", key=key)
     start = day(params.get("planned_start_date")) or day(found.get("planned_start_date"))
     end = day(params.get("planned_end_date")) or (start if params.get("planned_start_date") else day(found.get("planned_end_date")))
-    if not start or end < start:
-        raise CannotCheck("planned_end_date is before planned_start_date")
+    if not start:
+        raise refuse(language, "no_start")
+    if end < start:
+        raise refuse(language, "end_before")
     previous = {k: found.get(k) for k in MWO_FIELDS}
     found.update(planned_start_date=start, planned_end_date=end)
     return {"row": found, "previous": previous}

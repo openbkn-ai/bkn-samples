@@ -212,6 +212,9 @@ class AdjustTest(Base):
                     {"operation_id": "OP-404"}):
             with self.assertRaises(self.ms.CannotCheck, msg=bad):
                 self.ms.adjust_operation(f, bad)
+        with self.assertRaises(self.ms.CannotCheck) as refused:
+            self.ms.adjust_operation(f, {"operation_id": "OP-2703-09-10", "planned_machine_id": "MACH-TURN-01"})
+        self.assertIn("不属于" if self.lang == "zh" else "is not in", str(refused.exception))
 
     def test_adjust_maintenance_keeps_the_due_day(self):
         rows = self.t["maintenance_work_orders"]
@@ -240,6 +243,27 @@ class RuntimeTest(Base):
         self.assertIn(("manufacturing_operations", 100), calls)
         d = rt.rule("work_order_kit", self.query(), mode="detail", task={"key": "OP-2703-02-10"}, detail_query={"limit": 1})
         self.assertEqual((d["total"], len(d["rows"])), (2, 1))
+
+    def test_without_an_interaction_the_rule_reads_ontology_query_directly(self):
+        rt = self.m["schedule_runtime"]
+        rt.KN_ID, rt.LANGUAGE, rt.PAGE_SIZE = KN[self.lang], self.lang, 500
+        sdk_calls, rest_calls = [], []
+
+        def sdk(**kw):
+            sdk_calls.append(kw["ot_id"])
+            raise RuntimeError('query_object_instance: {"error":{"code":"conversation_required","message":"bkn_context is required"}}')
+
+        def call(path, method="GET", body=None, headers=None):
+            table = path.rsplit("/", 1)[1]
+            rest_calls.append((table, body["offset"], headers))
+            rows = self.t[table]
+            return {"datas": rows[body["offset"]:body["offset"] + body["limit"]], "total_count": len(rows)}
+        out = rt.rule("machine_capability", sdk, call=call, tasks=[{"key": "OP-2703-09-10"}])
+        self.assertFalse(out["results"][0]["pass"])
+        self.assertEqual(len(sdk_calls), 1)                                # decided once per call
+        self.assertEqual(rest_calls[0][2], {"X-HTTP-Method-Override": "GET"})
+        with self.assertRaises(RuntimeError):                              # other SDK failures stay failures
+            rt.rule("changeover", lambda **kw: (_ for _ in ()).throw(RuntimeError("boom")), call=call, tasks=[])
 
     def test_partial_reads_fail(self):
         rt = self.m["schedule_runtime"]
