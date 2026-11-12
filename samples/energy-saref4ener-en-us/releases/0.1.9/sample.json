@@ -1,0 +1,112 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "energy-saref4ener-en-us",
+    "version": "0.1.9",
+    "displayName": "Demand response and flexible energy",
+    "summary": "Synthetic response readiness, shared-resource planning and measured settlement.",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT synthetic sample; SAREF4ENER semantic attribution is documented separately."
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-11-12T14:29:50Z",
+      "defaultLocale": "en-US",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:1da62d5798d49b98b7c6eb739deb7814b77412f58fe651096a8a8f23e22406c4"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:b72f1396203369c5a273f433ce01ce3059f6d00af9c49fd8711f3d6c66301de4"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.function",
+        "execution.skill",
+        "sample.experience-set",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.2 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:daae57ae698d63e0be3980b13bbed29e56ea58795153b67590a05669dd768295",
+        "sizeBytes": 188992,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-energy-saref4ener-en-us-v0.1.9/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "energy-saref4ener-en-us-network",
+        "questions": [
+          "Can EVT-061 reach its target with the current plan, and how many kW short is it?",
+          "How many kWh of reduction were verified for EVT-001, what is the delivery ratio, and did it meet the threshold?",
+          "Which past events cannot have their settlement determined yet, and what is blocking each?"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "energy-saref4ener-en-us-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "energy-saref4ener-en-us-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "energy-saref4ener-en-us-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "energy-saref4ener-en-us-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "energy_saref4ener_en_us",
+          "expectedTables": 15
+        }
+      ],
+      "bindings": []
+    }
+  }
+}
