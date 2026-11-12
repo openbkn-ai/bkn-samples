@@ -31,11 +31,11 @@ def _entries(payload: dict, *keys: str) -> list:
 
 
 def capability_ready(run_cli) -> bool:
-    """Both calculation tools back tool actions; the kit-schedule tool backs the three plan object actions."""
+    """The calculation and schedule-rule tools back tool actions; the kit-schedule tool backs the three plan object actions."""
     sys.path.insert(0, str(SAMPLE_DIR / "tools"))
-    from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE
+    from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE, SCHEDULE_RULES
 
-    calculations = {spec["name"] for spec in FUNCTION_CATALOG.values()}
+    calculations = {spec["name"] for spec in [*FUNCTION_CATALOG.values(), *SCHEDULE_RULES.values()]}
     if not calculations:
         return False
     listing = run_cli(["toolbox", "list", "--keyword", BOX_NAME, "--limit", "100"])

@@ -8,7 +8,7 @@ TOOLS = Path(__file__).resolve().parents[2] / 'samples/supply_ontology_hand/tool
 sys.path.insert(0, str(TOOLS))
 import register_native_function_toolbox as FUNCTIONS
 import register_skills as SKILLS
-from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE
+from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE, SCHEDULE_RULES
 
 
 class SupplyMountTest(unittest.TestCase):
@@ -26,7 +26,8 @@ class SupplyMountTest(unittest.TestCase):
                 return {'data': [{'box_name': 'Supply', 'box_id': 'box-1', 'status': 'published'}]}
             if args[:2] == ['tool', 'list']:
                 return {'tools': [dict(name=spec['name'], tool_id=operation, status='enabled')
-                                  for operation, spec in [*FUNCTION_CATALOG.items(), ('kit_schedule', KIT_SCHEDULE)]]}
+                                  for operation, spec in [*FUNCTION_CATALOG.items(), ('kit_schedule', KIT_SCHEDULE),
+                                                          *SCHEDULE_RULES.items()]]}
             return {}
 
         with patch.object(FUNCTIONS, '_call', call):
@@ -36,9 +37,10 @@ class SupplyMountTest(unittest.TestCase):
         self.assertIn('import_mode=overwrite', create[1])
         actions = json.loads(create[create.index('-d') + 1])['entries']
         self.assertEqual([a['id'] for a in actions], [f'supply_ontology_hand_{op}' for op in FUNCTION_CATALOG]
-                         + [f'supply_ontology_hand_kitplan_{key}' for key in KIT_PLAN_ACTIONS])
+                         + [f'supply_ontology_hand_kitplan_{key}' for key in KIT_PLAN_ACTIONS]
+                         + [f'supply_ontology_hand_{op}' for op in SCHEDULE_RULES])
         self.assertEqual(result['action_ids'], [a['id'] for a in actions])
-        for action in actions[len(FUNCTION_CATALOG):]:
+        for action in actions[len(FUNCTION_CATALOG):len(FUNCTION_CATALOG) + len(KIT_PLAN_ACTIONS)]:
             # The plan actions are object actions on the plan dataset, run by the kit-schedule tool.
             self.assertEqual(action['operation_config'], {'type': 'object'})
             self.assertEqual(action['object_type_id'], 'supply_ontology_hand_kitplan')

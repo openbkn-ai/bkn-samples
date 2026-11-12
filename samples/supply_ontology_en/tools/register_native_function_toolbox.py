@@ -20,7 +20,7 @@ except ImportError:
 from typing import Any
 
 from ownership_receipt import require_owned, remember
-from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE
+from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE, SCHEDULE_RULES
 from native_function_bundle import build_native_function_code
 
 
@@ -80,6 +80,26 @@ KIT_ACTION_PARAMETERS = {
     "cancel": {"plan_id": "property", "bill_no": "property", "product_code": "property", "plan_status": ("const", "Cancelled"),
                "planner": "input"},
 }
+
+
+def rule_tool_inputs() -> list[dict[str, Any]]:
+    """The schedule-Gantt rule-tool contract: tasks in, one result per task out."""
+    task = {"name": "items", "type": "object", "required": True, "description": "One task: key, start, end, resource, values."}
+    tasks = _input("tasks", "array", "Tasks to check, at most 200 per call; values carry bill_no, product_code, line_code, planned_start, plan_status.",
+                   required=True)
+    tasks["sub_parameters"] = [task]
+    return [tasks, _input("scenario", "object", "Scenario edits; the tasks already carry the edited values, so it may be omitted.")]
+
+
+def rule_action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str]) -> list[dict[str, Any]]:
+    """The rule tools as tool actions, so Q&A and Skills check plans with the same code as the Gantt."""
+    return [{
+        "id": f"{kn_id}_{operation}", "name": spec["name"], "branch": "main",
+        "operation_config": {"type": "tool"}, "object_type_id": "", "action_type": "modify", "action_intent": "modify",
+        "action_source": {"type": "tool", "box_id": box_id, "tool_id": tool_ids[operation]},
+        "parameters": [{"name": "tasks", "type": "array", "value_from": "input", "comment": rule_tool_inputs()[0]["description"]}],
+        "comment": f"{spec['description']}\n{spec['use_rule']}",
+    } for operation, spec in SCHEDULE_RULES.items()]
 
 
 def kit_tool_inputs() -> list[dict[str, Any]]:
@@ -174,10 +194,19 @@ def _tool_inputs() -> dict[str, dict[str, Any]]:
         "outputs": [{"name": "result", "type": "object", "required": True,
                      "description": "The plan written (plan ID, kit status, kit date, key material, shortage note) and the shortages."}],
     }
+    for operation, spec in SCHEDULE_RULES.items():
+        tools[operation] = {
+            "name": spec["name"], "description": spec["description"], "script_type": "python",
+            "code": build_native_function_code(fixed_operation=operation), "inputs": rule_tool_inputs(),
+            "outputs": [{"name": "results", "type": "array", "required": True,
+                         "description": "One result per task: key, pass, severity, text, related."}],
+        }
     return tools
 
 
 def _use_rule(operation: str) -> str:
+    if operation in SCHEDULE_RULES:
+        return SCHEDULE_RULES[operation]["use_rule"]
     return KIT_SCHEDULE["use_rule"] if operation == "kit_schedule" else FUNCTION_CATALOG[operation]["use_rule"]
 
 
@@ -266,7 +295,8 @@ def run(*, box_name: str, apply: bool, kn_id: str | None = None) -> dict[str, An
     actions: list[dict[str, Any]] = []
     if kn_id:
         actions = [*action_definitions(kn_id, box_id, {k: v for k, v in tool_ids.items() if k in FUNCTION_CATALOG}),
-                   *kit_action_definitions(kn_id, box_id, tool_ids["kit_schedule"])]
+                   *kit_action_definitions(kn_id, box_id, tool_ids["kit_schedule"]),
+                   *rule_action_definitions(kn_id, box_id, tool_ids)]
         # Overwrite keeps a repeated install idempotent and follows re-created tool IDs.
         _call(["call", f"{BKN_API}/knowledge-networks/{kn_id}/action-types?import_mode=overwrite",
                "-X", "POST", "-d", json.dumps({"entries": actions}, ensure_ascii=False)])

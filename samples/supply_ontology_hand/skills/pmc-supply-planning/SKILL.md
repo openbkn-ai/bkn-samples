@@ -50,6 +50,7 @@ description: >
 - 已排计划：`MATCH (k:supply_ontology_hand_kitplan) WHERE k.plan_status <> '已取消' RETURN k.plan_id, k.bill_no, k.product_code, k.line_code, k.planned_start, k.planned_finish, k.kit_status, k.kit_date, k.key_material, k.plan_status`。某张单排没排：加 `AND k.bill_no = '<预测单号>'`；没有有效计划就是待排。
 - 产线在 `supply_ontology_hand_line`：工厂也是一行（`line_kind` 为“工厂”，不排产），产线的 `parent_code` 是所属工厂，`max_parallel` 是同时可执行的计划数，`product_lines` 是可生产的产品线；产品的默认产线是产品对象的 `line_code`。停线窗口在 `supply_ontology_hand_stoppage`，`resource_code` 是产线或工厂编码，工厂级窗口作用于该工厂所有产线。
 - 只有使用者明确要求排产、改期或取消时才执行三个行动：“建立齐套排产计划”（新建实例，`object_input` 传 `bill_no`、`product_code`〔整单传空字符串〕、`line_code`、`planned_start`、`planned_finish`、`plan_status`〔通常为已排〕、`source_scenario`、`planner`）、“调整齐套排产计划”（修改实例，`_instance_identities` 传选中计划的 `plan_id`，再传新的产线、计划开工、计划完工、来源方案、排产人）、“取消齐套排产计划”（修改实例，传计划号和排产人）。执行前说明要写入什么；执行后从结果里报告计划号、齐套状态、齐套日和关键物料。重复建立同一单（同一产品）不会新增计划，会修改已有的那条。
+- 问“这些计划现在排得通吗、哪张会缺料、产线能不能做”时，执行“齐套检查”“产线可生产”两个行动（排程甘特用的是同一套规则）：`tasks` 每条为 `{key, start, resource, values}`，key 用计划号，start 用计划开工，resource 用产线编码，values 带 `bill_no`、`product_code`、`line_code`、`planned_start`、`plan_status`。齐套检查把所有传入的计划放在同一库存池里按开工先后分配，所以要一次传入相关的全部计划；`related` 是争同一物料的计划。
 
 ## Cypher 写法
 

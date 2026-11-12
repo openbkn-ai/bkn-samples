@@ -21,7 +21,7 @@ def test_catalog_publishes_exactly_the_two_calculations():
 
 def test_dry_run_lists_the_tools_without_calling_the_platform():
     preview = run(box_name='Supply_EN_Functions', apply=False)
-    assert preview["operations"] == [*OPERATIONS, "kit_schedule"]
+    assert preview["operations"] == [*OPERATIONS, "kit_schedule", "kit_check_rule", "line_check_rule"]
     assert preview["needs_external_service"] is False
 
 

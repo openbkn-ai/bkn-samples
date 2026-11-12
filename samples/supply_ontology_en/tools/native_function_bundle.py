@@ -66,6 +66,18 @@ def kit_schedule(
 '''
 
 
+RULE_ENTRY_SOURCE = r'''
+from sandbox_sdk import bkn, tool
+import schedule_rules
+
+@tool
+def schedule_rule(tasks: list | None = None, scenario: dict | None = None) -> dict:
+    """Check schedule-Gantt tasks (kit-schedule plans); returns one result per task."""
+    # The tasks already carry the scenario's changes; the edits only say which ones moved.
+    return getattr(schedule_rules, _FIXED_OPERATION.removesuffix("_rule"))(tasks, bkn.query_object_instance)
+'''
+
+
 def _archive_source() -> str:
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
@@ -73,6 +85,7 @@ def _archive_source() -> str:
             archive.write(file_path, file_path.relative_to(TOOLS))
         archive.write(TOOLS / "managed_execution.py", "managed_execution.py")
         archive.write(TOOLS / "kit_schedule.py", "kit_schedule.py")
+        archive.write(TOOLS / "schedule_rules.py", "schedule_rules.py")
     return base64.b64encode(buffer.getvalue()).decode("ascii")
 
 
@@ -94,5 +107,6 @@ def build_native_function_code(*, fixed_operation: str) -> str:
         sys.path.insert(0, root)
         '''
     )
-    entry = KIT_ENTRY_SOURCE if fixed_operation == "kit_schedule" else ENTRY_SOURCE
+    entry = (KIT_ENTRY_SOURCE if fixed_operation == "kit_schedule"
+             else RULE_ENTRY_SOURCE if fixed_operation.endswith("_rule") else ENTRY_SOURCE)
     return bootstrap + "\n" + textwrap.dedent(entry).lstrip()

@@ -120,7 +120,7 @@ LINES = [
     ("L-SZ-UGV", "无人车与播种装配线", "Unmanned vehicle and seeding line", "产线", "F-SZ", "苏州工厂", "Suzhou Plant", "2",
      "无人车、智能播种", "Unmanned Vehicles, Smart Seeding"),
     ("L-SZ-ELE", "电子终端线", "Electronics terminal line", "产线", "F-SZ", "苏州工厂", "Suzhou Plant", "2",
-     "监测终端、智能大屏", "Monitoring Terminals, Smart Displays"),
+     "监测终端、智能大屏", "Monitoring Devices, Smart Displays"),
     ("L-UR-AD", "自动驾驶总装线", "Autopilot assembly line", "产线", "F-UR", "乌鲁木齐工厂", "Urumqi Plant", "2", "自动驾驶", "Autonomous Driving"),
     ("L-UR-NAV", "车载终端线", "Vehicle terminal line", "产线", "F-UR", "乌鲁木齐工厂", "Urumqi Plant", "3", "智能定位", "Smart Positioning"),
 ]

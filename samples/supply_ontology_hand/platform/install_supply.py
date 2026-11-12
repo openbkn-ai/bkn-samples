@@ -80,7 +80,7 @@ def capability_summary(payload: dict) -> str:
     components = payload.get("components") or {}
     digest = hashlib.sha256()
     if components.get("functions"):
-        for name in ("function_catalog.py", "native_function_bundle.py", "kit_schedule.py"):
+        for name in ("function_catalog.py", "native_function_bundle.py", "kit_schedule.py", "schedule_rules.py"):
             path = TOOLS / name
             digest.update(name.encode())
             digest.update(b"\0")

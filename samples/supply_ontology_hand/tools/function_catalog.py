@@ -59,6 +59,24 @@ KIT_SCHEDULE = {
                 "计划开工、计划完工、计划状态〔通常为已排〕、来源方案、排产人）、调整（修改实例，选中计划后传新的产线、计划开工、"
                 "计划完工、来源方案、排产人）、取消（修改实例，选中计划后传排产人）。只查已排计划、齐套结论时用 Cypher 查齐套排产计划。",
 }
+RULE_USE = ("排程甘特的规则工具：输入 tasks（每条含 key、start、end、resource、values，values 里有 bill_no、product_code、"
+            "line_code、planned_start、plan_status），一次最多 200 条；返回每条任务的 pass、severity（hard 或 soft）、text 和 related。"
+            "问答里检查已排计划时，先用 Cypher 取齐套排产计划，再把计划转成 tasks 传入。")
+SCHEDULE_RULES = {
+    "kit_check_rule": {
+        "name": "齐套检查",
+        "description": "检查一批排产计划在计划开工时是否齐套：先保已签约欠货，再按开工先后在同一库存池上分配库存和按期到货的在途；"
+                       "缺料时点名关键物料、缺口和预计到货，没下单的按采购提前期预估并提示尚未下采购申请。"
+                       "开工早于最早可开工日为硬约束；related 是争同一物料的计划。已确认的计划已领料，视为齐套。",
+        "use_rule": RULE_USE,
+    },
+    "line_check_rule": {
+        "name": "产线可生产",
+        "description": "检查一批排产计划的产线能否生产它的产品：产品的产品线要在产线的可生产产品线内，整单逐个产品判断；"
+                       "排到工厂或不存在的产线也不通过。不通过为硬约束，并点名产线和产品线。",
+        "use_rule": RULE_USE,
+    },
+}
 KIT_PLAN_ACTIONS = {
     "create": ("建立齐套排产计划", "add",
                "排产：为一张预测单（整单）或其中一个产品新建齐套排产计划，按计划开工日记录齐套结论。"
@@ -82,4 +100,4 @@ def native_operation_description() -> str:
     return "可用具名函数：" + "、".join(FUNCTION_CATALOG)
 
 
-__all__ = ["FUNCTION_CATALOG", "KIT_PLAN_ACTIONS", "KIT_SCHEDULE", "native_operation_description", "native_tool_description"]
+__all__ = ["FUNCTION_CATALOG", "KIT_PLAN_ACTIONS", "KIT_SCHEDULE", "SCHEDULE_RULES", "native_operation_description", "native_tool_description"]
