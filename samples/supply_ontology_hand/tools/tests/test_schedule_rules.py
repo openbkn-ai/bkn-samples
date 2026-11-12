@@ -162,7 +162,10 @@ def test_bundled_rule_tools_read_the_network_and_answer_per_task(monkeypatch):
     sdk = types.ModuleType("sandbox_sdk")
     sdk.bkn = types.SimpleNamespace(query_object_instance=query)
     sdk.tool = lambda fn: fn
+    osdk = types.ModuleType("bkn_osdk")
+    osdk.call = lambda *a, **k: (_ for _ in ()).throw(AssertionError("not used inside an interaction"))
     monkeypatch.setitem(sys.modules, "sandbox_sdk", sdk)
+    monkeypatch.setitem(sys.modules, "bkn_osdk", osdk)
     for name in [m for m in sys.modules if m in ("fn", "managed_execution", "schedule_rules") or m.startswith("fn.")]:
         monkeypatch.delitem(sys.modules, name)
     monkeypatch.setattr(sys, "path", list(sys.path))
@@ -231,3 +234,30 @@ def test_confirmed_plans_turn_short_when_their_purchase_is_delayed():
     after = {r["key"]: r for r in kit_rule(plans, {**rows, "purchase_order": delayed}, materials=materials, business_date=BD)}
     for plan in watched:
         assert (after[plan["key"]]["pass"], after[plan["key"]]["severity"], after[plan["key"]]["at"]) == (False, HARD, "2027-06-30")
+
+
+def test_outside_an_interaction_the_rule_tools_read_through_the_ontology_query_api():
+    from schedule_rules import line_check, tool_query
+    fake = FakeObjectQuery()
+    calls = []
+
+    def refuse(**_):
+        raise RuntimeError("conversation_required: bkn_context is required")
+
+    def call(path, method="GET", body=None, headers=None):
+        calls.append((path, method, headers))
+        ot_id = path.rsplit("/", 1)[1]
+        return fake(kn_id="kn", ot_id=ot_id, condition=body.get("condition"), limit=body["limit"], offset=body["offset"])
+    tasks = [task("a", "YCD2026091600000057", "2027-03-08", product="382-000005", line="L-UR-AD")]
+    assert line_check(tasks, tool_query(refuse, call))["results"][0]["pass"] is True
+    assert calls and all(m == "POST" and h == {"X-HTTP-Method-Override": "GET"} for _, m, h in calls)
+    assert calls[0][0].startswith("/api/ontology-query/v1/knowledge-networks/")
+
+
+def test_other_reader_errors_are_not_hidden():
+    from schedule_rules import tool_query
+
+    def broken(**_):
+        raise RuntimeError("object type not found")
+    with pytest.raises(RuntimeError):
+        tool_query(broken, lambda *a, **k: {})(kn_id="kn", ot_id="x", limit=1, offset=0)

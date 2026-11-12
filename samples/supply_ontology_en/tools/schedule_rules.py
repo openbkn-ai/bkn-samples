@@ -31,6 +31,32 @@ PLAN_FIELDS = ("bill_no", "product_code", "line_code", "planned_start", "planned
 CHUNK = 500
 
 
+def tool_query(sdk_query: Callable[..., Mapping[str, Any]], call: Callable[..., Any]) -> Callable[..., Mapping[str, Any]]:
+    """Object reads for a rule tool. The schedule Gantt calls it through the toolbox proxy, outside a Context Loader
+    interaction, where the SDK reader refuses (``conversation_required``); the ontology query API then answers the
+    same object query as the caller. Inside an interaction (an action, Q&A) the SDK reader is used."""
+    state = {"sdk": True}
+
+    def direct(kn_id: str, ot_id: str, condition: Any = None, limit: int = 500, offset: int = 0, **_: Any) -> Mapping[str, Any]:
+        body: dict[str, Any] = {"limit": limit, "offset": offset, "need_total": True}
+        if condition:
+            body["condition"] = condition
+        return call(f"/api/ontology-query/v1/knowledge-networks/{kn_id}/object-types/{ot_id}", method="POST", body=body,
+                    headers={"X-HTTP-Method-Override": "GET"})
+
+    def query(**request: Any) -> Mapping[str, Any]:
+        if state["sdk"]:
+            try:
+                return sdk_query(**request)
+            except Exception as error:  # the SDK raises its own error types
+                if "conversation_required" not in str(error) and "bkn_context" not in str(error):
+                    raise
+                state["sdk"] = False
+        request.pop("search_after", None)
+        return direct(**request)
+    return query
+
+
 def _reader(query: Callable[..., Mapping[str, Any]]):
     def read(ot_id: str, field: str | None = None, values: list[str] | None = None) -> list[dict[str, Any]]:
         if field is None:
@@ -118,4 +144,4 @@ def line_check(tasks: Any, query: Callable[..., Mapping[str, Any]]) -> dict[str,
     return {"results": line_rule(tasks, forecasts=forecasts, lines=lines, product_lines=product_lines)}
 
 
-__all__ = ["kit_check", "kit_check_detail", "line_check"]
+__all__ = ["kit_check", "kit_check_detail", "line_check", "tool_query"]
