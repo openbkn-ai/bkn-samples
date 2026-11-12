@@ -5,7 +5,7 @@ from unittest.mock import patch
 from tools.publication.build_candidate_set import validate_plan
 from tools.publication.build_candidate import included
 ROOT=Path(__file__).resolve().parents[2]
-PLAN=ROOT/'tools/publication/candidates-0.2.1.json'
+PLAN=ROOT/'tools/publication'/f'candidates-{(ROOT/"VERSION").read_text().strip()}.json'
 
 
 def load(path,name):
