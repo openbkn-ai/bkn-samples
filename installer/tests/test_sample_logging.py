@@ -85,6 +85,14 @@ class SampleLoggingTest(unittest.TestCase):
                 self.assertEqual(execute.call_count, 1)
                 sleep.assert_not_called()
 
+    def test_parent_forwards_sync_pending_retry_count(self):
+        output = io.StringIO()
+        child = {'source': 'sample', 'event': 'succeeded', 'step': 'cli.bkn.object-type.query',
+                 'stage': 'knowledge', 'returncode': 0, 'elapsed_ms': 2731, 'sync_pending_retries': 1}
+        with diagnostics.context({'sample': 'real'}, stage='platform-install'), redirect_stderr(output):
+            self.assertTrue(_sample_event(json.dumps(child)))
+        self.assertEqual(json.loads(output.getvalue())['sync_pending_retries'], 1)
+
     def test_function_and_skill_errors_name_the_actual_operation_and_hide_token(self):
         for args in [('toolbox', 'publish', 'box-1'), ('skill', 'publish', 'skill-1')]:
             with self.subTest(args=args):
