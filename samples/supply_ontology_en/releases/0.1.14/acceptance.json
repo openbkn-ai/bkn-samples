@@ -1,0 +1,88 @@
+{
+  "reportType": "public-acceptance-summary",
+  "sampleId": "supply-chain-en",
+  "version": "0.1.14",
+  "packageDigest": "sha256:5c83deb8386c34351d229742719ef16c84975fcf762a1c2309d8e6ebafdf2ace",
+  "sourceCommit": "195a268f5d0033b48218d0f6504652ef96fe0d98",
+  "verificationDate": "2026-11-12",
+  "testedPlatformVersion": "0.2.2",
+  "testedArchitecture": "arm64",
+  "databaseRuntime": "shared-mariadb",
+  "freshInstallation": true,
+  "checks": {
+    "database": {
+      "businessTables": 12,
+      "fixtureRecords": 78635,
+      "boundObjectRowCountsMatched": true,
+      "packageDatabaseVerificationHookPassed": true
+    },
+    "knowledge": {
+      "objectTypes": 11,
+      "relations": 15,
+      "liveBoundObjectQueriesPassed": 11,
+      "productionPlansReachingProducts": 605,
+      "productionPlans": 605
+    },
+    "capabilities": {
+      "nativeFunctionsInvoked": [
+        {
+          "name": "Buildable_Quantity_and_ATP",
+          "invokedThrough": "context-loader execute_tool in a managed interaction",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": false,
+          "passed": true
+        },
+        {
+          "name": "Demand_Coverage_and_Shortages",
+          "invokedThrough": "context-loader execute_tool in a managed interaction",
+          "exitCode": 0,
+          "fixtureComparisonPerformed": false,
+          "passed": true
+        }
+      ],
+      "mountedSkillsVerified": [
+        {
+          "name": "pmc-supply-planning",
+          "sourceContentDigest": "sha256:3f3b9693dbfd06b921e3eb6f75c5a0a0f9f5ada2cd5941a79d7193110f68253e",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        },
+        {
+          "name": "procurement-follow-up",
+          "sourceContentDigest": "sha256:6ba0cfed8d07de6b3bb95fd8543221154bf846aa1a4558a571899d38375c56c6",
+          "files": [
+            "SKILL.md"
+          ],
+          "passed": true
+        }
+      ],
+      "functionsNotDeclared": false,
+      "metricsNotDeclared": true
+    },
+    "scenario": {
+      "declaredCards": 15,
+      "referenceCypherQueriesPassed": 7,
+      "graphPatternsPassed": 0,
+      "fullQuestionCardsNotExercised": 8,
+      "modelQuestionsRun": 0
+    }
+  },
+  "lifecycle": {
+    "offlineImportPassed": true,
+    "samePackageReinstallationPassed": true,
+    "retainedOtherSampleQueriesPassed": true,
+    "notExercised": [
+      "bounded internal-dependency failure",
+      "retry with the same artifacts",
+      "uninstall without an active package cache or external HTTP"
+    ]
+  },
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (0.2.2-main.20261112104645.sha2d2a597); no native amd64 certification and no released vanilla 0.2.2.",
+    "Native functions were called through Context Loader execute_tool inside a managed interaction; on this build a Python function run as a tool action does not receive that context (openbkn-ai/bkn-foundry#3123), so the functions stay mounted capabilities.",
+    "Reference queries and functions were checked through APIs; browser UI and full model-question cards were not exercised."
+  ],
+  "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}

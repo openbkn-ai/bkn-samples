@@ -1,0 +1,43 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.14",
+  "packageDigest": "sha256:5c83deb8386c34351d229742719ef16c84975fcf762a1c2309d8e6ebafdf2ace",
+  "sourceCommit": "195a268f5d0033b48218d0f6504652ef96fe0d98",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "12 business tables; the 11 bound objects return the fixture row counts, plus the package's DB verification hook."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "All 11 objects have resource bindings and returned their fixture row counts live; 15 relations; all 605 production plans reach their products."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "2 real native function calls through Context Loader execute_tool in a managed interaction; 2 mounted Skills read and checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries passed. 8 of 15 cards have no direct reference check and were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.14/acceptance.json",
+  "evidenceDigest": "sha256:8fce95ff4f97f7c9cffb72096ad1352c435fb1080171cfaa1b470a7b7fd7fc3b",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (0.2.2-main.20261112104645.sha2d2a597); no native amd64 certification and no released vanilla 0.2.2.",
+    "Native functions were called through Context Loader execute_tool inside a managed interaction; on this build a Python function run as a tool action does not receive that context (openbkn-ai/bkn-foundry#3123), so the functions stay mounted capabilities.",
+    "Reference queries and functions were checked through APIs; browser UI and full model-question cards were not exercised."
+  ]
+}
