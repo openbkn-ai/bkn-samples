@@ -12,7 +12,7 @@ from function_catalog import FUNCTION_CATALOG
 
 
 class SupplyMountTest(unittest.TestCase):
-    def test_functions_mount_only_declared_tool_ids(self):
+    def test_functions_become_tool_actions_for_declared_tool_ids(self):
         calls = []
 
         def call(args):
@@ -30,11 +30,24 @@ class SupplyMountTest(unittest.TestCase):
             return {}
 
         with patch.object(FUNCTIONS, '_call', call):
-            FUNCTIONS.run(box_name='Supply', apply=True, kn_id='supply_ontology_hand')
-        attach = next(args for args in calls if args[:3] == ['bkn', 'capability', 'attach'])
-        self.assertEqual(attach, ['bkn', 'capability', 'attach', 'supply_ontology_hand', '--box', 'box-1',
-                                  '--tool', ','.join(FUNCTION_CATALOG)])
-        self.assertNotIn('--all-tools', attach)
+            result = FUNCTIONS.run(box_name='Supply', apply=True, kn_id='supply_ontology_hand')
+        self.assertFalse(any(args[:3] == ['bkn', 'capability', 'attach'] for args in calls))
+        create = next(args for args in calls if args[:1] == ['call'] and '/action-types' in args[1])
+        self.assertIn('import_mode=overwrite', create[1])
+        actions = json.loads(create[create.index('-d') + 1])['entries']
+        self.assertEqual([a['id'] for a in actions], [f'supply_ontology_hand_{op}' for op in FUNCTION_CATALOG])
+        self.assertEqual(result['action_ids'], [a['id'] for a in actions])
+        for action, (operation, spec) in zip(actions, FUNCTION_CATALOG.items()):
+            self.assertEqual(action['operation_config'], {'type': 'tool'})
+            self.assertEqual(action['object_type_id'], '')
+            self.assertEqual(action['action_source'], {'type': 'tool', 'box_id': 'box-1', 'tool_id': operation})
+            self.assertEqual(action['name'], spec['name'])
+            names = [p['name'] for p in action['parameters']]
+            # Business assumptions are inputs; the sample's business date stays fixed.
+            self.assertNotIn('business_date', names)
+            self.assertIn('products' if operation == 'build_capacity' else 'demands', names)
+            self.assertIn('need_by', names)
+            self.assertTrue(all(p['value_from'] == 'input' for p in action['parameters']))
 
     def test_skills_mount_only_registered_ids_after_publication(self):
         calls = []

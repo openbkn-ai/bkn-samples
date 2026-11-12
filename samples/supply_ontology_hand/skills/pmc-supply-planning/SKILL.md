@@ -9,7 +9,7 @@ description: >
 
 # PMC 生产计划
 
-回答计划经理关于欠货、接单、排产和备料的问题。查数、汇总、追关系用 Cypher；需要按 BOM 逐层净扣时调用函数。
+回答计划经理关于欠货、接单、排产和备料的问题。查数、汇总、追关系用 Cypher；需要按 BOM 逐层净扣时执行计算行动。
 
 ## 默认口径
 
@@ -26,17 +26,19 @@ description: >
 - “现货”只指成品可用库存，不含还能生产的数量：现货还能承诺 = 成品可用库存 − 已签约欠货 − 本次要发的数量。
 - 未关闭预测 = 关闭状态不是“已关闭”。一张预测单可以有多个产品。现有库存能支撑多少预测按可承诺量算，不能只看成品库存。
 
-## 什么时候调用函数
+## 什么时候执行计算行动
+
+两个计算以行动提供：先用 `get_action_info` 取参数定义，再用 `execute_action` 执行，最后用 `get_action_execution` 取结果。每次都要传全部参数：替代料（默认 false）、仓范围（默认 all）、需求日期（不设时传空字符串）、是否计入逾期在途（默认 false）等是业务假设，用户没说时按默认值显式传入，并在回答里说明按什么假设算的。
 
 - **产品可做数量与可承诺量**（`build_capacity`）：某产品现在最多还能做多少、可承诺多少、还能接多少新单、被哪颗料卡住；允许替代料、只用某几个仓、某日前在途到货、逾期在途催回后能多做多少。`products` 传产品编码列表，各产品独立计算；几个产品要一起看时一次传完，不要逐个调用。
-  - 哪些产品的欠货靠现货和生产都补不上：先用 Cypher 找出欠货超过成品库存的产品，再把这些产品一次传给本函数，`finished_goods_qty + buildable_qty < signed_backlog_qty` 的就是补不上的，差额是 `signed_backlog_qty − finished_goods_qty − buildable_qty`（`available_to_promise` 最小为 0，不能用来判断）。
+  - 哪些产品的欠货靠现货和生产都补不上：先用 Cypher 找出欠货超过成品库存的产品，再把这些产品一次传给本行动，`finished_goods_qty + buildable_qty < signed_backlog_qty` 的就是补不上的，差额是 `signed_backlog_qty − finished_goods_qty − buildable_qty`（`available_to_promise` 最小为 0，不能用来判断）。
   - 某日前在途能让这些产品多做多少：同一批产品再传 `need_by` 调一次，两次 `buildable_qty` 相减。
 - **需求齐套与缺料**（`demand_coverage`）：一张或几张需求够不够、缺哪些料、各缺多少。
   - 评估欠单本身：不传 `reserve_signed_backlog`。
   - 评估新单且要先保欠货：`reserve_signed_backlog=true`。
   - 排生产工单、不动成品：`use_finished_goods=false`。
   - 多单同时来：按使用者给的先后放进 `demands`。
-- 其他问题（欠货、库存、预测、工单、BOM 清单、反查用途、通用料）用 Cypher，不要调用函数。函数的 `limiting_materials` 和 `shortages` 是最底层缺料；要回答这些料有没有在途、交期多久，再用 Cypher 查采购订单和物料。
+- 其他问题（欠货、库存、预测、工单、BOM 清单、反查用途、通用料）用 Cypher，不要执行计算行动。函数的 `limiting_materials` 和 `shortages` 是最底层缺料；要回答这些料有没有在途、交期多久，再用 Cypher 查采购订单和物料。
 
 ## Cypher 写法
 
