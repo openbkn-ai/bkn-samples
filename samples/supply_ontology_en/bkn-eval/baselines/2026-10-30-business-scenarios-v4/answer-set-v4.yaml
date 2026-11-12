@@ -1,7 +1,7 @@
 schema_version: '4.0'
 set_id: supply-business-scenarios-v4
-business_date: '2026-08-25'
-source_snapshot_date: '2026-08-13'
+business_date: '2027-02-25'
+source_snapshot_date: '2027-02-13'
 prd: docs/PRD.en-US.md
 generation_method: independent raw CSV Decimal oracle (oracle.py)
 answers:
@@ -52,15 +52,15 @@ answers:
 - id: Q-08
   question: How many MRP planned orders have been calculated but not released yet?
   expected:
-    count: 262
-  answer: '{"count": 262}'
+    count: 313
+  answer: '{"count": 313}'
 - id: Q-09
   question: Among the orders we still owe, how many are past their promised date? Which one is the most overdue, and by how many days?
   expected:
-    overdue_orders: 192
-    oldest_order: SO0000538
-    days_late: 162
-  answer: '{"overdue_orders": 192, "oldest_order": "SO0000538", "days_late": 162}'
+    overdue_orders: 72
+    oldest_order: SO0000200
+    days_late: 45
+  answer: '{"overdue_orders": 72, "oldest_order": "SO0000200", "days_late": 45}'
 - id: Q-10
   question: Which of Cypressridge Agri's orders are not fully shipped yet, and how many units do we owe them in total?
   expected:
@@ -77,22 +77,22 @@ answers:
 - id: Q-11
   question: How many purchase lines are past their due date and still not fully received? How many suppliers do they involve?
   expected:
-    lines: 483
-    suppliers: 133
-  answer: '{"lines": 483, "suppliers": 133}'
+    lines: 105
+    suppliers: 49
+  answer: '{"lines": 105, "suppliers": 49}'
 - id: Q-12
   question: Which supplier has the most overdue purchase lines? How many overdue lines, and how much is still outstanding on them?
   expected:
     supplier: Ashvale Components
-    lines: 50
-    open_qty: 2844000
-  answer: '{"supplier": "Ashvale Components", "lines": 50, "open_qty": 2844000}'
+    lines: 24
+    open_qty: 1924000
+  answer: '{"supplier": "Ashvale Components", "lines": 24, "open_qty": 1924000}'
 - id: Q-13
   question: Of the suppliers Alex Reed is responsible for, how many currently have overdue purchase lines?
   expected:
     suppliers: 51
-    with_overdue: 25
-  answer: '{"suppliers": 51, "with_overdue": 25}'
+    with_overdue: 8
+  answer: '{"suppliers": 51, "with_overdue": 8}'
 - id: Q-14
   question: Which finished products use seal ring 165-002537?
   expected:
@@ -123,9 +123,9 @@ answers:
 - id: Q-17
   question: How many production work orders are not complete yet, and how many units have not been received into stock?
   expected:
-    work_orders: 23
-    remaining_qty: 6336
-  answer: '{"work_orders": 23, "remaining_qty": 6336}'
+    work_orders: 8
+    remaining_qty: 505
+  answer: '{"work_orders": 8, "remaining_qty": 505}'
 - id: Q-18
   question: Among the open forecasts, which product has the largest forecast quantity? What multiple of its current finished-goods stock is that?
   expected:
@@ -137,14 +137,14 @@ answers:
 - id: Q-19
   question: How many purchase lines are due to arrive in the next 30 days, and from how many suppliers?
   expected:
-    lines: 31
-    suppliers: 23
-  answer: '{"lines": 31, "suppliers": 23}'
+    lines: 301
+    suppliers: 110
+  answer: '{"lines": 301, "suppliers": 110}'
 - id: Q-20
   question: If we order SMD crystal 527-000017 today, what is the earliest date it can arrive?
   expected:
-    arrival_date: '2026-11-03'
-  answer: '{"arrival_date": "2026-11-03"}'
+    arrival_date: '2027-05-06'
+  answer: '{"arrival_date": "2027-05-06"}'
 - id: Q-21
   question: A customer wants 50 units of 382-000005. Can we ship them straight from finished goods? After that, how many more units of stock on hand can we still promise?
   expected:
@@ -195,9 +195,9 @@ answers:
     new_order_needed:
     - 165-002619
     - 606-000691
-    earliest_new_order_arrival: '2026-09-08'
+    earliest_new_order_arrival: '2027-03-11'
   answer: '{"short_sets": 4, "blocking_materials": {"165-002619": 4, "606-000691": 4, "606-000692": 4}, "chase_open_po": ["606-000692"], "new_order_needed": ["165-002619", "606-000691"], "earliest_new_order_arrival":
-    "2026-09-08"}'
+    "2027-03-11"}'
 - id: Q-26
   question: To clear the backlog for the YN580 agricultural drone 367-000130, which short materials have no open purchase order at all and must be ordered right away? Which is the slowest, and when is the
     earliest it can arrive?
@@ -214,9 +214,9 @@ answers:
     - 795-000761
     - 795-000776
     slowest_material: 527-000017
-    arrival_date: '2026-11-03'
+    arrival_date: '2027-05-06'
   answer: '{"no_open_po": ["165-002076", "165-003483", "165-003484", "165-003486", "501-000002", "527-000017", "606-001069", "606-001070", "795-000761", "795-000776"], "slowest_material": "527-000017",
-    "arrival_date": "2026-11-03"}'
+    "arrival_date": "2027-05-06"}'
 - id: Q-27
   question: If we ship the 526-000006 backlog from stock on hand in promised-date order, which orders can't be filled? Can the shortfall be built from current stock?
   expected:
@@ -306,15 +306,15 @@ answers:
     largest_shortage: 606-001059
   answer: '{"covered": false, "shortage_material_count": 16, "largest_shortage": "606-001059"}'
 - id: Q-35
-  question: 'Purchase order 02-KSHA-CGDD-260402-012958, line 849-000904: which purchase requisition did it come from? Which MRP planned order generated that requisition? In the end, which forecast and which
+  question: 'Purchase order 02-KSHA-CGDD-261002-012958, line 849-000904: which purchase requisition did it come from? Which MRP planned order generated that requisition? In the end, which forecast and which
     product was the material bought for?'
   expected:
-    purchase_request: CGSQ-260331-000026
-    mrp_plan_order: JHJY-20260331-00045866
-    forecast: YCD2026020500000045
+    purchase_request: CGSQ-260930-000026
+    mrp_plan_order: JHJY-20260930-00045866
+    forecast: YCD2026080500000045
     product_codes:
     - P69-000060
-  answer: '{"purchase_request": "CGSQ-260331-000026", "mrp_plan_order": "JHJY-20260331-00045866", "forecast": "YCD2026020500000045", "product_codes": ["P69-000060"]}'
+  answer: '{"purchase_request": "CGSQ-260930-000026", "mrp_plan_order": "JHJY-20260930-00045866", "forecast": "YCD2026080500000045", "product_codes": ["P69-000060"]}'
 - id: Q-36
   question: How many suppliers do we have on file in total?
   expected:
@@ -341,17 +341,123 @@ answers:
   question: Which purchases are due to arrive today? From which supplier, which material, and how much is still outstanding?
   expected:
     lines:
-    - po: 01-HDKJ-CGDD-260729-016176
+    - po: 01-HDKJ-CGDD-270224-014286
+      supplier: Pinestone Components
+      material_code: 588-000828
+      open_qty: 580
+    - po: 01-HDKJ-CGDD-270214-014227
       supplier: Hazelspring Technology
-      material_code: 606-001059
-      open_qty: 800
-  answer: '{"lines": [{"po": "01-HDKJ-CGDD-260729-016176", "supplier": "Hazelspring Technology", "material_code": "606-001059", "open_qty": 800}]}'
+      material_code: 606-000009
+      open_qty: 350
+    - po: 01-HDKJ-CGDD-270131-013848
+      supplier: Birchvale Components
+      material_code: 356-000587
+      open_qty: 10500
+    - po: 01-HDKJ-CGDD-270224-013817
+      supplier: Aldermill Payments
+      material_code: 849-001306
+      open_qty: 120
+    - po: 01-HDKJ-CGDD-270208-013680
+      supplier: Birchlake Technology
+      material_code: 165-002416
+      open_qty: 20800
+    - po: 01-HDKJ-CGDD-270224-013565
+      supplier: Pinestone Components
+      material_code: 588-000836
+      open_qty: 33
+    - po: 01-HDKJ-CGDD-270224-013501
+      supplier: Aldermill Payments
+      material_code: 849-001308
+      open_qty: 550
+    - po: 01-HDKJ-CGDD-270208-013444
+      supplier: Cypressgrove Technology
+      material_code: 849-000075
+      open_qty: 20000
+    - po: HD20260407-D01
+      supplier: Alderwood Plastics
+      material_code: 525-000140
+      open_qty: 15
+    - po: 01-HDKJ-CGDD-270224-012764
+      supplier: Ashbrook Technology
+      material_code: 588-000736
+      open_qty: 9
+    - po: 01-HDKJ-CGDD-270217-012615
+      supplier: Ashbrook Technology
+      material_code: 588-000545
+      open_qty: 598
+    - po: 01-HDKJ-CGDD-270224-012611
+      supplier: Pinestone Components
+      material_code: 588-000829
+      open_qty: 4
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: Pinestone Components
+      material_code: 588-000835
+      open_qty: 420
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: Pinestone Components
+      material_code: 588-000836
+      open_qty: 420
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: Pinestone Components
+      material_code: 588-000835
+      open_qty: 3310
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: Pinestone Components
+      material_code: 588-000836
+      open_qty: 3310
+    - po: 01-HDKJ-CGDD-270224-012610
+      supplier: Pinestone Components
+      material_code: 588-000836
+      open_qty: 54
+    - po: 01-HDKJ-CGDD-270224-016250
+      supplier: Oakridge Technology
+      material_code: 182-000028
+      open_qty: 600
+    - po: 01-HDKJ-CGDD-270224-016221
+      supplier: Cherrystone Fasteners
+      material_code: 849-001389
+      open_qty: 200
+    - po: 01-HDKJ-CGDD-270224-016221
+      supplier: Cherrystone Fasteners
+      material_code: 849-001322
+      open_qty: 200
+    - po: 01-HDKJ-CGDD-270127-016121
+      supplier: Firridge Hardware
+      material_code: 165-002704
+      open_qty: 67
+    - po: 01-HDKJ-CGDD-270127-016121
+      supplier: Firridge Hardware
+      material_code: 549-001813
+      open_qty: 2
+    - po: 01-HDKJ-CGDD-270207-015899
+      supplier: Cherryview Rubber
+      material_code: 468-000565
+      open_qty: 1000
+    - po: 01-HDKJ-CGDD-270204-015584
+      supplier: Pinewood Technology
+      material_code: 165-000647
+      open_qty: 5000
+  answer: '{"lines": [{"po": "01-HDKJ-CGDD-270224-014286", "supplier": "Pinestone Components", "material_code": "588-000828", "open_qty": 580}, {"po": "01-HDKJ-CGDD-270214-014227", "supplier": "Hazelspring
+    Technology", "material_code": "606-000009", "open_qty": 350}, {"po": "01-HDKJ-CGDD-270131-013848", "supplier": "Birchvale Components", "material_code": "356-000587", "open_qty": 10500}, {"po": "01-HDKJ-CGDD-270224-013817",
+    "supplier": "Aldermill Payments", "material_code": "849-001306", "open_qty": 120}, {"po": "01-HDKJ-CGDD-270208-013680", "supplier": "Birchlake Technology", "material_code": "165-002416", "open_qty":
+    20800}, {"po": "01-HDKJ-CGDD-270224-013565", "supplier": "Pinestone Components", "material_code": "588-000836", "open_qty": 33}, {"po": "01-HDKJ-CGDD-270224-013501", "supplier": "Aldermill Payments",
+    "material_code": "849-001308", "open_qty": 550}, {"po": "01-HDKJ-CGDD-270208-013444", "supplier": "Cypressgrove Technology", "material_code": "849-000075", "open_qty": 20000}, {"po": "HD20260407-D01",
+    "supplier": "Alderwood Plastics", "material_code": "525-000140", "open_qty": 15}, {"po": "01-HDKJ-CGDD-270224-012764", "supplier": "Ashbrook Technology", "material_code": "588-000736", "open_qty": 9},
+    {"po": "01-HDKJ-CGDD-270217-012615", "supplier": "Ashbrook Technology", "material_code": "588-000545", "open_qty": 598}, {"po": "01-HDKJ-CGDD-270224-012611", "supplier": "Pinestone Components", "material_code":
+    "588-000829", "open_qty": 4}, {"po": "01-HDKJ-CGDD-270224-012610", "supplier": "Pinestone Components", "material_code": "588-000835", "open_qty": 420}, {"po": "01-HDKJ-CGDD-270224-012610", "supplier":
+    "Pinestone Components", "material_code": "588-000836", "open_qty": 420}, {"po": "01-HDKJ-CGDD-270224-012610", "supplier": "Pinestone Components", "material_code": "588-000835", "open_qty": 3310}, {"po":
+    "01-HDKJ-CGDD-270224-012610", "supplier": "Pinestone Components", "material_code": "588-000836", "open_qty": 3310}, {"po": "01-HDKJ-CGDD-270224-012610", "supplier": "Pinestone Components", "material_code":
+    "588-000836", "open_qty": 54}, {"po": "01-HDKJ-CGDD-270224-016250", "supplier": "Oakridge Technology", "material_code": "182-000028", "open_qty": 600}, {"po": "01-HDKJ-CGDD-270224-016221", "supplier":
+    "Cherrystone Fasteners", "material_code": "849-001389", "open_qty": 200}, {"po": "01-HDKJ-CGDD-270224-016221", "supplier": "Cherrystone Fasteners", "material_code": "849-001322", "open_qty": 200}, {"po":
+    "01-HDKJ-CGDD-270127-016121", "supplier": "Firridge Hardware", "material_code": "165-002704", "open_qty": 67}, {"po": "01-HDKJ-CGDD-270127-016121", "supplier": "Firridge Hardware", "material_code":
+    "549-001813", "open_qty": 2}, {"po": "01-HDKJ-CGDD-270207-015899", "supplier": "Cherryview Rubber", "material_code": "468-000565", "open_qty": 1000}, {"po": "01-HDKJ-CGDD-270204-015584", "supplier":
+    "Pinewood Technology", "material_code": "165-000647", "open_qty": 5000}]}'
 - id: Q-41
-  question: How many purchase lines are due to arrive in September, and from how many suppliers?
+  question: How many purchase lines are due to arrive in March, and from how many suppliers?
   expected:
-    lines: 28
-    suppliers: 20
-  answer: '{"lines": 28, "suppliers": 20}'
+    lines: 268
+    suppliers: 106
+  answer: '{"lines": 268, "suppliers": 106}'
 - id: Q-42
   question: Which three products have the biggest backlog, and how many units does each owe?
   expected:
@@ -365,24 +471,24 @@ answers:
   expected:
     orders: 71
     unshipped_qty: 181
-    overdue: 71
-  answer: '{"orders": 71, "unshipped_qty": 181, "overdue": 71}'
+    overdue: 27
+  answer: '{"orders": 71, "unshipped_qty": 181, "overdue": 27}'
 - id: Q-44
   question: Which purchases of cardboard corner protector 606-001059 haven't arrived yet? Which of them are overdue?
   expected:
     lines:
-    - po: 01-HDKJ-CGDD-260706-015729
-      supplier: Hazelspring Technology
-      open_qty: 8
-      deliver_date: '2026-07-06'
-      overdue: true
-    - po: 01-HDKJ-CGDD-260729-016176
+    - po: 01-HDKJ-CGDD-270208-016176
       supplier: Hazelspring Technology
       open_qty: 800
-      deliver_date: '2026-08-25'
+      deliver_date: '2027-03-06'
       overdue: false
-  answer: '{"lines": [{"po": "01-HDKJ-CGDD-260706-015729", "supplier": "Hazelspring Technology", "open_qty": 8, "deliver_date": "2026-07-06", "overdue": true}, {"po": "01-HDKJ-CGDD-260729-016176", "supplier":
-    "Hazelspring Technology", "open_qty": 800, "deliver_date": "2026-08-25", "overdue": false}]}'
+    - po: 01-HDKJ-CGDD-270213-015729
+      supplier: Hazelspring Technology
+      open_qty: 8
+      deliver_date: '2027-03-13'
+      overdue: false
+  answer: '{"lines": [{"po": "01-HDKJ-CGDD-270208-016176", "supplier": "Hazelspring Technology", "open_qty": 800, "deliver_date": "2027-03-06", "overdue": false}, {"po": "01-HDKJ-CGDD-270213-015729", "supplier":
+    "Hazelspring Technology", "open_qty": 8, "deliver_date": "2027-03-13", "overdue": false}]}'
 - id: Q-45
   question: Among products with open forecasts, which have no finished-goods stock at all right now?
   expected:
@@ -394,13 +500,14 @@ answers:
     - P61-000351
   answer: '{"product_codes": ["367-000102", "367-000130", "367-000131", "734-000003", "P61-000351"]}'
 - id: Q-46
-  question: How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every overdue purchase could be chased in, how many could we build?
+  question: How many units of vehicle terminal U00-000080 can current stock still build at most? Which material blocks one more unit? If every purchase due by March 15 arrives on schedule, how many could
+    we build?
   expected:
     stock_only_buildable: 141
     first_blocking_materials:
     - 994-000328
-    with_overdue_po_chased: 2972
-  answer: '{"stock_only_buildable": 141, "first_blocking_materials": ["994-000328"], "with_overdue_po_chased": 2972}'
+    with_po_by_2027_03_15: 2972
+  answer: '{"stock_only_buildable": 141, "first_blocking_materials": ["994-000328"], "with_po_by_2027_03_15": 2972}'
 - id: Q-47
   question: A new order for 60 units of P61-000351 has come in. Protecting its backlog first, if every open purchase (overdue ones included) could be chased in, would materials be enough? What would still
     be short, and by how much?
@@ -410,20 +517,20 @@ answers:
       994-000645: 32
   answer: '{"covered": false, "shortages": {"994-000645": 32}}'
 - id: Q-48
-  question: For class-D audio amplifier 972-000677, we need to issue 500 to production by September 5 and 5,000 cumulative by September 15. With stock plus purchases arriving on schedule, is there enough
-    at each point?
+  question: For class-D audio amplifier 972-000677, we need to issue 500 to production by March 1 and 5,000 cumulative by March 10. With stock plus purchases arriving on schedule, is there enough at each
+    point?
   expected:
-    by_2026_09_05:
+    by_2027_03_01:
       available: 65
       covered: false
       short: 435
-    by_2026_09_15:
+    by_2027_03_10:
       available: 12515
       covered: true
       short: 0
-  answer: '{"by_2026_09_05": {"available": 65, "covered": false, "short": 435}, "by_2026_09_15": {"available": 12515, "covered": true, "short": 0}}'
+  answer: '{"by_2027_03_01": {"available": 65, "covered": false, "short": 435}, "by_2027_03_10": {"available": 12515, "covered": true, "short": 0}}'
 - id: Q-49
-  question: For the products whose backlog can't be covered, how many more units would purchases due by the end of September let each of them build?
+  question: For the products whose backlog can't be covered, how many more units would purchases due by the end of March let each of them build?
   expected:
     extra_buildable:
       367-000097: 0

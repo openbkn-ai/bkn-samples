@@ -7,11 +7,11 @@ Users install through one-click onboarding or offline package import; see the [i
 | Purpose | Script |
 | --- | --- |
 | Data loading | `load_sample_data.py` (called by `db/load_supply.py`) |
-| Knowledge network import and binding | `import_kn.py`, `setup_catalog.py`, `bind_kn_resources.py` |
+| Knowledge network import and binding | `import_kn.py`, `setup_catalog.py`, `bind_kn_resources.py`, `setup_kit_plan_dataset.py` |
 | Function and Skill publication | `register_native_function_toolbox.py`, `register_skills.py` |
 | Platform acceptance | `smoke_test.py` |
 
-`fn/planning.py` implements the two native calculation functions (buildable quantity and available to promise; demand coverage and shortages). `managed_execution.py` reads the facts each function needs at run time through `sandbox_sdk.bkn`, and the registration script bundles and publishes them. `config.example.yaml` is a developer reference; standard hooks generate the runtime configuration. `verify_sample.py` checks local delivery contracts.
+`fn/planning.py` implements the two native calculation functions (buildable quantity and available to promise; demand coverage and shortages). `fn/kitplan.py` and `kit_schedule.py` implement the kit-schedule function (kit check, writing the kit schedule plan); `setup_kit_plan_dataset.py` creates the plan dataset at install time and loads the scheduling history. `managed_execution.py` reads the facts each function needs at run time through `sandbox_sdk.bkn`, and the registration script bundles and publishes them. `config.example.yaml` is a developer reference; standard hooks generate the runtime configuration. `verify_sample.py` checks local delivery contracts.
 
 Run offline checks from this sample directory:
 

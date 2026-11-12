@@ -3614,6 +3614,31 @@
             "<=",
             "regex"
           ]
+        },
+        {
+          "name": "line_code",
+          "display_name": "默认产线编码",
+          "type": "string",
+          "comment": "按产品线分配的生产产线，对应产线编码。",
+          "mapped_field": {
+            "name": "line_code",
+            "type": "string",
+            "display_name": "line_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
         }
       ],
       "logic_properties": [],
@@ -4118,6 +4143,659 @@
       "color": "#0e5fc5",
       "branch": "main",
       "logic_properties": []
+    },
+    {
+      "id": "supply_ontology_hand_line",
+      "name": "产线",
+      "data_properties": [
+        {
+          "name": "line_code",
+          "display_name": "产线编码",
+          "type": "string",
+          "comment": "产线或工厂编码，工厂以 F- 开头，产线以 L- 开头。",
+          "mapped_field": {
+            "name": "line_code",
+            "type": "string",
+            "display_name": "line_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "line_name",
+          "display_name": "产线名称",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "line_name",
+            "type": "string",
+            "display_name": "line_name"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "line_kind",
+          "display_name": "类型",
+          "type": "string",
+          "comment": "工厂或产线。工厂不排产，只作为产线的上级。",
+          "mapped_field": {
+            "name": "line_kind",
+            "type": "string",
+            "display_name": "line_kind"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "parent_code",
+          "display_name": "上级编码",
+          "type": "string",
+          "comment": "产线所属工厂的编码；工厂为空。",
+          "mapped_field": {
+            "name": "parent_code",
+            "type": "string",
+            "display_name": "parent_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "factory_name",
+          "display_name": "所属工厂",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "factory_name",
+            "type": "string",
+            "display_name": "factory_name"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "max_parallel",
+          "display_name": "并行上限",
+          "type": "integer",
+          "comment": "同一时间最多同时执行的排产计划数；工厂为空。",
+          "mapped_field": {
+            "name": "max_parallel",
+            "type": "integer",
+            "display_name": "max_parallel"
+          }
+        },
+        {
+          "name": "product_lines",
+          "display_name": "可生产产品线",
+          "type": "string",
+          "comment": "该产线可生产的产品线，多个用顿号分隔；对应产品的产品线字段。",
+          "mapped_field": {
+            "name": "product_lines",
+            "type": "string",
+            "display_name": "product_lines"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        }
+      ],
+      "logic_properties": [],
+      "primary_keys": [
+        "line_code"
+      ],
+      "display_key": "line_name",
+      "incremental_key": "",
+      "tags": [
+        "已审核"
+      ],
+      "comment": "可排产的生产资源。工厂也作为一行（产线类型为“工厂”、没有上级），是产线的上级，本身不排产；停线窗口可以挂在工厂上，向下作用于该工厂的所有产线。并行上限是一条产线同一时间最多能同时执行的排产计划数。产品按产品线分配到产线，见“产线可生产的产品”。",
+      "icon": "icon-dip-suanziguanli",
+      "color": "#0e5fc5",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_stoppage",
+      "name": "停线窗口",
+      "data_properties": [
+        {
+          "name": "stoppage_id",
+          "display_name": "窗口编号",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "stoppage_id",
+            "type": "string",
+            "display_name": "stoppage_id"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "resource_code",
+          "display_name": "产线或工厂编码",
+          "type": "string",
+          "comment": "停产的产线编码；工厂级窗口填工厂编码。",
+          "mapped_field": {
+            "name": "resource_code",
+            "type": "string",
+            "display_name": "resource_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "resource_kind",
+          "display_name": "停产范围",
+          "type": "string",
+          "comment": "产线或工厂。",
+          "mapped_field": {
+            "name": "resource_kind",
+            "type": "string",
+            "display_name": "resource_kind"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "start_time",
+          "display_name": "开始时间",
+          "type": "timestamp",
+          "comment": "",
+          "mapped_field": {
+            "name": "start_time",
+            "type": "timestamp",
+            "display_name": "start_time"
+          }
+        },
+        {
+          "name": "end_time",
+          "display_name": "结束时间",
+          "type": "timestamp",
+          "comment": "",
+          "mapped_field": {
+            "name": "end_time",
+            "type": "timestamp",
+            "display_name": "end_time"
+          }
+        },
+        {
+          "name": "reason",
+          "display_name": "原因",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "reason",
+            "type": "string",
+            "display_name": "reason"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        }
+      ],
+      "logic_properties": [],
+      "primary_keys": [
+        "stoppage_id"
+      ],
+      "display_key": "reason",
+      "incremental_key": "",
+      "tags": [
+        "已审核"
+      ],
+      "comment": "产线或工厂计划停产的时段（检修、停电、节假日），时段内不能排产。挂在工厂上的窗口作用于该工厂的全部产线。",
+      "icon": "icon-dip-suanziguanli",
+      "color": "#0e5fc5",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_kitplan",
+      "name": "齐套排产计划",
+      "data_properties": [
+        {
+          "name": "plan_id",
+          "display_name": "计划号",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "plan_id",
+            "type": "string",
+            "display_name": "plan_id"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "bill_no",
+          "display_name": "预测单号",
+          "type": "string",
+          "comment": "对应需求预测单的预测单号。",
+          "mapped_field": {
+            "name": "bill_no",
+            "type": "string",
+            "display_name": "bill_no"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "product_code",
+          "display_name": "产品编码",
+          "type": "string",
+          "comment": "为空表示整单排产。",
+          "mapped_field": {
+            "name": "product_code",
+            "type": "string",
+            "display_name": "product_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "line_code",
+          "display_name": "产线编码",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "line_code",
+            "type": "string",
+            "display_name": "line_code"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "planned_start",
+          "display_name": "计划开工",
+          "type": "datetime",
+          "comment": "",
+          "mapped_field": {
+            "name": "planned_start",
+            "type": "datetime",
+            "display_name": "planned_start"
+          }
+        },
+        {
+          "name": "planned_finish",
+          "display_name": "计划完工",
+          "type": "datetime",
+          "comment": "",
+          "mapped_field": {
+            "name": "planned_finish",
+            "type": "datetime",
+            "display_name": "planned_finish"
+          }
+        },
+        {
+          "name": "quantity",
+          "display_name": "数量",
+          "type": "integer",
+          "comment": "单产品计划取该行预测数量；整单为空。",
+          "mapped_field": {
+            "name": "quantity",
+            "type": "integer",
+            "display_name": "quantity"
+          }
+        },
+        {
+          "name": "kit_date",
+          "display_name": "齐套日",
+          "type": "date",
+          "comment": "齐套时为最早可开工日；缺料时为在途按期到货后可齐套的日期，在途补不齐时为空。",
+          "mapped_field": {
+            "name": "kit_date",
+            "type": "date",
+            "display_name": "kit_date"
+          }
+        },
+        {
+          "name": "kit_status",
+          "display_name": "齐套状态",
+          "type": "string",
+          "comment": "齐套或缺料，按计划开工日计算。",
+          "mapped_field": {
+            "name": "kit_status",
+            "type": "string",
+            "display_name": "kit_status"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "key_material",
+          "display_name": "关键物料",
+          "type": "string",
+          "comment": "缺料时缺口最大的物料编码。",
+          "mapped_field": {
+            "name": "key_material",
+            "type": "string",
+            "display_name": "key_material"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "shortage_note",
+          "display_name": "缺料说明",
+          "type": "text",
+          "comment": "缺料时列出缺口最大的物料、数量与何时可齐套。",
+          "mapped_field": {
+            "name": "shortage_note",
+            "type": "text",
+            "display_name": "shortage_note"
+          }
+        },
+        {
+          "name": "plan_status",
+          "display_name": "计划状态",
+          "type": "string",
+          "comment": "已排、已确认或已取消。已确认表示已下达生产；已取消的计划不再有效。",
+          "mapped_field": {
+            "name": "plan_status",
+            "type": "string",
+            "display_name": "plan_status"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "reschedule_count",
+          "display_name": "改期次数",
+          "type": "integer",
+          "comment": "计划完工被调整的次数。",
+          "mapped_field": {
+            "name": "reschedule_count",
+            "type": "integer",
+            "display_name": "reschedule_count"
+          }
+        },
+        {
+          "name": "previous_finish",
+          "display_name": "上次计划完工",
+          "type": "datetime",
+          "comment": "最近一次改期前的计划完工。",
+          "mapped_field": {
+            "name": "previous_finish",
+            "type": "datetime",
+            "display_name": "previous_finish"
+          }
+        },
+        {
+          "name": "source_scenario",
+          "display_name": "来源方案",
+          "type": "string",
+          "comment": "排产时采用的方案名称。",
+          "mapped_field": {
+            "name": "source_scenario",
+            "type": "string",
+            "display_name": "source_scenario"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "planner",
+          "display_name": "排产人",
+          "type": "string",
+          "comment": "",
+          "mapped_field": {
+            "name": "planner",
+            "type": "string",
+            "display_name": "planner"
+          },
+          "index_config": {
+            "keyword_config": {
+              "enabled": true,
+              "ignore_above_len": 1024
+            },
+            "fulltext_config": {
+              "enabled": false,
+              "analyzer": "standard"
+            },
+            "vector_config": {
+              "enabled": false,
+              "model_id": "2081922309391781888"
+            }
+          }
+        },
+        {
+          "name": "planned_at",
+          "display_name": "排产时间",
+          "type": "datetime",
+          "comment": "最近一次写入计划的时间，日期按样例业务日期记录。",
+          "mapped_field": {
+            "name": "planned_at",
+            "type": "datetime",
+            "display_name": "planned_at"
+          }
+        }
+      ],
+      "logic_properties": [],
+      "primary_keys": [
+        "plan_id"
+      ],
+      "display_key": "plan_id",
+      "incremental_key": "",
+      "tags": [
+        "已审核"
+      ],
+      "comment": "排产结果：把一张需求预测单（整单）或其中一个产品排到某条产线的计划开工、完工时段，并记录排产时按计划开工日算出的齐套结论。排产（采用方案）时由“建立齐套排产计划”行动写入，不修改需求预测单。同一预测单号 + 产品编码只有一条有效计划（状态不是已取消），再次排产会修改这条计划并把改期次数加一。产品编码为空表示整单。齐套按先保已签约欠货、不用成品、计入计划开工日前按期到货的在途计算，与“需求齐套与缺料”同一口径。",
+      "icon": "icon-dip-suanziguanli",
+      "color": "#52C41A",
+      "branch": "main"
     }
   ],
   "relation_types": [
@@ -4515,6 +5193,150 @@
         "已审核"
       ],
       "comment": "",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_line2parent",
+      "name": "产线关联上级工厂",
+      "source_object_type_id": "supply_ontology_hand_line",
+      "target_object_type_id": "supply_ontology_hand_line",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "parent_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "line_code",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "产线所属的工厂；工厂没有上级。",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_line2prod",
+      "name": "产线可生产的产品",
+      "source_object_type_id": "supply_ontology_hand_line",
+      "target_object_type_id": "supply_ontology_hand_product",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "line_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "line_code",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "按产品线分配：产品的默认产线编码等于产线编码。",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_stop2line",
+      "name": "停线窗口关联产线",
+      "source_object_type_id": "supply_ontology_hand_stoppage",
+      "target_object_type_id": "supply_ontology_hand_line",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "resource_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "line_code",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "停线窗口所在的产线或工厂；工厂级窗口作用于其下全部产线。",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_plan2fcst",
+      "name": "齐套排产计划关联需求预测单",
+      "source_object_type_id": "supply_ontology_hand_kitplan",
+      "target_object_type_id": "supply_ontology_hand_forecast",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "bill_no",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "billno",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "计划对应的需求预测单；整单计划关联该单的全部行。",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_plan2prod",
+      "name": "齐套排产计划关联产品",
+      "source_object_type_id": "supply_ontology_hand_kitplan",
+      "target_object_type_id": "supply_ontology_hand_product",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "product_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "material_number",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "单产品计划对应的产品；整单计划没有产品编码。",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
+      "id": "supply_ontology_hand_plan2line",
+      "name": "齐套排产计划关联产线",
+      "source_object_type_id": "supply_ontology_hand_kitplan",
+      "target_object_type_id": "supply_ontology_hand_line",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "line_code",
+            "display_name": ""
+          },
+          "target_property": {
+            "name": "line_code",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [],
+      "comment": "计划排到的产线。",
       "icon": "",
       "color": "",
       "branch": "main"

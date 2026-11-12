@@ -45,9 +45,11 @@ def test_in_transit_counts_only_by_date_unless_overdue_lines_are_chased():
     plain = capacity("U00-000080")
     assert plain["buildable_qty"] == expected["stock_only_buildable"]
     assert sorted(plain["limiting_materials"]) == expected["first_blocking_materials"]
-    assert capacity("U00-000080", chase_overdue_po=True)["buildable_qty"] == expected["with_overdue_po_chased"]
+    assert capacity("U00-000080", need_by="2027-03-15")["buildable_qty"] == expected["with_po_by_2027_03_15"]
+    # Overdue lines are not supply until chased: they change nothing for U00-000080 here.
+    assert capacity("U00-000080", chase_overdue_po=True)["buildable_qty"] == expected["stock_only_buildable"]
     for product, extra in EXPECTED["Q-49"]["extra_buildable"].items():
-        assert capacity(product, need_by="2026-09-30")["buildable_qty"] - capacity(product)["buildable_qty"] == extra
+        assert capacity(product, need_by="2027-03-31")["buildable_qty"] - capacity(product)["buildable_qty"] == extra
 
 
 def test_backlog_shortage_is_the_bottom_level_material_gap():
@@ -64,7 +66,8 @@ def test_new_orders_share_one_pool_after_reserving_backlog():
     assert [(d["covered"], d["shortages"]) for d in result["demands"]] == [
         (expected["P61_000351"]["covered"], expected["P61_000351"]["shortages"]),
         (expected["U00_000151"]["covered"], expected["U00_000151"]["shortages"])]
-    chased = demand_coverage(ROWS, [{"product": "P61-000351", "qty": 60}], reserve_signed_backlog=True, chase_overdue_po=True)
+    chased = demand_coverage(ROWS, [{"product": "P61-000351", "qty": 60}], reserve_signed_backlog=True,
+                             need_by="9999-12-31", chase_overdue_po=True)
     assert chased["demands"][0]["shortages"] == EXPECTED["Q-47"]["shortages"]
 
 

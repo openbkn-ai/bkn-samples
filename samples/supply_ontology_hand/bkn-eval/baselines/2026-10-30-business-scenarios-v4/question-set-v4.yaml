@@ -1,7 +1,7 @@
 schema_version: '4.0'
 set_id: supply-business-scenarios-v4
-business_date: '2026-08-25'
-source_snapshot_date: '2026-08-13'
+business_date: '2027-02-25'
+source_snapshot_date: '2027-02-13'
 prd: docs/PRD.zh-CN.md
 audience: evaluated_agent
 answer_set_access: forbidden
@@ -214,7 +214,7 @@ questions:
   scenario: S10
   difficulty: 复杂
   role: 采购
-  question: 采购订单 02-KSHA-CGDD-260402-012958 里 849-000904 这一行是从哪张请购单来的？请购又是哪张 MRP 计划订单生成的？最终是为哪张需求预测、哪个产品备的料？
+  question: 采购订单 02-KSHA-CGDD-261002-012958 里 849-000904 这一行是从哪张请购单来的？请购又是哪张 MRP 计划订单生成的？最终是为哪张需求预测、哪个产品备的料？
   output_contract: 请购单号、MRP计划单号、预测单号、产品编码
 - id: Q-36
   scenario: S01
@@ -250,7 +250,7 @@ questions:
   scenario: S08
   difficulty: 中等
   role: 采购
-  question: 9 月份按交期要到货的采购行有多少行？来自几家供应商？
+  question: 3 月份按交期要到货的采购行有多少行？来自几家供应商？
   output_contract: 行数、供应商数
 - id: Q-42
   scenario: S02
@@ -280,8 +280,8 @@ questions:
   scenario: S09
   difficulty: 复杂
   role: PMC
-  question: U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果逾期没到的采购都能催回来，最多能做多少套？
-  output_contract: 现有库存可做、卡住的物料、催回逾期在途后可做
+  question: U00-000080 车载终端用现有库存最多还能做多少套？再多做一套卡在哪颗料？如果 3 月 15 日前按交期到货的在途都到了，最多能做多少套？
+  output_contract: 现有库存可做、卡住的物料、3 月 15 日前在途到货后可做
 - id: Q-47
   scenario: S07
   difficulty: 复杂
@@ -292,13 +292,13 @@ questions:
   scenario: S09
   difficulty: 复杂
   role: PMC
-  question: D 类音频功放 972-000677，9 月 5 日前要投 500 个、9 月 15 日前累计要投 5000 个。库存加上按期到货的在途，两个时间点分别够不够？
+  question: D 类音频功放 972-000677，3 月 1 日前要投 500 个、3 月 10 日前累计要投 5000 个。库存加上按期到货的在途，两个时间点分别够不够？
   output_contract: 两个时间点各自的可用量、能否满足、缺口
 - id: Q-49
   scenario: S06
   difficulty: 复杂
   role: PMC
-  question: 9 月底前按期到货的在途采购，能让欠货补不上的那几个产品各多做出几套？
+  question: 3 月底前按期到货的在途采购，能让欠货补不上的那几个产品各多做出几套？
   output_contract: 每个产品可多做的套数
 - id: Q-50
   scenario: S08
