@@ -4148,6 +4148,32 @@
       "branch": "main"
     },
     {
+      "id": "supply_ontology_hand_mps2prod",
+      "name": "生产计划关联产品",
+      "source_object_type_id": "supply_ontology_hand_mps",
+      "target_object_type_id": "supply_ontology_hand_product",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "material_number",
+            "display_name": "物料编码"
+          },
+          "target_property": {
+            "name": "material_number",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [
+        "已审核"
+      ],
+      "comment": "生产计划要生产的产品：按生产计划的物料编码对应产品编码。",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
       "id": "supply_ontology_hand_mrp2mat",
       "name": "物料需求计划关联物料",
       "source_object_type_id": "supply_ontology_hand_mrp",
