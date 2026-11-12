@@ -183,6 +183,24 @@ class UninstallTest(unittest.TestCase):
             self.assertEqual(request.call_count, attempts)
             self.assertEqual(sleep.call_count, attempts - 1)
 
+    def test_sample_datasets_are_deleted_before_their_catalog(self):
+        # Vega refuses to delete a catalog that still holds datasets; the sample's own datasets go first.
+        listing = "/api/vega-backend/v1/resources?catalog_id=catalog-owned&category=dataset&limit=-1"
+        dataset = "/api/vega-backend/v1/resources/plan-dataset"
+        self.platform[listing] = {"entries": [{"id": "plan-dataset", "catalog_id": "catalog-owned", "category": "dataset"}]}
+        self.platform[dataset] = {"entries": [{"id": "plan-dataset"}]}
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+        self.assertLess(self.deleted.index(dataset), self.deleted.index("/api/vega-backend/v1/catalogs/catalog-owned"))
+
+    def test_foreign_dataset_listing_blocks_all_deletion(self):
+        listing = "/api/vega-backend/v1/resources?catalog_id=catalog-owned&category=dataset&limit=-1"
+        self.platform[listing] = {"entries": [{"id": "other", "catalog_id": "catalog-other", "category": "dataset"}]}
+        self.start()
+        current = _read_state(self.state, "supply-chain")
+        self.assertEqual(current["status"], "uninstall_failed")
+        self.assertEqual(self.deleted, [])
+
     def test_uninstall_then_reinstall_preserves_history_and_unrelated_resources(self):
         self.start()
         current = _read_state(self.state, "supply-chain")
