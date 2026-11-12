@@ -4148,6 +4148,32 @@
       "branch": "main"
     },
     {
+      "id": "supply_ontology_en_mps2prod",
+      "name": "Production Plan Product",
+      "source_object_type_id": "supply_ontology_en_mps",
+      "target_object_type_id": "supply_ontology_en_product",
+      "type": "direct",
+      "mapping_rules": [
+        {
+          "source_property": {
+            "name": "material_number",
+            "display_name": "Material Code"
+          },
+          "target_property": {
+            "name": "material_number",
+            "display_name": ""
+          }
+        }
+      ],
+      "tags": [
+        "Approved"
+      ],
+      "comment": "The product a production plan makes, matched by the plan's material code.",
+      "icon": "",
+      "color": "",
+      "branch": "main"
+    },
+    {
       "id": "supply_ontology_en_mrp2mat",
       "name": "MRP Material",
       "source_object_type_id": "supply_ontology_en_mrp",
