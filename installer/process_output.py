@@ -30,7 +30,7 @@ def _sample_event(data):
         return False
     details = {key: event[key] for key in ("command", "resource_id", "object_type_id", "api_path", "reason", "traceback")
                if isinstance(event.get(key), str)}
-    for key in ("elapsed_ms", "returncode"):
+    for key in ("elapsed_ms", "returncode", "sync_pending_retries"):
         if type(event.get(key)) is int:
             details[key] = event[key]
     if event.get("stage") in {"database", "discover", "knowledge", "capabilities", "verify", "platform-install"}:
