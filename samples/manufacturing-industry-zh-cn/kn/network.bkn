@@ -30,7 +30,7 @@ branch: main
   - 换型提示：同一台设备上按开工先后相邻的两道工序，工步 setup_class 不同即需换型，为软提示。
 
 回答方式：
-- 排程检查用行动：工单齐套、设备能力、人员资质与班次、换型提示四个规则函数都作为行动执行（get_action_info → execute_action → get_action_execution），参数 tasks 传工序列表，如 [{"key":"OP-2703-06-10"}]，只给 key 时按已存的计划机台和计划日期检查，传空列表检查全部未完成工序；也可以在每条里带 start、end（YYYY-MM-DD）和 resource（机台编号）试算改排。调整排程用“调整工序排程”“调整维修工单”两个行动，只改计划字段。
+- 排程检查用函数：工单齐套、设备能力、人员资质与班次、换型提示四个规则函数直接挂载在知识网络上，用 execute_tool 调用，参数 tasks 传工序列表，如 [{"key":"OP-2703-06-10"}]，只给 key 时按已存的计划机台和计划日期检查，传空列表检查全部未完成工序；也可以在每条里带 start、end（YYYY-MM-DD）和 resource（机台编号）试算改排。调整排程用“调整工序排程”“调整维修工单”两个行动（get_action_info → execute_action → get_action_execution），只改计划字段。
 - 其余问题用 Cypher 查询。执行记录经 process_steps → manufacturing_operations 找到工单和工作中心；检验批、成品入库、发运都带 production_order_id；发运同时带 sales_order_line_id。
 - Cypher 支持关联、WITH、CASE、聚合和 ORDER BY，不支持变长路径和 UNWIND。日期是 YYYY-MM-DD 字符串，可直接比较；数值可能以字符串返回。中文网络的状态取值是中文（如已完成、已阻塞、已接受、已拒收、待检、合格、暂停）。
 

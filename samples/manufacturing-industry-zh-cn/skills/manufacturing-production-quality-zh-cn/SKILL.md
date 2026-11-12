@@ -8,7 +8,7 @@ description: >
 
 # 生产与质量
 
-回答生产主管和质量经理的问题。排程检查和调整用行动（见“机台排程”），其余用 Cypher 查询后按下面的口径判断。
+回答生产主管和质量经理的问题。排程检查用函数、调整用行动（见“机台排程”），其余用 Cypher 查询后按下面的口径判断。
 
 ## 默认口径
 
@@ -29,9 +29,9 @@ description: >
 
 工序（`manufacturing_operations`）的 `planned_machine_id`、`planned_start_date`、`planned_end_date` 是排程（按天，含首尾），`predecessor_operation_id` 是前序；维护工单的 `planned_start_date`、`planned_end_date` 是占用机台的日期，`planned_date` 是应保养日。同一台设备同一天只能做一件事。
 
-- 检查用四个规则行动：工单齐套、设备能力、人员资质与班次、换型提示。每个都按 get_action_info → execute_action → get_action_execution 执行，参数 `tasks` 传工序，如 `[{"key":"OP-2703-06-10"}]`；只给 key 按已存计划检查，传 `[]` 检查全部未开工工序；要试算改排时在每条里加 `start`、`end`（YYYY-MM-DD）和 `resource`（机台编号）。
+- 检查用四个规则函数：工单齐套、设备能力、人员资质与班次、换型提示，都直接挂载在知识网络上，用 Context Loader 的 execute_tool 调用，参数 `tasks` 传工序，如 `[{"key":"OP-2703-06-10"}]`；只给 key 按已存计划检查，传 `[]` 检查全部未开工工序；要试算改排时在每条里加 `start`、`end`（YYYY-MM-DD）和 `resource`（机台编号）。
 - 结果每条有 `pass`（null 为不适用，如已完成、已开工的工序；工单齐套只在工单首道未完成工序上判断）、`severity`（hard 不能采用，soft 是提示）、`text`、`related`（相互影响的工序）、可选的 `at`（最早可行日）和 `counts`。
-- 调整用“调整工序排程”（选中工序，传 `planned_machine_id`、`planned_start_date`、`planned_end_date`，机台须在同一工作中心）和“调整维修工单”（选中维护工单，传 `planned_start_date`、`planned_end_date`）。调整前先检查，回答时写明改前改后的值；只改计划字段，不代表已派工。
+- 调整用行动（get_action_info → execute_action → get_action_execution）：“调整工序排程”（选中工序，传 `planned_machine_id`、`planned_start_date`、`planned_end_date`，机台须在同一工作中心）和“调整维修工单”（选中维护工单，传 `planned_start_date`、`planned_end_date`）。调整前先检查，回答时写明改前改后的值；只改计划字段，不代表已派工。
 - 重叠（同一机台同一天两件事，含维护）、前序未完先开工、晚于工单交期，用 Cypher 读计划字段判断。
 
 ## Cypher 写法

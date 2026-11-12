@@ -304,7 +304,7 @@ class RegistrationTest(Base):
         for op in reg.OPERATIONS:
             compile(bundle.build(op, KN[self.lang]), op, "exec")
         actions = {a["id"].removeprefix(KN[self.lang] + "_"): a for a in reg.action_definitions(KN[self.lang], "box", {o: "t-" + o for o in reg.OPERATIONS}, zh)}
-        self.assertEqual(len(actions), 6)
+        self.assertEqual(set(actions), {"adjust_operation_schedule", "adjust_maintenance_work_order"})  # rules are mounted, not actions
         adjust = actions["adjust_operation_schedule"]
         self.assertEqual((adjust["operation_config"], adjust["object_type_id"], adjust["action_type"]),
                          ({"type": "object"}, "manufacturing_operations", "modify"))
@@ -314,9 +314,6 @@ class RegistrationTest(Base):
         mwo = actions["adjust_maintenance_work_order"]
         self.assertEqual(mwo["name"], "调整维修工单" if zh else "Adjust maintenance work order")
         self.assertEqual([p["name"] for p in mwo["parameters"]], ["maintenance_work_order_id", "planned_start_date", "planned_end_date"])
-        rule = actions["work_order_kit_rule"]
-        self.assertEqual((rule["operation_config"], rule["object_type_id"], [p["name"] for p in rule["parameters"]]),
-                         ({"type": "tool"}, "", ["tasks"]))
         fields = self.m["function_bundle"].settings()["fields"]
         for name in ("planned_machine_id", "planned_start_date", "planned_end_date"):
             self.assertIn(name, fields["manufacturing_operations"])
@@ -325,7 +322,7 @@ class RegistrationTest(Base):
         reg = self.m["register_capabilities"]
         reg.remember = lambda *a: None
         reg.require_owned = lambda *a: None
-        state = {"datasets": [], "tools": [], "actions": [], "bound": {}, "loaded": {}}
+        state = {"datasets": [], "tools": [], "actions": [], "bound": {}, "loaded": {}, "mounted": []}
 
         def cli(*args):
             if args[:3] == ("vega", "catalog", "resources"):
@@ -350,6 +347,10 @@ class RegistrationTest(Base):
             if args[:2] == ("tool", "get"):
                 op = args[-1].removeprefix("t-")
                 return {"metadata": {"function_content": {"code": next(t["code"] for t in state["tools"] if t["name"] == op)}}}
+            if args[:3] == ("bkn", "capability", "attach"):
+                state["mounted"] += args[args.index("--tool") + 1].split(","); return {}
+            if args[0] == "call" and args[1].endswith("/capabilities?limit=1000"):
+                return {"entries": [{"capability_type": "tool", "capability_id": t} for t in state["mounted"]]}
             if args[0] == "call" and "/action-types" in args[1]:
                 state["actions"] = json.loads(args[5])["entries"]; return {}
             if args[:2] == ("bkn", "action-type"):
@@ -359,11 +360,16 @@ class RegistrationTest(Base):
         self.assertEqual(set(out["datasets"]), {"manufacturing_operations", "maintenance_work_orders"})
         self.assertEqual(sorted(state["loaded"].values()), [45, 136])
         self.assertEqual(len(state["tools"]), 6)
-        self.assertEqual(len(out["action_ids"]), 6)
+        self.assertEqual(len(out["action_ids"]), 2)
+        self.assertEqual(sorted(state["mounted"]), sorted("t-" + op for op in reg.RULES))
         verified = reg.run(cli, KN[self.lang], apply=False, catalog_id="cat")
         self.assertEqual(verified["tool_ids"], out["tool_ids"])
         state["actions"] = state["actions"][:-1]
         with self.assertRaises(ValueError):
+            reg.run(cli, KN[self.lang], apply=False, catalog_id="cat")
+        state["actions"] = reg.action_definitions(KN[self.lang], "box", out["tool_ids"], self.lang == "zh")
+        state["mounted"] = state["mounted"][1:]
+        with self.assertRaisesRegex(ValueError, "not mounted"):
             reg.run(cli, KN[self.lang], apply=False, catalog_id="cat")
 
 

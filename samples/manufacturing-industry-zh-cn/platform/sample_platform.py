@@ -82,7 +82,7 @@ def main():
             require_owned('skills',matches[0].get('skill_id') or matches[0].get('id'));require(matches[0].get('status')=='published','unpublished Skill')
     require(len(skills['skills'])==2,'skill count differs')
     capabilities={'skills':skills,'schedule':schedule,'ownedExecution':read_receipt()}
-    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership',f'{len(specs)}-object-types',f'{RELATIONS}-relations',f'{len(tables)}-resource-bindings',f'{len(specs)-len(tables)}-dataset-bindings',f'{len(specs)}-live-object-queries',f"{len(schedule['action_ids'])}-schedule-actions")],'degrade':[],'message':''}
+    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership',f'{len(specs)}-object-types',f'{RELATIONS}-relations',f'{len(tables)}-resource-bindings',f'{len(specs)-len(tables)}-dataset-bindings',f'{len(specs)}-live-object-queries',f"{len(schedule['mounted_tool_ids'])}-mounted-rule-functions",f"{len(schedule['action_ids'])}-schedule-actions")],'degrade':[],'message':''}
     Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result));print(json.dumps(result))
 if __name__=='__main__':
     try:main()

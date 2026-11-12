@@ -1,11 +1,12 @@
-"""Machine scheduling on the platform: the two scheduled objects on datasets, one toolbox, six actions.
+"""Machine scheduling on the platform: the two scheduled objects on datasets, one toolbox, mounted rules, two actions.
 
 - Operations and maintenance work orders are what the scheduler changes, so their object types read
   datasets in the sample's catalog (the only writable source), loaded from the package's CSV.
 - One toolbox holds four rule functions (工单齐套, 设备能力, 人员资质与班次, 换型提示; Workshop
   schedule rule tools) and the two adjust functions.
-- Six actions: each rule function as a tool action (Q&A and Skills check with the same code), and
-  "调整工序排程" / "调整维修工单" as modify actions on their object types, inputs named like the fields.
+- The rule functions change nothing, so they are mounted on the network as functions (Q&A and Skills
+  call them with execute_tool, the same code as the Gantt); only what changes objects is an action:
+  "调整工序排程" / "调整维修工单", modify actions on their object types, inputs named like the fields.
 """
 
 from __future__ import annotations
@@ -70,10 +71,10 @@ RULE_USE = (
     "Schedule rule tool. tasks: operations to check, at most 200, e.g. [{\"key\":\"OP-2703-06-10\"}]; with only a key the stored "
     "planned machine and days are checked; add start, end (YYYY-MM-DD, end inclusive) and resource (machine ID) to try a change; an "
     "empty list checks every operation not started. Returns per task pass (null = not applicable), severity (hard or soft), text and "
-    "related. Run as an action: get_action_info, execute_action, then get_action_execution.",
+    "related. Mounted on the network as a function: call it with execute_tool.",
     "排程规则工具。tasks：要检查的工序，一次最多 200 条，如 [{\"key\":\"OP-2703-06-10\"}]；只给 key 时按已存的计划机台和计划日期检查；"
     "带上 start、end（YYYY-MM-DD，含当天）和 resource（机台编号）可试算改排；传空列表检查全部未开工工序。返回每条的 pass（null 表示不适用）、"
-    "severity（hard 或 soft）、text 和 related。作为行动执行：get_action_info → execute_action → get_action_execution。")
+    "severity（hard 或 soft）、text 和 related。函数直接挂载在知识网络上，用 execute_tool 调用。")
 ADJUST_USE = (
     "Only the planned fields change. Check the move with the four schedule rules first; report the before and after values.",
     "只修改计划字段。改之前先用四个排程规则检查；回答时说明改前改后的值。")
@@ -111,16 +112,9 @@ def is_zh() -> bool:
 
 
 def action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str], zh: bool) -> list[dict[str, Any]]:
+    """Only what changes objects is an action: the two adjust functions, as modify actions on their objects."""
     i = 1 if zh else 0
     actions = []
-    for op in RULES:
-        (names, descriptions) = CATALOG[op]
-        actions.append({"id": f"{kn_id}_{op}", "name": names[i], "branch": "main", "operation_config": {"type": "tool"},
-                        "object_type_id": "", "action_type": "modify", "action_intent": "modify",
-                        "action_source": {"type": "tool", "box_id": box_id, "tool_id": tool_ids[op]},
-                        "parameters": [{"name": "tasks", "type": "array", "value_from": "input",
-                                        "comment": tool_inputs(op, zh)[0]["description"]}],
-                        "comment": descriptions[i] + "\n" + RULE_USE[i]})
     targets = {"adjust_operation_schedule": "manufacturing_operations", "adjust_maintenance_work_order": "maintenance_work_orders"}
     for op in ADJUST:
         (names, descriptions) = CATALOG[op]
@@ -250,13 +244,20 @@ def run(cli: Callable[..., Any], kn_id: str, *, apply: bool, catalog_id: str) ->
                 raise ValueError("published source differs " + op)
         tool_ids[op] = tid
     actions = action_definitions(kn_id, bid, tool_ids, zh)
+    rules = [tool_ids[op] for op in RULES]
     if apply:
         if box.get("status") != "published":
             cli("toolbox", "publish", bid)
-        # Overwrite keeps a repeated install idempotent and follows re-created tool IDs.
+        # The rule functions change nothing: mounted on the network as functions (binding twice is a no-op).
+        cli("bkn", "capability", "attach", kn_id, "--box", bid, "--tool", ",".join(rules))
+        # The adjust functions change objects: modify actions; overwrite keeps a repeated install idempotent.
         cli("call", f"{BKN_API}/knowledge-networks/{kn_id}/action-types?import_mode=overwrite", "-X", "POST", "-d",
             json.dumps({"entries": actions}, ensure_ascii=False))
     else:
+        mounted = cli("call", f"{BKN_API}/knowledge-networks/{kn_id}/capabilities?limit=1000")
+        mounted = {str(c.get("capability_id")) for c in (mounted.get("entries") or [])} if isinstance(mounted, dict) else set()
+        if not set(rules) <= mounted:
+            raise ValueError("rule function not mounted: " + ", ".join(op for op in RULES if tool_ids[op] not in mounted))
         listed = cli("bkn", "action-type", "list", kn_id)
         listed = listed if isinstance(listed, list) else (listed.get("entries") or listed.get("data") or [])
         present = {(a.get("id"), (a.get("action_source") or {}).get("tool_id")) for a in listed}
@@ -264,7 +265,7 @@ def run(cli: Callable[..., Any], kn_id: str, *, apply: bool, catalog_id: str) ->
         if missing:
             raise ValueError("missing action " + ", ".join(missing))
     return {"datasets": bound, "toolbox_id": bid, "tool_ids": tool_ids, "action_ids": [a["id"] for a in actions],
-            "source_sha256": hashes}
+            "mounted_tool_ids": rules, "source_sha256": hashes}
 
 
 __all__ = ["ADJUST", "CATALOG", "OPERATIONS", "RULES", "action_definitions", "box_name", "dataset_rows", "run", "tool_inputs"]
