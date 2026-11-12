@@ -350,7 +350,7 @@ class RegistrationTest(Base):
             if args[:3] == ("bkn", "capability", "attach"):
                 state["mounted"] += args[args.index("--tool") + 1].split(","); return {}
             if args[0] == "call" and args[1].endswith("/capabilities?limit=1000"):
-                return {"entries": [{"capability_type": "tool", "capability_id": t} for t in state["mounted"]]}
+                return {"entries": [{"id": "b-" + t, "capability_type": "tool", "capability_id": t} for t in state["mounted"]] + [{"id": "", "capability_id": "t-work_order_kit_rule"}]}
             if args[0] == "call" and "/action-types" in args[1]:
                 state["actions"] = json.loads(args[5])["entries"]; return {}
             if args[:2] == ("bkn", "action-type"):

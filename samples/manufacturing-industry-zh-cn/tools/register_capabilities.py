@@ -255,7 +255,8 @@ def run(cli: Callable[..., Any], kn_id: str, *, apply: bool, catalog_id: str) ->
             json.dumps({"entries": actions}, ensure_ascii=False))
     else:
         mounted = cli("call", f"{BKN_API}/knowledge-networks/{kn_id}/capabilities?limit=1000")
-        mounted = {str(c.get("capability_id")) for c in (mounted.get("entries") or [])} if isinstance(mounted, dict) else set()
+        # Only explicit bindings count: entries derived from actions have no binding id and execute_tool ignores them.
+        mounted = {str(c.get("capability_id")) for c in (mounted.get("entries") or []) if c.get("id")} if isinstance(mounted, dict) else set()
         if not set(rules) <= mounted:
             raise ValueError("rule function not mounted: " + ", ".join(op for op in RULES if tool_ids[op] not in mounted))
         listed = cli("bkn", "action-type", "list", kn_id)
