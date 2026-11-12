@@ -10,6 +10,6 @@ Based on 0.1.15. Adds demand-driven scheduling: a demand forecast is placed on a
 
 The Skills describe the kit schedule plan queries and actions; the 15 experience cards and the v4 reference answers are recomputed on the new data, and 3 questions tied to a date window use the new business date.
 
-**Platform requirements**: the function writes the dataset as the caller and needs the OpenBKN 0.2.2 sandbox deployment (the sandbox injects `BKN_BASE_URL` and `BKN_TOKEN`, and its network policy allows the gateway); uninstalling needs a sample service that removes the sample's datasets first.
+**Platform requirements**: the function writes the dataset as the caller and needs the OpenBKN 0.2.2 sandbox deployment (the sandbox injects `BKN_BASE_URL` and `BKN_TOKEN`, and its network policy allows the gateway); uninstalling needs a sample service with openbkn-ai/bkn-samples#260, which removes the sample's datasets first.
 
 Existing installations keep their version; changing versions follows the standard uninstall/install flow, which removes sample-owned data and resources. No in-place migration is provided.
