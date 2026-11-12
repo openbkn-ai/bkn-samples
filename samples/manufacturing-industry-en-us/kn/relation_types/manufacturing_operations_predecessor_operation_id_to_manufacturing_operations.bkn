@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+name: manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+tags: [manufacturing, industry_sample]
+---
+
+## RelationType: manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+
+An operation's predecessor: the previous operation by sequence in the same work order.
+
+### Endpoint
+
+| Source | Target | Type |
+|---|---|---|
+| manufacturing_operations | manufacturing_operations | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|---|---|
+| predecessor_operation_id | operation_id |

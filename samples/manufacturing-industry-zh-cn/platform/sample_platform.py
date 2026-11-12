@@ -11,6 +11,8 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'))
 from ownership_receipt import read as read_receipt,require_owned
 from register_skills import run as register_skills
+from register_capabilities import run as register_schedule
+RELATIONS=73
 MANIFEST=json.loads((ROOT/'sample.yaml').read_text());SAMPLE=MANIFEST['metadata']['name'];KN=MANIFEST['spec']['knowledgeNetwork']['id']
 def require(ok,msg):
     if not ok:raise ValueError(msg)
@@ -46,9 +48,10 @@ def main():
     raw=json.loads(Path(os.environ['BKN_SAMPLE_INPUT']).read_text());require(raw['sample']==SAMPLE and raw['knowledgeNetwork']['id']==KN and raw['database']['name']==KN,'ownership identity differs')
     tags={'bkn-samples','bkn-sample-'+SAMPLE,'bkn-samples-version-'+raw['version'].replace('.','-')}
     specs=json.loads((ROOT/'model-contract.json').read_text())['object_types']
+    tables={t:s for t,s in specs.items() if s.get('source')!='dataset'}
     resources=entries(cli('vega','resource','list','--catalog-id',raw['catalog']['id'],'--category','table','--limit','100'))
     bindings={}
-    for table in specs:
+    for table in tables:
         matches=[r for r in resources if r['name'].rsplit('.',1)[-1]==table];require(len(matches)==1,'missing/ambiguous resource '+table);bindings[table]=matches[0]['id']
     if sys.argv[1]=='install':
         existing=run_sample_command(['openbkn','--json','bkn','get',KN],capture_output=True,text=True)
@@ -60,13 +63,16 @@ def main():
                 dest=Path(d)/'kn';shutil.copytree(ROOT/'kn',dest)
                 n=dest/'network.bkn';n.write_text(re.sub(r'^tags:.*$', 'tags: '+json.dumps(sorted(tags|{'manufacturing','iof'})),n.read_text(),flags=re.M))
                 cli('bkn','validate',str(dest));cli('bkn','push',str(dest))
-        bind_resources(specs,bindings,apply=True)
-    elif sys.argv[1]=='verify':bind_resources(specs,bindings,apply=False)
-    else:raise ValueError('expected install or verify')
+        bind_resources(tables,bindings,apply=True)
+    elif sys.argv[1]!='verify':raise ValueError('expected install or verify')
+    # Operations and maintenance work orders on their datasets; the scheduling functions and actions.
+    schedule=register_schedule(cli,KN,apply=sys.argv[1]=='install',catalog_id=raw['catalog']['id'])
+    # One export carries every object's binding; reading it once keeps verify within the hook's time budget.
     network=cli('bkn','get',KN,'--export');require(tags<=set(network.get('tags',[])),'network ownership differs')
-    require(len(network['object_types'])==len(specs) and len(network['relation_types'])==71,'model counts differ')
+    require(len(network['object_types'])==len(specs) and len(network['relation_types'])==RELATIONS,'model counts differ')
+    sources={o['id']:(o.get('data_source') or {}) for o in network['object_types']}
     for table,spec in specs.items():
-        obj=single(cli('bkn','object-type','get',KN,table));require(obj['data_source']['id']==bindings[table],'binding differs')
+        require(sources.get(table,{}).get('type')=='resource' and sources[table].get('id')==(bindings.get(table) or schedule['datasets'][table]),'binding differs: '+table)
         data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
     if sys.argv[1]=='install':skills=register_skills(apply=True,kn_id=KN)
     else:
@@ -76,8 +82,8 @@ def main():
             matches=[s for s in listed if s.get('name')==local['name']];require(len(matches)==1,'missing/ambiguous installed Skill')
             require_owned('skills',matches[0].get('skill_id') or matches[0].get('id'));require(matches[0].get('status')=='published','unpublished Skill')
     require(len(skills['skills'])==2,'skill count differs')
-    capabilities={'skills':skills,'ownedExecution':read_receipt()}
-    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership','40-object-types',str(71)+'-relations','40-resource-bindings','40-live-object-queries')],'degrade':[],'message':''}
+    capabilities={'skills':skills,'schedule':schedule,'ownedExecution':read_receipt()}
+    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership',f'{len(specs)}-object-types',f'{RELATIONS}-relations',f'{len(tables)}-resource-bindings',f'{len(specs)-len(tables)}-dataset-bindings',f'{len(specs)}-live-object-queries',f"{len(schedule['mounted_tool_ids'])}-mounted-rule-functions",f"{len(schedule['action_ids'])}-schedule-actions")],'degrade':[],'message':''}
     Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result));print(json.dumps(result))
 if __name__=='__main__':
     try:main()

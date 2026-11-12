@@ -38,8 +38,8 @@ class ManufacturingBknIdentifierTest(unittest.TestCase):
                     if resource_type == 'relation_type':
                         self.assertEqual(path.stem, document['id'], path)
                 self.assertEqual(observed, {'knowledge_network': 1, 'object_type': 40,
-                                            'relation_type': 71, 'concept_group': 3})
-                self.assertEqual(long_relation_fields, {'id': 62, 'name': 62})
+                                            'relation_type': 73, 'concept_group': 3})
+                self.assertEqual(long_relation_fields, {'id': 64, 'name': 64})
 
     def test_original_long_acceptance_fixtures_are_preserved(self):
         english_network = ROOT / 'samples' / 'manufacturing-industry-en-us' / 'kn' / 'network.bkn'

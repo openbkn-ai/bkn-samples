@@ -2,12 +2,13 @@
 name: manufacturing-production-quality-zh-cn
 description: >
   用于知识网络 manufacturing_industry_zh_cn 上生产主管和质量经理的问题：产品 BOM、工艺路线、设备能力和操作员资质，
-  工单进度、完成数量、报废与良率，执行是否合规（设备能力、保养当天、人员资质、排班），检验拒收、超限、质量漏检和规格版本，设备维护逾期与维修。
+  工单进度、完成数量、报废与良率，执行是否合规（设备能力、保养当天、人员资质、排班），检验拒收、超限、质量漏检和规格版本，设备维护逾期与维修，
+  以及三月机台排程（工单齐套、设备能力、人员资质与班次、换型）的检查与调整。
 ---
 
 # 生产与质量
 
-回答生产主管和质量经理的问题。本样例没有函数，全部用 Cypher 查询后按下面的口径判断。
+回答生产主管和质量经理的问题。排程检查用函数、调整用行动（见“机台排程”），其余用 Cypher 查询后按下面的口径判断。
 
 ## 默认口径
 
@@ -23,6 +24,15 @@ description: >
 - 质量放行：检验批已接受，且每项测量值在所引用规格（`quality_specification_id`）的上下限之内（含边界）。结果记为通过但测量值超限按不合格计，是质量漏检，要说明这批是否已发货。问产品现行规格看状态为生效的那条，旧版本状态为已作废。
 - 维护：计划日期早于业务日期且未完成的维护工单为逾期；维修中的设备不能排产；能力状态为暂停的设备不能做该能力的活。
 - 现在能上某项能力的操作员：资质合格、有效期不早于业务日期、在职。
+
+## 机台排程
+
+工序（`manufacturing_operations`）的 `planned_machine_id`、`planned_start_date`、`planned_end_date` 是排程（按天，含首尾），`predecessor_operation_id` 是前序；维护工单的 `planned_start_date`、`planned_end_date` 是占用机台的日期，`planned_date` 是应保养日。同一台设备同一天只能做一件事。
+
+- 检查用四个规则函数：工单齐套、设备能力、人员资质与班次、换型提示，都直接挂载在知识网络上，用 Context Loader 的 execute_tool 调用，参数 `tasks` 传工序，如 `[{"key":"OP-2703-06-10"}]`；只给 key 按已存计划检查，传 `[]` 检查全部未开工工序；要试算改排时在每条里加 `start`、`end`（YYYY-MM-DD）和 `resource`（机台编号）。
+- 结果每条有 `pass`（null 为不适用，如已完成、已开工的工序；工单齐套只在工单首道未完成工序上判断）、`severity`（hard 不能采用，soft 是提示）、`text`、`related`（相互影响的工序）、可选的 `at`（最早可行日）和 `counts`。
+- 调整用行动（get_action_info → execute_action → get_action_execution）：“调整工序排程”（选中工序，传 `planned_machine_id`、`planned_start_date`、`planned_end_date`，机台须在同一工作中心）和“调整维修工单”（选中维护工单，传 `planned_start_date`、`planned_end_date`）。调整前先检查，回答时写明改前改后的值；只改计划字段，不代表已派工。
+- 重叠（同一机台同一天两件事，含维护）、前序未完先开工、晚于工单交期，用 Cypher 读计划字段判断。
 
 ## Cypher 写法
 

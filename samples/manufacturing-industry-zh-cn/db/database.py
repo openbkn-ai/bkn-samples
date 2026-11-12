@@ -9,9 +9,12 @@ def require(ok,message):
 def fixture():
     lock=json.loads((ROOT/'dataset.lock').read_text()); contract=json.loads((ROOT/'model-contract.json').read_text())['object_types']; rows={}
     require(set(lock['files'])=={t+'.csv' for t in contract},'fixture inventory differs')
-    for t,spec in contract.items():
+    for t in contract:
         path=ROOT/'data'/(t+'.csv'); require('sha256:'+hashlib.sha256(path.read_bytes()).hexdigest()==lock['files'][path.name],'data digest mismatch')
-        with path.open() as f:
+    # Objects the scheduler writes live in datasets of the sample catalog, loaded by the platform hook.
+    contract={t:s for t,s in contract.items() if s.get('source')!='dataset'}
+    for t,spec in contract.items():
+        with (ROOT/'data'/(t+'.csv')).open() as f:
             reader=csv.DictReader(f); require(reader.fieldnames==list(spec['fields']),'field order differs'); rows[t]=list(reader)
         require(len(rows[t])==spec['row_count'],'record count differs')
     return contract,rows,hashlib.sha256((ROOT/'dataset.lock').read_bytes()).hexdigest()

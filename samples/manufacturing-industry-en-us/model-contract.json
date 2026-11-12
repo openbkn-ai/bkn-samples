@@ -143,10 +143,13 @@
         "maintenance_plan_id": "string",
         "machine_id": "string",
         "planned_date": "date",
-        "status": "string"
+        "status": "string",
+        "planned_start_date": "date",
+        "planned_end_date": "date"
       },
       "row_count": 45,
-      "unmodeled_string_columns": []
+      "unmodeled_string_columns": [],
+      "source": "dataset"
     },
     "manufacturing_operations": {
       "primary_key": "operation_id",
@@ -157,10 +160,16 @@
         "work_center_id": "string",
         "operation_name": "string",
         "sequence_number": "integer",
-        "status": "string"
+        "status": "string",
+        "planned_machine_id": "string",
+        "planned_start_date": "date",
+        "planned_end_date": "date",
+        "standard_duration_days": "integer",
+        "predecessor_operation_id": "string"
       },
       "row_count": 136,
-      "unmodeled_string_columns": []
+      "unmodeled_string_columns": [],
+      "source": "dataset"
     },
     "manufacturing_sites": {
       "primary_key": "site_id",
@@ -209,7 +218,7 @@
         "work_center_id": "string",
         "assignment_status": "string"
       },
-      "row_count": 102,
+      "row_count": 134,
       "unmodeled_string_columns": []
     },
     "operators": {
@@ -477,7 +486,7 @@
         "starts_date": "date",
         "ends_date": "date"
       },
-      "row_count": 31,
+      "row_count": 41,
       "unmodeled_string_columns": []
     },
     "shipments": {

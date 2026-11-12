@@ -7,7 +7,7 @@
     "aliases": [],
     "displayName": "Manufacturing Operations (EN)",
     "summary": "Order fulfilment, purchasing, execution compliance and quality release at a fictional precision machining company.",
-    "version": "0.1.6"
+    "version": "0.1.7"
   },
   "spec": {
     "studio": {
@@ -22,12 +22,12 @@
     "database": {
       "engine": "mariadb",
       "name": "manufacturing_industry_en_us",
-      "expectedTables": 40
+      "expectedTables": 38
     },
     "data": {
       "mode": "embedded"
     },
-    "platformVersion": ">=0.2.1 <0.3.0",
+    "platformVersion": ">=0.2.2 <0.3.0",
     "knowledgeNetwork": {
       "id": "manufacturing_industry_en_us",
       "displayName": "Manufacturing Operations (EN)"
@@ -39,7 +39,7 @@
       "objects": true,
       "relations": true,
       "metrics": false,
-      "functions": false,
+      "functions": true,
       "skills": true
     },
     "hooks": {

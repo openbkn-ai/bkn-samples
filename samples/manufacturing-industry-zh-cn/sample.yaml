@@ -7,7 +7,7 @@
     "aliases": [],
     "displayName": "制造业端到端运营（中文）",
     "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
-    "version": "0.1.6"
+    "version": "0.1.7"
   },
   "spec": {
     "studio": {
@@ -22,12 +22,12 @@
     "database": {
       "engine": "mariadb",
       "name": "manufacturing_industry_zh_cn",
-      "expectedTables": 40
+      "expectedTables": 38
     },
     "data": {
       "mode": "embedded"
     },
-    "platformVersion": ">=0.2.1 <0.3.0",
+    "platformVersion": ">=0.2.2 <0.3.0",
     "knowledgeNetwork": {
       "id": "manufacturing_industry_zh_cn",
       "displayName": "制造业端到端运营（中文）"
@@ -39,7 +39,7 @@
       "objects": true,
       "relations": true,
       "metrics": false,
-      "functions": false,
+      "functions": true,
       "skills": true
     },
     "hooks": {
