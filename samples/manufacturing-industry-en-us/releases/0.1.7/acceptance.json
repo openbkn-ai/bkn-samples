@@ -1,0 +1,129 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "manufacturing-industry-en-us",
+ "version": "0.1.7",
+ "packageDigest": "sha256:803381c8646549fa0c8b0da2baf348da6d28773deb61f5b2c9380596ee09d0fc",
+ "sourceCommit": "67ccba67ff9f716a7328db99dd703b9b0aa0f6c3",
+ "verificationDate": "2026-11-12",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 38,
+   "fixtureRecords": 1390,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 40,
+   "relations": 73,
+   "datasetBackedObjects": [
+    "maintenance_work_orders",
+    "manufacturing_operations"
+   ],
+   "datasetRecords": 181,
+   "bindingsVerifiedByHook": true,
+   "liveObjectQueriesPassed": 40
+  },
+  "capabilities": {
+   "mountedFunctions": [
+    {
+     "name": "work_order_kit_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "machine_capability_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "operator_shift_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "changeover_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "objectActionsExecuted": [
+    {
+     "action": "manufacturing_industry_en_us_adjust_maintenance_work_order",
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution",
+     "writeReadBack": true,
+     "refusalChecked": false,
+     "passed": true
+    },
+    {
+     "action": "manufacturing_industry_en_us_adjust_operation_schedule",
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution",
+     "writeReadBack": true,
+     "refusalChecked": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "manufacturing-order-supply-en-us",
+     "sourceContentDigest": "sha256:ca25424bafa7f646fd1a169fd65e9af06ed190c77ecc184136dc9018d566a783",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "manufacturing-production-quality-en-us",
+     "sourceContentDigest": "sha256:385c4bae04d87e752492c390e71c0f7c9ff98216ecf569893682249b1cfc3964",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "experienceCardsCypherPassed": true,
+   "cardsChecked": null,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "uninstallOfDatasetBoundInstallPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "functionsAndActionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build on a local kind cluster (sample service 022-9e2d8d18); no native amd64 certification and no released vanilla 0.2.2.",
+  "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
+  "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
+  "Reference queries, graph patterns, functions and actions were checked through APIs; no model answered the questions, and the Workshop app is not part of this version."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
