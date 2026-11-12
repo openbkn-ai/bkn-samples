@@ -31,7 +31,7 @@ def _entries(payload: dict, *keys: str) -> list:
 
 
 def capability_ready(run_cli) -> bool:
-    """The calculation and schedule-rule tools back tool actions; the kit-schedule tool backs the three plan object actions."""
+    """Calculation and schedule-rule tools are mounted on the network; the kit-schedule tool backs the three plan actions."""
     sys.path.insert(0, str(SAMPLE_DIR / "tools"))
     from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE, SCHEDULE_RULES
 
@@ -48,13 +48,17 @@ def capability_ready(run_cli) -> bool:
                if item.get("status") == "enabled" and item.get("tool_id")}
     if not calculations | {KIT_SCHEDULE["name"]} <= enabled.keys():
         return False
+    # Calculations are mounted on the network. An entry derived from an action has an empty binding ID and
+    # execute_tool does not accept it, so only real bindings count.
+    bindings = run_cli(["bkn", "capability", "list", "supply_ontology_en", "--limit", "100"])
+    mounted = {item.get("capability_id") for item in _entries(bindings, "entries")
+               if item.get("capability_type") == "function" and item.get("box_id") == box["box_id"] and item.get("id")}
     listing = run_cli(["bkn", "action-type", "list", "supply_ontology_en"])
-    owned = [item for item in _entries(listing, "entries") if (item.get("action_source") or {}).get("box_id") == box["box_id"]]
-    tool_actions = {(item.get("action_source") or {}).get("tool_id") for item in owned
-                    if (item.get("operation_config") or {}).get("type") == "tool"}
-    plan_actions = {item.get("id") for item in owned if (item.get("operation_config") or {}).get("type") == "object"
+    plan_actions = {item.get("id") for item in _entries(listing, "entries")
+                    if (item.get("operation_config") or {}).get("type") == "object"
+                    and (item.get("action_source") or {}).get("box_id") == box["box_id"]
                     and (item.get("action_source") or {}).get("tool_id") == enabled[KIT_SCHEDULE["name"]]}
-    return ({enabled[name] for name in calculations} <= tool_actions
+    return ({enabled[name] for name in calculations} <= mounted
             and {f"supply_ontology_en_kitplan_{key}" for key in KIT_PLAN_ACTIONS} <= plan_actions)
 
 def skills_ready(run_cli) -> bool:

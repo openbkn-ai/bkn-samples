@@ -12,16 +12,11 @@ from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE, S
 
 
 class SupplyMountTest(unittest.TestCase):
-    def test_functions_become_tool_actions_for_declared_tool_ids(self):
+    def test_calculations_are_mounted_and_only_the_plan_changes_are_actions(self):
         calls = []
 
         def call(args):
             calls.append(args)
-            if args[:2] == ['bkn', 'get']:
-                return {'tags':['bkn-samples','bkn-sample-supply-chain']}
-            if args[:3] == ['bkn', 'action-type', 'get']:
-                kn=json.loads((TOOLS.parent/'kn/supply_ontology_hand.json').read_text())
-                return next(a for a in kn['action_types'] if a['id'].endswith('_act_replen_draft'))
             if args[:2] == ['toolbox', 'list']:
                 return {'data': [{'box_name': 'Supply', 'box_id': 'box-1', 'status': 'published'}]}
             if args[:2] == ['tool', 'list']:
@@ -32,30 +27,21 @@ class SupplyMountTest(unittest.TestCase):
 
         with patch.object(FUNCTIONS, '_call', call):
             result = FUNCTIONS.run(box_name='Supply', apply=True, kn_id='supply_ontology_hand')
-        self.assertFalse(any(args[:3] == ['bkn', 'capability', 'attach'] for args in calls))
+        attach = next(args for args in calls if args[:3] == ['bkn', 'capability', 'attach'])
+        # Calculations only read: mounted on the network, run with execute_tool.
+        self.assertEqual(attach, ['bkn', 'capability', 'attach', 'supply_ontology_hand', '--box', 'box-1',
+                                  '--tool', ','.join([*FUNCTION_CATALOG, *SCHEDULE_RULES])])
+        self.assertEqual(result['mounted_tools'], [*FUNCTION_CATALOG, *SCHEDULE_RULES])
         create = next(args for args in calls if args[:1] == ['call'] and '/action-types' in args[1])
         self.assertIn('import_mode=overwrite', create[1])
         actions = json.loads(create[create.index('-d') + 1])['entries']
-        self.assertEqual([a['id'] for a in actions], [f'supply_ontology_hand_{op}' for op in FUNCTION_CATALOG]
-                         + [f'supply_ontology_hand_kitplan_{key}' for key in KIT_PLAN_ACTIONS]
-                         + [f'supply_ontology_hand_{op}' for op in SCHEDULE_RULES])
+        # Only what changes objects is an action: the three plan actions.
+        self.assertEqual([a['id'] for a in actions], [f'supply_ontology_hand_kitplan_{key}' for key in KIT_PLAN_ACTIONS])
         self.assertEqual(result['action_ids'], [a['id'] for a in actions])
-        for action in actions[len(FUNCTION_CATALOG):len(FUNCTION_CATALOG) + len(KIT_PLAN_ACTIONS)]:
-            # The plan actions are object actions on the plan dataset, run by the kit-schedule tool.
+        for action in actions:
             self.assertEqual(action['operation_config'], {'type': 'object'})
             self.assertEqual(action['object_type_id'], 'supply_ontology_hand_kitplan')
             self.assertEqual(action['action_source'], {'type': 'tool', 'box_id': 'box-1', 'tool_id': 'kit_schedule'})
-        for action, (operation, spec) in zip(actions, FUNCTION_CATALOG.items()):
-            self.assertEqual(action['operation_config'], {'type': 'tool'})
-            self.assertEqual(action['object_type_id'], '')
-            self.assertEqual(action['action_source'], {'type': 'tool', 'box_id': 'box-1', 'tool_id': operation})
-            self.assertEqual(action['name'], spec['name'])
-            names = [p['name'] for p in action['parameters']]
-            # Business assumptions are inputs; the sample's business date stays fixed.
-            self.assertNotIn('business_date', names)
-            self.assertIn('products' if operation == 'build_capacity' else 'demands', names)
-            self.assertIn('need_by', names)
-            self.assertTrue(all(p['value_from'] == 'input' for p in action['parameters']))
 
     def test_skills_mount_only_registered_ids_after_publication(self):
         calls = []
