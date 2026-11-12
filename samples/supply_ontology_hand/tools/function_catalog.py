@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 EXECUTION_USE_RULE = (
-    '作为行动执行：先用 get_action_info 取参数定义，再用 execute_action 执行，最后用 get_action_execution 取结果。'
-    '每个参数都要传：替代料、仓范围、需求日期、逾期在途等是业务假设，用户没说时按说明里的默认值显式传入，需求日期不设时传空字符串。'
-    '检查执行结果里的 exit_code 和 result，执行状态 completed 不等于计算成功。'
-    '只查数、汇总、追关系的问题用 Cypher，不要调用函数。'
+    '函数已挂载到知识网络，通过 execute_tool 直接调用；从发现结果原样复制 toolbox_id=owner_id、tool_id=capability_id，不重构 ID。'
+    '替代料、仓范围、需求日期、逾期在途等是业务假设，用户没说时按说明里的默认值显式传入，并在回答里说明。'
+    '检查 body.exit_code 和 result，HTTP 200 不等于计算成功。只查数、汇总、追关系的问题用 Cypher，不要调用函数。'
 )
 
 
@@ -59,9 +58,9 @@ KIT_SCHEDULE = {
                 "计划开工、计划完工、计划状态〔通常为已排〕、来源方案、排产人）、调整（修改实例，选中计划后传新的产线、计划开工、"
                 "计划完工、来源方案、排产人）、取消（修改实例，选中计划后传排产人）。只查已排计划、齐套结论时用 Cypher 查齐套排产计划。",
 }
-RULE_USE = ("排程甘特的规则工具：tasks 每条含 key、start、end、resource、values（bill_no、product_code、line_code、"
-            "planned_start、plan_status），一次最多 200 条，返回每条的 pass、severity、text、related。"
-            "问答里先用 Cypher 取齐套排产计划再转成 tasks；齐套检查传 mode=detail、task、query 取一张计划的缺料明细。")
+RULE_USE = ("排程甘特的规则工具，已挂载到知识网络，问答里用 execute_tool 调用：tasks 每条含 key、start、resource、values"
+            "（bill_no、product_code、line_code、planned_start、plan_status），一次最多 200 条，返回每条的 pass、severity、"
+            "text、related；齐套检查传 mode=detail、task、query 取一张计划的缺料明细。")
 SCHEDULE_RULES = {
     "kit_check_rule": {
         "name": "齐套检查",

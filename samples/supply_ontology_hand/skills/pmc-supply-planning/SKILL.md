@@ -10,7 +10,7 @@ description: >
 
 # PMC 生产计划
 
-回答计划经理关于欠货、接单、排产和备料的问题。查数、汇总、追关系用 Cypher；需要按 BOM 逐层净扣时执行计算行动。
+回答计划经理关于欠货、接单、排产和备料的问题。查数、汇总、追关系用 Cypher；需要按 BOM 逐层净扣时调用计算函数。
 
 ## 默认口径
 
@@ -27,19 +27,19 @@ description: >
 - “现货”只指成品可用库存，不含还能生产的数量：现货还能承诺 = 成品可用库存 − 已签约欠货 − 本次要发的数量。
 - 未关闭预测 = 关闭状态不是“已关闭”。一张预测单可以有多个产品，同一张单的产品同一天交货：交货日是 `startdate`（预测交货日期），`enddate` 是需求窗口结束日。交货日早于业务日期还没关闭的是已延期需求。现有库存能支撑多少预测按可承诺量算，不能只看成品库存。
 
-## 什么时候执行计算行动
+## 什么时候调用计算函数
 
-两个计算以行动提供：先用 `get_action_info` 取参数定义，再用 `execute_action` 执行，最后用 `get_action_execution` 取结果。每次都要传全部参数：替代料（默认 false）、仓范围（默认 all）、需求日期（不设时传空字符串）、是否计入逾期在途（默认 false）等是业务假设，用户没说时按默认值显式传入，并在回答里说明按什么假设算的。
+计算函数已挂载到知识网络，用 Context Loader 的 `execute_tool` 直接调用：从发现结果原样复制 `toolbox_id`（owner_id）和 `tool_id`（capability_id）。替代料（默认 false）、仓范围（默认 all）、需求日期、是否计入逾期在途（默认 false）等是业务假设，用户没说时按默认值显式传入，并在回答里说明按什么假设算的。检查 `body.exit_code` 和 `result`，HTTP 200 不等于计算成功。
 
 - **产品可做数量与可承诺量**（`build_capacity`）：某产品现在最多还能做多少、可承诺多少、还能接多少新单、被哪颗料卡住；允许替代料、只用某几个仓、某日前在途到货、逾期在途催回后能多做多少。`products` 传产品编码列表，各产品独立计算；几个产品要一起看时一次传完，不要逐个调用。
-  - 哪些产品的欠货靠现货和生产都补不上：先用 Cypher 找出欠货超过成品库存的产品，再把这些产品一次传给本行动，`finished_goods_qty + buildable_qty < signed_backlog_qty` 的就是补不上的，差额是 `signed_backlog_qty − finished_goods_qty − buildable_qty`（`available_to_promise` 最小为 0，不能用来判断）。
+  - 哪些产品的欠货靠现货和生产都补不上：先用 Cypher 找出欠货超过成品库存的产品，再把这些产品一次传给本函数，`finished_goods_qty + buildable_qty < signed_backlog_qty` 的就是补不上的，差额是 `signed_backlog_qty − finished_goods_qty − buildable_qty`（`available_to_promise` 最小为 0，不能用来判断）。
   - 某日前在途能让这些产品多做多少：同一批产品再传 `need_by` 调一次，两次 `buildable_qty` 相减。
 - **需求齐套与缺料**（`demand_coverage`）：一张或几张需求够不够、缺哪些料、各缺多少。
   - 评估欠单本身：不传 `reserve_signed_backlog`。
   - 评估新单且要先保欠货：`reserve_signed_backlog=true`。
   - 排生产工单、不动成品：`use_finished_goods=false`。
   - 多单同时来：按使用者给的先后放进 `demands`。
-- 其他问题（欠货、库存、预测、工单、BOM 清单、反查用途、通用料）用 Cypher，不要执行计算行动。函数的 `limiting_materials` 和 `shortages` 是最底层缺料；要回答这些料有没有在途、交期多久，再用 Cypher 查采购订单和物料。
+- 其他问题（欠货、库存、预测、工单、BOM 清单、反查用途、通用料）用 Cypher，不要调用计算函数。函数的 `limiting_materials` 和 `shortages` 是最底层缺料；要回答这些料有没有在途、交期多久，再用 Cypher 查采购订单和物料。
 
 ## 齐套排产计划
 
@@ -49,8 +49,8 @@ description: >
 - 齐套结论是排产时按计划开工日算的：先保已签约欠货、不用成品、计入计划开工日前按期到货的在途，口径与“需求齐套与缺料”相同。齐套时齐套日是最早可开工日；缺料时齐套日是在途按期到货后能齐套的日期，为空表示现有在途补不齐。问“现在还够不够”时重新执行需求齐套与缺料，不要只看计划里记录的结论。
 - 已排计划：`MATCH (k:supply_ontology_hand_kitplan) WHERE k.plan_status <> '已取消' RETURN k.plan_id, k.bill_no, k.product_code, k.line_code, k.planned_start, k.planned_finish, k.kit_status, k.kit_date, k.key_material, k.plan_status`。某张单排没排：加 `AND k.bill_no = '<预测单号>'`；没有有效计划就是待排。
 - 产线在 `supply_ontology_hand_line`：工厂也是一行（`line_kind` 为“工厂”，不排产），产线的 `parent_code` 是所属工厂，`max_parallel` 是同时可执行的计划数，`product_lines` 是可生产的产品线；产品的默认产线是产品对象的 `line_code`。停线窗口在 `supply_ontology_hand_stoppage`，`resource_code` 是产线或工厂编码，工厂级窗口作用于该工厂所有产线。
-- 只有使用者明确要求排产、改期或取消时才执行三个行动：“建立齐套排产计划”（新建实例，`object_input` 传 `bill_no`、`product_code`〔整单传空字符串〕、`line_code`、`planned_start`、`planned_finish`、`plan_status`〔通常为已排〕、`source_scenario`、`planner`）、“调整齐套排产计划”（修改实例，`_instance_identities` 传选中计划的 `plan_id`，再传新的产线、计划开工、计划完工、来源方案、排产人）、“取消齐套排产计划”（修改实例，传计划号和排产人）。执行前说明要写入什么；执行后从结果里报告计划号、齐套状态、齐套日和关键物料。重复建立同一单（同一产品）不会新增计划，会修改已有的那条。
-- 问“这些计划现在排得通吗、哪张会缺料、产线能不能做”时，执行“齐套检查”“产线可生产”两个行动（排程甘特用的是同一套规则）：`tasks` 每条为 `{key, start, resource, values}`，key 用计划号，start 用计划开工，resource 用产线编码，values 带 `bill_no`、`product_code`、`line_code`、`planned_start`、`plan_status`。齐套检查先保已签约欠货，再按已确认、已排的顺序、各自按开工先后在同一库存池里分配，所以要一次传入相关的全部计划；已开工（有开工工单）的计划物料已领用，直接通过。结果里 `at` 是最早可开工日，`related` 是争同一物料的计划。要列出某张计划缺哪些料，用齐套检查传 `mode=detail`、`task`（同上的一条）和 `query`（`group` 可选 late_po 在途晚到、overdue_po 采购逾期、no_pr 尚未下采购申请、reserved 库存被欠货占用；`keyOnly`、`search`、`offset`、`limit`），按返回的表格列出，不截断。
+- 只有使用者明确要求排产、改期或取消时才执行三个行动（改的是计划对象，所以是行动：先用 `get_action_info` 取参数定义，再用 `execute_action` 执行，最后用 `get_action_execution` 取结果）：“建立齐套排产计划”（新建实例，`object_input` 传 `bill_no`、`product_code`〔整单传空字符串〕、`line_code`、`planned_start`、`planned_finish`、`plan_status`〔通常为已排〕、`source_scenario`、`planner`）、“调整齐套排产计划”（修改实例，`_instance_identities` 传选中计划的 `plan_id`，再传新的产线、计划开工、计划完工、来源方案、排产人）、“取消齐套排产计划”（修改实例，传计划号和排产人）。执行前说明要写入什么；执行后从结果里报告计划号、齐套状态、齐套日和关键物料。重复建立同一单（同一产品）不会新增计划，会修改已有的那条。
+- 问“这些计划现在排得通吗、哪张会缺料、产线能不能做”时，用 `execute_tool` 调用“齐套检查”“产线可生产”两个函数（排程甘特用的是同一套规则）：`tasks` 每条为 `{key, start, resource, values}`，key 用计划号，start 用计划开工，resource 用产线编码，values 带 `bill_no`、`product_code`、`line_code`、`planned_start`、`plan_status`。齐套检查先保已签约欠货，再按已确认、已排的顺序、各自按开工先后在同一库存池里分配，所以要一次传入相关的全部计划；已开工（有开工工单）的计划物料已领用，直接通过。结果里 `at` 是最早可开工日，`related` 是争同一物料的计划。要列出某张计划缺哪些料，用齐套检查传 `mode=detail`、`task`（同上的一条）和 `query`（`group` 可选 late_po 在途晚到、overdue_po 采购逾期、no_pr 尚未下采购申请、reserved 库存被欠货占用；`keyOnly`、`search`、`offset`、`limit`），按返回的表格列出，不截断。
 
 ## Cypher 写法
 

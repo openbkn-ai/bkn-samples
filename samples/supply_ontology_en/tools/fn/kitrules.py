@@ -94,8 +94,12 @@ def _day(value: Any) -> str:
     return text[:10]
 
 
-def _short(day: str) -> str:
-    return f"{int(day[5:7])}/{int(day[8:10])}" if day else ""
+def _short(day: str, ref: str = DEFAULT_BUSINESS_DATE) -> str:
+    """Month/day; the year is added when it is not the business date's year."""
+    if not day:
+        return ""
+    short = f"{int(day[5:7])}/{int(day[8:10])}"
+    return short if day[:4] == ref[:4] else f"{day[:4]}/{short}"
 
 
 def _plus(day: str, days: int) -> str:

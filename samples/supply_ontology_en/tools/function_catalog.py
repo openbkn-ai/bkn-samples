@@ -3,11 +3,9 @@
 from __future__ import annotations
 
 EXECUTION_USE_RULE = (
-    'Run it as an action: get_action_info for its parameters, execute_action to run it, then get_action_execution for the result. '
-    'Pass every parameter: substitutes, warehouse scope, need-by date and overdue purchases are business assumptions; '
-    'when the user does not say, pass the documented default explicitly, and an empty string for no need-by date. '
-    'Check exit_code and result in the execution result: status completed alone does not mean the calculation succeeded. '
-    'Use Cypher, not a function, for lookups, totals and following relations.'
+    'Call through execute_tool, copying toolbox_id=owner_id and tool_id=capability_id exactly from discovery. '
+    'Pass the business assumptions (substitutes, warehouse scope, need-by date, overdue purchases) explicitly. '
+    'Check body.exit_code and result: HTTP 200 alone is not success. Use Cypher for lookups, totals and relations.'
 )
 
 
@@ -61,8 +59,8 @@ KIT_SCHEDULE = {
                 "source_scenario, planner), adjust (modify the selected plan: new line, start, finish, scenario, planner) and cancel "
                 "(modify the selected plan: planner). Use Cypher on the kit schedule plan to look up scheduled plans and kit results.",
 }
-RULE_USE = ("Schedule Gantt rule tool: tasks (key, start, end, resource, values: bill_no, product_code, line_code, "
-            "planned_start, plan_status), at most 200; returns pass, severity, text, related. "
+RULE_USE = ("Schedule Gantt rule tool, mounted (execute_tool in Q&A): tasks (key, start, resource, values: bill_no, "
+            "product_code, line_code, planned_start, plan_status), at most 200; returns pass, severity, text, related. "
             "Kit_Check with mode=detail, task, query lists a plan's shortages.")
 SCHEDULE_RULES = {
     "kit_check_rule": {

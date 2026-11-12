@@ -46,9 +46,9 @@ class SupplyVerifyTest(unittest.TestCase):
         tools = [{"name": spec["name"], "tool_id": operation, "status": "enabled"}
                  for operation, spec in [*FUNCTION_CATALOG.items(), ("kit_schedule", KIT_SCHEDULE), *SCHEDULE_RULES.items()]]
         bindings = [{"capability_type": "skill", "capability_id": item["skill_id"]} for item in names]
-        actions = [{"operation_config": {"type": "tool"}, "action_source": {"type": "tool", "box_id": "box-1", "tool_id": operation}}
-                   for operation in [*FUNCTION_CATALOG, *SCHEDULE_RULES]]
-        actions += [{"id": f"supply_ontology_hand_kitplan_{key}", "operation_config": {"type": "object"},
+        bindings += [{"id": f"binding-{operation}", "capability_type": "function", "box_id": "box-1", "capability_id": operation}
+                     for operation in [*FUNCTION_CATALOG, *SCHEDULE_RULES]]
+        actions = [{"id": f"supply_ontology_hand_kitplan_{key}", "operation_config": {"type": "object"},
                      "action_source": {"type": "tool", "box_id": "box-1", "tool_id": "kit_schedule"}} for key in KIT_PLAN_ACTIONS]
         checks = VERIFY.build_checks(
             data_ok=True,
@@ -96,3 +96,23 @@ class SupplyVerifyTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SupplyMountedFunctionTest(unittest.TestCase):
+    def test_an_entry_derived_from_an_action_is_not_a_mount(self):
+        import sys
+        sys.path.insert(0, str(VERIFY.SAMPLE_DIR / "tools"))
+        from function_catalog import FUNCTION_CATALOG, KIT_PLAN_ACTIONS, KIT_SCHEDULE, SCHEDULE_RULES
+        tools = [{"name": spec["name"], "tool_id": operation, "status": "enabled"}
+                 for operation, spec in [*FUNCTION_CATALOG.items(), ("kit_schedule", KIT_SCHEDULE), *SCHEDULE_RULES.items()]]
+        derived = [{"id": "", "capability_type": "function", "box_id": "box-1", "capability_id": operation,
+                    "sources": [{"kind": "action_type"}]} for operation in [*FUNCTION_CATALOG, *SCHEDULE_RULES]]
+        actions = [{"id": f"supply_ontology_hand_kitplan_{key}", "operation_config": {"type": "object"},
+                    "action_source": {"type": "tool", "box_id": "box-1", "tool_id": "kit_schedule"}} for key in KIT_PLAN_ACTIONS]
+        ready = VERIFY.capability_ready(_cli({
+            ("toolbox", "list"): {"data": [{"box_name": VERIFY.BOX_NAME, "box_id": "box-1"}]},
+            ("tool", "list"): {"tools": tools},
+            ("bkn", "capability"): {"entries": derived},
+            ("bkn", "action-type"): {"entries": actions},
+        }))
+        self.assertFalse(ready)
