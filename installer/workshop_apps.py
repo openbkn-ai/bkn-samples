@@ -1,18 +1,23 @@
 """Workshop apps a sample brings: created on installation, removed on uninstall.
 
-A sample places app specs exported from Workshop (``<id>.app.yaml``, the app's draft) in
-``workshop/apps/``. Installing creates each app on the sample's knowledge network, writes the
-spec as its draft and publishes it, so its pages open from the app workshop. The created app IDs
-are kept in the installation record; uninstalling deletes them.
+A sample places app specs exported from Workshop (the app's draft) in ``workshop/apps/``, without
+``app.id`` and with rule functions named only by ``boxName`` and ``toolName``: toolbox and tool IDs
+are new on every installation. Installing resolves those names in the toolboxes this installation
+created, writes the IDs in, creates each app on the sample's knowledge network with the spec as its
+draft and publishes it, so its pages open from the app workshop. A function that cannot be found
+fails the installation before any app is created. The created app IDs are kept in the installation
+record; uninstalling deletes them.
+
+On a platform without Workshop (the community edition) there is nothing to create: the sample is
+installed without its apps.
 
 Workshop app names are not unique. An app of the same name on the sample's network is the
 sample's own app from an earlier installation, so it is replaced, like the apps the record lists.
-Tool IDs in a spec belong to the environment it was exported from. Rule tools also carry their
-toolbox and tool names, which Workshop resolves when the IDs differ, so specs are not rewritten
-beyond the knowledge network reference.
 """
 
 from __future__ import annotations
+
+import copy
 
 from pathlib import Path
 from urllib.parse import quote
@@ -67,7 +72,67 @@ def validate(spec, network_id: str) -> list[str]:
         errors.append(f"dependencies.knowledgeNetwork.id must be the sample's knowledge network {network_id}")
     if not isinstance(spec.get("pages"), list) or not spec["pages"]:
         errors.append("pages must list at least one page")
+    if isinstance(app, dict) and "id" in app:
+        errors.append("app.id must be left out; Workshop assigns it")
+    for where, ref in rule_refs(spec):
+        if not isinstance(ref, dict) or not all(isinstance(ref.get(k), str) and ref[k].strip() for k in ("boxName", "toolName")):
+            errors.append(f"{where}: a rule function is named by boxName and toolName")
+        elif "box" in ref or "tool" in ref:
+            errors.append(f"{where}: leave out box and tool; the installer fills in this installation's IDs")
     return errors
+
+
+def rule_refs(spec):
+    """``(where, tool)`` for every rule function the spec calls: the Gantt layers' ``ruleTools`` and the
+    schedule model's task ``rules``."""
+    def walk(node, where):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if key == "ruleTools" and isinstance(value, list):
+                    for index, item in enumerate(value):
+                        yield f"{where}.ruleTools[{index}]", item.get("tool") if isinstance(item, dict) else None
+                else:
+                    yield from walk(value, f"{where}.{key}")
+        elif isinstance(node, list):
+            for index, item in enumerate(node):
+                yield from walk(item, f"{where}[{index}]")
+    if not isinstance(spec, dict):
+        return
+    yield from walk(spec.get("pages"), "pages")
+    model = spec.get("scheduleModel")
+    for t, task in enumerate(model.get("tasks") or [] if isinstance(model, dict) else []):
+        for r, rule in enumerate(task.get("rules") or [] if isinstance(task, dict) else []):
+            yield f"scheduleModel.tasks[{t}].rules[{r}]", rule.get("tool") if isinstance(rule, dict) else None
+
+
+def functions(api, toolboxes) -> dict:
+    """``{(toolbox name, tool name): (toolbox ID, tool ID)}`` for the toolboxes this installation created."""
+    found = {}
+    for box_id in toolboxes:
+        box = api("GET", "/api/agent-operator-integration/v1/tool-box/" + quote(str(box_id), safe=""))
+        if not isinstance(box, dict):
+            continue
+        for tool in box.get("tools") or []:
+            if isinstance(tool, dict) and tool.get("tool_id") and tool.get("name"):
+                found[(box.get("box_name"), tool["name"])] = (box.get("box_id") or box_id, tool["tool_id"])
+    return found
+
+
+def resolve(spec: dict, catalog: dict) -> dict:
+    """A copy of ``spec`` whose rule functions carry this installation's toolbox and tool IDs."""
+    resolved = copy.deepcopy(spec)
+    missing = []
+    for _where, ref in rule_refs(resolved):
+        ids = catalog.get((ref["boxName"], ref["toolName"]))
+        if ids is None:
+            missing.append(f"{ref['boxName']} / {ref['toolName']}")
+        else:
+            ref["box"], ref["tool"] = ids
+    if missing:
+        raise AppError("workshop_function_missing",
+                       f"The app {spec['app']['name']} calls functions this installation does not have: "
+                       + ", ".join(sorted(set(missing))))
+    return resolved
 
 
 def specs(sample_dir: Path, network_id: str) -> list[dict]:
@@ -106,6 +171,12 @@ def _same_name(api, network_id: str, name: str) -> list[str]:
     raise AppError("workshop_unavailable", "Workshop app list does not end")
 
 
+def available(api) -> bool:
+    """Whether the platform has Workshop: it is part of the professional edition, and below it every
+    Workshop route answers 404."""
+    return api("GET", APPS + "?limit=1") is not None
+
+
 def remove(api, app_id: str) -> None:
     """Deletes one app; an app already absent counts as removed."""
     path = APPS + "/" + quote(app_id, safe="")
@@ -114,13 +185,17 @@ def remove(api, app_id: str) -> None:
     api("DELETE", path)
 
 
-def install(api, spec_list: list[dict], network: dict, recorded: list[dict], remember=lambda apps: None) -> list[dict]:
+def install(api, spec_list: list[dict], network: dict, recorded: list[dict], remember=lambda apps: None,
+            toolboxes=()) -> list[dict]:
     """Replaces the sample's apps with ``spec_list``; returns ``[{id, name}]`` for the record.
 
     ``recorded`` are the apps a previous attempt or installation created. ``network`` is
     ``{id, name}`` of the sample's knowledge network. ``remember`` receives the list after every
-    change, so an interrupted attempt still leaves a receipt of what it created.
+    change, so an interrupted attempt still leaves a receipt of what it created. ``toolboxes`` are the
+    IDs of the toolboxes this installation created; rule functions are resolved in them first.
     """
+    catalog = functions(api, toolboxes) if any(True for spec in spec_list for _ in rule_refs(spec)) else {}
+    spec_list = [resolve(spec, catalog) for spec in spec_list]
     left = [item for item in recorded if isinstance(item, dict) and item.get("id")]
     for item in list(left):
         remove(api, str(item["id"]))

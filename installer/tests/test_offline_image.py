@@ -166,7 +166,7 @@ class OfflineImageTest(unittest.TestCase):
             candidate = build(ROOT / 'samples/supply_ontology_hand', '0.1.2', temporary / 'out', ref, temporary / 'oci')
             runtime = RemoteInstallation(ROOT, temporary / 'state', read_version(ROOT), 'arm64',
                 ['vega.catalog', 'knowledge-network.import.kn-json', 'execution.function', 'execution.skill',
-                 'sample.experience-set'],
+                 'sample.experience-set', 'sample.workshop-apps'],
                 'ghcr.io/openbkn-ai/executor@sha256:' + 'e' * 64)
             offline = OfflinePackages(ROOT, temporary / 'state', runtime)
             offline.import_package(candidate / 'package.tar.gz', 'admin')

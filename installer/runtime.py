@@ -162,17 +162,27 @@ def workshop_app_step(root: Path, sample: str, knowledge_network: dict, authoriz
         return None
     network = {"id": knowledge_network["id"], "name": knowledge_network.get("displayName") or knowledge_network["id"]}
 
-    def step(recorded, remember):
+    def step(recorded, remember, resources):
         from installer.uninstall import platform_client
         try:
             specs = apps_module.specs(sample_dir, network["id"])
             if not authorization:
                 raise apps_module.AppError("workshop_unavailable", "Creating the sample's Workshop apps needs the caller's sign-in.")
-            apps_module.install(platform_client(authorization), specs, network, recorded, remember)
+            api = platform_client(authorization)
+            if not apps_module.available(api):
+                diagnostics.emit("skipped", stage="verify", step="workshop-apps",
+                                 reason="the platform has no Workshop; the sample is installed without its apps")
+                remember([])
+                return
+            toolboxes = ((resources.get("ownedExecution") or {}).get("toolboxes") or []) if isinstance(resources, dict) else []
+            apps_module.install(api, specs, network, recorded, remember, toolboxes)
         except apps_module.AppError as error:
             raise ControlError(error.code, error.message) from None
         except ApiError as error:
             raise ControlError("workshop_unavailable", f"Workshop did not accept the sample's apps: {error.message}") from None
+        except Exception as error:  # a timeout, a dropped connection or a reply that is not JSON
+            raise ControlError("workshop_unavailable",
+                               f"Workshop could not be reached to create the sample's apps: {type(error).__name__}") from None
     return step
 
 

@@ -1,6 +1,5 @@
 apiVersion: workshop.openbkn.ai/v1
 app:
-  id: 01a1d41f-ee9e-7e09-8973-6eeb98c95b77
   name: Kit Scheduling
   description: 'For PMC planners: schedule demand forecasts onto production lines, check material kitting and line capability at the planned start, then record the plans.'
 dependencies:
@@ -376,14 +375,10 @@ pages:
           ruleTools:
           - name: Line_Can_Build
             tool:
-              box: 01a1d39c-637f-71f0-969f-b4133e7637c5
-              tool: 01a1d39c-7655-701f-9f14-4173c984cdf6
               boxName: Supply_EN_Functions
               toolName: Line_Can_Build
           - name: Kit_Check
             tool:
-              box: 01a1d39c-637f-71f0-969f-b4133e7637c5
-              tool: 01a1d39c-71b6-7b76-b459-b615673eb188
               boxName: Supply_EN_Functions
               toolName: Kit_Check
         - label: Line Stoppage
@@ -452,14 +447,10 @@ scheduleModel:
     rules:
     - name: Line_Can_Build
       tool:
-        box: 01a1d39c-637f-71f0-969f-b4133e7637c5
-        tool: 01a1d39c-7655-701f-9f14-4173c984cdf6
         boxName: Supply_EN_Functions
         toolName: Line_Can_Build
     - name: Kit_Check
       tool:
-        box: 01a1d39c-637f-71f0-969f-b4133e7637c5
-        tool: 01a1d39c-71b6-7b76-b459-b615673eb188
         boxName: Supply_EN_Functions
         toolName: Kit_Check
   resource:

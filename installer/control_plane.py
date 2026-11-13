@@ -400,7 +400,7 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
                 record["workshopApps"] = apps
                 _write_state(state_dir, record)
             with diagnostics.context(stage="verify"), diagnostics.step("workshop-apps"):
-                workshop_apps(list(record.get("workshopApps") or []), remember)
+                workshop_apps(list(record.get("workshopApps") or []), remember, record.get("resources") or {})
         record["stages"]["verify"] = "succeeded"
         record["status"] = "installed"
         record["installedAt"] = timestamp()

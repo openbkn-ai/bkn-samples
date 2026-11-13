@@ -1,6 +1,5 @@
 apiVersion: workshop.openbkn.ai/v1
 app:
-  id: 01a1d41b-8ded-773f-b6b1-8c77440f6839
   name: 齐套排产
   description: 给 PMC 计划员：把需求预测单排到产线上，按计划开工日检查物料齐套与产线能力，确认后写入排产计划。
 dependencies:
@@ -376,14 +375,10 @@ pages:
           ruleTools:
           - name: 产线可生产
             tool:
-              box: 01a1d39a-c503-79ea-aae3-d259f188167a
-              tool: 01a1d39a-d854-7772-b249-2ca2ad23ebf8
               boxName: 供应链原生计算函数
               toolName: 产线可生产
           - name: 齐套检查
             tool:
-              box: 01a1d39a-c503-79ea-aae3-d259f188167a
-              tool: 01a1d39a-d45f-74a2-8b9e-35379496f447
               boxName: 供应链原生计算函数
               toolName: 齐套检查
         - label: 停线窗口
@@ -452,14 +447,10 @@ scheduleModel:
     rules:
     - name: 产线可生产
       tool:
-        box: 01a1d39a-c503-79ea-aae3-d259f188167a
-        tool: 01a1d39a-d854-7772-b249-2ca2ad23ebf8
         boxName: 供应链原生计算函数
         toolName: 产线可生产
     - name: 齐套检查
       tool:
-        box: 01a1d39a-c503-79ea-aae3-d259f188167a
-        tool: 01a1d39a-d45f-74a2-8b9e-35379496f447
         boxName: 供应链原生计算函数
         toolName: 齐套检查
   resource:
