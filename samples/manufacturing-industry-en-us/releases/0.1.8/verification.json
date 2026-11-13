@@ -1,0 +1,45 @@
+{
+  "sampleId": "manufacturing-industry-en-us",
+  "version": "0.1.8",
+  "packageDigest": "sha256:d8fee4580cb523233dd67434f88e9246db5d3957c8701ba6a1985862fc3d46e8",
+  "sourceCommit": "ded2db0386d5b70e24808db2b5adb1158818358a",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "38 business tables, 1390 fixture records, the package's database verification hook passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "40 objects (2 on datasets of the sample catalog, 181 rows loaded) and 73 relations, all 240 properties and 73 relations read back with display names in the sample language; every binding and a live query per object verified by the platform hook; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Rules and adjustments toolboxes with functions named in the sample language; 4 mounted rule functions called through Context Loader execute_tool and through the toolbox proxy, matching local runs on the package fixtures; 2 object actions executed, written values read back and restored, a cross-work-centre move refused; 2 mounted Skills checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "The experience set's reference Cypher queries and graph patterns passed. No model answered the questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-en-us-v0.1.8/acceptance.json",
+  "evidenceDigest": "sha256:c8b72510aea8865130118e3b9f5ad77aa8a416838bc2e1208920c6f7df547b00",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.2 main builds on a local kind cluster (sample service 022-9e2d8d18; bkn-backend was redeployed to main-2eed547 by other work during the run); no native amd64 certification and no released vanilla 0.2.2.",
+    "Display names were read back from the platform: 240 properties and 73 relations named in the sample's language, the rules and adjustments toolboxes with their functions, no ID-style toolbox left.",
+    "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
+    "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
+    "Reference queries, graph patterns, functions and actions were checked through APIs; no model answered the questions, and the Workshop app is not part of this version."
+  ]
+}
