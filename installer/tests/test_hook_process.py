@@ -7,7 +7,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from installer import hook_process
 from installer.hook_process import run_hook
+from installer.tests.killed_hook import kill_during_hook
 from installer.runtime import process_run
 
 
@@ -54,6 +56,64 @@ class HookProcessTest(unittest.TestCase):
             with self.assertRaises(OSError):
                 run_hook(sample, script, malicious, {'BKN_SAMPLE_OUTPUT': str(output)})
             self.assertFalse(output.exists())
+
+    def test_killed_service_keeps_latest_receipt_written_by_the_hook(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            receipt = root / 'state' / 'manufacturing' / 'owned-execution.json'
+            empty = json.dumps({'toolboxes': [], 'skills': []})
+            latest = json.dumps({'toolboxes': ['box-1'], 'skills': ['skill-1']})
+            output = kill_during_hook(receipt, root, [empty, latest])
+            # The killed process never ran its copy-back of other outputs ...
+            self.assertFalse(output.exists())
+            # ... but the receipt reached the state directory as the hook last wrote it.
+            self.assertEqual(json.loads(receipt.read_text()), {'toolboxes': ['box-1'], 'skills': ['skill-1']})
+            self.assertEqual([path.name for path in receipt.parent.iterdir()], ['owned-execution.json'])
+
+    def test_killed_service_without_hook_receipt_leaves_no_receipt(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            receipt = root / 'state' / 'owned-execution.json'
+            kill_during_hook(receipt, root, [])
+            self.assertFalse(receipt.exists())
+
+    def test_mirror_skips_partial_or_invalid_receipts(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            work = root / 'work'; work.mkdir()
+            destination = root / 'owned-execution.json'
+            destination.write_text('{"toolboxes": [], "skills": ["previous"]}')
+            descriptor = os.open(work, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                mirror = hook_process._ReceiptMirror(descriptor, 'owned-execution.json', destination)
+                mirror.last = destination.read_bytes()
+                for content in ('{"toolboxes": [', '[]', '{"toolboxes": [], "skills": [7]}', '{"skills": []}'):
+                    (work / 'owned-execution.json').write_text(content)
+                    mirror.poll()
+                    self.assertEqual(json.loads(destination.read_text()), {'toolboxes': [], 'skills': ['previous']})
+                (work / 'owned-execution.json').unlink()
+                (work / 'owned-execution.json').symlink_to(root / 'elsewhere.json')
+                (root / 'elsewhere.json').write_text('{"toolboxes": ["foreign"], "skills": []}')
+                mirror.poll()
+                self.assertEqual(json.loads(destination.read_text()), {'toolboxes': [], 'skills': ['previous']})
+                (work / 'owned-execution.json').unlink()
+                (work / 'owned-execution.json').write_text('{"toolboxes": ["box"], "skills": []}')
+                mirror.poll()
+                self.assertEqual(json.loads(destination.read_text()), {'toolboxes': ['box'], 'skills': []})
+            finally:
+                os.close(descriptor)
+
+    def test_completed_hook_still_copies_final_receipt(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            sample = root / 'sample'; sample.mkdir()
+            script = sample / 'hook.sh'; script.write_text('')
+            receipt = root / 'owned-execution.json'
+            def hook(argv, env):
+                Path(env['BKN_SAMPLE_RECEIPT']).write_text('{"toolboxes": [], "skills": ["final"]}')
+                return subprocess.CompletedProcess(argv, 1)
+            run_hook(sample, script, hook, {'BKN_SAMPLE_RECEIPT': str(receipt)})
+            self.assertEqual(json.loads(receipt.read_text()), {'toolboxes': [], 'skills': ['final']})
 
     @unittest.skipUnless(sys.platform == 'linux' and os.geteuid() == 0, 'requires the Linux product runtime')
     def test_real_hook_cannot_read_root_secret_or_parent_credentials(self):
