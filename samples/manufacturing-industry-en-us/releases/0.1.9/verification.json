@@ -31,7 +31,7 @@
     }
   ],
   "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-en-us-v0.1.9/acceptance.json",
-  "evidenceDigest": "sha256:4236eb6a69cb969ffcde282b64650e71a5ad8a8460687bc13d7274daabdecca9",
+  "evidenceDigest": "sha256:81af854680feb2ffca18e90f963d81df4d37626c6b47496328a3eb551f7ba84a",
   "modelQuestionsForThisArtifact": 0,
   "retriedSameArtifacts": false,
   "uninstalledWithoutPackageOrCatalog": false,
@@ -41,6 +41,6 @@
     "The sample's Workshop app was created and published by the installation, its rule functions resolved to this installation's rules toolbox; it was opened in Workshop with its rule results, and created again after reinstallation. Dragging and applying in the browser was not exercised; the adjust actions it runs were executed through Context Loader.",
     "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
     "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
-    "Reference queries, graph patterns, functions and actions were checked through APIs; no model answered the questions, and the Workshop app is not part of this version."
+    "Reference queries, graph patterns, functions and actions were checked through APIs, and the Workshop app was opened and checked in Workshop; no model answered the questions."
   ]
 }

@@ -31,7 +31,7 @@
     }
   ],
   "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-zh-cn-v0.1.9/acceptance.json",
-  "evidenceDigest": "sha256:86d4e945d0e87474b89e22f379455f69d22dbe01d6e7de94e48f679e494a3902",
+  "evidenceDigest": "sha256:31ea31ecdf54aa959bc913c9730b2a6e5255c058646b449bb7c034fe86c5f9d1",
   "modelQuestionsForThisArtifact": 0,
   "retriedSameArtifacts": false,
   "uninstalledWithoutPackageOrCatalog": false,
@@ -41,7 +41,7 @@
     "The sample's Workshop app was created and published by the installation, its rule functions resolved to this installation's rules toolbox; it was opened in Workshop with its rule results, and created again after reinstallation. Dragging and applying in the browser was not exercised; the adjust actions it runs were executed through Context Loader.",
     "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
     "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
-    "Reference queries, graph patterns, functions and actions were checked through APIs; no model answered the questions, and the Workshop app is not part of this version.",
+    "Reference queries, graph patterns, functions and actions were checked through APIs, and the Workshop app was opened and checked in Workshop; no model answered the questions.",
     "After the zh-CN reinstallation one changeover rule call through Context Loader answered 502 (published tool call failed); the whole after-reinstallation function and action check was run again at once and passed. The first attempt is kept privately."
   ]
 }
