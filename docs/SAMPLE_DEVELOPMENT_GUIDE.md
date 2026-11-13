@@ -6,7 +6,7 @@ See the [Chinese development and version guide](SAMPLE_DEVELOPMENT_GUIDE.zh-CN.m
 
 ## Layout
 
-Each sample lives under `samples/<sample-id>/` and must contain `sample.yaml`, release notes, and the files needed by its declared hooks. Use `kn/` for an OpenBKN BKN directory or KN JSON, `data/` for embedded locked data, `tools/` for functions, and `skills/` for skills. An optional `experience/experience-set.yaml` offers question-and-answer cases taken from `bkn-eval/`; see [Sample experience sets](experience-set.md).
+Each sample lives under `samples/<sample-id>/` and must contain `sample.yaml`, release notes, and the files needed by its declared hooks. Use `kn/` for an OpenBKN BKN directory or KN JSON, `data/` for embedded locked data, `tools/` for functions, and `skills/` for skills. An optional `experience/experience-set.yaml` offers question-and-answer cases taken from `bkn-eval/`; see [Sample experience sets](experience-set.md). Optional `workshop/apps/*.app.yaml` files are Workshop apps the installer creates and publishes; see [Workshop apps in a sample](workshop-apps.md).
 
 ## Contract
 

@@ -1,0 +1,512 @@
+apiVersion: workshop.openbkn.ai/v1
+app:
+  id: 01a1d41b-8ded-773f-b6b1-8c77440f6839
+  name: 齐套排产
+  description: 给 PMC 计划员：把需求预测单排到产线上，按计划开工日检查物料齐套与产线能力，确认后写入排产计划。
+dependencies:
+  knowledgeNetwork:
+    id: supply_ontology_hand
+    name: 供应链本体知识网络-手工版
+sources:
+- id: scheduleTask1
+  label: 产品需求预测单
+  objectType: supply_ontology_hand_forecast
+  key: id
+  computed:
+  - name: planCount
+    label: 有效计划数
+    kind: matched
+    source: schedulePlan
+    pairs:
+    - field: billno
+      other: bill_no
+    - field: material_number
+      other: product_code
+    where:
+    - field: plan_status
+      op: ne
+      value: 已取消
+  - name: planResource
+    label: 计划资源
+    kind: matched
+    source: schedulePlan
+    pairs:
+    - field: billno
+      other: bill_no
+    - field: material_number
+      other: product_code
+    where:
+    - field: plan_status
+      op: ne
+      value: 已取消
+    field: line_code
+    type: text
+  - name: planStart
+    label: 计划开始
+    kind: matched
+    source: schedulePlan
+    pairs:
+    - field: billno
+      other: bill_no
+    - field: material_number
+      other: product_code
+    where:
+    - field: plan_status
+      op: ne
+      value: 已取消
+    field: planned_start
+    type: date
+  - name: planEnd
+    label: 计划结束
+    kind: matched
+    source: schedulePlan
+    pairs:
+    - field: billno
+      other: bill_no
+    - field: material_number
+      other: product_code
+    where:
+    - field: plan_status
+      op: ne
+      value: 已取消
+    field: planned_finish
+    type: date
+  - name: planned
+    label: 是否已排
+    kind: classify
+    cases:
+    - when:
+      - field: planCount
+        op: gt
+        value: 0
+      value: 已排
+      tone: success
+    - when:
+      - field: planCount
+        op: isEmpty
+      value: 未知
+      tone: neutral
+    otherwise:
+      value: 待排
+      tone: warning
+  - name: demandOpen
+    label: 是否未完成
+    kind: classify
+    cases:
+    - when:
+      - field: closestatus_title
+        op: eq
+        value: 已关闭
+      value: 已完成
+      tone: neutral
+    otherwise:
+      value: 未完成
+      tone: info
+  operations:
+  - id: create
+    label: 新建计划
+    params:
+    - name: start
+      label: 开始
+      type: date
+    - name: end
+      label: 结束
+      type: date
+    - name: resource
+      label: 资源
+      type: text
+    effects: []
+    action:
+      id: supply_ontology_hand_kitplan_create
+      params:
+        bill_no:
+          from: field
+          name: billno
+        product_code:
+          from: field
+          name: material_number
+        plan_status:
+          from: const
+          value: 已排
+        source_scenario:
+          from: context
+          name: scenario
+        planner:
+          from: context
+          name: user
+        planned_start:
+          from: param
+          name: start
+        planned_finish:
+          from: param
+          name: end
+        line_code:
+          from: param
+          name: resource
+      unique:
+      - bill_no
+      - product_code
+      active:
+      - field: plan_status
+        op: ne
+        value: 已取消
+- id: scheduleUnplanned
+  label: 待排产品需求预测单
+  objectType: supply_ontology_hand_forecast
+  key: id
+  from:
+    source: scheduleTask1
+    where:
+    - field: planned
+      op: eq
+      value: 待排
+    - field: demandOpen
+      op: eq
+      value: 未完成
+- id: schedulePlan
+  label: 齐套排产计划
+  objectType: supply_ontology_hand_kitplan
+  key: plan_id
+  operations:
+  - id: adjust
+    label: 调整计划
+    params:
+    - name: start
+      label: 开始
+      type: date
+    - name: end
+      label: 结束
+      type: date
+    - name: resource
+      label: 资源
+      type: text
+    effects:
+    - field: planned_start
+      kind: set
+      param: start
+    - field: planned_finish
+      kind: set
+      param: end
+    - field: line_code
+      kind: set
+      param: resource
+    action:
+      id: supply_ontology_hand_kitplan_adjust
+      params:
+        source_scenario:
+          from: context
+          name: scenario
+        planner:
+          from: context
+          name: user
+- id: schedulePlanActive
+  label: 有效齐套排产计划
+  objectType: supply_ontology_hand_kitplan
+  key: plan_id
+  from:
+    source: schedulePlan
+    where:
+    - field: plan_status
+      op: ne
+      value: 已取消
+- id: scheduleResource
+  label: 产线
+  objectType: supply_ontology_hand_line
+  key: line_code
+- id: scheduleCalendar1
+  label: 停线窗口
+  objectType: supply_ontology_hand_stoppage
+  key: stoppage_id
+variables:
+- name: asOf
+  label: 基准日期
+  kind: asOf
+  default: '2027-02-16'
+pages:
+- id: scheduleDemand
+  title: 产品需求预测单视角
+  icon: calendar
+  layout:
+    type: free
+    columns: 2
+    sidePosition: left
+    sideWidth: 300
+    asideWidth: 0
+    gap: normal
+  regions:
+    cells:
+    - id: scheduleBar
+      type: scenarioBar
+      frame:
+        x: 0
+        y: 0
+        w: 7
+        h: 3
+      config:
+        title: 方案
+        style: compact
+    - id: scheduleAsOf
+      type: asOfSlider
+      frame:
+        x: 7
+        y: 0
+        w: 5
+        h: 3
+      config:
+        title: 基准日期
+        source: scheduleTask1
+        rangeField: startdate
+        step: day
+        writes: asOf
+    - id: scheduleGantt
+      type: scheduleGantt
+      frame:
+        x: 0
+        y: 3
+        w: 12
+        h: 16
+      config:
+        title: 产品需求预测单（只读）
+        source: scheduleTask1
+        titleField: material_name
+        groupField: billno
+        layers:
+        - label: 计划
+          style: standard
+          source: scheduleTask1
+          resourceField: $key
+          startField: planStart
+          endField: planEnd
+          barFields:
+          - planResource
+          popoverFields:
+          - planned
+          - planCount
+          color: static
+          tone: success
+          targetField: startdate
+          doneWhen:
+          - field: closestatus_title
+            op: eq
+            value: 已关闭
+        - label: 目标
+          style: event
+          source: scheduleTask1
+          resourceField: $key
+          startField: startdate
+          color: static
+          tone: danger
+        tray: count
+        daysBefore: 7
+        daysAfter: 28
+        tick: auto
+        timeZone: local
+- id: scheduleResources
+  title: 产线视角
+  icon: calendar
+  layout:
+    type: free
+    columns: 2
+    sidePosition: left
+    sideWidth: 300
+    asideWidth: 0
+    gap: normal
+  regions:
+    cells:
+    - id: scheduleBar
+      type: scenarioBar
+      frame:
+        x: 0
+        y: 0
+        w: 7
+        h: 3
+      config:
+        title: 方案
+        style: compact
+    - id: scheduleAsOf
+      type: asOfSlider
+      frame:
+        x: 7
+        y: 0
+        w: 5
+        h: 3
+      config:
+        title: 基准日期
+        source: scheduleTask1
+        rangeField: startdate
+        step: day
+        writes: asOf
+    - id: scheduleGantt
+      type: scheduleGantt
+      frame:
+        x: 0
+        y: 3
+        w: 8
+        h: 16
+      config:
+        title: 排程（按产线）
+        source: scheduleResource
+        titleField: line_name
+        parentField: parent_code
+        capacityField: max_parallel
+        layers:
+        - label: 齐套排产计划
+          style: standard
+          source: schedulePlanActive
+          resourceField: line_code
+          startField: planned_start
+          endField: planned_finish
+          barFields:
+          - bill_no
+          - product_code
+          popoverFields:
+          - plan_status
+          color: static
+          tone: info
+          exclusive: true
+          adjust: adjust
+          snap: day
+          create:
+          - source: scheduleUnplanned
+            operation: create
+            days: 5
+            fields:
+            - billno
+            - startdate
+          ruleTools:
+          - name: 产线可生产
+            tool:
+              box: 01a1d39a-c503-79ea-aae3-d259f188167a
+              tool: 01a1d39a-d854-7772-b249-2ca2ad23ebf8
+              boxName: 供应链原生计算函数
+              toolName: 产线可生产
+          - name: 齐套检查
+            tool:
+              box: 01a1d39a-c503-79ea-aae3-d259f188167a
+              tool: 01a1d39a-d45f-74a2-8b9e-35379496f447
+              boxName: 供应链原生计算函数
+              toolName: 齐套检查
+        - label: 停线窗口
+          style: background
+          source: scheduleCalendar1
+          resourceField: resource_code
+          startField: start_time
+          endField: end_time
+          color: static
+          tone: neutral
+          blocks: true
+        daysBefore: 7
+        daysAfter: 28
+        tick: auto
+        timeZone: local
+    - id: scheduleEdits
+      type: scenarioBar
+      frame:
+        x: 8
+        y: 3
+        w: 4
+        h: 16
+      config:
+        title: 方案改动
+        style: assumptions
+theme:
+  name: default
+  mode: light
+  colorPrimary: '#255db0'
+  colorAccent: '#6d4fc2'
+  colorBg: '#f3f5f8'
+  colorSurface: '#ffffff'
+  colorSurfaceAlt: '#f8fafc'
+  colorBorder: '#dfe5ec'
+  colorText: '#203043'
+  colorTextMuted: '#607086'
+  colorSuccess: '#267257'
+  colorWarning: '#9b4e12'
+  colorDanger: '#b42318'
+  colorInfo: '#1f6f9f'
+  chartPalette:
+  - '#255db0'
+  - '#e0883a'
+  - '#2f9e77'
+  - '#d0453a'
+  - '#6d4fc2'
+  - '#3a9fc0'
+  - '#8a97a8'
+  fontFamily: '"Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif'
+  fontSize: 13
+  radius: 8
+  shadow: subtle
+  density: comfortable
+scheduleModel:
+  result: record
+  tasks:
+  - objectType: supply_ontology_hand_forecast
+    status: closestatus_title
+    doneWhen:
+    - field: closestatus_title
+      op: eq
+      value: 已关闭
+    groupField: billno
+    target:
+      field: startdate
+    rules:
+    - name: 产线可生产
+      tool:
+        box: 01a1d39a-c503-79ea-aae3-d259f188167a
+        tool: 01a1d39a-d854-7772-b249-2ca2ad23ebf8
+        boxName: 供应链原生计算函数
+        toolName: 产线可生产
+    - name: 齐套检查
+      tool:
+        box: 01a1d39a-c503-79ea-aae3-d259f188167a
+        tool: 01a1d39a-d45f-74a2-8b9e-35379496f447
+        boxName: 供应链原生计算函数
+        toolName: 齐套检查
+  resource:
+    objectType: supply_ontology_hand_line
+    titleField: line_name
+    parentField: parent_code
+    capacityField: max_parallel
+  calendars:
+  - objectType: supply_ontology_hand_stoppage
+    resourceField: resource_code
+    start: start_time
+    end: end_time
+    inherit: true
+  record:
+    objectType: supply_ontology_hand_kitplan
+    match:
+    - from: bill_no
+      to: billno
+    - from: product_code
+      to: material_number
+    resourceField: line_code
+    start: planned_start
+    end: planned_finish
+    status: plan_status
+    days: 5
+    active:
+    - field: plan_status
+      op: ne
+      value: 已取消
+    create:
+      action: supply_ontology_hand_kitplan_create
+      params:
+        plan_status:
+          from: const
+          value: 已排
+        source_scenario:
+          from: context
+          name: scenario
+        planner:
+          from: context
+          name: user
+    modify:
+      action: supply_ontology_hand_kitplan_adjust
+      params:
+        source_scenario:
+          from: context
+          name: scenario
+        planner:
+          from: context
+          name: user

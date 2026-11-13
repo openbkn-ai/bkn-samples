@@ -279,8 +279,14 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                     continue
                 raise ApiError(409, "ownership_conflict", "A resource no longer belongs to this sample; nothing will be deleted.")
         dataset_paths = _catalog_datasets(api, record["catalogId"]) if catalog_path else []
-        execution_paths = [_path("/api/agent-operator-integration/v1/skills/", id_)
-                           for id_ in resources["ownedExecution"]["skills"]]
+        # Workshop apps the installation created on the sample's knowledge network.
+        apps = record.get("workshopApps") or []
+        if not isinstance(apps, list) or any(not isinstance(app, dict) or not isinstance(app.get("id"), str) or not app["id"]
+                                             for app in apps):
+            raise ApiError(409, "ownership_receipt_missing", "The Workshop app receipt is invalid; nothing will be deleted.")
+        execution_paths = [_path("/api/workshop/v1/apps/", app["id"]) for app in apps]
+        execution_paths += [_path("/api/agent-operator-integration/v1/skills/", id_)
+                            for id_ in resources["ownedExecution"]["skills"]]
         execution_paths += [_path("/api/agent-operator-integration/v1/tool-box/", id_)
                             for id_ in resources["ownedExecution"]["toolboxes"]]
         name = _workload_name(sample)
@@ -314,7 +320,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
                     continue
                 if stage == "knowledge" and not required.issubset(set(resource.get("tags") or [])):
                     raise ApiError(409, "ownership_conflict", "The knowledge network no longer belongs to this sample; cleanup stopped.")
-                if stage == "capabilities":
+                if stage == "capabilities" and not path.startswith("/api/workshop/"):
                     if resource.get("status") == "published":
                         method = "PUT" if "/skills/" in path else "POST"
                         api(method, path + "/status", {"status": "offline"})
@@ -356,6 +362,7 @@ def execute_uninstall(state_dir, sample, api, kubectl):
         checkpoint("verify", "succeeded")
         record.update(status="uninstalled", finishedAt=timestamp())
         record.pop("error", None)
+        record.pop("workshopApps", None)
         for filename in ("owned-execution.json", "config.yaml", "database-credentials.json"):
             (state_dir / sample / filename).unlink(missing_ok=True)
     except Exception as error:

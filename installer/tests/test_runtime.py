@@ -103,17 +103,25 @@ class RuntimeTest(unittest.TestCase):
             return completed()
 
         state_dir = Path(tempfile.mkdtemp())
-        view = install_sample(
-            sample="supply-chain",
-            actor_role="admin",
-            state_dir=state_dir,
-            root=ROOT,
-            version="0.1.0",
-            deploy=deploy,
-            kubectl=kubectl,
-            run=run,
-            authorization="Bearer admin-token",
-        )
+        from installer.tests.test_workshop_apps import Workshop
+        workshop = Workshop()
+        with patch("installer.uninstall.platform_client", return_value=workshop) as client:
+            view = install_sample(
+                sample="supply-chain",
+                actor_role="admin",
+                state_dir=state_dir,
+                root=ROOT,
+                version="0.1.0",
+                deploy=deploy,
+                kubectl=kubectl,
+                run=run,
+                authorization="Bearer admin-token",
+            )
+        # The sample's Workshop app is created with the caller's sign-in and recorded.
+        client.assert_called_once_with("Bearer admin-token")
+        self.assertEqual([app["name"] for app in workshop.apps.values()], ["齐套排产"])
+        self.assertEqual(json.loads((state_dir / "supply-chain.json").read_text(encoding="utf-8"))["workshopApps"],
+                         [{"id": "app-1", "name": "齐套排产"}])
         prepare.assert_called_once()
         self.assertEqual(seen["password"], PASSWORD)
         self.assertEqual(seen["network"], "supply_ontology_hand")

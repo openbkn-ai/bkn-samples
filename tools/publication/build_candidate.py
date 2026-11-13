@@ -20,7 +20,7 @@ from installer.remote_bundle import MAX_ARCHIVE
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
 NOTE = re.compile(r"release-notes\.([a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*)\.md")
-DIRECTORIES = {"data", "db", "experience", "kn", "platform", "skills", "tools", "docs", "scripts", "iof-reference", "fibo-reference", "saref-reference"}
+DIRECTORIES = {"data", "db", "experience", "kn", "platform", "skills", "tools", "workshop", "docs", "scripts", "iof-reference", "fibo-reference", "saref-reference"}
 FILES = {"sample.yaml", "README.md", "LICENSE", "LICENSE.md", "run.sh", "dataset.lock",
          "vega_sql_execute.openapi.json", "model-contract.json"}
 
@@ -136,6 +136,8 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
                             (("function", "functions"), ("skill", "skills")) if components[key])
         if contract["spec"].get("studio", {}).get("experienceSet"):
             capabilities.append("sample.experience-set")
+        if any(path.startswith("workshop/apps/") and path.endswith(".app.yaml") for path in by_path):
+            capabilities.append("sample.workshop-apps")
         require(contract["spec"]["data"]["mode"] == "embedded", "offline packages require embedded data")
         if shared_database:
             architectures = ["amd64", "arm64"]

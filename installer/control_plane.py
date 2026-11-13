@@ -252,6 +252,7 @@ def create_installation(
     expected_tables: int,
     knowledge_network: dict,
     components: dict | None = None,
+    workshop_apps=None,
 ) -> dict:
     _require_admin(actor_role)
     current = _read_state(state_dir, sample)
@@ -272,6 +273,7 @@ def create_installation(
         expected_tables=expected_tables,
         knowledge_network=knowledge_network,
         components=components,
+        workshop_apps=workshop_apps,
     )
 
 
@@ -289,6 +291,7 @@ def retry_installation(
     knowledge_network: dict,
     components: dict | None = None,
     accepted: bool = False,
+    workshop_apps=None,
 ) -> dict:
     _require_admin(actor_role)
     current = _read_state(state_dir, sample)
@@ -307,10 +310,12 @@ def retry_installation(
         expected_tables=expected_tables,
         knowledge_network=knowledge_network,
         components=components,
+        workshop_apps=workshop_apps,
     )
 
 
-def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, current, expected_tables, knowledge_network, components=None) -> dict:
+def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, current, expected_tables, knowledge_network, components=None,
+             workshop_apps=None) -> dict:
     diagnostics.remember_secrets([database.get("password")])
     record = current or {
         "id": f"inst-{sample}",
@@ -389,6 +394,13 @@ def _advance(*, sample, version, database, state_dir, openbkn, hook_runner, curr
         for check in record["checks"]:
             diagnostics.emit("succeeded" if check.get("ok") else "failed", stage="verify",
                              step="check", check_name=str(check.get("name", "unnamed")))
+        if workshop_apps is not None:
+            # Apps open the sample's objects and functions, so they are created once those are verified.
+            def remember(apps):
+                record["workshopApps"] = apps
+                _write_state(state_dir, record)
+            with diagnostics.context(stage="verify"), diagnostics.step("workshop-apps"):
+                workshop_apps(list(record.get("workshopApps") or []), remember)
         record["stages"]["verify"] = "succeeded"
         record["status"] = "installed"
         record["installedAt"] = timestamp()
