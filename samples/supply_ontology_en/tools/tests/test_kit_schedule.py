@@ -4,7 +4,8 @@ from datetime import datetime
 import pytest
 
 from fn import CannotCompute, DEFAULT_BUSINESS_DATE
-from fn.kitplan import kit_check
+from fn.kitplan import KIT_COVERED, KIT_PENDING, KIT_SHORT
+from fn.kitrules import kit_rule
 from kit_schedule import OT_PLAN, moment, schedule
 from support_bkn_rows import DATA, FakeObjectQuery, csv_rows
 
@@ -31,6 +32,29 @@ class Store:
         self.plans[plan_id] = row
 
 
+def facts():
+    read = lambda name: list(csv.DictReader((DATA / f"{name}.csv").open(encoding="utf-8")))
+    rows = {**csv_rows(), "forecast": read("erp_mds_forecast"), "work_order": read("erp_production_work_order")}
+    return rows, {r["material_code"]: r for r in read("erp_material")}
+
+
+def as_task(plan):
+    return {"key": plan["plan_id"], "start": plan["planned_start"], "resource": plan["line_code"], "values": plan}
+
+
+def rule_result(plans, plan_id):
+    """What the schedule Gantt's kit check says about one plan, among all the given plans."""
+    rows, materials = facts()
+    tasks = [as_task(p) for p in plans]
+    return next(r for r in kit_rule(tasks, rows, materials=materials, business_date=DEFAULT_BUSINESS_DATE) if r["key"] == plan_id)
+
+
+def assert_record_matches_rule(plan, rule):
+    expected = KIT_COVERED if rule["pass"] is True else KIT_PENDING if rule.get("severity") == "soft" else KIT_SHORT
+    assert plan["kit_status"] == expected, (plan, rule)
+    assert plan.get("kit_date") == rule["at"], (plan, rule)
+
+
 def run(store, **params):
     return schedule(params, store.query(), store.write, now=NOW)
 
@@ -50,9 +74,7 @@ def test_scheduling_a_demand_creates_one_plan_with_its_kit_check():
     assert result["action"] == "created" and plan["plan_id"] == "KP-2026100200000062-U00-000151-01"
     assert plan["quantity"] == 500 and plan["reschedule_count"] == 0 and "previous_finish" not in plan
     assert plan["planned_at"] == f"{DEFAULT_BUSINESS_DATE}T10:30:00+08:00"
-    expected = kit_check(csv_rows(), [{"product": "U00-000151", "qty": "500.000000"}], "2027-05-10",
-                         business_date=DEFAULT_BUSINESS_DATE)
-    assert (plan["kit_status"], plan.get("kit_date", "")) == (expected["kit_status"], expected["kit_date"])
+    assert_record_matches_rule(plan, rule_result(list(store.plans.values()), plan["plan_id"]))
     assert [w[0] for w in store.writes] == [plan["plan_id"]]
 
 
@@ -107,15 +129,38 @@ def test_closed_or_unknown_demand_and_reversed_dates_are_refused():
     assert store.writes == []
 
 
-def test_installed_scheduled_plans_carry_the_kit_check_of_their_start():
-    rows = csv_rows()
-    forecasts = list(csv.DictReader((DATA / "erp_mds_forecast.csv").open(encoding="utf-8")))
-    for plan in history():
-        if plan["plan_status"] != "Scheduled":
-            continue
-        lines = [r for r in forecasts if r["billno"] == plan["bill_no"]
-                 and (not plan.get("product_code") or r["material_number"] == plan["product_code"])]
-        kit = kit_check(rows, [{"product": r["material_number"], "qty": r["qty"]} for r in lines],
-                        plan["planned_start"], business_date=DEFAULT_BUSINESS_DATE)
-        assert (plan["kit_status"], plan.get("kit_date", ""), plan.get("key_material", "")) == (
-            kit["kit_status"], kit["kit_date"], kit["key_material"])
+def test_installed_plans_record_what_the_kit_check_shows():
+    plans = history()
+    for plan in plans:
+        assert_record_matches_rule(plan, rule_result(plans, plan["plan_id"]))
+
+
+def test_moving_a_plan_in_production_keeps_it_kitted():
+    """F21: a confirmed plan whose production started was recorded short after a move, unlike the check."""
+    store = Store()
+    plan_id = "KP-2026100800000069-734-000001-01"
+    moved = run(store, plan_id=plan_id, bill_no="YCD2026100800000069", product_code="734-000001", plan_status="Confirmed",
+                line_code="L-SZ-UGV", planned_start="2027-02-22", planned_finish="2027-03-03")["plan"]
+    assert moved["kit_status"] == "Covered" and "shortage_note" not in moved
+    assert_record_matches_rule(moved, rule_result(list(store.plans.values()), plan_id))
+
+
+def test_a_short_record_names_its_own_start_even_before_the_business_date():
+    store = Store()
+    plan_id = "KP-2026091600000057-382-000005-01"
+    moved = run(store, plan_id=plan_id, bill_no="YCD2026091600000057", product_code="382-000005",
+                line_code="L-UR-AD", planned_start="2027-02-20", planned_finish="2027-02-24")["plan"]
+    assert "2027-02-20" in moved["shortage_note"]
+    assert_record_matches_rule(moved, rule_result(list(store.plans.values()), plan_id))
+
+
+def test_a_plan_kitted_once_purchase_requests_are_placed_is_recorded_as_pending_order():
+    """F28: the check lets the plan be adopted (soft), so the record does not call it short; the note keeps the requests to place."""
+    store = Store()
+    plan = run(store, bill_no="YCD2026070700000039", product_code="U00-000080", line_code="L-UR-NAV",
+               planned_start="2027-07-31", planned_finish="2027-08-06", plan_status="Scheduled")["plan"]
+    rule = rule_result(list(store.plans.values()), plan["plan_id"])
+    assert rule["pass"] is False and rule["severity"] == "soft"
+    assert plan["kit_status"] == KIT_PENDING and plan["kit_date"] <= "2027-07-31"
+    assert "2027-07-31" in plan["shortage_note"] and "no purchase request" in plan["shortage_note"]
+    assert_record_matches_rule(plan, rule)

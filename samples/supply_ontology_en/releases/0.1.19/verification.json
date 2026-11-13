@@ -1,0 +1,46 @@
+{
+  "sampleId": "supply-chain-en",
+  "version": "0.1.19",
+  "packageDigest": "sha256:b402639644842e7e689b8103f94c78bd22e9deef397415cd0b28819b108bf543",
+  "sourceCommit": "c6ae09d7950e9e27e317508100888e864802d542",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "14 business tables, 78647 fixture records; every bound object returns its fixture row count, plus the package's DB verification hook; the plan dataset holds 13 history plans."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "14 objects (13 table-bound, 1 dataset-bound) and 21 relations; all 605 production plans reach their products; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "4 mounted functions (2 calculations, 2 schedule rules) ran through execute_tool before and after reinstalling; the rule tools also answered through the toolbox proxy with check and detail; create, repeat create (updated, no new plan), adjust, cancel and whole-bill create ran as object actions and wrote the plan dataset; 2 Skills checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries passed; the other 8 cards were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-en-v0.1.19/acceptance.json",
+  "evidenceDigest": "sha256:ef14d375b163ee4e3fc8c99be96c0e73f11563005bd656a683b479ea297e7c06",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (bkn-backend-ee sha2d2a597, ontology-query-ee with bkn-foundry#3125, agent-retrieval sha2d466bc, sandbox 0.2.2 main eeffdb4, sample service 022-9e2d8d18 with bkn-samples#260); no native amd64 certification and no released vanilla 0.2.2.",
+    "Calculations and schedule rules are mounted functions run through Context Loader execute_tool in a managed interaction; the rule tools were also called through the toolbox proxy without an interaction, as the schedule Gantt calls them. The plan actions ran through get_action_info, execute_action and get_action_execution.",
+    "Writing plans needs the OpenBKN 0.2.2 sandbox deployment (BKN_BASE_URL, BKN_TOKEN, gateway allowed); uninstalling needs a sample service with bkn-samples#260.",
+    "Delaying a purchase order on the platform was not exercised; the confirmed plans turning short when their purchase is delayed is covered by the source tests on the same fixtures.",
+    "Reference queries, functions and actions were checked through APIs; browser UI and full model-question cards were not exercised.",
+    "Kit check through the toolbox proxy, measured in the sandbox, three runs each: one plan's detail 2.56–3.05 s, the 13 installed plans 2.57–3.1 s, 200 plans 3.08–3.64 s. Most of the remaining time is the knowledge-network read of the BOM and sandbox start-up."
+  ]
+}

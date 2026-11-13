@@ -18,7 +18,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from fn import DEFAULT_BUSINESS_DATE
-from fn.kitrules import CANCELLED, _labels, check_tasks, demands_of, kit_detail, kit_rule, line_rule, overlay, task_fields
+from fn.kitrules import CANCELLED, _labels, analyse, check_tasks, demands_of, kit_detail, kit_rule, line_rule, overlay, record, task_fields
 from fn.read_complete import read_complete
 from managed_execution import KN_ID, _in, _page_rows, load_bkn_rows
 
@@ -135,6 +135,16 @@ def _active_plans(read, scenario: Any) -> list[dict[str, Any]]:
     return tasks
 
 
+def kit_record(task: Mapping[str, Any], query: Callable[..., Mapping[str, Any]], *,
+               business_date: str = DEFAULT_BUSINESS_DATE) -> dict[str, Any]:
+    """The kit result a plan records when it is written: the same analysis as the check, with the network's
+    other active plans, so what is stored is what the schedule Gantt shows for it."""
+    read = _reader(query)
+    plans = overlay(_active_plans(read, None), [task])
+    rows, materials = _facts(read, query, plans, business_date)
+    return record(analyse(plans, rows, materials=materials, business_date=business_date)[str(task["key"])], materials)
+
+
 def kit_check_detail(task: Any, query: Callable[..., Mapping[str, Any]], *, scenario: Any = None, locale: str | None = None,
                      page: Mapping[str, Any] | None = None, business_date: str = DEFAULT_BUSINESS_DATE) -> dict[str, Any]:
     if not isinstance(task, Mapping) or not task.get("key"):
@@ -160,4 +170,4 @@ def line_check(tasks: Any, query: Callable[..., Mapping[str, Any]]) -> dict[str,
     return {"results": line_rule(tasks, forecasts=forecasts, lines=lines, product_lines=product_lines)}
 
 
-__all__ = ["kit_check", "kit_check_detail", "line_check", "tool_query"]
+__all__ = ["kit_check", "kit_check_detail", "kit_record", "line_check", "tool_query"]

@@ -34,6 +34,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 from typing import Any
 
+from .kitplan import KIT_COVERED, KIT_PENDING, KIT_SHORT
 from .planning import DEFAULT_BUSINESS_DATE, Plan, is_open_po, unshipped
 
 HARD, SOFT = "hard", "soft"
@@ -56,6 +57,9 @@ LABELS = {
         "covered": "物料齐套", "covered_at": "开工 {start} 物料齐套", "issued": "已开工，物料已按工单领用",
         "short_text": "缺料 {n} 种，关键：{name} {reason}", "conclusion": "缺料 {n} 种，最早 {at} 可齐套",
         "po_due": "在途 {due} 到", "need_pr": "未下采购申请", "overdue": "采购逾期",
+        "note": "计划开工 {start} 缺料：{items}{more}；最早 {at} 可齐套。", "note_item": "{name} 缺 {gap}（{reason}）",
+        "note_more": "等 {n} 种物料", "note_sep": "；",
+        "note_pending": "计划开工 {start} 前须下采购申请：{items}{more}；及时下单最早 {at} 可齐套。",
         "no_start": "无法检查：没有计划开工日", "no_demand": "无法检查：预测单 {bill} 没有未关闭的需求",
         "bad_tasks": "tasks 必须是任务列表", "too_many": "一次最多检查 {n} 条任务", "bad_task": "明细需要一条任务（task）",
     },
@@ -69,6 +73,9 @@ LABELS = {
         "issued": "In production; materials issued to work orders",
         "short_text": "{n} short; key: {name} {reason}", "conclusion": "{n} materials short; kitted {at} at the earliest",
         "po_due": "due {due}", "need_pr": "no purchase request", "overdue": "purchase overdue",
+        "note": "Short at planned start {start}: {items}{more}; kitted {at} at the earliest.",
+        "note_item": "{name} short {gap} ({reason})", "note_more": ", {n} materials in all", "note_sep": "; ",
+        "note_pending": "Purchase requests needed before planned start {start}: {items}{more}; kitted {at} at the earliest if ordered now.",
         "no_start": "Not checked: no planned start", "no_demand": "Not checked: forecast {bill} has no open demand",
         "bad_tasks": "tasks must be a list of tasks", "too_many": "at most {n} tasks per call", "bad_task": "the detail needs one task",
     },
@@ -319,6 +326,25 @@ def kit_rule(tasks: list[Mapping[str, Any]], rows: Mapping[str, Iterable[Mapping
     return results
 
 
+def record(item: Mapping[str, Any], materials: Mapping[str, Mapping[str, Any]], locale: str | None = None) -> dict[str, Any]:
+    """What a plan records about its kit, from the same analysis as the check: covered (and the start it is
+    kitted for) when the check passes; covered once ordered (soft) when only purchase requests still to be
+    placed now are missing and they arrive by the start; else short. Both of the latter carry the earliest
+    kitted date, the key material and a note naming the materials and why they are missing."""
+    labels = _labels(locale)
+    start = item["fields"]["start"]
+    if item["state"] in ("covered", "issued"):
+        return {"kit_status": KIT_COVERED, "kit_date": start, "key_material": "", "shortage_note": "", "shortages": {}}
+    lines = sorted(item["lines"], key=lambda l: (not l["key"], -l["gap"], l["code"]))
+    items = labels["note_sep"].join(labels["note_item"].format(name=_name(l["code"], materials), gap=_n(l["gap"]),
+                                                                reason=_reason(l, labels)) for l in lines[:3])
+    more = labels["note_more"].format(n=len(lines)) if len(lines) > 3 else ""
+    soft = bool(item.get("soft"))
+    return {"kit_status": KIT_PENDING if soft else KIT_SHORT, "kit_date": item["at"], "key_material": _key_line(item)["code"],
+            "shortage_note": labels["note_pending" if soft else "note"].format(start=start, items=items, more=more, at=item["at"]),
+            "shortages": {l["code"]: _n(l["gap"]) for l in lines}}
+
+
 def kit_detail(task: Mapping[str, Any], others: list[Mapping[str, Any]], rows: Mapping[str, Iterable[Mapping[str, Any]]], *,
                materials: Mapping[str, Mapping[str, Any]], products: Mapping[str, str] | None = None,
                business_date: str = DEFAULT_BUSINESS_DATE, locale: str | None = None, query: Mapping[str, Any] | None = None,
@@ -418,5 +444,5 @@ def line_rule(tasks: list[Mapping[str, Any]], *, forecasts: Iterable[Mapping[str
     return out
 
 
-__all__ = ["CONFIRMED", "overlay", "HARD", "MAX_TASKS", "SCHEDULED", "SOFT", "check_tasks", "demands_of", "kit_detail", "kit_rule",
+__all__ = ["CONFIRMED", "overlay", "record", "analyse", "HARD", "MAX_TASKS", "SCHEDULED", "SOFT", "check_tasks", "demands_of", "kit_detail", "kit_rule",
            "line_rule", "split_lines", "task_fields"]

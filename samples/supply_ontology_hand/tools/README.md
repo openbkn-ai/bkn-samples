@@ -11,7 +11,7 @@
 | 函数和 Skill 发布 | `register_native_function_toolbox.py`、`register_skills.py` |
 | 平台验收 | `smoke_test.py` |
 
-`fn/planning.py` 是两个原生计算函数（可做数量与可承诺量、需求齐套与缺料）的实现，`fn/kitplan.py` 和 `kit_schedule.py` 是齐套排产函数（齐套检查、写入齐套排产计划），`setup_kit_plan_dataset.py` 在安装时建计划数据集并写入排产历史，`managed_execution.py` 负责函数运行时读取数据，由注册脚本打包发布。`config.example.yaml` 是开发参考，标准安装 hooks 自动生成运行配置。`verify_sample.py` 校验源码交付契约。
+`fn/planning.py` 是两个原生计算函数（可做数量与可承诺量、需求齐套与缺料）的实现，`fn/kitrules.py` 是齐套检查与产线可生产的唯一实现，排程规则函数（`schedule_rules.py`）和齐套排产函数（`kit_schedule.py`，写入齐套排产计划时记录的齐套结论）都用它，`fn/kitplan.py` 只放齐套状态取值，`setup_kit_plan_dataset.py` 在安装时建计划数据集并写入排产历史，`managed_execution.py` 负责函数运行时读取数据，由注册脚本打包发布。`config.example.yaml` 是开发参考，标准安装 hooks 自动生成运行配置。`verify_sample.py` 校验源码交付契约。
 
 开发检查可在样例目录执行：
 
