@@ -243,6 +243,8 @@ class UninstallAppsTest(unittest.TestCase):
         record = self.uninstall([{"id": "app-1", "name": "Kit schedule"}])
         self.assertEqual(record["status"], "uninstalled")
         self.assertIn(("DELETE", f"{APPS}/app-1"), self.calls)
+        deletes = [path for method, path in self.calls if method == "DELETE"]
+        self.assertLess(deletes.index(f"{APPS}/app-1"), deletes.index("/api/bkn-backend/v1/knowledge-networks/network-owned"))
         self.assertFalse(any(path.startswith(f"{APPS}/app-1/") for _, path in self.calls))
         self.assertNotIn("workshopApps", record)
 

@@ -25,6 +25,6 @@ Object types and actions are referenced by ID; they are the same in every instal
 - Packages carry the `workshop/` folder and declare the capability `sample.workshop-apps`. A sample service without it rejects the package before downloading.
 - After the platform checks pass, the installer creates each app on the sample's network with the file as its draft, and publishes it, so its pages open from the app list. The created app IDs are kept in the installation record (`workshopApps`), written after every change.
 - Installing again, or retrying a failed installation, first deletes the recorded apps and any app of the same name on the sample's network, then creates them again.
-- Uninstalling deletes the recorded apps with the sample's functions and Skills.
+- Uninstalling deletes the recorded apps first, before the knowledge network they are built on.
 - The installer needs the installing administrator to be allowed to create Workshop apps.
 - Workshop is part of the professional edition. On a platform without it, every Workshop route answers 404, and the installer then installs the sample without its apps; diagnostics record the skipped step.
