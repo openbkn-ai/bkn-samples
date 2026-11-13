@@ -1,0 +1,305 @@
+apiVersion: workshop.openbkn.ai/v1
+app:
+  name: Machine Scheduling
+  description: 'For production leads: schedule March operations and maintenance work orders by machine, see work order kit, machine capability, operator qualification and shift, and changeover checks, then drag to replan and apply.'
+dependencies:
+  knowledgeNetwork:
+    id: manufacturing_industry_en_us
+    name: End-to-End Manufacturing Operations Sample
+sources:
+- id: scheduleTask1
+  label: Manufacturing Operation
+  objectType: manufacturing_operations
+  key: operation_id
+  operations:
+  - id: adjust
+    label: Adjust schedule
+    params:
+    - name: start
+      label: Start
+      type: date
+    - name: end
+      label: End
+      type: date
+    - name: resource
+      label: Resource
+      type: text
+    effects:
+    - field: planned_start_date
+      kind: set
+      param: start
+    - field: planned_end_date
+      kind: set
+      param: end
+    - field: planned_machine_id
+      kind: set
+      param: resource
+    action:
+      id: manufacturing_industry_en_us_adjust_operation_schedule
+      params: {}
+  follows:
+  - id: afterPredecessors
+    field: planned_start_date
+    from: scheduleTask1
+    path:
+    - ~manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+    fromField: planned_end_date
+    gapDays: 1
+    keepDuration: planned_end_date
+- id: scheduleTask2
+  label: Maintenance Work Order
+  objectType: maintenance_work_orders
+  key: maintenance_work_order_id
+  operations:
+  - id: adjust
+    label: Adjust schedule
+    params:
+    - name: start
+      label: Start
+      type: date
+    - name: end
+      label: End
+      type: date
+    - name: resource
+      label: Resource
+      type: text
+    effects:
+    - field: planned_start_date
+      kind: set
+      param: start
+    - field: planned_end_date
+      kind: set
+      param: end
+    - field: machine_id
+      kind: set
+      param: resource
+    action:
+      id: manufacturing_industry_en_us_adjust_maintenance_work_order
+      params: {}
+- id: scheduleResource
+  label: Production Machine
+  objectType: production_machines
+  key: machine_id
+  computed:
+  - name: groupName
+    label: Work Center
+    kind: related
+    path:
+    - production_machines_work_center_id_to_work_centers
+    aggregate: one
+    field: work_center_name
+    type: text
+variables:
+- name: asOf
+  label: Base date
+  kind: asOf
+  default: '2027-02-18'
+pages:
+- id: scheduleResources
+  title: Machine Schedule
+  layout:
+    type: free
+    columns: 2
+    sidePosition: left
+    sideWidth: 300
+    asideWidth: 0
+    gap: normal
+  regions:
+    cells:
+    - id: scheduleBar
+      type: scenarioBar
+      frame:
+        x: 0
+        y: 0
+        w: 7
+        h: 3
+      config:
+        title: Scenario
+        style: compact
+    - id: scheduleAsOf
+      type: asOfSlider
+      frame:
+        x: 7
+        y: 0
+        w: 5
+        h: 3
+      config:
+        title: Base date
+        source: scheduleTask1
+        rangeField: planned_start_date
+        step: day
+        writes: asOf
+    - id: scheduleGantt
+      type: scheduleGantt
+      frame:
+        x: 0
+        y: 3
+        w: 8
+        h: 16
+      config:
+        title: Schedule by machine
+        source: scheduleResource
+        titleField: machine_name
+        groupField: groupName
+        layers:
+        - label: Manufacturing Operation
+          style: standard
+          source: scheduleTask1
+          resourceField: planned_machine_id
+          startField: planned_start_date
+          endField: planned_end_date
+          barFields:
+          - operation_name
+          popoverFields:
+          - status
+          color: static
+          tone: info
+          exclusive: true
+          adjust: adjust
+          snap: day
+          targetFrom:
+          - objectType: production_orders
+            path:
+            - manufacturing_operations_production_order_id_to_production_orders
+            field: due_date
+          doneWhen:
+          - field: status
+            op: eq
+            value: completed
+          predecessorPath:
+          - manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+          predecessorReaches: predecessors
+          ruleTools:
+          - name: Changeover
+            tool:
+              boxName: Manufacturing_Schedule_Rules
+              toolName: Changeover
+          - name: Operator_Qualification_And_Shift
+            tool:
+              boxName: Manufacturing_Schedule_Rules
+              toolName: Operator_Qualification_And_Shift
+          - name: Machine_Capability
+            tool:
+              boxName: Manufacturing_Schedule_Rules
+              toolName: Machine_Capability
+          - name: Work_Order_Kit
+            tool:
+              boxName: Manufacturing_Schedule_Rules
+              toolName: Work_Order_Kit
+        - label: Maintenance Work Order
+          style: standard
+          source: scheduleTask2
+          resourceField: machine_id
+          startField: planned_start_date
+          endField: planned_end_date
+          barFields:
+          - maintenance_work_order_id
+          popoverFields:
+          - status
+          color: static
+          tone: success
+          exclusive: true
+          adjust: adjust
+          snap: day
+          targetField: planned_date
+          doneWhen:
+          - field: status
+            op: eq
+            value: completed
+        daysBefore: 7
+        daysAfter: 28
+        tick: auto
+        timeZone: local
+    - id: scheduleEdits
+      type: scenarioBar
+      frame:
+        x: 8
+        y: 3
+        w: 4
+        h: 16
+      config:
+        title: Scenario changes
+        style: assumptions
+theme:
+  name: default
+  mode: light
+  colorPrimary: '#255db0'
+  colorAccent: '#6d4fc2'
+  colorBg: '#f3f5f8'
+  colorSurface: '#ffffff'
+  colorSurfaceAlt: '#f8fafc'
+  colorBorder: '#dfe5ec'
+  colorText: '#203043'
+  colorTextMuted: '#607086'
+  colorSuccess: '#267257'
+  colorWarning: '#9b4e12'
+  colorDanger: '#b42318'
+  colorInfo: '#1f6f9f'
+  chartPalette:
+  - '#255db0'
+  - '#e0883a'
+  - '#2f9e77'
+  - '#d0453a'
+  - '#6d4fc2'
+  - '#3a9fc0'
+  - '#8a97a8'
+  fontFamily: '"Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif'
+  fontSize: 13
+  radius: 8
+  shadow: subtle
+  density: comfortable
+scheduleModel:
+  result: self
+  tasks:
+  - objectType: manufacturing_operations
+    assignField: planned_machine_id
+    start: planned_start_date
+    end: planned_end_date
+    status: status
+    doneWhen:
+    - field: status
+      op: eq
+      value: completed
+    target:
+      path:
+      - manufacturing_operations_production_order_id_to_production_orders
+      field: due_date
+    predecessors:
+      path:
+      - manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+    modify:
+      action: manufacturing_industry_en_us_adjust_operation_schedule
+    rules:
+    - name: Changeover
+      tool:
+        boxName: Manufacturing_Schedule_Rules
+        toolName: Changeover
+    - name: Operator_Qualification_And_Shift
+      tool:
+        boxName: Manufacturing_Schedule_Rules
+        toolName: Operator_Qualification_And_Shift
+    - name: Machine_Capability
+      tool:
+        boxName: Manufacturing_Schedule_Rules
+        toolName: Machine_Capability
+    - name: Work_Order_Kit
+      tool:
+        boxName: Manufacturing_Schedule_Rules
+        toolName: Work_Order_Kit
+  - objectType: maintenance_work_orders
+    assignField: machine_id
+    start: planned_start_date
+    end: planned_end_date
+    status: status
+    doneWhen:
+    - field: status
+      op: eq
+      value: completed
+    target:
+      field: planned_date
+    modify:
+      action: manufacturing_industry_en_us_adjust_maintenance_work_order
+  resource:
+    objectType: production_machines
+    titleField: machine_name
+    groupField: work_center_id
