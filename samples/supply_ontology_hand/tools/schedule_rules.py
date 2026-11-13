@@ -5,7 +5,9 @@ The rule-tool contract: input ``{tasks: [{key, start, end, resource, values}], s
 severity, text, related, at?, counts?, detail?}]}``. The kit check also answers a detail call for one
 task, ``{mode: "detail", task, scenario, locale, query: {group?, keyOnly?, search?, offset, limit}}``,
 with a paged table of the plan's short materials. Both check the tasks against the network's other
-active plans (with the scenario's edits of those plans applied), so they agree with each other.
+active plans with the scenario's changes (moves, cancellations and the plans it makes for demands). A task
+that is not one of those plans, such as the plan an unscheduled demand would make, is checked on its own on top
+of them, so a batch answer and the task's detail always agree.
 
 The Functions read the facts they need through ``sandbox_sdk.bkn``; anything they cannot check raises,
 so the caller marks the tasks "not checked" instead of passing them.
@@ -18,7 +20,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from fn import DEFAULT_BUSINESS_DATE
-from fn.kitrules import CANCELLED, _labels, analyse, check_tasks, demands_of, kit_detail, kit_rule, line_rule, overlay, record, task_fields
+from fn.kitrules import CANCELLED, SCHEDULED, _labels, assess, check_tasks, demands_of, kit_detail, kit_rule, line_rule, overlay, record, task_fields
 from fn.read_complete import read_complete
 from managed_execution import KN_ID, _in, _page_rows, load_bkn_rows
 
@@ -29,6 +31,8 @@ OT_PLAN = f"{KN_ID}_kitplan"
 OT_PRODUCT = f"{KN_ID}_product"
 OT_WORK = f"{KN_ID}_mps"
 PLAN_FIELDS = ("bill_no", "product_code", "line_code", "planned_start", "planned_finish", "plan_status")
+# A scenario's edit names the operation's parameters; the app's operations take these and set the plan fields.
+OPERATION_FIELDS = {"start": "planned_start", "end": "planned_finish", "resource": "line_code"}
 CHUNK = 500
 PAGE = 10_000
 # Only the fields the checks use, each with the object's primary key.
@@ -118,20 +122,47 @@ def kit_check(tasks: Any, query: Callable[..., Mapping[str, Any]], *, scenario: 
                                 others=others)}
 
 
-def _active_plans(read, scenario: Any) -> list[dict[str, Any]]:
-    """The network's active plans as tasks, with the scenario's edits of those plans applied."""
-    edits = {}
+def _edits(scenario: Any) -> list[tuple[str, str, dict[str, Any]]]:
+    """``(source, key, plan fields)`` for each edit of a scenario, its parameters named as plan fields."""
+    out = []
     for edit in (scenario or {}).get("edits") or [] if isinstance(scenario, Mapping) else []:
         params = edit.get("params") if isinstance(edit, Mapping) else None
         if isinstance(params, Mapping) and edit.get("key"):
-            edits.setdefault(str(edit["key"]), {}).update({k: v for k, v in params.items() if k in PLAN_FIELDS})
+            fields = {OPERATION_FIELDS.get(k, k): v for k, v in params.items()}
+            out.append((str(edit.get("source") or ""), str(edit["key"]),
+                        {k: v for k, v in fields.items() if k in PLAN_FIELDS}))
+    return out
+
+
+def _active_plans(read, scenario: Any) -> list[dict[str, Any]]:
+    """The plans every check works with: the network's active plans with the scenario's changes applied, and
+    the plans the scenario makes for demands (keyed as the page keys them, ``+<source>/<demand key>``)."""
+    edits, made = {}, {}
+    plans = list(read(OT_PLAN))
+    known = {str(p.get("plan_id") or "") for p in plans}
+    for source, key, fields in _edits(scenario):
+        if key in known:
+            edits.setdefault(key, {}).update(fields)
+        else:
+            made.setdefault((source, key), {}).update(fields)
     tasks = []
-    for plan in read(OT_PLAN):
+    for plan in plans:
         key = str(plan.get("plan_id") or "")
         values = {**plan, **edits.get(key, {})}
         if key and values.get("plan_status") != CANCELLED:
             tasks.append({"key": key, "start": values.get("planned_start"), "end": values.get("planned_finish"),
                           "resource": values.get("line_code"), "values": values})
+    if made:
+        demands = {str(r.get("id")): r for r in read(OT_FORECAST, "id", sorted(k for _s, k in made))}
+        for (source, key), fields in made.items():
+            demand = demands.get(key)
+            if demand is None or not fields.get("planned_start"):
+                continue
+            values = {"bill_no": demand.get("billno"), "product_code": demand.get("material_number"),
+                      "plan_status": SCHEDULED, **fields}
+            if values.get("plan_status") != CANCELLED:
+                tasks.append({"key": f"+{source}/{key}", "start": values.get("planned_start"),
+                              "end": values.get("planned_finish"), "resource": values.get("line_code"), "values": values})
     return tasks
 
 
@@ -140,9 +171,9 @@ def kit_record(task: Mapping[str, Any], query: Callable[..., Mapping[str, Any]],
     """The kit result a plan records when it is written: the same analysis as the check, with the network's
     other active plans, so what is stored is what the schedule Gantt shows for it."""
     read = _reader(query)
-    plans = overlay(_active_plans(read, None), [task])
-    rows, materials = _facts(read, query, plans, business_date)
-    return record(analyse(plans, rows, materials=materials, business_date=business_date)[str(task["key"])], materials)
+    others = _active_plans(read, None)
+    rows, materials = _facts(read, query, overlay(others, [task]), business_date)
+    return record(assess(others, [task], rows, materials=materials, business_date=business_date)[str(task["key"])], materials)
 
 
 def kit_check_detail(task: Any, query: Callable[..., Mapping[str, Any]], *, scenario: Any = None, locale: str | None = None,

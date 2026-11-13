@@ -51,3 +51,18 @@ def test_two_hundred_plans_and_one_detail_compute_fast():
     started = time.perf_counter()
     assert kit_detail(plans()[-2], plans(), rows, materials=materials, query={"limit": 50})["title"]
     assert time.perf_counter() - started < 3
+
+
+def test_the_demand_view_batch_checks_every_open_demand_quickly():
+    """The demand view sends the plans and, for every open demand without one, the plan it would make: each of
+    those is checked alone on top of the plans, which reuses the facts prepared once."""
+    rows = {**csv_rows(), "forecast": list(csv.DictReader((DATA / "erp_mds_forecast.csv").open(encoding="utf-8"))),
+            "work_order": list(csv.DictReader((DATA / "erp_production_work_order.csv").open(encoding="utf-8")))}
+    materials = {r["material_code"]: r for r in csv.DictReader((DATA / "erp_material.csv").open(encoding="utf-8"))}
+    proposals = [{"key": f"+demand/{r['id']}", "start": "2027-04-01", "resource": None,
+                  "values": {"bill_no": r["billno"], "product_code": r["material_number"], "plan_status": "已排"}}
+                 for r in rows["forecast"] if r["closestatus_title"] == "正常"][:187]
+    started = time.perf_counter()
+    assert len(kit_rule(plans() + proposals, rows, materials=materials, others=plans())) == len(plans()) + len(proposals)
+    assert time.perf_counter() - started < 3
+

@@ -29,17 +29,25 @@ sources:
     label: 计划资源
     kind: matched
     source: schedulePlan
-    pairs:
+    pairs: &id001
     - field: billno
       other: bill_no
     - field: material_number
       other: product_code
-    where:
+    where: &id002
     - field: plan_status
       op: ne
       value: 已取消
     field: line_code
     type: text
+  - kind: matched
+    source: schedulePlan
+    pairs: *id001
+    where: *id002
+    type: text
+    name: planKit
+    label: 计划齐套状态
+    field: kit_status
   - name: planStart
     label: 计划开始
     kind: matched
@@ -198,6 +206,30 @@ sources:
         planner:
           from: context
           name: user
+  computed:
+  - name: productName
+    label: 产品名称
+    kind: matched
+    source: scheduleTask1
+    pairs:
+    - field: bill_no
+      other: billno
+    - field: product_code
+      other: material_number
+    field: material_name
+    type: text
+  - name: planScope
+    label: 计划范围
+    kind: classify
+    cases:
+    - when:
+      - field: product_code
+        op: isEmpty
+      value: 整单
+      tone: info
+    otherwise:
+      value: 单个产品
+      tone: neutral
 - id: schedulePlanActive
   label: 有效齐套排产计划
   objectType: supply_ontology_hand_kitplan
@@ -277,9 +309,14 @@ pages:
           startField: planStart
           endField: planEnd
           barFields:
+          - planKit
           - planResource
           popoverFields:
           - planned
+          - planKit
+          - planResource
+          - planStart
+          - planEnd
           - planCount
           color: static
           tone: success
@@ -340,7 +377,7 @@ pages:
       frame:
         x: 0
         y: 3
-        w: 8
+        w: 12
         h: 16
       config:
         title: 排程（按产线）
@@ -356,10 +393,18 @@ pages:
           startField: planned_start
           endField: planned_finish
           barFields:
+          - productName
           - bill_no
-          - product_code
           popoverFields:
+          - planScope
+          - product_code
           - plan_status
+          - kit_status
+          - kit_date
+          - key_material
+          - shortage_note
+          - planner
+          - source_scenario
           color: static
           tone: info
           exclusive: true
@@ -397,10 +442,10 @@ pages:
     - id: scheduleEdits
       type: scenarioBar
       frame:
-        x: 8
-        y: 3
-        w: 4
-        h: 16
+        x: 0
+        y: 19
+        w: 12
+        h: 6
       config:
         title: 方案改动
         style: assumptions

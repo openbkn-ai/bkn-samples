@@ -46,7 +46,8 @@ def rule_result(plans, plan_id):
     """What the schedule Gantt's kit check says about one plan, among all the given plans."""
     rows, materials = facts()
     tasks = [as_task(p) for p in plans]
-    return next(r for r in kit_rule(tasks, rows, materials=materials, business_date=DEFAULT_BUSINESS_DATE) if r["key"] == plan_id)
+    return next(r for r in kit_rule(tasks, rows, materials=materials, business_date=DEFAULT_BUSINESS_DATE, others=tasks)
+                if r["key"] == plan_id)
 
 
 def assert_record_matches_rule(plan, rule):
