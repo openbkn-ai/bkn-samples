@@ -1,9 +1,10 @@
-"""Machine scheduling on the platform: the two scheduled objects on datasets, one toolbox, mounted rules, two actions.
+"""Machine scheduling on the platform: the two scheduled objects on datasets, two toolboxes, mounted rules, two actions.
 
 - Operations and maintenance work orders are what the scheduler changes, so their object types read
   datasets in the sample's catalog (the only writable source), loaded from the package's CSV.
-- One toolbox holds four rule functions (工单齐套, 设备能力, 人员资质与班次, 换型提示; Workshop
-  schedule rule tools) and the two adjust functions.
+- The rules toolbox holds the four rule functions (工单齐套, 设备能力, 人员资质与班次, 换型提示; Workshop
+  schedule rule tools); the adjustments toolbox holds the two adjust functions behind the actions. Toolboxes
+  and functions carry display names in the sample's language.
 - The rule functions change nothing, so they are mounted on the network as functions (Q&A and Skills
   call them with execute_tool, the same code as the Gantt); only what changes objects is an action:
   "调整工序排程" / "调整维修工单", modify actions on their object types, inputs named like the fields.
@@ -129,9 +130,26 @@ def action_definitions(kn_id: str, box_id: str, tool_ids: dict[str, str], zh: bo
     return actions
 
 
-def box_name() -> str:
-    sample = json.loads((ROOT / "sample.yaml").read_text(encoding="utf-8"))["metadata"]["name"]
-    return "MANUFACTURING_" + sample.rsplit("industry-", 1)[1].replace("-", "_") + "_Schedule"
+# toolbox -> ((en name, zh name), (en description, zh description), operations); names: Chinese, letters, digits, underscores only
+BOXES = {
+    "rules": (("Manufacturing_Schedule_Rules", "制造业排程规则"), (
+        "Rule functions of the manufacturing sample's machine schedule, mounted on the network: work order kit, machine capability, "
+        "operator qualification and shift, changeover.",
+        "制造业样例机台排程的规则函数，直接挂载在知识网络上：工单齐套、设备能力、人员资质与班次、换型提示。"), RULES),
+    "adjust": (("Manufacturing_Schedule_Adjustments", "制造业排程调整"), (
+        "Functions behind the manufacturing sample's two adjust actions: adjust operation schedule, adjust maintenance work order.",
+        "制造业样例两个调整行动的执行函数：调整工序排程、调整维修工单。"), ADJUST),
+}
+
+
+def box_name(box: str, zh: bool | None = None) -> str:
+    return BOXES[box][0][1 if (is_zh() if zh is None else zh) else 0]
+
+
+def tool_name(operation: str, zh: bool) -> str:
+    """Toolbox and tool names accept only Chinese, letters, digits and underscores: "Work order kit" -> "Work_Order_Kit"."""
+    names = CATALOG[operation][0]
+    return names[1] if zh else "_".join(word.capitalize() for word in names[0].split())
 
 
 # --- datasets of the two scheduled objects ------------------------------------------------------------
@@ -195,34 +213,34 @@ def datasets(cli: Callable[..., Any], kn_id: str, catalog_id: str, apply: bool) 
 
 
 # --- toolbox, functions, actions ------------------------------------------------------------------------
-def run(cli: Callable[..., Any], kn_id: str, *, apply: bool, catalog_id: str) -> dict[str, Any]:
-    zh = is_zh()
-    bound = datasets(cli, kn_id, catalog_id, apply)
-    name = box_name()
+def _toolbox(cli: Callable[..., Any], box: str, zh: bool, apply: bool) -> dict[str, Any]:
+    name = box_name(box, zh)
     boxes = cli("toolbox", "list", "--keyword", name, "--limit", "100")
     boxes = [b for b in (boxes.get("data") or boxes.get("entries") or []) if b.get("box_name") == name]
     if len(boxes) > 1:
-        raise ValueError("ambiguous owned toolbox")
-    if not boxes:
-        if not apply:
-            raise ValueError("missing owned toolbox")
-        box = cli("call", API + "/tool-box", "-X", "POST", "-d", json.dumps({
-            "box_name": name, "box_desc": "Machine scheduling rules and adjustments of the manufacturing sample",
-            "box_category": "data_process", "metadata_type": "function", "source": "custom"}))
-        remember("toolboxes", box["box_id"])
-    else:
-        box = boxes[0]
-        require_owned("toolboxes", box["box_id"])
-    bid = box["box_id"]
+        raise ValueError("ambiguous owned toolbox " + name)
+    if boxes:
+        require_owned("toolboxes", boxes[0]["box_id"])
+        return boxes[0]
+    if not apply:
+        raise ValueError("missing owned toolbox " + name)
+    created = cli("call", API + "/tool-box", "-X", "POST", "-d", json.dumps({
+        "box_name": name, "box_desc": BOXES[box][1][1 if zh else 0],
+        "box_category": "data_process", "metadata_type": "function", "source": "custom"}, ensure_ascii=False))
+    remember("toolboxes", created["box_id"])
+    return created
+
+
+def _functions(cli: Callable[..., Any], kn_id: str, bid: str, operations: tuple[str, ...], zh: bool, apply: bool,
+               tool_ids: dict[str, str], hashes: dict[str, str]) -> None:
     listed = cli("tool", "list", "--toolbox", bid, "--all")
     tools = listed.get("tools") or listed.get("data") or listed.get("entries") or []
-    tool_ids, hashes = {}, {}
-    for op in OPERATIONS:
+    for op in operations:
         code = build(op, kn_id)
         hashes[op] = hashlib.sha256(code.encode()).hexdigest()
-        (names, descriptions) = CATALOG[op]
-        found = next((t for t in tools if t.get("name") == op), None)
-        body = {"name": op, "description": descriptions[1 if zh else 0], "script_type": "python", "code": code,
+        name = tool_name(op, zh)
+        found = next((t for t in tools if t.get("name") == name), None)
+        body = {"name": name, "description": CATALOG[op][1][1 if zh else 0], "script_type": "python", "code": code,
                 "inputs": tool_inputs(op, zh),
                 "outputs": [{"name": "result", "type": "object", "required": True,
                              "description": "results per task, a detail table, or the changed row"}]}
@@ -230,26 +248,39 @@ def run(cli: Callable[..., Any], kn_id: str, *, apply: bool, catalog_id: str) ->
             if found:
                 tid = found["tool_id"]
                 cli("call", f"{API}/tool-box/{bid}/tool/{tid}", "-X", "POST", "-d", json.dumps(
-                    {"name": op, "description": body["description"], "metadata_type": "function", "function_input": body}, ensure_ascii=False))
+                    {"name": name, "description": body["description"], "metadata_type": "function", "function_input": body}, ensure_ascii=False))
             else:
                 tid = cli("call", f"{API}/tool-box/{bid}/tool", "-X", "POST", "-d", json.dumps(
                     {"metadata_type": "function", "function_input": body}, ensure_ascii=False))["success_ids"][0]
             cli("tool", "enable", "--toolbox", bid, tid)
         else:
             if not found:
-                raise ValueError("missing function " + op)
+                raise ValueError("missing function " + name)
             tid = found["tool_id"]
             saved = (cli("tool", "get", "--toolbox", bid, tid).get("metadata") or {}).get("function_content", {}).get("code")
             if saved != code:
-                raise ValueError("published source differs " + op)
+                raise ValueError("published source differs " + name)
         tool_ids[op] = tid
-    actions = action_definitions(kn_id, bid, tool_ids, zh)
+
+
+# --- toolboxes, functions, actions ----------------------------------------------------------------------
+def run(cli: Callable[..., Any], kn_id: str, *, apply: bool, catalog_id: str) -> dict[str, Any]:
+    zh = is_zh()
+    bound = datasets(cli, kn_id, catalog_id, apply)
+    tool_ids: dict[str, str] = {}
+    hashes: dict[str, str] = {}
+    box_ids = {}
+    for box, (_names, _descriptions, operations) in BOXES.items():
+        found = _toolbox(cli, box, zh, apply)
+        box_ids[box] = found["box_id"]
+        _functions(cli, kn_id, found["box_id"], operations, zh, apply, tool_ids, hashes)
+        if apply and found.get("status") != "published":
+            cli("toolbox", "publish", found["box_id"])
+    actions = action_definitions(kn_id, box_ids["adjust"], tool_ids, zh)
     rules = [tool_ids[op] for op in RULES]
     if apply:
-        if box.get("status") != "published":
-            cli("toolbox", "publish", bid)
         # The rule functions change nothing: mounted on the network as functions (binding twice is a no-op).
-        cli("bkn", "capability", "attach", kn_id, "--box", bid, "--tool", ",".join(rules))
+        cli("bkn", "capability", "attach", kn_id, "--box", box_ids["rules"], "--tool", ",".join(rules))
         # The adjust functions change objects: modify actions; overwrite keeps a repeated install idempotent.
         cli("call", f"{BKN_API}/knowledge-networks/{kn_id}/action-types?import_mode=overwrite", "-X", "POST", "-d",
             json.dumps({"entries": actions}, ensure_ascii=False))
@@ -261,12 +292,12 @@ def run(cli: Callable[..., Any], kn_id: str, *, apply: bool, catalog_id: str) ->
             raise ValueError("rule function not mounted: " + ", ".join(op for op in RULES if tool_ids[op] not in mounted))
         listed = cli("bkn", "action-type", "list", kn_id)
         listed = listed if isinstance(listed, list) else (listed.get("entries") or listed.get("data") or [])
-        present = {(a.get("id"), (a.get("action_source") or {}).get("tool_id")) for a in listed}
-        missing = [a["id"] for a in actions if (a["id"], a["action_source"]["tool_id"]) not in present]
+        present = {(a.get("id"), (a.get("action_source") or {}).get("box_id"), (a.get("action_source") or {}).get("tool_id")) for a in listed}
+        missing = [a["id"] for a in actions if (a["id"], a["action_source"]["box_id"], a["action_source"]["tool_id"]) not in present]
         if missing:
             raise ValueError("missing action " + ", ".join(missing))
-    return {"datasets": bound, "toolbox_id": bid, "tool_ids": tool_ids, "action_ids": [a["id"] for a in actions],
+    return {"datasets": bound, "toolbox_ids": box_ids, "tool_ids": tool_ids, "action_ids": [a["id"] for a in actions],
             "mounted_tool_ids": rules, "source_sha256": hashes}
 
 
-__all__ = ["ADJUST", "CATALOG", "OPERATIONS", "RULES", "action_definitions", "box_name", "dataset_rows", "run", "tool_inputs"]
+__all__ = ["ADJUST", "BOXES", "CATALOG", "OPERATIONS", "RULES", "action_definitions", "box_name", "dataset_rows", "run", "tool_inputs", "tool_name"]

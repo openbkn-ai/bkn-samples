@@ -13,18 +13,18 @@ Business object in the end-to-end manufacturing sample.
 
 | Name | Display Name | Type | Description | Mapped Field |
 |---|---|---|---|---|
-| operation_id | operation_id | string | Stable business identifier or business attribute. | operation_id |
-| production_order_id | production_order_id | string | Stable business identifier or business attribute. | production_order_id |
-| routing_operation_id | routing_operation_id | string | Stable business identifier or business attribute. | routing_operation_id |
-| work_center_id | work_center_id | string | Stable business identifier or business attribute. | work_center_id |
-| operation_name | operation_name | string | Stable business identifier or business attribute. | operation_name |
-| sequence_number | sequence_number | integer | Stable business identifier or business attribute. | sequence_number |
-| status | status | string | Stable business identifier or business attribute. | status |
-| planned_machine_id | planned_machine_id | string | Planned machine: the machine (production_machines.machine_id) the schedule puts this operation on; for completed operations the machine of the execution record. | planned_machine_id |
-| planned_start_date | planned_start_date | date | Planned start day YYYY-MM-DD (inclusive); for completed operations the execution start date. | planned_start_date |
-| planned_end_date | planned_end_date | date | Planned end day YYYY-MM-DD (inclusive); for completed operations the execution completion date. | planned_end_date |
-| standard_duration_days | standard_duration_days | integer | Standard duration in days, 2 from the execution history. | standard_duration_days |
-| predecessor_operation_id | predecessor_operation_id | string | Predecessor: the operation one sequence step earlier in the same work order; empty for the first operation. | predecessor_operation_id |
+| operation_id | Operation ID | string | Stable business identifier or business attribute. | operation_id |
+| production_order_id | Production Order ID | string | Stable business identifier or business attribute. | production_order_id |
+| routing_operation_id | Routing Operation ID | string | Stable business identifier or business attribute. | routing_operation_id |
+| work_center_id | Work Center ID | string | Stable business identifier or business attribute. | work_center_id |
+| operation_name | Operation Name | string | Stable business identifier or business attribute. | operation_name |
+| sequence_number | Sequence Number | integer | Stable business identifier or business attribute. | sequence_number |
+| status | Status | string | Stable business identifier or business attribute. | status |
+| planned_machine_id | Planned Machine | string | Planned machine: the machine (production_machines.machine_id) the schedule puts this operation on; for completed operations the machine of the execution record. | planned_machine_id |
+| planned_start_date | Planned Start Date | date | Planned start day YYYY-MM-DD (inclusive); for completed operations the execution start date. | planned_start_date |
+| planned_end_date | Planned End Date | date | Planned end day YYYY-MM-DD (inclusive); for completed operations the execution completion date. | planned_end_date |
+| standard_duration_days | Standard Duration (Days) | integer | Standard duration in days, 2 from the execution history. | standard_duration_days |
+| predecessor_operation_id | Predecessor Operation | string | Predecessor: the operation one sequence step earlier in the same work order; empty for the first operation. | predecessor_operation_id |
 
 ### Keys
 

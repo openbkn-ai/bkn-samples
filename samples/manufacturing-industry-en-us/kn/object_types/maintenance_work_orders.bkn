@@ -13,13 +13,13 @@ Business object in the end-to-end manufacturing sample.
 
 | Name | Display Name | Type | Description | Mapped Field |
 |---|---|---|---|---|
-| maintenance_work_order_id | maintenance_work_order_id | string | Stable business identifier or business attribute. | maintenance_work_order_id |
-| maintenance_plan_id | maintenance_plan_id | string | Stable business identifier or business attribute. | maintenance_plan_id |
-| machine_id | machine_id | string | Stable business identifier or business attribute. | machine_id |
-| planned_date | planned_date | date | Stable business identifier or business attribute. | planned_date |
-| status | status | string | Stable business identifier or business attribute. | status |
-| planned_start_date | planned_start_date | date | Planned start day YYYY-MM-DD (inclusive), the first day the service occupies the machine; overdue services are caught up on 2027-03-01. planned_date stays the due date. | planned_start_date |
-| planned_end_date | planned_end_date | date | Planned end day YYYY-MM-DD (inclusive), the last day the service occupies the machine. | planned_end_date |
+| maintenance_work_order_id | Maintenance Work Order ID | string | Stable business identifier or business attribute. | maintenance_work_order_id |
+| maintenance_plan_id | Maintenance Plan ID | string | Stable business identifier or business attribute. | maintenance_plan_id |
+| machine_id | Machine ID | string | Stable business identifier or business attribute. | machine_id |
+| planned_date | Due Date | date | Stable business identifier or business attribute. | planned_date |
+| status | Status | string | Stable business identifier or business attribute. | status |
+| planned_start_date | Planned Start Date | date | Planned start day YYYY-MM-DD (inclusive), the first day the service occupies the machine; overdue services are caught up on 2027-03-01. planned_date stays the due date. | planned_start_date |
+| planned_end_date | Planned End Date | date | Planned end day YYYY-MM-DD (inclusive), the last day the service occupies the machine. | planned_end_date |
 
 ### Keys
 
