@@ -262,3 +262,12 @@ def test_other_reader_errors_are_not_hidden():
 def test_a_date_outside_the_business_year_shows_its_year():
     from fn.kitrules import _short
     assert (_short("2027-03-10"), _short("2028-03-23")) == ("3/10", "2028/3/23")
+
+
+def test_descriptions_shown_to_business_users_carry_no_calling_details():
+    import re
+    from function_catalog import KIT_PLAN_ACTIONS, KIT_SCHEDULE, RULE_USE, SCHEDULE_RULES
+    texts = [KIT_SCHEDULE["description"], RULE_USE, *[s["description"] for s in SCHEDULE_RULES.values()],
+             *[comment for _name, _kind, comment in KIT_PLAN_ACTIONS.values()]]
+    for text in texts:
+        assert not re.search(r"mode=|object_input|_instance|execute_|get_action|\btasks?\b", text), text

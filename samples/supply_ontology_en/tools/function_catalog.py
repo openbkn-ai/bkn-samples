@@ -51,39 +51,39 @@ FUNCTION_CATALOG = {
 KIT_SCHEDULE = {
     "name": "Kit_Schedule",
     "operation": "kit_schedule",
-    "description": "Schedules a forecast (whole bill) or one product on a line, kit-checks the planned start and writes "
-                   "a kit schedule plan without changing the forecast. An active plan for the same forecast and product is "
-                   "updated; status Cancelled cancels it.",
-    "use_rule": "Run only through the three kit schedule plan actions: create (new instance; object_input carries bill_no, "
-                "product_code [empty string for the whole bill], line_code, planned_start, planned_finish, plan_status [usually Scheduled], "
-                "source_scenario, planner), adjust (modify the selected plan: new line, start, finish, scenario, planner) and cancel "
-                "(modify the selected plan: planner). Use Cypher on the kit schedule plan to look up scheduled plans and kit results.",
+    "description": "Schedules a forecast (whole bill) or one product on a line, checks materials for the planned start and "
+                   "records it in a kit schedule plan without changing the forecast. Scheduling the same bill and product "
+                   "again updates its plan.",
+    # Agents reach it only through the three plan actions; their inputs are described on each parameter.
+    "use_rule": "Used by the create, adjust and cancel kit schedule plan actions, not on its own; look up scheduled plans "
+                "and kit results with a knowledge network query.",
 }
-RULE_USE = ("Schedule Gantt rule tool, mounted (execute_tool in Q&A): tasks (key, start, resource, values: bill_no, "
-            "product_code, line_code, planned_start, plan_status), at most 200; returns pass, severity, text, related. "
-            "Kit_Check with mode=detail, task, query lists a plan's shortages.")
+# Calling details (tasks, detail mode, paging) are on the tool parameters; this text is shown to business users.
+RULE_USE = "Used by the schedule Gantt to check plans, and in Q&A to check scheduled plans; at most 200 plans per check."
 SCHEDULE_RULES = {
     "kit_check_rule": {
         "name": "Kit_Check",
-        "description": "Checks whether plans are kitted at their planned start: backlog first, then confirmed and scheduled "
-                       "plans in start order share stock and on-time purchases. Names the key shortage and its arrival; "
-                       "mode=detail with one task returns its shortage table.",
+        "description": "Checks materials at each plan's start: backlog first, then confirmed and scheduled plans in start "
+                       "order share stock and on-time purchases. Names the key shortage and its arrival; a plan starting too "
+                       "early cannot be adopted.",
         "use_rule": RULE_USE,
     },
     "line_check_rule": {
         "name": "Line_Can_Build",
-        "description": "Checks that each plan's line can build its products: each product's product line must be one of the line's "
-                       "product lines, every product of a whole bill included; a plant or unknown line fails. Failures are hard.",
+        "description": "Checks that a plan's line can build its products: each product's product line must be one of the "
+                       "line's product lines, every product of a whole bill included. A plant or unknown line fails, and "
+                       "such a plan cannot be adopted.",
         "use_rule": RULE_USE,
     },
 }
 KIT_PLAN_ACTIONS = {
     "create": ("Create Kit Schedule Plan", "add",
-               "Schedule: create a kit schedule plan for a forecast (whole bill) or one of its products and record the kit check "
-               "of the planned start. If the forecast + product already has an active plan, that plan is updated instead."),
+               "Creates a kit schedule plan for a demand forecast (whole bill) or one of its products and records the "
+               "kit result for its planned start. If that bill and product already have an active plan, it is updated instead."),
     "adjust": ("Adjust Kit Schedule Plan", "modify",
-               "Reschedule or move the selected plan to another line and kit-check it again; moving the finish adds a reschedule."),
-    "cancel": ("Cancel Kit Schedule Plan", "modify", "Set the selected plan to Cancelled; the demand can be scheduled again."),
+               "Moves the selected plan to another line, start or finish and checks its materials again; a new finish "
+               "counts as a reschedule."),
+    "cancel": ("Cancel Kit Schedule Plan", "modify", "Cancels the selected plan; the bill can then be scheduled again."),
 }
 
 

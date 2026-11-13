@@ -14,6 +14,7 @@ so the caller marks the tasks "not checked" instead of passing them.
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from fn import DEFAULT_BUSINESS_DATE
@@ -29,6 +30,13 @@ OT_PRODUCT = f"{KN_ID}_product"
 OT_WORK = f"{KN_ID}_mps"
 PLAN_FIELDS = ("bill_no", "product_code", "line_code", "planned_start", "planned_finish", "plan_status")
 CHUNK = 500
+PAGE = 10_000
+# Only the fields the checks use, each with the object's primary key.
+FIELDS = {
+    OT_FORECAST: ["id", "billno", "material_number", "material_name", "qty", "closestatus_title", "startdate"],
+    OT_MATERIAL: ["material_code", "material_name", "purchase_fixedleadtime", "huid_productline_name"],
+    OT_WORK: ["entry_id", "sourcebillnumber", "material_number", "taskstatus_title"],
+}
 
 
 def tool_query(sdk_query: Callable[..., Mapping[str, Any]], call: Callable[..., Any]) -> Callable[..., Mapping[str, Any]]:
@@ -37,10 +45,13 @@ def tool_query(sdk_query: Callable[..., Mapping[str, Any]], call: Callable[..., 
     same object query as the caller. Inside an interaction (an action, Q&A) the SDK reader is used."""
     state = {"sdk": True}
 
-    def direct(kn_id: str, ot_id: str, condition: Any = None, limit: int = 500, offset: int = 0, **_: Any) -> Mapping[str, Any]:
+    def direct(kn_id: str, ot_id: str, condition: Any = None, limit: int = 500, offset: int = 0,
+               properties: list[str] | None = None, **_: Any) -> Mapping[str, Any]:
         body: dict[str, Any] = {"limit": limit, "offset": offset, "need_total": True}
         if condition:
             body["condition"] = condition
+        if properties:
+            body["properties"] = properties
         return call(f"/api/ontology-query/v1/knowledge-networks/{kn_id}/object-types/{ot_id}", method="POST", body=body,
                     headers={"X-HTTP-Method-Override": "GET"})
 
@@ -59,13 +70,17 @@ def tool_query(sdk_query: Callable[..., Mapping[str, Any]], call: Callable[..., 
 
 def _reader(query: Callable[..., Mapping[str, Any]]):
     def read(ot_id: str, field: str | None = None, values: list[str] | None = None) -> list[dict[str, Any]]:
+        base = {"kn_id": KN_ID, "ot_id": ot_id, **({"properties": FIELDS[ot_id]} if ot_id in FIELDS else {})}
         if field is None:
-            return read_complete(query, {"kn_id": KN_ID, "ot_id": ot_id}, _page_rows, page_size=500, max_rows=50_000)
-        rows = []
-        for at in range(0, len(values or []), CHUNK):
-            rows += read_complete(query, {"kn_id": KN_ID, "ot_id": ot_id, "condition": _in(field, values[at:at + CHUNK])},
-                                  _page_rows, page_size=500, max_rows=50_000)
-        return rows
+            return read_complete(query, base, _page_rows, page_size=PAGE, max_rows=50_000)
+        chunks = [values[at:at + CHUNK] for at in range(0, len(values or []), CHUNK)]
+
+        def chunk(part: list[str]) -> list[dict[str, Any]]:
+            return read_complete(query, {**base, "condition": _in(field, part)}, _page_rows, page_size=PAGE, max_rows=50_000)
+        if len(chunks) == 1:
+            return chunk(chunks[0])
+        with ThreadPoolExecutor(max_workers=len(chunks)) as pool:
+            return [row for rows in pool.map(chunk, chunks) for row in rows]
     return read
 
 
@@ -84,10 +99,11 @@ def _facts(read, query, tasks, business_date):
     materials: dict[str, dict[str, Any]] = {}
     if demands:
         starts = [task_fields(t)["start"] for t in tasks if task_fields(t)["start"]]
-        rows.update(load_bkn_rows("demand_coverage", query, {"demands": demands, "need_by": max(starts or [business_date]),
-                                                             "reserve_signed_backlog": True}))
-        codes = sorted({str(r.get("material_code")) for r in rows["bom"]})
-        materials = {str(m["material_code"]): m for m in read(OT_MATERIAL, "material_code", codes)}
+        found = load_bkn_rows("demand_coverage", query, {"demands": demands, "need_by": max(starts or [business_date]),
+                                                         "reserve_signed_backlog": True},
+                              extra={"materials": lambda codes: read(OT_MATERIAL, "material_code", codes)})
+        materials = {str(m["material_code"]): m for m in found.pop("materials")}
+        rows.update(found)
     return rows, materials
 
 

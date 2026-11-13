@@ -40,11 +40,12 @@ def _matches(row: dict, condition: dict | None) -> bool:
     operation = condition["operation"]
     if operation == "and":
         return all(_matches(row, item) for item in condition["sub_conditions"])
-    value = row.get(condition["field"])
+    # The service compares typed values; the CSV fixture holds text, so compare as text.
+    value = str(row.get(condition["field"]))
     if operation == "==":
-        return value == condition["value"]
+        return value == str(condition["value"])
     if operation == "in":
-        return value in condition["value"]
+        return value in {str(item) for item in condition["value"]}
     raise AssertionError(f"unexpected operation {operation}")
 
 
