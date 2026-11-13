@@ -1,0 +1,301 @@
+# 维修工单属于它的设备：调整操作只改计划开始日和结束日，不改设备，甘特上只能在本行左右拖动（“调整维修工单”行动也只写这两个日期）。
+apiVersion: workshop.openbkn.ai/v1
+app:
+  name: 机台排产
+  description: 生产主管按机台排三月的工序和维修工单：查看工单齐套、设备能力、人员资质与班次、换型提示，拖动改排后采用写回。
+dependencies:
+  knowledgeNetwork:
+    id: manufacturing_industry_zh_cn
+    name: 制造业端到端运营样例
+sources:
+- id: scheduleTask1
+  label: 制造操作
+  objectType: manufacturing_operations
+  key: operation_id
+  operations:
+  - id: adjust
+    label: 调整排程
+    params:
+    - name: start
+      label: 开始
+      type: date
+    - name: end
+      label: 结束
+      type: date
+    - name: resource
+      label: 资源
+      type: text
+    effects:
+    - field: planned_start_date
+      kind: set
+      param: start
+    - field: planned_end_date
+      kind: set
+      param: end
+    - field: planned_machine_id
+      kind: set
+      param: resource
+    action:
+      id: manufacturing_industry_zh_cn_adjust_operation_schedule
+      params: {}
+  follows:
+  - id: afterPredecessors
+    field: planned_start_date
+    from: scheduleTask1
+    path:
+    - ~manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+    fromField: planned_end_date
+    gapDays: 1
+    keepDuration: planned_end_date
+- id: scheduleTask2
+  label: 维护工单
+  objectType: maintenance_work_orders
+  key: maintenance_work_order_id
+  operations:
+  - id: adjust
+    label: 调整排程
+    params:
+    - name: start
+      label: 开始
+      type: date
+    - name: end
+      label: 结束
+      type: date
+    effects:
+    - field: planned_start_date
+      kind: set
+      param: start
+    - field: planned_end_date
+      kind: set
+      param: end
+    action:
+      id: manufacturing_industry_zh_cn_adjust_maintenance_work_order
+      params: {}
+- id: scheduleResource
+  label: 生产设备
+  objectType: production_machines
+  key: machine_id
+  computed:
+  - name: groupName
+    label: 工作中心
+    kind: related
+    path:
+    - production_machines_work_center_id_to_work_centers
+    aggregate: one
+    field: work_center_name
+    type: text
+variables:
+- name: asOf
+  label: 基准日期
+  kind: asOf
+  default: '2027-02-18'
+pages:
+- id: scheduleResources
+  title: 生产设备排程
+  icon: calendar
+  layout:
+    type: free
+    columns: 2
+    sidePosition: left
+    sideWidth: 300
+    asideWidth: 0
+    gap: normal
+  regions:
+    cells:
+    - id: scheduleBar
+      type: scenarioBar
+      frame:
+        x: 0
+        y: 0
+        w: 7
+        h: 3
+      config:
+        title: 方案
+        style: compact
+    - id: scheduleAsOf
+      type: asOfSlider
+      frame:
+        x: 7
+        y: 0
+        w: 5
+        h: 3
+      config:
+        title: 基准日期
+        source: scheduleTask1
+        rangeField: planned_start_date
+        step: day
+        writes: asOf
+    - id: scheduleGantt
+      type: scheduleGantt
+      frame:
+        x: 0
+        y: 3
+        w: 8
+        h: 16
+      config:
+        title: 排程（按生产设备）
+        source: scheduleResource
+        titleField: machine_name
+        groupField: groupName
+        layers:
+        - label: 制造操作
+          style: standard
+          source: scheduleTask1
+          resourceField: planned_machine_id
+          startField: planned_start_date
+          endField: planned_end_date
+          barFields:
+          - operation_name
+          popoverFields:
+          - status
+          color: static
+          tone: info
+          exclusive: true
+          adjust: adjust
+          snap: day
+          targetFrom:
+          - objectType: production_orders
+            path:
+            - manufacturing_operations_production_order_id_to_production_orders
+            field: due_date
+          doneWhen:
+          - field: status
+            op: eq
+            value: 已完成
+          predecessorPath:
+          - manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+          predecessorReaches: predecessors
+          ruleTools:
+          - name: 换型提示
+            tool:
+              boxName: 制造业排程规则
+              toolName: 换型提示
+          - name: 人员资质与班次
+            tool:
+              boxName: 制造业排程规则
+              toolName: 人员资质与班次
+          - name: 设备能力
+            tool:
+              boxName: 制造业排程规则
+              toolName: 设备能力
+          - name: 工单齐套
+            tool:
+              boxName: 制造业排程规则
+              toolName: 工单齐套
+        - label: 维护工单
+          style: standard
+          source: scheduleTask2
+          resourceField: machine_id
+          startField: planned_start_date
+          endField: planned_end_date
+          barFields:
+          - maintenance_work_order_id
+          popoverFields:
+          - status
+          color: static
+          tone: success
+          exclusive: true
+          adjust: adjust
+          snap: day
+          targetField: planned_date
+          doneWhen:
+          - field: status
+            op: eq
+            value: 已完成
+        daysBefore: 7
+        daysAfter: 28
+        tick: auto
+        timeZone: local
+    - id: scheduleEdits
+      type: scenarioBar
+      frame:
+        x: 8
+        y: 3
+        w: 4
+        h: 16
+      config:
+        title: 方案改动
+        style: assumptions
+theme:
+  name: default
+  mode: light
+  colorPrimary: '#255db0'
+  colorAccent: '#6d4fc2'
+  colorBg: '#f3f5f8'
+  colorSurface: '#ffffff'
+  colorSurfaceAlt: '#f8fafc'
+  colorBorder: '#dfe5ec'
+  colorText: '#203043'
+  colorTextMuted: '#607086'
+  colorSuccess: '#267257'
+  colorWarning: '#9b4e12'
+  colorDanger: '#b42318'
+  colorInfo: '#1f6f9f'
+  chartPalette:
+  - '#255db0'
+  - '#e0883a'
+  - '#2f9e77'
+  - '#d0453a'
+  - '#6d4fc2'
+  - '#3a9fc0'
+  - '#8a97a8'
+  fontFamily: '"Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif'
+  fontSize: 13
+  radius: 8
+  shadow: subtle
+  density: comfortable
+scheduleModel:
+  result: self
+  tasks:
+  - objectType: manufacturing_operations
+    assignField: planned_machine_id
+    start: planned_start_date
+    end: planned_end_date
+    status: status
+    doneWhen:
+    - field: status
+      op: eq
+      value: 已完成
+    target:
+      path:
+      - manufacturing_operations_production_order_id_to_production_orders
+      field: due_date
+    predecessors:
+      path:
+      - manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
+    modify:
+      action: manufacturing_industry_zh_cn_adjust_operation_schedule
+    rules:
+    - name: 换型提示
+      tool:
+        boxName: 制造业排程规则
+        toolName: 换型提示
+    - name: 人员资质与班次
+      tool:
+        boxName: 制造业排程规则
+        toolName: 人员资质与班次
+    - name: 设备能力
+      tool:
+        boxName: 制造业排程规则
+        toolName: 设备能力
+    - name: 工单齐套
+      tool:
+        boxName: 制造业排程规则
+        toolName: 工单齐套
+  - objectType: maintenance_work_orders
+    assignField: machine_id
+    start: planned_start_date
+    end: planned_end_date
+    status: status
+    doneWhen:
+    - field: status
+      op: eq
+      value: 已完成
+    target:
+      field: planned_date
+    modify:
+      action: manufacturing_industry_zh_cn_adjust_maintenance_work_order
+  resource:
+    objectType: production_machines
+    titleField: machine_name
+    groupField: work_center_id
