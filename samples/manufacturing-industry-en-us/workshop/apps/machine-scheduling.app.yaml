@@ -1,3 +1,4 @@
+# A maintenance work order belongs to its machine: its adjust operation changes the planned start and end only, not the machine, so it moves along its own row (the adjust maintenance work order action writes only those days).
 apiVersion: workshop.openbkn.ai/v1
 app:
   name: Machine Scheduling
@@ -60,9 +61,6 @@ sources:
     - name: end
       label: End
       type: date
-    - name: resource
-      label: Resource
-      type: text
     effects:
     - field: planned_start_date
       kind: set
@@ -70,9 +68,6 @@ sources:
     - field: planned_end_date
       kind: set
       param: end
-    - field: machine_id
-      kind: set
-      param: resource
     action:
       id: manufacturing_industry_en_us_adjust_maintenance_work_order
       params: {}

@@ -1,3 +1,4 @@
+# 维修工单属于它的设备：调整操作只改计划开始日和结束日，不改设备，甘特上只能在本行左右拖动（“调整维修工单”行动也只写这两个日期）。
 apiVersion: workshop.openbkn.ai/v1
 app:
   name: 机台排产
@@ -60,9 +61,6 @@ sources:
     - name: end
       label: 结束
       type: date
-    - name: resource
-      label: 资源
-      type: text
     effects:
     - field: planned_start_date
       kind: set
@@ -70,9 +68,6 @@ sources:
     - field: planned_end_date
       kind: set
       param: end
-    - field: machine_id
-      kind: set
-      param: resource
     action:
       id: manufacturing_industry_zh_cn_adjust_maintenance_work_order
       params: {}
