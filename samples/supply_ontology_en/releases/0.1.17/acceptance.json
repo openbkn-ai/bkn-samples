@@ -1,0 +1,152 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "supply-chain-en",
+ "version": "0.1.17",
+ "packageDigest": "sha256:d28a395ec6505c1d6fe4364d8b840eae381e9424e7bd2d90ab81a153833b330e",
+ "sourceCommit": "69c4b813ef3e6e7fb1fe0563a6d1e2c0e04c094c",
+ "verificationDate": "2026-11-13",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 14,
+   "fixtureRecords": 78647,
+   "boundObjectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 14,
+   "relations": 21,
+   "liveBoundObjectQueriesPassed": 13,
+   "datasetObjects": 1,
+   "planHistoryRows": 13,
+   "productionPlansReachingProducts": 605,
+   "productionPlans": 605
+  },
+  "capabilities": {
+   "mountedFunctionsExecuted": [
+    {
+     "name": "Buildable_Quantity_and_ATP",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "passed": true
+    },
+    {
+     "name": "Demand_Coverage_and_Shortages",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "passed": true
+    },
+    {
+     "name": "Kit_Check",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "passed": true
+    },
+    {
+     "name": "Line_Can_Build",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "passed": true
+    }
+   ],
+   "ruleToolsThroughToolboxProxy": {
+    "tasksChecked": 15,
+    "detailRows": 39,
+    "passed": true
+   },
+   "kitCheckSeconds": {
+    "detail": [
+     4.61,
+     5.19,
+     4.66
+    ],
+    "installed_plans": [
+     3.58,
+     3.57,
+     3.6
+    ],
+    "plans_200": [
+     4.65,
+     5.98,
+     7.06
+    ]
+   },
+   "objectActionsExecuted": [
+    {
+     "step": "create",
+     "result": "created",
+     "exitCode": 0,
+     "passed": true
+    },
+    {
+     "step": "create_again",
+     "result": "updated",
+     "exitCode": 0,
+     "passed": true
+    },
+    {
+     "step": "adjust",
+     "result": "updated",
+     "exitCode": 0,
+     "passed": true
+    },
+    {
+     "step": "cancel",
+     "result": "cancelled",
+     "exitCode": 0,
+     "passed": true
+    },
+    {
+     "step": "create_whole",
+     "result": "created",
+     "exitCode": 0,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "pmc-supply-planning",
+     "sourceContentDigest": "sha256:3cde74bddbf580869b528674461542c2474ccae9dd62426b6ef2792a0ffb3537",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "procurement-follow-up",
+     "sourceContentDigest": "sha256:f48d92dcb0f474a76e4b361ed16f4f2aec521aa516d52275979571e85de6bf22",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 7,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "uninstallWithPlanDatasetPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "functionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (bkn-backend-ee sha2d2a597, ontology-query-ee with bkn-foundry#3125, agent-retrieval sha2d466bc, sandbox 0.2.2 main eeffdb4, sample service 022-9e2d8d18 with bkn-samples#260); no native amd64 certification and no released vanilla 0.2.2.",
+  "Calculations and schedule rules are mounted functions run through Context Loader execute_tool in a managed interaction; the rule tools were also called through the toolbox proxy without an interaction, as the schedule Gantt calls them. The plan actions ran through get_action_info, execute_action and get_action_execution.",
+  "Writing plans needs the OpenBKN 0.2.2 sandbox deployment (BKN_BASE_URL, BKN_TOKEN, gateway allowed); uninstalling needs a sample service with bkn-samples#260.",
+  "Delaying a purchase order on the platform was not exercised; the confirmed plans turning short when their purchase is delayed is covered by the source tests on the same fixtures.",
+  "Reference queries, functions and actions were checked through APIs; browser UI and full model-question cards were not exercised.",
+  "Kit check through the toolbox proxy, measured in the sandbox, three runs each: one plan's detail 4.61–5.19 s, the 13 installed plans 3.57–3.6 s, 200 plans 4.65–7.06 s. Most of the remaining time is the knowledge-network read of the BOM and sandbox start-up."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
