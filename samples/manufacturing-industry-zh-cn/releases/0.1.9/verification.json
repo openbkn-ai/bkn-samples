@@ -1,0 +1,47 @@
+{
+  "sampleId": "manufacturing-industry-zh-cn",
+  "version": "0.1.9",
+  "packageDigest": "sha256:fef878a441305eb3f3a6f823a406c0e3d491e6b152137c739ab8843c4dd8ad20",
+  "sourceCommit": "aa02d805bb5f0013c818c1f96cb15342853b10bb",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "38 business tables, 1390 fixture records, the package's database verification hook passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "40 objects (2 on datasets of the sample catalog, 181 rows loaded) and 73 relations, all 240 properties and 73 relations read back with display names in the sample language; every binding and a live query per object verified by the platform hook; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Machine Scheduling Workshop app created, published and opened with rule results, again after reinstallation; rules and adjustments toolboxes with functions named in the sample language; 4 mounted rule functions called through Context Loader execute_tool and through the toolbox proxy, matching local runs on the package fixtures; 2 object actions executed, written values read back and restored, a cross-work-centre move refused; 2 mounted Skills checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "The experience set's reference Cypher queries and graph patterns passed. No model answered the questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-zh-cn-v0.1.9/acceptance.json",
+  "evidenceDigest": "sha256:86d4e945d0e87474b89e22f379455f69d22dbe01d6e7de94e48f679e494a3902",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.2 main builds on a local kind cluster (sample service 022-3be0e6b3 with Workshop apps, #285; Studio and Workshop main builds); no native amd64 certification and no released vanilla 0.2.2.",
+    "Display names were read back from the platform: 240 properties and 73 relations named in the sample's language, the rules and adjustments toolboxes with their functions, no ID-style toolbox left.",
+    "The sample's Workshop app was created and published by the installation, its rule functions resolved to this installation's rules toolbox; it was opened in Workshop with its rule results, and created again after reinstallation. Dragging and applying in the browser was not exercised; the adjust actions it runs were executed through Context Loader.",
+    "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
+    "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
+    "Reference queries, graph patterns, functions and actions were checked through APIs; no model answered the questions, and the Workshop app is not part of this version.",
+    "After the zh-CN reinstallation one changeover rule call through Context Loader answered 502 (published tool call failed); the whole after-reinstallation function and action check was run again at once and passed. The first attempt is kept privately."
+  ]
+}
