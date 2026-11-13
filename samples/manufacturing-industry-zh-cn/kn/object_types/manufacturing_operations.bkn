@@ -13,18 +13,18 @@ tags: [manufacturing, industry_sample]
 
 | Name | Display Name | Type | Description | Mapped Field |
 |---|---|---|---|---|
-| operation_id | operation_id | string | 稳定业务标识或业务属性。 | operation_id |
-| production_order_id | production_order_id | string | 稳定业务标识或业务属性。 | production_order_id |
-| routing_operation_id | routing_operation_id | string | 稳定业务标识或业务属性。 | routing_operation_id |
-| work_center_id | work_center_id | string | 稳定业务标识或业务属性。 | work_center_id |
-| operation_name | operation_name | string | 稳定业务标识或业务属性。 | operation_name |
-| sequence_number | sequence_number | integer | 稳定业务标识或业务属性。 | sequence_number |
-| status | status | string | 稳定业务标识或业务属性。 | status |
-| planned_machine_id | planned_machine_id | string | 计划机台：排程安排这道工序在哪台设备上做（production_machines.machine_id）；已完成的取执行记录的设备。 | planned_machine_id |
-| planned_start_date | planned_start_date | date | 计划开工日 YYYY-MM-DD（含当天）；已完成的取执行记录的开始日。 | planned_start_date |
-| planned_end_date | planned_end_date | date | 计划完工日 YYYY-MM-DD（含当天）；已完成的取执行记录的完成日。 | planned_end_date |
-| standard_duration_days | standard_duration_days | integer | 标准工期（天），按历史执行记录取 2 天。 | standard_duration_days |
-| predecessor_operation_id | predecessor_operation_id | string | 前序工序：同一工单内序号上一道的工序；首道工序为空。 | predecessor_operation_id |
+| operation_id | 工序编号 | string | 稳定业务标识或业务属性。 | operation_id |
+| production_order_id | 生产工单编号 | string | 稳定业务标识或业务属性。 | production_order_id |
+| routing_operation_id | 工艺路线工序编号 | string | 稳定业务标识或业务属性。 | routing_operation_id |
+| work_center_id | 工作中心编号 | string | 稳定业务标识或业务属性。 | work_center_id |
+| operation_name | 工序名称 | string | 稳定业务标识或业务属性。 | operation_name |
+| sequence_number | 序号 | integer | 稳定业务标识或业务属性。 | sequence_number |
+| status | 状态 | string | 稳定业务标识或业务属性。 | status |
+| planned_machine_id | 计划机台 | string | 计划机台：排程安排这道工序在哪台设备上做（production_machines.machine_id）；已完成的取执行记录的设备。 | planned_machine_id |
+| planned_start_date | 计划开始日 | date | 计划开工日 YYYY-MM-DD（含当天）；已完成的取执行记录的开始日。 | planned_start_date |
+| planned_end_date | 计划结束日 | date | 计划完工日 YYYY-MM-DD（含当天）；已完成的取执行记录的完成日。 | planned_end_date |
+| standard_duration_days | 标准工期（天） | integer | 标准工期（天），按历史执行记录取 2 天。 | standard_duration_days |
+| predecessor_operation_id | 前序工序 | string | 前序工序：同一工单内序号上一道的工序；首道工序为空。 | predecessor_operation_id |
 
 ### Keys
 

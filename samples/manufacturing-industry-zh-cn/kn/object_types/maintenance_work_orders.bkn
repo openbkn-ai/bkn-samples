@@ -13,13 +13,13 @@ tags: [manufacturing, industry_sample]
 
 | Name | Display Name | Type | Description | Mapped Field |
 |---|---|---|---|---|
-| maintenance_work_order_id | maintenance_work_order_id | string | 稳定业务标识或业务属性。 | maintenance_work_order_id |
-| maintenance_plan_id | maintenance_plan_id | string | 稳定业务标识或业务属性。 | maintenance_plan_id |
-| machine_id | machine_id | string | 稳定业务标识或业务属性。 | machine_id |
-| planned_date | planned_date | date | 稳定业务标识或业务属性。 | planned_date |
-| status | status | string | 稳定业务标识或业务属性。 | status |
-| planned_start_date | planned_start_date | date | 计划开始日 YYYY-MM-DD（含当天），维护占用机台的第一天；逾期未做的安排在 2027-03-01 补做。planned_date 仍是应保养日。 | planned_start_date |
-| planned_end_date | planned_end_date | date | 计划结束日 YYYY-MM-DD（含当天），维护占用机台的最后一天。 | planned_end_date |
+| maintenance_work_order_id | 维修工单编号 | string | 稳定业务标识或业务属性。 | maintenance_work_order_id |
+| maintenance_plan_id | 保养计划编号 | string | 稳定业务标识或业务属性。 | maintenance_plan_id |
+| machine_id | 设备编号 | string | 稳定业务标识或业务属性。 | machine_id |
+| planned_date | 应保养日 | date | 稳定业务标识或业务属性。 | planned_date |
+| status | 状态 | string | 稳定业务标识或业务属性。 | status |
+| planned_start_date | 计划开始日 | date | 计划开始日 YYYY-MM-DD（含当天），维护占用机台的第一天；逾期未做的安排在 2027-03-01 补做。planned_date 仍是应保养日。 | planned_start_date |
+| planned_end_date | 计划结束日 | date | 计划结束日 YYYY-MM-DD（含当天），维护占用机台的最后一天。 | planned_end_date |
 
 ### Keys
 

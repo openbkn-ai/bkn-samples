@@ -44,8 +44,13 @@ def bind_resources(specs,bindings,apply):
             obj['data_source']={'type':'resource','id':bindings[table]}
             path=Path(directory)/(table+'.json');path.write_text(json.dumps(obj))
             cli('bkn','object-type','update',KN,table,'--body-file',str(path))
+def start_receipt():
+    # An empty ownership receipt before the first resource: a failed install can still be uninstalled.
+    path=os.environ.get('BKN_SAMPLE_RECEIPT')
+    if path and not Path(path).exists():Path(path).write_text(json.dumps({'toolboxes':[],'skills':[]}))
 def main():
     raw=json.loads(Path(os.environ['BKN_SAMPLE_INPUT']).read_text());require(raw['sample']==SAMPLE and raw['knowledgeNetwork']['id']==KN and raw['database']['name']==KN,'ownership identity differs')
+    if sys.argv[1]=='install':start_receipt()
     tags={'bkn-samples','bkn-sample-'+SAMPLE,'bkn-samples-version-'+raw['version'].replace('.','-')}
     specs=json.loads((ROOT/'model-contract.json').read_text())['object_types']
     tables={t:s for t,s in specs.items() if s.get('source')!='dataset'}

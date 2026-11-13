@@ -2,6 +2,7 @@
 import csv
 import importlib
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -18,7 +19,7 @@ def modules(lang):
         sys.modules.pop(name, None)
     sys.path.insert(0, tools)
     try:
-        return {name: importlib.import_module(name) for name in ("machine_schedule", "schedule_runtime", "function_bundle", "register_capabilities")}
+        return {name: importlib.import_module(name) for name in ("machine_schedule", "schedule_runtime", "function_bundle", "register_capabilities", "ownership_receipt")}
     finally:
         sys.path.remove(tools)
 
@@ -298,6 +299,32 @@ class RuntimeTest(Base):
 
 
 class RegistrationTest(Base):
+    def test_an_empty_receipt_exists_before_the_first_resource(self):
+        import os
+        import tempfile
+        tools = str(SAMPLES[self.lang] / "tools")
+        sys.path.insert(0, tools)
+        sys.modules.pop("ownership_receipt", None)
+        try:
+            spec = importlib.util.spec_from_file_location("mfg_platform_" + self.lang, SAMPLES[self.lang] / "platform" / "sample_platform.py")
+            platform = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(platform)
+        finally:
+            sys.path.remove(tools)
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "owned-execution.json"
+            os.environ["BKN_SAMPLE_RECEIPT"] = str(path)
+            try:
+                platform.start_receipt()
+                self.assertEqual(json.loads(path.read_text()), {"toolboxes": [], "skills": []})
+                path.write_text(json.dumps({"toolboxes": ["box-1"], "skills": []}))
+                platform.start_receipt()
+                self.assertEqual(json.loads(path.read_text())["toolboxes"], ["box-1"])
+            finally:
+                os.environ.pop("BKN_SAMPLE_RECEIPT")
+        source = (SAMPLES[self.lang] / "platform" / "sample_platform.py").read_text()
+        self.assertLess(source.index("if sys.argv[1]=='install':start_receipt()"), source.index("cli('bkn','push'"))
+
     def test_functions_compile_and_actions_follow_the_fields(self):
         reg, bundle = self.m["register_capabilities"], self.m["function_bundle"]
         zh = self.lang == "zh"
@@ -322,7 +349,7 @@ class RegistrationTest(Base):
         reg = self.m["register_capabilities"]
         reg.remember = lambda *a: None
         reg.require_owned = lambda *a: None
-        state = {"datasets": [], "tools": [], "actions": [], "bound": {}, "loaded": {}, "mounted": []}
+        state = {"datasets": [], "tools": [], "boxes": {}, "actions": [], "bound": {}, "loaded": {}, "mounted": []}
 
         def cli(*args):
             if args[:3] == ("vega", "catalog", "resources"):
@@ -337,20 +364,22 @@ class RegistrationTest(Base):
             if args[:2] == ("bkn", "object-type") and args[2] == "update":
                 body = json.loads(Path(args[6]).read_text()); state["bound"][args[4]] = body["data_source"]["id"]; return {}
             if args[:2] == ("toolbox", "list"):
-                return {"data": [{"box_name": reg.box_name(), "box_id": "box", "status": "published"}] if state["tools"] else []}
+                return {"data": [{"box_name": n, "box_id": b, "status": "published"} for n, b in state["boxes"].items()]}
             if args[0] == "call" and args[1].endswith("/tool-box"):
-                return {"box_id": "box"}
+                name = json.loads(args[5])["box_name"]; state["boxes"][name] = "box-" + str(len(state["boxes"]))
+                return {"box_id": state["boxes"][name]}
             if args[0] == "call" and args[1].endswith("/tool"):
-                body = json.loads(args[5])["function_input"]; state["tools"].append(body); return {"success_ids": ["t-" + body["name"]]}
+                body = json.loads(args[5])["function_input"]; box = args[1].split("/tool-box/")[1].split("/")[0]
+                state["tools"].append(dict(body, box=box)); return {"success_ids": ["t-" + body["name"]]}
             if args[:2] == ("tool", "list"):
-                return {"tools": [{"name": t["name"], "tool_id": "t-" + t["name"]} for t in state["tools"]]}
+                return {"tools": [{"name": t["name"], "tool_id": "t-" + t["name"]} for t in state["tools"] if t["box"] == args[3]]}
             if args[:2] == ("tool", "get"):
-                op = args[-1].removeprefix("t-")
-                return {"metadata": {"function_content": {"code": next(t["code"] for t in state["tools"] if t["name"] == op)}}}
+                name = args[-1].removeprefix("t-")
+                return {"metadata": {"function_content": {"code": next(t["code"] for t in state["tools"] if t["name"] == name)}}}
             if args[:3] == ("bkn", "capability", "attach"):
                 state["mounted"] += args[args.index("--tool") + 1].split(","); return {}
             if args[0] == "call" and args[1].endswith("/capabilities?limit=1000"):
-                return {"entries": [{"id": "b-" + t, "capability_type": "tool", "capability_id": t} for t in state["mounted"]] + [{"id": "", "capability_id": "t-work_order_kit_rule"}]}
+                return {"entries": [{"id": "b-" + t, "capability_type": "tool", "capability_id": t} for t in state["mounted"]] + [{"id": "", "capability_id": "t-" + reg.tool_name("work_order_kit_rule", self.lang == "zh")}]}
             if args[0] == "call" and "/action-types" in args[1]:
                 state["actions"] = json.loads(args[5])["entries"]; return {}
             if args[:2] == ("bkn", "action-type"):
@@ -361,13 +390,26 @@ class RegistrationTest(Base):
         self.assertEqual(sorted(state["loaded"].values()), [45, 136])
         self.assertEqual(len(state["tools"]), 6)
         self.assertEqual(len(out["action_ids"]), 2)
-        self.assertEqual(sorted(state["mounted"]), sorted("t-" + op for op in reg.RULES))
+        zh = self.lang == "zh"
+        self.assertEqual(sorted(state["mounted"]), sorted("t-" + reg.tool_name(op, zh) for op in reg.RULES))
+        names = ({"制造业排程规则", "制造业排程调整"} if zh else {"Manufacturing_Schedule_Rules", "Manufacturing_Schedule_Adjustments"})
+        self.assertEqual(set(state["boxes"]), names)
+        by_box = {b: sorted(t["name"] for t in state["tools"] if t["box"] == b) for b in state["boxes"].values()}
+        self.assertEqual(by_box[state["boxes"][reg.box_name("rules", zh)]], sorted(reg.tool_name(op, zh) for op in reg.RULES))
+        self.assertEqual(by_box[state["boxes"][reg.box_name("adjust", zh)]], sorted(reg.tool_name(op, zh) for op in reg.ADJUST))
+        if zh:
+            self.assertEqual({"工单齐套", "设备能力", "人员资质与班次", "换型提示", "调整工序排程", "调整维修工单"}, {t["name"] for t in state["tools"]})
+        else:
+            self.assertEqual({"Work_Order_Kit", "Machine_Capability", "Operator_Qualification_And_Shift", "Changeover",
+                              "Adjust_Operation_Schedule", "Adjust_Maintenance_Work_Order"}, {t["name"] for t in state["tools"]})
+        self.assertTrue(all(re.fullmatch(r"[\u4e00-\u9fffA-Za-z0-9_]+", n) for n in list(state["boxes"]) + [t["name"] for t in state["tools"]]))
+        self.assertTrue(all(a["action_source"]["box_id"] == state["boxes"][reg.box_name("adjust", zh)] for a in state["actions"]))
         verified = reg.run(cli, KN[self.lang], apply=False, catalog_id="cat")
         self.assertEqual(verified["tool_ids"], out["tool_ids"])
         state["actions"] = state["actions"][:-1]
         with self.assertRaises(ValueError):
             reg.run(cli, KN[self.lang], apply=False, catalog_id="cat")
-        state["actions"] = reg.action_definitions(KN[self.lang], "box", out["tool_ids"], self.lang == "zh")
+        state["actions"] = reg.action_definitions(KN[self.lang], out["toolbox_ids"]["adjust"], out["tool_ids"], self.lang == "zh")
         state["mounted"] = state["mounted"][1:]
         with self.assertRaisesRegex(ValueError, "not mounted"):
             reg.run(cli, KN[self.lang], apply=False, catalog_id="cat")
