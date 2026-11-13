@@ -16,9 +16,10 @@ from datetime import datetime
 from typing import Any
 
 from fn import CannotCompute, DEFAULT_BUSINESS_DATE
-from fn.kitplan import day, kit_check
+from fn.kitplan import day
 from fn.read_complete import read_complete
-from managed_execution import KN_ID, _equal, _in, _page_rows, load_bkn_rows
+from managed_execution import KN_ID, _equal, _in, _page_rows
+from schedule_rules import kit_record
 
 OT_PLAN = f"{KN_ID}_kitplan"
 OT_FORECAST = f"{KN_ID}_forecast"
@@ -108,17 +109,22 @@ def schedule(params: Mapping[str, Any], query: Callable[..., Mapping[str, Any]],
     if wrong:
         raise CannotCompute(f"Products {', '.join(wrong)} are not built on line {line_code}")
 
-    demands = [{"product": str(r["material_number"]), "qty": r["qty"]} for r in lines]
-    facts = load_bkn_rows("demand_coverage", query, {"demands": demands, "need_by": day(start), "reserve_signed_backlog": True})
-    names = {str(r.get("material_code")): str(r.get("material_name") or "") for r in facts.get("bom", [])}
-    kit = kit_check(facts, demands, start, business_date=business_date, names=names)
+    # The kit result is the one the schedule Gantt's kit check gives this plan: same allocation, with the
+    # network's other active plans, plans in production skipped, and the plan's own start.
+    final_status = (status if "plan_status" in params and _text(params, "plan_status")
+                    else (existing.get("plan_status") if existing else status))
+    key = str(existing.get("plan_id")) if existing else "new-plan"
+    kit = kit_record({"key": key, "start": start, "resource": line_code,
+                      "values": {"plan_id": key, "bill_no": bill, "product_code": product, "line_code": line_code,
+                                 "planned_start": start, "plan_status": final_status}},
+                     query, business_date=business_date)
 
     if existing is not None:
         moved = str(existing.get("planned_finish") or "") != finish
         row = {**{k: existing.get(k) for k in FIELDS},
                "reschedule_count": int(existing.get("reschedule_count") or 0) + (1 if moved else 0),
                "previous_finish": existing.get("planned_finish") if moved else existing.get("previous_finish"),
-               "plan_status": status if "plan_status" in params and _text(params, "plan_status") else existing.get("plan_status")}
+               "plan_status": final_status}
         action = "updated"
     else:
         number = f"KP-{bill[3:] if bill.startswith('YCD') else bill}-{product or 'ALL'}-{len(same) + 1:02d}"
@@ -130,8 +136,7 @@ def schedule(params: Mapping[str, Any], query: Callable[..., Mapping[str, Any]],
                shortage_note=kit["shortage_note"], source_scenario=_text(params, "source_scenario") or row.get("source_scenario"),
                planner=planner, planned_at=stamp)
     write(str(row["plan_id"]), _clean(row))
-    return {"action": action, "plan": _clean(row), "shortages": kit["shortages"],
-            "reserved_backlog_orders": kit["reserved_backlog_orders"]}
+    return {"action": action, "plan": _clean(row), "shortages": kit["shortages"]}
 
 
 def _clean(row: Mapping[str, Any]) -> dict[str, Any]:
