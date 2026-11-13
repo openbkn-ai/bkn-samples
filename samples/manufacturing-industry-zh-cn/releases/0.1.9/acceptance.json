@@ -1,0 +1,167 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "manufacturing-industry-zh-cn",
+ "version": "0.1.9",
+ "packageDigest": "sha256:fef878a441305eb3f3a6f823a406c0e3d491e6b152137c739ab8843c4dd8ad20",
+ "sourceCommit": "aa02d805bb5f0013c818c1f96cb15342853b10bb",
+ "verificationDate": "2026-11-13",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 38,
+   "fixtureRecords": 1390,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 40,
+   "relations": 73,
+   "datasetBackedObjects": [
+    "maintenance_work_orders",
+    "manufacturing_operations"
+   ],
+   "datasetRecords": 181,
+   "bindingsVerifiedByHook": true,
+   "liveObjectQueriesPassed": 40,
+   "displayNames": {
+    "propertiesNamed": 240,
+    "relationsNamed": 73,
+    "readBackFromPlatform": true
+   }
+  },
+  "capabilities": {
+   "mountedFunctions": [
+    {
+     "name": "work_order_kit_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "machine_capability_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "operator_shift_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "changeover_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "objectActionsExecuted": [
+    {
+     "action": "manufacturing_industry_zh_cn_adjust_maintenance_work_order",
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution",
+     "writeReadBack": true,
+     "refusalChecked": false,
+     "passed": true
+    },
+    {
+     "action": "manufacturing_industry_zh_cn_adjust_operation_schedule",
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution",
+     "writeReadBack": true,
+     "refusalChecked": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "manufacturing-order-supply-zh-cn",
+     "sourceContentDigest": "sha256:ad57d902489a9cb493e00f0751ba95a2fe5dcb0c68e65620afd0e6a2d32c8c5e",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "manufacturing-production-quality-zh-cn",
+     "sourceContentDigest": "sha256:c7923de6861b49a55901660948efa9ef0cc9f9bd10e593cbd774922525017d87",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "toolboxes": {
+    "制造业排程规则": [
+     "人员资质与班次",
+     "工单齐套",
+     "换型提示",
+     "设备能力"
+    ],
+    "制造业排程调整": [
+     "调整工序排程",
+     "调整维修工单"
+    ]
+   },
+   "workshopApps": [
+    {
+     "file": "workshop/apps/machine-scheduling.app.yaml",
+     "createdAndPublished": true,
+     "ruleReferences": 8,
+     "resolvedToThisInstallation": true,
+     "openedWithRuleResults": {
+      "tasks": 57,
+      "hardConstraints": 11,
+      "changeover": 8,
+      "operatorShift": 8,
+      "machineCapability": 1,
+      "workOrderKit": 5,
+      "notChecked": 0
+     },
+     "recreatedAfterReinstallation": true
+    }
+   ],
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "experienceCardsCypherPassed": true,
+   "cardsChecked": null,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "uninstallOfDatasetBoundInstallPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "functionsAndActionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with OpenBKN 0.2.2 main builds on a local kind cluster (sample service 022-3be0e6b3 with Workshop apps, #285; Studio and Workshop main builds); no native amd64 certification and no released vanilla 0.2.2.",
+  "Display names were read back from the platform: 240 properties and 73 relations named in the sample's language, the rules and adjustments toolboxes with their functions, no ID-style toolbox left.",
+  "The sample's Workshop app was created and published by the installation, its rule functions resolved to this installation's rules toolbox; it was opened in Workshop with its rule results, and created again after reinstallation. Dragging and applying in the browser was not exercised; the adjust actions it runs were executed through Context Loader.",
+  "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
+  "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
+  "Reference queries, graph patterns, functions and actions were checked through APIs; no model answered the questions, and the Workshop app is not part of this version.",
+  "After the zh-CN reinstallation one changeover rule call through Context Loader answered 502 (published tool call failed); the whole after-reinstallation function and action check was run again at once and passed. The first attempt is kept privately."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
