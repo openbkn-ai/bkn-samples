@@ -57,8 +57,11 @@ spec:
           readinessProbe:
             exec:
               command: ["healthcheck.sh", "--connect", "--innodb_initialized"]
+            # The healthcheck can take several seconds on a busy node; a short
+            # timeout drops the only endpoint and every sample query fails.
             periodSeconds: 5
-            timeoutSeconds: 3
+            timeoutSeconds: 10
+            failureThreshold: 6
           resources:
             {{- toYaml .Values.sampleDatabase.resources | nindent 12 }}
           volumeMounts:
