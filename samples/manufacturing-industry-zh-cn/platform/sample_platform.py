@@ -1,5 +1,6 @@
 """Native BKN import with explicit ownership, resource bindings and live queries."""
 import json,os,re,shutil,subprocess,sys,tempfile
+from concurrent.futures import ThreadPoolExecutor
 
 try:
     from installer.sample_logging import run as run_sample_command
@@ -26,11 +27,14 @@ def entries(value):
         if isinstance(value.get(key),list):return value[key]
     raise ValueError('missing entries')
 def single(v):return entries(v)[0] if isinstance(v,list) or 'entries' in v else v
+def parallel(fn,items):
+    # Read-only platform calls run side by side: one at a time, 40 objects at 1-2 s each would use most of the hook's 300 s.
+    with ThreadPoolExecutor(8) as pool:return list(pool.map(fn,items))
 def bind_resources(specs,bindings,apply):
     # Read every binding before mutating any object; never replace another source.
     pending=[]
-    for table in specs:
-        obj=single(cli('bkn','object-type','get',KN,table))
+    current=parallel(lambda table:single(cli('bkn','object-type','get',KN,table)),list(specs))
+    for table,obj in zip(specs,current):
         source=obj.get('data_source')
         if source is None:source={}
         require(isinstance(source,dict),'invalid data source '+table)
@@ -78,7 +82,9 @@ def main():
     sources={o['id']:(o.get('data_source') or {}) for o in network['object_types']}
     for table,spec in specs.items():
         require(sources.get(table,{}).get('type')=='resource' and sources[table].get('id')==(bindings.get(table) or schedule['datasets'][table]),'binding differs: '+table)
-        data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
+    live=parallel(lambda table:entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}')),list(specs))
+    for (table,spec),data in zip(specs.items(),live):
+        require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
     if sys.argv[1]=='install':skills=register_skills(apply=True,kn_id=KN)
     else:
         skills=register_skills(apply=False)
