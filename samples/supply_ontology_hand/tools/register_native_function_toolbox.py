@@ -113,7 +113,7 @@ def kit_action_definitions(kn_id: str, box_id: str, tool_id: str) -> list[dict[s
             "operation_config": {"type": "object"}, "object_type_id": f"{kn_id}_kitplan",
             "action_type": action_type, "action_intent": action_type,
             "action_source": {"type": "tool", "box_id": box_id, "tool_id": tool_id},
-            "parameters": parameters, "comment": f"{comment}\n{KIT_SCHEDULE['use_rule']}",
+            "parameters": parameters, "comment": comment,
         })
     return actions
 
