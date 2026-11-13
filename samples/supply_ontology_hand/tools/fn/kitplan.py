@@ -6,6 +6,8 @@ from typing import Any
 
 KIT_COVERED = "齐套"
 KIT_SHORT = "缺料"
+# Short at the start only by materials whose purchase request, placed now, arrives in time.
+KIT_PENDING = "齐套（待下单）"
 
 
 def day(value: Any) -> str:
@@ -16,4 +18,4 @@ def day(value: Any) -> str:
     return text[:10]
 
 
-__all__ = ["KIT_COVERED", "KIT_SHORT", "day"]
+__all__ = ["KIT_COVERED", "KIT_PENDING", "KIT_SHORT", "day"]

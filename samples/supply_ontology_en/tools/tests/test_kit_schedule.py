@@ -4,6 +4,7 @@ from datetime import datetime
 import pytest
 
 from fn import CannotCompute, DEFAULT_BUSINESS_DATE
+from fn.kitplan import KIT_COVERED, KIT_PENDING, KIT_SHORT
 from fn.kitrules import kit_rule
 from kit_schedule import OT_PLAN, moment, schedule
 from support_bkn_rows import DATA, FakeObjectQuery, csv_rows
@@ -49,7 +50,8 @@ def rule_result(plans, plan_id):
 
 
 def assert_record_matches_rule(plan, rule):
-    assert (plan["kit_status"] == "Covered") == (rule["pass"] is True), (plan, rule)
+    expected = KIT_COVERED if rule["pass"] is True else KIT_PENDING if rule.get("severity") == "soft" else KIT_SHORT
+    assert plan["kit_status"] == expected, (plan, rule)
     assert plan.get("kit_date") == rule["at"], (plan, rule)
 
 
@@ -150,3 +152,15 @@ def test_a_short_record_names_its_own_start_even_before_the_business_date():
                 line_code="L-UR-AD", planned_start="2027-02-20", planned_finish="2027-02-24")["plan"]
     assert "2027-02-20" in moved["shortage_note"]
     assert_record_matches_rule(moved, rule_result(list(store.plans.values()), plan_id))
+
+
+def test_a_plan_kitted_once_purchase_requests_are_placed_is_recorded_as_pending_order():
+    """F28: the check lets the plan be adopted (soft), so the record does not call it short; the note keeps the requests to place."""
+    store = Store()
+    plan = run(store, bill_no="YCD2026070700000039", product_code="U00-000080", line_code="L-UR-NAV",
+               planned_start="2027-07-31", planned_finish="2027-08-06", plan_status="Scheduled")["plan"]
+    rule = rule_result(list(store.plans.values()), plan["plan_id"])
+    assert rule["pass"] is False and rule["severity"] == "soft"
+    assert plan["kit_status"] == KIT_PENDING and plan["kit_date"] <= "2027-07-31"
+    assert "2027-07-31" in plan["shortage_note"] and "no purchase request" in plan["shortage_note"]
+    assert_record_matches_rule(plan, rule)
