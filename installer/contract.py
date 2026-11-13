@@ -9,7 +9,7 @@ from pathlib import Path
 
 import yaml
 
-from installer import experience_set
+from installer import experience_set, workshop_apps
 
 OFFICIAL_SOURCE_REPO = "https://github.com/openbkn-ai/bkn-samples"
 API_VERSION = "samples.openbkn.ai/v1alpha1"
@@ -130,6 +130,14 @@ def validate_document(sample_dir: Path, document: dict) -> list[str]:
             errors.extend(f"spec.studio.experienceSet: {item}" for item in experience_set.validate(experience))
             if isinstance(experience, dict) and experience.get("metadata", {}).get("language") != metadata.get("language"):
                 errors.append("spec.studio.experienceSet language must match metadata.language")
+
+    network_id = (spec.get("knowledgeNetwork") or {}).get("id") if isinstance(spec.get("knowledgeNetwork"), dict) else None
+    for app_path in workshop_apps.files(sample_dir):
+        try:
+            errors.extend(f"workshop/apps/{app_path.name}: {item}"
+                          for item in workshop_apps.validate(workshop_apps.load(app_path), network_id))
+        except workshop_apps.AppError as error:
+            errors.append(f"workshop/apps/{app_path.name}: {error.message}")
 
     database = _require_mapping(spec.get("database"), "spec.database", errors)
     if database.get("engine") != "mariadb":

@@ -1,0 +1,503 @@
+apiVersion: workshop.openbkn.ai/v1
+app:
+  name: Kit Scheduling
+  description: 'For PMC planners: schedule demand forecasts onto production lines, check material kitting and line capability at the planned start, then record the plans.'
+dependencies:
+  knowledgeNetwork:
+    id: supply_ontology_en
+    name: Supply Chain EN
+sources:
+- id: scheduleTask1
+  label: Demand Forecast
+  objectType: supply_ontology_en_forecast
+  key: id
+  computed:
+  - name: planCount
+    label: Active plans
+    kind: matched
+    source: schedulePlan
+    pairs:
+    - field: billno
+      other: bill_no
+    - field: material_number
+      other: product_code
+    where:
+    - field: plan_status
+      op: ne
+      value: Cancelled
+  - name: planResource
+    label: Planned resource
+    kind: matched
+    source: schedulePlan
+    pairs:
+    - field: billno
+      other: bill_no
+    - field: material_number
+      other: product_code
+    where:
+    - field: plan_status
+      op: ne
+      value: Cancelled
+    field: line_code
+    type: text
+  - name: planStart
+    label: Planned start
+    kind: matched
+    source: schedulePlan
+    pairs:
+    - field: billno
+      other: bill_no
+    - field: material_number
+      other: product_code
+    where:
+    - field: plan_status
+      op: ne
+      value: Cancelled
+    field: planned_start
+    type: date
+  - name: planEnd
+    label: Planned finish
+    kind: matched
+    source: schedulePlan
+    pairs:
+    - field: billno
+      other: bill_no
+    - field: material_number
+      other: product_code
+    where:
+    - field: plan_status
+      op: ne
+      value: Cancelled
+    field: planned_finish
+    type: date
+  - name: planned
+    label: Scheduled?
+    kind: classify
+    cases:
+    - when:
+      - field: planCount
+        op: gt
+        value: 0
+      value: Scheduled
+      tone: success
+    - when:
+      - field: planCount
+        op: isEmpty
+      value: Unknown
+      tone: neutral
+    otherwise:
+      value: To schedule
+      tone: warning
+  - name: demandOpen
+    label: Open?
+    kind: classify
+    cases:
+    - when:
+      - field: closestatus_title
+        op: eq
+        value: Closed
+      value: Done
+      tone: neutral
+    otherwise:
+      value: Open
+      tone: info
+  operations:
+  - id: create
+    label: Create plan
+    params:
+    - name: start
+      label: Start
+      type: date
+    - name: end
+      label: End
+      type: date
+    - name: resource
+      label: Resource
+      type: text
+    effects: []
+    action:
+      id: supply_ontology_en_kitplan_create
+      params:
+        bill_no:
+          from: field
+          name: billno
+        product_code:
+          from: field
+          name: material_number
+        plan_status:
+          from: const
+          value: Scheduled
+        source_scenario:
+          from: context
+          name: scenario
+        planner:
+          from: context
+          name: user
+        planned_start:
+          from: param
+          name: start
+        planned_finish:
+          from: param
+          name: end
+        line_code:
+          from: param
+          name: resource
+      unique:
+      - bill_no
+      - product_code
+      active:
+      - field: plan_status
+        op: ne
+        value: Cancelled
+- id: scheduleUnplanned
+  label: Demand Forecasts to schedule
+  objectType: supply_ontology_en_forecast
+  key: id
+  from:
+    source: scheduleTask1
+    where:
+    - field: planned
+      op: eq
+      value: To schedule
+    - field: demandOpen
+      op: eq
+      value: Open
+- id: schedulePlan
+  label: Kit Schedule Plan
+  objectType: supply_ontology_en_kitplan
+  key: plan_id
+  operations:
+  - id: adjust
+    label: Adjust plan
+    params:
+    - name: start
+      label: Start
+      type: date
+    - name: end
+      label: End
+      type: date
+    - name: resource
+      label: Resource
+      type: text
+    effects:
+    - field: planned_start
+      kind: set
+      param: start
+    - field: planned_finish
+      kind: set
+      param: end
+    - field: line_code
+      kind: set
+      param: resource
+    action:
+      id: supply_ontology_en_kitplan_adjust
+      params:
+        source_scenario:
+          from: context
+          name: scenario
+        planner:
+          from: context
+          name: user
+- id: schedulePlanActive
+  label: Active Kit Schedule Plans
+  objectType: supply_ontology_en_kitplan
+  key: plan_id
+  from:
+    source: schedulePlan
+    where:
+    - field: plan_status
+      op: ne
+      value: Cancelled
+- id: scheduleResource
+  label: Production Line
+  objectType: supply_ontology_en_line
+  key: line_code
+- id: scheduleCalendar1
+  label: Line Stoppage
+  objectType: supply_ontology_en_stoppage
+  key: stoppage_id
+variables:
+- name: asOf
+  label: Base date
+  kind: asOf
+  default: '2027-02-16'
+pages:
+- id: scheduleDemand
+  title: Demand Forecast view
+  icon: calendar
+  layout:
+    type: free
+    columns: 2
+    sidePosition: left
+    sideWidth: 300
+    asideWidth: 0
+    gap: normal
+  regions:
+    cells:
+    - id: scheduleBar
+      type: scenarioBar
+      frame:
+        x: 0
+        y: 0
+        w: 7
+        h: 3
+      config:
+        title: Scenario
+        style: compact
+    - id: scheduleAsOf
+      type: asOfSlider
+      frame:
+        x: 7
+        y: 0
+        w: 5
+        h: 3
+      config:
+        title: Base date
+        source: scheduleTask1
+        rangeField: startdate
+        step: day
+        writes: asOf
+    - id: scheduleGantt
+      type: scheduleGantt
+      frame:
+        x: 0
+        y: 3
+        w: 12
+        h: 16
+      config:
+        title: Demand Forecast (read only)
+        source: scheduleTask1
+        titleField: material_name
+        groupField: billno
+        layers:
+        - label: Plan
+          style: standard
+          source: scheduleTask1
+          resourceField: $key
+          startField: planStart
+          endField: planEnd
+          barFields:
+          - planResource
+          popoverFields:
+          - planned
+          - planCount
+          color: static
+          tone: success
+          targetField: startdate
+          doneWhen:
+          - field: closestatus_title
+            op: eq
+            value: Closed
+        - label: Target
+          style: event
+          source: scheduleTask1
+          resourceField: $key
+          startField: startdate
+          color: static
+          tone: danger
+        tray: count
+        daysBefore: 7
+        daysAfter: 28
+        tick: auto
+        timeZone: local
+- id: scheduleResources
+  title: Production Line view
+  icon: calendar
+  layout:
+    type: free
+    columns: 2
+    sidePosition: left
+    sideWidth: 300
+    asideWidth: 0
+    gap: normal
+  regions:
+    cells:
+    - id: scheduleBar
+      type: scenarioBar
+      frame:
+        x: 0
+        y: 0
+        w: 7
+        h: 3
+      config:
+        title: Scenario
+        style: compact
+    - id: scheduleAsOf
+      type: asOfSlider
+      frame:
+        x: 7
+        y: 0
+        w: 5
+        h: 3
+      config:
+        title: Base date
+        source: scheduleTask1
+        rangeField: startdate
+        step: day
+        writes: asOf
+    - id: scheduleGantt
+      type: scheduleGantt
+      frame:
+        x: 0
+        y: 3
+        w: 8
+        h: 16
+      config:
+        title: Schedule by Production Line
+        source: scheduleResource
+        titleField: line_name
+        parentField: parent_code
+        capacityField: max_parallel
+        layers:
+        - label: Kit Schedule Plan
+          style: standard
+          source: schedulePlanActive
+          resourceField: line_code
+          startField: planned_start
+          endField: planned_finish
+          barFields:
+          - bill_no
+          - product_code
+          popoverFields:
+          - plan_status
+          color: static
+          tone: info
+          exclusive: true
+          adjust: adjust
+          snap: day
+          create:
+          - source: scheduleUnplanned
+            operation: create
+            days: 5
+            fields:
+            - billno
+            - startdate
+          ruleTools:
+          - name: Line_Can_Build
+            tool:
+              boxName: Supply_EN_Functions
+              toolName: Line_Can_Build
+          - name: Kit_Check
+            tool:
+              boxName: Supply_EN_Functions
+              toolName: Kit_Check
+        - label: Line Stoppage
+          style: background
+          source: scheduleCalendar1
+          resourceField: resource_code
+          startField: start_time
+          endField: end_time
+          color: static
+          tone: neutral
+          blocks: true
+        daysBefore: 7
+        daysAfter: 28
+        tick: auto
+        timeZone: local
+    - id: scheduleEdits
+      type: scenarioBar
+      frame:
+        x: 8
+        y: 3
+        w: 4
+        h: 16
+      config:
+        title: Scenario changes
+        style: assumptions
+theme:
+  name: default
+  mode: light
+  colorPrimary: '#255db0'
+  colorAccent: '#6d4fc2'
+  colorBg: '#f3f5f8'
+  colorSurface: '#ffffff'
+  colorSurfaceAlt: '#f8fafc'
+  colorBorder: '#dfe5ec'
+  colorText: '#203043'
+  colorTextMuted: '#607086'
+  colorSuccess: '#267257'
+  colorWarning: '#9b4e12'
+  colorDanger: '#b42318'
+  colorInfo: '#1f6f9f'
+  chartPalette:
+  - '#255db0'
+  - '#e0883a'
+  - '#2f9e77'
+  - '#d0453a'
+  - '#6d4fc2'
+  - '#3a9fc0'
+  - '#8a97a8'
+  fontFamily: '"Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif'
+  fontSize: 13
+  radius: 8
+  shadow: subtle
+  density: comfortable
+scheduleModel:
+  result: record
+  tasks:
+  - objectType: supply_ontology_en_forecast
+    status: closestatus_title
+    doneWhen:
+    - field: closestatus_title
+      op: eq
+      value: Closed
+    groupField: billno
+    target:
+      field: startdate
+    rules:
+    - name: Line_Can_Build
+      tool:
+        boxName: Supply_EN_Functions
+        toolName: Line_Can_Build
+    - name: Kit_Check
+      tool:
+        boxName: Supply_EN_Functions
+        toolName: Kit_Check
+  resource:
+    objectType: supply_ontology_en_line
+    titleField: line_name
+    parentField: parent_code
+    capacityField: max_parallel
+  calendars:
+  - objectType: supply_ontology_en_stoppage
+    resourceField: resource_code
+    start: start_time
+    end: end_time
+    inherit: true
+  record:
+    objectType: supply_ontology_en_kitplan
+    match:
+    - from: bill_no
+      to: billno
+    - from: product_code
+      to: material_number
+    resourceField: line_code
+    start: planned_start
+    end: planned_finish
+    status: plan_status
+    days: 5
+    active:
+    - field: plan_status
+      op: ne
+      value: Cancelled
+    create:
+      action: supply_ontology_en_kitplan_create
+      params:
+        plan_status:
+          from: const
+          value: Scheduled
+        source_scenario:
+          from: context
+          name: scenario
+        planner:
+          from: context
+          name: user
+    modify:
+      action: supply_ontology_en_kitplan_adjust
+      params:
+        source_scenario:
+          from: context
+          name: scenario
+        planner:
+          from: context
+          name: user

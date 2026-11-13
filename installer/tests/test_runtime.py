@@ -99,21 +99,33 @@ class RuntimeTest(unittest.TestCase):
             seen["hook_token"] = env.get("BKN_TOKEN")
             seen.setdefault("configs", []).append(env.get("BKN_SAMPLE_CONFIG"))
             self.assertFalse((Path(env["BKN_SAMPLE_CONFIG"]).parents[1] / "supply-chain.json").exists())
-            Path(env["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps({"ok": True, "resources": {}}), encoding="utf-8")
+            Path(env["BKN_SAMPLE_OUTPUT"]).write_text(json.dumps({"ok": True, "resources": {
+                "ownedExecution": {"toolboxes": ["box-1"], "skills": []}}}), encoding="utf-8")
             return completed()
 
         state_dir = Path(tempfile.mkdtemp())
-        view = install_sample(
-            sample="supply-chain",
-            actor_role="admin",
-            state_dir=state_dir,
-            root=ROOT,
-            version="0.1.0",
-            deploy=deploy,
-            kubectl=kubectl,
-            run=run,
-            authorization="Bearer admin-token",
-        )
+        from installer.tests.test_workshop_apps import Workshop
+        workshop = Workshop(boxes={"box-1": ("供应链原生计算函数", {"齐套检查": "tool-kit", "产线可生产": "tool-line"})})
+        with patch("installer.uninstall.platform_client", return_value=workshop) as client:
+            view = install_sample(
+                sample="supply-chain",
+                actor_role="admin",
+                state_dir=state_dir,
+                root=ROOT,
+                version="0.1.0",
+                deploy=deploy,
+                kubectl=kubectl,
+                run=run,
+                authorization="Bearer admin-token",
+            )
+        # The sample's Workshop app is created with the caller's sign-in and recorded.
+        client.assert_called_once_with("Bearer admin-token")
+        self.assertEqual([app["name"] for app in workshop.apps.values()], ["齐套排产"])
+        self.assertEqual(json.loads((state_dir / "supply-chain.json").read_text(encoding="utf-8"))["workshopApps"],
+                         [{"id": "app-1", "name": "齐套排产"}])
+        from installer.workshop_apps import rule_refs
+        self.assertEqual({(ref["box"], ref["tool"]) for _, ref in rule_refs(workshop.apps["app-1"]["draft"])},
+                         {("box-1", "tool-kit"), ("box-1", "tool-line")})
         prepare.assert_called_once()
         self.assertEqual(seen["password"], PASSWORD)
         self.assertEqual(seen["network"], "supply_ontology_hand")
@@ -246,6 +258,38 @@ class RuntimeTest(unittest.TestCase):
                 retry_sample(sample="supply-chain", installation_id=current["id"], actor_role="admin", state_dir=state,
                              root=ROOT, version="0.1.0", deploy=stop_after_deploy, kubectl=lambda _: None, run=lambda *_: None)
             self.assertEqual(error.exception.code, "install_failed")
+
+
+class WorkshopAppStepTest(unittest.TestCase):
+    network = {"id": "supply_ontology_hand", "displayName": "供应链本体知识网络-手工版"}
+    resources = {"ownedExecution": {"toolboxes": ["box-1"], "skills": []}}
+
+    def step(self):
+        from installer.runtime import workshop_app_step
+        return workshop_app_step(ROOT, "supply-chain", self.network, "Bearer admin-token")
+
+    def test_without_workshop_the_sample_installs_without_its_apps(self):
+        from installer.tests.test_workshop_apps import Workshop
+        remembered = []
+        with patch("installer.uninstall.platform_client", return_value=Workshop(edition=False)):
+            self.step()([], remembered.append, self.resources)
+        self.assertEqual(remembered, [[]])
+
+    def test_an_unreachable_workshop_fails_the_step(self):
+        def api(method, path, body=None):
+            raise TimeoutError("timed out")
+        with patch("installer.uninstall.platform_client", return_value=api):
+            with self.assertRaises(ControlError) as caught:
+                self.step()([], lambda apps: None, self.resources)
+        self.assertEqual(caught.exception.code, "workshop_unavailable")
+
+    def test_a_missing_function_names_it(self):
+        from installer.tests.test_workshop_apps import Workshop
+        with patch("installer.uninstall.platform_client", return_value=Workshop(boxes={})):
+            with self.assertRaises(ControlError) as caught:
+                self.step()([], lambda apps: None, self.resources)
+        self.assertEqual(caught.exception.code, "workshop_function_missing")
+        self.assertIn("供应链原生计算函数 / 齐套检查", caught.exception.message)
 
 
 if __name__ == "__main__":

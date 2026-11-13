@@ -15,7 +15,7 @@ from installer.hook_process import run_hook
 from installer import diagnostics
 from installer.process_output import collect, OutputLimitExceeded
 
-from installer import experience_set, shared_database
+from installer import experience_set, shared_database, workshop_apps as apps_module
 from pathlib import Path
 
 from installer.control_plane import ControlError, create_installation, retry_installation
@@ -155,6 +155,37 @@ def _record_database_image(state_dir, sample, version, deployed):
     write_json(state_dir / f"{sample}.json", current)
 
 
+def workshop_app_step(root: Path, sample: str, knowledge_network: dict, authorization: str | None):
+    """The install step for the Workshop apps the sample brings, or None when it brings none."""
+    sample_dir, _document = _sample(root, sample)
+    if not apps_module.files(sample_dir):
+        return None
+    network = {"id": knowledge_network["id"], "name": knowledge_network.get("displayName") or knowledge_network["id"]}
+
+    def step(recorded, remember, resources):
+        from installer.uninstall import platform_client
+        try:
+            specs = apps_module.specs(sample_dir, network["id"])
+            if not authorization:
+                raise apps_module.AppError("workshop_unavailable", "Creating the sample's Workshop apps needs the caller's sign-in.")
+            api = platform_client(authorization)
+            if not apps_module.available(api):
+                diagnostics.emit("skipped", stage="verify", step="workshop-apps",
+                                 reason="the platform has no Workshop; the sample is installed without its apps")
+                remember([])
+                return
+            toolboxes = ((resources.get("ownedExecution") or {}).get("toolboxes") or []) if isinstance(resources, dict) else []
+            apps_module.install(api, specs, network, recorded, remember, toolboxes)
+        except apps_module.AppError as error:
+            raise ControlError(error.code, error.message) from None
+        except ApiError as error:
+            raise ControlError("workshop_unavailable", f"Workshop did not accept the sample's apps: {error.message}") from None
+        except Exception as error:  # a timeout, a dropped connection or a reply that is not JSON
+            raise ControlError("workshop_unavailable",
+                               f"Workshop could not be reached to create the sample's apps: {type(error).__name__}") from None
+    return step
+
+
 def record_experience_set(root: Path, sample: str, state_dir: Path) -> None:
     """Keeps the installed version's experience set with its installation; packages are not kept."""
     current = _read_state(state_dir, sample)
@@ -190,6 +221,7 @@ def install_sample(*, sample: str, actor_role: str, state_dir: Path, root: Path,
             expected_tables=expected_tables,
             knowledge_network=knowledge_network,
             components=components,
+            workshop_apps=workshop_app_step(root, sample, knowledge_network, authorization),
         )
         record_experience_set(root, sample, state_dir)
     except DeployError as exc:
@@ -231,6 +263,7 @@ def retry_sample(*, sample: str, installation_id: str, actor_role: str, state_di
             knowledge_network=knowledge_network,
             components=components,
             accepted=accepted,
+            workshop_apps=workshop_app_step(root, sample, knowledge_network, authorization),
         )
         record_experience_set(root, sample, state_dir)
     except (DeployError, ControlError) as exc:
