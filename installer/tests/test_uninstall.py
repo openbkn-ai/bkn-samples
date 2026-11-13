@@ -435,6 +435,21 @@ class UninstallTest(unittest.TestCase):
         history, _ = read_installation_history(self.state, "supply-chain", None)
         self.assertTrue(any(item.get("error") == original_error for item in history))
 
+    def test_service_killed_during_hook_can_still_uninstall_owned_resources(self):
+        from installer.tests.killed_hook import kill_during_hook
+        shared = self.state / "supply-chain"
+        receipt = json.dumps({"toolboxes": ["box-owned"], "skills": ["skill-owned"]})
+        with tempfile.TemporaryDirectory() as scratch:
+            kill_during_hook(shared / "owned-execution.json", scratch,
+                             [json.dumps({"toolboxes": [], "skills": []}), receipt])
+        # The restarted service marks the interrupted attempt failed; the planned network is not a receipt.
+        self.fail_installation(resources={"knowledgeNetworkId": "network-owned", "knowledgeNetworkPlanned": True},
+                               stages={"knowledge": "failed"}, error={"code": "install_interrupted", "message": "interrupted"})
+        self.start()
+        self.assertEqual(_read_state(self.state, "supply-chain")["status"], "uninstalled")
+        self.assertEqual(list(self.platform), ["/api/agent-operator-integration/v1/skills/other-sample"])
+        self.assertFalse((shared / "owned-execution.json").exists())
+
     def test_missing_or_corrupt_partial_hook_receipt_blocks_preparation(self):
         for content in (None, '{', '{"skills": [7], "toolboxes": []}'):
             with self.subTest(content=content):
