@@ -476,15 +476,16 @@ def kit_plan_seed(lang: str, data_dir: Path) -> list[dict[str, str]]:
     sys.path.insert(0, str(tools))
     for name in [m for m in sys.modules if m == "fn" or m.startswith("fn.")]:
         del sys.modules[name]
-    kitplan = importlib.import_module("fn.kitplan")
+    kitrules = importlib.import_module("fn.kitrules")
     sys.path.remove(str(tools))
     read = lambda t: list(csv.DictReader((data_dir / f"{t}.csv").open(encoding="utf-8")))
-    rows = {"bom": read("erp_material_bom"), "inventory": read("erp_real_time_inventory"),
-            "purchase_order": read("erp_purchase_order"), "sales_order": read("sales_order")}
-    names = {r["material_code"]: r["material_name"] for r in read("erp_material")}
     forecasts = read("erp_mds_forecast")
     products = {r["material_code"]: r for r in read("hd_product_view")}
     work = read("erp_production_work_order")
+    rows = {"bom": read("erp_material_bom"), "inventory": read("erp_real_time_inventory"),
+            "purchase_order": read("erp_purchase_order"), "sales_order": read("sales_order"),
+            "forecast": forecasts, "work_order": work}
+    materials = {r["material_code"]: r for r in read("erp_material")}
     zh = lang == "zh"
     status = {"confirmed": "已确认" if zh else "Confirmed", "scheduled": "已排" if zh else "Scheduled"}
     planner, scenario = ("朱杰倩", "初始排产") if zh else ("Owen Brooks", "Initial schedule")
@@ -500,18 +501,20 @@ def kit_plan_seed(lang: str, data_dir: Path) -> list[dict[str, str]]:
         seen.add(key)
         begin = min(x["planbegintime"] for x in group)[:10]
         end = max(x["planendtime"] for x in group)[:10]
-        plans.append((key[0], key[1], products[key[1]]["line_code"], begin, end, status["confirmed"], True))
+        plans.append((key[0], key[1], products[key[1]]["line_code"], begin, end, status["confirmed"]))
     for bill, product, line, begin, end, confirmed in SCHEDULED:
-        plans.append((bill, product, line, begin, end, status["confirmed" if confirmed else "scheduled"], False))
+        plans.append((bill, product, line, begin, end, status["confirmed" if confirmed else "scheduled"]))
+    # Each plan records what the schedule rule's kit check gives it among all the installed plans
+    # (plans in production have drawn their materials), so the history matches the Gantt on install.
+    tasks = [{"key": f"KP-{bill[3:]}-{product or 'ALL'}-01", "start": begin, "resource": line,
+              "values": {"bill_no": bill, "product_code": product, "line_code": line, "plan_status": plan_status}}
+             for bill, product, line, begin, end, plan_status in plans]
+    analysis = kitrules.analyse(tasks, rows, materials=materials, business_date=BD)
     seed = []
-    for bill, product, line, begin, end, plan_status, in_production in plans:
+    for task, (bill, product, line, begin, end, plan_status) in zip(tasks, plans):
         lines = [r for r in forecasts if r["billno"] == bill and (not product or r["material_number"] == product)]
-        demands = [{"product": r["material_number"], "qty": r["qty"]} for r in lines]
-        if in_production:
-            kit = {"kit_status": kitplan.KIT_COVERED, "kit_date": begin, "key_material": "", "shortage_note": ""}
-        else:
-            kit = kitplan.kit_check(rows, demands, begin, business_date=BD, names=names)
-        number = f"KP-{bill[3:]}-{product or 'ALL'}-01"
+        kit = kitrules.record(analysis[task["key"]], materials)
+        number = task["key"]
         seed.append(dict(
             plan_id=number, bill_no=bill, product_code=product, line_code=line,
             planned_start=f"{begin}T08:00:00+08:00", planned_finish=f"{end}T20:00:00+08:00",
