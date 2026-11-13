@@ -76,9 +76,13 @@ def main():
     network=cli('bkn','get',KN,'--export');require(tags<=set(network.get('tags',[])),'network ownership differs')
     require(len(network['object_types'])==len(specs) and len(network['relation_types'])==RELATIONS,'model counts differ')
     sources={o['id']:(o.get('data_source') or {}) for o in network['object_types']}
+    # Install queries the two dataset-backed objects it just loaded; verify, a hook with its own 300 s, queries every object.
+    # One CLI process at a time: the sample service has 256 MiB, and the install already spends most of its budget binding.
+    queried=[t for t,s in specs.items() if sys.argv[1]=='verify' or s.get('source')=='dataset']
     for table,spec in specs.items():
         require(sources.get(table,{}).get('type')=='resource' and sources[table].get('id')==(bindings.get(table) or schedule['datasets'][table]),'binding differs: '+table)
-        data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(spec['primary_key'] in r for r in data),'live object query failed '+table)
+    for table in queried:
+        data=entries(cli('bkn','object-type','query',KN,table,'--body','{"limit":2}'));require(len(data)==2 and all(specs[table]['primary_key'] in r for r in data),'live object query failed '+table)
     if sys.argv[1]=='install':skills=register_skills(apply=True,kn_id=KN)
     else:
         skills=register_skills(apply=False)
@@ -88,7 +92,7 @@ def main():
             require_owned('skills',matches[0].get('skill_id') or matches[0].get('id'));require(matches[0].get('status')=='published','unpublished Skill')
     require(len(skills['skills'])==2,'skill count differs')
     capabilities={'skills':skills,'schedule':schedule,'ownedExecution':read_receipt()}
-    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership',f'{len(specs)}-object-types',f'{RELATIONS}-relations',f'{len(tables)}-resource-bindings',f'{len(specs)-len(tables)}-dataset-bindings',f'{len(specs)}-live-object-queries',f"{len(schedule['mounted_tool_ids'])}-mounted-rule-functions",f"{len(schedule['action_ids'])}-schedule-actions")],'degrade':[],'message':''}
+    result={'ok':True,'stage':'platform-'+sys.argv[1],'resources':{'catalogId':raw['catalog']['id'],'knowledgeNetworkId':KN,'ownedExecution':capabilities['ownedExecution'],'capabilitySummary':capabilities},'checks':[{'name':n,'ok':True} for n in ('ownership',f'{len(specs)}-object-types',f'{RELATIONS}-relations',f'{len(tables)}-resource-bindings',f'{len(specs)-len(tables)}-dataset-bindings',f'{len(queried)}-live-object-queries',f"{len(schedule['mounted_tool_ids'])}-mounted-rule-functions",f"{len(schedule['action_ids'])}-schedule-actions")],'degrade':[],'message':''}
     Path(os.environ['BKN_SAMPLE_OUTPUT']).write_text(json.dumps(result));print(json.dumps(result))
 if __name__=='__main__':
     try:main()
