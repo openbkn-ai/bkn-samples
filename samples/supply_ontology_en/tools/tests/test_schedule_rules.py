@@ -40,7 +40,8 @@ def task(key, bill, start, product="", line="L1", status="Scheduled"):
 
 
 def check(*tasks):
-    return {r["key"]: r for r in kit_rule(list(tasks), ROWS, materials=MATERIALS, business_date=BD)}
+    """The tasks as the scheduling page sends them: the plans themselves, so they share the stock."""
+    return {r["key"]: r for r in kit_rule(list(tasks), ROWS, materials=MATERIALS, business_date=BD, others=list(tasks))}
 
 
 def test_a_plan_covered_by_stock_passes():
@@ -271,3 +272,53 @@ def test_descriptions_shown_to_business_users_carry_no_calling_details():
              *[comment for _name, _kind, comment in KIT_PLAN_ACTIONS.values()]]
     for text in texts:
         assert not re.search(r"mode=|object_input|_instance|execute_|get_action|\btasks?\b", text), text
+
+
+def test_demands_that_would_be_planned_are_checked_alone_in_a_batch_as_in_their_detail():
+    """The demand view sends planned demands as their plans and the others as the plans they would make: those
+    proposals must not take stock from each other, or a batch answer and the demand's detail disagree."""
+    rows = {**ROWS, "forecast": ROWS["forecast"] + [dict(billno="B6", material_number="P2", qty=60, closestatus_title="Open")]}
+    network = [task("a", "B1", "2027-03-01")]                      # takes 80 of the 100 in stock
+    proposals = [task("+demand/x", "B2", "2027-03-02", product="P2"), task("+demand/y", "B6", "2027-03-03", product="P2")]
+    batch = {r["key"]: r for r in kit_rule(network + proposals, rows, materials=MATERIALS, business_date=BD, others=network)}
+    for proposal in proposals:
+        table = kit_detail(proposal, network, rows, materials=MATERIALS, business_date=BD)
+        alone = batch[proposal["key"]]
+        assert (alone["pass"], alone["at"], alone["counts"][0]["value"]) == (False, table["at"], table["total"])
+        assert table["rows"][0]["cells"]["short"] == 40                     # 60 needed, 20 left after plan a, not 0 after x
+    assert batch["a"]["pass"] is True
+
+
+def _plans_with(scenario, plans, demands):
+    from schedule_rules import OT_FORECAST, OT_PLAN, _active_plans
+
+    def read(ot_id, field=None, values=None):
+        rows = plans if ot_id == OT_PLAN else demands if ot_id == OT_FORECAST else []
+        return [r for r in rows if field is None or str(r.get(field)) in set(values or [])]
+    return {t["key"]: t for t in _active_plans(read, scenario)}
+
+
+def test_the_scenario_changes_every_check_works_with():
+    plans = [dict(plan_id="KP-1", bill_no="B1", product_code="", line_code="L1", planned_start="2027-03-01",
+                  planned_finish="2027-03-05", plan_status="Scheduled"),
+             dict(plan_id="KP-2", bill_no="B2", product_code="", line_code="L1", planned_start="2027-03-02",
+                  planned_finish="2027-03-06", plan_status="Scheduled")]
+    demands = [dict(id="F-9", billno="B3", material_number="P3", qty=5, closestatus_title="Open")]
+    scenario = {"edits": [
+        {"source": "plans", "key": "KP-1", "operation": "adjust", "params": {"start": "2027-03-20", "end": "2027-03-24", "resource": "L2"}},
+        {"source": "plans", "key": "KP-2", "operation": "cancel", "params": {"plan_status": "Cancelled"}},
+        {"source": "demands", "key": "F-9", "operation": "create", "params": {"start": "2027-04-01", "end": "2027-04-03", "resource": "L3"}}]}
+    found = _plans_with(scenario, plans, demands)
+    assert set(found) == {"KP-1", "+demands/F-9"}                # the cancelled plan no longer counts
+    assert (found["KP-1"]["start"], found["KP-1"]["resource"]) == ("2027-03-20", "L2")
+    made = found["+demands/F-9"]
+    assert (made["values"]["bill_no"], made["values"]["product_code"], made["start"], made["resource"]) == ("B3", "P3", "2027-04-01", "L3")
+
+
+def test_a_task_without_a_line_is_not_applicable_for_the_line_check():
+    lines = {"L1": {"line_name": "L1", "line_kind": "Line", "product_lines": "A"}}
+    for resource in (None, ""):
+        unplaced = dict(task("u", "B1", "2027-03-01"), resource=resource)
+        result = line_rule([unplaced], forecasts=ROWS["forecast"], lines=lines, product_lines={"P1": "A"})[0]
+        assert (result["key"], result["pass"], result["text"]) == ("u", None, "")
+
