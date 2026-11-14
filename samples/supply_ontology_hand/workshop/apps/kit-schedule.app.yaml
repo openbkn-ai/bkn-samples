@@ -26,7 +26,7 @@ sources:
       op: ne
       value: 已取消
   - name: planResource
-    label: 计划产线
+    label: 计划产线编码
     kind: matched
     source: schedulePlan
     pairs: &id001
@@ -40,6 +40,14 @@ sources:
       value: 已取消
     field: line_code
     type: text
+  - kind: matched
+    source: schedulePlan
+    pairs: *id001
+    where: *id002
+    type: text
+    name: planLine
+    label: 计划产线
+    field: lineName
   - kind: matched
     source: schedulePlan
     pairs: *id001
@@ -230,6 +238,15 @@ sources:
     otherwise:
       value: 单个产品
       tone: neutral
+  - name: lineName
+    label: 产线名称
+    kind: matched
+    source: scheduleResource
+    pairs:
+    - field: line_code
+      other: line_code
+    field: line_name
+    type: text
 - id: schedulePlanActive
   label: 有效齐套排产计划
   objectType: supply_ontology_hand_kitplan
@@ -310,9 +327,11 @@ pages:
           endField: planEnd
           barFields:
           - planKit
+          - planLine
           popoverFields:
           - planned
           - planKit
+          - planLine
           - planResource
           - planStart
           - planEnd
