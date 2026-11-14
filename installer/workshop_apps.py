@@ -1,9 +1,9 @@
 """Workshop apps a sample brings: created on installation, removed on uninstall.
 
-A sample places app specs exported from Workshop (the app's draft) in ``workshop/apps/``, without
-``app.id`` and with rule functions named only by ``boxName`` and ``toolName``: toolbox and tool IDs
-are new on every installation. Installing resolves those names in the toolboxes this installation
-created, writes the IDs in, creates each app on the sample's knowledge network with the spec as its
+A sample places app specs exported from Workshop (the app's draft) in ``workshop/apps/``. Rule
+functions are found by ``boxName`` and ``toolName``: toolbox and tool IDs are new on every
+installation, so any IDs a file carries (an export keeps its environment's, and its ``app.id``) are
+not used. Installing resolves the names in the toolboxes this installation created, writes the IDs in, creates each app on the sample's knowledge network with the spec as its
 draft and publishes it, so its pages open from the app workshop. A function that cannot be found
 fails the installation before any app is created. The created app IDs are kept in the installation
 record; uninstalling deletes them.
@@ -72,13 +72,11 @@ def validate(spec, network_id: str) -> list[str]:
         errors.append(f"dependencies.knowledgeNetwork.id must be the sample's knowledge network {network_id}")
     if not isinstance(spec.get("pages"), list) or not spec["pages"]:
         errors.append("pages must list at least one page")
-    if isinstance(app, dict) and "id" in app:
-        errors.append("app.id must be left out; Workshop assigns it")
+    # An app exported from Workshop may keep its app.id and the toolbox and tool IDs of the environment it
+    # came from: the installer drops the one and replaces the others, so an export is used as it is.
     for where, ref in rule_refs(spec):
         if not isinstance(ref, dict) or not all(isinstance(ref.get(k), str) and ref[k].strip() for k in ("boxName", "toolName")):
             errors.append(f"{where}: a rule function is named by boxName and toolName")
-        elif "box" in ref or "tool" in ref:
-            errors.append(f"{where}: leave out box and tool; the installer fills in this installation's IDs")
     return errors
 
 
@@ -206,7 +204,8 @@ def install(api, spec_list: list[dict], network: dict, recorded: list[dict], rem
         name = spec["app"]["name"]
         for app_id in _same_name(api, network["id"], name):
             remove(api, app_id)
-        draft = {**spec, "dependencies": {**spec["dependencies"], "knowledgeNetwork": dict(network)}}
+        draft = {**spec, "app": {k: v for k, v in spec["app"].items() if k != "id"},
+                 "dependencies": {**spec["dependencies"], "knowledgeNetwork": dict(network)}}
         app = api("POST", APPS, {"name": name, "description": spec["app"].get("description") or "",
                                  "tags": [], "references": [], "kn": dict(network), "draft": draft})
         if not isinstance(app, dict) or not app.get("id"):
