@@ -9,6 +9,7 @@ checked" instead of passing.
 from __future__ import annotations
 
 import json
+import os
 from collections.abc import Callable, Mapping
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
@@ -68,10 +69,26 @@ def read_table(query: Callable[..., Any], table: str, condition: dict[str, Any] 
             return rows
 
 
-def reader(sdk_query: Callable[..., Any], call: Callable[..., Any] | None) -> Callable[..., Any]:
+def in_conversation(bkn: Any) -> bool:
+    """Whether this execution belongs to a Context Loader conversation, the only place ``sandbox_sdk.bkn`` reads.
+    Outside one (a Workshop rule check or adjust action through the toolbox proxy) the SDK refuses, and its first
+    use still leaves an empty ``/workspace/adhoc-<id>`` directory behind; the sandbox walks every such directory
+    before and after each later execution, so a few thousand of them cost seconds per call. Only the execution's
+    own state is read here (``vars`` does not trigger the SDK's lazy set-up)."""
+    if os.environ.get("BKN_CONVERSATION_ID", "").strip():
+        return True
+    runtime = vars(bkn).get("_RUNTIME") if hasattr(bkn, "__dict__") else None
+    context = runtime.get("bkn") if isinstance(runtime, Mapping) else None
+    return isinstance(context, Mapping) and bool(str(context.get("conversation_id") or "").strip())
+
+
+def reader(sdk_query: Callable[..., Any] | None, call: Callable[..., Any] | None) -> Callable[..., Any]:
     """The SDK's object query; without a Context Loader interaction (a Workshop rule-tool call through the
-    toolbox) the SDK refuses, so the same query goes to ontology-query directly as the caller."""
-    direct = {"on": False}
+    toolbox) the SDK refuses, so the same query goes to ontology-query directly as the caller. Without a
+    conversation (``sdk_query`` is None, see ``in_conversation``) the SDK is not touched at all."""
+    if sdk_query is None and call is None:
+        raise ValueError("no object reader: neither a conversation nor a direct call")
+    direct = {"on": sdk_query is None}
 
     def rest(kn_id: str, ot_id: str, limit: int, offset: int, condition: Any = None) -> Any:
         body = {"limit": limit, "offset": offset, "need_total": True, **({"condition": condition} if condition else {})}
@@ -167,4 +184,4 @@ def adjust_maintenance(query: Callable[..., Any], call: Callable[..., Any], para
     return {"maintenance_work_order": typed("maintenance_work_orders", changed["row"]), "previous": changed["previous"]}
 
 
-__all__ = ["adjust_maintenance", "adjust_operation", "load", "read_table", "reader", "rule", "typed"]
+__all__ = ["adjust_maintenance", "adjust_operation", "in_conversation", "load", "read_table", "reader", "rule", "typed"]

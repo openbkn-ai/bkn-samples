@@ -15,6 +15,7 @@ so the caller marks the tasks "not checked" instead of passing them.
 
 from __future__ import annotations
 
+import os
 from collections.abc import Callable, Mapping
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
@@ -43,11 +44,25 @@ FIELDS = {
 }
 
 
-def tool_query(sdk_query: Callable[..., Mapping[str, Any]], call: Callable[..., Any]) -> Callable[..., Mapping[str, Any]]:
+def in_conversation(bkn: Any) -> bool:
+    """Whether this execution belongs to a Context Loader conversation, the only place ``sandbox_sdk.bkn`` reads.
+    Outside one (a Workshop rule check through the toolbox proxy) the SDK refuses, and its first use still leaves
+    an empty ``/workspace/adhoc-<id>`` directory behind; the sandbox walks every such directory before and after
+    each later execution, so a few thousand of them cost seconds per call. Only the execution's own state is read
+    here (``vars`` does not trigger the SDK's lazy set-up)."""
+    if os.environ.get("BKN_CONVERSATION_ID", "").strip():
+        return True
+    runtime = vars(bkn).get("_RUNTIME") if hasattr(bkn, "__dict__") else None
+    context = runtime.get("bkn") if isinstance(runtime, Mapping) else None
+    return isinstance(context, Mapping) and bool(str(context.get("conversation_id") or "").strip())
+
+
+def tool_query(sdk_query: Callable[..., Mapping[str, Any]] | None, call: Callable[..., Any]) -> Callable[..., Mapping[str, Any]]:
     """Object reads for a rule tool. The schedule Gantt calls it through the toolbox proxy, outside a Context Loader
     interaction, where the SDK reader refuses (``conversation_required``); the ontology query API then answers the
-    same object query as the caller. Inside an interaction (an action, Q&A) the SDK reader is used."""
-    state = {"sdk": True}
+    same object query as the caller. Inside an interaction (an action, Q&A) the SDK reader is used; without one
+    (``sdk_query`` is None, see ``in_conversation``) the SDK is not touched at all."""
+    state = {"sdk": sdk_query is not None}
 
     def direct(kn_id: str, ot_id: str, condition: Any = None, limit: int = 500, offset: int = 0,
                properties: list[str] | None = None, **_: Any) -> Mapping[str, Any]:
@@ -201,4 +216,4 @@ def line_check(tasks: Any, query: Callable[..., Mapping[str, Any]]) -> dict[str,
     return {"results": line_rule(tasks, forecasts=forecasts, lines=lines, product_lines=product_lines)}
 
 
-__all__ = ["kit_check", "kit_check_detail", "kit_record", "line_check", "tool_query"]
+__all__ = ["in_conversation", "kit_check", "kit_check_detail", "kit_record", "line_check", "tool_query"]

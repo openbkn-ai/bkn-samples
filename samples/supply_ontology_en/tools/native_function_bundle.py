@@ -76,7 +76,9 @@ def schedule_rule(tasks: list | None = None, scenario: dict | None = None, mode:
                   task: dict | None = None, locale: str | None = None, query: dict | None = None) -> dict:
     """Check schedule-Gantt tasks (kit-schedule plans), or with mode "detail" explain one task as a table."""
     # The tasks already carry the scenario's changes; the edits only say which ones moved.
-    read = schedule_rules.tool_query(bkn.query_object_instance, bkn_osdk.call)
+    # The SDK reader only inside a conversation: touching it elsewhere leaves a directory in the shared workspace.
+    read = schedule_rules.tool_query(bkn.query_object_instance if schedule_rules.in_conversation(bkn) else None,
+                                     bkn_osdk.call)
     if _FIXED_OPERATION == "kit_check_rule" and mode == "detail":
         return schedule_rules.kit_check_detail(task, read, scenario=scenario, locale=locale, page=query)
     if _FIXED_OPERATION == "kit_check_rule":

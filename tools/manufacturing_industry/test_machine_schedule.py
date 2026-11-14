@@ -2,9 +2,12 @@
 import csv
 import importlib
 import json
+import os
 import re
 import sys
+import types
 import unittest
+from unittest import mock
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -292,6 +295,80 @@ class RuntimeTest(Base):
         self.assertEqual(rest_calls[0][2], {"X-HTTP-Method-Override": "GET"})
         with self.assertRaises(RuntimeError):                              # other SDK failures stay failures
             rt.rule("changeover", lambda **kw: (_ for _ in ()).throw(RuntimeError("boom")), call=call, tasks=[])
+
+    def run_bundled(self, operation, env, **event):
+        """Run one built Function as the sandbox would; returns its answer and the ``sandbox_sdk.bkn`` names touched."""
+        touched, rest = [], []
+        query = self.query()
+
+        class Bkn(types.ModuleType):
+            def __getattr__(self, name):        # the SDK sets itself up (and makes a workspace dir) on first access
+                touched.append(name)
+                return query
+        bkn = Bkn("sandbox_sdk.bkn")
+        sdk = types.ModuleType("sandbox_sdk")
+        sdk.bkn, sdk.tool = bkn, (lambda fn: fn)
+
+        def call(path, method="GET", body=None, headers=None):
+            rest.append(path)
+            rows = self.t[path.rsplit("/", 1)[1]]
+            return {"datas": rows[body["offset"]:body["offset"] + body["limit"]], "total_count": len(rows)}
+        osdk = types.ModuleType("bkn_osdk")
+        osdk.call = call
+        saved = {n: sys.modules.pop(n) for n in ("machine_schedule", "schedule_runtime") if n in sys.modules}
+        try:
+            with mock.patch.dict(sys.modules, {"sandbox_sdk": sdk, "bkn_osdk": osdk}), mock.patch.dict(os.environ, env), \
+                    mock.patch.object(sys, "path", list(sys.path)):
+                if not env:
+                    os.environ.pop("BKN_CONVERSATION_ID", None)
+                namespace = {}
+                exec(self.m["function_bundle"].build(operation, KN[self.lang]), namespace)
+                out = namespace["schedule_rule"](**event)
+        finally:
+            for n in ("machine_schedule", "schedule_runtime"):
+                sys.modules.pop(n, None)
+            sys.modules.update(saved)
+        return out, touched, rest
+
+    def test_without_a_conversation_the_function_never_touches_the_sdk(self):
+        # Each first touch of sandbox_sdk.bkn outside a conversation leaves a /workspace/adhoc-* directory, and the
+        # sandbox walks all of them before and after every execution: rule checks went from ~1 s to 7-9 s.
+        out, touched, rest = self.run_bundled("machine_capability_rule", {}, tasks=[{"key": "OP-2703-09-10"}])
+        self.assertFalse(out["results"][0]["pass"])
+        self.assertEqual(touched, [])
+        self.assertTrue(rest and all(p.startswith("/api/ontology-query/v1/") for p in rest))
+
+    def test_in_a_conversation_the_function_reads_through_the_sdk(self):
+        out, touched, rest = self.run_bundled("machine_capability_rule", {"BKN_CONVERSATION_ID": "conv-1"},
+                                              tasks=[{"key": "OP-2703-09-10"}])
+        self.assertFalse(out["results"][0]["pass"])
+        self.assertEqual(set(touched), {"query_object_instance"})
+        self.assertEqual(rest, [])
+
+    def test_reader_without_an_sdk_reader_goes_direct(self):
+        rt = self.m["schedule_runtime"]
+        rt.KN_ID = KN[self.lang]
+        paths = []
+
+        def call(path, method="GET", body=None, headers=None):
+            paths.append((path, method, headers))
+            return {"datas": [], "total_count": 0}
+        self.assertEqual(rt.read_table(rt.reader(None, call), "production_machines"), [])
+        self.assertEqual(paths, [(f"/api/ontology-query/v1/knowledge-networks/{KN[self.lang]}/object-types/production_machines",
+                                  "POST", {"X-HTTP-Method-Override": "GET"})])
+        with self.assertRaises(ValueError):
+            rt.reader(None, None)
+
+    def test_the_conversation_can_come_with_the_execution_event(self):
+        rt = self.m["schedule_runtime"]
+        bkn = types.ModuleType("bkn")
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("BKN_CONVERSATION_ID", None)
+            self.assertFalse(rt.in_conversation(bkn))
+            bkn._RUNTIME = {"bkn": {"conversation_id": "c"}}
+            self.assertTrue(rt.in_conversation(bkn))
+            bkn._RUNTIME = {"bkn": {"conversation_id": " "}}
+            self.assertFalse(rt.in_conversation(bkn))
 
     def test_partial_reads_fail(self):
         rt = self.m["schedule_runtime"]

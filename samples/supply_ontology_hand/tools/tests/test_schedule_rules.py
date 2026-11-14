@@ -167,6 +167,7 @@ def test_bundled_rule_tools_read_the_network_and_answer_per_task(monkeypatch):
     osdk.call = lambda *a, **k: (_ for _ in ()).throw(AssertionError("not used inside an interaction"))
     monkeypatch.setitem(sys.modules, "sandbox_sdk", sdk)
     monkeypatch.setitem(sys.modules, "bkn_osdk", osdk)
+    monkeypatch.setenv("BKN_CONVERSATION_ID", "conv-1")  # inside an interaction
     for name in [m for m in sys.modules if m in ("fn", "managed_execution", "schedule_rules") or m.startswith("fn.")]:
         monkeypatch.delitem(sys.modules, name)
     monkeypatch.setattr(sys, "path", list(sys.path))
@@ -258,6 +259,65 @@ def test_other_reader_errors_are_not_hidden():
         raise RuntimeError("object type not found")
     with pytest.raises(RuntimeError):
         tool_query(broken, lambda *a, **k: {})(kn_id="kn", ot_id="x", limit=1, offset=0)
+
+
+def _run_bundled_line_check(monkeypatch, conversation):
+    """The built line-check Function run as the sandbox runs it; returns its answer, the ``sandbox_sdk.bkn`` names it
+    touched and the ontology-query calls it made."""
+    fake, touched, rest = FakeObjectQuery(), [], []
+
+    class Bkn(types.ModuleType):
+        def __getattr__(self, name):  # the SDK sets itself up (and makes a workspace directory) on first access
+            touched.append(name)
+            return fake
+    sdk = types.ModuleType("sandbox_sdk")
+    sdk.bkn, sdk.tool = Bkn("sandbox_sdk.bkn"), (lambda fn: fn)
+
+    def call(path, method="GET", body=None, headers=None):
+        rest.append(path)
+        return fake(kn_id="kn", ot_id=path.rsplit("/", 1)[1], condition=body.get("condition"), limit=body["limit"],
+                    offset=body["offset"])
+    osdk = types.ModuleType("bkn_osdk")
+    osdk.call = call
+    monkeypatch.setitem(sys.modules, "sandbox_sdk", sdk)
+    monkeypatch.setitem(sys.modules, "bkn_osdk", osdk)
+    for name in [m for m in sys.modules if m in ("fn", "managed_execution", "schedule_rules") or m.startswith("fn.")]:
+        monkeypatch.delitem(sys.modules, name)
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    if conversation:
+        monkeypatch.setenv("BKN_CONVERSATION_ID", conversation)
+    else:
+        monkeypatch.delenv("BKN_CONVERSATION_ID", raising=False)
+    namespace: dict = {}
+    exec(build_native_function_code(fixed_operation="line_check_rule"), namespace)
+    tasks = [task("a", "YCD2026091600000057", "2027-03-08", product="382-000005", line="L-UR-AD")]
+    return namespace["schedule_rule"](tasks=tasks, scenario={"edits": []}), touched, rest
+
+
+def test_without_a_conversation_the_rule_function_never_touches_the_sdk(monkeypatch):
+    # Each first touch of sandbox_sdk.bkn outside a conversation leaves a /workspace/adhoc-* directory, and the
+    # sandbox walks all of them before and after every execution: rule checks went from ~1 s to 7-9 s.
+    out, touched, rest = _run_bundled_line_check(monkeypatch, None)
+    assert out["results"][0]["pass"] is True
+    assert touched == []
+    assert rest and all(p.startswith("/api/ontology-query/v1/knowledge-networks/") for p in rest)
+
+
+def test_in_a_conversation_the_rule_function_reads_through_the_sdk(monkeypatch):
+    out, touched, rest = _run_bundled_line_check(monkeypatch, "conv-1")
+    assert out["results"][0]["pass"] is True
+    assert set(touched) == {"query_object_instance"} and rest == []
+
+
+def test_the_conversation_can_come_with_the_execution_event(monkeypatch):
+    from schedule_rules import in_conversation
+    monkeypatch.delenv("BKN_CONVERSATION_ID", raising=False)
+    bkn = types.ModuleType("bkn")
+    assert in_conversation(bkn) is False
+    bkn._RUNTIME = {"bkn": {"conversation_id": "c"}}
+    assert in_conversation(bkn) is True
+    bkn._RUNTIME = {"bkn": {"conversation_id": " "}}
+    assert in_conversation(bkn) is False
 
 
 def test_a_date_outside_the_business_year_shows_its_year():
