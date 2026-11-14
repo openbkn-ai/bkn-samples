@@ -24,11 +24,16 @@ import bkn_osdk
 import schedule_runtime
 
 
+def _reader():
+    # The SDK reader only inside a conversation: touching it elsewhere leaves a directory in the shared workspace.
+    return bkn.query_object_instance if schedule_runtime.in_conversation(bkn) else None
+
+
 @tool
 def schedule_rule(tasks: list | None = None, scenario: dict | None = None, mode: str | None = None,
                   task: dict | None = None, locale: str | None = None, query: dict | None = None) -> dict:
     """Check schedule tasks (operations) against one rule; mode "detail" returns one task's paged table."""
-    return schedule_runtime.rule(_OPERATION, bkn.query_object_instance, call=bkn_osdk.call, tasks=tasks, scenario=scenario, mode=mode,
+    return schedule_runtime.rule(_OPERATION, _reader(), call=bkn_osdk.call, tasks=tasks, scenario=scenario, mode=mode,
                                  task=task, locale=locale, detail_query=query)
 '''
 
@@ -38,12 +43,17 @@ import bkn_osdk
 import schedule_runtime
 
 
+def _reader():
+    # The SDK reader only inside a conversation: touching it elsewhere leaves a directory in the shared workspace.
+    return bkn.query_object_instance if schedule_runtime.in_conversation(bkn) else None
+
+
 @tool
 def adjust_operation_schedule(operation_id: str | None = None, planned_machine_id: str | None = None,
                               planned_start_date: str | None = None, planned_end_date: str | None = None) -> dict:
     """Move one operation to a machine of its work centre and new planned days."""
     params = {k: v for k, v in locals().items() if v not in (None, "")}
-    return schedule_runtime.adjust_operation(bkn.query_object_instance, bkn_osdk.call, params)
+    return schedule_runtime.adjust_operation(_reader(), bkn_osdk.call, params)
 '''
 
 MAINTENANCE_ENTRY = r'''
@@ -52,12 +62,17 @@ import bkn_osdk
 import schedule_runtime
 
 
+def _reader():
+    # The SDK reader only inside a conversation: touching it elsewhere leaves a directory in the shared workspace.
+    return bkn.query_object_instance if schedule_runtime.in_conversation(bkn) else None
+
+
 @tool
 def adjust_maintenance_work_order(maintenance_work_order_id: str | None = None, planned_start_date: str | None = None,
                                   planned_end_date: str | None = None) -> dict:
     """Move one maintenance work order's planned days; its due day stays."""
     params = {k: v for k, v in locals().items() if v not in (None, "")}
-    return schedule_runtime.adjust_maintenance(bkn.query_object_instance, bkn_osdk.call, params)
+    return schedule_runtime.adjust_maintenance(_reader(), bkn_osdk.call, params)
 '''
 
 ENTRIES = {"adjust_operation_schedule": OPERATION_ENTRY, "adjust_maintenance_work_order": MAINTENANCE_ENTRY}
