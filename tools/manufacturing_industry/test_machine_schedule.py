@@ -345,6 +345,20 @@ class RuntimeTest(Base):
         self.assertEqual(set(touched), {"query_object_instance"})
         self.assertEqual(rest, [])
 
+    def test_reader_without_an_sdk_reader_goes_direct(self):
+        rt = self.m["schedule_runtime"]
+        rt.KN_ID = KN[self.lang]
+        paths = []
+
+        def call(path, method="GET", body=None, headers=None):
+            paths.append((path, method, headers))
+            return {"datas": [], "total_count": 0}
+        self.assertEqual(rt.read_table(rt.reader(None, call), "production_machines"), [])
+        self.assertEqual(paths, [(f"/api/ontology-query/v1/knowledge-networks/{KN[self.lang]}/object-types/production_machines",
+                                  "POST", {"X-HTTP-Method-Override": "GET"})])
+        with self.assertRaises(ValueError):
+            rt.reader(None, None)
+
     def test_the_conversation_can_come_with_the_execution_event(self):
         rt = self.m["schedule_runtime"]
         bkn = types.ModuleType("bkn")
