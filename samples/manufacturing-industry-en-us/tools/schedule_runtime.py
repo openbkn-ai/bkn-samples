@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable, Mapping
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 import machine_schedule as ms
 
 PAGE_SIZE = 500
+READ_WORKERS = 6
 MAX_ROWS = 20_000
 # Set by the bundle: the network, its language and the field types of the two scheduled objects.
 KN_ID = ""
@@ -91,7 +93,16 @@ def reader(sdk_query: Callable[..., Any], call: Callable[..., Any] | None) -> Ca
 
 
 def load(query: Callable[..., Any], tables: tuple[str, ...]) -> dict[str, list[dict[str, Any]]]:
-    return {table: read_table(query, table) for table in tables}
+    """Every table a rule needs, read side by side: one after another, ten tables at 1-2 s each kept a rule check
+    near Workshop's 35 s limit. The first read finds out whether the SDK or the direct query answers."""
+    if not tables:
+        return {}
+    first = tables[0]
+    out = {first: read_table(query, first)}
+    with ThreadPoolExecutor(max_workers=min(READ_WORKERS, len(tables))) as pool:
+        for table, rows in zip(tables[1:], pool.map(lambda table: read_table(query, table), tables[1:])):
+            out[table] = rows
+    return out
 
 
 def rule(name: str, query: Callable[..., Any], *, call: Callable[..., Any] | None = None, tasks: Any = None, scenario: Any = None, mode: Any = None,

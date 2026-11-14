@@ -189,8 +189,24 @@ WORDS = {
 
 
 def lang_of(locale: Any, default: str) -> str:
-    text = str(locale or "").lower()
-    return "zh" if text.startswith("zh") else ("en" if text.startswith("en") else default)
+    """The sample's own language. The locale a caller sends (Workshop sends its interface language) is not used,
+    so a page shows one language: a Chinese sample in an English Studio still reads Chinese, and the other way round."""
+    return default
+
+
+# Data values the English sample stores as codes, as words in texts and tables (the Chinese sample stores words).
+VALUE_WORDS = {
+    "CAST_IRON": "cast iron", "STAINLESS": "stainless steel", "BRONZE": "bronze", "ALUMINIUM": "aluminium",
+    "INSPECTION": "inspection", "MARKING": "marking",
+    "qualified": "qualified", "suspended": "suspended", "in_training": "in training",
+    "available": "available", "under_repair": "under repair",
+    "frozen": "frozen", "draft": "draft", "obsolete": "obsolete", "active": "active", "left": "left",
+}
+
+
+def shown(lang: str, value: Any) -> str:
+    text = str(value or "")
+    return VALUE_WORDS.get(text, text.replace("_", " ")) if lang == "en" else text
 
 
 # --- facts -------------------------------------------------------------------------------------
@@ -435,7 +451,7 @@ def kit_outcome(f: Facts, kit_run: Mapping[str, Mapping[str, Any]], kit: Kit, or
     parts = []
     if not bom_ok:
         bom = kit.bom[order]
-        parts.append(W["kit.bom"].format(bom=bom.get("bom_version_id") or "?", status=bom.get("status") or "?"))
+        parts.append(W["kit.bom"].format(bom=bom.get("bom_version_id") or "?", status=shown(lang, bom.get("status")) or "?"))
     if shorts:
         key = max(shorts, key=lambda m: ((item["ready"].get(m) or "9999"), shorts[m]["short"], m))
         parts.append(W["kit.short"].format(n=len(shorts), name=f.name("product", key), qty=_qty(f, key, shorts[key]["short"])))
@@ -597,7 +613,7 @@ def check_capability(f: Facts, tasks: list[Mapping[str, Any]], lang: str) -> lis
             if status == "qualified":
                 out.append(result(key, True, W["cap.ok"].format(**names), detail=True))
             elif status:
-                out.append(result(key, False, W["cap.bad"].format(status=_status_text(f, machine, cap), **names), detail=True))
+                out.append(result(key, False, W["cap.bad"].format(status=shown(lang, _status_text(f, machine, cap)), **names), detail=True))
             else:
                 out.append(result(key, False, W["cap.none"].format(**names), detail=True))
     return out
@@ -618,7 +634,7 @@ def detail_capability(f: Facts, op: str, lang: str) -> dict[str, Any]:
         rows.append({"id": m, "group": "qualified" if status == "qualified" else ("suspended" if status else "no_capability"),
                      "key": m == machine,
                      "cells": {"machine": f"{f.name('machine', m)} {m}", "work_center": f.name("wc", str(info.get("work_center_id") or "")),
-                               "capability": _status_text(f, m, cap) or W["none"], "machine_status": str(info.get("status") or "")},
+                               "capability": shown(lang, _status_text(f, m, cap)) or W["none"], "machine_status": shown(lang, info.get("status"))},
                      "links": {"machine": {"objectType": "production_machines", "key": m}}})
     rows.sort(key=lambda r: (not r["key"], r["group"] != "qualified", r["id"]))
     return {"title": W["cap.title"].format(op=op, name=f.ops[op].get("operation_name") or "", cap=f.name("cap", cap)),
@@ -717,7 +733,7 @@ def detail_operator(f: Facts, op: str, lang: str) -> dict[str, Any]:
         qual = v["qual"] or {}
         rows.append({"id": person, "group": v["group"], "key": v["group"] == "eligible",
                      "cells": {"operator": f"{f.name('operator', person)} {person}",
-                               "qualification": str(qual.get("qualification_status") or W["none"]), "valid_to": v["valid_to"],
+                               "qualification": shown(lang, qual.get("qualification_status")) or W["none"], "valid_to": v["valid_to"],
                                "week": "、".join(f.name("wc", w) for w in v["week"]) if lang == "zh" else ", ".join(f.name("wc", w) for w in v["week"])},
                      "links": {"operator": {"objectType": "operators", "key": person}}})
     order = ("eligible", "not_assigned", "expired", "unqualified", "left")
@@ -758,13 +774,15 @@ def check_changeover(f: Facts, tasks: list[Mapping[str, Any]], lang: str) -> lis
         at = line.index(op)
         prev = line[at - 1] if at else ""
         after = line[at + 1] if at + 1 < len(line) else ""
-        setup = lambda o: str(f.steps.get(o, {}).get("setup_class") or "")
+        setup = lambda o: shown(lang, f.steps.get(o, {}).get("setup_class"))
         if not prev:
             out.append(result(key, True, W["chg.first"], related=[after] if after else []))
         elif setup(prev) == setup(op):
             out.append(result(key, True, W["chg.ok"].format(setup=setup(op)), related=[x for x in (prev, after) if x]))
         else:
-            out.append(result(key, False, W["chg.change"].format(prev=prev, a=setup(prev), b=setup(op)), severity=SOFT,
+            before = f.ops.get(prev, {})
+            named = " ".join(str(x) for x in (before.get("production_order_id"), before.get("operation_name")) if x) or prev
+            out.append(result(key, False, W["chg.change"].format(prev=named, a=setup(prev), b=setup(op)), severity=SOFT,
                               related=[x for x in (prev, after) if x]))
     return out
 

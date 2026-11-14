@@ -191,12 +191,29 @@ class ContractTest(Base):
                  "values": {"planned_start_date": "2027-03-25", "planned_end_date": "2027-03-26"}})
         self.assertEqual(f.plan["OP-2703-09-20"][1:], ("2027-03-25", "2027-03-26"))
 
-    def test_labels_follow_the_locale(self):
-        zh = self.check("machine_capability", [{"key": "OP-2703-09-10"}], locale="zh-CN")["OP-2703-09-10"]["text"]
-        en = self.check("machine_capability", [{"key": "OP-2703-09-10"}], locale="en-US")["OP-2703-09-10"]["text"]
-        self.assertIn("能力", zh)
-        self.assertIn("suspended" if self.lang == "en" else "暂停", en)
-        self.assertNotIn("能力", en)
+    def test_texts_stay_in_the_sample_language_whatever_the_locale(self):
+        # Workshop sends its interface language; a Chinese sample in an English Studio still reads Chinese.
+        texts = [self.check("machine_capability", [{"key": "OP-2703-09-10"}], locale=loc)["OP-2703-09-10"]["text"]
+                 for loc in ("zh-CN", "en-US", None)]
+        self.assertEqual(len(set(texts)), 1)
+        cjk = any("\u4e00" <= ch <= "\u9fff" for ch in texts[0])
+        self.assertEqual(cjk, self.lang == "zh")
+        for loc in ("zh-CN", "en-US"):
+            table = self.ms.detail("work_order_kit", self.t, {"key": "OP-2703-06-10"}, None, language=self.lang, locale=loc,
+                                   query={"offset": 0, "limit": 50})
+            labels = " ".join(c["label"] for c in table["columns"]) + table["title"] + table["conclusion"]
+            self.assertEqual(any("\u4e00" <= ch <= "\u9fff" for ch in labels.replace("件", "")), self.lang == "zh", (loc, labels))
+
+    def test_codes_read_as_words_in_english(self):
+        text = self.check("machine_capability", [{"key": "OP-2703-09-10"}])["OP-2703-09-10"]["text"]
+        self.assertIn("suspended" if self.lang == "en" else "暂停", text)
+        out = self.ms.check("changeover", self.t, [], None, language=self.lang)["results"]
+        joined = " ".join(r["text"] for r in out)
+        self.assertNotRegex(joined, r"CAST_IRON|STAINLESS|INSPECTION|OP-27")
+        if self.lang == "en":
+            self.assertIn("cast iron", joined)
+        changes = [r["text"] for r in out if r["pass"] is False]
+        self.assertTrue(changes and all("WO-" in t for t in changes), changes[:2])
 
 
 class AdjustTest(Base):
