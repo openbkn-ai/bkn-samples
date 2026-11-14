@@ -26,7 +26,7 @@ sources:
       op: ne
       value: 已取消
   - name: planResource
-    label: 计划资源
+    label: 计划产线
     kind: matched
     source: schedulePlan
     pairs: &id001
@@ -310,7 +310,6 @@ pages:
           endField: planEnd
           barFields:
           - planKit
-          - planResource
           popoverFields:
           - planned
           - planKit
@@ -416,6 +415,7 @@ pages:
             days: 5
             fields:
             - billno
+            - qty
             - startdate
           ruleTools:
           - name: 产线可生产

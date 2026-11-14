@@ -26,7 +26,7 @@ sources:
       op: ne
       value: Cancelled
   - name: planResource
-    label: Planned resource
+    label: Planned line
     kind: matched
     source: schedulePlan
     pairs: &id001
@@ -310,7 +310,6 @@ pages:
           endField: planEnd
           barFields:
           - planKit
-          - planResource
           popoverFields:
           - planned
           - planKit
@@ -416,13 +415,14 @@ pages:
             days: 5
             fields:
             - billno
+            - qty
             - startdate
           ruleTools:
-          - name: Line_Can_Build
+          - name: Line can build
             tool:
               boxName: Supply_EN_Functions
               toolName: Line_Can_Build
-          - name: Kit_Check
+          - name: Kit check
             tool:
               boxName: Supply_EN_Functions
               toolName: Kit_Check
@@ -490,11 +490,11 @@ scheduleModel:
     target:
       field: startdate
     rules:
-    - name: Line_Can_Build
+    - name: Line can build
       tool:
         boxName: Supply_EN_Functions
         toolName: Line_Can_Build
-    - name: Kit_Check
+    - name: Kit check
       tool:
         boxName: Supply_EN_Functions
         toolName: Kit_Check

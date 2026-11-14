@@ -88,13 +88,8 @@ class AppSpecTest(unittest.TestCase):
         self.assertTrue(workshop_apps.validate({**spec(), "apiVersion": "v0"}, "supply_ontology_hand"))
         self.assertTrue(workshop_apps.validate({**spec(), "pages": []}, "supply_ontology_hand"))
         self.assertTrue(workshop_apps.validate({**spec(), "app": {"id": "x"}}, "supply_ontology_hand"))
-        self.assertTrue(workshop_apps.validate({**spec(), "app": {"id": "exported", "name": "Kit schedule"}}, "supply_ontology_hand"))
 
-    def test_rule_functions_are_named_without_ids(self):
-        with_ids = spec()
-        with_ids["scheduleModel"]["tasks"][0]["rules"][0]["tool"].update(box="box-old", tool="tool-old")
-        self.assertIn("scheduleModel.tasks[0].rules[0]: leave out box and tool; the installer fills in this installation's IDs",
-                      workshop_apps.validate(with_ids, "supply_ontology_hand"))
+    def test_rule_functions_are_named_by_toolbox_and_tool(self):
         unnamed = spec()
         unnamed["pages"][0]["regions"]["cells"][0]["config"]["layers"][0]["ruleTools"][1]["tool"] = {"toolName": "Line_Can_Build"}
         self.assertEqual(workshop_apps.validate(unnamed, "supply_ontology_hand"),
@@ -256,3 +251,33 @@ class UninstallAppsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ExportedAppTest(unittest.TestCase):
+    """A Workshop export keeps its app.id and its environment's tool IDs; it installs as it is."""
+    network = {"id": "supply_ontology_hand", "name": "供应链"}
+
+    def exported(self):
+        spec_ = spec()
+        spec_["app"]["id"] = "app-from-another-environment"
+        for _, ref in workshop_apps.rule_refs(spec_):
+            ref.update(box="box-elsewhere", tool="tool-elsewhere")
+        return spec_
+
+    def test_an_export_is_accepted_and_bound_to_this_installation(self):
+        exported = self.exported()
+        self.assertEqual(workshop_apps.validate(exported, "supply_ontology_hand"), [])
+        platform = Workshop()
+        created = workshop_apps.install(platform, [exported], self.network, [], toolboxes=["box-1"])
+        draft = platform.apps[created[0]["id"]]["draft"]
+        self.assertNotIn("id", draft["app"])
+        self.assertEqual(ids_of(draft), [("box-1", "tool-kit"), ("box-1", "tool-line"), ("box-1", "tool-kit")])
+
+    def test_the_repository_specs_are_exports_without_environment_ids(self):
+        import yaml as _yaml
+        root = Path(__file__).resolve().parents[2] / "samples"
+        for path in sorted(root.glob("*/workshop/apps/*.app.yaml")):
+            spec_ = _yaml.safe_load(path.read_text(encoding="utf-8"))
+            self.assertNotIn("id", spec_["app"], path)
+            self.assertFalse([ref for _, ref in workshop_apps.rule_refs(spec_) if "box" in ref or "tool" in ref], path)
+
