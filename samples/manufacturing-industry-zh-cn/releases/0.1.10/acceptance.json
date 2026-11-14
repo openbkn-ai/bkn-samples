@@ -164,6 +164,7 @@
   "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
   "Reference queries, graph patterns, functions and actions were checked through APIs, and the Workshop app was opened and checked in Workshop; no model answered the questions.",
   "Opening the app in the browser, its four rule functions completed their checks (hard 11, kit 5, capability 1, operator 8, changeover 8, not checked 0) on a pre-release 0.1.10 package (655d3d5, before the detail titles named operations by work order); on first load the four calls queue in one sandbox session and take 25-30 s, and once exceeded Workshop's 35 s limit before a re-check passed. Known issue, Studio fix in progress; the rule functions themselves answer in about 9 s each through the toolbox proxy.",
+  "The first zh-CN run stopped before importing this package: uninstalling the earlier trial installation answered 503 from the platform. The uninstall was retried and the whole run repeated from the start; the stopped run never installed the package, so this is not a retry of an installation.",
   "The app was exported, imported as a new app with made-up toolbox and function IDs, and its four rule functions were found by toolbox and function name and completed their checks; the copies were deleted."
  ],
  "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
