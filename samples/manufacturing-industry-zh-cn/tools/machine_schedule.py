@@ -138,7 +138,7 @@ WORDS = {
         "kit.title": "{order} · {product} · 计划开工 {day}",
         "cap.ok": "{machine} {cap}能力合格", "cap.bad": "{machine} {cap}能力为{status}", "cap.none": "{machine} 没有{cap}能力",
         "cap.nomachine": "没有指定机台", "cap.unknown": "没有机台 {machine}",
-        "cap.title": "{op} · {name} · 需要{cap}",
+        "cap.title": "{op} · 需要{cap}",
         "g.qualified": "能力合格", "g.suspended": "能力不合格", "g.no_capability": "无此能力",
         "c.machine": "机台", "c.work_center": "工作中心", "c.capability": "能力状态", "c.machine_status": "设备状态",
         "s.machines": "具备该能力的机台", "s.qualified": "能力合格",
@@ -150,7 +150,7 @@ WORDS = {
         "c.operator": "操作员", "c.qualification": "资质", "c.valid_to": "有效期至", "c.week": "本周班次",
         "s.eligible": "可上岗", "s.parallel": "同时段工序",
         "chg.ok": "与前一道同为{setup}，无需换型", "chg.first": "机台上没有前一道工序", "chg.change": "换型：前一道 {prev} 为{a}，本道为{b}",
-        "detail.na": "不适用：{why}", "none": "无",
+        "detail.na": "不适用：{why}", "detail.none": "这条规则没有明细表，结论见上", "none": "无",
     },
     "en": {
         "rule.work_order_kit": "Work order kit", "rule.machine_capability": "Machine capability",
@@ -170,7 +170,7 @@ WORDS = {
         "kit.title": "{order} · {product} · planned start {day}",
         "cap.ok": "{machine}: {cap} qualified", "cap.bad": "{machine}: {cap} is {status}", "cap.none": "{machine} has no {cap} capability",
         "cap.nomachine": "No machine assigned", "cap.unknown": "No machine {machine}",
-        "cap.title": "{op} · {name} · needs {cap}",
+        "cap.title": "{op} · needs {cap}",
         "g.qualified": "Qualified", "g.suspended": "Not qualified", "g.no_capability": "No such capability",
         "c.machine": "Machine", "c.work_center": "Work centre", "c.capability": "Capability status", "c.machine_status": "Machine status",
         "s.machines": "Machines with the capability", "s.qualified": "Qualified",
@@ -183,14 +183,30 @@ WORDS = {
         "s.eligible": "Can work", "s.parallel": "Operations at once",
         "chg.ok": "Same setup as the previous operation ({setup})", "chg.first": "No earlier operation on the machine",
         "chg.change": "Changeover: previous {prev} is {a}, this one {b}",
-        "detail.na": "Not applicable: {why}", "none": "none",
+        "detail.na": "Not applicable: {why}", "detail.none": "This rule has no detail table; see its conclusion", "none": "none",
     },
 }
 
 
 def lang_of(locale: Any, default: str) -> str:
-    text = str(locale or "").lower()
-    return "zh" if text.startswith("zh") else ("en" if text.startswith("en") else default)
+    """The sample's own language. The locale a caller sends (Workshop sends its interface language) is not used,
+    so a page shows one language: a Chinese sample in an English Studio still reads Chinese, and the other way round."""
+    return default
+
+
+# Data values the English sample stores as codes, as words in texts and tables (the Chinese sample stores words).
+VALUE_WORDS = {
+    "CAST_IRON": "cast iron", "STAINLESS": "stainless steel", "BRONZE": "bronze", "ALUMINIUM": "aluminium",
+    "INSPECTION": "inspection", "MARKING": "marking",
+    "qualified": "qualified", "suspended": "suspended", "in_training": "in training",
+    "available": "available", "under_repair": "under repair",
+    "frozen": "frozen", "draft": "draft", "obsolete": "obsolete", "active": "active", "left": "left",
+}
+
+
+def shown(lang: str, value: Any) -> str:
+    text = str(value or "")
+    return VALUE_WORDS.get(text, text.replace("_", " ")) if lang == "en" else text
 
 
 # --- facts -------------------------------------------------------------------------------------
@@ -215,6 +231,11 @@ class Facts:
 
     def words(self, lang: str) -> dict[str, str]:
         return WORDS[lang]
+
+    def op_label(self, op: str) -> str:
+        """An operation as people name it: its work order and operation, e.g. "WO-2703-06 五轴精铣"."""
+        row = self.ops.get(op, {})
+        return " ".join(str(x) for x in (row.get("production_order_id"), row.get("operation_name")) if x) or op
 
     def apply_edits(self, scenario: Any) -> None:
         """Scenario edits that set an operation's planned fields move it in the plan."""
@@ -435,7 +456,7 @@ def kit_outcome(f: Facts, kit_run: Mapping[str, Mapping[str, Any]], kit: Kit, or
     parts = []
     if not bom_ok:
         bom = kit.bom[order]
-        parts.append(W["kit.bom"].format(bom=bom.get("bom_version_id") or "?", status=bom.get("status") or "?"))
+        parts.append(W["kit.bom"].format(bom=bom.get("bom_version_id") or "?", status=shown(lang, bom.get("status")) or "?"))
     if shorts:
         key = max(shorts, key=lambda m: ((item["ready"].get(m) or "9999"), shorts[m]["short"], m))
         parts.append(W["kit.short"].format(n=len(shorts), name=f.name("product", key), qty=_qty(f, key, shorts[key]["short"])))
@@ -597,7 +618,7 @@ def check_capability(f: Facts, tasks: list[Mapping[str, Any]], lang: str) -> lis
             if status == "qualified":
                 out.append(result(key, True, W["cap.ok"].format(**names), detail=True))
             elif status:
-                out.append(result(key, False, W["cap.bad"].format(status=_status_text(f, machine, cap), **names), detail=True))
+                out.append(result(key, False, W["cap.bad"].format(status=shown(lang, _status_text(f, machine, cap)), **names), detail=True))
             else:
                 out.append(result(key, False, W["cap.none"].format(**names), detail=True))
     return out
@@ -618,10 +639,10 @@ def detail_capability(f: Facts, op: str, lang: str) -> dict[str, Any]:
         rows.append({"id": m, "group": "qualified" if status == "qualified" else ("suspended" if status else "no_capability"),
                      "key": m == machine,
                      "cells": {"machine": f"{f.name('machine', m)} {m}", "work_center": f.name("wc", str(info.get("work_center_id") or "")),
-                               "capability": _status_text(f, m, cap) or W["none"], "machine_status": str(info.get("status") or "")},
+                               "capability": shown(lang, _status_text(f, m, cap)) or W["none"], "machine_status": shown(lang, info.get("status"))},
                      "links": {"machine": {"objectType": "production_machines", "key": m}}})
     rows.sort(key=lambda r: (not r["key"], r["group"] != "qualified", r["id"]))
-    return {"title": W["cap.title"].format(op=op, name=f.ops[op].get("operation_name") or "", cap=f.name("cap", cap)),
+    return {"title": W["cap.title"].format(op=f.op_label(op), cap=f.name("cap", cap)),
             "conclusion": verdict["text"], "summary": [
                 {"label": W["s.machines"], "value": sum(1 for r in rows if r["group"] != "no_capability")},
                 {"label": W["s.qualified"], "value": sum(1 for r in rows if r["group"] == "qualified")}],
@@ -717,7 +738,7 @@ def detail_operator(f: Facts, op: str, lang: str) -> dict[str, Any]:
         qual = v["qual"] or {}
         rows.append({"id": person, "group": v["group"], "key": v["group"] == "eligible",
                      "cells": {"operator": f"{f.name('operator', person)} {person}",
-                               "qualification": str(qual.get("qualification_status") or W["none"]), "valid_to": v["valid_to"],
+                               "qualification": shown(lang, qual.get("qualification_status")) or W["none"], "valid_to": v["valid_to"],
                                "week": "、".join(f.name("wc", w) for w in v["week"]) if lang == "zh" else ", ".join(f.name("wc", w) for w in v["week"])},
                      "links": {"operator": {"objectType": "operators", "key": person}}})
     order = ("eligible", "not_assigned", "expired", "unqualified", "left")
@@ -725,8 +746,9 @@ def detail_operator(f: Facts, op: str, lang: str) -> dict[str, Any]:
     summary = [{"label": W["s.eligible"], "value": len(r["eligible"]), **({"tone": severity} if not passed else {})},
                {"label": W["s.parallel"], "value": 1 + len(r["parallel"])}]
     sep = "、" if lang == "zh" else ", "
-    conclusion = text + (("（" + sep.join(related) + "）") if related and lang == "zh" else ((" (" + sep.join(related) + ")") if related else ""))
-    return {"title": W["op.title"].format(op=op, wc=f.name("wc", r["wc"]), day=short(r["start"])), "conclusion": conclusion,
+    named = [f.op_label(o) for o in related]
+    conclusion = text + (("（" + sep.join(named) + "）") if named and lang == "zh" else ((" (" + sep.join(named) + ")") if named else ""))
+    return {"title": W["op.title"].format(op=f.op_label(op), wc=f.name("wc", r["wc"]), day=short(r["start"])), "conclusion": conclusion,
             "summary": summary, "groups": _groups(rows, order, W),
             "columns": [{"key": "operator", "label": W["c.operator"], "type": "text"},
                         {"key": "qualification", "label": W["c.qualification"], "type": "text"},
@@ -758,13 +780,13 @@ def check_changeover(f: Facts, tasks: list[Mapping[str, Any]], lang: str) -> lis
         at = line.index(op)
         prev = line[at - 1] if at else ""
         after = line[at + 1] if at + 1 < len(line) else ""
-        setup = lambda o: str(f.steps.get(o, {}).get("setup_class") or "")
+        setup = lambda o: shown(lang, f.steps.get(o, {}).get("setup_class"))
         if not prev:
             out.append(result(key, True, W["chg.first"], related=[after] if after else []))
         elif setup(prev) == setup(op):
             out.append(result(key, True, W["chg.ok"].format(setup=setup(op)), related=[x for x in (prev, after) if x]))
         else:
-            out.append(result(key, False, W["chg.change"].format(prev=prev, a=setup(prev), b=setup(op)), severity=SOFT,
+            out.append(result(key, False, W["chg.change"].format(prev=f.op_label(prev), a=setup(prev), b=setup(op)), severity=SOFT,
                               related=[x for x in (prev, after) if x]))
     return out
 
@@ -835,7 +857,9 @@ def detail(rule: str, tables: Mapping[str, Iterable[Mapping[str, Any]]], task: A
         if not body and rule == "work_order_kit":
             why = "na.not_first"
     if why or not body:
-        return {"title": str(task.get("key")), "conclusion": W["detail.na"].format(why=W[why or "na.unknown"]),
+        title = f.op_label(op) if op in f.ops else str(task.get("key"))
+        text = W["detail.none"] if not why and rule not in DETAILS else W["detail.na"].format(why=W[why or "na.unknown"])
+        return {"title": title, "conclusion": text,
                 "summary": [], "groups": [], "columns": [], "rows": [], "total": 0}
     q = query if isinstance(query, Mapping) else {}
     rows = body["rows"]

@@ -71,3 +71,21 @@
 - **文案和语言不同：** 页面标题、图层名称和计算字段名称都是文件里的普通文本。翻译时连同筛选条件要比较的分类取值一起改。
 - **规则函数名称不同：** 把 `boxName` 和 `toolName` 改成客户的工具箱名和函数名，甘特图层的 `ruleTools` 和 `scheduleModel.tasks[].rules` 两处都要改。
 - 导入后打开两页，确认计划条显示的是业务名称；在排程页点“重新检查”，并试着采用一个测试方案，再把应用交给客户。
+
+### 制造业：机台排产
+
+制造业样例各带一个应用 `workshop/apps/machine-scheduling.app.yaml`：中文网络 `manufacturing_industry_zh_cn` 上的 **机台排产**，英文网络 `manufacturing_industry_en_us` 上的 **Machine Scheduling**。它把工序和维修工单排到生产设备上，直接修改这两种对象，所以只有一页，没有计划记录。
+
+客户环境需要（按 ID）：
+
+- **调度对象：** `manufacturing_operations`（日期 `planned_start_date` / `planned_end_date`，机台 `planned_machine_id`，`status`，`production_order_id`，`operation_name`，`predecessor_operation_id`）和 `maintenance_work_orders`（`planned_start_date` / `planned_end_date`，`machine_id`，应保养日 `planned_date`，`status`，`maintenance_plan_id`）。
+- **资源和关联：** `production_machines`（`machine_name`、`work_center_id`）、`work_centers`（`work_center_name`）、`production_orders`（`due_date`，工序的目标）和 `maintenance_plans`（`plan_name`，悬停卡片里显示），以及文件里用到的关系：工序的生产工单、前序工序，设备的工作中心，维修工单的保养计划。
+- **行动：** `<网络>_adjust_operation_schedule`（工序、计划机台、开始、结束）和 `<网络>_adjust_maintenance_work_order`（维修工单、开始、结束）。维修工单只能改时间，留在本设备那一行。
+- **规则函数**，在工具箱 `制造业排程规则`（中文）或 `Manufacturing_Schedule_Rules`（英文）里：`工单齐套` / `Work_Order_Kit`、`设备能力` / `Machine_Capability`、`人员资质与班次` / `Operator_Qualification_And_Shift`、`换型提示` / `Changeover`。它们自己读网络里的物料、能力、排班和工艺对象；客户网络需要相同的对象类，或者用同名的函数换成客户自己的。英文应用页面上的规则名称是 Work order kit、Machine capability、Operator qualification and shift、Changeover：页面名称是 `name`，函数是 `tool.toolName`。
+
+按客户要改的地方：
+
+- **状态取值：** 每个 `doneWhen` 里的已完成是 `已完成`（中文）或 `completed`（英文）。英文应用另用计算字段 `statusText` 把 `status` 显示成可读文字（`not_started`、`in_progress`、`completed`、`planned`），要和客户的取值一起改。
+- **时间范围：** 甘特从基准日期 `2027-03-01` 打开，显示十天（`daysBefore: 1`、`daysAfter: 8`）。十天才能让两天的工序条放下“工单号 + 工序名”；把基准日期默认值改成客户的计划起始日。其他日子用缩放和基准日期查看。
+- **计划条文字：** 工序显示 `production_order_id` 和 `operation_name`，维修工单显示工单号；悬停卡片补充工序名或保养计划名和状态。
+- 导入后点一次“重新检查”：四个规则都应有结果，“未能校验”为 0。

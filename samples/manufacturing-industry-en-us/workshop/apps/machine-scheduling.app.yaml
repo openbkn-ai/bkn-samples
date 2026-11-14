@@ -6,7 +6,7 @@ app:
 dependencies:
   knowledgeNetwork:
     id: manufacturing_industry_en_us
-    name: End-to-End Manufacturing Operations Sample
+    name: Manufacturing Operations (EN)
 sources:
 - id: scheduleTask1
   label: Manufacturing Operation
@@ -47,6 +47,28 @@ sources:
     fromField: planned_end_date
     gapDays: 1
     keepDuration: planned_end_date
+  computed:
+  - name: statusText
+    label: Status
+    kind: classify
+    cases:
+    - when:
+      - field: status
+        op: eq
+        value: not_started
+      value: Not started
+    - when:
+      - field: status
+        op: eq
+        value: in_progress
+      value: In progress
+    - when:
+      - field: status
+        op: eq
+        value: completed
+      value: Completed
+    otherwise:
+      value: Other
 - id: scheduleTask2
   label: Maintenance Work Order
   objectType: maintenance_work_orders
@@ -71,6 +93,36 @@ sources:
     action:
       id: manufacturing_industry_en_us_adjust_maintenance_work_order
       params: {}
+  computed:
+  - name: planName
+    label: Maintenance plan
+    kind: related
+    path:
+    - maintenance_work_orders_maintenance_plan_id_to_maintenance_plans
+    aggregate: one
+    field: plan_name
+    type: text
+  - name: statusText
+    label: Status
+    kind: classify
+    cases:
+    - when:
+      - field: status
+        op: eq
+        value: planned
+      value: Planned
+    - when:
+      - field: status
+        op: eq
+        value: in_progress
+      value: In progress
+    - when:
+      - field: status
+        op: eq
+        value: completed
+      value: Completed
+    otherwise:
+      value: Other
 - id: scheduleResource
   label: Production Machine
   objectType: production_machines
@@ -88,7 +140,7 @@ variables:
 - name: asOf
   label: Base date
   kind: asOf
-  default: '2027-02-18'
+  default: '2027-03-01'
 pages:
 - id: scheduleResources
   title: Machine Schedule
@@ -130,7 +182,7 @@ pages:
         x: 0
         y: 3
         w: 8
-        h: 16
+        h: 28
       config:
         title: Schedule by machine
         source: scheduleResource
@@ -144,9 +196,11 @@ pages:
           startField: planned_start_date
           endField: planned_end_date
           barFields:
+          - production_order_id
           - operation_name
           popoverFields:
-          - status
+          - operation_name
+          - statusText
           color: static
           tone: info
           exclusive: true
@@ -165,22 +219,22 @@ pages:
           - manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
           predecessorReaches: predecessors
           ruleTools:
+          - name: Work order kit
+            tool:
+              boxName: Manufacturing_Schedule_Rules
+              toolName: Work_Order_Kit
+          - name: Machine capability
+            tool:
+              boxName: Manufacturing_Schedule_Rules
+              toolName: Machine_Capability
+          - name: Operator qualification and shift
+            tool:
+              boxName: Manufacturing_Schedule_Rules
+              toolName: Operator_Qualification_And_Shift
           - name: Changeover
             tool:
               boxName: Manufacturing_Schedule_Rules
               toolName: Changeover
-          - name: Operator_Qualification_And_Shift
-            tool:
-              boxName: Manufacturing_Schedule_Rules
-              toolName: Operator_Qualification_And_Shift
-          - name: Machine_Capability
-            tool:
-              boxName: Manufacturing_Schedule_Rules
-              toolName: Machine_Capability
-          - name: Work_Order_Kit
-            tool:
-              boxName: Manufacturing_Schedule_Rules
-              toolName: Work_Order_Kit
         - label: Maintenance Work Order
           style: standard
           source: scheduleTask2
@@ -190,7 +244,8 @@ pages:
           barFields:
           - maintenance_work_order_id
           popoverFields:
-          - status
+          - planName
+          - statusText
           color: static
           tone: success
           exclusive: true
@@ -201,8 +256,8 @@ pages:
           - field: status
             op: eq
             value: completed
-        daysBefore: 7
-        daysAfter: 28
+        daysBefore: 1
+        daysAfter: 8
         tick: auto
         timeZone: local
     - id: scheduleEdits
@@ -211,7 +266,7 @@ pages:
         x: 8
         y: 3
         w: 4
-        h: 16
+        h: 28
       config:
         title: Scenario changes
         style: assumptions
@@ -265,22 +320,22 @@ scheduleModel:
     modify:
       action: manufacturing_industry_en_us_adjust_operation_schedule
     rules:
+    - name: Work order kit
+      tool:
+        boxName: Manufacturing_Schedule_Rules
+        toolName: Work_Order_Kit
+    - name: Machine capability
+      tool:
+        boxName: Manufacturing_Schedule_Rules
+        toolName: Machine_Capability
+    - name: Operator qualification and shift
+      tool:
+        boxName: Manufacturing_Schedule_Rules
+        toolName: Operator_Qualification_And_Shift
     - name: Changeover
       tool:
         boxName: Manufacturing_Schedule_Rules
         toolName: Changeover
-    - name: Operator_Qualification_And_Shift
-      tool:
-        boxName: Manufacturing_Schedule_Rules
-        toolName: Operator_Qualification_And_Shift
-    - name: Machine_Capability
-      tool:
-        boxName: Manufacturing_Schedule_Rules
-        toolName: Machine_Capability
-    - name: Work_Order_Kit
-      tool:
-        boxName: Manufacturing_Schedule_Rules
-        toolName: Work_Order_Kit
   - objectType: maintenance_work_orders
     assignField: machine_id
     start: planned_start_date

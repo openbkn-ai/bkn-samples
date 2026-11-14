@@ -6,7 +6,7 @@ app:
 dependencies:
   knowledgeNetwork:
     id: manufacturing_industry_zh_cn
-    name: 制造业端到端运营样例
+    name: 制造业端到端运营（中文）
 sources:
 - id: scheduleTask1
   label: 制造操作
@@ -71,6 +71,15 @@ sources:
     action:
       id: manufacturing_industry_zh_cn_adjust_maintenance_work_order
       params: {}
+  computed:
+  - name: planName
+    label: 保养计划
+    kind: related
+    path:
+    - maintenance_work_orders_maintenance_plan_id_to_maintenance_plans
+    aggregate: one
+    field: plan_name
+    type: text
 - id: scheduleResource
   label: 生产设备
   objectType: production_machines
@@ -88,7 +97,7 @@ variables:
 - name: asOf
   label: 基准日期
   kind: asOf
-  default: '2027-02-18'
+  default: '2027-03-01'
 pages:
 - id: scheduleResources
   title: 生产设备排程
@@ -131,7 +140,7 @@ pages:
         x: 0
         y: 3
         w: 8
-        h: 16
+        h: 28
       config:
         title: 排程（按生产设备）
         source: scheduleResource
@@ -145,8 +154,10 @@ pages:
           startField: planned_start_date
           endField: planned_end_date
           barFields:
+          - production_order_id
           - operation_name
           popoverFields:
+          - operation_name
           - status
           color: static
           tone: info
@@ -166,22 +177,22 @@ pages:
           - manufacturing_operations_predecessor_operation_id_to_manufacturing_operations
           predecessorReaches: predecessors
           ruleTools:
-          - name: 换型提示
-            tool:
-              boxName: 制造业排程规则
-              toolName: 换型提示
-          - name: 人员资质与班次
-            tool:
-              boxName: 制造业排程规则
-              toolName: 人员资质与班次
-          - name: 设备能力
-            tool:
-              boxName: 制造业排程规则
-              toolName: 设备能力
           - name: 工单齐套
             tool:
               boxName: 制造业排程规则
               toolName: 工单齐套
+          - name: 设备能力
+            tool:
+              boxName: 制造业排程规则
+              toolName: 设备能力
+          - name: 人员资质与班次
+            tool:
+              boxName: 制造业排程规则
+              toolName: 人员资质与班次
+          - name: 换型提示
+            tool:
+              boxName: 制造业排程规则
+              toolName: 换型提示
         - label: 维护工单
           style: standard
           source: scheduleTask2
@@ -191,6 +202,7 @@ pages:
           barFields:
           - maintenance_work_order_id
           popoverFields:
+          - planName
           - status
           color: static
           tone: success
@@ -202,8 +214,8 @@ pages:
           - field: status
             op: eq
             value: 已完成
-        daysBefore: 7
-        daysAfter: 28
+        daysBefore: 1
+        daysAfter: 8
         tick: auto
         timeZone: local
     - id: scheduleEdits
@@ -212,7 +224,7 @@ pages:
         x: 8
         y: 3
         w: 4
-        h: 16
+        h: 28
       config:
         title: 方案改动
         style: assumptions
@@ -266,22 +278,22 @@ scheduleModel:
     modify:
       action: manufacturing_industry_zh_cn_adjust_operation_schedule
     rules:
-    - name: 换型提示
-      tool:
-        boxName: 制造业排程规则
-        toolName: 换型提示
-    - name: 人员资质与班次
-      tool:
-        boxName: 制造业排程规则
-        toolName: 人员资质与班次
-    - name: 设备能力
-      tool:
-        boxName: 制造业排程规则
-        toolName: 设备能力
     - name: 工单齐套
       tool:
         boxName: 制造业排程规则
         toolName: 工单齐套
+    - name: 设备能力
+      tool:
+        boxName: 制造业排程规则
+        toolName: 设备能力
+    - name: 人员资质与班次
+      tool:
+        boxName: 制造业排程规则
+        toolName: 人员资质与班次
+    - name: 换型提示
+      tool:
+        boxName: 制造业排程规则
+        toolName: 换型提示
   - objectType: maintenance_work_orders
     assignField: machine_id
     start: planned_start_date
