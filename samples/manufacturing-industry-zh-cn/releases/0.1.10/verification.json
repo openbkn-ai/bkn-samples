@@ -1,0 +1,48 @@
+{
+  "sampleId": "manufacturing-industry-zh-cn",
+  "version": "0.1.10",
+  "packageDigest": "sha256:24c2d1ba6cac4ec3bd8337dd54719a2b7a8f817955a63d9a47a1a447941789a0",
+  "sourceCommit": "57888f25b4ae10209d0d3ce3d641bb79ce8c0c74",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "38 business tables, 1390 fixture records, the package's database verification hook passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "40 objects (2 on datasets of the sample catalog, 181 rows loaded) and 73 relations, all 240 properties and 73 relations read back with display names in the sample language; every binding and a live query per object verified by the platform hook; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Machine Scheduling Workshop app created, published and opened with rule results, again after reinstallation; rules and adjustments toolboxes with functions named in the sample language; 4 mounted rule functions called through Context Loader execute_tool and through the toolbox proxy, matching local runs on the package fixtures; 2 object actions executed, written values read back and restored, a cross-work-centre move refused; 2 mounted Skills checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "The experience set's reference Cypher queries and graph patterns passed. No model answered the questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-zh-cn-v0.1.10/acceptance.json",
+  "evidenceDigest": "sha256:1be5fb161b338d63d9861b9f1d77e6b0828f60ef9b634a7180b30086b07f524d",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.2 main builds on a local kind cluster (sample service with Workshop apps; Studio main-9417fac); no native amd64 certification and no released vanilla 0.2.2.",
+    "Display names were read back from the platform: 240 properties and 73 relations named in the sample's language, the rules and adjustments toolboxes with their functions, no ID-style toolbox left.",
+    "The sample's Workshop app was created and published by the installation, its rule functions resolved to this installation's rules toolbox; it was opened in Workshop with its rule results, and created again after reinstallation. Dragging and applying in the browser was not exercised; the adjust actions it runs were executed through Context Loader.",
+    "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
+    "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
+    "Reference queries, graph patterns, functions and actions were checked through APIs, and the Workshop app was opened and checked in Workshop; no model answered the questions.",
+    "Opening the app in the browser, its four rule functions completed their checks (hard 11, kit 5, capability 1, operator 8, changeover 8, not checked 0) on a pre-release 0.1.10 package (655d3d5, before the detail titles named operations by work order); on first load the four calls queue in one sandbox session and take 25-30 s, and once exceeded Workshop's 35 s limit before a re-check passed. Known issue, Studio fix in progress; the rule functions themselves answer in about 9 s each through the toolbox proxy.",
+    "The app was exported, imported as a new app with made-up toolbox and function IDs, and its four rule functions were found by toolbox and function name and completed their checks; the copies were deleted."
+  ]
+}

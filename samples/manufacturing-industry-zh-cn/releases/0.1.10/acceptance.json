@@ -1,0 +1,170 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "manufacturing-industry-zh-cn",
+ "version": "0.1.10",
+ "packageDigest": "sha256:24c2d1ba6cac4ec3bd8337dd54719a2b7a8f817955a63d9a47a1a447941789a0",
+ "sourceCommit": "57888f25b4ae10209d0d3ce3d641bb79ce8c0c74",
+ "verificationDate": "2026-11-14",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 38,
+   "fixtureRecords": 1390,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 40,
+   "relations": 73,
+   "datasetBackedObjects": [
+    "maintenance_work_orders",
+    "manufacturing_operations"
+   ],
+   "datasetRecords": 181,
+   "bindingsVerifiedByHook": true,
+   "liveObjectQueriesPassed": 40,
+   "displayNames": {
+    "propertiesNamed": 240,
+    "relationsNamed": 73,
+    "readBackFromPlatform": true
+   }
+  },
+  "capabilities": {
+   "mountedFunctions": [
+    {
+     "name": "work_order_kit_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "machine_capability_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "operator_shift_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    },
+    {
+     "name": "changeover_rule",
+     "invokedThrough": [
+      "context-loader execute_tool",
+      "toolbox proxy"
+     ],
+     "fixtureComparisonPerformed": true,
+     "passed": true
+    }
+   ],
+   "objectActionsExecuted": [
+    {
+     "action": "manufacturing_industry_zh_cn_adjust_maintenance_work_order",
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution",
+     "writeReadBack": true,
+     "refusalChecked": false,
+     "passed": true
+    },
+    {
+     "action": "manufacturing_industry_zh_cn_adjust_operation_schedule",
+     "invokedThrough": "context-loader get_action_info, execute_action, get_action_execution",
+     "writeReadBack": true,
+     "refusalChecked": true,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "manufacturing-order-supply-zh-cn",
+     "sourceContentDigest": "sha256:ad57d902489a9cb493e00f0751ba95a2fe5dcb0c68e65620afd0e6a2d32c8c5e",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "manufacturing-production-quality-zh-cn",
+     "sourceContentDigest": "sha256:c7923de6861b49a55901660948efa9ef0cc9f9bd10e593cbd774922525017d87",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "toolboxes": {
+    "制造业排程规则": [
+     "人员资质与班次",
+     "工单齐套",
+     "换型提示",
+     "设备能力"
+    ],
+    "制造业排程调整": [
+     "调整工序排程",
+     "调整维修工单"
+    ]
+   },
+   "workshopApps": [
+    {
+     "file": "workshop/apps/machine-scheduling.app.yaml",
+     "createdAndPublished": true,
+     "ruleReferences": 8,
+     "resolvedToThisInstallation": true,
+     "openedWithRuleResults": {
+      "tasksInWindow": 29,
+      "hardConstraints": 11,
+      "changeover": 8,
+      "operatorShift": 8,
+      "machineCapability": 1,
+      "workOrderKit": 5,
+      "notChecked": 0,
+      "browserRuleChecks": "known issue, Studio fix in progress"
+     },
+     "exportImportByName": true,
+     "recreatedAfterReinstallation": true
+    }
+   ],
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "experienceCardsCypherPassed": true,
+   "cardsChecked": null,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "uninstallOfDatasetBoundInstallPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "functionsAndActionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with OpenBKN 0.2.2 main builds on a local kind cluster (sample service with Workshop apps; Studio main-9417fac); no native amd64 certification and no released vanilla 0.2.2.",
+  "Display names were read back from the platform: 240 properties and 73 relations named in the sample's language, the rules and adjustments toolboxes with their functions, no ID-style toolbox left.",
+  "The sample's Workshop app was created and published by the installation, its rule functions resolved to this installation's rules toolbox; it was opened in Workshop with its rule results, and created again after reinstallation. Dragging and applying in the browser was not exercised; the adjust actions it runs were executed through Context Loader.",
+  "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
+  "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
+  "Reference queries, graph patterns, functions and actions were checked through APIs, and the Workshop app was opened and checked in Workshop; no model answered the questions.",
+  "Opening the app in the browser, its four rule functions completed their checks (hard 11, kit 5, capability 1, operator 8, changeover 8, not checked 0) on a pre-release 0.1.10 package (655d3d5, before the detail titles named operations by work order); on first load the four calls queue in one sandbox session and take 25-30 s, and once exceeded Workshop's 35 s limit before a re-check passed. Known issue, Studio fix in progress; the rule functions themselves answer in about 9 s each through the toolbox proxy.",
+  "The app was exported, imported as a new app with made-up toolbox and function IDs, and its four rule functions were found by toolbox and function name and completed their checks; the copies were deleted."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
