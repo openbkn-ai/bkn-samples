@@ -138,7 +138,7 @@ WORDS = {
         "kit.title": "{order} · {product} · 计划开工 {day}",
         "cap.ok": "{machine} {cap}能力合格", "cap.bad": "{machine} {cap}能力为{status}", "cap.none": "{machine} 没有{cap}能力",
         "cap.nomachine": "没有指定机台", "cap.unknown": "没有机台 {machine}",
-        "cap.title": "{op} · {name} · 需要{cap}",
+        "cap.title": "{op} · 需要{cap}",
         "g.qualified": "能力合格", "g.suspended": "能力不合格", "g.no_capability": "无此能力",
         "c.machine": "机台", "c.work_center": "工作中心", "c.capability": "能力状态", "c.machine_status": "设备状态",
         "s.machines": "具备该能力的机台", "s.qualified": "能力合格",
@@ -150,7 +150,7 @@ WORDS = {
         "c.operator": "操作员", "c.qualification": "资质", "c.valid_to": "有效期至", "c.week": "本周班次",
         "s.eligible": "可上岗", "s.parallel": "同时段工序",
         "chg.ok": "与前一道同为{setup}，无需换型", "chg.first": "机台上没有前一道工序", "chg.change": "换型：前一道 {prev} 为{a}，本道为{b}",
-        "detail.na": "不适用：{why}", "none": "无",
+        "detail.na": "不适用：{why}", "detail.none": "这条规则没有明细表，结论见上", "none": "无",
     },
     "en": {
         "rule.work_order_kit": "Work order kit", "rule.machine_capability": "Machine capability",
@@ -170,7 +170,7 @@ WORDS = {
         "kit.title": "{order} · {product} · planned start {day}",
         "cap.ok": "{machine}: {cap} qualified", "cap.bad": "{machine}: {cap} is {status}", "cap.none": "{machine} has no {cap} capability",
         "cap.nomachine": "No machine assigned", "cap.unknown": "No machine {machine}",
-        "cap.title": "{op} · {name} · needs {cap}",
+        "cap.title": "{op} · needs {cap}",
         "g.qualified": "Qualified", "g.suspended": "Not qualified", "g.no_capability": "No such capability",
         "c.machine": "Machine", "c.work_center": "Work centre", "c.capability": "Capability status", "c.machine_status": "Machine status",
         "s.machines": "Machines with the capability", "s.qualified": "Qualified",
@@ -183,7 +183,7 @@ WORDS = {
         "s.eligible": "Can work", "s.parallel": "Operations at once",
         "chg.ok": "Same setup as the previous operation ({setup})", "chg.first": "No earlier operation on the machine",
         "chg.change": "Changeover: previous {prev} is {a}, this one {b}",
-        "detail.na": "Not applicable: {why}", "none": "none",
+        "detail.na": "Not applicable: {why}", "detail.none": "This rule has no detail table; see its conclusion", "none": "none",
     },
 }
 
@@ -231,6 +231,11 @@ class Facts:
 
     def words(self, lang: str) -> dict[str, str]:
         return WORDS[lang]
+
+    def op_label(self, op: str) -> str:
+        """An operation as people name it: its work order and operation, e.g. "WO-2703-06 五轴精铣"."""
+        row = self.ops.get(op, {})
+        return " ".join(str(x) for x in (row.get("production_order_id"), row.get("operation_name")) if x) or op
 
     def apply_edits(self, scenario: Any) -> None:
         """Scenario edits that set an operation's planned fields move it in the plan."""
@@ -637,7 +642,7 @@ def detail_capability(f: Facts, op: str, lang: str) -> dict[str, Any]:
                                "capability": shown(lang, _status_text(f, m, cap)) or W["none"], "machine_status": shown(lang, info.get("status"))},
                      "links": {"machine": {"objectType": "production_machines", "key": m}}})
     rows.sort(key=lambda r: (not r["key"], r["group"] != "qualified", r["id"]))
-    return {"title": W["cap.title"].format(op=op, name=f.ops[op].get("operation_name") or "", cap=f.name("cap", cap)),
+    return {"title": W["cap.title"].format(op=f.op_label(op), cap=f.name("cap", cap)),
             "conclusion": verdict["text"], "summary": [
                 {"label": W["s.machines"], "value": sum(1 for r in rows if r["group"] != "no_capability")},
                 {"label": W["s.qualified"], "value": sum(1 for r in rows if r["group"] == "qualified")}],
@@ -741,8 +746,9 @@ def detail_operator(f: Facts, op: str, lang: str) -> dict[str, Any]:
     summary = [{"label": W["s.eligible"], "value": len(r["eligible"]), **({"tone": severity} if not passed else {})},
                {"label": W["s.parallel"], "value": 1 + len(r["parallel"])}]
     sep = "、" if lang == "zh" else ", "
-    conclusion = text + (("（" + sep.join(related) + "）") if related and lang == "zh" else ((" (" + sep.join(related) + ")") if related else ""))
-    return {"title": W["op.title"].format(op=op, wc=f.name("wc", r["wc"]), day=short(r["start"])), "conclusion": conclusion,
+    named = [f.op_label(o) for o in related]
+    conclusion = text + (("（" + sep.join(named) + "）") if named and lang == "zh" else ((" (" + sep.join(named) + ")") if named else ""))
+    return {"title": W["op.title"].format(op=f.op_label(op), wc=f.name("wc", r["wc"]), day=short(r["start"])), "conclusion": conclusion,
             "summary": summary, "groups": _groups(rows, order, W),
             "columns": [{"key": "operator", "label": W["c.operator"], "type": "text"},
                         {"key": "qualification", "label": W["c.qualification"], "type": "text"},
@@ -780,9 +786,7 @@ def check_changeover(f: Facts, tasks: list[Mapping[str, Any]], lang: str) -> lis
         elif setup(prev) == setup(op):
             out.append(result(key, True, W["chg.ok"].format(setup=setup(op)), related=[x for x in (prev, after) if x]))
         else:
-            before = f.ops.get(prev, {})
-            named = " ".join(str(x) for x in (before.get("production_order_id"), before.get("operation_name")) if x) or prev
-            out.append(result(key, False, W["chg.change"].format(prev=named, a=setup(prev), b=setup(op)), severity=SOFT,
+            out.append(result(key, False, W["chg.change"].format(prev=f.op_label(prev), a=setup(prev), b=setup(op)), severity=SOFT,
                               related=[x for x in (prev, after) if x]))
     return out
 
@@ -853,7 +857,9 @@ def detail(rule: str, tables: Mapping[str, Iterable[Mapping[str, Any]]], task: A
         if not body and rule == "work_order_kit":
             why = "na.not_first"
     if why or not body:
-        return {"title": str(task.get("key")), "conclusion": W["detail.na"].format(why=W[why or "na.unknown"]),
+        title = f.op_label(op) if op in f.ops else str(task.get("key"))
+        text = W["detail.none"] if not why and rule not in DETAILS else W["detail.na"].format(why=W[why or "na.unknown"])
+        return {"title": title, "conclusion": text,
                 "summary": [], "groups": [], "columns": [], "rows": [], "total": 0}
     q = query if isinstance(query, Mapping) else {}
     rows = body["rows"]

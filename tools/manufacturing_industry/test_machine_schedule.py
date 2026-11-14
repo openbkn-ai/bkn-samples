@@ -204,6 +204,16 @@ class ContractTest(Base):
             labels = " ".join(c["label"] for c in table["columns"]) + table["title"] + table["conclusion"]
             self.assertEqual(any("\u4e00" <= ch <= "\u9fff" for ch in labels.replace("件", "")), self.lang == "zh", (loc, labels))
 
+    def test_details_name_operations_by_order_and_operation(self):
+        for rule in ("work_order_kit", "machine_capability", "operator_shift"):
+            for key in ("OP-2703-06-10", "OP-2703-09-10", "OP-2703-09-20"):
+                table = self.ms.detail(rule, self.t, {"key": key}, None, language=self.lang, query={"limit": 5})
+                self.assertNotRegex(table["title"] + table["conclusion"], r"OP-\d{4}", (rule, key))
+        none = self.ms.detail("changeover", self.t, {"key": "OP-2703-06-10"}, None, language=self.lang)
+        self.assertEqual(none["rows"], [])
+        self.assertIn("WO-2703-06", none["title"])
+        self.assertNotIn(self.ms.WORDS[self.lang]["na.unknown"], none["conclusion"])
+
     def test_codes_read_as_words_in_english(self):
         text = self.check("machine_capability", [{"key": "OP-2703-09-10"}])["OP-2703-09-10"]["text"]
         self.assertIn("suspended" if self.lang == "en" else "暂停", text)
