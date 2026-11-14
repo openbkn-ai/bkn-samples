@@ -71,3 +71,21 @@ Rule functions are found by toolbox and function name when the page runs, so the
 - **Different labels and language:** page titles, layer labels and computed field labels are plain text in the file. Translate them together with the classify values that filters compare against.
 - **Rule functions under other names:** set `boxName` and `toolName` to the customer's toolbox and function names. Both rule-tool lists use them: the Gantt layer's `ruleTools` and `scheduleModel.tasks[].rules`.
 - After importing, open both pages, check that the bars show business names, run **Check again** on the scheduling page, and apply one test scenario before handing the app over.
+
+### Manufacturing: Machine Scheduling
+
+The manufacturing samples bring one app each, `workshop/apps/machine-scheduling.app.yaml`: **机台排产** on `manufacturing_industry_zh_cn` and **Machine Scheduling** on `manufacturing_industry_en_us`. It schedules operations and maintenance work orders on production machines and changes those objects directly, so it has a single page and no plan records.
+
+What the customer environment needs, by ID:
+
+- **Scheduled objects:** `manufacturing_operations` (dates `planned_start_date` / `planned_end_date`, machine `planned_machine_id`, `status`, `production_order_id`, `operation_name`, `predecessor_operation_id`) and `maintenance_work_orders` (`planned_start_date` / `planned_end_date`, `machine_id`, `planned_date` as the due date, `status`, `maintenance_plan_id`).
+- **Resources and lookups:** `production_machines` (`machine_name`, `work_center_id`), `work_centers` (`work_center_name`), `production_orders` (`due_date`, the operations' target) and `maintenance_plans` (`plan_name`, shown in the hover card), with the relations the file names: the operation's production order and predecessor operation, the machine's work center, the maintenance order's plan.
+- **Actions:** `<network>_adjust_operation_schedule` (operation, planned machine, start, end) and `<network>_adjust_maintenance_work_order` (maintenance order, start, end). A maintenance order moves only in time; it stays on its machine's row.
+- **Rule functions,** in toolbox `制造业排程规则` (zh) or `Manufacturing_Schedule_Rules` (en): `工单齐套` / `Work_Order_Kit`, `设备能力` / `Machine_Capability`, `人员资质与班次` / `Operator_Qualification_And_Shift`, `换型提示` / `Changeover`. They read the network's material, capability, roster and routing objects themselves; a customer network needs the same object types for them, or functions of its own under these names. On the page the English rules are labelled Work order kit, Machine capability, Operator qualification and shift and Changeover; the label is `name`, the function is `tool.toolName`.
+
+What to change for a customer:
+
+- **Status values:** done is `已完成` (zh) or `completed` (en) in every `doneWhen`. The English app also turns `status` into readable text with the computed field `statusText` (`not_started`, `in_progress`, `completed`, `planned`); keep its cases in step with the customer's values.
+- **Window:** the Gantt opens on the base date `2027-03-01` and shows ten days (`daysBefore: 1`, `daysAfter: 8`). Ten days is what gives a two-day bar room for "work order and operation"; set the base date default to the customer's planning start. Users zoom and move the base date for other days.
+- **Bar text:** operations show `production_order_id` and `operation_name`, maintenance orders their number; the hover card adds the operation or maintenance plan and the status.
+- After importing, run **Check again** once: all four rules should report results, and "not checked" should be 0.

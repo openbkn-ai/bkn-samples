@@ -2,7 +2,7 @@
 
 Data and actions are the same as in 0.1.9. The sample's Machine Scheduling app (机台排产 in the Chinese sample) and its four rule functions change, so a production lead sees on opening where the problems are and why.
 
-- **Bars**: an operation's bar shows its work order and operation (e.g. "WO-2703-06 5-axis finish milling"), a maintenance work order's bar its number; the hover card adds the operation or maintenance plan and the status. The Gantt shows ten days from the base date by default, wide enough for the order and operation on a two-day bar; zoom and the base date show other days.
+- **Bars**: an operation's bar shows its work order and operation (e.g. "WO-2703-06 5-axis finish milling"), a maintenance work order's bar its number; the hover card adds the operation or maintenance plan and the status. The Gantt shows ten days from the base date by default, wide enough for the order and operation on a two-day bar (long English operation names are cut short there and shown in full in the hover card); zoom and the base date show other days.
 - **First screen**: the base date opens on 2027-03-01, the first day of the March schedule, and the Gantt is taller, so most machines show at once.
 - **Rule order and names**: work order kit, machine capability, operator qualification and shift, changeover, in that order; the English app shows Work order kit, Machine capability, Operator qualification and shift and Changeover instead of the function names.
 - **Faster rule functions**: each rule reads its tables in parallel, so the four rules answer within Workshop's time limit even on a slow platform.
