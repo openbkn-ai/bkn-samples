@@ -1,0 +1,113 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "manufacturing-industry-zh-cn",
+    "version": "0.1.11",
+    "displayName": "制造业端到端运营（中文）",
+    "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "MIT · 虚构样例数据，不得用于真实生产运营决策。"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-11-14T11:18:04Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:12bc35d8531f903e157aa5b1fe798be9ed6237c412c1c5035f8a804120ea8178"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:2d4775eb0f9e731b77bfcf9792dbb7a893860812c5e77d09e07783d8b4d60c69"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.bkn-directory",
+        "execution.function",
+        "execution.skill",
+        "sample.experience-set",
+        "sample.workshop-apps",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.2 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:c24accd67de8098ccb34bd06060e7d3aae6e2e6841d8cb93e865a12d9da1d1fb",
+        "sizeBytes": 142355,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-zh-cn-v0.1.11/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "manufacturing-industry-zh-cn-network",
+        "questions": [
+          "现在哪些工单被阻塞了？各是因为什么？",
+          "已经完成的执行里，哪些不合规？各是什么原因？",
+          "有没有检验记成通过、测量值却超出规格的批次？这批货发出去了吗？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "bkn-directory",
+          "entrypoint": "network.bkn",
+          "contentId": "manufacturing-industry-zh-cn-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "manufacturing-industry-zh-cn-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "manufacturing-industry-zh-cn-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "manufacturing-industry-zh-cn-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "manufacturing_industry_zh_cn",
+          "expectedTables": 38
+        }
+      ],
+      "bindings": []
+    }
+  }
+}
