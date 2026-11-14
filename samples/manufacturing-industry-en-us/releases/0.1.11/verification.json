@@ -1,0 +1,48 @@
+{
+  "sampleId": "manufacturing-industry-en-us",
+  "version": "0.1.11",
+  "packageDigest": "sha256:1b254d26db84761bf5b3e208eb73acc6c8713771760b9e2662e231671ce3fe95",
+  "sourceCommit": "72274d798a3d4984415b6845686fd928c3b7bf2f",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "38 business tables, 1390 fixture records, the package's database verification hook passed."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "40 objects (2 on datasets of the sample catalog, 181 rows loaded) and 73 relations, all 240 properties and 73 relations read back with display names in the sample language; every binding and a live query per object verified by the platform hook; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "Machine Scheduling Workshop app created, published and opened with rule results, again after reinstallation; rules and adjustments toolboxes with functions named in the sample language; 4 mounted rule functions called through Context Loader execute_tool and through the toolbox proxy, matching local runs on the package fixtures; 2 object actions executed, written values read back and restored, a cross-work-centre move refused; 2 mounted Skills checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "The experience set's reference Cypher queries and graph patterns passed. No model answered the questions; no model score."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-manufacturing-industry-en-us-v0.1.11/acceptance.json",
+  "evidenceDigest": "sha256:2d43351b1da6988daf5ec67f53340bdf8386af067fa0aa36420e13e9e3c24622",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with OpenBKN 0.2.2 main builds on a local kind cluster (sample service with Workshop apps; Studio with the rule-check fixes of openbkn-ee #844, #845 and #846); no native amd64 certification and no released vanilla 0.2.2.",
+    "Display names were read back from the platform: 240 properties and 73 relations named in the sample's language, the rules and adjustments toolboxes with their functions, no ID-style toolbox left.",
+    "The sample's Workshop app was created and published by the installation, its rule functions resolved to this installation's rules toolbox; it was opened in Workshop with its rule results, and created again after reinstallation. In the browser a scenario was saved and checked for applying but not applied; the adjust actions it runs were executed through Context Loader.",
+    "The four rule functions are mounted on the network and were called through Context Loader execute_tool and through the toolbox proxy the Workshop schedule Gantt uses; every check result matched the same code run locally on the package fixtures.",
+    "The two adjust actions were executed through Context Loader (get_action_info, execute_action, get_action_execution); their writes were read back with Cypher and then restored. Installing again restores the package schedule.",
+    "Reference queries, graph patterns, functions and actions were checked through APIs, and the Workshop app was opened and checked in Workshop; no model answered the questions.",
+    "Opening the app in the browser on this 0.1.11 package, its four rule functions completed their checks in about 12 s (29 tasks in the window, hard 11, late 8, kit 5, capability 1, operator 8, changeover 8, not checked 0); dates showed as dates, the check detail opened on the failing rule, and a test scenario (a maintenance work order moved one day) was saved and its apply dialog named the conflict by work order, operation and machine and blocked applying; nothing was applied and the scenario was deleted.",
+    "The app file is unchanged from 0.1.10, where the app was exported, imported as a new app with made-up toolbox and function IDs, and its four rule functions were found by toolbox and function name and completed their checks; the copies were deleted."
+  ]
+}
