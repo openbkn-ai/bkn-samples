@@ -26,7 +26,7 @@ sources:
       op: ne
       value: Cancelled
   - name: planResource
-    label: Planned line
+    label: Planned line code
     kind: matched
     source: schedulePlan
     pairs: &id001
@@ -40,6 +40,14 @@ sources:
       value: Cancelled
     field: line_code
     type: text
+  - kind: matched
+    source: schedulePlan
+    pairs: *id001
+    where: *id002
+    type: text
+    name: planLine
+    label: Planned line
+    field: lineName
   - kind: matched
     source: schedulePlan
     pairs: *id001
@@ -230,6 +238,15 @@ sources:
     otherwise:
       value: One product
       tone: neutral
+  - name: lineName
+    label: Line name
+    kind: matched
+    source: scheduleResource
+    pairs:
+    - field: line_code
+      other: line_code
+    field: line_name
+    type: text
 - id: schedulePlanActive
   label: Active Kit Schedule Plans
   objectType: supply_ontology_en_kitplan
@@ -310,9 +327,11 @@ pages:
           endField: planEnd
           barFields:
           - planKit
+          - planLine
           popoverFields:
           - planned
           - planKit
+          - planLine
           - planResource
           - planStart
           - planEnd
