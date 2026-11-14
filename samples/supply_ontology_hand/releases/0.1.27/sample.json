@@ -1,0 +1,119 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1beta1",
+  "kind": "Sample",
+  "metadata": {
+    "sampleId": "supply-chain",
+    "version": "0.1.27",
+    "displayName": "供应链",
+    "summary": "用脱敏的订单、库存、BOM 和采购数据体验欠货补发、接单承诺和采购跟进。",
+    "authors": [
+      "OpenBKN"
+    ],
+    "licenseNote": "脱敏历史回放，不能用于真实交付承诺。"
+  },
+  "spec": {
+    "release": {
+      "publishedAt": "2026-11-14T09:18:45Z",
+      "defaultLocale": "zh-CN",
+      "releaseNotes": [
+        {
+          "locale": "en-US",
+          "path": "release-notes.en-US.md",
+          "digest": "sha256:831c3461ecb7fd732c42ff2ab73392864e0d3f1480d7ba65793a9bde6e243429"
+        },
+        {
+          "locale": "zh-CN",
+          "path": "release-notes.zh-CN.md",
+          "digest": "sha256:aceec3835d827fbee9b017f8e1670cebe2393f122a706b153b2fb93207751919"
+        }
+      ]
+    },
+    "requires": {
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "capabilities": [
+        "vega.catalog",
+        "knowledge-network.import.kn-json",
+        "execution.function",
+        "execution.skill",
+        "sample.experience-set",
+        "sample.workshop-apps",
+        "database.shared"
+      ],
+      "installationProfiles": [
+        "openbkn.ai/sample-install.v1"
+      ],
+      "platformVersion": ">=0.2.2 <0.3.0",
+      "requiredExtensions": []
+    },
+    "artifacts": [
+      {
+        "id": "package",
+        "type": "archive",
+        "digest": "sha256:ad9aeb5b900db78fb411701b65eaacad59db0a71dca41632e5117ee561be1e44",
+        "sizeBytes": 1545821,
+        "locations": [
+          "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.27/package.tar.gz"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "type": "openbkn.ai/knowledge-network-detail.v1",
+        "contentId": "supply-network",
+        "questions": [
+          "客户想再订 30 套 526-000006，现在最多能接多少套？",
+          "哪些产品的欠货靠现货和现有库存都补不上？"
+        ]
+      }
+    ],
+    "extensions": {},
+    "contents": {
+      "knowledgeNetworks": [
+        {
+          "artifactId": "package",
+          "directory": "kn",
+          "format": "kn-json",
+          "entrypoint": "supply_ontology_hand.json",
+          "contentId": "supply-network"
+        }
+      ],
+      "functionPackages": [
+        {
+          "artifactId": "package",
+          "directory": "tools",
+          "contentId": "supply-chain-functions"
+        }
+      ],
+      "skillPackages": [
+        {
+          "artifactId": "package",
+          "directory": "skills",
+          "contentId": "supply-chain-skills"
+        }
+      ]
+    },
+    "delivery": {
+      "profile": "openbkn.ai/sample-install.v1",
+      "dataDependencies": [
+        {
+          "id": "supply-data",
+          "artifactId": "package",
+          "engine": "mariadb",
+          "databaseName": "supply_demo_hand",
+          "expectedTables": 14
+        }
+      ],
+      "bindings": [
+        {
+          "objectTypeId": "supply_ontology_hand_inventory",
+          "dataDependencyId": "supply-data",
+          "tableName": "erp_real_time_inventory",
+          "contentId": "supply-network"
+        }
+      ]
+    }
+  }
+}
