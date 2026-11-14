@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000015",
-    "sequence": 15,
+    "revision": "catalog-000016",
+    "sequence": 16,
     "channel": "stable",
-    "publishedAt": "2026-11-14T10:01:33Z",
+    "publishedAt": "2026-11-14T10:29:10Z",
     "productVersion": "0.2.2"
   },
   "spec": {
@@ -2341,7 +2341,7 @@
         "displayName": "制造业端到端运营（中文）",
         "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
         "publishedAt": "2026-11-13T11:08:34Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "自带“机台排产”应用：安装后在应用工坊直接打开，按机台排三月的工序和维修工单，四个规则函数的结果一起标出，拖动改排后执行调整行动写回；卸载时一并删除；在 OpenBKN 0.2.2 上完成固定包全新安装验收。",
@@ -2386,7 +2386,8 @@
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/a11e4dbaf841c5e20e03ae074c02626c214338d9/samples/manufacturing-industry-zh-cn/releases/0.1.9/verification.json",
           "digest": "sha256:5c9660132424ffbd8006c900c46d163de0d873a7a720c23ddca77df5197f3dfd"
         },
-        "language": "zh-CN"
+        "language": "zh-CN",
+        "withdrawalReason": "Superseded by manufacturing-industry-zh-cn 0.1.10 for OpenBKN 0.2.2, which reworks the Machine Scheduling app for business users. Obsolete GitHub Release and package assets deleted to avoid ambiguity; metadata retained only for existing installation history."
       },
       {
         "sampleId": "manufacturing-industry-en-us",
@@ -2394,7 +2395,7 @@
         "displayName": "Manufacturing Operations (EN)",
         "summary": "Order fulfilment, purchasing, execution compliance and quality release at a fictional precision machining company.",
         "publishedAt": "2026-11-13T11:08:35Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "Brings the Machine Scheduling Workshop app: open it from the app list after installation, schedule March operations and maintenance work orders by machine with the four rule functions marked, drag to replan and apply through the adjust actions; removed on uninstallation; fresh installation of the fixed package accepted on OpenBKN 0.2.2.",
@@ -2438,6 +2439,113 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/a11e4dbaf841c5e20e03ae074c02626c214338d9/samples/manufacturing-industry-en-us/releases/0.1.9/verification.json",
           "digest": "sha256:6206e417d10c3e5cac139c84f15422cebcea94536ec26e6d3d63be27a8b6455f"
+        },
+        "language": "en-US",
+        "withdrawalReason": "Superseded by manufacturing-industry-en-us 0.1.10 for OpenBKN 0.2.2, which reworks the Machine Scheduling app for business users. Obsolete GitHub Release and package assets deleted to avoid ambiguity; metadata retained only for existing installation history."
+      },
+      {
+        "sampleId": "manufacturing-industry-zh-cn",
+        "version": "0.1.10",
+        "displayName": "制造业端到端运营（中文）",
+        "summary": "虚构精密加工企业的订单交付、物料采购、生产执行合规与质量放行。",
+        "publishedAt": "2026-11-14T09:37:19Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "机台排产应用按业务用户检查过一遍：计划条显示工单号和工序名，打开即看三月排程，规则按业务顺序并更快返回，检查结论和明细始终用样例语言；导出后可在其他环境按工具箱名和函数名导入复用；在 OpenBKN 0.2.2 上完成固定包全新安装验收。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8bc42efdee2aecf4061afb97c39195a7a79b95c9/samples/manufacturing-industry-zh-cn/releases/0.1.10/release-notes.en-US.md",
+              "digest": "sha256:1473338af643eb0e9bea6eb4e2f74362ab667d891a607b3b06100e14da754ede"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8bc42efdee2aecf4061afb97c39195a7a79b95c9/samples/manufacturing-industry-zh-cn/releases/0.1.10/release-notes.zh-CN.md",
+              "digest": "sha256:b20d7ada95b69141de435dd7b1393cfce95f0424cd3538ee8d5cb4f53703bf63"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8bc42efdee2aecf4061afb97c39195a7a79b95c9/samples/manufacturing-industry-zh-cn/releases/0.1.10/sample.json",
+          "digest": "sha256:0352d46e0c077c7682e3c4c5f5dfb8b66c645ef01a9dcc5072b703bc4bb5bcda"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "sample.workshop-apps",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8bc42efdee2aecf4061afb97c39195a7a79b95c9/samples/manufacturing-industry-zh-cn/releases/0.1.10/verification.json",
+          "digest": "sha256:1207ad0afdcd0da0a7233594142685a0c9667b6d631b531786dece4b4964002d"
+        },
+        "language": "zh-CN"
+      },
+      {
+        "sampleId": "manufacturing-industry-en-us",
+        "version": "0.1.10",
+        "displayName": "Manufacturing Operations (EN)",
+        "summary": "Order fulfilment, purchasing, execution compliance and quality release at a fictional precision machining company.",
+        "publishedAt": "2026-11-14T09:37:20Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "The Machine Scheduling app checked as a business user would: bars show work order and operation, it opens on the March schedule, rules come in business order and answer faster, checks and details stay in the sample language; exported, it imports elsewhere and finds its functions by toolbox and function name; fresh installation of the fixed package accepted on OpenBKN 0.2.2.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8bc42efdee2aecf4061afb97c39195a7a79b95c9/samples/manufacturing-industry-en-us/releases/0.1.10/release-notes.en-US.md",
+              "digest": "sha256:1473338af643eb0e9bea6eb4e2f74362ab667d891a607b3b06100e14da754ede"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8bc42efdee2aecf4061afb97c39195a7a79b95c9/samples/manufacturing-industry-en-us/releases/0.1.10/release-notes.zh-CN.md",
+              "digest": "sha256:b20d7ada95b69141de435dd7b1393cfce95f0424cd3538ee8d5cb4f53703bf63"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8bc42efdee2aecf4061afb97c39195a7a79b95c9/samples/manufacturing-industry-en-us/releases/0.1.10/sample.json",
+          "digest": "sha256:ee01a23c2cc188f51dca2c27e08aadf7b1e559a8a06a1ad630e87a09eb071ac1"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.bkn-directory",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "sample.workshop-apps",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/8bc42efdee2aecf4061afb97c39195a7a79b95c9/samples/manufacturing-industry-en-us/releases/0.1.10/verification.json",
+          "digest": "sha256:404ba1801812ce82c1531488ff4d716e959038ad30b670dd07b78bd30a9c7a44"
         },
         "language": "en-US"
       }
