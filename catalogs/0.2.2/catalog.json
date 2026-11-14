@@ -3,10 +3,10 @@
   "kind": "SampleCatalog",
   "metadata": {
     "sourceId": "openbkn-official",
-    "revision": "catalog-000014",
-    "sequence": 14,
+    "revision": "catalog-000015",
+    "sequence": 15,
     "channel": "stable",
-    "publishedAt": "2026-11-13T17:54:52Z",
+    "publishedAt": "2026-11-14T10:01:33Z",
     "productVersion": "0.2.2"
   },
   "spec": {
@@ -966,7 +966,7 @@
         "displayName": "供应链",
         "summary": "用脱敏的订单、库存、BOM 和采购数据体验欠货补发、接单承诺和采购跟进。",
         "publishedAt": "2026-11-13T17:13:22Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "zh-CN",
           "summary": "齐套检查的批量结论与单条明细口径一致：未排需求各自单独叠加到现有计划和方案改动上判断，不再互相占料；产线可生产对还没排到产线的任务返回不适用；自带“齐套排产”应用的计划条显示产品名称，甘特图占满整行，需求视角显示计划齐套状态；在 OpenBKN 0.2.2 上完成固定包全新安装验收。",
@@ -1010,6 +1010,60 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/14944c8e2c4f7e4e90bdaafb57ef346e45ac5461/samples/supply_ontology_hand/releases/0.1.26/verification.json",
           "digest": "sha256:9622019b390430bd6d03173a5388366f1d628a1c06df374e711169b25802e159"
+        },
+        "language": "zh-CN",
+        "withdrawalReason": "Superseded by supply-chain 0.1.27 for OpenBKN 0.2.2. Obsolete GitHub Release and package assets deleted to avoid ambiguity; metadata retained only for existing installation history."
+      },
+      {
+        "sampleId": "supply-chain",
+        "version": "0.1.27",
+        "displayName": "供应链",
+        "summary": "用脱敏的订单、库存、BOM 和采购数据体验欠货补发、接单承诺和采购跟进。",
+        "publishedAt": "2026-11-14T09:18:45Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "zh-CN",
+          "summary": "自带“齐套排产”应用改用业务文案：需求视角计划条显示齐套状态、待排卡片显示数量；应用工坊导出的应用文件可直接复用，安装时按工具箱名和函数名重新绑定规则函数；文档补充在客户环境复用应用的步骤；在 OpenBKN 0.2.2 上完成固定包全新安装验收。",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82dcc5af772eaf18a22ca76f34d2cb047ebc148f/samples/supply_ontology_hand/releases/0.1.27/release-notes.en-US.md",
+              "digest": "sha256:831c3461ecb7fd732c42ff2ab73392864e0d3f1480d7ba65793a9bde6e243429"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82dcc5af772eaf18a22ca76f34d2cb047ebc148f/samples/supply_ontology_hand/releases/0.1.27/release-notes.zh-CN.md",
+              "digest": "sha256:aceec3835d827fbee9b017f8e1670cebe2393f122a706b153b2fb93207751919"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82dcc5af772eaf18a22ca76f34d2cb047ebc148f/samples/supply_ontology_hand/releases/0.1.27/sample.json",
+          "digest": "sha256:cd5edc43aaa458fbb4ec8e17a24bf754f82176206a5b03d5dce8c4f6a6fc0e22"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "sample.workshop-apps",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82dcc5af772eaf18a22ca76f34d2cb047ebc148f/samples/supply_ontology_hand/releases/0.1.27/verification.json",
+          "digest": "sha256:adb1e1c68a55b0d7b4fadcb647c410f0f83a12a05d33bbaa6c037a990e131b45"
         },
         "language": "zh-CN"
       },
@@ -1338,7 +1392,7 @@
         "displayName": "Supply Chain (EN)",
         "summary": "Use sample orders, stock, BOMs and purchases to fill backlog, accept orders and follow up purchases.",
         "publishedAt": "2026-11-13T17:13:23Z",
-        "releaseStatus": "published",
+        "releaseStatus": "withdrawn",
         "releaseNotes": {
           "defaultLocale": "en-US",
           "summary": "Kit_Check gives a batch the same answer as each task's detail: unscheduled demands are checked alone on top of the plans and scenario changes, no longer taking stock from each other; Line_Can_Build answers not applicable for a task without a line; the Kit Scheduling app's plan bars show product names, the Gantt takes the full width and the demand view shows each plan's kit status; fresh installation of the fixed package accepted on OpenBKN 0.2.2.",
@@ -1382,6 +1436,60 @@
         "verification": {
           "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/14944c8e2c4f7e4e90bdaafb57ef346e45ac5461/samples/supply_ontology_en/releases/0.1.21/verification.json",
           "digest": "sha256:0bef60861cbccc0af0ba16eb08e7c5253f458f1453913c35ed3a6ba161838ce8"
+        },
+        "language": "en-US",
+        "withdrawalReason": "Superseded by supply-chain-en 0.1.22 for OpenBKN 0.2.2. Obsolete GitHub Release and package assets deleted to avoid ambiguity; metadata retained only for existing installation history."
+      },
+      {
+        "sampleId": "supply-chain-en",
+        "version": "0.1.22",
+        "displayName": "Supply Chain (EN)",
+        "summary": "Use sample orders, stock, BOMs and purchases to fill backlog, accept orders and follow up purchases.",
+        "publishedAt": "2026-11-14T09:18:46Z",
+        "releaseStatus": "published",
+        "releaseNotes": {
+          "defaultLocale": "en-US",
+          "summary": "The Kit Scheduling app uses business wording: demand bars show kit status, tray cards show quantity, rules read Kit check and Line can build; an app exported from the app workshop reuses as it is, with rule functions bound again by toolbox and function name on install; the docs add how to reuse an app in a customer environment; fresh installation of the fixed package accepted on OpenBKN 0.2.2.",
+          "documents": [
+            {
+              "locale": "en-US",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82dcc5af772eaf18a22ca76f34d2cb047ebc148f/samples/supply_ontology_en/releases/0.1.22/release-notes.en-US.md",
+              "digest": "sha256:1184e7e030a17c7319ae34802fc17e6130d6f0829c98eb551cb65e9c12dcb663"
+            },
+            {
+              "locale": "zh-CN",
+              "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82dcc5af772eaf18a22ca76f34d2cb047ebc148f/samples/supply_ontology_en/releases/0.1.22/release-notes.zh-CN.md",
+              "digest": "sha256:90fcee059c37093842dab9270ee77897d6879a8069e290352b0870562becf031"
+            }
+          ]
+        },
+        "manifest": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82dcc5af772eaf18a22ca76f34d2cb047ebc148f/samples/supply_ontology_en/releases/0.1.22/sample.json",
+          "digest": "sha256:35419dfb32bfb81242a7bb1dffa304b1ff90e58656012ce3ff25b23d4f611f4f"
+        },
+        "requires": {
+          "architectures": [
+            "amd64",
+            "arm64"
+          ],
+          "capabilities": [
+            "vega.catalog",
+            "knowledge-network.import.kn-json",
+            "execution.function",
+            "execution.skill",
+            "sample.experience-set",
+            "sample.workshop-apps",
+            "database.shared"
+          ],
+          "installationProfiles": [
+            "openbkn.ai/sample-install.v1"
+          ],
+          "platformVersion": ">=0.2.2 <0.3.0",
+          "requiredExtensions": []
+        },
+        "verification": {
+          "url": "https://raw.githubusercontent.com/openbkn-ai/bkn-samples/82dcc5af772eaf18a22ca76f34d2cb047ebc148f/samples/supply_ontology_en/releases/0.1.22/verification.json",
+          "digest": "sha256:602dd4178d0ff48ef77f5c384d7097c8062fa9350f960404ac2b7507c3acc597"
         },
         "language": "en-US"
       },
