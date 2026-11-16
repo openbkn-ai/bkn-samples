@@ -65,3 +65,16 @@ def test_incomplete_requests_are_refused_before_reading(operation, params):
     with pytest.raises(CannotCompute):
         load_bkn_rows(operation, query, params)
     assert query.calls == []
+
+
+def test_sdk_reads_page_past_ten_thousand_rows_with_the_returned_cursor():
+    """The sandbox SDK refuses offset + limit above 10,000 on indexed object types; an action that reads a large
+    BOM must follow the cursor each page returns (the fake reader refuses offsets past 10,000)."""
+    bom = [{"bom_material_code": "526-000006", "material_code": f"M{i % 7}", "seq_no": str(i), "alt_priority": 0}
+           for i in range(23_456)]
+    query = FakeObjectQuery({"supply_ontology_hand_bom": bom})
+    rows = load_bkn_rows("build_capacity", query, {"products": ["526-000006"]})
+    assert len(rows["bom"]) == len(bom)
+    pages = [c for c in query.calls if c["ot_id"].endswith("_bom")]
+    assert [c.get("cursor") for c in pages] == [None, "10000", "20000"]
+    assert all("offset" not in c for c in pages[1:])

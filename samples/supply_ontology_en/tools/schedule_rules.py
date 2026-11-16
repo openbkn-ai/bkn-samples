@@ -65,25 +65,21 @@ def tool_query(sdk_query: Callable[..., Mapping[str, Any]] | None, call: Callabl
     state = {"sdk": sdk_query is not None}
 
     def direct(kn_id: str, ot_id: str, condition: Any = None, limit: int = 500, offset: int = 0,
-               properties: list[str] | None = None, search_after: Any = None, **_: Any) -> Mapping[str, Any]:
+               properties: list[str] | None = None, cursor: str | None = None, **_: Any) -> Mapping[str, Any]:
         # Pages after the first follow the API's opaque cursor: offset paging stops at 10,000 rows on indexed
         # object types, and a plan's materials can match more stock rows than that.
         body: dict[str, Any] = {"limit": limit, "need_total": True}
-        if isinstance(search_after, str) and search_after:
-            body["cursor"] = search_after
+        if isinstance(cursor, str) and cursor:
+            body["cursor"] = cursor
         else:
             body["offset"] = offset
         if condition:
             body["condition"] = condition
         if properties:
             body["properties"] = properties
-        page = call(f"/api/ontology-query/v1/knowledge-networks/{kn_id}/object-types/{ot_id}", method="POST", body=body,
+        # read_complete follows the returned ``paging.next_cursor``.
+        return call(f"/api/ontology-query/v1/knowledge-networks/{kn_id}/object-types/{ot_id}", method="POST", body=body,
                     headers={"X-HTTP-Method-Override": "GET"})
-        if not isinstance(page, Mapping):
-            return page
-        paging = page.get("paging")
-        cursor = paging.get("next_cursor") if isinstance(paging, Mapping) else None
-        return {**{k: v for k, v in page.items() if k != "search_after"}, **({"search_after": cursor} if cursor else {})}
 
     def query(**request: Any) -> Mapping[str, Any]:
         if state["sdk"]:
@@ -93,7 +89,7 @@ def tool_query(sdk_query: Callable[..., Mapping[str, Any]] | None, call: Callabl
                 if "conversation_required" not in str(error) and "bkn_context" not in str(error):
                     raise
                 state["sdk"] = False
-                request.pop("search_after", None)  # an SDK cursor means nothing to the query API
+                request.pop("cursor", None)  # an SDK cursor means nothing to the query API
         return direct(**request)
     return query
 

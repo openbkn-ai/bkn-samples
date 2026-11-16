@@ -408,3 +408,20 @@ def test_direct_reads_page_past_ten_thousand_rows_with_the_api_cursor():
                         page_size=10_000, max_rows=50_000)
     assert got == rows
     assert [b.get("cursor") for b in bodies] == [None, "10000", "20000"]
+
+
+def test_sdk_rule_reads_page_past_ten_thousand_rows_with_the_returned_cursor():
+    """Inside a conversation the rule reads go through the sandbox SDK, which also refuses offset + limit above
+    10,000 and returns its next page as a top-level ``cursor``."""
+    from fn.read_complete import read_complete
+    from schedule_rules import tool_query
+    from support_bkn_rows import FakeObjectQuery
+    rows = [{"id": i} for i in range(23_456)]
+    sdk = FakeObjectQuery({"inventory": rows})
+
+    def call(*_, **__):
+        raise AssertionError("the query API is not used while the SDK answers")
+    got = read_complete(tool_query(sdk, call), {"kn_id": "kn", "ot_id": "inventory"}, lambda page: page["datas"],
+                        page_size=10_000, max_rows=50_000)
+    assert sorted(r["id"] for r in got) == list(range(len(rows)))
+    assert [c.get("cursor") for c in sdk.calls] == [None, "10000", "20000"]

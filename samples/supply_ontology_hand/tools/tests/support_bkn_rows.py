@@ -63,7 +63,21 @@ class FakeObjectQuery:
         return [{rename.get(k, k): v for k, v in r.items()} for r in table(TABLES[ot_id])]
 
     def __call__(self, **query):
+        """Answers like the sandbox SDK's ``query_object_instance`` on an indexed object type: offset + limit above
+        10,000 is refused, the next page comes from the returned ``cursor``, and only the first page carries
+        ``total_count``."""
         self.calls.append(query)
+        unknown = set(query) - {"kn_id", "ot_id", "condition", "cursor", "limit", "offset", "properties", "sort"}
+        if unknown:
+            raise TypeError(f"query_object_instance() got unexpected keyword arguments {sorted(unknown)}")
         rows = [r for r in reversed(self._rows(query["ot_id"])) if _matches(r, query.get("condition"))]
-        start = query.get("offset", 0)
-        return {"datas": [dict(r) for r in rows[start:start + query["limit"]]], "total_count": len(rows)}
+        if query.get("cursor"):
+            assert query.get("offset") is None, "cursor and offset are mutually exclusive"
+            start = int(query["cursor"])
+        else:
+            start = query.get("offset") or 0
+            if start + query["limit"] > 10_000:
+                raise RuntimeError("paging.offset + paging.limit must not exceed 10000 for OpenSearch queries")
+        end = min(start + query["limit"], len(rows))
+        page = {"datas": [dict(r) for r in rows[start:end]], **({"cursor": str(end)} if end < len(rows) else {})}
+        return page if query.get("cursor") else {**page, "total_count": len(rows)}
