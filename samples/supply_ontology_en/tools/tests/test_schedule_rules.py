@@ -382,3 +382,29 @@ def test_a_task_without_a_line_is_not_applicable_for_the_line_check():
         result = line_rule([unplaced], forecasts=ROWS["forecast"], lines=lines, product_lines={"P1": "A"})[0]
         assert (result["key"], result["pass"], result["text"]) == ("u", None, "")
 
+
+
+def test_direct_reads_page_past_ten_thousand_rows_with_the_api_cursor():
+    """Indexed object types refuse offset + limit above 10,000; later pages follow ``paging.next_cursor``."""
+    from fn.read_complete import read_complete
+    from schedule_rules import tool_query
+    rows = [{"id": i} for i in range(23_456)]
+    bodies = []
+
+    def call(path, method="GET", body=None, headers=None):
+        bodies.append(dict(body))
+        if "cursor" in body:
+            assert "offset" not in body
+            start = int(body["cursor"])
+        else:
+            start = body["offset"]
+            if start + body["limit"] > 10_000:
+                raise RuntimeError("paging.offset + paging.limit must not exceed 10000 for OpenSearch queries")
+        end = min(start + body["limit"], len(rows))
+        return {"datas": rows[start:end], "total_count": len(rows),
+                "paging": {"next_cursor": str(end) if end < len(rows) else None}}
+    query = tool_query(None, call)
+    got = read_complete(query, {"kn_id": "kn", "ot_id": "inventory"}, lambda page: page["datas"],
+                        page_size=10_000, max_rows=50_000)
+    assert got == rows
+    assert [b.get("cursor") for b in bodies] == [None, "10000", "20000"]
