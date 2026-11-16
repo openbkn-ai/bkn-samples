@@ -1,0 +1,48 @@
+{
+  "sampleId": "supply-chain",
+  "version": "0.1.30",
+  "packageDigest": "sha256:ed11db44cbf388852cae852531960a015c8abf86a75accbfd20c1182f72b0057",
+  "sourceCommit": "d2cf1eb3e1ba2f8a2c913ffae56a894811e7bb74",
+  "platformVersion": "0.2.2",
+  "architectureTested": "arm64",
+  "freshInstallation": true,
+  "dataImageRef": null,
+  "databaseRuntime": "shared-mariadb",
+  "checks": [
+    {
+      "name": "database",
+      "passed": true,
+      "details": "14 business tables, 78647 fixture records; every bound object returns its fixture row count, plus the package's DB verification hook; the plan dataset holds 13 history plans."
+    },
+    {
+      "name": "knowledge",
+      "passed": true,
+      "details": "14 objects (13 table-bound, 1 dataset-bound) and 21 relations; all 605 production plans reach their products; the same after uninstalling and reinstalling."
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "details": "the Workshop app (产品需求预测单视角 / 产线视角) was created and published on the sample's network with its rule functions resolved to this installation's toolbox, and created again after reinstalling; through the toolbox proxy a demand-view batch of 15 plans and 20 unscheduled demands gave each demand the answer its detail gives, and the line check answered not applicable for tasks without a line; 4 mounted functions (2 calculations, 2 schedule rules) ran through execute_tool before and after reinstalling; the rule tools also answered through the toolbox proxy with check and detail; create, repeat create (updated, no new plan), adjust, cancel and whole-bill create ran as object actions and wrote the plan dataset; 2 Skills checked against source contents; no metrics."
+    },
+    {
+      "name": "scenario",
+      "passed": true,
+      "details": "7 reference Cypher queries passed; the other 8 cards were not exercised as full questions; no model score or browser UI claim."
+    }
+  ],
+  "evidence": "https://github.com/openbkn-ai/bkn-samples/releases/download/sample-supply-chain-v0.1.30/acceptance.json",
+  "evidenceDigest": "sha256:56d2532005e10f73950c6469105b6a495037ad3a95dc509e0041a608a00b0bed",
+  "modelQuestionsForThisArtifact": 0,
+  "retriedSameArtifacts": false,
+  "uninstalledWithoutPackageOrCatalog": false,
+  "limits": [
+    "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (bkn-backend-ee sha2d2a597, ontology-query-ee with bkn-foundry#3125, agent-retrieval sha2d466bc, sandbox 0.2.2 main eeffdb4, sample service 022-3be0e6b3 with bkn-samples#285); no native amd64 certification and no released vanilla 0.2.2.",
+    "Calculations and schedule rules are mounted functions run through Context Loader execute_tool in a managed interaction; the rule tools were also called through the toolbox proxy without an interaction, as the schedule Gantt calls them. The plan actions ran through get_action_info, execute_action and get_action_execution.",
+    "Writing plans needs the OpenBKN 0.2.2 sandbox deployment (BKN_BASE_URL, BKN_TOKEN, gateway allowed); uninstalling needs a sample service with bkn-samples#260.",
+    "Delaying a purchase order on the platform was not exercised; the confirmed plans turning short when their purchase is delayed is covered by the source tests on the same fixtures.",
+    "The Workshop app needs the professional edition (Workshop); a community edition platform installs the sample without it, which was not exercised here.",
+    "Actions and functions now read objects with the query cursor on the sandbox SDK path too (0.1.29 fixed only the page rule checks). On 8081 the supply-chain installation was given a local index for its BOM, stock, purchase request and purchase order tables, so that the query service refuses offset + limit above 10,000 as an indexed network does; there, in the 齐套排产 app, a planned bar was moved, the scenario saved and applied, and Adjust Kit Schedule Plan completed (exit code 0) and wrote the plan; the mounted functions and the five action steps were run again through Context Loader and passed. supply-chain-en was checked on its default, non-indexed installation only; its functions are the same code.",
+    "Reference queries, functions and actions were checked through APIs; full model-question cards were not exercised.",
+    "Kit check through the toolbox proxy, measured in the sandbox, three runs each: one plan's detail 1.03–1.54 s, the 13 installed plans 1.03–1.03 s, 200 plans 2.55–3.09 s. Most of the remaining time is the knowledge-network read of the BOM and sandbox start-up."
+  ]
+}

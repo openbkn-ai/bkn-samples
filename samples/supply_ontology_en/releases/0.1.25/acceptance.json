@@ -1,0 +1,176 @@
+{
+ "reportType": "public-acceptance-summary",
+ "sampleId": "supply-chain-en",
+ "version": "0.1.25",
+ "packageDigest": "sha256:a7b1ff77ff0146adf9fd696adf99a8cc70111e153e72978aff8a7826c453d542",
+ "sourceCommit": "d2cf1eb3e1ba2f8a2c913ffae56a894811e7bb74",
+ "verificationDate": "2026-11-16",
+ "testedPlatformVersion": "0.2.2",
+ "testedArchitecture": "arm64",
+ "databaseRuntime": "shared-mariadb",
+ "freshInstallation": true,
+ "checks": {
+  "database": {
+   "businessTables": 14,
+   "fixtureRecords": 78647,
+   "boundObjectRowCountsMatched": true,
+   "packageDatabaseVerificationHookPassed": true
+  },
+  "knowledge": {
+   "objectTypes": 14,
+   "relations": 21,
+   "liveBoundObjectQueriesPassed": 13,
+   "datasetObjects": 1,
+   "planHistoryRows": 13,
+   "productionPlansReachingProducts": 605,
+   "productionPlans": 605
+  },
+  "capabilities": {
+   "mountedFunctionsExecuted": [
+    {
+     "name": "Buildable_Quantity_and_ATP",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "passed": true
+    },
+    {
+     "name": "Demand_Coverage_and_Shortages",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "passed": true
+    },
+    {
+     "name": "Kit_Check",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "passed": true
+    },
+    {
+     "name": "Line_Can_Build",
+     "invokedThrough": "context-loader execute_tool in a managed interaction",
+     "passed": true
+    }
+   ],
+   "ruleToolsThroughToolboxProxy": {
+    "tasksChecked": 15,
+    "detailRows": 39,
+    "passed": true
+   },
+   "kitCheckSeconds": {
+    "detail": [
+     1.03,
+     1.04,
+     1.55
+    ],
+    "installed_plans": [
+     1.54,
+     1.04,
+     1.03
+    ],
+    "plans_200": [
+     2.04,
+     2.04,
+     2.04
+    ]
+   },
+   "objectActionsExecuted": [
+    {
+     "step": "create",
+     "result": "created",
+     "exitCode": 0,
+     "passed": true
+    },
+    {
+     "step": "create_again",
+     "result": "updated",
+     "exitCode": 0,
+     "passed": true
+    },
+    {
+     "step": "adjust",
+     "result": "updated",
+     "exitCode": 0,
+     "passed": true
+    },
+    {
+     "step": "cancel",
+     "result": "cancelled",
+     "exitCode": 0,
+     "passed": true
+    },
+    {
+     "step": "create_whole",
+     "result": "created",
+     "exitCode": 0,
+     "passed": true
+    }
+   ],
+   "mountedSkillsVerified": [
+    {
+     "name": "pmc-supply-planning",
+     "sourceContentDigest": "sha256:d2a7688fa881c8781a6db91f9c88596a5ff2d72a085d70b84bed44340439508a",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    },
+    {
+     "name": "procurement-follow-up",
+     "sourceContentDigest": "sha256:f48d92dcb0f474a76e4b361ed16f4f2aec521aa516d52275979571e85de6bf22",
+     "files": [
+      "SKILL.md"
+     ],
+     "passed": true
+    }
+   ],
+   "batchMatchesDetail": {
+    "plans": 15,
+    "unscheduledDemands": 20,
+    "comparedWithDetail": 8,
+    "passed": true
+   },
+   "lineCheckWithoutLineNotApplicable": true,
+   "workshopApp": {
+    "pages": [
+     "Demand Forecast view",
+     "Production Line view"
+    ],
+    "published": true,
+    "ruleFunctionsResolvedToThisInstallation": [
+     "Supply_EN_Functions / Kit_Check",
+     "Supply_EN_Functions / Line_Can_Build"
+    ],
+    "recreatedAfterReinstallation": true,
+    "browserRuleChecksNotChecked": 0,
+    "demandBarsShowLineName": true,
+    "passed": true
+   },
+   "metricsNotDeclared": true
+  },
+  "scenario": {
+   "declaredCards": 15,
+   "referenceCypherQueriesPassed": 7,
+   "modelQuestionsRun": 0
+  }
+ },
+ "lifecycle": {
+  "offlineImportPassed": true,
+  "uninstallWithPlanDatasetPassed": true,
+  "samePackageReinstallationPassed": true,
+  "retainedOtherSampleQueriesPassed": true,
+  "functionsAfterReinstallationPassed": true,
+  "notExercised": [
+   "bounded internal-dependency failure",
+   "retry with the same artifacts",
+   "uninstall without an active package cache or external HTTP"
+  ]
+ },
+ "limits": [
+  "Native execution covered Linux arm64 with an OpenBKN 0.2.2 main build (bkn-backend-ee sha2d2a597, ontology-query-ee with bkn-foundry#3125, agent-retrieval sha2d466bc, sandbox 0.2.2 main eeffdb4, sample service 022-3be0e6b3 with bkn-samples#285); no native amd64 certification and no released vanilla 0.2.2.",
+  "Calculations and schedule rules are mounted functions run through Context Loader execute_tool in a managed interaction; the rule tools were also called through the toolbox proxy without an interaction, as the schedule Gantt calls them. The plan actions ran through get_action_info, execute_action and get_action_execution.",
+  "Writing plans needs the OpenBKN 0.2.2 sandbox deployment (BKN_BASE_URL, BKN_TOKEN, gateway allowed); uninstalling needs a sample service with bkn-samples#260.",
+  "Delaying a purchase order on the platform was not exercised; the confirmed plans turning short when their purchase is delayed is covered by the source tests on the same fixtures.",
+  "The Workshop app needs the professional edition (Workshop); a community edition platform installs the sample without it, which was not exercised here.",
+  "Actions and functions now read objects with the query cursor on the sandbox SDK path too (0.1.29 fixed only the page rule checks). On 8081 the supply-chain installation was given a local index for its BOM, stock, purchase request and purchase order tables, so that the query service refuses offset + limit above 10,000 as an indexed network does; there, in the 齐套排产 app, a planned bar was moved, the scenario saved and applied, and Adjust Kit Schedule Plan completed (exit code 0) and wrote the plan; the mounted functions and the five action steps were run again through Context Loader and passed. supply-chain-en was checked on its default, non-indexed installation only; its functions are the same code.",
+  "Reference queries, functions and actions were checked through APIs; full model-question cards were not exercised.",
+  "Kit check through the toolbox proxy, measured in the sandbox, three runs each: one plan's detail 1.03–1.55 s, the 13 installed plans 1.03–1.54 s, 200 plans 2.04–2.04 s. Most of the remaining time is the knowledge-network read of the BOM and sandbox start-up."
+ ],
+ "detailedRuntimeReceipts": "Retained privately by the publisher; not distributed in release assets."
+}
