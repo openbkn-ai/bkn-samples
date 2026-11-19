@@ -1,0 +1,88 @@
+---
+type: object_type
+id: coupon_template
+name: 优惠券模板
+tags: [MVP, 电商]
+---
+
+## ObjectType: 优惠券模板
+
+优惠券发行模板。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_coupon_template | ecommerce_ops.coupon_templates |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| template_id | 优惠券模板主键ID | integer | 优惠券模板主键ID | template_id |
+| template_name | 模板名称 | string | 模板名称 | template_name |
+| coupon_type | 券类型（满减/折扣等） | string | 券类型（满减/折扣等） | coupon_type |
+| discount_value | 优惠力度（金额或折扣） | decimal | 优惠力度（金额或折扣） | discount_value |
+| min_order_amt | 最低消费金额 | decimal | 最低消费金额 | min_order_amt |
+| max_discount | 最大优惠金额封顶 | decimal | 最大优惠金额封顶 | max_discount |
+| total_quantity | 发行总量 | integer | 发行总量 | total_quantity |
+| issued_quantity | 已发放数量 | integer | 已发放数量 | issued_quantity |
+| used_quantity | 已使用数量 | integer | 已使用数量 | used_quantity |
+| per_user_limit | 单用户限领数量 | integer | 单用户限领数量 | per_user_limit |
+| validity_type | 有效期类型（固定区间/领取后N天） | string | 有效期类型（固定区间/领取后N天） | validity_type |
+| valid_start | 有效期开始时间 | datetime | 有效期开始时间 | valid_start |
+| valid_end | 有效期结束时间 | datetime | 有效期结束时间 | valid_end |
+| valid_days | 领取后有效天数 | integer | 领取后有效天数 | valid_days |
+| usage_scope | 使用范围类型 | string | 使用范围类型 | usage_scope |
+| scope_ids | 使用范围ID列表（JSON） | text | 使用范围ID列表（JSON） | scope_ids |
+| is_stackable | 是否可与其他优惠叠加 | integer | 是否可与其他优惠叠加 | is_stackable |
+| status | 模板状态 | string | 模板状态 | status |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+
+### Property Constraints
+
+```yaml
+coupon_type:
+  value_type: coupon_benefit_type
+min_order_amt:
+  value_type: cny_nonnegative_amount
+max_discount:
+  value_type: cny_nonnegative_amount
+validity_type:
+  value_type: coupon_validity_mode
+```
+
+### Logic Properties
+
+#### lp_coupon_redeem_rate
+
+**Meta**
+
+| Display Name | Type | Description |
+|--------------|------|-------------|
+| 优惠券核销率 | tool | 模板累计已核销数量/累计已发放数量；零分母返回无定义。源字段来自券模板，不依赖用券统计视图。 |
+
+**Source**
+
+| Source Type | Source ID | Source Name | BoxID | ToolID | ResultPath |
+|-------------|-----------|-------------|-------|--------|------------|
+| tool |  | calc_ratio | ecommerce_box_53615198c61d | ecommerce_tool_53fe1149ca70 | $.result.rate_pct |
+
+**Parameters**
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| numerator | number | body |  | property | used_quantity |  |
+| denominator | number | body |  | property | issued_quantity |  |
+
+**Analysis Dimensions**
+
+| Name | Display Name | Type | Description |
+|------|--------------|------|-------------|
+
+
+### Keys
+
+Primary Keys: template_id
+Display Key: template_name
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_activity_product_product
+name: 活动参与项对应商品
+tags: [电商]
+---
+
+## RelationType: 活动参与项对应商品
+
+按源表业务键关联；非空外键与目标唯一性已经源表只读核验。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| activity_product | product | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| product_id | product_id |

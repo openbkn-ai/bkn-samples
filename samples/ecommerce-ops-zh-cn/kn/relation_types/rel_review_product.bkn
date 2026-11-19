@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_review_product
+name: 评价对应商品
+tags: [MVP, 电商]
+---
+
+## RelationType: 评价对应商品
+
+评价对应商品（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| product_review | product | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| product_id | product_id |

@@ -1,0 +1,43 @@
+---
+type: object_type
+id: warehouse
+name: 仓库
+tags: [MVP, 电商]
+---
+
+## ObjectType: 仓库
+
+仓储节点。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_warehouse | ecommerce_ops.warehouses |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| warehouse_id | 仓库主键ID | integer | 仓库主键ID | warehouse_id |
+| warehouse_name | 仓库名称 | string | 仓库名称 | warehouse_name |
+| warehouse_code | 仓库编码 | string | 仓库编码 | warehouse_code |
+| province_id | 省行政区ID | integer | 省行政区ID | province_id |
+| city_id | 市行政区ID | integer | 市行政区ID | city_id |
+| district_id | 区/县行政区ID | integer | 区/县行政区ID | district_id |
+| detail_address | 仓库详细地址 | string | 仓库详细地址 | detail_address |
+| contact_person | 联系人 | string | 联系人 | contact_person |
+| contact_phone | 联系电话 | string | 联系电话 | contact_phone |
+| warehouse_type | 仓库类型（自营/第三方等） | string | 仓库类型（自营/第三方等） | warehouse_type |
+| area_sqm | 仓库面积（平方米） | decimal | 仓库面积（平方米） | area_sqm |
+| status | 仓库状态 | string | 仓库状态 | status |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: warehouse_id
+Display Key: warehouse_name
+Incremental Key:

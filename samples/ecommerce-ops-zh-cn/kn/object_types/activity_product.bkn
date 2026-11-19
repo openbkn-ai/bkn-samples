@@ -1,0 +1,51 @@
+---
+type: object_type
+id: activity_product
+name: 活动商品参与项
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 活动商品参与项
+
+活动参与的SKU/商品及活动价、活动库存、已售数量、限购等事实。活动库存不等同SKU实物或可售库存，不推断实际订单归因。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_activity_product | ecommerce_ops.activity_products |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| ap_id | 活动商品参与项ID | integer | 活动商品参与项ID | ap_id |
+| activity_id | 活动ID | integer | 活动ID | activity_id |
+| sku_id | 参与活动的SKU ID | integer | 参与活动的SKU ID | sku_id |
+| product_id | 参与活动的商品ID | integer | 参与活动的商品ID | product_id |
+| activity_price | 活动价（元） | decimal | 活动价（元） | activity_price |
+| stock_quantity | 活动分配库存数量 | integer | 活动分配库存数量 | stock_quantity |
+| sold_quantity | 活动已售数量 | integer | 活动已售数量 | sold_quantity |
+| per_user_limit | 单用户限购数量 | integer | 单用户限购数量 | per_user_limit |
+| sort_order | 展示排序 | integer | 展示排序 | sort_order |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+
+### Property Constraints
+
+```yaml
+activity_price:
+  value_type: cny_nonnegative_amount
+stock_quantity:
+  value_type: nonnegative_goods_quantity
+sold_quantity:
+  value_type: nonnegative_goods_quantity
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: ap_id
+Display Key: ap_id
+Incremental Key:

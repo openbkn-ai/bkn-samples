@@ -1,0 +1,80 @@
+{
+  "definition": {
+    "id": "01a17d45-9a45-73a3-b3d0-54d5c815324c",
+    "version": 1,
+    "code": "m_01a17d459a4573a3b3d054d5c815324c",
+    "name": "评测用采购单指标（预填，保持原样）",
+    "description": "评测表单原有业务描述（保持原样）",
+    "owner_object_type_id": "purchase_order",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "aggregation": "count_rows"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "purchase_order",
+          "property_name": "supplier_id"
+        },
+        {
+          "object_type_id": "purchase_order",
+          "property_name": "warehouse_id"
+        },
+        {
+          "object_type_id": "purchase_order",
+          "property_name": "order_status"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "purchase_order",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-18T03:26:19Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793103075942,
+  "update_time": 1794972379153,
+  "revision": "b421735de1d64aa28277c9c50bb5412a"
+}

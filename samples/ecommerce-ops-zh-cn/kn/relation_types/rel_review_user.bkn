@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_review_user
+name: 评价来自用户
+tags: [MVP, 电商]
+---
+
+## RelationType: 评价来自用户
+
+评价来自用户（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| product_review | user | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| user_id | user_id |

@@ -1,0 +1,48 @@
+---
+type: object_type
+id: order_status_log
+name: 订单状态变更记录
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 订单状态变更记录
+
+订单的一次状态变更事实，记录前后状态、操作方类型与时间。操作方为多态身份，不能把所有operator_id连接为客户用户。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_order_status_log | ecommerce_ops.order_status_logs |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| log_id | 状态变更记录ID | integer | 状态变更记录ID | log_id |
+| order_id | 订单ID | integer | 订单ID | order_id |
+| order_no | 订单号 | string | 订单号 | order_no |
+| from_status | 变更前状态 | string | 变更前状态 | from_status |
+| to_status | 变更后状态 | string | 变更后状态 | to_status |
+| operator_type | 操作者类型（用户/系统/客服等） | string | 操作者类型（用户/系统/客服等） | operator_type |
+| operator_id | 操作者ID | integer | 操作者ID | operator_id |
+| remark | 变更备注 | string | 变更备注 | remark |
+| created_at | 日志时间 | datetime | 日志时间 | created_at |
+
+### Property Constraints
+
+```yaml
+from_status:
+  value_type: sales_order_status
+to_status:
+  value_type: sales_order_status
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: log_id
+Display Key: log_id
+Incremental Key:

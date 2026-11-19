@@ -1,0 +1,23 @@
+---
+type: value_type
+id: payment_method
+name: 支付方式
+tags: [电商业务值类型]
+---
+
+## ValueType: 支付方式
+
+订单、支付流水和支付尝试的支付方式词表。表达采用的方式，不证明已收款；free表示零金额免支付场景，cod表示货到付款。
+
+### Definition
+
+```yaml
+base_type: string
+enum:
+  - {value: wechat, display: 微信支付, description: 微信支付渠道。}
+  - {value: alipay, display: 支付宝, description: 支付宝支付渠道。}
+  - {value: bank_card, display: 银行卡, description: 源表bank_card编码，保留其与信用卡编码的区别。}
+  - {value: credit_card, display: 信用卡, description: 源表credit_card编码。}
+  - {value: cod, display: 货到付款, description: 货到付款方式，是否已收款须核对业务事实。}
+  - {value: free, display: 零金额免支付, description: 零金额订单的免支付方式，不代表现金收款。}
+```

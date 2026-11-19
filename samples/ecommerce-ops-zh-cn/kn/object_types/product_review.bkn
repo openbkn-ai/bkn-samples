@@ -1,0 +1,50 @@
+---
+type: object_type
+id: product_review
+name: 商品评价
+tags: [MVP, 电商]
+---
+
+## ObjectType: 商品评价
+
+用户商品评价。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_product_review | ecommerce_ops.product_reviews |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| review_id | 评价主键ID | integer | 评价主键ID | review_id |
+| product_id | 商品ID | integer | 商品ID | product_id |
+| sku_id | SKU ID | integer | SKU ID | sku_id |
+| user_id | 评价用户ID | integer | 评价用户ID | user_id |
+| order_id | 关联订单ID | integer | 关联订单ID | order_id |
+| rating | 评分（通常1-5） | integer | 评分（通常1-5） | rating |
+| content | 评价内容 | text | 评价内容 | content |
+| images | 评价图片列表（JSON） | text | 评价图片列表（JSON） | images |
+| is_anonymous | 是否匿名评价 | integer | 是否匿名评价 | is_anonymous |
+| is_verified | 是否已购认证评价 | integer | 是否已购认证评价 | is_verified |
+| reply_content | 商家回复内容 | text | 商家回复内容 | reply_content |
+| reply_time | 商家回复时间 | datetime | 商家回复时间 | reply_time |
+| created_at | 评价创建时间 | datetime | 评价创建时间 | created_at |
+
+### Property Constraints
+
+```yaml
+rating:
+  value_type: product_review_rating
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: review_id
+Display Key: review_id
+Incremental Key:

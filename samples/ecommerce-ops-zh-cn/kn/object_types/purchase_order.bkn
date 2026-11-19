@@ -1,0 +1,50 @@
+---
+type: object_type
+id: purchase_order
+name: 采购单
+tags: [MVP, 电商]
+---
+
+## ObjectType: 采购单
+
+向供应商发起的采购订单。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_purchase_order | ecommerce_ops.purchase_orders |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| po_id | 采购单主键ID | integer | 采购单主键ID | po_id |
+| po_no | 采购单号 | string | 采购单号 | po_no |
+| supplier_id | 供应商ID | integer | 供应商ID | supplier_id |
+| warehouse_id | 收货仓库ID | integer | 收货仓库ID | warehouse_id |
+| order_status | 采购单状态 | string | 采购单状态 | order_status |
+| total_amount | 采购总金额（元） | decimal | 采购总金额（元） | total_amount |
+| expected_date | 预计到货日期 | date | 预计到货日期 | expected_date |
+| actual_date | 实际到货日期 | date | 实际到货日期 | actual_date |
+| creator_id | 创建人ID | integer | 创建人ID | creator_id |
+| approver_id | 审批人ID | integer | 审批人ID | approver_id |
+| remark | 备注 | text | 备注 | remark |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |
+
+### Property Constraints
+
+```yaml
+total_amount:
+  value_type: cny_nonnegative_amount
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: po_id
+Display Key: po_no
+Incremental Key:

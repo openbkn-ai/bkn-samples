@@ -1,0 +1,61 @@
+---
+type: object_type
+id: shipment
+name: 发货单
+tags: [MVP, 电商]
+---
+
+## ObjectType: 发货单
+
+订单发货/运单。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_shipment | ecommerce_ops.shipments |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field | Mask Rule |
+|------|--------------|------|-------------|--------------|-----------|
+| shipment_id | 发货单主键ID | integer | 发货单主键ID | shipment_id |  |
+| shipment_no | 发货单号 | string | 发货单号 | shipment_no | {"kind":"partial","replacement":"*","keep_start":1,"keep_end":1} |
+| order_id | 关联订单ID | integer | 关联订单ID | order_id |  |
+| warehouse_id | 发货仓库ID | integer | 发货仓库ID | warehouse_id |  |
+| express_company | 快递公司 | string | 快递公司 | express_company | {"kind":"fixed","replacement":"******"} |
+| express_no | 快递单号 | string | 快递单号 | express_no | {"kind":"partial","replacement":"*","keep_start":3,"keep_end":4} |
+| sender_name | 寄件人姓名 | string | 寄件人姓名 | sender_name |  |
+| sender_phone | 寄件人电话 | string | 寄件人电话 | sender_phone | {"kind":"partial","replacement":"*","keep_start":3,"keep_end":4} |
+| sender_address | 寄件地址 | string | 寄件地址 | sender_address | {"kind":"partial","replacement":"*","keep_start":3,"keep_end":4} |
+| receiver_name | 收件人姓名 | string | 收件人姓名 | receiver_name | {"kind":"fixed","replacement":"******"} |
+| receiver_phone | 收件人电话 | string | 收件人电话 | receiver_phone | {"kind":"partial","replacement":"*","keep_start":3,"keep_end":4} |
+| receiver_province | 收件省 | string | 收件省 | receiver_province |  |
+| receiver_city | 收件市 | string | 收件市 | receiver_city |  |
+| receiver_district | 收件区/县 | string | 收件区/县 | receiver_district |  |
+| receiver_detail | 收件详细地址 | string | 收件详细地址 | receiver_detail |  |
+| package_count | 包裹件数 | integer | 包裹件数 | package_count |  |
+| package_weight_g | 包裹重量（克） | integer | 包裹重量（克） | package_weight_g |  |
+| shipping_fee | 运费（元） | decimal | 运费（元） | shipping_fee |  |
+| shipment_status | 发货/物流状态 | string | 发货/物流状态 | shipment_status |  |
+| shipped_at | 发货时间 | datetime | 发货时间 | shipped_at |  |
+| delivered_at | 妥投/送达时间 | datetime | 妥投/送达时间 | delivered_at |  |
+| signed_at | 签收时间 | datetime | 签收时间 | signed_at |  |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |  |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |  |
+
+### Property Constraints
+
+```yaml
+shipping_fee:
+  value_type: cny_nonnegative_amount
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: shipment_id
+Display Key: shipment_no
+Incremental Key:

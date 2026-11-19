@@ -1,0 +1,90 @@
+{
+  "definition": {
+    "id": "legacy_base_cbd0df430e81353b6b07",
+    "version": 3,
+    "code": "legacy_legacy_base_cbd0df430e81353b6b07",
+    "name": "全部订单商品原价金额",
+    "description": "sum(total_amount)。在所选查询范围内汇总全部状态订单的商品原价金额，未减优惠、不含另列运费，不代表实际收款。",
+    "owner_object_type_id": "order",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "order",
+            "property_name": "total_amount"
+          }
+        },
+        "aggregation": "sum"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "order_status"
+        },
+        {
+          "object_type_id": "order",
+          "property_name": "channel_id"
+        },
+        {
+          "object_type_id": "order",
+          "property_name": "payment_method"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:54:09Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795089249009,
+  "update_time": 1795089249200,
+  "revision": "454b9da7c1b24a60bd639a9cc0741f33"
+}

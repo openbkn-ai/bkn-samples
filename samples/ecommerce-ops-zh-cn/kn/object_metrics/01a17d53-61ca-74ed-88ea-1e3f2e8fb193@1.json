@@ -1,0 +1,79 @@
+{
+  "definition": {
+    "id": "01a17d53-61ca-74ed-88ea-1e3f2e8fb193",
+    "version": 1,
+    "code": "m_01a17d5361ca74ed88ea1e3f2e8fb193",
+    "name": "评测用支付流水指标（预填，保持原样）",
+    "description": "评测表单原有业务描述（保持原样）",
+    "owner_object_type_id": "payment",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "payment",
+            "property_name": "paid_at"
+          },
+          "value_type": "datetime"
+        },
+        "aggregation": "count"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "payment",
+          "property_name": "payment_method"
+        },
+        {
+          "object_type_id": "payment",
+          "property_name": "payment_status"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-18T03:26:19Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793103978980,
+  "update_time": 1794972379153,
+  "revision": "2a66a8dd21dc4b96a4e3abbef04129b1"
+}

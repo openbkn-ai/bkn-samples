@@ -1,0 +1,50 @@
+---
+type: object_type
+id: inbound_record
+name: 入库记录
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 入库记录
+
+一次实际入库，关联采购明细、SKU和仓库。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_inbound_record | ecommerce_ops.inbound_records |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| inbound_id | 入库记录ID | integer | 入库单主键ID | inbound_id |
+| inbound_no | 入库单号 | string | 入库单号 | inbound_no |
+| po_id | 采购单ID | integer | 采购订单ID | po_id |
+| po_item_id | 采购明细ID | integer | 采购订单明细ID | po_item_id |
+| sku_id | SKU ID | integer | SKU ID | sku_id |
+| warehouse_id | 仓库ID | integer | 入库仓库ID | warehouse_id |
+| quantity | 数量 | integer | 入库数量 | quantity |
+| operator_id | 操作人ID | integer | 操作人ID | operator_id |
+| inbound_type | 入库类型 | string | 入库类型 | inbound_type |
+| batch_no | 批次号 | string | 批次号 | batch_no |
+| production_date | 生产日期 | date | 生产日期 | production_date |
+| expiry_date | 到期日期 | date | 过期日期 | expiry_date |
+| created_at | 创建时间 | datetime | 入库时间 | created_at |
+
+### Property Constraints
+
+```yaml
+quantity:
+  value_type: positive_goods_quantity
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: inbound_id
+Display Key: inbound_no
+Incremental Key:

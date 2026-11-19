@@ -1,0 +1,42 @@
+---
+type: object_type
+id: shipment_item
+name: 发货明细
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 发货明细
+
+一张发货单中的一个订单行，记录本次发货数量，支持分批发货。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_shipment_item | shipment_items |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| shipment_id | 发货单ID | integer | 发货单ID | shipment_id |
+| item_id | 明细ID | integer | 明细ID | item_id |
+| order_id | 订单ID | integer | 订单ID | order_id |
+| order_created_at | 订单创建时间 | datetime | 订单创建时间 | order_created_at |
+| quantity | 数量 | integer | 数量 | quantity |
+
+### Property Constraints
+
+```yaml
+quantity:
+  value_type: positive_goods_quantity
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: shipment_id, item_id
+Display Key: item_id
+Incremental Key:

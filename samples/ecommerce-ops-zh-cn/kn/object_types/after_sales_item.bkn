@@ -1,0 +1,43 @@
+---
+type: object_type
+id: after_sales_item
+name: 售后明细
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 售后明细
+
+售后单中的一个订单行，复合身份为售后单ID和订单明细ID。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_after_sales_item | after_sales_items |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| case_id | 售后单ID | integer | 售后单ID | case_id |
+| item_id | 明细ID | integer | 明细ID | item_id |
+| return_quantity | 退货数量 | integer | 退货数量 | return_quantity |
+| refund_amount | 记录退款金额（元） | decimal | 记录退款金额（元） | refund_amount |
+
+### Property Constraints
+
+```yaml
+return_quantity:
+  value_type: nonnegative_goods_quantity
+refund_amount:
+  value_type: cny_nonnegative_amount
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: case_id, item_id
+Display Key: item_id
+Incremental Key:

@@ -1,0 +1,64 @@
+---
+type: action_type
+id: ecom_link_brand_product_reverse
+name: 从品牌关联商品
+tags: [电商]
+action_intent: add
+---
+
+## ActionType: 从品牌关联商品
+
+从品牌入口选择商品，建立商品到品牌的归属关系。
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: relation
+  relation_type_id: rel_product_brand
+  relation_operation: create
+  anchor_role: target
+  other_object_condition:
+    object_type_id: product
+    field: status
+    operation: ==
+    value_from: const
+    value: offline
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| brand |
+
+### Trigger Condition
+
+```yaml
+object_type_id: brand
+field: country
+operation: ==
+value_from: const
+value: 中国
+```
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_1e885e595ff6 | ecommerce_tool_b798b8b8e837 |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "products" |  |
+| key | integer | body |  | source_identity |  |  |
+| data.brand_id | integer | body |  | target_identity |  |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

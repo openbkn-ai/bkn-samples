@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_cart_item_product
+name: 购物车明细对应商品
+tags: [电商]
+---
+
+## RelationType: 购物车明细对应商品
+
+按源表业务键关联；非空外键与目标唯一性已经源表只读核验。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| cart_item | product | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| product_id | product_id |

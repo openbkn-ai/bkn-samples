@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_sku_product
+name: SKU属于SPU
+tags: [MVP, 电商]
+---
+
+## RelationType: SKU属于SPU
+
+SKU属于SPU（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| product_sku | product | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| product_id | product_id |

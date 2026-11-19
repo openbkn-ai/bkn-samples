@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_product_brand
+name: 商品属于品牌
+tags: [MVP, 电商]
+---
+
+## RelationType: 商品属于品牌
+
+商品属于品牌（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| product | brand | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| brand_id | brand_id |

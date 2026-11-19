@@ -1,0 +1,62 @@
+{
+  "definition": {
+    "id": "01a1f43d-5c06-7ef5-a919-24a3d398c0d1",
+    "version": 1,
+    "code": "ec_dep_reservation_lines",
+    "name": "库存预占记录数（计算依赖）",
+    "description": "计算依赖，仅为已批准业务指标提供聚合底座，不作为额外独立经营KPI。",
+    "owner_object_type_id": "inventory_reservation",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "aggregation": "count_rows"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T14:37:04Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795099024391,
+  "update_time": 1795099024512,
+  "revision": "e51f39a31fc44ddea90233e7b1b462a6"
+}

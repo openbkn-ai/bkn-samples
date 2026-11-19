@@ -1,0 +1,136 @@
+{
+  "definition": {
+    "id": "01a17d49-bf21-7d31-a664-fdffc9a832f2",
+    "version": 1,
+    "code": "m_01a17d49bf217d31a664fdffc9a832f2",
+    "name": "评测用发货单指标（预填，保持原样）",
+    "description": "评测表单原有业务描述（保持原样）",
+    "owner_object_type_id": "shipment",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": [
+          {
+            "object_type_id": "shipment",
+            "property_name": "warehouse_id"
+          }
+        ]
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "count",
+          "code": "times",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "legacy_base_0130f17c0c3cd2bc1f3c",
+        "version": 1
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "shipment",
+                  "property_name": "signed_at"
+                }
+              },
+              "comparison_operator": "is_null"
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "shipment",
+                  "property_name": "shipped_at"
+                }
+              },
+              "comparison_operator": "is_not_null"
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "shipment",
+                  "property_name": "shipment_status"
+                }
+              },
+              "comparison_operator": "not_in",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "returned"
+                },
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "cancelled"
+                }
+              ]
+            }
+          ]
+        },
+        "event_time": {
+          "object_type_id": "shipment",
+          "property_name": "created_at"
+        },
+        "time_window": {
+          "mode": "period_to_date",
+          "period": "week",
+          "timezone": "UTC",
+          "week_start": "monday"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "shipment",
+          "property_name": "express_company"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-18T03:26:19Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793103347507,
+  "update_time": 1794972379153,
+  "revision": "417e3f4ddf19460885767e7df71d6201"
+}

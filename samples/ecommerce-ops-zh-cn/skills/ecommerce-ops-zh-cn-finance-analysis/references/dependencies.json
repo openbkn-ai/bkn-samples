@@ -1,0 +1,41 @@
+{
+  "title": "经营与财务分析",
+  "read_only": true,
+  "object_types": [
+    "order",
+    "order_item",
+    "payment",
+    "payment_attempt",
+    "user",
+    "sales_channel"
+  ],
+  "function_names": [
+    "ecommerce_finance_workflow",
+    "ecommerce_order_financial_analysis",
+    "ecommerce_user_consumption_analysis"
+  ],
+  "metric_codes": [
+    "m_confirmed_receipts_v1",
+    "m_completed_refund_amount_v1",
+    "m_net_receipts_v1"
+  ],
+  "resolve_ids_at_runtime": true,
+  "prohibited_capabilities": [
+    "generic_crud",
+    "payment_execution",
+    "inventory_mutation",
+    "message_sending",
+    "external_search"
+  ],
+  "required_context": [
+    "kn_id",
+    "caller_permissions"
+  ],
+  "sources": [
+    "用户已确认的电商业务规则",
+    "当前网络schema与已挂载函数契约"
+  ],
+  "workflow_function_name": "ecommerce_finance_workflow",
+  "execution_model": "agent_function_osdk_then_offline_render",
+  "skill_runtime_network_access": false
+}

@@ -1,0 +1,104 @@
+{
+  "definition": {
+    "id": "01a1b015-13d5-7cad-8c09-5e090defbb57",
+    "version": 1,
+    "code": "m_01a1b01513d57cad8c095e090defbb57",
+    "name": "SKU实付总金额",
+    "description": "通过SKU关联到订单明细，并统计其总金额",
+    "owner_object_type_id": "order_item",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": [
+          {
+            "object_type_id": "order_item",
+            "property_name": "product_id"
+          }
+        ]
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "null",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "01a15d18-4024-7522-9235-4757042ef6ff",
+        "version": 3
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "order_item",
+              "property_name": "unit_price"
+            }
+          },
+          "comparison_operator": "neq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "decimal",
+              "value": 0
+            }
+          ]
+        },
+        "relation_path": {
+          "alias": "business_relation",
+          "steps": [
+            {
+              "relation_type_id": "rel_order_item_sku",
+              "direction": "outgoing",
+              "target_object_type_id": "product_sku"
+            }
+          ],
+          "purpose": "qualify_root",
+          "quantifier": "exists",
+          "cardinality_policy": "distinct_root"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-06T08:58:58Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793955533782,
+  "update_time": 1793955538264,
+  "revision": "222313bbdd9111f18a92be70ee90ad77"
+}

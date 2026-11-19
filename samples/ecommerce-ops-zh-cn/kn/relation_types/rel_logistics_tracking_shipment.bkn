@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_logistics_tracking_shipment
+name: 物流轨迹属于发货单
+tags: [电商]
+---
+
+## RelationType: 物流轨迹属于发货单
+
+按源表业务键关联；非空外键与目标唯一性已经源表只读核验。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| logistics_tracking | shipment | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| shipment_id | shipment_id |

@@ -1,0 +1,58 @@
+---
+type: object_type
+id: order_item
+name: 订单明细
+tags: [MVP, 电商]
+---
+
+## ObjectType: 订单明细
+
+销售订单行项目。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_order_item | ecommerce_ops.order_items |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| item_id | 订单明细主键ID | integer | 订单明细主键ID | item_id |
+| order_id | 所属订单ID | integer | 所属订单ID | order_id |
+| order_created_at | 订单创建时间（与订单分区键对齐） | datetime | 订单创建时间（与订单分区键对齐） | order_created_at |
+| sku_id | SKU ID | integer | SKU ID | sku_id |
+| product_id | 商品ID | integer | 商品ID | product_id |
+| product_name | 下单时商品名称快照 | string | 下单时商品名称快照 | product_name |
+| sku_spec | 下单时SKU规格快照 | string | 下单时SKU规格快照 | sku_spec |
+| unit_price | 成交单价（元） | decimal | 成交单价（元） | unit_price |
+| quantity | 购买数量 | integer | 购买数量 | quantity |
+| total_amount | 明细小计金额（元） | decimal | 明细小计金额（元） | total_amount |
+| discount_amount | 明细优惠金额（元） | decimal | 明细优惠金额（元） | discount_amount |
+| actual_amount | 订单行优惠后应付金额（元） | decimal | 订单行优惠后的应付金额，属于下单金额快照；未付款订单的明细也可有正金额，不代表该行已实际收款。 | actual_amount |
+| created_at | 明细创建时间 | datetime | 明细创建时间 | created_at |
+
+### Property Constraints
+
+```yaml
+unit_price:
+  value_type: cny_nonnegative_amount
+quantity:
+  value_type: positive_goods_quantity
+total_amount:
+  value_type: cny_nonnegative_amount
+discount_amount:
+  value_type: cny_nonnegative_amount
+actual_amount:
+  value_type: cny_nonnegative_amount
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: item_id
+Display Key: product_name
+Incremental Key:

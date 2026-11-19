@@ -1,0 +1,1273 @@
+[
+  {
+    "operation_config": {
+      "type": "object"
+    },
+    "id": "ecom_batch_update_brand_status_cond",
+    "name": "批量停用中国品牌",
+    "action_type": "modify",
+    "action_intent": "modify",
+    "object_type_id": "brand",
+    "object_type": {
+      "id": "brand",
+      "name": "品牌",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "condition": {
+      "object_type_id": "brand",
+      "field": "country",
+      "operation": "==",
+      "value_from": "const",
+      "value": "中国"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_5dab86864feb"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "brands"
+      },
+      {
+        "name": "key",
+        "type": "integer",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_id"
+      },
+      {
+        "name": "data.status",
+        "type": "string",
+        "source": "body",
+        "value_from": "input"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商",
+      "适用条件"
+    ],
+    "comment": "对符合中国国家条件的品牌批量设置 inactive 状态。",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "object"
+    },
+    "id": "ecom_create_brand",
+    "name": "新建品牌",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "brand",
+    "object_type": {
+      "id": "brand",
+      "name": "品牌",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_1270873cd00a"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "brands"
+      },
+      {
+        "name": "data.brand_name",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_name"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "创建品牌记录，结果以电商业务系统为准",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "object"
+    },
+    "id": "ecom_create_brand_name_country",
+    "name": "按名称与国家创建品牌",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "brand",
+    "object_type": {
+      "id": "brand",
+      "name": "品牌",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_1270873cd00a"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "brands"
+      },
+      {
+        "name": "data.brand_name",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_name"
+      },
+      {
+        "name": "data.country",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "country"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "使用执行工具创建品牌，运行时逐项填写并映射 brand_name、country",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "object"
+    },
+    "id": "ecom_create_brand_profile",
+    "name": "创建品牌完整资料",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "brand",
+    "object_type": {
+      "id": "brand",
+      "name": "品牌",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "affect": null,
+    "impact_contracts": [
+      {
+        "object_type_id": "brand",
+        "expected_operation": "add",
+        "description": "创建品牌并填写名称、英文名、国家、官网及状态。",
+        "affected_fields": [
+          "brand_name",
+          "brand_name_en",
+          "country",
+          "website",
+          "status"
+        ]
+      }
+    ],
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_1270873cd00a"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "brands"
+      },
+      {
+        "name": "data.brand_name",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_name"
+      },
+      {
+        "name": "data.brand_name_en",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_name_en"
+      },
+      {
+        "name": "data.country",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "country"
+      },
+      {
+        "name": "data.website",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "website"
+      },
+      {
+        "name": "data.status",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "status"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "使用执行工具创建品牌，运行时逐项填写并映射 brand_name、brand_name_en、country、website、status",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "object"
+    },
+    "id": "ecom_create_product_core",
+    "name": "新建商品·基础信息",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "product",
+    "object_type": {
+      "id": "product",
+      "name": "商品SPU",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_1270873cd00a"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "products"
+      },
+      {
+        "name": "data.product_name",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "product_name"
+      },
+      {
+        "name": "data.product_code",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "product_code"
+      },
+      {
+        "name": "data.category_id",
+        "type": "integer",
+        "source": "body",
+        "value_from": "property",
+        "value": "category_id"
+      },
+      {
+        "name": "data.brand_id",
+        "type": "integer",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_id"
+      },
+      {
+        "name": "data.subtitle",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "subtitle"
+      },
+      {
+        "name": "data.description",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "description"
+      },
+      {
+        "name": "data.unit",
+        "type": "string",
+        "source": "body",
+        "value_from": "property",
+        "value": "unit"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "使用执行工具创建商品；运行时分别填写商品名称、编码、分类、品牌、副标题、描述和单位，并映射到源接口的 data 字段",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "object"
+    },
+    "id": "ecom_delete_brand",
+    "name": "删除品牌",
+    "action_type": "delete",
+    "action_intent": "delete",
+    "object_type_id": "brand",
+    "object_type": {
+      "id": "brand",
+      "name": "品牌",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_37eb5042ccc0"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "brands"
+      },
+      {
+        "name": "key",
+        "type": "integer",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_id"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "按品牌实例删除记录",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "tool"
+    },
+    "id": "ecom_independent_api_brand_read",
+    "name": "按品牌编号查询品牌",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "",
+    "object_type": {
+      "id": "",
+      "name": "",
+      "branch": "",
+      "icon": "",
+      "color": ""
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_f3b9c677ce01"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "brands"
+      },
+      {
+        "name": "key",
+        "type": "string",
+        "source": "path",
+        "value_from": "input"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "独立工具调用",
+      "电商"
+    ],
+    "comment": "按显式输入的品牌编号查询业务记录。",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "tool"
+    },
+    "id": "ecom_independent_gross_profit",
+    "name": "计算商品毛利率",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "",
+    "object_type": {
+      "id": "",
+      "name": "",
+      "branch": "",
+      "icon": "",
+      "color": ""
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_53615198c61d",
+      "tool_id": "ecommerce_tool_ded40d029726"
+    },
+    "parameters": [
+      {
+        "name": "price",
+        "type": "number",
+        "source": "body",
+        "value_from": "input",
+        "required": true
+      },
+      {
+        "name": "cost_price",
+        "type": "number",
+        "source": "body",
+        "value_from": "input",
+        "required": true
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "独立工具调用",
+      "电商"
+    ],
+    "comment": "按同一口径的收入和成本计算毛利率；零收入返回无定义。",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "tool"
+    },
+    "id": "ecom_independent_verify_amount",
+    "name": "核对含税总金额",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "",
+    "object_type": {
+      "id": "",
+      "name": "",
+      "branch": "",
+      "icon": "",
+      "color": ""
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_53615198c61d",
+      "tool_id": "ecommerce_tool_c0c387845301"
+    },
+    "parameters": [
+      {
+        "name": "price_without_tax",
+        "type": "number",
+        "source": "body",
+        "value_from": "input"
+      },
+      {
+        "name": "tax_amount",
+        "type": "number",
+        "source": "body",
+        "value_from": "input"
+      },
+      {
+        "name": "total_amount",
+        "type": "number",
+        "source": "body",
+        "value_from": "input"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "独立工具调用",
+      "电商"
+    ],
+    "comment": "按人民币两位小数核对不含税小计加税额与总金额是否一致。",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "relation",
+      "relation_type_id": "rel_product_brand",
+      "relation_operation": "create",
+      "anchor_role": "target",
+      "other_object_condition": {
+        "object_type_id": "product",
+        "field": "status",
+        "operation": "==",
+        "value_from": "const",
+        "value": "offline"
+      }
+    },
+    "id": "ecom_link_brand_product_reverse",
+    "name": "从品牌关联商品",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "brand",
+    "object_type": {
+      "id": "brand",
+      "name": "品牌",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "condition": {
+      "object_type_id": "brand",
+      "field": "country",
+      "operation": "==",
+      "value_from": "const",
+      "value": "中国"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_1e885e595ff6",
+      "tool_id": "ecommerce_tool_b798b8b8e837"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "products"
+      },
+      {
+        "name": "key",
+        "type": "integer",
+        "source": "body",
+        "value_from": "source_identity"
+      },
+      {
+        "name": "data.brand_id",
+        "type": "integer",
+        "source": "body",
+        "value_from": "target_identity"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "从品牌入口选择商品，建立商品到品牌的归属关系。",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "relation",
+      "relation_type_id": "rel_product_brand",
+      "relation_operation": "create",
+      "anchor_role": "source"
+    },
+    "id": "ecom_link_product_brand",
+    "name": "商品关联品牌",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "product",
+    "object_type": {
+      "id": "product",
+      "name": "商品SPU",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_1e885e595ff6",
+      "tool_id": "ecommerce_tool_b798b8b8e837"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "products"
+      },
+      {
+        "name": "key",
+        "type": "integer",
+        "source": "body",
+        "value_from": "source_identity"
+      },
+      {
+        "name": "data.brand_id",
+        "type": "integer",
+        "source": "body",
+        "value_from": "target_identity"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "建立商品与品牌的关系",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "relation",
+      "relation_type_id": "rel_product_brand",
+      "relation_operation": "create",
+      "anchor_role": "source",
+      "other_object_condition": {
+        "object_type_id": "brand",
+        "field": "country",
+        "operation": "==",
+        "value_from": "const",
+        "value": "中国"
+      }
+    },
+    "id": "ecom_link_product_brand_cond",
+    "name": "关联符合条件的商品与品牌",
+    "action_type": "add",
+    "action_intent": "add",
+    "object_type_id": "product",
+    "object_type": {
+      "id": "product",
+      "name": "商品SPU",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "condition": {
+      "object_type_id": "product",
+      "field": "status",
+      "operation": "==",
+      "value_from": "const",
+      "value": "offline"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_1e885e595ff6",
+      "tool_id": "ecommerce_tool_b798b8b8e837"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "products"
+      },
+      {
+        "name": "key",
+        "type": "integer",
+        "source": "body",
+        "value_from": "source_identity"
+      },
+      {
+        "name": "data.brand_id",
+        "type": "integer",
+        "source": "body",
+        "value_from": "target_identity"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "满足商品和品牌两端适用条件后，建立商品的品牌归属。",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "relation",
+      "relation_type_id": "rel_product_brand",
+      "relation_operation": "delete",
+      "anchor_role": "source"
+    },
+    "id": "ecom_unlink_product_brand",
+    "name": "商品解除品牌关联",
+    "action_type": "delete",
+    "action_intent": "delete",
+    "object_type_id": "product",
+    "object_type": {
+      "id": "product",
+      "name": "商品SPU",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_1e885e595ff6",
+      "tool_id": "ecommerce_tool_b798b8b8e837"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "products"
+      },
+      {
+        "name": "key",
+        "type": "integer",
+        "source": "body",
+        "value_from": "source_identity"
+      },
+      {
+        "name": "X-Relation-Target",
+        "type": "integer",
+        "source": "header",
+        "value_from": "target_identity"
+      },
+      {
+        "name": "data.brand_id",
+        "type": "string",
+        "source": "body",
+        "value_from": "const",
+        "value": "__BKN_NULL__"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "解除可空的商品品牌关系",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "object"
+    },
+    "id": "ecom_update_brand",
+    "name": "修改品牌名称",
+    "action_type": "modify",
+    "action_intent": "modify",
+    "object_type_id": "brand",
+    "object_type": {
+      "id": "brand",
+      "name": "品牌",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "affect": null,
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_5dab86864feb"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "brands"
+      },
+      {
+        "name": "key",
+        "type": "integer",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_id"
+      },
+      {
+        "name": "data.brand_name",
+        "type": "string",
+        "source": "body",
+        "value_from": "input"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "按品牌实例修改名称",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  },
+  {
+    "operation_config": {
+      "type": "object"
+    },
+    "id": "ecom_update_brand_cond_params",
+    "name": "按条件更新品牌资料",
+    "action_type": "modify",
+    "action_intent": "modify",
+    "object_type_id": "brand",
+    "object_type": {
+      "id": "brand",
+      "name": "品牌",
+      "branch": "",
+      "icon": "icon-tianshenpi",
+      "color": "#1677ff"
+    },
+    "condition": {
+      "object_type_id": "brand",
+      "field": "country",
+      "operation": "==",
+      "value_from": "const",
+      "value": "中国"
+    },
+    "affect": {
+      "object_type_id": "brand",
+      "object_type": {
+        "id": "",
+        "name": "",
+        "branch": "",
+        "icon": "",
+        "color": ""
+      },
+      "comment": "仅允许修改中国品牌名称",
+      "expected_operation": "modify",
+      "affected_fields": [
+        "brand_name"
+      ]
+    },
+    "impact_contracts": [
+      {
+        "object_type_id": "brand",
+        "expected_operation": "modify",
+        "description": "仅允许修改中国品牌名称",
+        "affected_fields": [
+          "brand_name"
+        ]
+      }
+    ],
+    "action_source": {
+      "type": "tool",
+      "box_id": "ecommerce_box_c31dd447c7fb",
+      "tool_id": "ecommerce_tool_5dab86864feb"
+    },
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "source": "path",
+        "value_from": "const",
+        "value": "brands"
+      },
+      {
+        "name": "key",
+        "type": "integer",
+        "source": "body",
+        "value_from": "property",
+        "value": "brand_id"
+      },
+      {
+        "name": "data.brand_name",
+        "type": "string",
+        "source": "body",
+        "value_from": "input"
+      }
+    ],
+    "schedule": {
+      "type": "",
+      "expression": ""
+    },
+    "tags": [
+      "电商"
+    ],
+    "comment": "按适用条件更新指定品牌资料",
+    "icon": "",
+    "color": "#1677ff",
+    "kn_id": "ecommerce_ops_zh_cn",
+    "branch": "main",
+    "creator": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "create_time": 1795084554248,
+    "updater": {
+      "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+      "type": "user",
+      "name": "Administrator"
+    },
+    "update_time": 1795094982817,
+    "module_type": "action_type",
+    "operations": [
+      "delete",
+      "execute",
+      "modify",
+      "view_detail"
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_po_supplier
+name: 采购单供应商
+tags: [MVP, 电商]
+---
+
+## RelationType: 采购单供应商
+
+采购单供应商（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| purchase_order | supplier | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| supplier_id | supplier_id |

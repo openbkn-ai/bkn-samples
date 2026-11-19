@@ -1,0 +1,39 @@
+---
+type: object_type
+id: product_category
+name: 商品分类
+tags: [MVP, 电商]
+---
+
+## ObjectType: 商品分类
+
+商品类目树节点。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_product_category | ecommerce_ops.product_categories |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| category_id | 分类主键ID | integer | 分类主键ID | category_id |
+| category_name | 分类名称 | string | 分类名称 | category_name |
+| parent_id | 父分类ID（顶级为空） | integer | 父分类ID（顶级为空） | parent_id |
+| level | 分类层级（1/2/3） | integer | 分类层级（1/2/3） | level |
+| category_code | 分类编码 | string | 分类编码 | category_code |
+| icon_url | 分类图标URL | string | 分类图标URL | icon_url |
+| sort_order | 排序权重 | integer | 排序权重 | sort_order |
+| is_active | 是否启用 | integer | 是否启用 | is_active |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: category_id
+Display Key: category_name
+Incremental Key:

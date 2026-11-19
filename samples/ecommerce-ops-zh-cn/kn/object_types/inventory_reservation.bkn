@@ -1,0 +1,52 @@
+---
+type: object_type
+id: inventory_reservation
+name: 库存预占
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 库存预占
+
+订单行实际预占及缺货待补记录；仅active状态的实际预占扣减可售量，待补数量不再扣减。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_inventory_reservation | inventory_reservations |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| reservation_id | 库存预占ID | integer | 库存预占ID | reservation_id |
+| order_id | 订单ID | integer | 订单ID | order_id |
+| item_id | 明细ID | integer | 明细ID | item_id |
+| sku_id | SKU ID | integer | SKU ID | sku_id |
+| warehouse_id | 仓库ID | integer | 仓库ID | warehouse_id |
+| ordered_quantity | 订单行购买数量 | integer | 订单行购买数量 | ordered_quantity |
+| reserved_quantity | 实际预占数量 | integer | 实际预占数量 | reserved_quantity |
+| backorder_quantity | 缺货待补数量 | integer | 缺货待补数量 | backorder_quantity |
+| expected_date | 预计补货日期 | date | 预计补货日期 | expected_date |
+| po_item_id | 采购明细ID | integer | 采购明细ID | po_item_id |
+| status | 业务状态 | string | 业务状态 | status |
+
+### Property Constraints
+
+```yaml
+ordered_quantity:
+  value_type: positive_goods_quantity
+reserved_quantity:
+  value_type: nonnegative_goods_quantity
+backorder_quantity:
+  value_type: nonnegative_goods_quantity
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: reservation_id
+Display Key: reservation_id
+Incremental Key:

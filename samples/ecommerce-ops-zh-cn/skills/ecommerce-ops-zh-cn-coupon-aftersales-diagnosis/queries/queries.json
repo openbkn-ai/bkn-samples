@@ -1,0 +1,26 @@
+[
+  {
+    "name": "coupon_template_counters",
+    "description": "模板累计发放/核销计数，不等同期间核销率。",
+    "parameters": [
+      "template_ids"
+    ],
+    "cypher": "MATCH (t:coupon_template) WHERE t.template_id IN $template_ids RETURN t.template_id AS template_id,t.coupon_type AS coupon_type,t.issued_quantity AS issued_quantity,t.used_quantity AS used_quantity,t.discount_value AS discount_value,t.min_order_amt AS min_order_amt,t.max_discount AS max_discount LIMIT 100"
+  },
+  {
+    "name": "after_sales_cases",
+    "description": "按订单追溯售后生命周期与分阶段金额。",
+    "parameters": [
+      "order_ids"
+    ],
+    "cypher": "MATCH (c:after_sales_case) WHERE c.order_id IN $order_ids RETURN c.case_id AS case_id,c.order_id AS order_id,c.status AS case_status,c.requested_amount AS requested_amount,c.approved_amount AS approved_amount,c.refund_amount AS recorded_refund_amount,c.requested_at AS requested_at,c.approved_at AS approved_at,c.return_received_at AS return_received_at,c.completed_at AS completed_at LIMIT 100"
+  },
+  {
+    "name": "after_sales_lines",
+    "description": "售后明细与原订单行关联，不推算未提供的支付退款分配。",
+    "parameters": [
+      "case_ids"
+    ],
+    "cypher": "MATCH (s:after_sales_item)-[:rel_after_sales_item_order_item]->(i:order_item) WHERE s.case_id IN $case_ids RETURN s.case_id AS case_id,s.item_id AS item_id,i.order_id AS order_id,i.sku_id AS sku_id,s.return_quantity AS return_quantity,s.refund_amount AS recorded_line_refund_amount LIMIT 100"
+  }
+]

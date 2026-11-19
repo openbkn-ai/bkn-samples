@@ -1,0 +1,45 @@
+---
+type: object_type
+id: cart_item
+name: 购物车明细
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 购物车明细
+
+购物车中的SKU及数量、勾选状态、added_at和更新时间。勾选结算不等于已下单，当前明细不足以还原完整行为历史或转单归因。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_cart_item | ecommerce_ops.cart_items |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| item_id | 购物车明细主键ID | integer | 购物车明细主键ID | item_id |
+| cart_id | 所属购物车ID | integer | 所属购物车ID | cart_id |
+| sku_id | SKU ID | integer | SKU ID | sku_id |
+| product_id | 商品ID | integer | 商品ID | product_id |
+| quantity | 加购数量 | integer | 加购数量 | quantity |
+| is_selected | 是否勾选结算（0或1） | integer | 是否勾选结算（0或1） | is_selected |
+| added_at | 加入购物车时间 | datetime | 加入购物车时间 | added_at |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |
+
+### Property Constraints
+
+```yaml
+quantity:
+  value_type: positive_goods_quantity
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: item_id
+Display Key: item_id
+Incremental Key:

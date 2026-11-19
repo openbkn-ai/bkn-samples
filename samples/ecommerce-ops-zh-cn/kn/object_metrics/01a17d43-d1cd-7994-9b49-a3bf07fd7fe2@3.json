@@ -1,0 +1,98 @@
+{
+  "definition": {
+    "id": "01a17d43-d1cd-7994-9b49-a3bf07fd7fe2",
+    "version": 3,
+    "code": "m_01a17d43d1cd79949b49a3bf07fd7fe2",
+    "name": "近两周已签收发货数",
+    "description": "全部发货单数；筛选：发货/物流状态等于signed。时间字段：创建时间。窗口：{\"mode\":\"rolling\",\"length\":2,\"unit\":\"week\",\"timezone\":\"Asia/Shanghai\"}；按上海业务时区计算。",
+    "owner_object_type_id": "shipment",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": [
+          {
+            "object_type_id": "shipment",
+            "property_name": "warehouse_id"
+          }
+        ]
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "count",
+          "code": "times",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "legacy_base_0130f17c0c3cd2bc1f3c",
+        "version": 3
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "shipment",
+              "property_name": "shipment_status"
+            }
+          },
+          "comparison_operator": "eq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "signed"
+            }
+          ]
+        },
+        "event_time": {
+          "object_type_id": "shipment",
+          "property_name": "created_at"
+        },
+        "time_window": {
+          "mode": "rolling",
+          "length": 2,
+          "unit": "week",
+          "timezone": "Asia/Shanghai"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:54:16Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795089256035,
+  "update_time": 1795089256251,
+  "revision": "dd9deddcbcde49be8fd17684c078d4c9"
+}

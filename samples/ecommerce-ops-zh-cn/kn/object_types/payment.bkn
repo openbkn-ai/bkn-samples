@@ -1,0 +1,56 @@
+---
+type: object_type
+id: payment
+name: 支付流水
+tags: [MVP, 电商]
+---
+
+## ObjectType: 支付流水
+
+订单支付记录及其退款记账汇总。每条记录对应一笔支付，退款金额及完成时间附在支付记录上；该对象不提供逐笔退款交易或完整退款历史。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_payment | ecommerce_ops.payments |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| payment_id | 支付流水主键ID | integer | 支付流水主键ID | payment_id |
+| payment_no | 支付单号 | string | 支付单号 | payment_no |
+| order_id | 关联订单ID | integer | 关联订单ID | order_id |
+| user_id | 支付用户ID | integer | 支付用户ID | user_id |
+| payment_method | 支付方式 | string | 支付方式 | payment_method |
+| payment_amount | 支付金额（元） | decimal | 支付金额（元） | payment_amount |
+| payment_status | 支付状态（成功/退款中等） | string | 支付状态（成功/退款中等） | payment_status |
+| transaction_id | 第三方交易流水号 | string | 第三方交易流水号 | transaction_id |
+| paid_at | 支付成功时间 | datetime | 支付成功时间 | paid_at |
+| refund_amount | 退款记账金额（含申请中退款，元） | decimal | 支付记录上的退款记账金额，可能包含申请中退款；统计已完成退款须同时要求 refund_at 非空，并按退款完成时间归属期间，不能仅凭 payment_status 判断。 | refund_amount |
+| refund_reason | 退款原因 | string | 退款原因 | refund_reason |
+| refund_at | 退款时间 | datetime | 退款时间 | refund_at |
+| created_at | 支付单创建时间（分区键） | datetime | 支付单创建时间（分区键） | created_at |
+
+### Property Constraints
+
+```yaml
+payment_method:
+  value_type: payment_method
+payment_amount:
+  value_type: cny_nonnegative_amount
+payment_status:
+  value_type: payment_record_status
+refund_amount:
+  value_type: cny_nonnegative_amount
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: payment_id
+Display Key: payment_no
+Incremental Key:

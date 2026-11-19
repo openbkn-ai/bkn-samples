@@ -1,0 +1,174 @@
+{
+  "definition": {
+    "id": "01a17d49-26c2-7ef3-98fb-71d036c482b4",
+    "version": 4,
+    "code": "m_01a17d4926c27ef398fb71d036c482b4",
+    "name": "订单平均金额口径差额（未计运费）",
+    "description": "质量排查辅助量：(非取消订单商品原价金额-优惠-应付金额)/非取消订单数，未计运费。不用作利润或账差告警；正式核对使用包含运费的逐单查询。单位为元/单，仍不作为正式账差告警。",
+    "owner_object_type_id": "order",
+    "metric_type": "composite",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "composite",
+      "dependencies": [
+        {
+          "alias": "gmv",
+          "metric_ref": {
+            "metric_id": "m_gmv",
+            "version": 3
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "alias": "discount",
+          "metric_ref": {
+            "metric_id": "m_discount_amt",
+            "version": 3
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "alias": "net_paid",
+          "metric_ref": {
+            "metric_id": "m_net_paid",
+            "version": 3
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "alias": "order_cnt",
+          "metric_ref": {
+            "metric_id": "m_order_cnt",
+            "version": 3
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ],
+      "expression": {
+        "node_type": "binary",
+        "operator": "divide",
+        "left": {
+          "node_type": "binary",
+          "operator": "subtract",
+          "left": {
+            "node_type": "binary",
+            "operator": "subtract",
+            "left": {
+              "node_type": "dependency",
+              "dependency_alias": "gmv"
+            },
+            "right": {
+              "node_type": "dependency",
+              "dependency_alias": "discount"
+            }
+          },
+          "right": {
+            "node_type": "dependency",
+            "dependency_alias": "net_paid"
+          }
+        },
+        "right": {
+          "node_type": "dependency",
+          "dependency_alias": "order_cnt"
+        }
+      },
+      "alignment": {
+        "result_owner_object_type_id": "order",
+        "group_by_dimensions": [],
+        "grain_policy": "same_grain",
+        "result_set_policy": "intersection",
+        "time_alignment": "same_time_window"
+      },
+      "zero_division_policy": "unavailable",
+      "null_policy": "propagate"
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "channel_id"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T12:03:05Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795089785688,
+  "update_time": 1795089785896,
+  "revision": "aa27a285bb9b419295719fb3cd55769b"
+}

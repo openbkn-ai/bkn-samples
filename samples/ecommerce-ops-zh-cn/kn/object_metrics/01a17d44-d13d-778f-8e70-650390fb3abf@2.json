@@ -1,0 +1,86 @@
+{
+  "definition": {
+    "id": "01a17d44-d13d-778f-8e70-650390fb3abf",
+    "version": 2,
+    "code": "m_01a17d44d13d778f8e70650390fb3abf",
+    "name": "订单明细优惠后金额合计",
+    "description": "计算：sum(明细实付金额（元）)；未另行增加订单状态或时间过滤。",
+    "owner_object_type_id": "order_item",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "order_item",
+            "property_name": "actual_amount"
+          },
+          "value_type": "decimal"
+        },
+        "aggregation": "sum"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "product_id"
+        },
+        {
+          "object_type_id": "order_item",
+          "property_name": "sku_id"
+        },
+        {
+          "object_type_id": "order_item",
+          "property_name": "order_id"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:25:27Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087527520,
+  "update_time": 1795087527718,
+  "revision": "130641b5492b4d959cc33a1bcf8b11b3"
+}

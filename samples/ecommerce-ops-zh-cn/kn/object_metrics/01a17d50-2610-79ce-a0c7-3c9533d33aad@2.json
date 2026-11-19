@@ -1,0 +1,106 @@
+{
+  "definition": {
+    "id": "01a17d50-2610-79ce-a0c7-3c9533d33aad",
+    "version": 2,
+    "code": "m_01a17d50261079cea0c73c9533d33aad",
+    "name": "SKU实物库存潜在毛利估值",
+    "description": "计算：sum(((销售价（元）-成本价（元）)×库存数量))；未另行增加订单状态或时间过滤。按现价与成本估算的库存潜在毛利，非已实现利润，未扣税费、运费、隔离和预占。",
+    "owner_object_type_id": "product_sku",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "binary",
+          "operator": "multiply",
+          "left": {
+            "node_type": "binary",
+            "operator": "subtract",
+            "left": {
+              "node_type": "property",
+              "property_ref": {
+                "object_type_id": "product_sku",
+                "property_name": "price"
+              },
+              "value_type": "decimal"
+            },
+            "right": {
+              "node_type": "property",
+              "property_ref": {
+                "object_type_id": "product_sku",
+                "property_name": "cost_price"
+              },
+              "value_type": "decimal"
+            }
+          },
+          "right": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "product_sku",
+              "property_name": "stock_quantity"
+            },
+            "value_type": "int64"
+          }
+        },
+        "aggregation": "sum"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "product_sku",
+          "property_name": "product_id"
+        },
+        {
+          "object_type_id": "product_sku",
+          "property_name": "status"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:25:26Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087526795,
+  "update_time": 1795087526984,
+  "revision": "3ed2c349739d450c8e8c5bcc366ab525"
+}

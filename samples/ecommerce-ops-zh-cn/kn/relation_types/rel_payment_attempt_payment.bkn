@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_payment_attempt_payment
+name: 尝试关联支付流水
+tags: [电商]
+---
+
+## RelationType: 尝试关联支付流水
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| payment_attempt | payment | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| payment_id | payment_id |

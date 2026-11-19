@@ -1,0 +1,76 @@
+{
+  "definition": {
+    "id": "m_avg_rating",
+    "version": 2,
+    "code": "legacy_m_avg_rating",
+    "name": "商品评价平均评分",
+    "description": "avg(product_review.rating)；统计全部已有评价，未额外限制已购认证或匿名状态。",
+    "owner_object_type_id": "product_review",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "measure",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up"
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "product_review",
+            "property_name": "rating"
+          }
+        },
+        "aggregation": "avg"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "product_review",
+          "property_name": "product_id"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "product_review",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:25:20Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087519907,
+  "update_time": 1795087520130,
+  "revision": "13d46c6fc79f4a56b74133d134d02169"
+}

@@ -1,0 +1,83 @@
+{
+  "definition": {
+    "id": "legacy_base_96d826967df29bbf31d9",
+    "version": 2,
+    "code": "legacy_legacy_base_96d826967df29bbf31d9",
+    "name": "基础：订单总数",
+    "description": "count(order_id)，包含全部订单状态。",
+    "owner_object_type_id": "order",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "count",
+          "code": "times",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "order",
+            "property_name": "order_id"
+          }
+        },
+        "aggregation": "count"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "order_status"
+        },
+        {
+          "object_type_id": "order",
+          "property_name": "channel_id"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:25:19Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087519200,
+  "update_time": 1795087519407,
+  "revision": "5a911ba7612842aeb07101cd7fca827b"
+}

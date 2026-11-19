@@ -1,0 +1,79 @@
+{
+  "function_name": "ecommerce_inventory_fulfillment_workflow",
+  "inputs": [
+    {
+      "name": "kn_id",
+      "type": "string",
+      "description": "当前知识网络ID；由Agent上下文提供，不写死环境。",
+      "required": true
+    },
+    {
+      "name": "sku_ids",
+      "type": "array",
+      "description": "SKU ID最多500个；与all_skus=true二选一。",
+      "required": false,
+      "sub_parameters": [
+        {
+          "name": "items",
+          "type": "number",
+          "description": "正整数业务ID"
+        }
+      ]
+    },
+    {
+      "name": "all_skus",
+      "type": "boolean",
+      "description": "明确true时才扫描全部SKU。",
+      "required": false,
+      "example": false
+    },
+    {
+      "name": "include_offline",
+      "type": "boolean",
+      "description": "true包含非上线或非在售SKU，默认false。",
+      "required": false,
+      "example": false
+    },
+    {
+      "name": "detail_limit",
+      "type": "number",
+      "description": "库存明细上限0到1000，默认20，不影响汇总。",
+      "required": false,
+      "example": 20
+    },
+    {
+      "name": "po_item_ids",
+      "type": "array",
+      "description": "待追溯入库的采购明细ID，最多100个。",
+      "required": false,
+      "sub_parameters": [
+        {
+          "name": "items",
+          "type": "number",
+          "description": "正整数业务ID"
+        }
+      ]
+    },
+    {
+      "name": "order_ids",
+      "type": "array",
+      "description": "待核对分批发货的订单ID，最多100个。",
+      "required": false,
+      "sub_parameters": [
+        {
+          "name": "items",
+          "type": "number",
+          "description": "正整数业务ID"
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "object",
+      "required": true,
+      "description": "status、domain、read_only、results、calls、warnings和口径说明。"
+    }
+  ]
+}

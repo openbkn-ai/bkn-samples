@@ -1,0 +1,71 @@
+{
+  "function_name": "ecommerce_coupon_aftersales_workflow",
+  "inputs": [
+    {
+      "name": "kn_id",
+      "type": "string",
+      "description": "当前知识网络ID；由Agent上下文提供，不写死环境。",
+      "required": true
+    },
+    {
+      "name": "template_ids",
+      "type": "array",
+      "description": "需诊断核销率的模板ID，最多100个。",
+      "required": false,
+      "sub_parameters": [
+        {
+          "name": "items",
+          "type": "number",
+          "description": "正整数业务ID"
+        }
+      ]
+    },
+    {
+      "name": "user_id",
+      "type": "number",
+      "description": "限定订单用券异常检查的用户ID，正整数。",
+      "required": false
+    },
+    {
+      "name": "check_validity",
+      "type": "boolean",
+      "description": "明确true时检查全量可见券的有效期异常。",
+      "required": false,
+      "example": false
+    },
+    {
+      "name": "order_ids",
+      "type": "array",
+      "description": "追溯售后单的订单ID，最多100个。",
+      "required": false,
+      "sub_parameters": [
+        {
+          "name": "items",
+          "type": "number",
+          "description": "正整数业务ID"
+        }
+      ]
+    },
+    {
+      "name": "case_ids",
+      "type": "array",
+      "description": "追溯售后明细的售后单ID，最多100个。",
+      "required": false,
+      "sub_parameters": [
+        {
+          "name": "items",
+          "type": "number",
+          "description": "正整数业务ID"
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "object",
+      "required": true,
+      "description": "status、domain、read_only、results、calls、warnings和口径说明。"
+    }
+  ]
+}

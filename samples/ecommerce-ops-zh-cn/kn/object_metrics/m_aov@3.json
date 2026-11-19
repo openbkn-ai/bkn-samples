@@ -1,0 +1,96 @@
+{
+  "definition": {
+    "id": "m_aov",
+    "version": 3,
+    "code": "legacy_m_aov",
+    "name": "非取消订单平均应付金额",
+    "description": "avg(order.actual_amount)，order_status\u003c\u003ecancelled；不等同实收或退款后净客单价。",
+    "owner_object_type_id": "order",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "legacy_base_0ee7550c6d4591349f5e",
+        "version": 3
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "order",
+              "property_name": "order_status"
+            }
+          },
+          "comparison_operator": "neq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "cancelled"
+            }
+          ]
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "channel_id"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:54:17Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795089257618,
+  "update_time": 1795089257853,
+  "revision": "2cdff2fc50eb4ce9b83e17168f1cbf22"
+}

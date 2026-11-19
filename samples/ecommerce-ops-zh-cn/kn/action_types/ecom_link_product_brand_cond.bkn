@@ -1,0 +1,64 @@
+---
+type: action_type
+id: ecom_link_product_brand_cond
+name: 关联符合条件的商品与品牌
+tags: [电商]
+action_intent: add
+---
+
+## ActionType: 关联符合条件的商品与品牌
+
+满足商品和品牌两端适用条件后，建立商品的品牌归属。
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: relation
+  relation_type_id: rel_product_brand
+  relation_operation: create
+  anchor_role: source
+  other_object_condition:
+    object_type_id: brand
+    field: country
+    operation: ==
+    value_from: const
+    value: 中国
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| product |
+
+### Trigger Condition
+
+```yaml
+object_type_id: product
+field: status
+operation: ==
+value_from: const
+value: offline
+```
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_1e885e595ff6 | ecommerce_tool_b798b8b8e837 |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "products" |  |
+| key | integer | body |  | source_identity |  |  |
+| data.brand_id | integer | body |  | target_identity |  |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

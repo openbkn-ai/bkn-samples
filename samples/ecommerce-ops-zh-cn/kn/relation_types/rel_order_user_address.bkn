@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_order_user_address
+name: 订单使用收货地址
+tags: [电商]
+---
+
+## RelationType: 订单使用收货地址
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| order | user_address | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| address_id | address_id |

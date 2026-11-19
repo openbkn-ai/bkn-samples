@@ -1,0 +1,128 @@
+{
+  "definition": {
+    "id": "01a1b028-5826-7048-bd69-4df91e4b0a7e",
+    "version": 3,
+    "code": "m_product_sales_avg_price_20261106",
+    "name": "商品下单均价（优惠后）",
+    "description": "订单明细actual_amount合计/quantity合计；包含所有下单状态，不代表已付款或退款后净销售均价。",
+    "owner_object_type_id": "order_item",
+    "metric_type": "composite",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "null",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "composite",
+      "dependencies": [
+        {
+          "alias": "amount",
+          "metric_ref": {
+            "metric_id": "01a15d18-4024-7522-9235-4757042ef6ff",
+            "version": 4
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "alias": "quantity",
+          "metric_ref": {
+            "metric_id": "m_sold_qty",
+            "version": 2
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ],
+      "expression": {
+        "node_type": "binary",
+        "operator": "divide",
+        "left": {
+          "node_type": "dependency",
+          "dependency_alias": "amount"
+        },
+        "right": {
+          "node_type": "dependency",
+          "dependency_alias": "quantity"
+        }
+      },
+      "alignment": {
+        "result_owner_object_type_id": "order_item",
+        "group_by_dimensions": [],
+        "grain_policy": "same_grain",
+        "result_set_policy": "intersection",
+        "time_alignment": "same_time_window"
+      },
+      "zero_division_policy": "unavailable",
+      "null_policy": "propagate"
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "product_id"
+        },
+        {
+          "object_type_id": "order_item",
+          "property_name": "sku_id"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:26:28Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087588204,
+  "update_time": 1795087588418,
+  "revision": "df16b7c38d894af09ca59fb88139ee23"
+}

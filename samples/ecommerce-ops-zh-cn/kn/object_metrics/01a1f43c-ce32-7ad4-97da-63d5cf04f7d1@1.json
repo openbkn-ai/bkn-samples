@@ -1,0 +1,80 @@
+{
+  "definition": {
+    "id": "01a1f43c-ce32-7ad4-97da-63d5cf04f7d1",
+    "version": 1,
+    "code": "ec_dep_logged_order_count",
+    "name": "发生状态记录的订单数（计算依赖）",
+    "description": "计算依赖，仅为已批准业务指标提供聚合底座，不作为额外独立经营KPI。",
+    "owner_object_type_id": "order_status_log",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "order_status_log",
+            "property_name": "order_id"
+          },
+          "value_type": "int64"
+        },
+        "aggregation": "count_distinct"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order_status_log",
+          "property_name": "to_status"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "order_status_log",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T14:37:02Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795098988083,
+  "update_time": 1795099022797,
+  "revision": "bf8931f190e44c398573157d65764c47"
+}

@@ -1,0 +1,116 @@
+{
+  "definition": {
+    "id": "01a1f43d-5a8c-7944-a78f-81413f1c8e6c",
+    "version": 1,
+    "code": "ec_m07_backordered_orders",
+    "name": "当前缺货待补订单数",
+    "description": "M07：当前active预占中backorder_quantity\u003e0的订单去重数；快照，不表示逾期。",
+    "owner_object_type_id": "inventory_reservation",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "01a1f43d-593f-7b21-9fd4-a78a4a7e9970",
+        "version": 1
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "inventory_reservation",
+                  "property_name": "status"
+                }
+              },
+              "comparison_operator": "eq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "active"
+                }
+              ]
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "inventory_reservation",
+                  "property_name": "backorder_quantity"
+                }
+              },
+              "comparison_operator": "gt",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "int64",
+                  "value": 0
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "inventory_reservation",
+          "property_name": "sku_id"
+        },
+        {
+          "object_type_id": "inventory_reservation",
+          "property_name": "warehouse_id"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T14:37:04Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795099024013,
+  "update_time": 1795099024166,
+  "revision": "dca4cf719b1e4663858632de52620a56"
+}

@@ -1,0 +1,53 @@
+---
+type: object_type
+id: after_sales_case
+name: 售后单
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 售后单
+
+一次售后申请，区分申请、批准、退货接收和退款完成。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_after_sales_case | after_sales_cases |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| case_id | 售后单ID | integer | 售后单ID | case_id |
+| order_id | 订单ID | integer | 订单ID | order_id |
+| business_type | 售后类型 | string | 售后类型 | business_type |
+| status | 业务状态 | string | 业务状态 | status |
+| requested_amount | 申请退款金额（元） | decimal | 申请退款金额（元） | requested_amount |
+| approved_amount | 批准退款金额（元） | decimal | 批准退款金额（元） | approved_amount |
+| refund_amount | 记录退款金额（元） | decimal | 记录退款金额（元） | refund_amount |
+| requested_at | 申请时间 | datetime | 申请时间 | requested_at |
+| approved_at | 批准时间 | datetime | 批准时间 | approved_at |
+| return_received_at | 退货收货时间 | datetime | 退货收货时间 | return_received_at |
+| completed_at | 完成时间 | datetime | 完成时间 | completed_at |
+| reason | 原因 | string | 原因 | reason |
+
+### Property Constraints
+
+```yaml
+requested_amount:
+  value_type: cny_nonnegative_amount
+approved_amount:
+  value_type: cny_nonnegative_amount
+refund_amount:
+  value_type: cny_nonnegative_amount
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: case_id
+Display Key: case_id
+Incremental Key:

@@ -1,0 +1,128 @@
+{
+  "definition": {
+    "id": "01a1b028-5826-7048-bd69-4df91e4b0a7e",
+    "version": 2,
+    "code": "m_product_sales_avg_price_20261106",
+    "name": "商品销售均价（复合指标）",
+    "description": "引用两个已发布原子指标：实付总金额 v3（实际公式为 sum(order_item.total_amount)）与销售件数 v1（sum(order_item.quantity)）。同一订单明细范围内，总金额除以总件数；支持按产品或SKU分析。金额口径以实际字段 total_amount 为准。V2",
+    "owner_object_type_id": "order_item",
+    "metric_type": "composite",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "null",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "composite",
+      "dependencies": [
+        {
+          "alias": "amount",
+          "metric_ref": {
+            "metric_id": "01a15d18-4024-7522-9235-4757042ef6ff",
+            "version": 3
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "alias": "quantity",
+          "metric_ref": {
+            "metric_id": "m_sold_qty",
+            "version": 1
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ],
+      "expression": {
+        "node_type": "binary",
+        "operator": "multiply",
+        "left": {
+          "node_type": "dependency",
+          "dependency_alias": "amount"
+        },
+        "right": {
+          "node_type": "dependency",
+          "dependency_alias": "quantity"
+        }
+      },
+      "alignment": {
+        "result_owner_object_type_id": "order_item",
+        "group_by_dimensions": [],
+        "grain_policy": "same_grain",
+        "result_set_policy": "intersection",
+        "time_alignment": "same_time_window"
+      },
+      "zero_division_policy": "unavailable",
+      "null_policy": "propagate"
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "product_id"
+        },
+        {
+          "object_type_id": "order_item",
+          "property_name": "sku_id"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-18T03:26:19Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793957290847,
+  "update_time": 1794972379153,
+  "revision": "2ded08b3473e48dfa5243035754eb663"
+}

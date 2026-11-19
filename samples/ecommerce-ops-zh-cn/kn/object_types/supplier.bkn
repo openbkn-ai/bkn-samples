@@ -1,0 +1,46 @@
+---
+type: object_type
+id: supplier
+name: 供应商
+tags: [MVP, 电商]
+---
+
+## ObjectType: 供应商
+
+采购供应商主数据。不含银行账号等敏感字段。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_supplier | ecommerce_ops.suppliers |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| supplier_id | 供应商主键ID | integer | 供应商主键ID | supplier_id |
+| supplier_name | 供应商名称 | string | 供应商名称 | supplier_name |
+| supplier_code | 供应商编码 | string | 供应商编码 | supplier_code |
+| contact_person | 联系人 | string | 联系人 | contact_person |
+| contact_phone | 联系电话 | string | 联系电话 | contact_phone |
+| email | 联系邮箱 | string | 联系邮箱 | email |
+| province_id | 省行政区ID | integer | 省行政区ID | province_id |
+| city_id | 市行政区ID | integer | 市行政区ID | city_id |
+| district_id | 区/县行政区ID | integer | 区/县行政区ID | district_id |
+| detail_address | 详细地址 | string | 详细地址 | detail_address |
+| bank_name | bank_name | string |  | bank_name |
+| bank_account | bank_account | string |  | bank_account |
+| tax_id | tax_id | string |  | tax_id |
+| cooperation_status | 合作状态 | string | 合作状态 | cooperation_status |
+| rating | 供应商评级 | integer | 供应商评级 | rating |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: supplier_id
+Display Key: supplier_name
+Incremental Key:

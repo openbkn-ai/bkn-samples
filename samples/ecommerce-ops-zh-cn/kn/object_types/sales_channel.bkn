@@ -1,0 +1,37 @@
+---
+type: object_type
+id: sales_channel
+name: 销售渠道
+tags: [MVP, 电商]
+---
+
+## ObjectType: 销售渠道
+
+订单销售渠道。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_sales_channel | ecommerce_ops.sales_channels |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| channel_id | 渠道主键ID | integer | 渠道主键ID | channel_id |
+| channel_name | 渠道名称 | string | 渠道名称 | channel_name |
+| channel_code | 渠道编码 | string | 渠道编码 | channel_code |
+| channel_type | 渠道类型（app/小程序/web等） | string | 渠道类型（app/小程序/web等） | channel_type |
+| description | 渠道说明 | text | 渠道说明 | description |
+| status | 渠道状态 | string | 渠道状态 | status |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: channel_id
+Display Key: channel_name
+Incremental Key:

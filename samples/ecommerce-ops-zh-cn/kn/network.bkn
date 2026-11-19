@@ -1,0 +1,635 @@
+---
+type: knowledge_network
+id: ecommerce_ops_zh_cn
+name: 电商经营决策（中文）
+tags:
+- 电商
+- 经营决策
+bkn_spec: '3.0'
+branch: main
+---
+
+# 电商经营决策（中文）
+
+标准电商样例；资源、工具及Skill在安装时绑定到当前样例环境。
+
+
+## Network Overview
+
+### Object Types
+
+| ID | Name | File Path | Description |
+|----|------|-----------|-------------|
+| activity_product | 活动商品参与项 | `object_types/activity_product.bkn` | 活动参与的SKU/商品及活动价、活动库存、已售数量、限购等事实。 |
+| activity_rule | 活动规则配置 | `object_types/activity_rule.bkn` | 某营销活动实际保存的规则类型、配置与优先级。 |
+| after_sales_case | 售后单 | `object_types/after_sales_case.bkn` | 一次售后申请，区分申请、批准、退货接收和退款完成。 |
+| after_sales_item | 售后明细 | `object_types/after_sales_item.bkn` | 售后单中的一个订单行，复合身份为售后单ID和订单明细ID。 |
+| brand | 品牌 | `object_types/brand.bkn` | 商品品牌。 |
+| cart | 购物车 | `object_types/cart.bkn` | 用户的购物容器，表达当前源表事实；不把购物车创建时间当作每个明细加购时间。 |
+| cart_item | 购物车明细 | `object_types/cart_item.bkn` | 购物车中的SKU及数量、勾选状态、added_at和更新时间。 |
+| coupon_abnormal_orders | 已付款订单用券异常事件 | `object_types/coupon_abnormal_orders.bkn` | 事件类：每个对象是一条“已付款订单用券异常事件”事件，由平台的事件模块写入。 |
+| coupon_invalid_validity | 优惠券有效期异常事件 | `object_types/coupon_invalid_validity.bkn` | 事件类：每个对象是一条“优惠券有效期异常事件”事件，由平台的事件模块写入。 |
+| coupon_template | 优惠券模板 | `object_types/coupon_template.bkn` | 优惠券发行模板。 |
+| inbound_record | 入库记录 | `object_types/inbound_record.bkn` | 一次实际入库，关联采购明细、SKU和仓库。 |
+| inventory_movement | 库存流水 | `object_types/inventory_movement.bkn` | 一次逐仓SKU库存变化；reference_type/reference_id为多态来源，未确认前不建立来源关系。 |
+| inventory_quality_hold | 质量隔离记录 | `object_types/inventory_quality_hold.bkn` | SKU逐仓隔离记录；源表没有解除状态，不推断隔离释放历史。 |
+| inventory_reservation | 库存预占 | `object_types/inventory_reservation.bkn` | 订单行实际预占及缺货待补记录；仅active状态的实际预占扣减可售量，待补数量不再扣减。 |
+| logistics_tracking | 物流轨迹节点 | `object_types/logistics_tracking.bkn` | 发货单的一次物流轨迹节点。 |
+| logistics_tracking_stalled | 运输轨迹停滞事件 | `object_types/logistics_tracking_stalled.bkn` | 事件类：每个对象是一条“运输轨迹停滞事件”事件，由平台的事件模块写入。 |
+| marketing_activity | 营销活动 | `object_types/marketing_activity.bkn` | 有类型、周期、状态和优先级的营销活动事实；活动商品适用范围不等于订单已使用该活动。 |
+| order | 销售订单 | `object_types/order.bkn` | 销售订单主表。 |
+| order_item | 订单明细 | `object_types/order_item.bkn` | 销售订单行项目。 |
+| order_status_log | 订单状态变更记录 | `object_types/order_status_log.bkn` | 订单的一次状态变更事实，记录前后状态、操作方类型与时间。 |
+| orderoverdue | 订单跨日未发货异常事件 | `object_types/orderoverdue.bkn` | 平台托管事件对象，每条记录为订单跨日未发货异常事件。 |
+| payment | 支付流水 | `object_types/payment.bkn` | 订单支付记录及其退款记账汇总。 |
+| payment_attempt | 支付尝试 | `object_types/payment_attempt.bkn` | 一次支付尝试，可失败或重试，不等于实际收款。 |
+| payment_failure_unrecovered | 支付失败未恢复待跟进事件 | `object_types/payment_failure_unrecovered.bkn` | 事件类：每个对象是一条“支付失败未恢复待跟进事件”事件，由平台的事件模块写入。 |
+| product | 商品SPU | `object_types/product.bkn` | 商品标准产品单元。 |
+| product_category | 商品分类 | `object_types/product_category.bkn` | 商品类目树节点。 |
+| product_review | 商品评价 | `object_types/product_review.bkn` | 用户商品评价。 |
+| product_sku | 商品SKU | `object_types/product_sku.bkn` | 商品销售规格与库存、价格。 |
+| purchase_expected_receipt_gap | 采购超过预计到货日期仍欠收事件 | `object_types/purchase_expected_receipt_gap.bkn` | 事件类：每个对象是一条“采购超过预计到货日期仍欠收事件”事件，由平台的事件模块写入。 |
+| purchase_order | 采购单 | `object_types/purchase_order.bkn` | 向供应商发起的采购订单。 |
+| purchase_order_item | 采购明细 | `object_types/purchase_order_item.bkn` | 采购单中的SKU行，记录采购数量、价格及已收数量。 |
+| return_received_processing_wait | 退货收货后处理等待事件 | `object_types/return_received_processing_wait.bkn` | 事件类：每个对象是一条“退货收货后处理等待事件”事件，由平台的事件模块写入。 |
+| sales_channel | 销售渠道 | `object_types/sales_channel.bkn` | 订单销售渠道。 |
+| shipment | 发货单 | `object_types/shipment.bkn` | 订单发货/运单。 |
+| shipment_item | 发货明细 | `object_types/shipment_item.bkn` | 一张发货单中的一个订单行，记录本次发货数量，支持分批发货。 |
+| supplier | 供应商 | `object_types/supplier.bkn` | 采购供应商主数据。 |
+| user | 用户 | `object_types/user.bkn` | 电商平台用户账号。 |
+| user_address | 收货地址 | `object_types/user_address.bkn` | 用户收货地址。 |
+| user_coupon | 用户优惠券 | `object_types/user_coupon.bkn` | 用户已领取的优惠券实例。 |
+| warehouse | 仓库 | `object_types/warehouse.bkn` | 仓储节点。 |
+
+### Relation Types
+
+| ID | Name | File Path | Description |
+|----|------|-----------|-------------|
+| coupon_abnormal_orders_subject | 关于 | `relation_types/coupon_abnormal_orders_subject.bkn` | “已付款订单用券异常事件”事件所关于的对象。 |
+| coupon_invalid_validity_subject | 关于 | `relation_types/coupon_invalid_validity_subject.bkn` | “优惠券有效期异常事件”事件所关于的对象。 |
+| logistics_tracking_stalled_subject | 关于 | `relation_types/logistics_tracking_stalled_subject.bkn` | “运输轨迹停滞事件”事件所关于的对象。 |
+| orderoverdue_subject | 关于 | `relation_types/orderoverdue_subject.bkn` | “订单跨日未发货异常事件”事件所关于的对象。 |
+| payment_failure_unrecovered_subject | 关于 | `relation_types/payment_failure_unrecovered_subject.bkn` | “支付失败未恢复待跟进事件”事件所关于的对象。 |
+| purchase_expected_receipt_gap_subject | 关于 | `relation_types/purchase_expected_receipt_gap_subject.bkn` | “采购超过预计到货日期仍欠收事件”事件所关于的对象。 |
+| rel_activity_product_marketing_activity | 商品参与项属于营销活动 | `relation_types/rel_activity_product_marketing_activity.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_activity_product_product | 活动参与项对应商品 | `relation_types/rel_activity_product_product.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_activity_product_product_sku | 活动参与项对应SKU | `relation_types/rel_activity_product_product_sku.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_activity_rule_marketing_activity | 规则配置属于营销活动 | `relation_types/rel_activity_rule_marketing_activity.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_address_user | 地址属于用户 | `relation_types/rel_address_user.bkn` | 地址属于用户（外键语义）。 |
+| rel_after_sales_case_order | 售后单属于订单 | `relation_types/rel_after_sales_case_order.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_after_sales_item_after_sales_case | 售后明细属于售后单 | `relation_types/rel_after_sales_item_after_sales_case.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_after_sales_item_order_item | 售后明细对应订单行 | `relation_types/rel_after_sales_item_order_item.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_cart_item_cart | 购物车明细属于购物车 | `relation_types/rel_cart_item_cart.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_cart_item_product | 购物车明细对应商品 | `relation_types/rel_cart_item_product.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_cart_item_product_sku | 购物车明细对应SKU | `relation_types/rel_cart_item_product_sku.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_cart_user | 购物车属于用户 | `relation_types/rel_cart_user.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_inbound_record_product_sku | 入库对应SKU | `relation_types/rel_inbound_record_product_sku.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inbound_record_purchase_order | 入库关联采购单 | `relation_types/rel_inbound_record_purchase_order.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inbound_record_purchase_order_item | 入库关联采购明细 | `relation_types/rel_inbound_record_purchase_order_item.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inbound_record_warehouse | 入库进入仓库 | `relation_types/rel_inbound_record_warehouse.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_movement_product_sku | 库存流水对应SKU | `relation_types/rel_inventory_movement_product_sku.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_movement_warehouse | 库存流水所属仓库 | `relation_types/rel_inventory_movement_warehouse.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_quality_hold_product_sku | 隔离库存对应SKU | `relation_types/rel_inventory_quality_hold_product_sku.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_quality_hold_warehouse | 隔离库存所属仓库 | `relation_types/rel_inventory_quality_hold_warehouse.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_reservation_order | 库存预占属于订单 | `relation_types/rel_inventory_reservation_order.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_reservation_order_item | 库存预占对应订单行 | `relation_types/rel_inventory_reservation_order_item.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_reservation_product_sku | 库存预占对应SKU | `relation_types/rel_inventory_reservation_product_sku.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_reservation_purchase_order_item | 待补库存关联采购明细 | `relation_types/rel_inventory_reservation_purchase_order_item.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_inventory_reservation_warehouse | 库存预占所属仓库 | `relation_types/rel_inventory_reservation_warehouse.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_logistics_tracking_shipment | 物流轨迹属于发货单 | `relation_types/rel_logistics_tracking_shipment.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_order_channel | 订单来自渠道 | `relation_types/rel_order_channel.bkn` | 订单来自渠道（外键语义）。 |
+| rel_order_item_order | 明细属于订单 | `relation_types/rel_order_item_order.bkn` | 明细属于订单（外键语义）。 |
+| rel_order_item_sku | 明细对应SKU | `relation_types/rel_order_item_sku.bkn` | 明细对应SKU（外键语义）。 |
+| rel_order_status_log_order | 状态变更记录属于订单 | `relation_types/rel_order_status_log_order.bkn` | 按源表业务键关联；非空外键与目标唯一性已经源表只读核验。 |
+| rel_order_user | 订单属于用户 | `relation_types/rel_order_user.bkn` | 订单属于用户（外键语义）。 |
+| rel_order_user_address | 订单使用收货地址 | `relation_types/rel_order_user_address.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_order_user_coupon | 订单记录使用的优惠券 | `relation_types/rel_order_user_coupon.bkn` | 依据订单记录的 coupon_id 关联用户优惠券 user_coupon_id，表达订单侧记录的用券事实。 |
+| rel_payment_attempt_order | 支付尝试属于订单 | `relation_types/rel_payment_attempt_order.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_payment_attempt_payment | 尝试关联支付流水 | `relation_types/rel_payment_attempt_payment.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_payment_order | 支付关联订单 | `relation_types/rel_payment_order.bkn` | 支付关联订单（外键语义）。 |
+| rel_po_supplier | 采购单供应商 | `relation_types/rel_po_supplier.bkn` | 采购单供应商（外键语义）。 |
+| rel_po_warehouse | 采购单收货仓 | `relation_types/rel_po_warehouse.bkn` | 采购单收货仓（外键语义）。 |
+| rel_product_brand | 商品属于品牌 | `relation_types/rel_product_brand.bkn` | 商品属于品牌（外键语义）。 |
+| rel_product_category | 商品属于分类 | `relation_types/rel_product_category.bkn` | 商品属于分类（外键语义）。 |
+| rel_product_category_product_category | 分类属于父分类 | `relation_types/rel_product_category_product_category.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_product_review_order | 评价关联订单 | `relation_types/rel_product_review_order.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_product_review_product_sku | 评价对应SKU | `relation_types/rel_product_review_product_sku.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_purchase_order_item_product | 采购明细对应商品 | `relation_types/rel_purchase_order_item_product.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_purchase_order_item_product_sku | 采购明细对应SKU | `relation_types/rel_purchase_order_item_product_sku.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_purchase_order_item_purchase_order | 采购明细属于采购单 | `relation_types/rel_purchase_order_item_purchase_order.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_review_product | 评价对应商品 | `relation_types/rel_review_product.bkn` | 评价对应商品（外键语义）。 |
+| rel_review_user | 评价来自用户 | `relation_types/rel_review_user.bkn` | 评价来自用户（外键语义）。 |
+| rel_shipment_item_order_item | 发货明细对应订单行 | `relation_types/rel_shipment_item_order_item.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_shipment_item_shipment | 发货明细属于发货单 | `relation_types/rel_shipment_item_shipment.bkn` | 按源表业务键关联，允许空外键；无匹配记录不伪造关系。 |
+| rel_shipment_order | 发货关联订单 | `relation_types/rel_shipment_order.bkn` | 发货关联订单（外键语义）。 |
+| rel_shipment_warehouse | 发货出自仓库 | `relation_types/rel_shipment_warehouse.bkn` | 发货出自仓库（外键语义）。 |
+| rel_sku_product | SKU属于SPU | `relation_types/rel_sku_product.bkn` | SKU属于SPU（外键语义）。 |
+| rel_user_coupon_order | 优惠券记录的使用订单 | `relation_types/rel_user_coupon_order.bkn` | 依据用户优惠券记录的 order_id 关联订单 order_id，表达优惠券侧记录的使用订单。 |
+| rel_user_coupon_template | 券来自模板 | `relation_types/rel_user_coupon_template.bkn` | 券来自模板（外键语义）。 |
+| rel_user_coupon_user | 券属于用户 | `relation_types/rel_user_coupon_user.bkn` | 券属于用户（外键语义）。 |
+| return_received_processing_wait_subject | 关于 | `relation_types/return_received_processing_wait_subject.bkn` | “退货收货后处理等待事件”事件所关于的对象。 |
+
+### Action Types
+
+| ID | Name | File Path | Description |
+|----|------|-----------|-------------|
+| ecom_batch_update_brand_status_cond | 批量停用中国品牌 | `action_types/ecom_batch_update_brand_status_cond.bkn` | 对符合中国国家条件的品牌批量设置 inactive 状态。 |
+| ecom_create_brand | 新建品牌 | `action_types/ecom_create_brand.bkn` | 创建品牌记录，结果以电商业务系统为准 |
+| ecom_create_brand_name_country | 按名称与国家创建品牌 | `action_types/ecom_create_brand_name_country.bkn` | 使用执行工具创建品牌，运行时逐项填写并映射 brand_name、country |
+| ecom_create_brand_profile | 创建品牌完整资料 | `action_types/ecom_create_brand_profile.bkn` | 使用执行工具创建品牌，运行时逐项填写并映射 brand_name、brand_name_en、country、website、status |
+| ecom_create_product_core | 新建商品·基础信息 | `action_types/ecom_create_product_core.bkn` | 使用执行工具创建商品；运行时分别填写商品名称、编码、分类、品牌、副标题、描述和单位，并映射到源接口的 data 字段 |
+| ecom_delete_brand | 删除品牌 | `action_types/ecom_delete_brand.bkn` | 按品牌实例删除记录 |
+| ecom_independent_api_brand_read | 按品牌编号查询品牌 | `action_types/ecom_independent_api_brand_read.bkn` | 按显式输入的品牌编号查询业务记录。 |
+| ecom_independent_gross_profit | 计算商品毛利率 | `action_types/ecom_independent_gross_profit.bkn` | 按同一口径的收入和成本计算毛利率；零收入返回无定义。 |
+| ecom_independent_verify_amount | 核对含税总金额 | `action_types/ecom_independent_verify_amount.bkn` | 按人民币两位小数核对不含税小计加税额与总金额是否一致。 |
+| ecom_link_brand_product_reverse | 从品牌关联商品 | `action_types/ecom_link_brand_product_reverse.bkn` | 从品牌入口选择商品，建立商品到品牌的归属关系。 |
+| ecom_link_product_brand | 商品关联品牌 | `action_types/ecom_link_product_brand.bkn` | 建立商品与品牌的关系 |
+| ecom_link_product_brand_cond | 关联符合条件的商品与品牌 | `action_types/ecom_link_product_brand_cond.bkn` | 满足商品和品牌两端适用条件后，建立商品的品牌归属。 |
+| ecom_unlink_product_brand | 商品解除品牌关联 | `action_types/ecom_unlink_product_brand.bkn` | 解除可空的商品品牌关系 |
+| ecom_update_brand | 修改品牌名称 | `action_types/ecom_update_brand.bkn` | 按品牌实例修改名称 |
+| ecom_update_brand_cond_params | 按条件更新品牌资料 | `action_types/ecom_update_brand_cond_params.bkn` | 按适用条件更新指定品牌资料 |
+
+### Risk Types
+
+| ID | Name | File Path | Description |
+|----|------|-----------|-------------|
+
+### Concept Groups
+
+| ID | Name | File Path | Description |
+|----|------|-----------|-------------|
+| ecommerce_after_sales_marketing | 营销与售后 | `concept_groups/ecommerce_after_sales_marketing.bkn` | 按实际源表实体及业务事件组织。 |
+| ecommerce_customers | 客户 | `concept_groups/ecommerce_customers.bkn` | 按实际源表实体及业务事件组织。 |
+| ecommerce_exceptions | 异常事件 | `concept_groups/ecommerce_exceptions.bkn` | 按实际源表实体及业务事件组织。 |
+| ecommerce_fulfillment | 履约库存与采购 | `concept_groups/ecommerce_fulfillment.bkn` | 按实际源表实体及业务事件组织。 |
+| ecommerce_products | 商品 | `concept_groups/ecommerce_products.bkn` | 按实际源表实体及业务事件组织。 |
+| ecommerce_transactions | 交易与支付 | `concept_groups/ecommerce_transactions.bkn` | 按实际源表实体及业务事件组织。 |
+
+### Value Types
+
+| ID | Name | File Path | Description |
+|----|------|-----------|-------------|
+| cny_nonnegative_amount | 人民币非负金额 | `value_types/cny_nonnegative_amount.bkn` | 以人民币元计量的非负金额，允许零金额。 |
+| coupon_benefit_type | 优惠券优惠方式 | `value_types/coupon_benefit_type.bkn` | 区分优惠计算方式，避免把discount_value统一解释成人民币金额。 |
+| coupon_validity_mode | 优惠券有效期方式 | `value_types/coupon_validity_mode.bkn` | 区分固定有效期与领取后有效天数，帮助选择需要解释的时间字段；该词表不单独定义边界是否包含当天，也不修复异常日期。 |
+| nonnegative_goods_quantity | 非负整数商品数量 | `value_types/nonnegative_goods_quantity.bkn` | 库存、已售、预占、缺货、已收货及实际退货数量，允许0表达无库存、尚未预占、未到货或无需实物退货。 |
+| payment_method | 支付方式 | `value_types/payment_method.bkn` | 订单、支付流水和支付尝试的支付方式词表。 |
+| payment_record_status | 支付流水状态 | `value_types/payment_record_status.bkn` | 支付记录自身的状态词表，不与支付尝试状态或订单状态混用。 |
+| positive_goods_quantity | 正整数商品数量 | `value_types/positive_goods_quantity.bkn` | 购买、入库、发货及有效质量隔离记录的商品数量，至少为1；按关联SKU的业务计量单位理解，不限定为件或包裹。 |
+| product_review_rating | 商品评价星级 | `value_types/product_review_rating.bkn` | 用户商品评价的1至5星评分；用于识别低分评价和口碑分析。 |
+| sales_order_status | 销售订单状态 | `value_types/sales_order_status.bkn` | 销售订单当前状态和状态变更日志共用的状态词表。 |
+| user_coupon_status | 用户优惠券状态 | `value_types/user_coupon_status.bkn` | 用户已领取优惠券的存储状态词表。 |
+
+### Object Metrics V1
+
+| ID | Name | File Path | Description |
+|----|------|-----------|-------------|
+| 01a15c89-a9e9-7eb5-bdc6-aebbc61bebba@1 | 呆滞库存商品数 | `object_metrics/01a15c89-a9e9-7eb5-bdc6-aebbc61bebba@1.json` | 呆滞库存商品数：以 created_at 作为入库时间，统计入库时间距统计时点大于 90 天的商品数，按 product_id 去重，排除 stock_quantity = 0 及 created_at 为空的记录。 |
+| 01a15c89-a9e9-7eb5-bdc6-aebbc61bebba@2 | SKU总数 | `object_metrics/01a15c89-a9e9-7eb5-bdc6-aebbc61bebba@2.json` | count_rows(product_sku)。按实际公式正名；当前不宣称90天呆滞或按商品去重。呆滞标准需基于入库/最后动销证据另行定义。 |
+| 01a15d18-4024-7522-9235-4757042ef6ff@1 | 实付总金额 | `object_metrics/01a15d18-4024-7522-9235-4757042ef6ff@1.json` | 对 order_item 明细的 actual_amount（明细实付金额，单位：元）求和，得到实付总金额，支持按 sku_id、product_id 下钻。 |
+| 01a15d18-4024-7522-9235-4757042ef6ff@2 | 实付总金额 | `object_metrics/01a15d18-4024-7522-9235-4757042ef6ff@2.json` | 对 order_item 明细的 actual_amount（明细实付金额，单位：元）求和，得到实付总金额，支持按 sku_id、product_id 下钻。 |
+| 01a15d18-4024-7522-9235-4757042ef6ff@3 | 实付总金额 | `object_metrics/01a15d18-4024-7522-9235-4757042ef6ff@3.json` | 对 order_item 明细的 actual_amount（明细实付金额，单位：元）求和，得到实付总金额，支持按 sku_id、product_id 下钻。 |
+| 01a15d18-4024-7522-9235-4757042ef6ff@4 | 订单明细优惠后金额合计 | `object_metrics/01a15d18-4024-7522-9235-4757042ef6ff@4.json` | sum(order_item.actual_amount)，包含所有订单状态；支持商品、SKU及订单创建时间分析，不等同实际收款。 |
+| 01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@1 | 评测用销售订单指标（预填，保持原样） | `object_metrics/01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@2 | 近7日已付款高额完成订单应付金额 | `object_metrics/01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@2.json` | 基础：订单应付金额；筛选：(订单状态（待支付/已发货/已完成/退款中等）等于completed 且 支付完成时间非空 且 应付/实付金额（元）≥1000)。时间字段：下单时间（分区键）。窗口：{"mode":"rolling","length":7,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@3 | 近7日已付款高额完成订单应付金额 | `object_metrics/01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@3.json` | 全部订单应付金额；筛选：(订单状态（待支付/已发货/已完成/退款中等）等于completed 且 支付完成时间非空 且 应付/实付金额（元）≥1000)。时间字段：下单时间（分区键）。窗口：{"mode":"rolling","length":7,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d43-6d1d-7e11-affc-ababc66ab050@1 | 评测用销售订单指标（预填，保持原样） | `object_metrics/01a17d43-6d1d-7e11-affc-ababc66ab050@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d43-6d1d-7e11-affc-ababc66ab050@2 | 近7日非取消高额订单应付金额 | `object_metrics/01a17d43-6d1d-7e11-affc-ababc66ab050@2.json` | 基础：订单应付金额；筛选：(订单状态（待支付/已发货/已完成/退款中等）不等于cancelled 且 应付/实付金额（元）≥1000)。时间字段：下单时间（分区键）。窗口：{"mode":"rolling","length":7,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d43-6d1d-7e11-affc-ababc66ab050@3 | 近7日非取消高额订单应付金额 | `object_metrics/01a17d43-6d1d-7e11-affc-ababc66ab050@3.json` | 全部订单应付金额；筛选：(订单状态（待支付/已发货/已完成/退款中等）不等于cancelled 且 应付/实付金额（元）≥1000)。时间字段：下单时间（分区键）。窗口：{"mode":"rolling","length":7,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@1 | 评测用发货单指标（预填，保持原样） | `object_metrics/01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@2 | 近两周已签收发货数 | `object_metrics/01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@2.json` | 基础：发货单总数；筛选：发货/物流状态等于signed。时间字段：创建时间。窗口：{"mode":"rolling","length":2,"unit":"week","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@3 | 近两周已签收发货数 | `object_metrics/01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@3.json` | 全部发货单数；筛选：发货/物流状态等于signed。时间字段：创建时间。窗口：{"mode":"rolling","length":2,"unit":"week","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d44-d13d-778f-8e70-650390fb3abf@1 | 评测用订单明细指标（预填，保持原样） | `object_metrics/01a17d44-d13d-778f-8e70-650390fb3abf@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d44-d13d-778f-8e70-650390fb3abf@2 | 订单明细优惠后金额合计 | `object_metrics/01a17d44-d13d-778f-8e70-650390fb3abf@2.json` | 计算：sum(明细实付金额（元）)；未另行增加订单状态或时间过滤。 |
+| 01a17d44-d13d-778f-8e70-650390fb3abf@3 | 订单明细优惠后金额（订单维度分析） | `object_metrics/01a17d44-d13d-778f-8e70-650390fb3abf@3.json` | 计算：sum(明细实付金额（元）)；未另行增加订单状态或时间过滤。 |
+| 01a17d45-9a45-73a3-b3d0-54d5c815324c@1 | 评测用采购单指标（预填，保持原样） | `object_metrics/01a17d45-9a45-73a3-b3d0-54d5c815324c@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d45-9a45-73a3-b3d0-54d5c815324c@2 | 采购单总数 | `object_metrics/01a17d45-9a45-73a3-b3d0-54d5c815324c@2.json` | 计算：count_rows()；未另行增加订单状态或时间过滤。 |
+| 01a17d46-6386-75a9-9650-96a39eb4fc22@1 | 评测用商品SKU指标（预填，保持原样） | `object_metrics/01a17d46-6386-75a9-9650-96a39eb4fc22@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d46-6386-75a9-9650-96a39eb4fc22@2 | SKU实物库存成本估值 | `object_metrics/01a17d46-6386-75a9-9650-96a39eb4fc22@2.json` | 计算：sum((成本价（元）×库存数量))；未另行增加订单状态或时间过滤。 |
+| 01a17d47-14c8-7ab4-95f7-fe3242d20aa4@1 | 评测用仓库指标（预填，保持原样） | `object_metrics/01a17d47-14c8-7ab4-95f7-fe3242d20aa4@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d47-14c8-7ab4-95f7-fe3242d20aa4@2 | 仓库面积合计 | `object_metrics/01a17d47-14c8-7ab4-95f7-fe3242d20aa4@2.json` | 计算：sum(仓库面积（平方米）)；未另行增加订单状态或时间过滤。 |
+| 01a17d48-7d11-7bed-aa06-50c91335ea88@1 | 评测用销售订单指标（预填，保持原样） | `object_metrics/01a17d48-7d11-7bed-aa06-50c91335ea88@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d48-7d11-7bed-aa06-50c91335ea88@2 | 近90日已付款已发货或完成订单优惠额 | `object_metrics/01a17d48-7d11-7bed-aa06-50c91335ea88@2.json` | 基础：订单优惠减免金额；筛选：(订单状态（待支付/已发货/已完成/退款中等）属于completed,shipped 且 优惠减免金额（元）>0 且 支付完成时间非空)。时间字段：下单时间（分区键）。窗口：{"mode":"rolling","length":90,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d48-7d11-7bed-aa06-50c91335ea88@3 | 近90日已付款已发货或完成订单优惠额 | `object_metrics/01a17d48-7d11-7bed-aa06-50c91335ea88@3.json` | 全部订单优惠减免金额；筛选：(订单状态（待支付/已发货/已完成/退款中等）属于completed,shipped 且 优惠减免金额（元）>0 且 支付完成时间非空)。时间字段：下单时间（分区键）。窗口：{"mode":"rolling","length":90,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d49-26c2-7ef3-98fb-71d036c482b4@1 | 评测用销售订单指标（预填，保持原样） | `object_metrics/01a17d49-26c2-7ef3-98fb-71d036c482b4@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d49-26c2-7ef3-98fb-71d036c482b4@2 | 非取消订单平均金额核对差额 | `object_metrics/01a17d49-26c2-7ef3-98fb-71d036c482b4@2.json` | (非取消订单原价金额-优惠减免金额-应付金额)/非取消订单数；用于每单金额核对，含运费等口径差异。 |
+| 01a17d49-26c2-7ef3-98fb-71d036c482b4@3 | 非取消订单平均金额核对差额 | `object_metrics/01a17d49-26c2-7ef3-98fb-71d036c482b4@3.json` | (非取消订单原价金额-优惠减免金额-应付金额)/非取消订单数；用于每单金额核对，含运费等口径差异。 |
+| 01a17d49-26c2-7ef3-98fb-71d036c482b4@4 | 订单平均金额口径差额（未计运费） | `object_metrics/01a17d49-26c2-7ef3-98fb-71d036c482b4@4.json` | 质量排查辅助量：(非取消订单商品原价金额-优惠-应付金额)/非取消订单数，未计运费。不用作利润或账差告警；正式核对使用包含运费的逐单查询。单位为元/单，仍不作为正式账差告警。 |
+| 01a17d49-bf21-7d31-a664-fdffc9a832f2@1 | 评测用发货单指标（预填，保持原样） | `object_metrics/01a17d49-bf21-7d31-a664-fdffc9a832f2@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d49-bf21-7d31-a664-fdffc9a832f2@2 | 本周已发货未签收有效发货数 | `object_metrics/01a17d49-bf21-7d31-a664-fdffc9a832f2@2.json` | 基础：发货单总数；筛选：(签收时间为空 且 发货时间非空 且 发货/物流状态不属于returned,cancelled)。时间字段：创建时间。窗口：{"mode":"period_to_date","period":"week","timezone":"Asia/Shanghai","week_start":"monday"}；按上海业务时区计算。 |
+| 01a17d49-bf21-7d31-a664-fdffc9a832f2@3 | 本周已发货未签收有效发货数 | `object_metrics/01a17d49-bf21-7d31-a664-fdffc9a832f2@3.json` | 全部发货单数；筛选：(签收时间为空 且 发货时间非空 且 发货/物流状态不属于returned,cancelled)。时间字段：创建时间。窗口：{"mode":"period_to_date","period":"week","timezone":"Asia/Shanghai","week_start":"monday"}；按上海业务时区计算。 |
+| 01a17d4f-28eb-7704-baeb-b758e19b2221@1 | 评测用订单明细指标（预填，保持原样） | `object_metrics/01a17d4f-28eb-7704-baeb-b758e19b2221@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d4f-28eb-7704-baeb-b758e19b2221@2 | 订单明细单价乘数量合计 | `object_metrics/01a17d4f-28eb-7704-baeb-b758e19b2221@2.json` | 计算：sum((成交单价（元）×购买数量))；未另行增加订单状态或时间过滤。 |
+| 01a17d50-2610-79ce-a0c7-3c9533d33aad@1 | 评测用商品SKU指标（预填，保持原样） | `object_metrics/01a17d50-2610-79ce-a0c7-3c9533d33aad@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d50-2610-79ce-a0c7-3c9533d33aad@2 | SKU实物库存潜在毛利估值 | `object_metrics/01a17d50-2610-79ce-a0c7-3c9533d33aad@2.json` | 计算：sum(((销售价（元）-成本价（元）)×库存数量))；未另行增加订单状态或时间过滤。按现价与成本估算的库存潜在毛利，非已实现利润，未扣税费、运费、隔离和预占。 |
+| 01a17d50-b422-7508-8103-f8c2fa8b6952@1 | 评测用商品SKU指标（预填，保持原样） | `object_metrics/01a17d50-b422-7508-8103-f8c2fa8b6952@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d50-b422-7508-8103-f8c2fa8b6952@2 | SKU实物库存正毛利估值 | `object_metrics/01a17d50-b422-7508-8103-f8c2fa8b6952@2.json` | 计算：sum((greatest((销售价（元）-成本价（元）),0)×库存数量))；未另行增加订单状态或时间过滤。按现价与成本估算的库存潜在毛利，非已实现利润，未扣税费、运费、隔离和预占。 |
+| 01a17d53-61ca-74ed-88ea-1e3f2e8fb193@1 | 评测用支付流水指标（预填，保持原样） | `object_metrics/01a17d53-61ca-74ed-88ea-1e3f2e8fb193@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d53-61ca-74ed-88ea-1e3f2e8fb193@2 | 已填写收款时间的支付流水数 | `object_metrics/01a17d53-61ca-74ed-88ea-1e3f2e8fb193@2.json` | 计算：count(支付成功时间)；未另行增加订单状态或时间过滤。退款记账字段可能含申请中金额，不作为实收净额；实收净额使用“已确认收款减已完成退款净额”。 |
+| 01a17d54-c253-79f3-8000-a1b07afd1e44@1 | 评测用用户优惠券指标（预填，保持原样） | `object_metrics/01a17d54-c253-79f3-8000-a1b07afd1e44@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d54-c253-79f3-8000-a1b07afd1e44@2 | 近30日领取优惠券数 | `object_metrics/01a17d54-c253-79f3-8000-a1b07afd1e44@2.json` | 基础：用户优惠券数；筛选：无附加过滤。时间字段：使用时间。窗口：{"mode":"rolling","length":30,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d54-c253-79f3-8000-a1b07afd1e44@3 | 近30日领取优惠券数 | `object_metrics/01a17d54-c253-79f3-8000-a1b07afd1e44@3.json` | 用户优惠券总数；筛选：无附加过滤。时间字段：使用时间。窗口：{"mode":"rolling","length":30,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d56-2253-75a6-840f-d319d76c09d0@1 | 评测用订单明细指标（预填，保持原样） | `object_metrics/01a17d56-2253-75a6-840f-d319d76c09d0@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d56-2253-75a6-840f-d319d76c09d0@2 | 有订单明细的订单数 | `object_metrics/01a17d56-2253-75a6-840f-d319d76c09d0@2.json` | 计算：count_distinct(所属订单ID)；未另行增加订单状态或时间过滤。 |
+| 01a17d56-2253-75a6-840f-d319d76c09d0@3 | 有订单明细的订单数 | `object_metrics/01a17d56-2253-75a6-840f-d319d76c09d0@3.json` | 质量检查辅助量：统计订单明细中出现的order_id去重数。需结合订单主表集合、无明细订单和孤立明细检查，不单独作为经营KPI，也不直接等同完整率。 |
+| 01a17d56-7f8f-7273-91e8-d41abe71da85@1 | 评测用收货地址指标（预填，保持原样） | `object_metrics/01a17d56-7f8f-7273-91e8-d41abe71da85@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d56-7f8f-7273-91e8-d41abe71da85@2 | 有收货地址的用户数 | `object_metrics/01a17d56-7f8f-7273-91e8-d41abe71da85@2.json` | 计算：count_distinct(所属用户ID)；未另行增加订单状态或时间过滤。 |
+| 01a17d57-79e9-771f-8205-e680668a078b@1 | 评测用销售订单指标（预填，保持原样） | `object_metrics/01a17d57-79e9-771f-8205-e680668a078b@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d57-79e9-771f-8205-e680668a078b@2 | 近7日高额完成订单应付金额 | `object_metrics/01a17d57-79e9-771f-8205-e680668a078b@2.json` | 基础：订单应付金额；筛选：(订单状态（待支付/已发货/已完成/退款中等）等于completed 且 应付/实付金额（元）≥1000)。时间字段：下单时间（分区键）。窗口：{"mode":"rolling","length":7,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d57-79e9-771f-8205-e680668a078b@3 | 近7日高额完成订单应付金额 | `object_metrics/01a17d57-79e9-771f-8205-e680668a078b@3.json` | 全部订单应付金额；筛选：(订单状态（待支付/已发货/已完成/退款中等）等于completed 且 应付/实付金额（元）≥1000)。时间字段：下单时间（分区键）。窗口：{"mode":"rolling","length":7,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d57-e569-7466-974e-60efb321df13@1 | 评测用销售订单指标（预填，保持原样） | `object_metrics/01a17d57-e569-7466-974e-60efb321df13@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d57-e569-7466-974e-60efb321df13@2 | 本季度已付款非取消订单数 | `object_metrics/01a17d57-e569-7466-974e-60efb321df13@2.json` | 基础：订单总数；筛选：(订单状态（待支付/已发货/已完成/退款中等）不等于cancelled 且 支付完成时间非空)。时间字段：下单时间（分区键）。窗口：{"mode":"period_to_date","period":"quarter","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d57-e569-7466-974e-60efb321df13@3 | 本季度已付款非取消订单数 | `object_metrics/01a17d57-e569-7466-974e-60efb321df13@3.json` | 全部订单数；筛选：(订单状态（待支付/已发货/已完成/退款中等）不等于cancelled 且 支付完成时间非空)。时间字段：下单时间（分区键）。窗口：{"mode":"period_to_date","period":"quarter","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d58-c676-7281-8fc8-a55537ec2ce8@1 | 评测用用户优惠券指标（预填，保持原样） | `object_metrics/01a17d58-c676-7281-8fc8-a55537ec2ce8@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d58-c676-7281-8fc8-a55537ec2ce8@2 | 近30日已核销优惠券数 | `object_metrics/01a17d58-c676-7281-8fc8-a55537ec2ce8@2.json` | 基础：用户优惠券数；筛选：(状态（未使用/已使用/过期等）等于used 且 使用时间非空)。时间字段：使用时间。窗口：{"mode":"rolling","length":30,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d58-c676-7281-8fc8-a55537ec2ce8@3 | 近30日已核销优惠券数 | `object_metrics/01a17d58-c676-7281-8fc8-a55537ec2ce8@3.json` | 用户优惠券总数；筛选：(状态（未使用/已使用/过期等）等于used 且 使用时间非空)。时间字段：使用时间。窗口：{"mode":"rolling","length":30,"unit":"day","timezone":"Asia/Shanghai"}；按上海业务时区计算。 |
+| 01a17d94-5fd0-75a7-9e9c-008c7708540a@1 | 评测用销售订单指标（预填，保持原样） | `object_metrics/01a17d94-5fd0-75a7-9e9c-008c7708540a@1.json` | 评测表单原有业务描述（保持原样） |
+| 01a17d94-5fd0-75a7-9e9c-008c7708540a@2 | 非取消订单金额核对总差额 | `object_metrics/01a17d94-5fd0-75a7-9e9c-008c7708540a@2.json` | 非取消订单原价金额-优惠减免金额-应付金额的总差额；用于金额恒等式核对，不作净销售额。 |
+| 01a17d94-5fd0-75a7-9e9c-008c7708540a@3 | 非取消订单金额核对总差额 | `object_metrics/01a17d94-5fd0-75a7-9e9c-008c7708540a@3.json` | 非取消订单原价金额-优惠减免金额-应付金额的总差额；用于金额恒等式核对，不作净销售额。 |
+| 01a17d94-5fd0-75a7-9e9c-008c7708540a@4 | 订单金额口径总差额（未计运费） | `object_metrics/01a17d94-5fd0-75a7-9e9c-008c7708540a@4.json` | 质量排查辅助量：非取消订单商品原价金额-优惠-应付金额，未计运费。正常订单也可能出现负运费差额，不能以非零判断账错。正式逐单金额核对使用包含运费的order_amount_integrity.cypher。 |
+| 01a1b015-13d5-7cad-8c09-5e090defbb57@1 | SKU实付总金额 | `object_metrics/01a1b015-13d5-7cad-8c09-5e090defbb57@1.json` | 通过SKU关联到订单明细，并统计其总金额 |
+| 01a1b015-13d5-7cad-8c09-5e090defbb57@2 | 非零单价商品明细优惠后金额 | `object_metrics/01a1b015-13d5-7cad-8c09-5e090defbb57@2.json` | 按product_id分组，筛选unit_price不为0且关联SKU存在的明细，汇总actual_amount；不是已收款。 |
+| 01a1b018-cb70-769a-b10f-db737d66c21c@1 | 商品非零单价明细均价（优惠后） | `object_metrics/01a1b018-cb70-769a-b10f-db737d66c21c@1.json` | 按product_id分组，同一非零单价且关联SKU存在的明细范围内，actual_amount合计/quantity合计。 |
+| 01a1b028-5826-7048-bd69-4df91e4b0a7e@1 | 商品销售均价（复合指标） | `object_metrics/01a1b028-5826-7048-bd69-4df91e4b0a7e@1.json` | 引用两个已发布原子指标：实付总金额 v3（实际公式为 sum(order_item.total_amount)）与销售件数 v1（sum(order_item.quantity)）。同一订单明细范围内，总金额除以总件数；支持按产品或SKU分析。金额口径以实际字段 total_amount 为准。 |
+| 01a1b028-5826-7048-bd69-4df91e4b0a7e@2 | 商品销售均价（复合指标） | `object_metrics/01a1b028-5826-7048-bd69-4df91e4b0a7e@2.json` | 引用两个已发布原子指标：实付总金额 v3（实际公式为 sum(order_item.total_amount)）与销售件数 v1（sum(order_item.quantity)）。同一订单明细范围内，总金额除以总件数；支持按产品或SKU分析。金额口径以实际字段 total_amount 为准。V2 |
+| 01a1b028-5826-7048-bd69-4df91e4b0a7e@3 | 商品下单均价（优惠后） | `object_metrics/01a1b028-5826-7048-bd69-4df91e4b0a7e@3.json` | 订单明细actual_amount合计/quantity合计；包含所有下单状态，不代表已付款或退款后净销售均价。 |
+| 01a1f38d-efeb-731b-8920-c852c4fdb4a6@1 | 基础：支付流水收款金额 | `object_metrics/01a1f38d-efeb-731b-8920-c852c4fdb4a6@1.json` | sum(payment_amount)，基础层；是否收款完成由上层paid_at过滤。 |
+| 01a1f38d-efeb-731b-8920-c852c4fdb4a6@2 | 支付流水金额合计 | `object_metrics/01a1f38d-efeb-731b-8920-c852c4fdb4a6@2.json` | sum(payment_amount)。在所选查询范围内汇总支付流水记账金额，不额外检查paid_at是否非空，不扣退款；实际收款及净额使用相应完成状态指标。 |
+| 01a1f38f-ab79-70db-8b2e-b9b844c67580@1 | 已确认收款金额 | `object_metrics/01a1f38f-ab79-70db-8b2e-b9b844c67580@1.json` | 汇总paid_at非空记录的payment_amount，含退款后的原始收款；时间窗口按支付流水created_at统一归属，不作为到账日或退款日现金流。 |
+| 01a1f38f-ab79-70db-8b2e-b9b844c67580@2 | 已确认收款金额 | `object_metrics/01a1f38f-ab79-70db-8b2e-b9b844c67580@2.json` | 汇总paid_at非空记录的payment_amount，含退款后的原始收款；时间窗口按支付流水created_at统一归属，不作为到账日或退款日现金流。 |
+| 01a1f38f-ac7f-7057-beec-01b29ac42c68@1 | 已完成退款金额 | `object_metrics/01a1f38f-ac7f-7057-beec-01b29ac42c68@1.json` | 仅汇总refund_at非空记录的refund_amount，不含申请中退款；时间窗口按支付流水created_at统一归属，不作为到账日或退款日现金流。 |
+| 01a1f38f-ac7f-7057-beec-01b29ac42c68@2 | 已完成退款金额 | `object_metrics/01a1f38f-ac7f-7057-beec-01b29ac42c68@2.json` | 仅汇总refund_at非空记录的refund_amount，不含申请中退款；时间窗口按支付流水created_at统一归属，不作为到账日或退款日现金流。 |
+| 01a1f38f-eaa7-7102-9014-64b495b59a08@1 | 非零单价商品明细下单件数 | `object_metrics/01a1f38f-eaa7-7102-9014-64b495b59a08@1.json` | 非零单价商品明细下单件数 |
+| 01a1f390-5817-7a05-9601-8bb92b7e73e3@1 | 已确认收款减已完成退款净额 | `object_metrics/01a1f390-5817-7a05-9601-8bb92b7e73e3@1.json` | paid_at非空的收款金额减refund_at非空的已完成退款金额；按同一支付流水集合对齐，时间窗口不混用收款日与退款日。 |
+| 01a1f390-5817-7a05-9601-8bb92b7e73e3@2 | 已确认收款减已完成退款净额 | `object_metrics/01a1f390-5817-7a05-9601-8bb92b7e73e3@2.json` | paid_at非空的收款金额减refund_at非空的已完成退款金额；按同一支付流水集合对齐，时间窗口不混用收款日与退款日。 没有已完成退款时按0处理；保持支付流水集合的统一created_at归属。 |
+| 01a1f390-5817-7a05-9601-8bb92b7e73e3@3 | 已确认收款减已完成退款净额 | `object_metrics/01a1f390-5817-7a05-9601-8bb92b7e73e3@3.json` | paid_at非空的收款金额减refund_at非空的已完成退款金额；按同一支付流水集合对齐，时间窗口不混用收款日与退款日。 没有已完成退款时按0处理；保持支付流水集合的统一created_at归属。 |
+| 01a1f3c6-3ce4-7992-bc92-3f544433b761@1 | 用户总数 | `object_metrics/01a1f3c6-3ce4-7992-bc92-3f544433b761@1.json` | 按用户源表user_id去重统计用户总数；不将消费分层分析结果作为实体，不代表活跃用户数。 |
+| 01a1f3c6-3e24-77c5-a3cd-032c1cb684df@1 | 优惠券模板累计发券量 | `object_metrics/01a1f3c6-3e24-77c5-a3cd-032c1cb684df@1.json` | 累计发券量来自优惠券模板源表issued_quantity合计；不依赖用券统计视图。 |
+| 01a1f3c6-8c13-7c7e-8d6e-03a7d0b6bfa2@1 | 上线在售SKU数 | `object_metrics/01a1f3c6-8c13-7c7e-8d6e-03a7d0b6bfa2@1.json` | 基于SKU源表统计在售且所属商品上线的SKU；关系存在性筛选去重根SKU，不依赖库存视图。 |
+| 01a1f43c-ce32-7ad4-97da-63d5cf04f7d1@1 | 发生状态记录的订单数（计算依赖） | `object_metrics/01a1f43c-ce32-7ad4-97da-63d5cf04f7d1@1.json` | 计算依赖，仅为已批准业务指标提供聚合底座，不作为额外独立经营KPI。 |
+| 01a1f43d-568c-784f-88a3-961a2023e9f5@1 | 付款后待发货阶段取消订单数 | `object_metrics/01a1f43d-568c-784f-88a3-961a2023e9f5@1.json` | M02：状态日志pending_delivery→cancelled的去重订单数，按取消事件时间归属；不计同状态重复记录。 |
+| 01a1f43d-57df-7a70-929e-dd5f837c7369@1 | 已发货阶段转入退款订单数 | `object_metrics/01a1f43d-57df-7a70-929e-dd5f837c7369@1.json` | M03：状态日志shipped→refunding的去重订单数，按迁移事件时间归属；不是全部售后率。 |
+| 01a1f43d-593f-7b21-9fd4-a78a4a7e9970@1 | 存在预占记录的订单数（计算依赖） | `object_metrics/01a1f43d-593f-7b21-9fd4-a78a4a7e9970@1.json` | 计算依赖，仅为已批准业务指标提供聚合底座，不作为额外独立经营KPI。 |
+| 01a1f43d-5a8c-7944-a78f-81413f1c8e6c@1 | 当前缺货待补订单数 | `object_metrics/01a1f43d-5a8c-7944-a78f-81413f1c8e6c@1.json` | M07：当前active预占中backorder_quantity>0的订单去重数；快照，不表示逾期。 |
+| 01a1f43d-5c06-7ef5-a919-24a3d398c0d1@1 | 库存预占记录数（计算依赖） | `object_metrics/01a1f43d-5c06-7ef5-a919-24a3d398c0d1@1.json` | 计算依赖，仅为已批准业务指标提供聚合底座，不作为额外独立经营KPI。 |
+| 01a1f43d-5d59-763a-9aee-1df4fae642f5@1 | 有效预占订单行数（计算依赖） | `object_metrics/01a1f43d-5d59-763a-9aee-1df4fae642f5@1.json` | M08分母：active且订购数量>0的预占记录数；用于预占满足率，不代表全部订单明细。 |
+| 01a1f43d-5ec4-79a4-8495-17742edbe04e@1 | 足量预占订单行数（计算依赖） | `object_metrics/01a1f43d-5ec4-79a4-8495-17742edbe04e@1.json` | M08分子：active且订购数量>0、实际预占>=订购数量的记录数。 |
+| 01a1f43d-6022-7520-bafb-6e4795866506@1 | 库存预占足量订单行占比 | `object_metrics/01a1f43d-6022-7520-bafb-6e4795866506@1.json` | M08：足量预占有效行/全部有效预占行。当前快照；分母为0时不可计算，不代表全部订单行或发货履约率。 |
+| 01a1f43d-6164-767c-b3f3-db46162115fd@1 | 售后申请金额合计（计算依赖） | `object_metrics/01a1f43d-6164-767c-b3f3-db46162115fd@1.json` | 计算依赖，仅为已批准业务指标提供聚合底座，不作为额外独立经营KPI。 |
+| 01a1f43d-62c5-7d04-9ac1-650fb00ad9a0@1 | 在办售后申请金额 | `object_metrics/01a1f43d-62c5-7d04-9ac1-650fb00ad9a0@1.json` | M10：当前completed_at为空的售后申请金额合计。不是批准金额、待付现金或已完成退款；当前快照。 |
+| 01a1f43d-ed6c-7332-b653-f43e98a23fdf@1 | 售后办理小时均值（计算依赖） | `object_metrics/01a1f43d-ed6c-7332-b653-f43e98a23fdf@1.json` | 计算依赖，仅为已批准业务指标提供聚合底座，不作为额外独立经营KPI。 |
+| 01a1f43e-28c2-72e1-bab2-1ca4050744df@1 | 售后平均完成时长 | `object_metrics/01a1f43e-28c2-72e1-bab2-1ca4050744df@1.json` | M09：有效完成时间减申请时间，小时，按售后类型分别展示，按完成时间归属；不混入在办等待时长。 |
+| da3eepnv4t9mvbfrkfqg@1 | 订单总金额 | `object_metrics/da3eepnv4t9mvbfrkfqg@1.json` | Migrated from legacy metric 订单总金额 |
+| da3eepnv4t9mvbfrkfqg@2 | 全部订单原价金额 | `object_metrics/da3eepnv4t9mvbfrkfqg@2.json` | sum(order.total_amount)，包含取消、未付款及退款订单，与非取消订单原价金额区分。 |
+| legacy_base_0130f17c0c3cd2bc1f3c@1 | 已签收发货数（迁移基础指标） | `object_metrics/legacy_base_0130f17c0c3cd2bc1f3c@1.json` | Generated base atomic metric for migrated metric 已签收发货数 |
+| legacy_base_0130f17c0c3cd2bc1f3c@2 | 基础：发货单总数 | `object_metrics/legacy_base_0130f17c0c3cd2bc1f3c@2.json` | count(shipment_id)，不含signed过滤。 |
+| legacy_base_0130f17c0c3cd2bc1f3c@3 | 全部发货单数 | `object_metrics/legacy_base_0130f17c0c3cd2bc1f3c@3.json` | count(shipment_id)。在所选查询范围内统计全部物流状态的发货单，不额外限制为已签收或已发货状态。 |
+| legacy_base_0ee7550c6d4591349f5e@1 | 客单价（迁移基础指标） | `object_metrics/legacy_base_0ee7550c6d4591349f5e@1.json` | Generated base atomic metric for migrated metric 客单价 |
+| legacy_base_0ee7550c6d4591349f5e@2 | 基础：订单平均应付金额 | `object_metrics/legacy_base_0ee7550c6d4591349f5e@2.json` | avg(actual_amount)，不含取消、付款或退款过滤。 |
+| legacy_base_0ee7550c6d4591349f5e@3 | 全部订单平均应付金额 | `object_metrics/legacy_base_0ee7550c6d4591349f5e@3.json` | avg(actual_amount)。在所选查询范围内计算全部状态订单应付金额的平均值，不额外排除取消、未付款或退款订单。 |
+| legacy_base_3d7761a33f272c243e21@1 | 实付净额（迁移基础指标） | `object_metrics/legacy_base_3d7761a33f272c243e21@1.json` | Generated base atomic metric for migrated metric 实付净额 |
+| legacy_base_3d7761a33f272c243e21@2 | 基础：订单应付金额 | `object_metrics/legacy_base_3d7761a33f272c243e21@2.json` | sum(actual_amount)，不含订单状态或实收过滤。 |
+| legacy_base_3d7761a33f272c243e21@3 | 全部订单应付金额 | `object_metrics/legacy_base_3d7761a33f272c243e21@3.json` | sum(actual_amount)。在所选查询范围内汇总全部状态订单应付金额，不额外校验收款完成或扣除退款，不是净收款。 |
+| legacy_base_51242058aa32d9151346@1 | 已用券次数（迁移基础指标） | `object_metrics/legacy_base_51242058aa32d9151346@1.json` | Generated base atomic metric for migrated metric 已用券次数 |
+| legacy_base_51242058aa32d9151346@2 | 基础：用户优惠券数 | `object_metrics/legacy_base_51242058aa32d9151346@2.json` | count(user_coupon_id)，不含used过滤。 |
+| legacy_base_51242058aa32d9151346@3 | 用户优惠券总数 | `object_metrics/legacy_base_51242058aa32d9151346@3.json` | count(user_coupon_id)。在所选查询范围内统计全部状态的用户优惠券记录，不仅统计已核销券，也不等同模板累计发券量。 |
+| legacy_base_6acb2a25fac127cd2b9f@1 | 优惠减免金额（迁移基础指标） | `object_metrics/legacy_base_6acb2a25fac127cd2b9f@1.json` | Generated base atomic metric for migrated metric 优惠减免金额 |
+| legacy_base_6acb2a25fac127cd2b9f@2 | 基础：订单优惠减免金额 | `object_metrics/legacy_base_6acb2a25fac127cd2b9f@2.json` | sum(discount_amount)，不含订单状态过滤。 |
+| legacy_base_6acb2a25fac127cd2b9f@3 | 全部订单优惠减免金额 | `object_metrics/legacy_base_6acb2a25fac127cd2b9f@3.json` | sum(discount_amount)。在所选查询范围内汇总全部状态订单的优惠减免金额，不额外排除取消订单；不限于优惠券减免。 |
+| legacy_base_96d826967df29bbf31d9@1 | 订单数（迁移基础指标） | `object_metrics/legacy_base_96d826967df29bbf31d9@1.json` | Generated base atomic metric for migrated metric 订单数 |
+| legacy_base_96d826967df29bbf31d9@2 | 基础：订单总数 | `object_metrics/legacy_base_96d826967df29bbf31d9@2.json` | count(order_id)，包含全部订单状态。 |
+| legacy_base_96d826967df29bbf31d9@3 | 全部订单数 | `object_metrics/legacy_base_96d826967df29bbf31d9@3.json` | count(order_id)。在所选查询范围内统计全部订单状态，不额外排除取消、未付款或退款订单；不是已付款订单数。 |
+| legacy_base_cbd0df430e81353b6b07@1 | GMV（成交总金额）（迁移基础指标） | `object_metrics/legacy_base_cbd0df430e81353b6b07@1.json` | Generated base atomic metric for migrated metric GMV（成交总金额） |
+| legacy_base_cbd0df430e81353b6b07@2 | 基础：订单原价金额 | `object_metrics/legacy_base_cbd0df430e81353b6b07@2.json` | sum(total_amount)，包含全部订单状态。 |
+| legacy_base_cbd0df430e81353b6b07@3 | 全部订单商品原价金额 | `object_metrics/legacy_base_cbd0df430e81353b6b07@3.json` | sum(total_amount)。在所选查询范围内汇总全部状态订单的商品原价金额，未减优惠、不含另列运费，不代表实际收款。 |
+| m_aov@1 | 客单价 | `object_metrics/m_aov@1.json` | 【口径】avg(actual_amount)；排除已取消。 |
+| m_aov@2 | 非取消订单平均应付金额 | `object_metrics/m_aov@2.json` | avg(order.actual_amount)，order_status<>cancelled；不等同实收或退款后净客单价。 |
+| m_aov@3 | 非取消订单平均应付金额 | `object_metrics/m_aov@3.json` | avg(order.actual_amount)，order_status<>cancelled；不等同实收或退款后净客单价。 |
+| m_avg_rating@1 | 平均评分 | `object_metrics/m_avg_rating@1.json` | 【口径】avg(rating)。 |
+| m_avg_rating@2 | 商品评价平均评分 | `object_metrics/m_avg_rating@2.json` | avg(product_review.rating)；统计全部已有评价，未额外限制已购认证或匿名状态。 |
+| m_coupon_used_cnt@1 | 已用券次数 | `object_metrics/m_coupon_used_cnt@1.json` | 【口径】count(user_coupon_id)，status=已使用（若枚举不同以数据为准）。 |
+| m_coupon_used_cnt@2 | 已核销优惠券数 | `object_metrics/m_coupon_used_cnt@2.json` | count(user_coupon_id)，status=used；计券张数，不作为订单数或核销率。 |
+| m_coupon_used_cnt@3 | 已核销优惠券数 | `object_metrics/m_coupon_used_cnt@3.json` | count(user_coupon_id)，status=used；计券张数，不作为订单数或核销率。 |
+| m_discount_amt@1 | 优惠减免金额 | `object_metrics/m_discount_amt@1.json` | 【口径】sum(discount_amount)；排除已取消。 |
+| m_discount_amt@2 | 非取消订单优惠减免金额 | `object_metrics/m_discount_amt@2.json` | sum(discount_amount)，order_status<>cancelled；包含所有优惠，不仅是优惠券。 |
+| m_discount_amt@3 | 非取消订单优惠减免金额 | `object_metrics/m_discount_amt@3.json` | sum(discount_amount)，order_status<>cancelled；包含所有优惠，不仅是优惠券。 |
+| m_gmv@1 | GMV（成交总金额） | `object_metrics/m_gmv@1.json` | 【口径】sum(total_amount)；排除 order_status=已取消。【易混】不等于实付净额。 |
+| m_gmv@2 | 非取消订单原价金额（GMV） | `object_metrics/m_gmv@2.json` | sum(total_amount)，order_status<>cancelled；包含未付款和退款订单，不代表净销售额。 |
+| m_gmv@3 | 非取消订单原价金额（GMV） | `object_metrics/m_gmv@3.json` | sum(total_amount)，order_status<>cancelled；包含未付款和退款订单，不代表净销售额。 |
+| m_net_paid@1 | 实付净额 | `object_metrics/m_net_paid@1.json` | 【口径】sum(actual_amount)；排除已取消。 |
+| m_net_paid@2 | 非取消订单应付金额 | `object_metrics/m_net_paid@2.json` | sum(actual_amount)，order_status<>cancelled；不再误称净收款，实收退款见新收款指标。 |
+| m_net_paid@3 | 非取消订单应付金额 | `object_metrics/m_net_paid@3.json` | sum(actual_amount)，order_status<>cancelled；不再误称净收款，实收退款见新收款指标。 |
+| m_order_cnt@1 | 订单数 | `object_metrics/m_order_cnt@1.json` | 【口径】count(order_id)；排除已取消。 |
+| m_order_cnt@2 | 非取消订单数 | `object_metrics/m_order_cnt@2.json` | count(order_id)，order_status<>cancelled；与已付款订单数区分。 |
+| m_order_cnt@3 | 非取消订单数 | `object_metrics/m_order_cnt@3.json` | count(order_id)，order_status<>cancelled；与已付款订单数区分。 |
+| m_refund_amt@1 | 退款金额 | `object_metrics/m_refund_amt@1.json` | 【口径】sum(refund_amount)。 |
+| m_refund_amt@2 | 基础：退款记账金额（含申请） | `object_metrics/m_refund_amt@2.json` | sum(payment.refund_amount)，包括申请中和已完成退款；实际退款使用已完成退款金额指标。 |
+| m_refund_amt@3 | 退款记账金额（含申请中退款） | `object_metrics/m_refund_amt@3.json` | sum(refund_amount)。在所选查询范围内汇总退款记账金额，包含申请中与已完成退款；只有refund_at非空的部分才属于已完成退款金额。 |
+| m_review_cnt@1 | 评价数 | `object_metrics/m_review_cnt@1.json` | 【口径】count(review_id)。 |
+| m_review_cnt@2 | 商品评价数 | `object_metrics/m_review_cnt@2.json` | count(product_review.review_id)，统计全部已有评价。 |
+| m_shipment_cnt@1 | 发货单数 | `object_metrics/m_shipment_cnt@1.json` | 【口径】count(shipment_id)。 |
+| m_shipment_cnt@2 | 发货单总数 | `object_metrics/m_shipment_cnt@2.json` | count(shipment_id)；统计全部发货状态。 |
+| m_signed_shipment_cnt@1 | 已签收发货数 | `object_metrics/m_signed_shipment_cnt@1.json` | 【口径】count(shipment_id)，shipment_status=已签收（若枚举不同以数据为准）。 |
+| m_signed_shipment_cnt@2 | 已签收发货单数 | `object_metrics/m_signed_shipment_cnt@2.json` | count(shipment_id)，shipment_status=signed；窗口由定义及查询时间约束。 |
+| m_signed_shipment_cnt@3 | 已签收发货单数 | `object_metrics/m_signed_shipment_cnt@3.json` | count(shipment_id)，shipment_status=signed；窗口由定义及查询时间约束。 |
+| m_sold_qty@1 | 销售件数 | `object_metrics/m_sold_qty@1.json` | 【口径】sum(order_item.quantity)。 |
+| m_sold_qty@2 | 订单明细下单件数 | `object_metrics/m_sold_qty@2.json` | sum(order_item.quantity)，包含全部订单状态；未扣取消或退货，不误称净销售件数。 |
+
+## Directory Structure
+
+```
+.
+├── network.bkn
+├── SKILL.md
+├── CHECKSUM
+├── object_types/
+│   ├── activity_product.bkn
+│   ├── activity_rule.bkn
+│   ├── after_sales_case.bkn
+│   ├── after_sales_item.bkn
+│   ├── brand.bkn
+│   ├── cart.bkn
+│   ├── cart_item.bkn
+│   ├── coupon_abnormal_orders.bkn
+│   ├── coupon_invalid_validity.bkn
+│   ├── coupon_template.bkn
+│   ├── inbound_record.bkn
+│   ├── inventory_movement.bkn
+│   ├── inventory_quality_hold.bkn
+│   ├── inventory_reservation.bkn
+│   ├── logistics_tracking.bkn
+│   ├── logistics_tracking_stalled.bkn
+│   ├── marketing_activity.bkn
+│   ├── order.bkn
+│   ├── order_item.bkn
+│   ├── order_status_log.bkn
+│   ├── orderoverdue.bkn
+│   ├── payment.bkn
+│   ├── payment_attempt.bkn
+│   ├── payment_failure_unrecovered.bkn
+│   ├── product.bkn
+│   ├── product_category.bkn
+│   ├── product_review.bkn
+│   ├── product_sku.bkn
+│   ├── purchase_expected_receipt_gap.bkn
+│   ├── purchase_order.bkn
+│   ├── purchase_order_item.bkn
+│   ├── return_received_processing_wait.bkn
+│   ├── sales_channel.bkn
+│   ├── shipment.bkn
+│   ├── shipment_item.bkn
+│   ├── supplier.bkn
+│   ├── user.bkn
+│   ├── user_address.bkn
+│   ├── user_coupon.bkn
+│   └── warehouse.bkn
+├── relation_types/
+│   ├── coupon_abnormal_orders_subject.bkn
+│   ├── coupon_invalid_validity_subject.bkn
+│   ├── logistics_tracking_stalled_subject.bkn
+│   ├── orderoverdue_subject.bkn
+│   ├── payment_failure_unrecovered_subject.bkn
+│   ├── purchase_expected_receipt_gap_subject.bkn
+│   ├── rel_activity_product_marketing_activity.bkn
+│   ├── rel_activity_product_product.bkn
+│   ├── rel_activity_product_product_sku.bkn
+│   ├── rel_activity_rule_marketing_activity.bkn
+│   ├── rel_address_user.bkn
+│   ├── rel_after_sales_case_order.bkn
+│   ├── rel_after_sales_item_after_sales_case.bkn
+│   ├── rel_after_sales_item_order_item.bkn
+│   ├── rel_cart_item_cart.bkn
+│   ├── rel_cart_item_product.bkn
+│   ├── rel_cart_item_product_sku.bkn
+│   ├── rel_cart_user.bkn
+│   ├── rel_inbound_record_product_sku.bkn
+│   ├── rel_inbound_record_purchase_order.bkn
+│   ├── rel_inbound_record_purchase_order_item.bkn
+│   ├── rel_inbound_record_warehouse.bkn
+│   ├── rel_inventory_movement_product_sku.bkn
+│   ├── rel_inventory_movement_warehouse.bkn
+│   ├── rel_inventory_quality_hold_product_sku.bkn
+│   ├── rel_inventory_quality_hold_warehouse.bkn
+│   ├── rel_inventory_reservation_order.bkn
+│   ├── rel_inventory_reservation_order_item.bkn
+│   ├── rel_inventory_reservation_product_sku.bkn
+│   ├── rel_inventory_reservation_purchase_order_item.bkn
+│   ├── rel_inventory_reservation_warehouse.bkn
+│   ├── rel_logistics_tracking_shipment.bkn
+│   ├── rel_order_channel.bkn
+│   ├── rel_order_item_order.bkn
+│   ├── rel_order_item_sku.bkn
+│   ├── rel_order_status_log_order.bkn
+│   ├── rel_order_user.bkn
+│   ├── rel_order_user_address.bkn
+│   ├── rel_order_user_coupon.bkn
+│   ├── rel_payment_attempt_order.bkn
+│   ├── rel_payment_attempt_payment.bkn
+│   ├── rel_payment_order.bkn
+│   ├── rel_po_supplier.bkn
+│   ├── rel_po_warehouse.bkn
+│   ├── rel_product_brand.bkn
+│   ├── rel_product_category.bkn
+│   ├── rel_product_category_product_category.bkn
+│   ├── rel_product_review_order.bkn
+│   ├── rel_product_review_product_sku.bkn
+│   ├── rel_purchase_order_item_product.bkn
+│   ├── rel_purchase_order_item_product_sku.bkn
+│   ├── rel_purchase_order_item_purchase_order.bkn
+│   ├── rel_review_product.bkn
+│   ├── rel_review_user.bkn
+│   ├── rel_shipment_item_order_item.bkn
+│   ├── rel_shipment_item_shipment.bkn
+│   ├── rel_shipment_order.bkn
+│   ├── rel_shipment_warehouse.bkn
+│   ├── rel_sku_product.bkn
+│   ├── rel_user_coupon_order.bkn
+│   ├── rel_user_coupon_template.bkn
+│   ├── rel_user_coupon_user.bkn
+│   └── return_received_processing_wait_subject.bkn
+├── action_types/
+│   ├── ecom_batch_update_brand_status_cond.bkn
+│   ├── ecom_create_brand.bkn
+│   ├── ecom_create_brand_name_country.bkn
+│   ├── ecom_create_brand_profile.bkn
+│   ├── ecom_create_product_core.bkn
+│   ├── ecom_delete_brand.bkn
+│   ├── ecom_independent_api_brand_read.bkn
+│   ├── ecom_independent_gross_profit.bkn
+│   ├── ecom_independent_verify_amount.bkn
+│   ├── ecom_link_brand_product_reverse.bkn
+│   ├── ecom_link_product_brand.bkn
+│   ├── ecom_link_product_brand_cond.bkn
+│   ├── ecom_unlink_product_brand.bkn
+│   ├── ecom_update_brand.bkn
+│   └── ecom_update_brand_cond_params.bkn
+├── concept_groups/
+│   ├── ecommerce_after_sales_marketing.bkn
+│   ├── ecommerce_customers.bkn
+│   ├── ecommerce_exceptions.bkn
+│   ├── ecommerce_fulfillment.bkn
+│   ├── ecommerce_products.bkn
+│   └── ecommerce_transactions.bkn
+├── value_types/
+│   ├── cny_nonnegative_amount.bkn
+│   ├── coupon_benefit_type.bkn
+│   ├── coupon_validity_mode.bkn
+│   ├── nonnegative_goods_quantity.bkn
+│   ├── payment_method.bkn
+│   ├── payment_record_status.bkn
+│   ├── positive_goods_quantity.bkn
+│   ├── product_review_rating.bkn
+│   ├── sales_order_status.bkn
+│   └── user_coupon_status.bkn
+└── object_metrics/
+    ├── 01a15c89-a9e9-7eb5-bdc6-aebbc61bebba@1.json
+    ├── 01a15c89-a9e9-7eb5-bdc6-aebbc61bebba@2.json
+    ├── 01a15d18-4024-7522-9235-4757042ef6ff@1.json
+    ├── 01a15d18-4024-7522-9235-4757042ef6ff@2.json
+    ├── 01a15d18-4024-7522-9235-4757042ef6ff@3.json
+    ├── 01a15d18-4024-7522-9235-4757042ef6ff@4.json
+    ├── 01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@1.json
+    ├── 01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@2.json
+    ├── 01a17d43-4b40-7b0f-a4b7-e74c3c96b43b@3.json
+    ├── 01a17d43-6d1d-7e11-affc-ababc66ab050@1.json
+    ├── 01a17d43-6d1d-7e11-affc-ababc66ab050@2.json
+    ├── 01a17d43-6d1d-7e11-affc-ababc66ab050@3.json
+    ├── 01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@1.json
+    ├── 01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@2.json
+    ├── 01a17d43-d1cd-7994-9b49-a3bf07fd7fe2@3.json
+    ├── 01a17d44-d13d-778f-8e70-650390fb3abf@1.json
+    ├── 01a17d44-d13d-778f-8e70-650390fb3abf@2.json
+    ├── 01a17d44-d13d-778f-8e70-650390fb3abf@3.json
+    ├── 01a17d45-9a45-73a3-b3d0-54d5c815324c@1.json
+    ├── 01a17d45-9a45-73a3-b3d0-54d5c815324c@2.json
+    ├── 01a17d46-6386-75a9-9650-96a39eb4fc22@1.json
+    ├── 01a17d46-6386-75a9-9650-96a39eb4fc22@2.json
+    ├── 01a17d47-14c8-7ab4-95f7-fe3242d20aa4@1.json
+    ├── 01a17d47-14c8-7ab4-95f7-fe3242d20aa4@2.json
+    ├── 01a17d48-7d11-7bed-aa06-50c91335ea88@1.json
+    ├── 01a17d48-7d11-7bed-aa06-50c91335ea88@2.json
+    ├── 01a17d48-7d11-7bed-aa06-50c91335ea88@3.json
+    ├── 01a17d49-26c2-7ef3-98fb-71d036c482b4@1.json
+    ├── 01a17d49-26c2-7ef3-98fb-71d036c482b4@2.json
+    ├── 01a17d49-26c2-7ef3-98fb-71d036c482b4@3.json
+    ├── 01a17d49-26c2-7ef3-98fb-71d036c482b4@4.json
+    ├── 01a17d49-bf21-7d31-a664-fdffc9a832f2@1.json
+    ├── 01a17d49-bf21-7d31-a664-fdffc9a832f2@2.json
+    ├── 01a17d49-bf21-7d31-a664-fdffc9a832f2@3.json
+    ├── 01a17d4f-28eb-7704-baeb-b758e19b2221@1.json
+    ├── 01a17d4f-28eb-7704-baeb-b758e19b2221@2.json
+    ├── 01a17d50-2610-79ce-a0c7-3c9533d33aad@1.json
+    ├── 01a17d50-2610-79ce-a0c7-3c9533d33aad@2.json
+    ├── 01a17d50-b422-7508-8103-f8c2fa8b6952@1.json
+    ├── 01a17d50-b422-7508-8103-f8c2fa8b6952@2.json
+    ├── 01a17d53-61ca-74ed-88ea-1e3f2e8fb193@1.json
+    ├── 01a17d53-61ca-74ed-88ea-1e3f2e8fb193@2.json
+    ├── 01a17d54-c253-79f3-8000-a1b07afd1e44@1.json
+    ├── 01a17d54-c253-79f3-8000-a1b07afd1e44@2.json
+    ├── 01a17d54-c253-79f3-8000-a1b07afd1e44@3.json
+    ├── 01a17d56-2253-75a6-840f-d319d76c09d0@1.json
+    ├── 01a17d56-2253-75a6-840f-d319d76c09d0@2.json
+    ├── 01a17d56-2253-75a6-840f-d319d76c09d0@3.json
+    ├── 01a17d56-7f8f-7273-91e8-d41abe71da85@1.json
+    ├── 01a17d56-7f8f-7273-91e8-d41abe71da85@2.json
+    ├── 01a17d57-79e9-771f-8205-e680668a078b@1.json
+    ├── 01a17d57-79e9-771f-8205-e680668a078b@2.json
+    ├── 01a17d57-79e9-771f-8205-e680668a078b@3.json
+    ├── 01a17d57-e569-7466-974e-60efb321df13@1.json
+    ├── 01a17d57-e569-7466-974e-60efb321df13@2.json
+    ├── 01a17d57-e569-7466-974e-60efb321df13@3.json
+    ├── 01a17d58-c676-7281-8fc8-a55537ec2ce8@1.json
+    ├── 01a17d58-c676-7281-8fc8-a55537ec2ce8@2.json
+    ├── 01a17d58-c676-7281-8fc8-a55537ec2ce8@3.json
+    ├── 01a17d94-5fd0-75a7-9e9c-008c7708540a@1.json
+    ├── 01a17d94-5fd0-75a7-9e9c-008c7708540a@2.json
+    ├── 01a17d94-5fd0-75a7-9e9c-008c7708540a@3.json
+    ├── 01a17d94-5fd0-75a7-9e9c-008c7708540a@4.json
+    ├── 01a1b015-13d5-7cad-8c09-5e090defbb57@1.json
+    ├── 01a1b015-13d5-7cad-8c09-5e090defbb57@2.json
+    ├── 01a1b018-cb70-769a-b10f-db737d66c21c@1.json
+    ├── 01a1b028-5826-7048-bd69-4df91e4b0a7e@1.json
+    ├── 01a1b028-5826-7048-bd69-4df91e4b0a7e@2.json
+    ├── 01a1b028-5826-7048-bd69-4df91e4b0a7e@3.json
+    ├── 01a1f38d-efeb-731b-8920-c852c4fdb4a6@1.json
+    ├── 01a1f38d-efeb-731b-8920-c852c4fdb4a6@2.json
+    ├── 01a1f38f-ab79-70db-8b2e-b9b844c67580@1.json
+    ├── 01a1f38f-ab79-70db-8b2e-b9b844c67580@2.json
+    ├── 01a1f38f-ac7f-7057-beec-01b29ac42c68@1.json
+    ├── 01a1f38f-ac7f-7057-beec-01b29ac42c68@2.json
+    ├── 01a1f38f-eaa7-7102-9014-64b495b59a08@1.json
+    ├── 01a1f390-5817-7a05-9601-8bb92b7e73e3@1.json
+    ├── 01a1f390-5817-7a05-9601-8bb92b7e73e3@2.json
+    ├── 01a1f390-5817-7a05-9601-8bb92b7e73e3@3.json
+    ├── 01a1f3c6-3ce4-7992-bc92-3f544433b761@1.json
+    ├── 01a1f3c6-3e24-77c5-a3cd-032c1cb684df@1.json
+    ├── 01a1f3c6-8c13-7c7e-8d6e-03a7d0b6bfa2@1.json
+    ├── 01a1f43c-ce32-7ad4-97da-63d5cf04f7d1@1.json
+    ├── 01a1f43d-568c-784f-88a3-961a2023e9f5@1.json
+    ├── 01a1f43d-57df-7a70-929e-dd5f837c7369@1.json
+    ├── 01a1f43d-593f-7b21-9fd4-a78a4a7e9970@1.json
+    ├── 01a1f43d-5a8c-7944-a78f-81413f1c8e6c@1.json
+    ├── 01a1f43d-5c06-7ef5-a919-24a3d398c0d1@1.json
+    ├── 01a1f43d-5d59-763a-9aee-1df4fae642f5@1.json
+    ├── 01a1f43d-5ec4-79a4-8495-17742edbe04e@1.json
+    ├── 01a1f43d-6022-7520-bafb-6e4795866506@1.json
+    ├── 01a1f43d-6164-767c-b3f3-db46162115fd@1.json
+    ├── 01a1f43d-62c5-7d04-9ac1-650fb00ad9a0@1.json
+    ├── 01a1f43d-ed6c-7332-b653-f43e98a23fdf@1.json
+    ├── 01a1f43e-28c2-72e1-bab2-1ca4050744df@1.json
+    ├── da3eepnv4t9mvbfrkfqg@1.json
+    ├── da3eepnv4t9mvbfrkfqg@2.json
+    ├── legacy_base_0130f17c0c3cd2bc1f3c@1.json
+    ├── legacy_base_0130f17c0c3cd2bc1f3c@2.json
+    ├── legacy_base_0130f17c0c3cd2bc1f3c@3.json
+    ├── legacy_base_0ee7550c6d4591349f5e@1.json
+    ├── legacy_base_0ee7550c6d4591349f5e@2.json
+    ├── legacy_base_0ee7550c6d4591349f5e@3.json
+    ├── legacy_base_3d7761a33f272c243e21@1.json
+    ├── legacy_base_3d7761a33f272c243e21@2.json
+    ├── legacy_base_3d7761a33f272c243e21@3.json
+    ├── legacy_base_51242058aa32d9151346@1.json
+    ├── legacy_base_51242058aa32d9151346@2.json
+    ├── legacy_base_51242058aa32d9151346@3.json
+    ├── legacy_base_6acb2a25fac127cd2b9f@1.json
+    ├── legacy_base_6acb2a25fac127cd2b9f@2.json
+    ├── legacy_base_6acb2a25fac127cd2b9f@3.json
+    ├── legacy_base_96d826967df29bbf31d9@1.json
+    ├── legacy_base_96d826967df29bbf31d9@2.json
+    ├── legacy_base_96d826967df29bbf31d9@3.json
+    ├── legacy_base_cbd0df430e81353b6b07@1.json
+    ├── legacy_base_cbd0df430e81353b6b07@2.json
+    ├── legacy_base_cbd0df430e81353b6b07@3.json
+    ├── m_aov@1.json
+    ├── m_aov@2.json
+    ├── m_aov@3.json
+    ├── m_avg_rating@1.json
+    ├── m_avg_rating@2.json
+    ├── m_coupon_used_cnt@1.json
+    ├── m_coupon_used_cnt@2.json
+    ├── m_coupon_used_cnt@3.json
+    ├── m_discount_amt@1.json
+    ├── m_discount_amt@2.json
+    ├── m_discount_amt@3.json
+    ├── m_gmv@1.json
+    ├── m_gmv@2.json
+    ├── m_gmv@3.json
+    ├── m_net_paid@1.json
+    ├── m_net_paid@2.json
+    ├── m_net_paid@3.json
+    ├── m_order_cnt@1.json
+    ├── m_order_cnt@2.json
+    ├── m_order_cnt@3.json
+    ├── m_refund_amt@1.json
+    ├── m_refund_amt@2.json
+    ├── m_refund_amt@3.json
+    ├── m_review_cnt@1.json
+    ├── m_review_cnt@2.json
+    ├── m_shipment_cnt@1.json
+    ├── m_shipment_cnt@2.json
+    ├── m_signed_shipment_cnt@1.json
+    ├── m_signed_shipment_cnt@2.json
+    ├── m_signed_shipment_cnt@3.json
+    ├── m_sold_qty@1.json
+    └── m_sold_qty@2.json
+```

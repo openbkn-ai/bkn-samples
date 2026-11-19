@@ -1,0 +1,52 @@
+---
+type: object_type
+id: purchase_order_item
+name: 采购明细
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 采购明细
+
+采购单中的SKU行，记录采购数量、价格及已收数量。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_purchase_order_item | ecommerce_ops.purchase_order_items |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| item_id | 明细ID | integer | 采购明细主键ID | item_id |
+| po_id | 采购单ID | integer | 所属采购单ID | po_id |
+| sku_id | SKU ID | integer | SKU ID | sku_id |
+| product_id | 商品SPU ID | integer | 商品ID | product_id |
+| quantity | 数量 | integer | 采购数量 | quantity |
+| unit_price | 采购单价（元） | decimal | 采购单价（元） | unit_price |
+| total_amount | 明细金额（元） | decimal | 明细金额（元） | total_amount |
+| received_qty | 已收货数量 | integer | 已收货数量 | received_qty |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+
+### Property Constraints
+
+```yaml
+quantity:
+  value_type: positive_goods_quantity
+unit_price:
+  value_type: cny_nonnegative_amount
+total_amount:
+  value_type: cny_nonnegative_amount
+received_qty:
+  value_type: nonnegative_goods_quantity
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: item_id
+Display Key: item_id
+Incremental Key:

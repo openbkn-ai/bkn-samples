@@ -1,0 +1,46 @@
+---
+type: action_type
+id: ecom_independent_verify_amount
+name: 核对含税总金额
+tags: [独立工具调用, 电商]
+action_intent: add
+---
+
+## ActionType: 核对含税总金额
+
+按人民币两位小数核对不含税小计加税额与总金额是否一致。
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: tool
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+
+### Trigger Condition
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_53615198c61d | ecommerce_tool_c0c387845301 |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| price_without_tax | number | body |  | input |  |  |
+| tax_amount | number | body |  | input |  |  |
+| total_amount | number | body |  | input |  |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

@@ -1,0 +1,83 @@
+{
+  "definition": {
+    "id": "m_sold_qty",
+    "version": 2,
+    "code": "legacy_m_sold_qty",
+    "name": "订单明细下单件数",
+    "description": "sum(order_item.quantity)，包含全部订单状态；未扣取消或退货，不误称净销售件数。",
+    "owner_object_type_id": "order_item",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "measure",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "custom",
+          "code": "piece",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "order_item",
+            "property_name": "quantity"
+          }
+        },
+        "aggregation": "sum"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "product_id"
+        },
+        {
+          "object_type_id": "order_item",
+          "property_name": "sku_id"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:25:24Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087524306,
+  "update_time": 1795087524506,
+  "revision": "59d360588620407599f6ea0b6872437e"
+}

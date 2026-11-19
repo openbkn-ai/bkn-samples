@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_address_user
+name: 地址属于用户
+tags: [MVP, 电商]
+---
+
+## RelationType: 地址属于用户
+
+地址属于用户（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| user_address | user | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| user_id | user_id |

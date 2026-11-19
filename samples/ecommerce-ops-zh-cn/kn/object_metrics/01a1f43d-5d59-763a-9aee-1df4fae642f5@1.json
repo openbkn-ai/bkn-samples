@@ -1,0 +1,107 @@
+{
+  "definition": {
+    "id": "01a1f43d-5d59-763a-9aee-1df4fae642f5",
+    "version": 1,
+    "code": "ec_dep_active_reservation_lines",
+    "name": "有效预占订单行数（计算依赖）",
+    "description": "M08分母：active且订购数量\u003e0的预占记录数；用于预占满足率，不代表全部订单明细。",
+    "owner_object_type_id": "inventory_reservation",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "01a1f43d-5c06-7ef5-a919-24a3d398c0d1",
+        "version": 1
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "inventory_reservation",
+                  "property_name": "status"
+                }
+              },
+              "comparison_operator": "eq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "active"
+                }
+              ]
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "inventory_reservation",
+                  "property_name": "ordered_quantity"
+                }
+              },
+              "comparison_operator": "gt",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "int64",
+                  "value": 0
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T14:37:04Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795099024729,
+  "update_time": 1795099024852,
+  "revision": "8134411cbb46407eb06297ff4607b793"
+}

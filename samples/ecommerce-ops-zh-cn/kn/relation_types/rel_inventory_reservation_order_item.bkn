@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_inventory_reservation_order_item
+name: 库存预占对应订单行
+tags: [电商]
+---
+
+## RelationType: 库存预占对应订单行
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| inventory_reservation | order_item | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| item_id | item_id |

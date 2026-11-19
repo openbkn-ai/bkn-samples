@@ -1,0 +1,43 @@
+{
+  "title": "库存履约与采购分析",
+  "read_only": true,
+  "object_types": [
+    "product_sku",
+    "product",
+    "brand",
+    "inventory_quality_hold",
+    "inventory_reservation",
+    "inventory_movement",
+    "purchase_order_item",
+    "purchase_order",
+    "inbound_record",
+    "shipment_item",
+    "shipment",
+    "order_item",
+    "warehouse"
+  ],
+  "function_names": [
+    "ecommerce_inventory_fulfillment_workflow",
+    "ecommerce_inventory_availability"
+  ],
+  "metric_codes": [],
+  "resolve_ids_at_runtime": true,
+  "prohibited_capabilities": [
+    "generic_crud",
+    "payment_execution",
+    "inventory_mutation",
+    "message_sending",
+    "external_search"
+  ],
+  "required_context": [
+    "kn_id",
+    "caller_permissions"
+  ],
+  "sources": [
+    "用户已确认的电商业务规则",
+    "当前网络schema与已挂载函数契约"
+  ],
+  "workflow_function_name": "ecommerce_inventory_fulfillment_workflow",
+  "execution_model": "agent_function_osdk_then_offline_render",
+  "skill_runtime_network_access": false
+}

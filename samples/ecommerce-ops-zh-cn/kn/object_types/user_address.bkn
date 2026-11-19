@@ -1,0 +1,43 @@
+---
+type: object_type
+id: user_address
+name: 收货地址
+tags: [MVP, 电商]
+---
+
+## ObjectType: 收货地址
+
+用户收货地址。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_user_address | ecommerce_ops.user_addresses |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| address_id | 地址主键ID | integer | 地址主键ID | address_id |
+| user_id | 所属用户ID | integer | 所属用户ID | user_id |
+| recipient_name | 收件人姓名 | string | 收件人姓名 | recipient_name |
+| phone | 收件人手机号 | string | 收件人手机号 | phone |
+| province_id | 省行政区ID | integer | 省行政区ID | province_id |
+| city_id | 市行政区ID | integer | 市行政区ID | city_id |
+| district_id | 区/县行政区ID | integer | 区/县行政区ID | district_id |
+| detail_address | 详细地址 | string | 详细地址 | detail_address |
+| zip_code | 邮政编码 | string | 邮政编码 | zip_code |
+| address_tag | 地址标签（如家/公司） | string | 地址标签（如家/公司） | address_tag |
+| is_default | 是否默认收货地址 | integer | 是否默认收货地址 | is_default |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: address_id
+Display Key: recipient_name
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_after_sales_case_order
+name: 售后单属于订单
+tags: [电商]
+---
+
+## RelationType: 售后单属于订单
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| after_sales_case | order | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| order_id | order_id |

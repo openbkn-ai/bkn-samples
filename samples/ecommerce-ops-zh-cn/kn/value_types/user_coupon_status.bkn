@@ -1,0 +1,20 @@
+---
+type: value_type
+id: user_coupon_status
+name: 用户优惠券状态
+tags: [电商业务值类型]
+---
+
+## ValueType: 用户优惠券状态
+
+用户已领取优惠券的存储状态词表。状态是记录事实，可用性须结合有效期、模板规则和订单条件判断；不据此自动改写源数据。
+
+### Definition
+
+```yaml
+base_type: string
+enum:
+  - {value: unused, display: 未使用, description: 尚未核销的存储状态，不保证当前可用。}
+  - {value: used, display: 已使用, description: 已核销的存储状态，使用订单通过记录关系追溯。}
+  - {value: expired, display: 已过期, description: 源记录标为过期，实际有效期可另行核对。}
+```

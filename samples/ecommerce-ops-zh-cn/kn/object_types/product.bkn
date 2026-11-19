@@ -1,0 +1,60 @@
+---
+type: object_type
+id: product
+name: 商品SPU
+tags: [MVP, 电商]
+---
+
+## ObjectType: 商品SPU
+
+商品标准产品单元。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_product | ecommerce_ops.products |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| product_id | 商品SPU主键ID | integer | 商品SPU主键ID | product_id |
+| product_name | 商品名称 | string | 商品名称 | product_name |
+| product_code | 商品编码 | string | 商品编码 | product_code |
+| category_id | 所属分类ID | integer | 所属分类ID | category_id |
+| brand_id | 所属品牌ID | integer | 所属品牌ID | brand_id |
+| subtitle | 副标题/卖点摘要 | string | 副标题/卖点摘要 | subtitle |
+| description | 商品详情描述 | text | 商品详情描述 | description |
+| main_image_url | 主图URL | string | 主图URL | main_image_url |
+| unit | 计量单位 | string | 计量单位 | unit |
+| min_price | SKU最低售价 | decimal | SKU最低售价 | min_price |
+| max_price | SKU最高售价 | decimal | SKU最高售价 | max_price |
+| weight_grams | 重量（克） | integer | 重量（克） | weight_grams |
+| length_cm | 长度（厘米） | decimal | 长度（厘米） | length_cm |
+| width_cm | 宽度（厘米） | decimal | 宽度（厘米） | width_cm |
+| height_cm | 高度（厘米） | decimal | 高度（厘米） | height_cm |
+| warranty_months | 保修月数 | integer | 保修月数 | warranty_months |
+| sales_count | 累计销量 | integer | 累计销量 | sales_count |
+| is_recommended | 是否推荐 | integer | 是否推荐 | is_recommended |
+| status | 上架状态（online/offline等） | string | 上架状态（online/offline等） | status |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |
+
+### Property Constraints
+
+```yaml
+min_price:
+  value_type: cny_nonnegative_amount
+max_price:
+  value_type: cny_nonnegative_amount
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: product_id
+Display Key: product_name
+Incremental Key:

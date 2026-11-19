@@ -1,0 +1,97 @@
+{
+  "definition": {
+    "id": "m_coupon_used_cnt",
+    "version": 2,
+    "code": "legacy_m_coupon_used_cnt",
+    "name": "已核销优惠券数",
+    "description": "count(user_coupon_id)，status=used；计券张数，不作为订单数或核销率。",
+    "owner_object_type_id": "user_coupon",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "count",
+          "code": "times",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "legacy_base_51242058aa32d9151346",
+        "version": 2
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "user_coupon",
+              "property_name": "status"
+            }
+          },
+          "comparison_operator": "eq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "used"
+            }
+          ]
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "user_coupon",
+          "property_name": "template_id"
+        },
+        {
+          "object_type_id": "user_coupon",
+          "property_name": "status"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "user_coupon",
+          "property_name": "use_time"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:26:28Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087587823,
+  "update_time": 1795087588013,
+  "revision": "131a689c15be42e99b120270ff4fff63"
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "payment_details",
+    "description": "指定订单的支付收退款事实，最多100行，检查limited。",
+    "parameters": [
+      "order_ids"
+    ],
+    "cypher": "MATCH (p:payment) WHERE p.order_id IN $order_ids RETURN p.payment_id AS payment_id,p.order_id AS order_id,p.payment_amount AS payment_amount,p.paid_at AS paid_at,p.refund_amount AS refund_amount,p.refund_at AS refund_at,p.payment_status AS payment_status LIMIT 100"
+  },
+  {
+    "name": "payment_attempts",
+    "description": "指定订单的支付尝试与失败原因。",
+    "parameters": [
+      "order_ids"
+    ],
+    "cypher": "MATCH (a:payment_attempt) WHERE a.order_id IN $order_ids RETURN a.attempt_id AS attempt_id,a.order_id AS order_id,a.attempt_no AS attempt_no,a.status AS attempt_status,a.amount AS attempted_amount,a.failure_code AS failure_code LIMIT 100"
+  }
+]

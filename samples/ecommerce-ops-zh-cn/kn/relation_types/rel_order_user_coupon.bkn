@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_order_user_coupon
+name: 订单记录使用的优惠券
+tags: [电商]
+---
+
+## RelationType: 订单记录使用的优惠券
+
+依据订单记录的 coupon_id 关联用户优惠券 user_coupon_id，表达订单侧记录的用券事实。与优惠券侧 order_id 独立存储，不保证互为严格逆关系或同步一致；两条关系均保留用于异常核对。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| order | user_coupon | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| coupon_id | user_coupon_id |

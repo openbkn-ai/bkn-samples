@@ -1,0 +1,50 @@
+---
+type: action_type
+id: ecom_link_product_brand
+name: 商品关联品牌
+tags: [电商]
+action_intent: add
+---
+
+## ActionType: 商品关联品牌
+
+建立商品与品牌的关系
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: relation
+  relation_type_id: rel_product_brand
+  relation_operation: create
+  anchor_role: source
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| product |
+
+### Trigger Condition
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_1e885e595ff6 | ecommerce_tool_b798b8b8e837 |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "products" |  |
+| key | integer | body |  | source_identity |  |  |
+| data.brand_id | integer | body |  | target_identity |  |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

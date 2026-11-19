@@ -1,0 +1,104 @@
+{
+  "definition": {
+    "id": "m_gmv",
+    "version": 2,
+    "code": "legacy_m_gmv",
+    "name": "非取消订单原价金额（GMV）",
+    "description": "sum(total_amount)，order_status\u003c\u003ecancelled；包含未付款和退款订单，不代表净销售额。",
+    "owner_object_type_id": "order",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "legacy_base_cbd0df430e81353b6b07",
+        "version": 2
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "order",
+              "property_name": "order_status"
+            }
+          },
+          "comparison_operator": "neq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "cancelled"
+            }
+          ]
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "order_status"
+        },
+        {
+          "object_type_id": "order",
+          "property_name": "channel_id"
+        },
+        {
+          "object_type_id": "order",
+          "property_name": "payment_method"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:26:23Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087582854,
+  "update_time": 1795087583052,
+  "revision": "b1e73f9c5435462d9bb32e0cfce15807"
+}

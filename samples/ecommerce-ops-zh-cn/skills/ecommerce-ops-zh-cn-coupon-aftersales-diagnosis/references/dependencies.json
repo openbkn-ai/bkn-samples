@@ -1,0 +1,41 @@
+{
+  "title": "优惠券与售后诊断",
+  "read_only": true,
+  "object_types": [
+    "coupon_template",
+    "user_coupon",
+    "order",
+    "order_item",
+    "after_sales_case",
+    "after_sales_item",
+    "payment",
+    "user"
+  ],
+  "function_names": [
+    "ecommerce_coupon_aftersales_workflow",
+    "ecommerce_coupon_validity_anomalies",
+    "coupon_abnormal_orders",
+    "coupon_abnormal_count_by_user",
+    "calc_coupon_usage_rate"
+  ],
+  "metric_codes": [],
+  "resolve_ids_at_runtime": true,
+  "prohibited_capabilities": [
+    "generic_crud",
+    "payment_execution",
+    "inventory_mutation",
+    "message_sending",
+    "external_search"
+  ],
+  "required_context": [
+    "kn_id",
+    "caller_permissions"
+  ],
+  "sources": [
+    "用户已确认的电商业务规则",
+    "当前网络schema与已挂载函数契约"
+  ],
+  "workflow_function_name": "ecommerce_coupon_aftersales_workflow",
+  "execution_model": "agent_function_osdk_then_offline_render",
+  "skill_runtime_network_access": false
+}

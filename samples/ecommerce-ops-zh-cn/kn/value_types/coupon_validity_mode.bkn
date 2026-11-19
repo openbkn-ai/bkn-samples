@@ -1,0 +1,19 @@
+---
+type: value_type
+id: coupon_validity_mode
+name: 优惠券有效期方式
+tags: [电商业务值类型]
+---
+
+## ValueType: 优惠券有效期方式
+
+区分固定有效期与领取后有效天数，帮助选择需要解释的时间字段；该词表不单独定义边界是否包含当天，也不修复异常日期。
+
+### Definition
+
+```yaml
+base_type: string
+enum:
+  - {value: fixed_period, display: 固定时间区间, description: 结合valid_start和valid_end解释模板有效区间。}
+  - {value: days_after_receive, display: 领取后有效天数, description: 结合valid_days、领取时间和用户券expire_time解释。}
+```

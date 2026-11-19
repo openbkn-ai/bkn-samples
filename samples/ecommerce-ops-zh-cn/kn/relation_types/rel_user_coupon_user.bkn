@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_user_coupon_user
+name: 券属于用户
+tags: [MVP, 电商]
+---
+
+## RelationType: 券属于用户
+
+券属于用户（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| user_coupon | user | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| user_id | user_id |

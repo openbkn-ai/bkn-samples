@@ -1,0 +1,47 @@
+---
+type: action_type
+id: ecom_update_brand
+name: 修改品牌名称
+tags: [电商]
+action_intent: modify
+---
+
+## ActionType: 修改品牌名称
+
+按品牌实例修改名称
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: object
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| brand |
+
+### Trigger Condition
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_c31dd447c7fb | ecommerce_tool_5dab86864feb |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "brands" |  |
+| key | integer | body |  | property | brand_id |  |
+| data.brand_name | string | body |  | input |  |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

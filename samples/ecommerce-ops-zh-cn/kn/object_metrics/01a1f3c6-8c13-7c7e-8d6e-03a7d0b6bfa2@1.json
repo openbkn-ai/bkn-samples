@@ -1,0 +1,114 @@
+{
+  "definition": {
+    "id": "01a1f3c6-8c13-7c7e-8d6e-03a7d0b6bfa2",
+    "version": 1,
+    "code": "legacy_legacy_base_0563b7946ba6e5381b86_source_v1",
+    "name": "上线在售SKU数",
+    "description": "基于SKU源表统计在售且所属商品上线的SKU；关系存在性筛选去重根SKU，不依赖库存视图。",
+    "owner_object_type_id": "product_sku",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "01a15c89-a9e9-7eb5-bdc6-aebbc61bebba",
+        "version": 2
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "product_sku",
+              "property_name": "status"
+            }
+          },
+          "comparison_operator": "eq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "active"
+            }
+          ]
+        },
+        "relation_path": {
+          "alias": "online_product",
+          "steps": [
+            {
+              "relation_type_id": "rel_sku_product",
+              "direction": "forward",
+              "target_object_type_id": "product"
+            }
+          ],
+          "purpose": "qualify_root",
+          "quantifier": "exists",
+          "related_filters": {
+            "node_type": "predicate",
+            "left": {
+              "source": "property",
+              "property_ref": {
+                "object_type_id": "product",
+                "property_name": "status"
+              }
+            },
+            "comparison_operator": "eq",
+            "right": [
+              {
+                "source": "literal",
+                "value_type": "string",
+                "value": "online"
+              }
+            ]
+          },
+          "cardinality_policy": "distinct_root"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T12:27:18Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795091237908,
+  "update_time": 1795091238062,
+  "revision": "f2cc193664894944a4dc62e8d5222962"
+}

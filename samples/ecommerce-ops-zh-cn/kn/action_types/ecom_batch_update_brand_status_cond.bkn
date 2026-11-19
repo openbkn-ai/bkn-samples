@@ -1,0 +1,55 @@
+---
+type: action_type
+id: ecom_batch_update_brand_status_cond
+name: 批量停用中国品牌
+tags: [电商, 适用条件]
+action_intent: modify
+---
+
+## ActionType: 批量停用中国品牌
+
+对符合中国国家条件的品牌批量设置 inactive 状态。
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: object
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| brand |
+
+### Trigger Condition
+
+```yaml
+object_type_id: brand
+field: country
+operation: ==
+value_from: const
+value: 中国
+```
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_c31dd447c7fb | ecommerce_tool_5dab86864feb |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "brands" |  |
+| key | integer | body |  | property | brand_id |  |
+| data.status | string | body |  | input |  |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

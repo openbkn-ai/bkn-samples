@@ -1,0 +1,71 @@
+---
+type: object_type
+id: user
+name: 用户
+tags: [MVP, 电商]
+---
+
+## ObjectType: 用户
+
+电商平台用户账号。不含密码哈希等敏感字段。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_user | ecommerce_ops.users |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| user_id | 用户主键ID | integer | 用户主键ID | user_id |
+| username | 登录用户名 | string | 登录用户名 | username |
+| password_hash | password_hash | string |  | password_hash |
+| real_name | 真实姓名 | string | 真实姓名 | real_name |
+| nickname | 昵称 | string | 昵称 | nickname |
+| gender | 性别（M/F等） | string | 性别（M/F等） | gender |
+| email | 邮箱 | string | 邮箱 | email |
+| phone | 手机号 | string | 手机号 | phone |
+| avatar_url | 头像URL | string | 头像URL | avatar_url |
+| birthday | 出生日期 | date | 出生日期 | birthday |
+| register_time | 注册时间 | datetime | 注册时间 | register_time |
+| last_login_time | 最近登录时间 | datetime | 最近登录时间 | last_login_time |
+| user_level | 用户等级（如normal） | string | 用户等级（如normal） | user_level |
+| status | 账号状态（如active） | string | 账号状态（如active） | status |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |
+
+### Logic Properties
+
+#### coupon_abnormal_order_count
+
+**Meta**
+
+| Display Name | Type | Description |
+|--------------|------|-------------|
+| 优惠券异常订单数 | tool | 按当前用户统计已付款且未取消订单中，优惠券用户不一致、过期使用、使用早于领取或关联订单不一致的去重订单数。 |
+
+**Source**
+
+| Source Type | Source ID | Source Name | BoxID | ToolID | ResultPath |
+|-------------|-----------|-------------|-------|--------|------------|
+| tool |  | coupon_abnormal_count_by_user | ecommerce_box_53615198c61d | ecommerce_tool_5e3b98bcbee2 | $.value |
+
+**Parameters**
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| user_id | number | Body |  | property | user_id |  |
+
+**Analysis Dimensions**
+
+| Name | Display Name | Type | Description |
+|------|--------------|------|-------------|
+
+
+### Keys
+
+Primary Keys: user_id
+Display Key: username
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_inventory_movement_product_sku
+name: 库存流水对应SKU
+tags: [电商]
+---
+
+## RelationType: 库存流水对应SKU
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| inventory_movement | product_sku | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| sku_id | sku_id |

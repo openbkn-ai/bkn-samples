@@ -1,0 +1,45 @@
+---
+type: action_type
+id: ecom_independent_gross_profit
+name: 计算商品毛利率
+tags: [独立工具调用, 电商]
+action_intent: add
+---
+
+## ActionType: 计算商品毛利率
+
+按同一口径的收入和成本计算毛利率；零收入返回无定义。
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: tool
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+
+### Trigger Condition
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_53615198c61d | ecommerce_tool_ded40d029726 |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| price | number | body |  | input |  |  |
+| cost_price | number | body |  | input |  |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

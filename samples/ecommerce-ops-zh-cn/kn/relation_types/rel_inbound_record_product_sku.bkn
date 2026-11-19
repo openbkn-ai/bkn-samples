@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_inbound_record_product_sku
+name: 入库对应SKU
+tags: [电商]
+---
+
+## RelationType: 入库对应SKU
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| inbound_record | product_sku | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| sku_id | sku_id |

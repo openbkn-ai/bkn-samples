@@ -1,0 +1,22 @@
+---
+type: concept_group
+id: ecommerce_exceptions
+name: 异常事件
+tags: [电商]
+---
+
+## ConceptGroup: 异常事件
+
+按实际源表实体及业务事件组织。
+
+### Object Types
+
+| ID | Name | Description |
+|----|------|-------------|
+| coupon_abnormal_orders | 已付款订单用券异常事件 | 事件类：每个对象是一条“已付款订单用券异常事件”事件，由平台的事件模块写入。 |
+| coupon_invalid_validity | 优惠券有效期异常事件 | 事件类：每个对象是一条“优惠券有效期异常事件”事件，由平台的事件模块写入。 |
+| logistics_tracking_stalled | 运输轨迹停滞事件 | 事件类：每个对象是一条“运输轨迹停滞事件”事件，由平台的事件模块写入。 |
+| orderoverdue | 订单跨日未发货异常事件 | 平台托管事件对象，每条记录为订单跨日未发货异常事件。 |
+| payment_failure_unrecovered | 支付失败未恢复待跟进事件 | 事件类：每个对象是一条“支付失败未恢复待跟进事件”事件，由平台的事件模块写入。 |
+| purchase_expected_receipt_gap | 采购超过预计到货日期仍欠收事件 | 事件类：每个对象是一条“采购超过预计到货日期仍欠收事件”事件，由平台的事件模块写入。 |
+| return_received_processing_wait | 退货收货后处理等待事件 | 事件类：每个对象是一条“退货收货后处理等待事件”事件，由平台的事件模块写入。 |

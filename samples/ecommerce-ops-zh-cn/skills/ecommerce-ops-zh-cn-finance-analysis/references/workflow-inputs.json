@@ -1,0 +1,57 @@
+{
+  "function_name": "ecommerce_finance_workflow",
+  "inputs": [
+    {
+      "name": "kn_id",
+      "type": "string",
+      "description": "当前知识网络ID；由Agent上下文提供，不写死环境。",
+      "required": true
+    },
+    {
+      "name": "order_ids",
+      "type": "array",
+      "description": "订单ID，最多100个；与user_ids至少一项非空。",
+      "required": false,
+      "sub_parameters": [
+        {
+          "name": "items",
+          "type": "number",
+          "description": "正整数业务ID"
+        }
+      ]
+    },
+    {
+      "name": "user_ids",
+      "type": "array",
+      "description": "用户ID，最多100个；指定时必须提供高、中阈值。",
+      "required": false,
+      "sub_parameters": [
+        {
+          "name": "items",
+          "type": "number",
+          "description": "正整数业务ID"
+        }
+      ]
+    },
+    {
+      "name": "high_value_threshold",
+      "type": "number",
+      "description": "高消费阈值，元，必须高于中阈值。",
+      "required": false
+    },
+    {
+      "name": "medium_value_threshold",
+      "type": "number",
+      "description": "中消费阈值，元，非负。",
+      "required": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "object",
+      "required": true,
+      "description": "status、domain、read_only、results、calls、warnings和口径说明。"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+---
+type: object_type
+id: user_coupon
+name: 用户优惠券
+tags: [MVP, 电商]
+---
+
+## ObjectType: 用户优惠券
+
+用户已领取的优惠券实例。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_user_coupon | ecommerce_ops.user_coupons |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| user_coupon_id | 用户优惠券主键ID | integer | 用户优惠券主键ID | user_coupon_id |
+| coupon_code | 优惠券码 | string | 优惠券码 | coupon_code |
+| template_id | 优惠券模板ID | integer | 优惠券模板ID | template_id |
+| user_id | 所属用户ID | integer | 所属用户ID | user_id |
+| order_id | 使用关联的订单ID | integer | 使用关联的订单ID | order_id |
+| status | 状态（未使用/已使用/过期等） | string | 状态（未使用/已使用/过期等） | status |
+| receive_time | 领取时间 | datetime | 领取时间 | receive_time |
+| use_time | 使用时间 | datetime | 使用时间 | use_time |
+| expire_time | 过期时间 | datetime | 过期时间 | expire_time |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+
+### Property Constraints
+
+```yaml
+status:
+  value_type: user_coupon_status
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: user_coupon_id
+Display Key: coupon_code
+Incremental Key:

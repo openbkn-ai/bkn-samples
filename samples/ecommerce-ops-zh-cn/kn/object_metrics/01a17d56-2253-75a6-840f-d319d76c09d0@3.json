@@ -1,0 +1,79 @@
+{
+  "definition": {
+    "id": "01a17d56-2253-75a6-840f-d319d76c09d0",
+    "version": 3,
+    "code": "m_01a17d56225375a6840fd319d76c09d0",
+    "name": "有订单明细的订单数",
+    "description": "质量检查辅助量：统计订单明细中出现的order_id去重数。需结合订单主表集合、无明细订单和孤立明细检查，不单独作为经营KPI，也不直接等同完整率。",
+    "owner_object_type_id": "order_item",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "order_item",
+            "property_name": "order_id"
+          },
+          "value_type": "int64"
+        },
+        "aggregation": "count_distinct"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "product_id"
+        },
+        {
+          "object_type_id": "order_item",
+          "property_name": "sku_id"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T12:03:05Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795089784962,
+  "update_time": 1795089785130,
+  "revision": "2a42c377f910477b8282a3b30ae2a9b6"
+}

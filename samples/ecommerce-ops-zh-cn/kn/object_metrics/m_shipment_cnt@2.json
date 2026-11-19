@@ -1,0 +1,87 @@
+{
+  "definition": {
+    "id": "m_shipment_cnt",
+    "version": 2,
+    "code": "legacy_m_shipment_cnt",
+    "name": "发货单总数",
+    "description": "count(shipment_id)；统计全部发货状态。",
+    "owner_object_type_id": "shipment",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "count",
+          "code": "times",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "shipment",
+            "property_name": "shipment_id"
+          }
+        },
+        "aggregation": "count"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "shipment",
+          "property_name": "shipment_status"
+        },
+        {
+          "object_type_id": "shipment",
+          "property_name": "warehouse_id"
+        },
+        {
+          "object_type_id": "shipment",
+          "property_name": "express_company"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "shipment",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:25:23Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1792722335351,
+  "update_time": 1795087523031,
+  "revision": "fd09a5677e8a428e8b99f462477960bd"
+}

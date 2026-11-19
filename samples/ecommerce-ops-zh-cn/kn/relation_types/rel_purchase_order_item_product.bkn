@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_purchase_order_item_product
+name: 采购明细对应商品
+tags: [电商]
+---
+
+## RelationType: 采购明细对应商品
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| purchase_order_item | product | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| product_id | product_id |

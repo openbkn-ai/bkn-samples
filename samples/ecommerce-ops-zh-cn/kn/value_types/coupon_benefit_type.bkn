@@ -1,0 +1,21 @@
+---
+type: value_type
+id: coupon_benefit_type
+name: 优惠券优惠方式
+tags: [电商业务值类型]
+---
+
+## ValueType: 优惠券优惠方式
+
+区分优惠计算方式，避免把discount_value统一解释成人民币金额。参数含义与适用范围须结合模板配置，不由该词表独立计算优惠。
+
+### Definition
+
+```yaml
+base_type: string
+enum:
+  - {value: fixed_amount, display: 固定金额优惠, description: 固定金额减免，结合模板参数和使用范围解释。}
+  - {value: full_reduction, display: 满额减免, description: 达到最低消费等适用条件后减免。}
+  - {value: percentage, display: 比例折扣, description: 比例折扣类型。discount_value的百分数或折扣系数尺度须结合计算规则核实；不能当成人民币金额，也不声明0至1范围。}
+  - {value: free_shipping, display: 免运费, description: 运费优惠，具体减免范围和上限以模板配置为准。}
+```

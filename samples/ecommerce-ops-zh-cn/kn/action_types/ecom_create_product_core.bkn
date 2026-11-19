@@ -1,0 +1,52 @@
+---
+type: action_type
+id: ecom_create_product_core
+name: 新建商品·基础信息
+tags: [电商]
+action_intent: add
+---
+
+## ActionType: 新建商品·基础信息
+
+使用执行工具创建商品；运行时分别填写商品名称、编码、分类、品牌、副标题、描述和单位，并映射到源接口的 data 字段
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: object
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| product |
+
+### Trigger Condition
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_c31dd447c7fb | ecommerce_tool_1270873cd00a |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "products" |  |
+| data.product_name | string | body |  | property | product_name |  |
+| data.product_code | string | body |  | property | product_code |  |
+| data.category_id | integer | body |  | property | category_id |  |
+| data.brand_id | integer | body |  | property | brand_id |  |
+| data.subtitle | string | body |  | property | subtitle |  |
+| data.description | string | body |  | property | description |  |
+| data.unit | string | body |  | property | unit |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

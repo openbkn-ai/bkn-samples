@@ -1,0 +1,34 @@
+[
+  {
+    "name": "订单应付金额快照合计（不等于收款或GMV）",
+    "query": "SELECT COUNT(*) AS rows_count,SUM(actual_amount) AS total_value FROM {{ecommerce_resource_order}}",
+    "expected": {
+      "rows_count": 15020,
+      "total_value": "479215448.42"
+    }
+  },
+  {
+    "name": "有到账时间的支付流水金额",
+    "query": "SELECT COUNT(*) AS rows_count,SUM(payment_amount) AS total_value FROM {{ecommerce_resource_payment}} WHERE paid_at IS NOT NULL",
+    "expected": {
+      "rows_count": 12210,
+      "total_value": "388203869.70"
+    }
+  },
+  {
+    "name": "已完成售后记录实际退款金额",
+    "query": "SELECT COUNT(*) AS rows_count,SUM(refund_amount) AS total_value FROM {{ecommerce_resource_after_sales_case}} WHERE completed_at IS NOT NULL",
+    "expected": {
+      "rows_count": 746,
+      "total_value": "22514444.63"
+    }
+  },
+  {
+    "name": "有效预占记录的缺货数量",
+    "query": "SELECT COUNT(*) AS rows_count,SUM(backorder_quantity) AS total_value FROM {{ecommerce_resource_inventory_reservation}} WHERE status = 'active'",
+    "expected": {
+      "rows_count": 50,
+      "total_value": "73"
+    }
+  }
+]

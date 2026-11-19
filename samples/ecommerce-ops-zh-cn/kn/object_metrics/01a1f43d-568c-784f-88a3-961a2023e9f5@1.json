@@ -1,0 +1,116 @@
+{
+  "definition": {
+    "id": "01a1f43d-568c-784f-88a3-961a2023e9f5",
+    "version": 1,
+    "code": "ec_m02_paid_waiting_cancelled_orders",
+    "name": "付款后待发货阶段取消订单数",
+    "description": "M02：状态日志pending_delivery→cancelled的去重订单数，按取消事件时间归属；不计同状态重复记录。",
+    "owner_object_type_id": "order_status_log",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "count",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "01a1f43c-ce32-7ad4-97da-63d5cf04f7d1",
+        "version": 1
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "order_status_log",
+                  "property_name": "from_status"
+                }
+              },
+              "comparison_operator": "eq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "pending_delivery"
+                }
+              ]
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "order_status_log",
+                  "property_name": "to_status"
+                }
+              },
+              "comparison_operator": "eq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "cancelled"
+                }
+              ]
+            }
+          ]
+        },
+        "event_time": {
+          "object_type_id": "order_status_log",
+          "property_name": "created_at"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": [
+        {
+          "object_type_id": "order_status_log",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T14:37:03Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795099022988,
+  "update_time": 1795099023124,
+  "revision": "d645b94bd0544dd8ada6f2e37528df4a"
+}

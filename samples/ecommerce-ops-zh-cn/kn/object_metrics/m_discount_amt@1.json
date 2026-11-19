@@ -1,0 +1,96 @@
+{
+  "definition": {
+    "id": "m_discount_amt",
+    "version": 1,
+    "code": "legacy_m_discount_amt",
+    "name": "优惠减免金额",
+    "description": "【口径】sum(discount_amount)；排除已取消。",
+    "owner_object_type_id": "order",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "legacy_base_6acb2a25fac127cd2b9f",
+        "version": 1
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "order",
+              "property_name": "order_status"
+            }
+          },
+          "comparison_operator": "neq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "string",
+              "value": "cancelled"
+            }
+          ]
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "channel_id"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-09-10T08:11:14.007000Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1789027874007,
+  "update_time": 1789027874007,
+  "revision": "222b1fb5dd9111f18a92be70ee90ad77"
+}

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_shipment_item_order_item
+name: 发货明细对应订单行
+tags: [电商]
+---
+
+## RelationType: 发货明细对应订单行
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| shipment_item | order_item | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| item_id | item_id |

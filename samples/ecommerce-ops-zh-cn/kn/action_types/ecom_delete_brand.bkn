@@ -1,0 +1,46 @@
+---
+type: action_type
+id: ecom_delete_brand
+name: 删除品牌
+tags: [电商]
+action_intent: delete
+---
+
+## ActionType: 删除品牌
+
+按品牌实例删除记录
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: object
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| brand |
+
+### Trigger Condition
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_c31dd447c7fb | ecommerce_tool_37eb5042ccc0 |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "brands" |  |
+| key | integer | body |  | property | brand_id |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

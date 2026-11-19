@@ -1,0 +1,129 @@
+{
+  "definition": {
+    "id": "01a1b018-cb70-769a-b10f-db737d66c21c",
+    "version": 1,
+    "code": "m_01a1b018cb70769ab10fdb737d66c21c",
+    "name": "商品非零单价明细均价（优惠后）",
+    "description": "按product_id分组，同一非零单价且关联SKU存在的明细范围内，actual_amount合计/quantity合计。",
+    "owner_object_type_id": "order_item",
+    "metric_type": "composite",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": [
+          {
+            "object_type_id": "order_item",
+            "property_name": "product_id"
+          }
+        ]
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "composite",
+      "dependencies": [
+        {
+          "alias": "metric_1",
+          "metric_ref": {
+            "metric_id": "01a1b015-13d5-7cad-8c09-5e090defbb57",
+            "version": 2
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "alias": "metric_2",
+          "metric_ref": {
+            "metric_id": "01a1f38f-eaa7-7102-9014-64b495b59a08",
+            "version": 1
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ],
+      "expression": {
+        "node_type": "binary",
+        "operator": "divide",
+        "left": {
+          "node_type": "dependency",
+          "dependency_alias": "metric_1"
+        },
+        "right": {
+          "node_type": "dependency",
+          "dependency_alias": "metric_2"
+        }
+      },
+      "alignment": {
+        "result_owner_object_type_id": "order_item",
+        "group_by_dimensions": [
+          {
+            "object_type_id": "order_item",
+            "property_name": "product_id"
+          }
+        ],
+        "grain_policy": "same_grain",
+        "result_set_policy": "intersection",
+        "time_alignment": "same_time_window"
+      },
+      "zero_division_policy": "unavailable",
+      "null_policy": "propagate"
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:28:05Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793955777392,
+  "update_time": 1795087685463,
+  "revision": "c8845bf7b8fb4a4598c61118df10d9c8"
+}

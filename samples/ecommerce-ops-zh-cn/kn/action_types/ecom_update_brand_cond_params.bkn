@@ -1,0 +1,73 @@
+---
+type: action_type
+id: ecom_update_brand_cond_params
+name: 按条件更新品牌资料
+tags: [电商]
+action_intent: modify
+---
+
+## ActionType: 按条件更新品牌资料
+
+按适用条件更新指定品牌资料
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: object
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| brand |
+
+### Affect Object
+
+| Affect Object | Affect Description |
+|---------------|--------------------|
+| brand | 仅允许修改中国品牌名称 |
+
+### Impact Contracts
+
+```yaml
+impact_contracts:
+  - object_type_id: brand
+    expected_operation: modify
+    description: 仅允许修改中国品牌名称
+    affected_fields:
+      - brand_name
+```
+
+
+### Trigger Condition
+
+```yaml
+object_type_id: brand
+field: country
+operation: ==
+value_from: const
+value: 中国
+```
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_c31dd447c7fb | ecommerce_tool_5dab86864feb |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "brands" |  |
+| key | integer | body |  | property | brand_id |  |
+| data.brand_name | string | body |  | input |  |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

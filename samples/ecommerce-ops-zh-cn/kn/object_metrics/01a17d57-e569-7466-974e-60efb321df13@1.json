@@ -1,0 +1,119 @@
+{
+  "definition": {
+    "id": "01a17d57-e569-7466-974e-60efb321df13",
+    "version": 1,
+    "code": "m_01a17d57e5697466974e60efb321df13",
+    "name": "评测用销售订单指标（预填，保持原样）",
+    "description": "评测表单原有业务描述（保持原样）",
+    "owner_object_type_id": "order",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": [
+          {
+            "object_type_id": "order",
+            "property_name": "channel_id"
+          }
+        ]
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "count",
+          "code": "times",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "legacy_base_96d826967df29bbf31d9",
+        "version": 1
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "order",
+                  "property_name": "order_status"
+                }
+              },
+              "comparison_operator": "neq",
+              "right": [
+                {
+                  "source": "literal",
+                  "value_type": "string",
+                  "value": "cancelled"
+                }
+              ]
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "order",
+                  "property_name": "payment_time"
+                }
+              },
+              "comparison_operator": "is_not_null"
+            }
+          ]
+        },
+        "event_time": {
+          "object_type_id": "order",
+          "property_name": "created_at"
+        },
+        "time_window": {
+          "mode": "period_to_date",
+          "period": "quarter",
+          "timezone": "UTC"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order",
+          "property_name": "order_status"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-18T03:26:19Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793104274819,
+  "update_time": 1794972379153,
+  "revision": "9496f0faf66b4c24a5a5a176a0053ca1"
+}

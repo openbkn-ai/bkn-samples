@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_shipment_warehouse
+name: 发货出自仓库
+tags: [MVP, 电商]
+---
+
+## RelationType: 发货出自仓库
+
+发货出自仓库（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| shipment | warehouse | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| warehouse_id | warehouse_id |

@@ -1,0 +1,51 @@
+---
+type: object_type
+id: inventory_movement
+name: 库存流水
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 库存流水
+
+一次逐仓SKU库存变化；reference_type/reference_id为多态来源，未确认前不建立来源关系。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_inventory_movement | ecommerce_ops.inventory_records |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| record_id | 库存流水ID | integer | 库存流水主键ID | record_id |
+| sku_id | SKU ID | integer | SKU ID | sku_id |
+| warehouse_id | 仓库ID | integer | 仓库ID | warehouse_id |
+| change_type | 库存变动类型 | string | 变动类型（入库/出库/盘点等） | change_type |
+| change_quantity | 变动数量 | integer | 变动数量（可正可负） | change_quantity |
+| before_quantity | 变动前数量 | integer | 变动前库存 | before_quantity |
+| after_quantity | 变动后数量 | integer | 变动后库存 | after_quantity |
+| reference_type | 业务来源类型 | string | 关联单据类型 | reference_type |
+| reference_id | 业务来源ID | integer | 关联单据ID | reference_id |
+| remark | 备注 | string | 备注 | remark |
+| operator_id | 操作人ID | integer | 操作人ID | operator_id |
+| created_at | 创建时间 | datetime | 流水时间 | created_at |
+
+### Property Constraints
+
+```yaml
+before_quantity:
+  value_type: nonnegative_goods_quantity
+after_quantity:
+  value_type: nonnegative_goods_quantity
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: record_id
+Display Key: record_id
+Incremental Key:

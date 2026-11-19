@@ -1,0 +1,86 @@
+{
+  "definition": {
+    "id": "m_refund_amt",
+    "version": 3,
+    "code": "legacy_m_refund_amt",
+    "name": "退款记账金额（含申请中退款）",
+    "description": "sum(refund_amount)。在所选查询范围内汇总退款记账金额，包含申请中与已完成退款；只有refund_at非空的部分才属于已完成退款金额。",
+    "owner_object_type_id": "payment",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "payment",
+            "property_name": "refund_amount"
+          }
+        },
+        "aggregation": "sum"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "payment",
+          "property_name": "payment_method"
+        },
+        {
+          "object_type_id": "payment",
+          "property_name": "payment_status"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "payment",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:54:12Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795089252267,
+  "update_time": 1795089252512,
+  "revision": "55a420a0cfc948ba965bed23d3854f9d"
+}

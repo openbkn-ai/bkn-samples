@@ -1,0 +1,83 @@
+{
+  "definition": {
+    "id": "legacy_base_51242058aa32d9151346",
+    "version": 3,
+    "code": "legacy_legacy_base_51242058aa32d9151346",
+    "name": "用户优惠券总数",
+    "description": "count(user_coupon_id)。在所选查询范围内统计全部状态的用户优惠券记录，不仅统计已核销券，也不等同模板累计发券量。",
+    "owner_object_type_id": "user_coupon",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "count",
+          "code": "times",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "user_coupon",
+            "property_name": "user_coupon_id"
+          }
+        },
+        "aggregation": "count"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "user_coupon",
+          "property_name": "template_id"
+        },
+        {
+          "object_type_id": "user_coupon",
+          "property_name": "status"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "user_coupon",
+          "property_name": "use_time"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:54:10Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795089250165,
+  "update_time": 1795089250413,
+  "revision": "c18b5fe850814c9494ca7a3c3e5cf199"
+}

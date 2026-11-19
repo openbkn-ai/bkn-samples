@@ -1,0 +1,41 @@
+---
+type: object_type
+id: marketing_activity
+name: 营销活动
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 营销活动
+
+有类型、周期、状态和优先级的营销活动事实；活动商品适用范围不等于订单已使用该活动。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_marketing_activity | ecommerce_ops.marketing_activities |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| activity_id | 活动主键ID | integer | 活动主键ID | activity_id |
+| activity_name | 活动名称 | string | 活动名称 | activity_name |
+| activity_type | 活动类型（满减/秒杀/买赠等） | string | 活动类型（满减/秒杀/买赠等） | activity_type |
+| description | 活动说明 | text | 活动说明 | description |
+| start_time | 开始时间 | datetime | 开始时间 | start_time |
+| end_time | 结束时间 | datetime | 结束时间 | end_time |
+| status | 活动状态（进行中/已结束等） | string | 活动状态（进行中/已结束等） | status |
+| priority | 优先级 | integer | 优先级 | priority |
+| creator_id | 创建人ID | integer | 创建人ID | creator_id |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: activity_id
+Display Key: activity_name
+Incremental Key:

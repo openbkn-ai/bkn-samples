@@ -1,0 +1,20 @@
+---
+type: value_type
+id: payment_record_status
+name: 支付流水状态
+tags: [电商业务值类型]
+---
+
+## ValueType: 支付流水状态
+
+支付记录自身的状态词表，不与支付尝试状态或订单状态混用。已完成退款仍以refund_at非空为必要条件，success记录也可能带有已完成退款。
+
+### Definition
+
+```yaml
+base_type: string
+enum:
+  - {value: success, display: 支付成功, description: 支付记录为成功；不能由此断言未发生退款。}
+  - {value: refunding, display: 退款中, description: 支付记录处于退款处理状态。}
+  - {value: refunded, display: 已退款, description: 支付记录为已退款；金额和完成时间继续核对refund_amount及refund_at。}
+```

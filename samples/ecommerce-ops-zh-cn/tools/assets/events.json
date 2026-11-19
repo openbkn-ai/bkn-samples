@@ -1,0 +1,179 @@
+[
+  {
+    "code": "coupon_abnormal_orders",
+    "name": "已付款订单用券异常事件",
+    "source": "rule",
+    "subject": "order",
+    "severity": "P1",
+    "merge_hours": 0,
+    "rule": {},
+    "rule_version": "81121cf98165",
+    "rule_tool": {
+      "box_id": "ecommerce_box_53615198c61d",
+      "tool_id": "ecommerce_tool_f0a3756dfc6b",
+      "parameters": {}
+    },
+    "check_schedule": {
+      "cron": "0 8 * * *",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  {
+    "code": "coupon_invalid_validity",
+    "name": "优惠券有效期异常事件",
+    "source": "rule",
+    "subject": "user_coupon",
+    "severity": "P2",
+    "merge_hours": 0,
+    "rule": {
+      "description": "领取时间和到期时间均非空，且到期早于领取；检查所有券状态，包括已核销券。",
+      "evaluation_mode": "manual_application",
+      "check_tool": {
+        "box_id": "ecommerce_box_53615198c61d",
+        "tool_id": "ecommerce_tool_f62ba33556e9",
+        "parameters": {}
+      },
+      "runner": "run_coupon_check.py"
+    },
+    "rule_version": "",
+    "rule_tool": null,
+    "check_schedule": null
+  },
+  {
+    "code": "logistics_tracking_stalled",
+    "name": "运输轨迹停滞事件",
+    "source": "rule",
+    "subject": "shipment",
+    "severity": "P2",
+    "merge_hours": 0,
+    "rule": {
+      "description": "已实际发货，最新轨迹未终结，连续48小时没有有效进展；明确签收、退回或取消排除。",
+      "evaluation_mode": "application",
+      "activation_state": "ready_for_application_check",
+      "approved": true,
+      "approval_source": "用户在本聊天明确确认支付15分钟、物流48小时、退货收货后24小时",
+      "detector_version": "ecommerce-events-1.0.0",
+      "criteria_version": 1,
+      "thresholds": {
+        "stagnation_hours": 48
+      },
+      "detector_function": "ecommerce_business_event_candidates",
+      "record_function": "ecommerce_record_business_event_check",
+      "completeness_policy": "complete_resource_scan_with_explicit_covered_keys",
+      "business_source_writes": false
+    },
+    "rule_version": "ev1_a5c2f55ce775",
+    "rule_tool": null,
+    "check_schedule": null
+  },
+  {
+    "code": "orderoverdue",
+    "name": "订单跨日未发货异常事件",
+    "source": "rule",
+    "subject": "order",
+    "severity": "P1",
+    "merge_hours": 0,
+    "rule": {
+      "description": "保留原跨日未发货条件，增加缺货预占明细、SKU及采购单证据；列表可能含重复采购单ID，按主体查询完整明细。空列表表示未发现对应缺货记录，不直接断言仓库责任。",
+      "evidence_fields": [
+        "backorder_line_ids",
+        "backorder_sku_ids",
+        "purchase_order_ids"
+      ],
+      "business_condition_changed": false
+    },
+    "rule_version": "2ad48e17a41e",
+    "rule_tool": {
+      "box_id": "ecommerce_box_e34386c9b81a",
+      "tool_id": "ecommerce_tool_002660bec6f3",
+      "parameters": {
+        "cutoff_time": {
+          "check_time": "date"
+        }
+      }
+    },
+    "check_schedule": {
+      "cron": "0 8 * * *",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  {
+    "code": "payment_failure_unrecovered",
+    "name": "支付失败未恢复待跟进事件",
+    "source": "rule",
+    "subject": "order",
+    "severity": "P2",
+    "merge_hours": 0,
+    "rule": {
+      "description": "首付失败队列最新尝试仍失败，末次失败后满15分钟、无有效成功支付或确认收款且订单未取消。",
+      "evaluation_mode": "application",
+      "activation_state": "ready_for_application_check",
+      "approved": true,
+      "approval_source": "用户在本聊天明确确认支付15分钟、物流48小时、退货收货后24小时",
+      "detector_version": "ecommerce-events-1.0.0",
+      "criteria_version": 1,
+      "thresholds": {
+        "quiet_wait_minutes": 15
+      },
+      "detector_function": "ecommerce_business_event_candidates",
+      "record_function": "ecommerce_record_business_event_check",
+      "completeness_policy": "complete_resource_scan_with_explicit_covered_keys",
+      "business_source_writes": false
+    },
+    "rule_version": "ev1_2b3b45fdfc67",
+    "rule_tool": null,
+    "check_schedule": null
+  },
+  {
+    "code": "purchase_expected_receipt_gap",
+    "name": "采购超过预计到货日期仍欠收事件",
+    "source": "rule",
+    "subject": "purchase_order",
+    "severity": "P2",
+    "merge_hours": 0,
+    "rule": {
+      "description": "预计到货日早于检查日，采购仍欠收；缺预计日期或收货口径矛盾的主体不纳入恢复判断。",
+      "evaluation_mode": "application",
+      "activation_state": "ready_for_application_check",
+      "approved": true,
+      "approval_source": "用户在本聊天明确确认支付15分钟、物流48小时、退货收货后24小时",
+      "detector_version": "ecommerce-events-1.0.0",
+      "criteria_version": 1,
+      "thresholds": {},
+      "detector_function": "ecommerce_business_event_candidates",
+      "record_function": "ecommerce_record_business_event_check",
+      "completeness_policy": "complete_resource_scan_with_explicit_covered_keys",
+      "business_source_writes": false
+    },
+    "rule_version": "ev1_866e75ed22bb",
+    "rule_tool": null,
+    "check_schedule": null
+  },
+  {
+    "code": "return_received_processing_wait",
+    "name": "退货收货后处理等待事件",
+    "source": "rule",
+    "subject": "after_sales_case",
+    "severity": "P2",
+    "merge_hours": 0,
+    "rule": {
+      "description": "退货退款已实际收货，收货后满24小时售后仍未完成；申请金额不能当实际退款支出。",
+      "evaluation_mode": "application",
+      "activation_state": "ready_for_application_check",
+      "approved": true,
+      "approval_source": "用户在本聊天明确确认支付15分钟、物流48小时、退货收货后24小时",
+      "detector_version": "ecommerce-events-1.0.0",
+      "criteria_version": 1,
+      "thresholds": {
+        "processing_wait_hours": 24
+      },
+      "detector_function": "ecommerce_business_event_candidates",
+      "record_function": "ecommerce_record_business_event_check",
+      "completeness_policy": "complete_resource_scan_with_explicit_covered_keys",
+      "business_source_writes": false
+    },
+    "rule_version": "ev1_b540d0763f65",
+    "rule_tool": null,
+    "check_schedule": null
+  }
+]

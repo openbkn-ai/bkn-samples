@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_user_coupon_template
+name: 券来自模板
+tags: [MVP, 电商]
+---
+
+## RelationType: 券来自模板
+
+券来自模板（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| user_coupon | coupon_template | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| template_id | template_id |

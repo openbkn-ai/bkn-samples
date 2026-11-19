@@ -1,0 +1,93 @@
+---
+type: object_type
+id: order
+name: 销售订单
+tags: [MVP, 电商]
+---
+
+## ObjectType: 销售订单
+
+销售订单主表。已取消订单不计入 GMV 等成交类指标。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_order | ecommerce_ops.orders |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field | Mask Rule |
+|------|--------------|------|-------------|--------------|-----------|
+| order_id | 订单主键ID | integer | 订单主键ID | order_id |  |
+| order_no | 订单号 | string | 订单号 | order_no | {"kind":"partial","replacement":"*","keep_start":3,"keep_end":4} |
+| user_id | 下单用户ID | integer | 下单用户ID | user_id |  |
+| address_id | 收货地址ID | integer | 收货地址ID | address_id |  |
+| channel_id | 销售渠道ID | integer | 销售渠道ID | channel_id |  |
+| order_status | 订单状态（待支付/已发货/已完成/退款中等） | string | 订单状态（待支付/已发货/已完成/退款中等） | order_status |  |
+| total_amount | 商品总金额（元） | decimal | 商品总金额（元） | total_amount |  |
+| discount_amount | 优惠减免金额（元） | decimal | 优惠减免金额（元） | discount_amount |  |
+| coupon_id | 使用的用户优惠券ID | integer | 使用的用户优惠券ID | coupon_id |  |
+| shipping_fee | 运费（元） | decimal | 运费（元） | shipping_fee |  |
+| actual_amount | 订单应付金额（元） | decimal | 订单应付金额，按源表记录，包含订单运费；未付款订单也可有正金额。该字段不代表已确认收款，收款应结合支付流水及 paid_at 判断。 | actual_amount | {"kind":"round","step":1000} |
+| payment_method | 支付方式（微信/支付宝等） | string | 支付方式（微信/支付宝等） | payment_method |  |
+| payment_time | 支付完成时间 | datetime | 支付完成时间 | payment_time |  |
+| delivery_time | 发货时间 | datetime | 发货时间 | delivery_time |  |
+| complete_time | 订单完成时间 | datetime | 订单完成时间 | complete_time |  |
+| cancel_time | 取消时间 | datetime | 取消时间 | cancel_time |  |
+| cancel_reason | 取消原因 | string | 取消原因 | cancel_reason |  |
+| remark | 订单备注 | text | 订单备注 | remark |  |
+| created_at | 下单时间（分区键） | datetime | 下单时间（分区键） | created_at |  |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |  |
+
+### Property Constraints
+
+```yaml
+order_status:
+  value_type: sales_order_status
+total_amount:
+  value_type: cny_nonnegative_amount
+discount_amount:
+  value_type: cny_nonnegative_amount
+shipping_fee:
+  value_type: cny_nonnegative_amount
+actual_amount:
+  value_type: cny_nonnegative_amount
+payment_method:
+  value_type: payment_method
+```
+
+### Logic Properties
+
+#### lp_order_discount_rate
+
+**Meta**
+
+| Display Name | Type | Description |
+|--------------|------|-------------|
+| 订单折扣率 | tool | 折扣率 = discount_amount / total_amount |
+
+**Source**
+
+| Source Type | Source ID | Source Name | BoxID | ToolID | ResultPath |
+|-------------|-----------|-------------|-------|--------|------------|
+| tool |  | calc_discount_rate | ecommerce_box_53615198c61d | ecommerce_tool_b161f515d2bb | $.result.rate_pct |
+
+**Parameters**
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| discount_amount | number | Body |  | property | discount_amount |  |
+| total_amount | number | Body |  | property | total_amount |  |
+
+**Analysis Dimensions**
+
+| Name | Display Name | Type | Description |
+|------|--------------|------|-------------|
+
+
+### Keys
+
+Primary Keys: order_id
+Display Key: order_no
+Incremental Key:

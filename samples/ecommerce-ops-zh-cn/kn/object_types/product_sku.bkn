@@ -1,0 +1,115 @@
+---
+type: object_type
+id: product_sku
+name: 商品SKU
+tags: [MVP, 电商]
+---
+
+## ObjectType: 商品SKU
+
+商品销售规格与库存、价格。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_product_sku | ecommerce_ops.product_skus |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| sku_id | SKU主键ID | integer | SKU主键ID | sku_id |
+| product_id | 所属商品SPU ID | integer | 所属商品SPU ID | product_id |
+| sku_code | SKU编码 | string | SKU编码 | sku_code |
+| sku_name | SKU名称（含规格） | string | SKU名称（含规格） | sku_name |
+| spec_attributes | 规格属性（JSON） | text | 规格属性（JSON） | spec_attributes |
+| price | 销售价（元） | decimal | 销售价（元） | price |
+| market_price | 市场价/划线价（元） | decimal | 市场价/划线价（元） | market_price |
+| cost_price | 成本价（元） | decimal | 成本价（元） | cost_price |
+| stock_quantity | SKU实物库存数量 | integer | 源表实物数量，包含质量隔离；不等同可售量。可售量由源表查询计算。 | stock_quantity |
+| alert_quantity | 库存预警阈值 | integer | 库存预警阈值 | alert_quantity |
+| image_url | SKU图片URL | string | SKU图片URL | image_url |
+| barcode | 条形码 | string | 条形码 | barcode |
+| status | SKU状态（如active） | string | SKU状态（如active） | status |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |
+
+### Property Constraints
+
+```yaml
+price:
+  value_type: cny_nonnegative_amount
+market_price:
+  value_type: cny_nonnegative_amount
+cost_price:
+  value_type: cny_nonnegative_amount
+stock_quantity:
+  value_type: nonnegative_goods_quantity
+alert_quantity:
+  value_type: nonnegative_goods_quantity
+```
+
+### Logic Properties
+
+#### revenue_forecast
+
+**Meta**
+
+| Display Name | Type | Description |
+|--------------|------|-------------|
+| SKU销量情景毛利估算 | tool | 按当前SKU售价和成本计算指定销量的毛利，不包含税费、运费及退款。 |
+
+**Source**
+
+| Source Type | Source ID | Source Name | BoxID | ToolID | ResultPath |
+|-------------|-----------|-------------|-------|--------|------------|
+| tool |  | revenue_forecast | ecommerce_box_53615198c61d | ecommerce_tool_4d86bff37c78 | $.result |
+
+**Parameters**
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| cost_price_field | string | Body |  | const | cost_price |  |
+| kn_id | string | Body |  | const | ecommerce_ops_zh_cn |  |
+| quantity | number | Body |  | input |  |  |
+| sale_price_field | string | Body |  | const | price |  |
+| sku_instance_id | number | Body |  | property | sku_id |  |
+
+**Analysis Dimensions**
+
+| Name | Display Name | Type | Description |
+|------|--------------|------|-------------|
+
+#### lp_sku_gross_margin
+
+**Meta**
+
+| Display Name | Type | Description |
+|--------------|------|-------------|
+| SKU毛利率 | tool | 毛利率 = (price - cost_price) / price |
+
+**Source**
+
+| Source Type | Source ID | Source Name | BoxID | ToolID | ResultPath |
+|-------------|-----------|-------------|-------|--------|------------|
+| tool |  | calc_gross_margin | ecommerce_box_53615198c61d | ecommerce_tool_5b49bba32bf6 | $.result.rate_pct |
+
+**Parameters**
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| cost_price | number | Body |  | property | cost_price |  |
+| price | number | Body |  | property | price |  |
+
+**Analysis Dimensions**
+
+| Name | Display Name | Type | Description |
+|------|--------------|------|-------------|
+
+
+### Keys
+
+Primary Keys: sku_id
+Display Key: sku_name
+Incremental Key:

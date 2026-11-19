@@ -1,0 +1,66 @@
+---
+type: action_type
+id: ecom_create_brand_profile
+name: 创建品牌完整资料
+tags: [电商]
+action_intent: add
+---
+
+## ActionType: 创建品牌完整资料
+
+使用执行工具创建品牌，运行时逐项填写并映射 brand_name、brand_name_en、country、website、status
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: object
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| brand |
+
+### Impact Contracts
+
+```yaml
+impact_contracts:
+  - object_type_id: brand
+    expected_operation: add
+    description: 创建品牌并填写名称、英文名、国家、官网及状态。
+    affected_fields:
+      - brand_name
+      - brand_name_en
+      - country
+      - website
+      - status
+```
+
+
+### Trigger Condition
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_c31dd447c7fb | ecommerce_tool_1270873cd00a |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "brands" |  |
+| data.brand_name | string | body |  | property | brand_name |  |
+| data.brand_name_en | string | body |  | property | brand_name_en |  |
+| data.country | string | body |  | property | country |  |
+| data.website | string | body |  | property | website |  |
+| data.status | string | body |  | property | status |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

@@ -1,0 +1,49 @@
+---
+type: object_type
+id: payment_attempt
+name: 支付尝试
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 支付尝试
+
+一次支付尝试，可失败或重试，不等于实际收款。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_payment_attempt | payment_attempts |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| attempt_id | 支付尝试ID | integer | 支付尝试ID | attempt_id |
+| order_id | 订单ID | integer | 订单ID | order_id |
+| payment_id | 支付流水ID | integer | 支付流水ID | payment_id |
+| attempt_no | 尝试序号 | integer | 尝试序号 | attempt_no |
+| channel | 支付渠道 | string | 支付渠道 | channel |
+| status | 业务状态 | string | 业务状态 | status |
+| amount | 尝试金额（元） | decimal | 尝试金额（元） | amount |
+| attempted_at | 尝试时间 | datetime | 尝试时间 | attempted_at |
+| settled_at | 结算时间 | datetime | 结算时间 | settled_at |
+| failure_code | 失败原因代码 | string | 失败原因代码 | failure_code |
+
+### Property Constraints
+
+```yaml
+channel:
+  value_type: payment_method
+amount:
+  value_type: cny_nonnegative_amount
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: attempt_id
+Display Key: attempt_id
+Incremental Key:

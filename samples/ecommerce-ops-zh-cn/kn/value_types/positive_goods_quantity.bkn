@@ -1,0 +1,17 @@
+---
+type: value_type
+id: positive_goods_quantity
+name: 正整数商品数量
+tags: [电商业务值类型]
+---
+
+## ValueType: 正整数商品数量
+
+购买、入库、发货及有效质量隔离记录的商品数量，至少为1；按关联SKU的业务计量单位理解，不限定为件或包裹。不用于允许零值的库存快照、收货进度或退款不退货数量。
+
+### Definition
+
+```yaml
+base_type: integer
+range: {min: 1}
+```

@@ -1,0 +1,133 @@
+{
+  "definition": {
+    "id": "01a1f390-5817-7a05-9601-8bb92b7e73e3",
+    "version": 1,
+    "code": "m_net_receipts_v1",
+    "name": "已确认收款减已完成退款净额",
+    "description": "paid_at非空的收款金额减refund_at非空的已完成退款金额；按同一支付流水集合对齐，时间窗口不混用收款日与退款日。",
+    "owner_object_type_id": "payment",
+    "metric_type": "composite",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "composite",
+      "dependencies": [
+        {
+          "alias": "receipts",
+          "metric_ref": {
+            "metric_id": "01a1f38f-ab79-70db-8b2e-b9b844c67580",
+            "version": 1
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "alias": "refunds",
+          "metric_ref": {
+            "metric_id": "01a1f38f-ac7f-7057-beec-01b29ac42c68",
+            "version": 1
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ],
+      "expression": {
+        "node_type": "binary",
+        "operator": "subtract",
+        "left": {
+          "node_type": "dependency",
+          "dependency_alias": "receipts"
+        },
+        "right": {
+          "node_type": "dependency",
+          "dependency_alias": "refunds"
+        }
+      },
+      "alignment": {
+        "result_owner_object_type_id": "payment",
+        "group_by_dimensions": [],
+        "grain_policy": "same_grain",
+        "result_set_policy": "intersection",
+        "time_alignment": "same_time_window"
+      },
+      "zero_division_policy": "unavailable",
+      "null_policy": "propagate"
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "payment",
+          "property_name": "payment_method"
+        },
+        {
+          "object_type_id": "payment",
+          "property_name": "payment_status"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "payment",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:28:05Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087685656,
+  "update_time": 1795087685800,
+  "revision": "f8566aa1a1324bfcbe6be091b82d8060"
+}

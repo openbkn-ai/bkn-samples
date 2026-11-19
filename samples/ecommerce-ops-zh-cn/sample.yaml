@@ -1,0 +1,51 @@
+{
+  "apiVersion": "samples.openbkn.ai/v1alpha1",
+  "kind": "Sample",
+  "metadata": {
+    "name": "ecommerce-ops-zh-cn",
+    "language": "zh-CN",
+    "displayName": "电商经营决策（中文）",
+    "summary": "订单收款、库存履约、采购补货、营销优惠券、售后与经营异常分析。",
+    "version": "0.1.0"
+  },
+  "spec": {
+    "studio": {
+      "licenseNote": "业务演示数据快照；发布前核对数据授权范围。",
+      "questions": [
+        "已付款却跨日未发货的订单有哪些，是否受缺货和采购影响？",
+        "当前收款、退款和净收款如何计算？",
+        "哪些运输单停滞、退货收货后仍未完成处理？"
+      ]
+    },
+    "database": {
+      "engine": "mariadb",
+      "name": "ecommerce_ops_zh_cn",
+      "expectedTables": 46
+    },
+    "data": {
+      "mode": "embedded",
+      "lockFile": "dataset.lock"
+    },
+    "platformVersion": ">=0.2.2 <0.3.0",
+    "knowledgeNetwork": {
+      "id": "ecommerce_ops_zh_cn",
+      "displayName": "电商经营决策（中文）"
+    },
+    "capabilities": {
+      "required": true
+    },
+    "components": {
+      "objects": true,
+      "relations": true,
+      "metrics": true,
+      "functions": true,
+      "skills": true
+    },
+    "hooks": {
+      "dbInit": "db/init.sh",
+      "dbVerify": "db/verify.sh",
+      "platformInstall": "platform/install.sh",
+      "platformVerify": "platform/verify.sh"
+    }
+  }
+}

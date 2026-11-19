@@ -1,0 +1,83 @@
+{
+  "definition": {
+    "id": "m_review_cnt",
+    "version": 2,
+    "code": "legacy_m_review_cnt",
+    "name": "商品评价数",
+    "description": "count(product_review.review_id)，统计全部已有评价。",
+    "owner_object_type_id": "product_review",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "count",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "count",
+          "code": "times",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "property",
+          "property_ref": {
+            "object_type_id": "product_review",
+            "property_name": "review_id"
+          }
+        },
+        "aggregation": "count"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "product_review",
+          "property_name": "product_id"
+        },
+        {
+          "object_type_id": "product_review",
+          "property_name": "rating"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "product_review",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:25:25Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087525396,
+  "update_time": 1795087525567,
+  "revision": "41bce09fca68433ca7204da255f0be2b"
+}

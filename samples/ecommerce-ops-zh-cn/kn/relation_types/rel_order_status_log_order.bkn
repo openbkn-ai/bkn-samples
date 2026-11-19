@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_order_status_log_order
+name: 状态变更记录属于订单
+tags: [电商]
+---
+
+## RelationType: 状态变更记录属于订单
+
+按源表业务键关联；非空外键与目标唯一性已经源表只读核验。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| order_status_log | order | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| order_id | order_id |

@@ -1,0 +1,119 @@
+{
+  "definition": {
+    "id": "01a1f43d-6022-7520-bafb-6e4795866506",
+    "version": 1,
+    "code": "ec_m08_fully_reserved_line_ratio",
+    "name": "库存预占足量订单行占比",
+    "description": "M08：足量预占有效行/全部有效预占行。当前快照；分母为0时不可计算，不代表全部订单行或发货履约率。",
+    "owner_object_type_id": "inventory_reservation",
+    "metric_type": "composite",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "ratio",
+        "precision": 18,
+        "scale": 6,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "dimensionless",
+          "code": "1",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "unavailable",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "composite",
+      "dependencies": [
+        {
+          "alias": "full",
+          "metric_ref": {
+            "metric_id": "01a1f43d-5ec4-79a4-8495-17742edbe04e",
+            "version": 1
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "alias": "active",
+          "metric_ref": {
+            "metric_id": "01a1f43d-5d59-763a-9aee-1df4fae642f5",
+            "version": 1
+          },
+          "object_alignment": {
+            "mode": "same_object",
+            "deduplication": "none"
+          },
+          "evaluation_context": {
+            "window": "inherited",
+            "filter_context": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ],
+      "expression": {
+        "node_type": "binary",
+        "operator": "divide",
+        "left": {
+          "node_type": "dependency",
+          "dependency_alias": "full"
+        },
+        "right": {
+          "node_type": "dependency",
+          "dependency_alias": "active"
+        }
+      },
+      "alignment": {
+        "result_owner_object_type_id": "inventory_reservation",
+        "group_by_dimensions": [],
+        "grain_policy": "same_grain",
+        "result_set_policy": "intersection",
+        "time_alignment": "same_time_window"
+      },
+      "zero_division_policy": "unavailable",
+      "null_policy": "propagate"
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T14:37:05Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795099025442,
+  "update_time": 1795099025556,
+  "revision": "9d2b7c4fd2ba4fcbaf3daebe5e5b4108"
+}

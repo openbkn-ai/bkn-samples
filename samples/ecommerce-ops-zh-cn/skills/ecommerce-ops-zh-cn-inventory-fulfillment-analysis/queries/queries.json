@@ -1,0 +1,26 @@
+[
+  {
+    "name": "reservations_to_purchase",
+    "description": "查看SKU待补预占及其已关联的采购计划，不将未关联记录伪造成有计划。",
+    "parameters": [
+      "sku_ids"
+    ],
+    "cypher": "MATCH (r:inventory_reservation) WHERE r.sku_id IN $sku_ids OPTIONAL MATCH (r)-[:rel_inventory_reservation_purchase_order_item]->(i:purchase_order_item) RETURN r.reservation_id AS reservation_id,r.sku_id AS sku_id,r.status AS reservation_status,r.reserved_quantity AS reserved_quantity,r.backorder_quantity AS backorder_quantity,r.expected_date AS expected_date,i.item_id AS po_item_id,i.po_id AS po_id,i.quantity AS purchased_quantity,i.received_qty AS received_quantity LIMIT 100"
+  },
+  {
+    "name": "inbound_details",
+    "description": "采购行的入库事实，按入库ID去重汇总。",
+    "parameters": [
+      "po_item_ids"
+    ],
+    "cypher": "MATCH (r:inbound_record) WHERE r.po_item_id IN $po_item_ids RETURN r.inbound_id AS inbound_id,r.po_item_id AS po_item_id,r.sku_id AS sku_id,r.warehouse_id AS warehouse_id,r.quantity AS inbound_quantity,r.created_at AS inbound_time LIMIT 100"
+  },
+  {
+    "name": "shipment_line_quantities",
+    "description": "订单行数量和已发货量，保留无发货明细的订单行。",
+    "parameters": [
+      "order_ids"
+    ],
+    "cypher": "MATCH (i:order_item) WHERE i.order_id IN $order_ids OPTIONAL MATCH (s:shipment_item)-[:rel_shipment_item_order_item]->(i) RETURN i.item_id AS item_id,i.order_id AS order_id,i.quantity AS ordered_quantity,coalesce(sum(s.quantity),0) AS shipped_quantity LIMIT 100"
+  }
+]

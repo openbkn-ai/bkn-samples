@@ -1,0 +1,24 @@
+---
+type: value_type
+id: sales_order_status
+name: 销售订单状态
+tags: [电商业务值类型]
+---
+
+## ValueType: 销售订单状态
+
+销售订单当前状态和状态变更日志共用的状态词表。枚举描述单个状态，不定义允许的迁移路径。初始日志from_status允许为空，不把空值增加为业务状态。
+
+### Definition
+
+```yaml
+base_type: string
+enum:
+  - {value: pending_payment, display: 待支付, description: 订单记录为待支付。}
+  - {value: pending_delivery, display: 待发货, description: 订单记录为待发货。}
+  - {value: shipped, display: 已发货, description: 订单记录为已发货。}
+  - {value: completed, display: 已完成, description: 订单记录为已完成。}
+  - {value: cancelled, display: 已取消, description: 订单记录为已取消。}
+  - {value: refunding, display: 退款中, description: 订单记录为退款处理中。}
+  - {value: refunded, display: 已退款, description: 订单侧已退款状态；退款完成金额与时间仍核对支付流水。}
+```

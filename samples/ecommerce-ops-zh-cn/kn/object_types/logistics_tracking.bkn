@@ -1,0 +1,38 @@
+---
+type: object_type
+id: logistics_tracking
+name: 物流轨迹节点
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 物流轨迹节点
+
+发货单的一次物流轨迹节点。tracked_at是轨迹发生时间，created_at是记录创建时间；与发货单当前状态区分。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_logistics_tracking | ecommerce_ops.logistics_tracking |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| tracking_id | 物流轨迹节点ID | integer | 物流轨迹节点ID | tracking_id |
+| shipment_id | 所属发货单ID | integer | 所属发货单ID | shipment_id |
+| tracking_status | 轨迹节点状态 | string | 轨迹节点状态 | tracking_status |
+| location | 节点所在地点 | string | 节点所在地点 | location |
+| description | 轨迹描述 | string | 轨迹描述 | description |
+| operator_name | 操作员/快递员姓名 | string | 操作员/快递员姓名 | operator_name |
+| tracked_at | 轨迹发生时间 | datetime | 轨迹发生时间 | tracked_at |
+| created_at | 记录创建时间 | datetime | 记录创建时间 | created_at |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: tracking_id
+Display Key: tracking_id
+Incremental Key:

@@ -1,0 +1,94 @@
+{
+  "definition": {
+    "id": "01a17d4f-28eb-7704-baeb-b758e19b2221",
+    "version": 1,
+    "code": "m_01a17d4f28eb7704baebb758e19b2221",
+    "name": "评测用订单明细指标（预填，保持原样）",
+    "description": "评测表单原有业务描述（保持原样）",
+    "owner_object_type_id": "order_item",
+    "metric_type": "atomic",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "atomic",
+      "measure": {
+        "expression": {
+          "node_type": "binary",
+          "operator": "multiply",
+          "left": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "order_item",
+              "property_name": "unit_price"
+            },
+            "value_type": "decimal"
+          },
+          "right": {
+            "node_type": "property",
+            "property_ref": {
+              "object_type_id": "order_item",
+              "property_name": "quantity"
+            },
+            "value_type": "int64"
+          }
+        },
+        "aggregation": "sum"
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "product_id"
+        },
+        {
+          "object_type_id": "order_item",
+          "property_name": "sku_id"
+        }
+      ],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-18T03:26:19Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793103702263,
+  "update_time": 1794972379153,
+  "revision": "4bdc21682b49415e98f369436b1a527a"
+}

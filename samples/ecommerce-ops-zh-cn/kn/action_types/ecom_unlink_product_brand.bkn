@@ -1,0 +1,51 @@
+---
+type: action_type
+id: ecom_unlink_product_brand
+name: 商品解除品牌关联
+tags: [电商]
+action_intent: delete
+---
+
+## ActionType: 商品解除品牌关联
+
+解除可空的商品品牌关系
+
+### Operation Config
+
+```yaml
+operation_config:
+  type: relation
+  relation_type_id: rel_product_brand
+  relation_operation: delete
+  anchor_role: source
+```
+
+
+### Bound Object
+
+| Bound Object |
+|--------------|
+| product |
+
+### Trigger Condition
+
+
+### Action Source
+
+| Type | BoxID | ToolID | McpID | ToolName |
+|------|-------|--------|-------|----------|
+| tool | ecommerce_box_1e885e595ff6 | ecommerce_tool_b798b8b8e837 |  |  |
+
+### Parameter Binding
+
+| Name | Type | Source | Operation | ValueFrom | Value | Description |
+|------|------|--------|-----------|-----------|-------|-------------|
+| name | string | path |  | const | "products" |  |
+| key | integer | body |  | source_identity |  |  |
+| X-Relation-Target | integer | header |  | target_identity |  |  |
+| data.brand_id | string | body |  | const | "__BKN_NULL__" |  |
+
+### Schedule
+
+| Type | Expression |
+|------|------------|

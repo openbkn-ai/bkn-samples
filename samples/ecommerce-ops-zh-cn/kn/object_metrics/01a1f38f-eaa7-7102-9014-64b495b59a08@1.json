@@ -1,0 +1,111 @@
+{
+  "definition": {
+    "id": "01a1f38f-eaa7-7102-9014-64b495b59a08",
+    "version": 1,
+    "code": "m_product_priced_quantity_v1",
+    "name": "非零单价商品明细下单件数",
+    "description": "非零单价商品明细下单件数",
+    "owner_object_type_id": "order_item",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": [
+          {
+            "object_type_id": "order_item",
+            "property_name": "product_id"
+          }
+        ]
+      },
+      "value": {
+        "physical_type": "int64",
+        "semantic_type": "measure",
+        "unit": {
+          "system": "registered",
+          "quantity_kind": "custom",
+          "code": "piece",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "m_sold_qty",
+        "version": 2
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "order_item",
+              "property_name": "unit_price"
+            }
+          },
+          "comparison_operator": "neq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "decimal",
+              "value": 0
+            }
+          ]
+        },
+        "relation_path": {
+          "alias": "business_relation",
+          "steps": [
+            {
+              "relation_type_id": "rel_order_item_sku",
+              "direction": "forward",
+              "target_object_type_id": "product_sku"
+            }
+          ],
+          "purpose": "qualify_root",
+          "quantifier": "exists",
+          "cardinality_policy": "distinct_root"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "sku_id"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "order_item",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:27:37Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795087657639,
+  "update_time": 1795087657775,
+  "revision": "7efe33a1574b464badb02ec9daacc685"
+}

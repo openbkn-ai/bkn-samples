@@ -1,0 +1,43 @@
+---
+type: object_type
+id: inventory_quality_hold
+name: 质量隔离记录
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 质量隔离记录
+
+SKU逐仓隔离记录；源表没有解除状态，不推断隔离释放历史。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_inventory_quality_hold | inventory_quality_holds |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| hold_id | 质量隔离记录ID | integer | 质量隔离记录ID | hold_id |
+| sku_id | SKU ID | integer | SKU ID | sku_id |
+| warehouse_id | 仓库ID | integer | 仓库ID | warehouse_id |
+| quantity | 数量 | integer | 数量 | quantity |
+| reason | 原因 | string | 原因 | reason |
+| held_at | 隔离时间 | datetime | 隔离时间 | held_at |
+
+### Property Constraints
+
+```yaml
+quantity:
+  value_type: positive_goods_quantity
+```
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: hold_id
+Display Key: hold_id
+Incremental Key:

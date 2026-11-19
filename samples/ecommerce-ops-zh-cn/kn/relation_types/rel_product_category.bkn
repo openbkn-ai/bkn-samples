@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_product_category
+name: 商品属于分类
+tags: [MVP, 电商]
+---
+
+## RelationType: 商品属于分类
+
+商品属于分类（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| product | product_category | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| category_id | category_id |

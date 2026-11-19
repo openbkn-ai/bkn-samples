@@ -1,0 +1,93 @@
+{
+  "definition": {
+    "id": "01a1f38f-ab79-70db-8b2e-b9b844c67580",
+    "version": 2,
+    "code": "m_confirmed_receipts_v1",
+    "name": "已确认收款金额",
+    "description": "汇总paid_at非空记录的payment_amount，含退款后的原始收款；时间窗口按支付流水created_at统一归属，不作为到账日或退款日现金流。",
+    "owner_object_type_id": "payment",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": []
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "zero",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "01a1f38d-efeb-731b-8920-c852c4fdb4a6",
+        "version": 2
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "payment",
+              "property_name": "paid_at"
+            }
+          },
+          "comparison_operator": "is_not_null"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [
+        {
+          "object_type_id": "payment",
+          "property_name": "payment_method"
+        },
+        {
+          "object_type_id": "payment",
+          "property_name": "payment_status"
+        }
+      ],
+      "time_dimensions": [
+        {
+          "object_type_id": "payment",
+          "property_name": "created_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "migration-snapshot",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:54:13Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795089253134,
+  "update_time": 1795089253357,
+  "revision": "95fd89ec4803496cbadf18cbfe01d25d"
+}

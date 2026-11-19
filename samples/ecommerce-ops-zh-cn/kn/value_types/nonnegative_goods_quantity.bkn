@@ -1,0 +1,17 @@
+---
+type: value_type
+id: nonnegative_goods_quantity
+name: 非负整数商品数量
+tags: [电商业务值类型]
+---
+
+## ValueType: 非负整数商品数量
+
+库存、已售、预占、缺货、已收货及实际退货数量，允许0表达无库存、尚未预占、未到货或无需实物退货。按关联SKU的业务计量单位理解，不用于可正可负的库存变动量。不约束跨字段数量平衡。
+
+### Definition
+
+```yaml
+base_type: integer
+range: {min: 0}
+```

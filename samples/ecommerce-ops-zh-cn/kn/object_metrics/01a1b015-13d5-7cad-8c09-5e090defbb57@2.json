@@ -1,0 +1,104 @@
+{
+  "definition": {
+    "id": "01a1b015-13d5-7cad-8c09-5e090defbb57",
+    "version": 2,
+    "code": "m_01a1b01513d57cad8c095e090defbb57",
+    "name": "非零单价商品明细优惠后金额",
+    "description": "按product_id分组，筛选unit_price不为0且关联SKU存在的明细，汇总actual_amount；不是已收款。",
+    "owner_object_type_id": "order_item",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": [
+          {
+            "object_type_id": "order_item",
+            "property_name": "product_id"
+          }
+        ]
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "amount",
+        "precision": 18,
+        "scale": 2,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "ISO_4217",
+          "quantity_kind": "currency",
+          "code": "CNY",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "null",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "01a15d18-4024-7522-9235-4757042ef6ff",
+        "version": 4
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "predicate",
+          "left": {
+            "source": "property",
+            "property_ref": {
+              "object_type_id": "order_item",
+              "property_name": "unit_price"
+            }
+          },
+          "comparison_operator": "neq",
+          "right": [
+            {
+              "source": "literal",
+              "value_type": "decimal",
+              "value": 0
+            }
+          ]
+        },
+        "relation_path": {
+          "alias": "business_relation",
+          "steps": [
+            {
+              "relation_type_id": "rel_order_item_sku",
+              "direction": "forward",
+              "target_object_type_id": "product_sku"
+            }
+          ],
+          "purpose": "qualify_root",
+          "quantifier": "exists",
+          "cardinality_policy": "distinct_root"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": []
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T11:26:24Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1793956577040,
+  "update_time": 1795087584066,
+  "revision": "dfed1873a395473485dbc8a60d7c3c55"
+}

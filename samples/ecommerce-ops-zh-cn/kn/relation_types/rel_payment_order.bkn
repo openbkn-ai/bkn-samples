@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_payment_order
+name: 支付关联订单
+tags: [MVP, 电商]
+---
+
+## RelationType: 支付关联订单
+
+支付关联订单（外键语义）。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| payment | order | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| order_id | order_id |

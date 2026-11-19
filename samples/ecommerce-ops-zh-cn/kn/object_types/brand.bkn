@@ -1,0 +1,40 @@
+---
+type: object_type
+id: brand
+name: 品牌
+tags: [MVP, 电商]
+---
+
+## ObjectType: 品牌
+
+商品品牌。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_brand | ecommerce_ops.brands |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field | Mask Rule |
+|------|--------------|------|-------------|--------------|-----------|
+| brand_id | 品牌主键ID | integer | 品牌主键ID | brand_id |  |
+| brand_name | 品牌中文名 | string | 品牌中文名 | brand_name |  |
+| brand_name_en | 品牌英文名 | string | 品牌英文名 | brand_name_en | {"kind":"partial","replacement":"*","keep_start":3,"keep_end":4} |
+| logo_url | 品牌Logo URL | string | 品牌Logo URL | logo_url |  |
+| website | 品牌官网 | string | 品牌官网 | website |  |
+| description | 品牌简介 | text | 品牌简介 | description |  |
+| country | 所属国家/地区 | string | 所属国家/地区 | country |  |
+| founded_year | 创立年份 | integer | 创立年份 | founded_year |  |
+| status | 状态（如active） | string | 状态（如active） | status |  |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |  |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: brand_id
+Display Key: brand_name
+Incremental Key:

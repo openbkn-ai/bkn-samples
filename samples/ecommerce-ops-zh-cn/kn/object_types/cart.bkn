@@ -1,0 +1,34 @@
+---
+type: object_type
+id: cart
+name: 购物车
+tags: [源表实体, 电商]
+---
+
+## ObjectType: 购物车
+
+用户的购物容器，表达当前源表事实；不把购物车创建时间当作每个明细加购时间。
+
+### Data Source
+
+| Type | ID | Name |
+|------|----|------|
+| resource | ecommerce_resource_cart | ecommerce_ops.carts |
+
+### Data Properties
+
+| Name | Display Name | Type | Description | Mapped Field |
+|------|--------------|------|-------------|--------------|
+| cart_id | 购物车主键ID | integer | 购物车主键ID | cart_id |
+| user_id | 所属用户ID | integer | 所属用户ID | user_id |
+| created_at | 创建时间 | datetime | 创建时间 | created_at |
+| updated_at | 更新时间 | datetime | 更新时间 | updated_at |
+
+### Logic Properties
+
+
+### Keys
+
+Primary Keys: cart_id
+Display Key: cart_id
+Incremental Key:

@@ -1,0 +1,22 @@
+---
+type: relation_type
+id: rel_product_review_order
+name: 评价关联订单
+tags: [电商]
+---
+
+## RelationType: 评价关联订单
+
+按源表业务键关联，允许空外键；无匹配记录不伪造关系。
+
+### Endpoint
+
+| Source | Target | Type |
+|--------|--------|------|
+| product_review | order | direct |
+
+### Mapping Rules
+
+| Source Property | Target Property |
+|-----------------|-----------------|
+| order_id | order_id |

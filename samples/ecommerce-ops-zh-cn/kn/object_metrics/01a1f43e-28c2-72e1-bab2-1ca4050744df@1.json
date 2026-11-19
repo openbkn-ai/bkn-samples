@@ -1,0 +1,130 @@
+{
+  "definition": {
+    "id": "01a1f43e-28c2-72e1-bab2-1ca4050744df",
+    "version": 1,
+    "code": "ec_m09_aftersales_completion_hours",
+    "name": "售后平均完成时长",
+    "description": "M09：有效完成时间减申请时间，小时，按售后类型分别展示，按完成时间归属；不混入在办等待时长。",
+    "owner_object_type_id": "after_sales_case",
+    "metric_type": "derived",
+    "result_semantics": {
+      "statistical_grain": {
+        "group_by_dimensions": [
+          {
+            "object_type_id": "after_sales_case",
+            "property_name": "business_type"
+          }
+        ]
+      },
+      "value": {
+        "physical_type": "decimal",
+        "semantic_type": "measure",
+        "precision": 18,
+        "scale": 6,
+        "rounding_mode": "half_up",
+        "unit": {
+          "system": "UCUM",
+          "quantity_kind": "duration",
+          "code": "h",
+          "scale_factor": 1
+        }
+      },
+      "no_data_policy": "unavailable",
+      "partial_data_policy": "reject"
+    },
+    "specification": {
+      "kind": "derived",
+      "base_metric": {
+        "metric_id": "01a1f43d-ed6c-7332-b653-f43e98a23fdf",
+        "version": 1
+      },
+      "business_qualifiers": {
+        "filters": {
+          "node_type": "group",
+          "boolean_operator": "and",
+          "children": [
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "after_sales_case",
+                  "property_name": "requested_at"
+                }
+              },
+              "comparison_operator": "is_not_null"
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "after_sales_case",
+                  "property_name": "completed_at"
+                }
+              },
+              "comparison_operator": "is_not_null"
+            },
+            {
+              "node_type": "predicate",
+              "left": {
+                "source": "property",
+                "property_ref": {
+                  "object_type_id": "after_sales_case",
+                  "property_name": "completed_at"
+                }
+              },
+              "comparison_operator": "after_or_equal",
+              "right": [
+                {
+                  "source": "property",
+                  "property_ref": {
+                    "object_type_id": "after_sales_case",
+                    "property_name": "requested_at"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "event_time": {
+          "object_type_id": "after_sales_case",
+          "property_name": "completed_at"
+        }
+      }
+    },
+    "query_capabilities": {
+      "analysis_dimensions": [],
+      "time_dimensions": [
+        {
+          "object_type_id": "after_sales_case",
+          "property_name": "completed_at"
+        }
+      ]
+    },
+    "lifecycle": {
+      "status": "published",
+      "ontology_version": "current",
+      "expression_language_version": "1.0",
+      "function_registry_version": "1.0",
+      "aggregation_registry_version": "1.0",
+      "unit_registry_version": "1.0",
+      "published_at": "2026-11-19T14:37:56Z"
+    }
+  },
+  "kn_id": "ecommerce_ops_zh_cn",
+  "branch": "main",
+  "creator": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "updater": {
+    "id": "266c6a42-6131-4d62-8f39-853e7093701c",
+    "type": "user",
+    "name": ""
+  },
+  "create_time": 1795099076802,
+  "update_time": 1795099076931,
+  "revision": "52235055180144b89c8b8dfd11e48a9d"
+}

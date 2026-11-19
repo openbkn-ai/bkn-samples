@@ -1,0 +1,18 @@
+---
+type: value_type
+id: cny_nonnegative_amount
+name: 人民币非负金额
+tags: [电商业务值类型]
+---
+
+## ValueType: 人民币非负金额
+
+以人民币元计量的非负金额，允许零金额。仅统一币种、单位和单值边界；应付、收款、申请退款及完成退款仍分别遵循属性说明与业务时间口径，不能因共用值类型直接相加。
+
+### Definition
+
+```yaml
+base_type: decimal
+range: {min: 0}
+unit: CNY
+```
