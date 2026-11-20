@@ -147,6 +147,58 @@ class SampleTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'native event check incomplete'):
                 PLATFORM.scan_events(None)
 
+    def test_index_restore_keeps_fresh_physical_schema_and_new_columns(self):
+        current = [{'name': 'id', 'type': 'integer', 'original_type': 'BIGINT', 'filterable': False},
+                   {'name': 'new_column', 'type': 'string', 'filterable': True}]
+        source = [{'name': 'id', 'type': 'old', 'original_type': 'bigint(20)', 'filterable': True,
+                   'features': [{'feature_type': 'vector', 'config': {'dimension': 1024, 'model_name': 'local'}}]}]
+        result = PLATFORM.merge_index_schema(current, source)
+        self.assertEqual(result[0]['type'], 'integer')
+        self.assertEqual(result[0]['original_type'], 'BIGINT')
+        self.assertTrue(result[0]['filterable'])
+        self.assertEqual(result[1], current[1])
+        self.assertNotIn('dimension', result[0]['features'][0]['config'])
+        self.assertFalse(current[0]['filterable'])
+
+    def test_embedding_references_are_names_and_install_time_tokens(self):
+        configs = PLATFORM.load(ROOT / 'tools/assets/indices.json')
+        count = 0
+        for config in configs.values():
+            default = config['index_config'].get('default_embedding_model')
+            self.assertFalse(default and default.isdigit())
+            for prop in config['schema_definition']:
+                for feature in prop.get('features') or []:
+                    if feature['feature_type'] == 'vector':
+                        token = feature['config']['embedding_model']
+                        self.assertIn(token, config['embedding_models'])
+                        self.assertFalse(token.isdigit()); count += 1
+        self.assertGreater(count, 0)
+
+    def test_skill_runtime_dependencies_and_read_only_templates(self):
+        for skill in PLATFORM.load(ROOT / 'tools/assets/skills.json'):
+            directory = ROOT / skill['directory']
+            deps = PLATFORM.load(directory / 'references/dependencies.json')
+            self.assertTrue(deps['read_only'])
+            for query in PLATFORM.load(directory / 'queries/queries.json'):
+                self.assertTrue(query['cypher'].startswith('MATCH '))
+                self.assertEqual(set(re.findall(r'\$([A-Za-z_][A-Za-z0-9_]*)', query['cypher'])), set(query['parameters']))
+                self.assertNotRegex(query['cypher'], r'(?i)\b(CREATE|MERGE|DELETE|SET|REMOVE|DROP|ALTER)\b')
+            self.assertFalse((directory / 'scripts/check_contract.py').exists())
+
+    def test_embedding_binding_uses_configured_target_default_without_changing_it(self):
+        class FakeState:
+            value = {'map': {}}
+            save = staticmethod(lambda: None)
+        models = [{'model_id': 'new-id', 'model_name': 'target-default'}]
+        calls = []
+        def request(method, path, body=None):
+            calls.append(method)
+            return {'model_name': 'target-default'} if '/get_default?' in path else {'data': models}
+        with patch.dict(os.environ, {'BKN_SAMPLE_EMBEDDING': '', 'EMBEDDING_MODEL_NAME': ''}), patch.object(PLATFORM, 'api', side_effect=request):
+            state = FakeState(); PLATFORM.bind_embedding_models(state)
+        self.assertEqual(set(state.value['map'].values()), {'new-id'})
+        self.assertTrue(calls and all(method == 'GET' for method in calls))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -55,6 +55,46 @@ def parameter_semantics(parameters):
             for p in parameters or []]
 
 
+def merge_index_schema(current, source):
+    """Retain fresh physical metadata; restore only the source's mutable settings."""
+    requested = copy.deepcopy(current)
+    settings = {p['name']: p for p in source}
+    for prop in requested:
+        if prop['name'] in settings:
+            for key in ('display_name', 'description', 'filterable', 'features'):
+                if key in settings[prop['name']]:
+                    prop[key] = copy.deepcopy(settings[prop['name']][key])
+        for feature in prop.get('features') or []:
+            if feature.get('feature_type') == 'vector':
+                feature.get('config', {}).pop('dimension', None)
+    return requested
+
+
+def bind_embedding_models(state):
+    wanted = {}
+    for config in load(ASSETS / 'indices.json').values():
+        wanted.update(config.get('embedding_models', {}))
+    if not wanted:
+        return
+    models = []
+    for page in range(1, 51):
+        listed = api('GET', '/api/mf-model-manager/v1/small-model/list?page=' + str(page) + '&size=100&model_type=embedding')
+        batch = entries(listed); models.extend(batch)
+        if len(batch) < 100:
+            break
+    override = os.environ.get('BKN_SAMPLE_EMBEDDING') or os.environ.get('EMBEDDING_MODEL_NAME')
+    if not override:
+        configured = api('GET', '/api/mf-model-manager/v1/small-model/get_default?model_type=embedding')
+        override = configured.get('model_name') or (configured.get('data') or {}).get('model_name')
+    for token, name in wanted.items():
+        reference = override or name
+        matches = [m for m in models if m.get('model_name') == reference or str(m.get('model_id')) == reference]
+        require(len(matches) == 1, 'missing or ambiguous configured embedding model: ' + name)
+        state.value['map'][token] = str(matches[0]['model_id'])
+        state.value.setdefault('embedding_names', {})[name] = matches[0]['model_name']
+    state.save()
+
+
 def cli(*args):
     result = run_command(['openbkn', '--json', *map(str, args)], capture_output=True, text=True, timeout=1200)
     if result.returncode:
@@ -346,13 +386,19 @@ def main():
         if 'events' not in state.value['phases']:
             install_events(state)
         if 'indices' not in state.value['phases']:
+            bind_embedding_models(state)
             bindings = load(ASSETS / 'bindings.json')
-            for oid, config in load(ASSETS / 'indices.json').items():
+            for oid, config in state.render(load(ASSETS / 'indices.json')).items():
                 rid = state.value['map'][bindings[oid]['resource_token']]
                 current = entries(api('GET', '/api/vega-backend/v1/resources/' + rid))[0]
                 require(current['catalog_id'] == payload['catalog']['id'], 'resource catalog ownership differs')
-                body = {key: current[key] for key in ('name', 'catalog_id', 'tags', 'description', 'category', 'enabled')}
-                body.update(config); body['expected_update_time'] = current['update_time']
+                body = {key: current[key] for key in ('id', 'name', 'catalog_id', 'tags', 'description', 'category', 'enabled')}
+                body['schema_definition'] = merge_index_schema(current['schema_definition'], config['schema_definition'])
+                body['index_config'] = copy.deepcopy(config['index_config'])
+                default = body['index_config'].get('default_embedding_model')
+                if default in state.value.get('embedding_names', {}):
+                    body['index_config']['default_embedding_model'] = state.value['embedding_names'][default]
+                body['expected_update_time'] = current['update_time']
                 api('PUT', '/api/vega-backend/v1/resources/' + rid, body)
             resource_ids = sorted({state.value['map'][b['resource_token']] for b in bindings.values()})
             with ThreadPoolExecutor(max_workers=3) as pool:

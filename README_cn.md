@@ -52,6 +52,8 @@ OpenBKN 0.2.1 提供 **12 个标准样例**：供应链、世界杯、制造业�
 
 ## 开发与发布
 
+开发中的独立样例：[电商经营决策（中文）](samples/ecommerce-ops-zh-cn/)。包含业务数据快照、指标、函数、Skills 和事件规则；候选版本通过验收并正式发布后才会加入在线目录。
+
 新增或更新样例请先阅读[样例开发指南](docs/SAMPLE_DEVELOPMENT_GUIDE.zh-CN.md)。本地开发需要与平台版本兼容的 [openbkn CLI](https://github.com/openbkn-ai/bkn-sdk)、Python 3.11+，以及样例脚本声明的依赖。
 
 ```text

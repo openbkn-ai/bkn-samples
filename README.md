@@ -54,6 +54,8 @@ An independent external agent answers the questions through MCP. Reference answe
 
 ## Develop and publish
 
+Development candidate: [Ecommerce operations (Chinese)](samples/ecommerce-ops-zh-cn/), with a business data snapshot, metrics, functions, Skills, and event rules. It will enter the online catalog after fixed-package acceptance and publication.
+
 Start with the [Sample Development Guide](docs/SAMPLE_DEVELOPMENT_GUIDE.md). For local development, use an [openbkn CLI](https://github.com/openbkn-ai/bkn-sdk) compatible with your platform and Python 3.11+ with the dependencies required by the sample's scripts.
 
 ```text
