@@ -138,6 +138,15 @@ class SampleTests(unittest.TestCase):
         self.assertEqual(len(memberships), 1)
         self.assertEqual({i['id'] for i in memberships[0]['entries']}, {e['code'] for e in events})
 
+    def test_http_success_with_unknown_event_check_is_rejected(self):
+        native = next(e for e in PLATFORM.load(ROOT / 'tools/assets/events.json') if e.get('rule_tool'))
+        original_load = PLATFORM.load
+        def selected_load(path):
+            return [native] if Path(path).name == 'events.json' else original_load(path)
+        with patch.object(PLATFORM, 'load', side_effect=selected_load), patch.object(PLATFORM, 'api', return_value={'check': {'status': 'unknown'}}):
+            with self.assertRaisesRegex(ValueError, 'native event check incomplete'):
+                PLATFORM.scan_events(None)
+
 
 if __name__ == '__main__':
     unittest.main()

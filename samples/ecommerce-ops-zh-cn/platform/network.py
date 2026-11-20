@@ -245,7 +245,7 @@ def scan_events(state):
     for event in load(ASSETS / 'events.json'):
         if event.get('rule_tool'):
             result = api('POST', BASE + '/event-types/' + event['code'] + '/check')
-            require(result.get('status') not in ('failed', 'unknown'), 'native event check incomplete')
+            require(result.get('check', {}).get('status') == 'ok', 'native event check incomplete')
         elif event['code'] in ('purchase_expected_receipt_gap', 'payment_failure_unrecovered', 'logistics_tracking_stalled', 'return_received_processing_wait'):
             result = cli('function', 'execute', state.value['map'][recorder['token']], '--toolbox', state.value['map'][recorder['box_token']], '--body', json.dumps({'kn_id': KN, 'event_type': event['code']}))
             require(result.get('status_code') == 200 and result.get('body', {}).get('exit_code') == 0 and result.get('body', {}).get('result', {}).get('status') == 'complete', 'business event detector failed or incomplete')
@@ -272,7 +272,8 @@ def scan_events(state):
             else:
                 raise ValueError('coupon coverage exceeds bounded full scan')
             check_tool = functions['ecommerce_coupon_validity_anomalies']['function_input']
-            api('POST', BASE + '/rule-checks', {'event_type': event['code'], 'rule_version': hashlib.sha256(check_tool['code'].encode()).hexdigest()[:16], 'status': 'ok', 'hits': hits, 'covered': covered})
+            recorded = api('POST', BASE + '/rule-checks', {'event_type': event['code'], 'rule_version': hashlib.sha256(check_tool['code'].encode()).hexdigest()[:16], 'status': 'ok', 'hits': hits, 'covered': covered})
+            require(recorded.get('check', {}).get('status') == 'ok', 'coupon event check was not recorded')
     state.phase('initial-event-check')
 
 
@@ -299,6 +300,8 @@ def verify(state, tags):
             require(actual == expected, 'action definition differs: ' + action['id'] + '/' + key)
     require(len(entries(api('GET', BASE + '/object-metrics?limit=500'))) == 67, 'metric count differs')
     require(len(entries(api('GET', BASE + '/event-types'))) == 7, 'event class count differs')
+    checks = {c['event_type']: c for c in entries(api('GET', BASE + '/rule-checks'))}
+    require(set(checks) >= set(contract['event_codes']) and all(checks[code]['status'] == 'ok' for code in contract['event_codes']), 'initial event checks incomplete')
     require(len(entries(api('GET', BASE + '/capabilities?limit=500'))) == 53, 'capability count differs')
     for baseline in state.render(load(ASSETS / 'business-baseline.json')):
         response = api('POST', '/api/vega-backend/v1/resources/query', {'query': baseline['query'], 'query_format': 'sql', 'paging': {'mode': 'single', 'limit': 2, 'offset': 0}})
