@@ -66,7 +66,12 @@ def api(method, path, body=None):
             raw = response.read()
         return json.loads(raw) if raw else {}
     except HTTPError as error:
-        raise RuntimeError('platform API returned HTTP ' + str(error.code) + ' at ' + path.split('?')[0]) from None
+        try:
+            detail = json.loads(error.read(8192)); code = detail.get('error_code', detail.get('code', ''))
+        except (ValueError, OSError):
+            code = ''
+        safe_code = code if isinstance(code, str) and re.fullmatch(r'[A-Za-z0-9_.-]{0,160}', code) else ''
+        raise RuntimeError('platform API returned HTTP ' + str(error.code) + ' ' + safe_code + ' at ' + path.split('?')[0]) from None
 
 
 def persist(path, value):
@@ -139,7 +144,7 @@ def register_tools(state):
             require(state.value['map'][box['token']] in state.owned['toolboxes'], 'toolbox ownership conflict')
             continue
         body = {'box_name': box['name'], 'box_desc': box['description'], 'metadata_type': box['metadata_type'], 'source': 'custom', 'box_category': 'data_process'}
-        if box.get('service_url'):
+        if box['metadata_type'] == 'openapi' and box.get('service_url'):
             body['box_svc_url'] = box['service_url']
         result = api('POST', TOOLS, body)
         state.remember('toolboxes', box['token'], result['box_id'])
@@ -311,6 +316,7 @@ def main():
             require(tags <= set(existing.get('tags', [])), 'network ownership conflict')
         else:
             bootstrap = state.render(load(ASSETS / 'bootstrap.json'))
+            bootstrap['branch'] = 'main'
             bootstrap['tags'] = sorted(tags)
             api('POST', '/api/bkn-backend/v1/knowledge-networks?strict_mode=false', bootstrap)
         if 'tools' not in state.value['phases']:

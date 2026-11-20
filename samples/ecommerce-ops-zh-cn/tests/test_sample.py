@@ -4,6 +4,7 @@ import decimal
 import importlib.util
 import json
 import os
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -99,6 +100,13 @@ class SampleTests(unittest.TestCase):
         self.assertEqual({p.name for p in (ROOT / 'skills').iterdir()}, {s['name'] for s in skills})
         for s in skills:
             self.assertIn('name: ' + s['name'], (ROOT / s['directory'] / 'SKILL.md').read_text(encoding='utf-8'))
+
+    def test_toolbox_names_follow_platform_contract(self):
+        for box in PLATFORM.load(ROOT / 'tools/assets/toolboxes.json'):
+            self.assertRegex(box['name'], r'^[A-Za-z0-9_]+$')
+            self.assertLessEqual(len(box['name']), 50)
+        bootstrap = PLATFORM.load(ROOT / 'tools/assets/bootstrap.json')
+        self.assertEqual(bootstrap['branch'], 'main')
 
 
 if __name__ == '__main__':
