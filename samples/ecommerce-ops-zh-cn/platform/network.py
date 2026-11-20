@@ -47,6 +47,14 @@ def entries(value):
     raise ValueError('expected result collection')
 
 
+def parameter_semantics(parameters):
+    """Native import makes omitted defaults explicit; compare effective bindings."""
+    return [{**{k: p.get(k) or '' for k in ('name', 'type', 'source', 'operation', 'value_from')},
+             'value': None if p.get('value_from') == 'input' else p.get('value'),
+             'if_system_gen': bool(p.get('if_system_gen')), 'comment': p.get('comment') or ''}
+            for p in parameters or []]
+
+
 def cli(*args):
     result = run_command(['openbkn', '--json', *map(str, args)], capture_output=True, text=True, timeout=1200)
     if result.returncode:
@@ -282,8 +290,11 @@ def verify(state, tags):
             require(objects[oid].get(key) == value, 'object definition differs: ' + oid + '/' + key)
     actions = {a['id']: a for a in network['action_types']}
     for action in state.render(load(ASSETS / 'actions.json')):
-        for key in ('parameters', 'action_source', 'condition', 'operation_config'):
-            require(actions[action['id']].get(key) == action.get(key), 'action definition differs: ' + action['id'] + '/' + key)
+        for key in ('parameters', 'action_source', 'condition', 'operation_config', 'impact_contracts'):
+            actual, expected = actions[action['id']].get(key), action.get(key)
+            if key == 'parameters':
+                actual, expected = parameter_semantics(actual), parameter_semantics(expected)
+            require(actual == expected, 'action definition differs: ' + action['id'] + '/' + key)
     require(len(entries(api('GET', BASE + '/object-metrics?limit=500'))) == 67, 'metric count differs')
     require(len(entries(api('GET', BASE + '/event-types'))) == 7, 'event class count differs')
     require(len(entries(api('GET', BASE + '/capabilities?limit=500'))) == 53, 'capability count differs')

@@ -108,6 +108,18 @@ class SampleTests(unittest.TestCase):
         bootstrap = PLATFORM.load(ROOT / 'tools/assets/bootstrap.json')
         self.assertEqual(bootstrap['branch'], 'main')
 
+    def test_impact_contracts_do_not_duplicate_legacy_affect_projection(self):
+        for file in (ROOT / 'kn/action_types').glob('*.bkn'):
+            text = file.read_text(encoding='utf-8')
+            self.assertFalse('### Impact Contracts' in text and '### Affect Object' in text, file.name)
+
+    def test_parameter_defaults_preserve_effective_binding(self):
+        original = [{'name': 'status', 'type': 'string', 'source': 'body', 'value_from': 'input'}]
+        imported = [{**original[0], 'operation': '', 'value': '', 'if_system_gen': False, 'comment': ''}]
+        self.assertEqual(PLATFORM.parameter_semantics(original), PLATFORM.parameter_semantics(imported))
+        imported[0]['source'] = 'path'
+        self.assertNotEqual(PLATFORM.parameter_semantics(original), PLATFORM.parameter_semantics(imported))
+
 
 if __name__ == '__main__':
     unittest.main()
