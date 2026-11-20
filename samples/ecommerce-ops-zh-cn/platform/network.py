@@ -1,5 +1,4 @@
 """Managed native BKN installation with portable identities and ownership receipts."""
-from concurrent.futures import ThreadPoolExecutor
 import copy
 from decimal import Decimal
 import hashlib
@@ -53,6 +52,20 @@ def parameter_semantics(parameters):
              'value': None if p.get('value_from') == 'input' else p.get('value'),
              'if_system_gen': bool(p.get('if_system_gen')), 'comment': p.get('comment') or ''}
             for p in parameters or []]
+
+
+def property_semantics(properties):
+    result = copy.deepcopy(properties)
+    for prop in result or []:
+        # These are runtime/index availability projections, not definitions.
+        prop.pop('index_features', None); prop.pop('condition_operations', None)
+        for parameter in prop.get('parameters') or []:
+            parameter['comment'] = parameter.get('comment') or ''
+            parameter['if_system_generate'] = bool(parameter.get('if_system_generate'))
+            parameter['required'] = bool(parameter.get('required'))
+            if parameter.get('value_from') == 'input':
+                parameter.pop('value', None)
+    return result
 
 
 def merge_index_schema(current, source):
@@ -262,6 +275,13 @@ def install_model(state, tags):
         file.write_text('---\n' + yaml.safe_dump(meta, allow_unicode=True, sort_keys=False) + '---' + body, encoding='utf-8')
         cli('bkn', 'validate', dest)
         cli('bkn', 'push', dest, '--import-mode', 'overwrite')
+    # Preserve parameter requiredness and complete binding declarations that
+    # the native table representation does not carry.
+    imported = {o['id']: o for o in api('GET', BASE + '?mode=export')['object_types']}
+    for oid, expected in state.render(load(ASSETS / 'object-semantics.json')).items():
+        if expected.get('logic_properties'):
+            body = copy.deepcopy(imported[oid]); body['logic_properties'] = expected['logic_properties']
+            api('PUT', BASE + '/object-types/' + oid + '?branch=main', body)
     state.phase('model')
 
 
@@ -330,7 +350,10 @@ def verify(state, tags):
         require(actual == binding['fields'], 'field mapping differs: ' + oid)
     for oid, expected in state.render(load(ASSETS / 'object-semantics.json')).items():
         for key, value in expected.items():
-            require(objects[oid].get(key) == value, 'object definition differs: ' + oid + '/' + key)
+            actual = objects[oid].get(key)
+            if key in ('data_properties', 'logic_properties'):
+                actual, value = property_semantics(actual), property_semantics(value)
+            require(actual == value, 'object definition differs: ' + oid + '/' + key)
     actions = {a['id']: a for a in network['action_types']}
     for action in state.render(load(ASSETS / 'actions.json')):
         for key in ('parameters', 'action_source', 'condition', 'operation_config', 'impact_contracts'):
@@ -385,31 +408,16 @@ def main():
             bind_capabilities(state)
         if 'events' not in state.value['phases']:
             install_events(state)
-        if 'indices' not in state.value['phases']:
-            bind_embedding_models(state)
-            bindings = load(ASSETS / 'bindings.json')
-            for oid, config in state.render(load(ASSETS / 'indices.json')).items():
-                rid = state.value['map'][bindings[oid]['resource_token']]
-                current = entries(api('GET', '/api/vega-backend/v1/resources/' + rid))[0]
-                require(current['catalog_id'] == payload['catalog']['id'], 'resource catalog ownership differs')
-                body = {key: current[key] for key in ('id', 'name', 'catalog_id', 'tags', 'description', 'category', 'enabled')}
-                body['schema_definition'] = merge_index_schema(current['schema_definition'], config['schema_definition'])
-                body['index_config'] = copy.deepcopy(config['index_config'])
-                default = body['index_config'].get('default_embedding_model')
-                if default in state.value.get('embedding_names', {}):
-                    body['index_config']['default_embedding_model'] = state.value['embedding_names'][default]
-                body['expected_update_time'] = current['update_time']
-                api('PUT', '/api/vega-backend/v1/resources/' + rid, body)
-            resource_ids = sorted({state.value['map'][b['resource_token']] for b in bindings.values()})
-            with ThreadPoolExecutor(max_workers=3) as pool:
-                list(pool.map(lambda rid: cli('vega', 'resource', 'build', rid, '--wait', '--timeout', '900'), resource_ids))
-            state.phase('indices')
+        # Index configuration remains in the package for a later phase. The
+        # user explicitly deferred index construction and its acceptance.
+        state.value['index_build_status'] = 'deferred_by_user'
+        state.save()
         if 'initial-event-check' not in state.value['phases']:
             scan_events(state)
     checks = verify(state, tags)
     summary = hashlib.sha256(json.dumps(state.value['map'], sort_keys=True).encode()).hexdigest()
     result = {'ok': True, 'stage': 'platform-' + mode, 'resources': {'catalogId': payload['catalog']['id'], 'knowledgeNetworkId': KN,
-              'ownedExecution': state.owned, 'capabilitySummary': summary}, 'checks': [{'name': k, 'ok': v} for k, v in checks.items()], 'degrade': [], 'message': ''}
+              'ownedExecution': state.owned, 'capabilitySummary': summary, 'indexBuildStatus': 'deferred_by_user'}, 'checks': [{'name': k, 'ok': v} for k, v in checks.items()], 'degrade': [], 'message': ''}
     persist(Path(os.environ['BKN_SAMPLE_OUTPUT']), result)
     print(json.dumps(result, ensure_ascii=False))
 

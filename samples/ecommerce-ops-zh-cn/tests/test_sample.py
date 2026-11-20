@@ -199,6 +199,14 @@ class SampleTests(unittest.TestCase):
         self.assertEqual(set(state.value['map'].values()), {'new-id'})
         self.assertTrue(calls and all(method == 'GET' for method in calls))
 
+    def test_logic_binding_requiredness_is_part_of_business_semantics(self):
+        original = [{'name': 'forecast', 'parameters': [{'name': 'quantity', 'value_from': 'input', 'required': True}]}]
+        imported = [{'name': 'forecast', 'parameters': [{'name': 'quantity', 'value_from': 'input', 'required': True, 'comment': '', 'if_system_generate': False}],
+                     'index_features': [{'available': False}], 'condition_operations': []}]
+        self.assertEqual(PLATFORM.property_semantics(original), PLATFORM.property_semantics(imported))
+        imported[0]['parameters'][0]['required'] = False
+        self.assertNotEqual(PLATFORM.property_semantics(original), PLATFORM.property_semantics(imported))
+
 
 if __name__ == '__main__':
     unittest.main()

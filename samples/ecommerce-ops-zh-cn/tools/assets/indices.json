@@ -458,7 +458,11 @@
         "filterable": true
       }
     ],
-    "index_config": {},
+    "index_config": {
+      "primary_key_fields": [
+        "case_id"
+      ]
+    },
     "embedding_models": {}
   },
   "after_sales_item": {
@@ -524,7 +528,12 @@
         "filterable": true
       }
     ],
-    "index_config": {},
+    "index_config": {
+      "primary_key_fields": [
+        "case_id",
+        "item_id"
+      ]
+    },
     "embedding_models": {}
   },
   "brand": {
@@ -2201,7 +2210,11 @@
         "filterable": true
       }
     ],
-    "index_config": {},
+    "index_config": {
+      "primary_key_fields": [
+        "hold_id"
+      ]
+    },
     "embedding_models": {}
   },
   "inventory_reservation": {
@@ -2351,7 +2364,11 @@
         "filterable": true
       }
     ],
-    "index_config": {},
+    "index_config": {
+      "primary_key_fields": [
+        "reservation_id"
+      ]
+    },
     "embedding_models": {}
   },
   "logistics_tracking": {
@@ -4382,7 +4399,11 @@
         "filterable": true
       }
     ],
-    "index_config": {},
+    "index_config": {
+      "primary_key_fields": [
+        "attempt_id"
+      ]
+    },
     "embedding_models": {}
   },
   "product": {
@@ -7328,7 +7349,12 @@
         "filterable": true
       }
     ],
-    "index_config": {},
+    "index_config": {
+      "primary_key_fields": [
+        "shipment_id",
+        "item_id"
+      ]
+    },
     "embedding_models": {}
   },
   "supplier": {
