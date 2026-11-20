@@ -24,6 +24,41 @@ PLATFORM = module('ecommerce_platform', 'platform/network.py')
 
 
 class SampleTests(unittest.TestCase):
+    def capability_state(self):
+        tokens = set()
+        for d in PLATFORM.load(ROOT / 'tools/assets/functions.json'):
+            tokens.update((d['token'], d['box_token']))
+        tokens.update(s['token'] for s in PLATFORM.load(ROOT / 'tools/assets/skills.json'))
+        state = object.__new__(PLATFORM.State)
+        state.value = {'map': {t: 'installed_' + t for t in tokens}}
+        return state
+
+    def test_mounts_without_source_environment_knowledge_base(self):
+        self.assertEqual(PLATFORM.load(ROOT / 'tools/assets/external-mounts.json'), [])
+        state = self.capability_state()
+        with patch.object(PLATFORM, 'api', return_value={}) as request, patch.object(state, 'phase') as phase:
+            PLATFORM.bind_capabilities(state)
+        args = request.call_args.args
+        self.assertEqual(args[:2], ('POST', PLATFORM.BASE + '/capabilities'))
+        mounts = args[2]['capabilities']
+        self.assertEqual(len(mounts), 52)
+        self.assertEqual(sum(m['capability_type'] == 'function' for m in mounts), 49)
+        self.assertEqual(sum(m['capability_type'] == 'skill' for m in mounts), 3)
+        self.assertNotIn('knowledge_base', {m['capability_type'] for m in mounts})
+        phase.assert_called_once_with('mounts')
+
+    def test_capability_verification_rejects_same_count_wrong_identity(self):
+        state = self.capability_state()
+        actual = PLATFORM.capability_mounts(state)
+        PLATFORM.verify_capabilities(state, actual)
+        actual[0] = {**actual[0], 'capability_id': 'wrong-tool'}
+        with self.assertRaisesRegex(ValueError, 'capability identities differ'):
+            PLATFORM.verify_capabilities(state, actual)
+        actual = PLATFORM.capability_mounts(state)
+        actual[0] = {**actual[0], 'box_id': 'wrong-toolbox'}
+        with self.assertRaisesRegex(ValueError, 'capability identities differ'):
+            PLATFORM.verify_capabilities(state, actual)
+
     def test_lossless_typed_values(self):
         values = [None, '', 0, False, decimal.Decimal('123.4500'), datetime.datetime(2026, 11, 20, 0, 0),
                   datetime.date(2026, 11, 20), datetime.timedelta(seconds=3601), b'\x00\xff']

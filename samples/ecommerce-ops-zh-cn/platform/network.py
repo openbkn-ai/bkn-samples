@@ -252,14 +252,28 @@ def register_skills(state):
     state.phase('skills')
 
 
-def bind_capabilities(state):
+def capability_mounts(state):
     mounts = [{'capability_type': 'function', 'box_id': state.value['map'][d['box_token']],
                'capability_id': state.value['map'][d['token']], 'comment': d['comment']}
               for d in load(ASSETS / 'functions.json')]
     mounts += [{'capability_type': 'skill', 'capability_id': state.value['map'][s['token']], 'comment': s['comment']}
                for s in load(ASSETS / 'skills.json')]
     mounts += [{k: v for k, v in e.items() if k != 'name'} for e in load(ASSETS / 'external-mounts.json')]
-    api('POST', BASE + '/capabilities', {'capabilities': mounts})
+    return mounts
+
+
+def verify_capabilities(state, actual):
+    def identity(item):
+        kind = item['capability_type']
+        owner = (item.get('box_id') or item.get('owner_id') or '') if kind in ('function', 'mcp_tool') else ''
+        return kind, owner, item['capability_id']
+    expected = {identity(item) for item in capability_mounts(state)}
+    found = {identity(item) for item in actual}
+    require(len(actual) == len(found) and found == expected, 'capability identities differ')
+
+
+def bind_capabilities(state):
+    api('POST', BASE + '/capabilities', {'capabilities': capability_mounts(state)})
     state.phase('mounts')
 
 
@@ -365,7 +379,7 @@ def verify(state, tags):
     require(len(entries(api('GET', BASE + '/event-types'))) == 7, 'event class count differs')
     checks = {c['event_type']: c for c in entries(api('GET', BASE + '/rule-checks'))}
     require(set(checks) >= set(contract['event_codes']) and all(checks[code]['status'] == 'ok' for code in contract['event_codes']), 'initial event checks incomplete')
-    require(len(entries(api('GET', BASE + '/capabilities?limit=500'))) == 53, 'capability count differs')
+    verify_capabilities(state, entries(api('GET', BASE + '/capabilities?limit=500')))
     for baseline in state.render(load(ASSETS / 'business-baseline.json')):
         response = api('POST', '/api/vega-backend/v1/resources/query', {'query': baseline['query'], 'query_format': 'sql', 'paging': {'mode': 'single', 'limit': 2, 'offset': 0}})
         require(not response.get('warnings') and not response.get('limited'), 'business baseline result incomplete')
