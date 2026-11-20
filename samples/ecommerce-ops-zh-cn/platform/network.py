@@ -230,10 +230,12 @@ def install_events(state):
     for event in state.render(load(ASSETS / 'events.json')):
         code = event['code']
         api('PUT' if code in existing else 'POST', BASE + '/event-types' + ('/' + code if code in existing else ''), event)
+    network = api('GET', BASE + '?mode=export')
+    memberships = {g['id']: set(g.get('object_type_ids') or []) for g in network['concept_groups']}
     for group in load(ASSETS / 'groups.json'):
-        ids = group.get('object_type_ids') or []
+        ids = [i for i in group.get('object_type_ids') or [] if i not in memberships.get(group['id'], set())]
         if ids:
-            api('POST', BASE + '/concept-groups/' + group['id'] + '/object-types?branch=main&strict_mode=true', [{'id': i} for i in ids])
+            api('POST', BASE + '/concept-groups/' + group['id'] + '/object-types?branch=main&strict_mode=true', {'entries': [{'id': i} for i in ids]})
     state.phase('events')
 
 

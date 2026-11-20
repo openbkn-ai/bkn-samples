@@ -120,6 +120,24 @@ class SampleTests(unittest.TestCase):
         imported[0]['source'] = 'path'
         self.assertNotEqual(PLATFORM.parameter_semantics(original), PLATFORM.parameter_semantics(imported))
 
+    def test_event_install_adds_only_missing_members_with_entries_envelope(self):
+        groups = PLATFORM.load(ROOT / 'tools/assets/groups.json')
+        events = PLATFORM.load(ROOT / 'tools/assets/events.json')
+        current = [{'id': g['id'], 'object_type_ids': [i for i in g.get('object_type_ids') or [] if i not in {e['code'] for e in events}]} for g in groups]
+        calls = []
+        def request(method, path, body=None):
+            if method == 'GET':
+                return {'entries': events} if path.endswith('/event-types') else {'concept_groups': current}
+            calls.append((method, path, body)); return {}
+        class FakeState:
+            render = staticmethod(lambda value: value)
+            phase = staticmethod(lambda name: None)
+        with patch.object(PLATFORM, 'api', side_effect=request):
+            PLATFORM.install_events(FakeState())
+        memberships = [body for method, path, body in calls if path.endswith('strict_mode=true')]
+        self.assertEqual(len(memberships), 1)
+        self.assertEqual({i['id'] for i in memberships[0]['entries']}, {e['code'] for e in events})
+
 
 if __name__ == '__main__':
     unittest.main()
