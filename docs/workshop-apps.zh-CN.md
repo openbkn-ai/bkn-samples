@@ -10,7 +10,7 @@
 - `sources[].objectType`、行动 ID（`…operations[].action.id`）和各字段名，按 ID 指向该网络的对象类、行动和属性。
 - 规则函数（`pages[…].layers[].ruleTools[]` 和 `scheduleModel.tasks[].rules[]`）用 `tool.boxName`（工具箱名）和 `tool.toolName`（函数名）指明。导出文件还带着 `tool.box` / `tool.tool`，也就是原环境里的 ID。这些 ID 换了环境就没用了：在新环境里找不到这些 ID 时，Workshop 会按工具箱名和函数名调用同名函数。
 - `app.id` 是导出时那个应用的 ID，导入或安装时会给新应用分配新的 ID。
-- `components[]` 列出页面用到的自定义组件：每个 `type`（`x-<前缀>.<名称>`）和画它的组件包 `package`。Workshop 按组件包文件的 SHA-256 保存，同样的文件在哪个环境里都是同一个组件包 ID。应用列表的导出只有这个文件，不带组件包。
+- `components[]` 列出页面用到的自定义组件：每个 `type`（`x-<前缀>.<名称>`）和画它的组件包 `package`。Workshop 按组件包文件的 SHA-256 保存，同样的文件在哪个环境里都是同一个组件包 ID。应用列表的导出只有这个文件，不带组件包。样例里的应用文件可以不写 `package`，安装时按上传后的 ID 写入。
 
 ## 给样例加应用
 
@@ -18,7 +18,7 @@
 2. 在应用列表里导出。
 3. 保存为 `samples/<样例>/workshop/apps/<名称>.app.yaml`。安装器可以直接用导出文件。仓库里的副本最好不带环境 ID：删掉 `app.id` 和规则函数里的 `box` / `tool` 两行。
 4. 其他语言的样例各带一份，在该样例的网络上建，文案用该语言。
-5. 应用用到自定义组件时，把每个组件包放进 `samples/<样例>/workshop/components/<目录>/`：组件包的文件，`manifest.json` 在最上层。`workshop pull` 写进工程目录 `components/` 的就是这个样子，可以直接拷过来。组件要打包生成的，源码放在旁边，例如 `workshop/component-sources/<目录>/`。
+5. 应用用到自定义组件时，把每个组件包放进 `samples/<样例>/workshop/components/<目录>/`：组件包的文件，`manifest.json` 在最上层。`workshop pull` 写进工程目录 `components/` 的就是这个样子，可以直接拷过来。组件要打包生成的（例如把 three.js 打进去），打包结果不进仓库：源码放在 `workshop/component-sources/<目录>/`，带 `package.json`（`build` 脚本把组件包文件写到 `dist/`）和 `package-lock.json`；组件包目录只放 `manifest.json` 等其余文件，应用文件里删掉 `package` 一行。构建候选包时在临时目录运行 `npm ci --ignore-scripts` 和 `npm run build`，`dist/` 里的文件放进组件包目录。
 
 安装器逐个检查：
 
@@ -29,6 +29,8 @@
 - 每个规则函数都写了 `boxName` 和 `toolName`；
 - `components[]` 里的每个组件在 `workshop/components/` 下都有组件包目录，其 `manifest.json` 写的就是这个 `type`；两个目录不能是同一个类型，每个组件包打包后不超过 5 MiB。
 
+构建候选包时还检查：每个源码目录都有 `package.json` 和 `package-lock.json`，构建成功并在 `dist/` 写出文件，且这些文件没有同名文件已在仓库里。
+
 同一样例的应用不能重名。
 
 ## 安装与卸载
@@ -37,7 +39,7 @@
 - 平台检查通过后，安装器依次：
   1. 只在本次安装创建的工具箱里，按工具箱名和函数名查出每个规则函数的 ID，写进应用；找不到函数就在创建任何应用之前失败，并报出缺少哪些函数。
   2. 在样例网络上逐个创建应用，把文件写为草稿。
-  3. 把应用用到的组件包打成 zip 上传进应用；Workshop 返回的组件包 ID 与文件里写的不同时，按返回的 ID 保存草稿。
+  3. 把应用用到的组件包打成 zip 上传进应用；文件里没写组件包 ID，或与 Workshop 返回的不同时，按返回的 ID 保存草稿。
   4. 发布应用，使其页面能从应用列表打开。
   5. 把应用 ID 记在安装记录（`workshopApps`）里，每次变更后立即写入。
 - 再次安装或重试失败的安装时，先删除记录中的应用和样例网络上的同名应用，再重新创建。

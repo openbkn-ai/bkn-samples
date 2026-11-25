@@ -131,16 +131,6 @@ class AppSpecTest(unittest.TestCase):
         self.assertTrue(included(Path("workshop/apps/kit.app.yaml")))
 
 
-def package_id(folder):
-    """A package's ID as Workshop gives it: the SHA-256 of its files in path order, each as path, length and content."""
-    digest = hashlib.sha256()
-    for path in sorted((p for p in folder.rglob("*") if p.is_file() and not p.name.startswith(".")),
-                       key=lambda p: p.relative_to(folder).as_posix().encode()):
-        data = path.read_bytes()
-        digest.update(path.relative_to(folder).as_posix().encode() + b"\0" + str(len(data)).encode() + b"\0" + data)
-    return digest.hexdigest()
-
-
 def component_folder(root, folder="ai-lineTwin", kind="x-ai.lineTwin"):
     path = Path(root) / "workshop" / "components" / folder
     path.mkdir(parents=True, exist_ok=True)
@@ -150,11 +140,12 @@ def component_folder(root, folder="ai-lineTwin", kind="x-ai.lineTwin"):
 
 
 def twin(package="stale-id", name="Line twin", network="manufacturing_industry_zh_cn"):
+    component = {"type": "x-ai.lineTwin", **({"package": package} if package else {}), "source": "upload"}
     return {"apiVersion": "workshop.openbkn.ai/v1", "app": {"name": name},
             "dependencies": {"knowledgeNetwork": {"id": network, "name": "exported name"}},
             "sources": [], "variables": [],
             "pages": [{"id": "twin", "title": "Twin", "regions": {"cells": [{"type": "x-ai.lineTwin", "config": {}}]}}],
-            "theme": {}, "components": [{"type": "x-ai.lineTwin", "package": package, "source": "upload"}]}
+            "theme": {}, "components": [component]}
 
 
 class ComponentPackageTest(unittest.TestCase):
@@ -215,6 +206,49 @@ class ComponentPackageTest(unittest.TestCase):
         self.assertEqual((sent.data, sent.get_header("Content-type")), (b"PK zip", "application/zip"))
 
 
+class BuildComponentsTest(unittest.TestCase):
+    """Packing a sample builds its component sources with their locked dependencies."""
+
+    def source(self, root, lock=True):
+        folder = Path(root) / "workshop" / "component-sources" / "ai-lineTwin"
+        (folder / "src").mkdir(parents=True)
+        (folder / "package.json").write_text('{"scripts": {"build": "esbuild"}}', encoding="utf-8")
+        if lock:
+            (folder / "package-lock.json").write_text("{}", encoding="utf-8")
+        (folder / "src" / "index.js").write_text("export {};", encoding="utf-8")
+        return [path.relative_to(root) for path in folder.rglob("*") if path.is_file()]
+
+    def test_the_build_output_becomes_the_component_package(self):
+        from tools.publication.build_candidate import build_components
+        commands = []
+
+        def run(command, cwd, **_):
+            commands.append(command)
+            if command[:2] == ["npm", "run"]:
+                (Path(cwd) / "dist").mkdir()
+                (Path(cwd) / "dist" / "index.js").write_text("bundled", encoding="utf-8")
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
+        with tempfile.TemporaryDirectory() as tmp:
+            tracked = self.source(tmp)
+            built = build_components(Path(tmp), tracked, run)
+        self.assertEqual(commands, [["npm", "ci", "--ignore-scripts", "--no-audit", "--no-fund"], ["npm", "run", "build"]])
+        self.assertEqual(built, [("workshop/components/ai-lineTwin/index.js", 0o644, b"bundled")])
+
+    def test_a_source_needs_its_lock_file_and_a_working_build(self):
+        from tools.publication.build_candidate import build_components
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, "package-lock.json"):
+                build_components(Path(tmp), self.source(tmp, lock=False), lambda *a, **k: None)
+        with tempfile.TemporaryDirectory() as tmp:
+            failing = lambda command, cwd, **_: SimpleNamespace(returncode=1, stdout="", stderr="npm ERR! integrity")
+            with self.assertRaisesRegex(ValueError, "integrity"):
+                build_components(Path(tmp), self.source(tmp), failing)
+        with tempfile.TemporaryDirectory() as tmp:
+            nothing = lambda command, cwd, **_: SimpleNamespace(returncode=0, stdout="", stderr="")
+            with self.assertRaisesRegex(ValueError, "dist/"):
+                build_components(Path(tmp), self.source(tmp), nothing)
+
+
 class InstallComponentsTest(unittest.TestCase):
     network = {"id": "manufacturing_industry_zh_cn", "name": "制造业"}
 
@@ -240,6 +274,13 @@ class InstallComponentsTest(unittest.TestCase):
         app = platform.apps[created[0]["id"]]
         self.assertEqual(app["draft"]["components"], [{"type": "x-ai.lineTwin", "package": "new-id", "source": "upload"}])
         self.assertEqual((app["draft_revision"], app["published"]["revision"]), (2, 2))
+
+    def test_an_app_naming_no_package_id_gets_the_uploaded_one(self):
+        platform = Workshop(package_ids={"x-ai.lineTwin": "built-id"})
+        created = workshop_apps.install(platform, [twin(package=None)], self.network, [], packages=self.packages())
+        app = platform.apps[created[0]["id"]]
+        self.assertEqual(app["draft"]["components"], [{"type": "x-ai.lineTwin", "source": "upload", "package": "built-id"}])
+        self.assertEqual(app["published"]["revision"], 2)
 
     def test_a_component_without_a_package_fails_before_any_app_changes(self):
         stale = {"id": "app-recorded", "name": "Line twin", "kn": dict(self.network)}
@@ -430,6 +471,6 @@ class ExportedAppTest(unittest.TestCase):
             for path in workshop_apps.files(sample_dir):
                 for item in workshop_apps.components(_yaml.safe_load(path.read_text(encoding="utf-8"))):
                     self.assertIn(item["type"], types, path)
-                    # The ID Workshop gives the folder's files, so the app opens as committed without a draft save.
-                    self.assertEqual(item["package"], package_id(types[item["type"]]), path)
+                    # The package is built when the sample is packed; the installer writes in the ID Workshop gives it.
+                    self.assertNotIn("package", item, path)
 

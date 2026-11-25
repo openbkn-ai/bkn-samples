@@ -10,7 +10,7 @@ An app file (`<name>.app.yaml`) is the app's draft exactly as the app list expor
 - `sources[].objectType`, action IDs (`…operations[].action.id`) and field names point at that network's object types, actions and properties by ID.
 - Rule functions (`pages[…].layers[].ruleTools[]` and `scheduleModel.tasks[].rules[]`) name their function by `tool.boxName` (toolbox name) and `tool.toolName` (function name). An export also carries `tool.box` / `tool.tool`, the IDs in the environment it came from. They are not used elsewhere: Workshop calls the function of the same toolbox and function name when the IDs are not found there.
 - `app.id` is the exported app's ID. Importing or installing gives the new app its own.
-- `components[]` lists the custom components the pages draw with: each `type` (`x-<prefix>.<name>`) and the `package` that draws it. Workshop keeps a package by the SHA-256 of its files, so the same files have the same package ID in every environment. The app list's export carries only this file, not the packages.
+- `components[]` lists the custom components the pages draw with: each `type` (`x-<prefix>.<name>`) and the `package` that draws it. Workshop keeps a package by the SHA-256 of its files, so the same files have the same package ID in every environment. The app list's export carries only this file, not the packages. A sample's app file may leave `package` out; installing writes in the ID the upload gets.
 
 ## Adding an app to a sample
 
@@ -18,7 +18,7 @@ An app file (`<name>.app.yaml`) is the app's draft exactly as the app list expor
 2. In the app list, export it.
 3. Save the file as `samples/<sample>/workshop/apps/<name>.app.yaml`. The installer accepts an export as it is. Keeping the repository copy free of environment IDs is tidier: delete `app.id` and the `box` / `tool` lines.
 4. A sample in another language gets its own app, built on that sample's network with copy in that language.
-5. If the app draws with custom components, put each package in `samples/<sample>/workshop/components/<folder>/`: the package's files with `manifest.json` at the top. `workshop pull` writes them that way into the project's `components/`, so the folders can be copied over. Keep a component's source, if it is built, beside it, for example in `workshop/component-sources/<folder>/`.
+5. If the app draws with custom components, put each package in `samples/<sample>/workshop/components/<folder>/`: the package's files with `manifest.json` at the top. `workshop pull` writes them that way into the project's `components/`, so the folders can be copied over. A component that is built (bundling three.js, for example) does not commit its build: keep the source in `workshop/component-sources/<folder>/` with `package.json` (its `build` script writes the package files to `dist/`) and `package-lock.json`, keep only `manifest.json` and the other files in the package folder, and delete the `package` line from the app file. Building a candidate runs `npm ci --ignore-scripts` and `npm run build` in a scratch folder and puts the files in `dist/` into the package folder.
 
 The installer checks every file:
 
@@ -29,6 +29,8 @@ The installer checks every file:
 - every rule function has `boxName` and `toolName`;
 - every component in `components[]` has a package folder in `workshop/components/` whose `manifest.json` gives that `type`; no two folders give the same type, and each packs to at most 5 MiB.
 
+Building a candidate also checks that every source folder has `package.json` and `package-lock.json`, that its build succeeds and writes files to `dist/`, and that none of them is already tracked.
+
 Two apps of one sample cannot share a name.
 
 ## Installation and removal
@@ -37,7 +39,7 @@ Two apps of one sample cannot share a name.
 - After the platform checks pass, the installer:
   1. looks each rule function up by toolbox name and function name, only in the toolboxes this installation created, and writes their IDs in; if one is missing, the installation fails before any app is created, and the error names the missing functions;
   2. creates each app on the sample's network with the file as its draft;
-  3. uploads into it, as zips, the component packages it draws with; where Workshop answers another package ID than the file names, it saves the draft with that ID;
+  3. uploads into it, as zips, the component packages it draws with; where the file names no package ID, or another one than Workshop answers, it saves the draft with the answered ID;
   4. publishes it, so its pages open from the app list;
   5. keeps the app IDs in the installation record (`workshopApps`), written after every change.
 - Installing again, or retrying a failed installation, first deletes the recorded apps and any app of the same name on the sample's network, then creates them again.
