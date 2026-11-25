@@ -1,0 +1,12 @@
+{
+  "name": "line-twin-component",
+  "private": true,
+  "description": "Source of the x-ai.lineTwin Workshop component; `npm run build` writes ../../components/ai-lineTwin/index.js.",
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --format=esm --minify --target=es2022 --legal-comments=none --outfile=../../components/ai-lineTwin/index.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10",
+    "three": "0.187.0"
+  }
+}

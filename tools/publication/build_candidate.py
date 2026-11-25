@@ -138,6 +138,8 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
             capabilities.append("sample.experience-set")
         if any(path.startswith("workshop/apps/") and path.endswith(".app.yaml") for path in by_path):
             capabilities.append("sample.workshop-apps")
+        if any(path.startswith("workshop/components/") for path in by_path):
+            capabilities.append("sample.workshop-components")
         require(contract["spec"]["data"]["mode"] == "embedded", "offline packages require embedded data")
         if shared_database:
             architectures = ["amd64", "arm64"]

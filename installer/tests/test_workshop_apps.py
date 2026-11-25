@@ -1,8 +1,12 @@
+import hashlib
+import io
 import json
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
 
 import yaml
 
@@ -38,8 +42,11 @@ def ids_of(draft):
 class Workshop:
     """Workshop's app API: list by network and name (substring), create, publish, get, delete."""
 
-    def __init__(self, apps=None, boxes=None, edition=True):
+    def __init__(self, apps=None, boxes=None, edition=True, package_ids=None):
         self.apps = {app["id"]: app for app in (apps or [])}
+        # Workshop keeps a package by the SHA-256 of its files; a test may have it answer another ID.
+        self.package_ids = package_ids or {}
+        self.packages = {}
         self.boxes = boxes if boxes is not None else {"box-1": ("Supply functions", {"Kit_Check": "tool-kit", "Line_Can_Build": "tool-line"})}
         self.edition = edition
         self.calls = []
@@ -70,7 +77,20 @@ class Workshop:
             self.apps[app["id"]] = app
             return app
         app_id = path[len(APPS) + 1:].split("/")[0]
+        if method == "POST" and path.endswith("/component-packages"):
+            assert isinstance(body, workshop_apps.Upload) and body.content_type == "application/zip"
+            with zipfile.ZipFile(io.BytesIO(body.data)) as archive:
+                kind = json.loads(archive.read("manifest.json"))["type"]
+            package_id = self.package_ids.get(kind) or hashlib.sha256(body.data).hexdigest()
+            self.packages[package_id] = (kind, app_id)
+            return {"package": {"id": package_id, "type": kind}, "warnings": []}
+        if method == "PUT" and path.endswith("/draft"):
+            app = self.apps[app_id]
+            assert body["revision"] == app["draft_revision"]
+            app.update(draft=body["draft"], draft_revision=app["draft_revision"] + 1)
+            return app
         if method == "POST" and path.endswith("/publish"):
+            assert body["revision"] == self.apps[app_id]["draft_revision"]
             self.apps[app_id].update(status="published", current_version=1, published=body)
             return {"app_id": app_id, "version": 1}
         if method == "GET":
@@ -109,6 +129,115 @@ class AppSpecTest(unittest.TestCase):
 
     def test_packages_carry_the_workshop_folder(self):
         self.assertTrue(included(Path("workshop/apps/kit.app.yaml")))
+
+
+def component_folder(root, folder="ai-lineTwin", kind="x-ai.lineTwin"):
+    path = Path(root) / "workshop" / "components" / folder
+    path.mkdir(parents=True, exist_ok=True)
+    (path / "manifest.json").write_text(json.dumps({"type": kind, "entry": "index.js"}), encoding="utf-8")
+    (path / "index.js").write_text("export {};", encoding="utf-8")
+    return path
+
+
+def twin(package="stale-id", name="Line twin", network="manufacturing_industry_zh_cn"):
+    return {"apiVersion": "workshop.openbkn.ai/v1", "app": {"name": name},
+            "dependencies": {"knowledgeNetwork": {"id": network, "name": "exported name"}},
+            "sources": [], "variables": [],
+            "pages": [{"id": "twin", "title": "Twin", "regions": {"cells": [{"type": "x-ai.lineTwin", "config": {}}]}}],
+            "theme": {}, "components": [{"type": "x-ai.lineTwin", "package": package, "source": "upload"}]}
+
+
+class ComponentPackageTest(unittest.TestCase):
+    def test_each_folder_is_one_package_with_its_files_at_the_top(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = component_folder(tmp)
+            (folder / ".DS_Store").write_text("x", encoding="utf-8")
+            (folder / "old.zip").write_bytes(b"zip")
+            (folder / "assets").mkdir()
+            (folder / "assets" / "model.json").write_text("{}", encoding="utf-8")
+            packages = workshop_apps.packages(Path(tmp))
+            self.assertEqual(list(packages), ["x-ai.lineTwin"])
+            with zipfile.ZipFile(io.BytesIO(packages["x-ai.lineTwin"])) as archive:
+                self.assertEqual(sorted(archive.namelist()), ["assets/model.json", "index.js", "manifest.json"])
+            # Packing the same files again gives the same zip.
+            self.assertEqual(workshop_apps.packages(Path(tmp)), packages)
+
+    def test_a_folder_must_give_one_type_of_its_own(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            component_folder(tmp)
+            component_folder(tmp, folder="copy")
+            with self.assertRaises(workshop_apps.AppError) as caught:
+                workshop_apps.component_types(Path(tmp))
+            self.assertEqual(caught.exception.code, "invalid_workshop_component")
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "workshop" / "components" / "empty").mkdir(parents=True)
+            with self.assertRaises(workshop_apps.AppError):
+                workshop_apps.component_types(Path(tmp))
+        with tempfile.TemporaryDirectory() as tmp:
+            component_folder(tmp, kind="lineTwin")
+            with self.assertRaises(workshop_apps.AppError):
+                workshop_apps.component_types(Path(tmp))
+
+    def test_an_app_may_draw_only_with_components_the_sample_brings(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp) / "workshop" / "apps"
+            folder.mkdir(parents=True)
+            (folder / "twin.app.yaml").write_text(yaml.safe_dump(twin(), allow_unicode=True), encoding="utf-8")
+            with self.assertRaises(workshop_apps.AppError) as caught:
+                workshop_apps.specs(Path(tmp), "manufacturing_industry_zh_cn")
+            self.assertIn("no package of x-ai.lineTwin", caught.exception.message)
+            component_folder(tmp)
+            self.assertEqual([s["app"]["name"] for s in workshop_apps.specs(Path(tmp), "manufacturing_industry_zh_cn")],
+                             ["Line twin"])
+
+    def test_packages_carry_the_component_folders(self):
+        self.assertTrue(included(Path("workshop/components/ai-lineTwin/index.js")))
+
+    def test_the_platform_client_sends_a_package_as_its_zip(self):
+        response = MagicMock()
+        response.__enter__.return_value.read.return_value = b'{"package": {"id": "p"}}'
+        from installer.uninstall import platform_client
+        with patch.dict("os.environ", {"BKN_BASE_URL": "http://platform"}), \
+                patch("installer.uninstall.urlopen", return_value=response) as request:
+            platform_client("Bearer test")("POST", f"{APPS}/app-1/component-packages",
+                                           workshop_apps.Upload(b"PK zip", "application/zip"))
+        sent = request.call_args.args[0]
+        self.assertEqual((sent.data, sent.get_header("Content-type")), (b"PK zip", "application/zip"))
+
+
+class InstallComponentsTest(unittest.TestCase):
+    network = {"id": "manufacturing_industry_zh_cn", "name": "制造业"}
+
+    def packages(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            component_folder(tmp)
+            return workshop_apps.packages(Path(tmp))
+
+    def test_the_package_is_uploaded_into_the_app_before_it_is_published(self):
+        packages = self.packages()
+        stored = hashlib.sha256(packages["x-ai.lineTwin"]).hexdigest()
+        platform = Workshop()
+        created = workshop_apps.install(platform, [twin(package=stored)], self.network, [], packages=packages)
+        app = platform.apps[created[0]["id"]]
+        self.assertEqual(platform.packages, {stored: ("x-ai.lineTwin", app["id"])})
+        self.assertEqual([call[0] + " " + call[1].rsplit("/", 1)[-1] for call in platform.calls if call[0] != "GET"],
+                         ["POST apps", "POST component-packages", "POST publish"])
+        self.assertEqual((app["status"], app["published"]["revision"]), ("published", 1))
+
+    def test_a_package_stored_under_another_id_is_saved_into_the_draft_first(self):
+        platform = Workshop(package_ids={"x-ai.lineTwin": "new-id"})
+        created = workshop_apps.install(platform, [twin(package="stale-id")], self.network, [], packages=self.packages())
+        app = platform.apps[created[0]["id"]]
+        self.assertEqual(app["draft"]["components"], [{"type": "x-ai.lineTwin", "package": "new-id", "source": "upload"}])
+        self.assertEqual((app["draft_revision"], app["published"]["revision"]), (2, 2))
+
+    def test_a_component_without_a_package_fails_before_any_app_changes(self):
+        stale = {"id": "app-recorded", "name": "Line twin", "kn": dict(self.network)}
+        platform = Workshop([stale])
+        with self.assertRaises(workshop_apps.AppError):
+            workshop_apps.install(platform, [twin()], self.network, [{"id": "app-recorded", "name": "Line twin"}])
+        self.assertEqual(list(platform.apps), ["app-recorded"])
+        self.assertFalse([call for call in platform.calls if call[0] != "GET"])
 
 
 class InstallAppsTest(unittest.TestCase):
@@ -280,4 +409,15 @@ class ExportedAppTest(unittest.TestCase):
             spec_ = _yaml.safe_load(path.read_text(encoding="utf-8"))
             self.assertNotIn("id", spec_["app"], path)
             self.assertFalse([ref for _, ref in workshop_apps.rule_refs(spec_) if "box" in ref or "tool" in ref], path)
+
+    def test_the_repository_apps_draw_only_with_packages_their_sample_brings(self):
+        import yaml as _yaml
+        root = Path(__file__).resolve().parents[2] / "samples"
+        for sample_dir in sorted(path.parents[2] for path in root.glob("*/workshop/apps/*.app.yaml")):
+            types = workshop_apps.component_types(sample_dir)
+            for kind, folder in types.items():
+                workshop_apps.pack(folder)
+            for path in workshop_apps.files(sample_dir):
+                for item in workshop_apps.components(_yaml.safe_load(path.read_text(encoding="utf-8"))):
+                    self.assertIn(item["type"], types, path)
 

@@ -132,10 +132,17 @@ def validate_document(sample_dir: Path, document: dict) -> list[str]:
                 errors.append("spec.studio.experienceSet language must match metadata.language")
 
     network_id = (spec.get("knowledgeNetwork") or {}).get("id") if isinstance(spec.get("knowledgeNetwork"), dict) else None
+    try:
+        component_types = workshop_apps.component_types(sample_dir)
+        for folder in component_types.values():
+            workshop_apps.pack(folder)
+    except workshop_apps.AppError as error:
+        errors.append(f"workshop/components/{error.message}")
+        component_types = None
     for app_path in workshop_apps.files(sample_dir):
         try:
             errors.extend(f"workshop/apps/{app_path.name}: {item}"
-                          for item in workshop_apps.validate(workshop_apps.load(app_path), network_id))
+                          for item in workshop_apps.validate(workshop_apps.load(app_path), network_id, component_types))
         except workshop_apps.AppError as error:
             errors.append(f"workshop/apps/{app_path.name}: {error.message}")
 

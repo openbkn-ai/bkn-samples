@@ -10,6 +10,7 @@ An app file (`<name>.app.yaml`) is the app's draft exactly as the app list expor
 - `sources[].objectType`, action IDs (`…operations[].action.id`) and field names point at that network's object types, actions and properties by ID.
 - Rule functions (`pages[…].layers[].ruleTools[]` and `scheduleModel.tasks[].rules[]`) name their function by `tool.boxName` (toolbox name) and `tool.toolName` (function name). An export also carries `tool.box` / `tool.tool`, the IDs in the environment it came from. They are not used elsewhere: Workshop calls the function of the same toolbox and function name when the IDs are not found there.
 - `app.id` is the exported app's ID. Importing or installing gives the new app its own.
+- `components[]` lists the custom components the pages draw with: each `type` (`x-<prefix>.<name>`) and the `package` that draws it. Workshop keeps a package by the SHA-256 of its files, so the same files have the same package ID in every environment. The app list's export carries only this file, not the packages.
 
 ## Adding an app to a sample
 
@@ -17,6 +18,7 @@ An app file (`<name>.app.yaml`) is the app's draft exactly as the app list expor
 2. In the app list, export it.
 3. Save the file as `samples/<sample>/workshop/apps/<name>.app.yaml`. The installer accepts an export as it is. Keeping the repository copy free of environment IDs is tidier: delete `app.id` and the `box` / `tool` lines.
 4. A sample in another language gets its own app, built on that sample's network with copy in that language.
+5. If the app draws with custom components, put each package in `samples/<sample>/workshop/components/<folder>/`: the package's files with `manifest.json` at the top. `workshop pull` writes them that way into the project's `components/`, so the folders can be copied over. Keep a component's source, if it is built, beside it, for example in `workshop/component-sources/<folder>/`.
 
 The installer checks every file:
 
@@ -24,20 +26,22 @@ The installer checks every file:
 - the app has a name of at most 128 characters;
 - `dependencies.knowledgeNetwork.id` is the sample's knowledge network;
 - there is at least one page;
-- every rule function has `boxName` and `toolName`.
+- every rule function has `boxName` and `toolName`;
+- every component in `components[]` has a package folder in `workshop/components/` whose `manifest.json` gives that `type`; no two folders give the same type, and each packs to at most 5 MiB.
 
 Two apps of one sample cannot share a name.
 
 ## Installation and removal
 
-- Packages carry the `workshop/` folder and declare the capability `sample.workshop-apps`; a sample service without it rejects the package before downloading.
+- Packages carry the `workshop/` folder and declare the capability `sample.workshop-apps`, and `sample.workshop-components` when they bring component packages; a sample service without them rejects the package before downloading.
 - After the platform checks pass, the installer:
   1. looks each rule function up by toolbox name and function name, only in the toolboxes this installation created, and writes their IDs in; if one is missing, the installation fails before any app is created, and the error names the missing functions;
   2. creates each app on the sample's network with the file as its draft;
-  3. publishes it, so its pages open from the app list;
-  4. keeps the app IDs in the installation record (`workshopApps`), written after every change.
+  3. uploads into it, as zips, the component packages it draws with; where Workshop answers another package ID than the file names, it saves the draft with that ID;
+  4. publishes it, so its pages open from the app list;
+  5. keeps the app IDs in the installation record (`workshopApps`), written after every change.
 - Installing again, or retrying a failed installation, first deletes the recorded apps and any app of the same name on the sample's network, then creates them again.
-- Uninstalling deletes the recorded apps first, then the knowledge network they are built on.
+- Uninstalling deletes the recorded apps first, then the knowledge network they are built on. Component packages stay stored: Workshop has no way to delete one, and an app elsewhere may draw with the same package.
 - The installing administrator needs permission to create Workshop apps.
 - Workshop is part of the professional edition. On a platform without it, every Workshop route answers 404. The installer then installs the sample without its apps, and diagnostics record the skipped step.
 

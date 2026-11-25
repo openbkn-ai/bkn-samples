@@ -31,10 +31,12 @@ PROFILE = "openbkn.ai/sample-install.v1"
 # the installation stages. Explicit operator configuration may restrict it.
 # `sample.experience-set` is this service recording and serving a package's
 # experience set; services without it reject such packages before download.
-# `sample.workshop-apps` is this service creating the Workshop apps a package brings.
+# `sample.workshop-apps` is this service creating the Workshop apps a package brings, and
+# `sample.workshop-components` uploading the custom component packages those apps draw with.
 CAPABILITIES = {"database.shared", "vega.catalog", "knowledge-network.import.kn-json",
                 "knowledge-network.import.bkn-directory",
-                "execution.function", "execution.skill", "sample.experience-set", "sample.workshop-apps"}
+                "execution.function", "execution.skill", "sample.experience-set", "sample.workshop-apps",
+                "sample.workshop-components"}
 
 
 class UniqueLoader(yaml.SafeLoader):
