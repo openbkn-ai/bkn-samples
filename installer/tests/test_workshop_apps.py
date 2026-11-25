@@ -131,6 +131,16 @@ class AppSpecTest(unittest.TestCase):
         self.assertTrue(included(Path("workshop/apps/kit.app.yaml")))
 
 
+def package_id(folder):
+    """A package's ID as Workshop gives it: the SHA-256 of its files in path order, each as path, length and content."""
+    digest = hashlib.sha256()
+    for path in sorted((p for p in folder.rglob("*") if p.is_file() and not p.name.startswith(".")),
+                       key=lambda p: p.relative_to(folder).as_posix().encode()):
+        data = path.read_bytes()
+        digest.update(path.relative_to(folder).as_posix().encode() + b"\0" + str(len(data)).encode() + b"\0" + data)
+    return digest.hexdigest()
+
+
 def component_folder(root, folder="ai-lineTwin", kind="x-ai.lineTwin"):
     path = Path(root) / "workshop" / "components" / folder
     path.mkdir(parents=True, exist_ok=True)
@@ -420,4 +430,6 @@ class ExportedAppTest(unittest.TestCase):
             for path in workshop_apps.files(sample_dir):
                 for item in workshop_apps.components(_yaml.safe_load(path.read_text(encoding="utf-8"))):
                     self.assertIn(item["type"], types, path)
+                    # The ID Workshop gives the folder's files, so the app opens as committed without a draft save.
+                    self.assertEqual(item["package"], package_id(types[item["type"]]), path)
 

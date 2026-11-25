@@ -7,4 +7,4 @@ npm install
 npm run build
 ```
 
-打包后 `index.js` 的内容变了，组件包的 ID 也会变：安装器按上传后的 ID 写回应用草稿，不用手改 `workshop/apps/line-twin.app.yaml`。
+打包时去掉了源码里的许可注释，three.js 的许可写在组件包的 `README.md` 末尾，升级 three.js 时一并更新。打包后 `index.js` 的内容变了，组件包的 ID 也会变：安装器按上传后的 ID 写回应用草稿，不用手改 `workshop/apps/line-twin.app.yaml`。
