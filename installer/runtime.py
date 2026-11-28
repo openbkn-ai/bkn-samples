@@ -175,7 +175,7 @@ def workshop_app_step(root: Path, sample: str, knowledge_network: dict, authoriz
                 remember([])
                 return
             toolboxes = ((resources.get("ownedExecution") or {}).get("toolboxes") or []) if isinstance(resources, dict) else []
-            apps_module.install(api, specs, network, recorded, remember, toolboxes)
+            apps_module.install(api, specs, network, recorded, remember, toolboxes, apps_module.packages(sample_dir))
         except apps_module.AppError as error:
             raise ControlError(error.code, error.message) from None
         except ApiError as error:

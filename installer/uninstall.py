@@ -9,7 +9,7 @@ from urllib.request import Request, HTTPRedirectHandler, ProxyHandler, build_ope
 
 import yaml
 
-from installer import shared_database
+from installer import shared_database, workshop_apps
 from installer.control_plane import catalog_name, ownership_tags
 from installer.deploy_database import NAMESPACE, _workload_name, database_read_error
 from installer.history import read_installation_history, record_terminal_installation
@@ -71,9 +71,13 @@ def _platform_failure(error, method, path):
 def platform_client(authorization):
     base = os.environ["BKN_BASE_URL"].rstrip("/")
     def call(method, path, body=None):
-        request = Request(base + path, method=method,
-                          data=json.dumps(body).encode() if body is not None else None,
-                          headers={"Authorization": authorization, "Content-Type": "application/json"})
+        # A component package goes as its zip; everything else is JSON.
+        if isinstance(body, workshop_apps.Upload):
+            data, content_type = body.data, body.content_type
+        else:
+            data, content_type = (json.dumps(body).encode() if body is not None else None), "application/json"
+        request = Request(base + path, method=method, data=data,
+                          headers={"Authorization": authorization, "Content-Type": content_type})
         for attempt in range(2):
             try:
                 with diagnostics.secrets([authorization, authorization.removeprefix("Bearer ")]), \

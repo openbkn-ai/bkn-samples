@@ -13,11 +13,22 @@ installed without its apps.
 
 Workshop app names are not unique. An app of the same name on the sample's network is the
 sample's own app from an earlier installation, so it is replaced, like the apps the record lists.
+
+An app may draw pages with custom components. Their packages are folders in
+``workshop/components/``, each holding the files of one package with ``manifest.json`` at its top,
+as the Workshop command line pulls them. Installing uploads the packages an app names into the
+app, before it is published. Workshop keeps a package by the SHA-256 of its files, so the package
+ID an export names is the one the upload answers; where it is not, the draft is saved with the
+uploaded package. Packages stay stored after uninstalling: apps elsewhere may draw with the same
+one, and Workshop has no way to delete a package.
 """
 
 from __future__ import annotations
 
 import copy
+import io
+import json
+import zipfile
 
 from pathlib import Path
 from urllib.parse import quote
@@ -27,7 +38,9 @@ import yaml
 API_VERSION = "workshop.openbkn.ai/v1"
 APPS = "/api/workshop/v1/apps"
 DIRECTORY = Path("workshop") / "apps"
+COMPONENTS = Path("workshop") / "components"
 MAX_SPEC = 4 * 1024 * 1024
+MAX_PACKAGE = 5 * 1024 * 1024
 
 
 class AppError(Exception):
@@ -35,6 +48,14 @@ class AppError(Exception):
         super().__init__(message)
         self.code = code
         self.message = message
+
+
+class Upload:
+    """A request body sent as it is, of the given content type: a component package's zip."""
+
+    def __init__(self, data: bytes, content_type: str):
+        self.data = data
+        self.content_type = content_type
 
 
 def files(sample_dir: Path) -> list[Path]:
@@ -53,8 +74,68 @@ def load(path: Path) -> dict:
     return spec
 
 
-def validate(spec, network_id: str) -> list[str]:
-    """Errors in one exported app spec for a sample whose knowledge network is ``network_id``."""
+def component_folders(sample_dir: Path) -> list[Path]:
+    folder = sample_dir / COMPONENTS
+    if not folder.is_dir():
+        return []
+    return sorted(path for path in folder.iterdir() if path.is_dir() and not path.name.startswith("."))
+
+
+def component_type(folder: Path) -> str:
+    """The ``x-`` type a package folder's ``manifest.json`` gives."""
+    try:
+        manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, ValueError) as error:
+        raise AppError("invalid_workshop_component", f"{folder.name}: manifest.json is missing or not JSON") from error
+    kind = manifest.get("type") if isinstance(manifest, dict) else None
+    if not isinstance(kind, str) or not kind.startswith("x-"):
+        raise AppError("invalid_workshop_component", f"{folder.name}: manifest.json must give an x- type")
+    return kind
+
+
+def component_types(sample_dir: Path) -> dict[str, Path]:
+    """``{type: folder}`` for the component packages the sample brings."""
+    found = {}
+    for folder in component_folders(sample_dir):
+        kind = component_type(folder)
+        if kind in found:
+            raise AppError("invalid_workshop_component", f"{folder.name}: {found[kind].name} is a package of {kind} too")
+        found[kind] = folder
+    return found
+
+
+def pack(folder: Path) -> bytes:
+    """A package folder as the zip Workshop takes: its files at the top, hidden files and zips left out."""
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        for path in sorted(item for item in folder.rglob("*") if item.is_file()):
+            relative = path.relative_to(folder)
+            if any(part.startswith(".") for part in relative.parts) or path.suffix.lower() == ".zip":
+                continue
+            archive.writestr(zipfile.ZipInfo(relative.as_posix(), (1980, 1, 1, 0, 0, 0)), path.read_bytes(),
+                             zipfile.ZIP_DEFLATED)
+    data = buffer.getvalue()
+    if len(data) > MAX_PACKAGE:
+        raise AppError("invalid_workshop_component", f"{folder.name}: the package is larger than 5 MiB")
+    return data
+
+
+def packages(sample_dir: Path) -> dict[str, bytes]:
+    """``{type: zip}`` for the component packages the sample brings."""
+    return {kind: pack(folder) for kind, folder in component_types(sample_dir).items()}
+
+
+def components(spec) -> list[dict]:
+    """The custom components an app spec draws with: ``{type, package}`` each."""
+    listed = spec.get("components") if isinstance(spec, dict) else None
+    return [item for item in listed if isinstance(item, dict)] if isinstance(listed, list) else []
+
+
+def validate(spec, network_id: str, component_types=None) -> list[str]:
+    """Errors in one exported app spec for a sample whose knowledge network is ``network_id``.
+
+    ``component_types`` are the types of the component packages the sample brings; when given, each
+    component the app draws with must be one of them."""
     if not isinstance(spec, dict):
         return ["the app spec must be a mapping"]
     errors = []
@@ -77,6 +158,10 @@ def validate(spec, network_id: str) -> list[str]:
     for where, ref in rule_refs(spec):
         if not isinstance(ref, dict) or not all(isinstance(ref.get(k), str) and ref[k].strip() for k in ("boxName", "toolName")):
             errors.append(f"{where}: a rule function is named by boxName and toolName")
+    if component_types is not None:
+        for index, item in enumerate(components(spec)):
+            if item.get("type") not in component_types:
+                errors.append(f"components[{index}]: the sample brings no package of {item.get('type')} in workshop/components")
     return errors
 
 
@@ -136,9 +221,10 @@ def resolve(spec: dict, catalog: dict) -> dict:
 def specs(sample_dir: Path, network_id: str) -> list[dict]:
     loaded = []
     names = set()
+    types = component_types(sample_dir)
     for path in files(sample_dir):
         spec = load(path)
-        errors = validate(spec, network_id)
+        errors = validate(spec, network_id, types)
         if errors:
             raise AppError("invalid_workshop_app", f"{path.name}: {'; '.join(errors)}")
         if spec["app"]["name"] in names:
@@ -183,15 +269,45 @@ def remove(api, app_id: str) -> None:
     api("DELETE", path)
 
 
+def upload_components(api, app_id: str, draft: dict, revision: int, packages: dict) -> int:
+    """Uploads the packages ``draft`` draws with into the app; returns the draft revision to publish.
+
+    Where Workshop stores a package under another ID than the draft names, the draft is saved with it."""
+    named = components(draft)
+    if not named:
+        return revision
+    base = f"{APPS}/{quote(app_id, safe='')}"
+    stored = {}
+    for item in named:
+        kind = item.get("type")
+        if kind not in stored:
+            result = api("POST", base + "/component-packages", Upload(packages[kind], "application/zip"))
+            package = result.get("package") if isinstance(result, dict) else None
+            if not isinstance(package, dict) or not package.get("id"):
+                raise AppError("workshop_unavailable", f"Workshop did not store the component package {kind}")
+            stored[kind] = package["id"]
+    if all(item.get("package") == stored[item.get("type")] for item in named):
+        return revision
+    draft["components"] = [{**item, "package": stored[item["type"]]} if isinstance(item, dict) and item.get("type") in stored
+                           else item for item in draft["components"]]
+    saved = api("PUT", base + "/draft", {"draft": draft, "revision": revision})
+    return (saved.get("draft_revision") if isinstance(saved, dict) else None) or revision + 1
+
+
 def install(api, spec_list: list[dict], network: dict, recorded: list[dict], remember=lambda apps: None,
-            toolboxes=()) -> list[dict]:
+            toolboxes=(), packages=None) -> list[dict]:
     """Replaces the sample's apps with ``spec_list``; returns ``[{id, name}]`` for the record.
 
     ``recorded`` are the apps a previous attempt or installation created. ``network`` is
     ``{id, name}`` of the sample's knowledge network. ``remember`` receives the list after every
     change, so an interrupted attempt still leaves a receipt of what it created. ``toolboxes`` are the
     IDs of the toolboxes this installation created; rule functions are resolved in them first.
+    ``packages`` are ``{type: zip}`` of the component packages the sample brings.
     """
+    packages = packages or {}
+    missing = sorted({item.get("type") for spec in spec_list for item in components(spec)} - set(packages))
+    if missing:
+        raise AppError("invalid_workshop_app", "The sample brings no component package of " + ", ".join(map(str, missing)))
     catalog = functions(api, toolboxes) if any(True for spec in spec_list for _ in rule_refs(spec)) else {}
     spec_list = [resolve(spec, catalog) for spec in spec_list]
     left = [item for item in recorded if isinstance(item, dict) and item.get("id")]
@@ -212,6 +328,7 @@ def install(api, spec_list: list[dict], network: dict, recorded: list[dict], rem
             raise AppError("workshop_unavailable", f"Workshop did not create the app {name}")
         created.append({"id": app["id"], "name": name})
         remember(list(created))
+        revision = upload_components(api, app["id"], draft, app.get("draft_revision") or 1, packages)
         api("POST", f"{APPS}/{quote(app['id'], safe='')}/publish",
-            {"revision": app.get("draft_revision") or 1, "note": "Installed with the sample"})
+            {"revision": revision, "note": "Installed with the sample"})
     return created

@@ -1,0 +1,39 @@
+{
+  "type": "x-ai.lineTwin",
+  "kind": "component",
+  "version": "0.1.0",
+  "workshopApi": 1,
+  "element": "ai-line-twin",
+  "entry": "index.js",
+  "label": { "zh-CN": "产线三维孪生", "en-US": "3D line twin" },
+  "description": "把设备按工厂、工作中心排成三维车间：设备按类型建模，三色灯显示加工中、待机与需关注（状态不是正常取值时脉动提示），托盘上的料箱为排队工序数；可拖动旋转、滚轮缩放；点一台设备选中它并打开详情，再点取消，别处选中的设备在这里高亮",
+  "category": "display",
+  "configSchema": {
+    "type": "object",
+    "required": ["normalStatus"],
+    "properties": {
+      "title": { "type": "string", "title": "标题", "description": "卡片标题，可不填", "x-workshop": { "tab": "display" } },
+      "normalStatus": { "type": "string", "title": "正常状态的取值", "description": "设备状态为这个值时视为正常；其他取值显示为需关注（例如维修中）。取值以知识网络中设备状态的取值为准", "default": "可用", "maxLength": 40, "x-workshop": { "tab": "data" } },
+      "selection": { "type": "string", "title": "点击设备写入", "description": "选中对象筛选，详情抽屉读它", "x-workshop": { "widget": "variable", "tab": "link" } }
+    }
+  },
+  "data": {
+    "source": true,
+    "fields": [
+      { "role": "name", "type": "string" },
+      { "role": "group", "type": "string" },
+      { "role": "site", "type": "string" },
+      { "role": "kind", "type": "string" },
+      { "role": "status", "type": "string" },
+      { "role": "running", "type": "number" },
+      { "role": "queued", "type": "number" }
+    ]
+  },
+  "follows": true,
+  "emits": ["selection"],
+  "capabilities": [],
+  "describes": true,
+  "defaultSize": { "w": 8, "h": 12 },
+  "minSize": { "w": 4, "h": 7 },
+  "network": []
+}

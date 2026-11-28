@@ -1,0 +1,262 @@
+variables:
+  - name: machine
+    label: 选中设备
+    kind: selection
+    source: machines
+  - name: state
+    label: 运行情况
+    kind: value
+apiVersion: workshop.openbkn.ai/v1
+app:
+  name: 产线三维孪生
+dependencies:
+  knowledgeNetwork:
+    id: manufacturing_industry_zh_cn
+    name: 制造业端到端运营样例
+sources:
+  - id: machines
+    label: 生产设备
+    objectType: production_machines
+    key: machine_id
+    computed:
+      - name: wcName
+        label: 工作中心
+        kind: related
+        path:
+          - production_machines_work_center_id_to_work_centers
+        aggregate: one
+        field: work_center_name
+        type: text
+      - name: siteName
+        label: 工厂
+        kind: related
+        path:
+          - production_machines_site_id_to_manufacturing_sites
+        aggregate: one
+        field: site_name
+        type: text
+      - name: runningOps
+        label: 加工中工序
+        kind: related
+        path:
+          - manufacturing_operations_planned_machine_id_to_production_machines
+        aggregate: count
+        where:
+          - field: status
+            op: eq
+            value: 进行中
+      - name: queuedOps
+        label: 排队工序
+        kind: related
+        path:
+          - manufacturing_operations_planned_machine_id_to_production_machines
+        aggregate: count
+        where:
+          - field: status
+            op: eq
+            value: 未开始
+      - name: openMaint
+        label: 未完成保养
+        kind: related
+        path:
+          - maintenance_work_orders_machine_id_to_production_machines
+        aggregate: count
+        where:
+          - field: status
+            op: in
+            values:
+              - 已计划
+              - 进行中
+      - name: state
+        label: 运行情况
+        kind: classify
+        cases:
+          - when:
+              - field: status
+                op: ne
+                value: 可用
+            value: 需关注
+            tone: warning
+          - when:
+              - field: runningOps
+                op: gt
+                value: 0
+            value: 加工中
+            tone: success
+        otherwise:
+          value: 待机
+          tone: neutral
+    formats:
+      queuedOps:
+        unit: 道
+        decimals: 0
+      runningOps:
+        unit: 道
+        decimals: 0
+      openMaint:
+        unit: 张
+        decimals: 0
+  - id: events
+    label: 事件
+    objectType: events:events
+    key: event_id
+    events: {}
+pages:
+  - regions:
+      cells:
+        - id: kpis
+          type: metricCards
+          frame:
+            x: 0
+            y: 0
+            w: 12
+            h: 3
+          config:
+            source: machines
+            compare: none
+            items:
+              - label: 设备
+                aggregate: count
+                tone: neutral
+              - label: 加工中
+                aggregate: count
+                tone: success
+                when:
+                  - field: state
+                    op: eq
+                    value: 加工中
+              - label: 需关注
+                aggregate: count
+                tone: warning
+                when:
+                  - field: state
+                    op: eq
+                    value: 需关注
+              - label: 排队工序
+                aggregate: sum
+                valueField: queuedOps
+                tone: info
+              - label: 未完成保养
+                aggregate: sum
+                valueField: openMaint
+                tone: neutral
+            filters: []
+            writes: state
+        - id: line
+          type: x-ai.lineTwin
+          frame:
+            x: 0
+            y: 3
+            w: 9
+            h: 11
+          config:
+            title: 车间实况
+            source: machines
+            normalStatus: 可用
+            selection: machine
+            fieldRoles:
+              name: machine_name
+              group: wcName
+              site: siteName
+              kind: machine_type
+              status: status
+              running: runningOps
+              queued: queuedOps
+        - id: queue
+          type: objectList
+          frame:
+            x: 9
+            y: 3
+            w: 3
+            h: 11
+          config:
+            title: 设备 · 按排队工序
+            source: machines
+            titleField: machine_name
+            subtitleFields:
+              - wcName
+              - queuedOps
+            sortField: queuedOps
+            sortOrder: desc
+            badgeField: state
+            limit: 12
+            selection: machine
+            filters:
+              - variable: state
+                field: state
+    id: twin
+    title: 产线三维孪生
+    layout:
+      type: free
+      columns: 2
+      sidePosition: left
+      sideWidth: 300
+      asideWidth: 0
+      gap: normal
+    detail:
+      id: machineDetail
+      type: objectDetail
+      config:
+        title: 设备
+        source: machines
+        fields:
+          - machine_type
+          - siteName
+          - wcName
+          - status
+          - runningOps
+          - queuedOps
+          - openMaint
+        related:
+          - label: 工序
+            objectType: manufacturing_operations
+            path:
+              - manufacturing_operations_planned_machine_id_to_production_machines
+            fields:
+              - operation_name
+              - status
+              - planned_start_date
+              - planned_end_date
+            limit: 10
+          - label: 保养工单
+            objectType: maintenance_work_orders
+            path:
+              - maintenance_work_orders_machine_id_to_production_machines
+            fields:
+              - maintenance_work_order_id
+              - status
+              - planned_start_date
+              - planned_end_date
+            limit: 8
+        selection: machine
+theme:
+  name: default
+  mode: light
+  colorPrimary: "#255db0"
+  colorAccent: "#6d4fc2"
+  colorBg: "#f3f5f8"
+  colorSurface: "#ffffff"
+  colorSurfaceAlt: "#f8fafc"
+  colorBorder: "#dfe5ec"
+  colorText: "#203043"
+  colorTextMuted: "#607086"
+  colorSuccess: "#267257"
+  colorWarning: "#9b4e12"
+  colorDanger: "#b42318"
+  colorInfo: "#1f6f9f"
+  chartPalette:
+    - "#255db0"
+    - "#e0883a"
+    - "#2f9e77"
+    - "#d0453a"
+    - "#6d4fc2"
+    - "#3a9fc0"
+    - "#8a97a8"
+  fontFamily: '"Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif'
+  fontSize: 13
+  radius: 8
+  shadow: subtle
+  density: comfortable
+components:
+  - type: x-ai.lineTwin
+    source: upload

@@ -72,6 +72,44 @@ def included(relative):
     return (len(parts) == 1 and relative.name in FILES) or parts[0] in DIRECTORIES
 
 
+COMPONENT_SOURCES = ("workshop", "component-sources")
+
+
+def build_components(sample_dir, tracked, run=subprocess.run):
+    """Builds each tracked ``workshop/component-sources/<folder>/`` into the package ``workshop/components/<folder>/``.
+
+    A component that has to be bundled (three.js, for example) is reviewed as source with its lock file,
+    not as the bundle. Its tracked files are copied to a scratch folder, its locked dependencies installed
+    with lifecycle scripts off (``npm ci --ignore-scripts``) and its ``build`` script run; the files it
+    writes to ``dist/`` are the package files. Returns ``[(path, mode, bytes)]``."""
+    folders = sorted({path.parts[2] for path in tracked if path.parts[:2] == COMPONENT_SOURCES and len(path.parts) > 3})
+    built = []
+    for folder in folders:
+        prefix = Path(*COMPONENT_SOURCES, folder)
+        sources = sorted(path for path in tracked if path.parts[:3] == prefix.parts)
+        names = {path.relative_to(prefix).as_posix() for path in sources}
+        require({"package.json", "package-lock.json"} <= names,
+                f"{prefix.as_posix()}: a component source needs package.json and package-lock.json")
+        with tempfile.TemporaryDirectory(prefix="component-") as scratch:
+            work = Path(scratch)
+            for path in sources:
+                target = work / path.relative_to(prefix)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(sample_dir / path, target)
+            for command in (["npm", "ci", "--ignore-scripts", "--no-audit", "--no-fund"], ["npm", "run", "build"]):
+                result = run(command, cwd=work, capture_output=True, text=True)
+                require(result.returncode == 0,
+                        f"{prefix.as_posix()}: {' '.join(command)} failed: {(result.stderr or result.stdout or '')[-400:]}")
+            dist = work / "dist"
+            outputs = sorted(path for path in dist.rglob("*") if path.is_file()) if dist.is_dir() else []
+            require(outputs, f"{prefix.as_posix()}: the build wrote nothing to dist/")
+            for path in outputs:
+                packaged = Path("workshop", "components", folder, path.relative_to(dist))
+                require(packaged not in tracked, f"{packaged.as_posix()} is both tracked and built")
+                built.append((packaged.as_posix(), 0o644, path.read_bytes()))
+    return built
+
+
 def build(sample_dir, version, output, data_image_ref=None, image_layout=None, shared_database=False):
     require(not shared_database or (data_image_ref is None and image_layout is None), "shared database packages do not use a sample image")
     require(VERSION.fullmatch(version), "version must be MAJOR.MINOR.PATCH")
@@ -114,6 +152,11 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
         total += len(data)
         require(total <= 512 * 1024 * 1024, "candidate exceeds 512 MiB")
         snapshots.append((relative.as_posix(), mode, data))
+    for path, mode, data in build_components(sample_dir, files):
+        total += len(data)
+        require(total <= 512 * 1024 * 1024, "candidate exceeds 512 MiB")
+        snapshots.append((path, mode, data))
+    snapshots.sort(key=lambda snapshot: snapshot[0])
     by_path = {p: data for p, _, data in snapshots}
     documents = []
     for relative, locale in notes:
@@ -138,6 +181,8 @@ def build(sample_dir, version, output, data_image_ref=None, image_layout=None, s
             capabilities.append("sample.experience-set")
         if any(path.startswith("workshop/apps/") and path.endswith(".app.yaml") for path in by_path):
             capabilities.append("sample.workshop-apps")
+        if any(path.startswith("workshop/components/") for path in by_path):
+            capabilities.append("sample.workshop-components")
         require(contract["spec"]["data"]["mode"] == "embedded", "offline packages require embedded data")
         if shared_database:
             architectures = ["amd64", "arm64"]
